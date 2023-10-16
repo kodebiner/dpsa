@@ -159,6 +159,10 @@ class Auth extends BaseController
      */
     public function register()
     {
+        $data                   = $this->data;
+        $data['config']         = $this->config;
+        $data['title']          = lang('Auth.registerTitle');
+        $data['description']    = lang('Auth.registerTitle');
         // check if already logged in.
         if ($this->auth->check()) {
             return redirect()->back();
@@ -172,7 +176,7 @@ class Auth extends BaseController
                 ->with('error', lang('Auth.registerDisabled'));
         }
 
-        return $this->_render($this->config->views['register'], ['config' => $this->config]);
+        return $this->_render($this->config->views['register'], $data);
     }
 
     /**
@@ -269,13 +273,17 @@ class Auth extends BaseController
      */
     public function forgotPassword()
     {
+        $data                   = $this->data;
+        $data['config']         = $this->config;
+        $data['title']          = lang('Global.forgotPassword');
+        $data['description']    = '';
         if ($this->config->activeResetter === null) {
             return redirect()
                 ->route('login')
                 ->with('error', lang('Auth.forgotDisabled'));
         }
 
-        return $this->_render($this->config->views['forgot'], ['config' => $this->config]);
+        return $this->_render($this->config->views['forgot'],$data );
     }
 
     /**
