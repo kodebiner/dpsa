@@ -1,0 +1,559 @@
+INFO - 2023-10-16 06:04:29 --> REDIRECTED ROUTE at https://dbsa.local/
+INFO - 2023-10-16 06:04:29 --> REDIRECTED ROUTE at https://dbsa.local/
+ERROR - 2023-10-16 06:44:56 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'dbsa' in C:\xampp\htdocs\dbsa\system\Database\MySQLi\Connection.php:184
+Stack trace:
+#0 C:\xampp\htdocs\dbsa\system\Database\MySQLi\Connection.php(184): mysqli->real_connect('127.0.0.1', 'root', Object(SensitiveParameterValue), 'dbsa', 3306, '', 0)
+#1 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#5 C:\xampp\htdocs\dbsa\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 C:\xampp\htdocs\dbsa\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 C:\xampp\htdocs\dbsa\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\dbsa\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\dbsa\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\dbsa\spark(102): CodeIgniter\CLI\Console->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'dbsa' in C:\xampp\htdocs\dbsa\system\Database\MySQLi\Connection.php:229
+Stack trace:
+#0 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 C:\xampp\htdocs\dbsa\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#4 C:\xampp\htdocs\dbsa\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 C:\xampp\htdocs\dbsa\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 C:\xampp\htdocs\dbsa\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 C:\xampp\htdocs\dbsa\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#8 C:\xampp\htdocs\dbsa\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#9 C:\xampp\htdocs\dbsa\spark(102): CodeIgniter\CLI\Console->run()
+#10 {main}
+INFO - 2023-10-16 06:56:43 --> REDIRECTED ROUTE at https://dbsa.local/
+INFO - 2023-10-16 07:04:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:04:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:10:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:10:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:10:35 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:10:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:10:48 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:10:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:11:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:11:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:11:49 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:15:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:15:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:15:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:15:37 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:21:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:21:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:21:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:21:38 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:22:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:28:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:28:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:28:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 07:28:50 --> Undefined property: Myth\Auth\Config\Auth::$requireActivation
+in APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php on line 220.
+ 1 APPPATH\ThirdParty\myth-auth\src\Controllers\AuthController.php(220): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Myth\\Auth\\Config\\Auth::$requireActivation', 'C:\\xampp\\htdocs\\dbsa\\app\\ThirdParty\\myth-auth\\src\\Controllers\\AuthController.php', 220)
+ 2 SYSTEMPATH\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 07:30:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:30:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:30:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:30:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:31:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-10-16 07:31:03 --> Email: sendWithMail throwed ErrorException: mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in C:\xampp\htdocs\dbsa\system\Email\Email.php:1744
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'mail(): Failed ...', 'C:\\xampp\\htdocs...', 1744)
+#1 C:\xampp\htdocs\dbsa\system\Email\Email.php(1744): mail('rizal@gmail.com', '=?UTF-8?Q?Activ...', 'This is a multi...', 'Date: Mon, 16 O...')
+#2 C:\xampp\htdocs\dbsa\system\Email\Email.php(1681): CodeIgniter\Email\Email->sendWithMail()
+#3 C:\xampp\htdocs\dbsa\system\Email\Email.php(1575): CodeIgniter\Email\Email->spoolEmail()
+#4 C:\xampp\htdocs\dbsa\app\ThirdParty\myth-auth\src\Authentication\Activators\EmailActivator.php(32): CodeIgniter\Email\Email->send()
+#5 C:\xampp\htdocs\dbsa\app\ThirdParty\myth-auth\src\Controllers\AuthController.php(236): Myth\Auth\Authentication\Activators\EmailActivator->send(Object(Myth\Auth\Entities\User))
+#6 C:\xampp\htdocs\dbsa\system\CodeIgniter.php(919): Myth\Auth\Controllers\AuthController->attemptRegister()
+#7 C:\xampp\htdocs\dbsa\system\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(Myth\Auth\Controllers\AuthController))
+#8 C:\xampp\htdocs\dbsa\system\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\dbsa\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#10 {main}
+ERROR - 2023-10-16 07:31:03 --> Email: Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.
+ERROR - 2023-10-16 07:31:03 --> 
+INFO - 2023-10-16 07:31:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:31:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:31:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:32:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:32:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:32:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:49:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:50:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:50:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 07:50:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 08:09:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:09:55 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:11:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:11:26 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:11:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:11:27 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:14:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:14:26 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:16:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:16:37 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:18:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:18:49 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:19:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:19:18 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:20:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:20:13 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:11 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:12 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:13 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:13 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:13 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:13 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:44 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:21:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:21:46 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:24:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:24:17 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:28:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:28:21 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:28:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:28:55 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:28:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:28:56 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:28:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:28:57 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:28:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:28:58 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:29:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:29:08 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:29:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:29:39 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:29:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:29:40 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:30:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:13 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:30:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:45 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:30:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:46 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:30:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:46 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:30:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:46 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:30:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:30:47 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:31:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:31:18 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:31:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:31:20 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:31:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:31:49 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:32:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:32:08 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:32:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:32:09 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:32:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:32:10 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 08:32:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:32:24 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:32:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:32:25 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:44:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:44:11 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 08:47:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 08:47:18 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2023-10-16 08:56:19 --> Class "Myth\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 08:57:51 --> Class "Myth\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 08:58:27 --> Class "Myth\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 08:59:03 --> Class "Myth\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 09:01:48 --> Class "Myth\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 09:02:17 --> Class "App\Auth\Controllers\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 09:02:44 --> Class "App\Controllers\Auth\BaseController" not found
+in APPPATH\Controllers\Auth.php on line 14.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(306): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(285): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(263): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Auth')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Auth')
+ 5 SYSTEMPATH\CodeIgniter.php(877): class_exists('\\App\\Controllers\\Auth', true)
+ 6 SYSTEMPATH\CodeIgniter.php(481): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 09:03:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 09:03:08 --> Cannot declare class Myth\Auth\Config\Auth, because the name is already in use
+in APPPATH\Config\Auth.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+INFO - 2023-10-16 09:03:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:04:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:05:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:05:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:08:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:12:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2023-10-16 09:12:35 --> [DEPRECATED] Creation of dynamic property App\Controllers\Auth::$agent is deprecated in APPPATH\Controllers\BaseController.php on line 67.
+ 1 SYSTEMPATH\CodeIgniter.php(892): App\Controllers\BaseController->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 2 SYSTEMPATH\CodeIgniter.php(485): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+WARNING - 2023-10-16 09:12:35 --> [DEPRECATED] Creation of dynamic property App\Controllers\Auth::$locale is deprecated in APPPATH\Controllers\BaseController.php on line 68.
+ 1 SYSTEMPATH\CodeIgniter.php(892): App\Controllers\BaseController->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 2 SYSTEMPATH\CodeIgniter.php(485): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+WARNING - 2023-10-16 09:12:35 --> [DEPRECATED] Creation of dynamic property App\Controllers\Auth::$uri is deprecated in APPPATH\Controllers\BaseController.php on line 69.
+ 1 SYSTEMPATH\CodeIgniter.php(892): App\Controllers\BaseController->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 2 SYSTEMPATH\CodeIgniter.php(485): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-10-16 09:12:35 --> Class "App\Models\UserModel" not found
+in APPPATH\Controllers\BaseController.php on line 72.
+ 1 SYSTEMPATH\CodeIgniter.php(892): App\Controllers\BaseController->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 2 SYSTEMPATH\CodeIgniter.php(485): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 09:13:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:30:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 09:30:27 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 09:38:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 09:38:21 --> Undefined variable $data
+in APPPATH\Controllers\Auth.php on line 74.
+ 1 APPPATH\Controllers\Auth.php(74): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 74)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 09:38:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:44:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 09:44:35 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 09:55:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:55:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:55:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 09:55:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:16:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:16:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:16:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:16:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:16:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:22:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:22:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:22:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:25:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:28:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 10:28:27 --> Invalid file: "App\Auth\Views\login.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('App\\Auth\\Views\\login.php')
+ 2 SYSTEMPATH\Common.php(1188): CodeIgniter\View\View->render('App\\Auth\\Views\\login', [], true)
+ 3 APPPATH\Controllers\Auth.php(525): view('App\\Auth\\Views\\login', [...])
+ 4 APPPATH\Controllers\Auth.php(75): App\Controllers\Auth->_render('App\\Auth\\Views\\login', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 6 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 7 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 10:28:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 10:28:50 --> Invalid file: "Views/Auth/_message_block.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Views/Auth/_message_block.php')
+ 2 SYSTEMPATH\Common.php(1188): CodeIgniter\View\View->render('Views/Auth/_message_block', [], true)
+ 3 APPPATH\Views\Auth\login.php(13): view('Views/Auth/_message_block')
+ 4 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\dbsa\\app\\Views\\Auth\\login.php')
+ 5 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1188): CodeIgniter\View\View->render('App\\Views\\Auth\\login', [], true)
+ 7 APPPATH\Controllers\Auth.php(525): view('App\\Views\\Auth\\login', [...])
+ 8 APPPATH\Controllers\Auth.php(75): App\Controllers\Auth->_render('App\\Views\\Auth\\login', [...])
+ 9 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+10 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+11 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 10:31:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:32:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 10:46:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 11:08:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 11:10:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 11:10:29 --> Undefined variable $title
+in APPPATH\Views\Auth\layout.php on line 7.
+ 1 APPPATH\Views\Auth\layout.php(7): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\dbsa\\app\\Views\\Auth\\layout.php', 7)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\dbsa\\app\\Views\\Auth\\layout.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('App\\Views\\Auth\\layout', [], true)
+ 5 SYSTEMPATH\Common.php(1188): CodeIgniter\View\View->render('App\\Views\\Auth\\login', [], true)
+ 6 APPPATH\Controllers\Auth.php(525): view('App\\Views\\Auth\\login', [...])
+ 7 APPPATH\Controllers\Auth.php(75): App\Controllers\Auth->_render('App\\Views\\Auth\\login', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 9 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 11:11:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-10-16 11:11:47 --> Undefined property: App\Controllers\Auth::$data
+in APPPATH\Controllers\Auth.php on line 60.
+ 1 APPPATH\Controllers\Auth.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Controllers\\Auth::$data', 'C:\\xampp\\htdocs\\dbsa\\app\\Controllers\\Auth.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(919): App\Controllers\Auth->login()
+ 3 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 4 SYSTEMPATH\CodeIgniter.php(353): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2023-10-16 11:12:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 11:13:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 11:14:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-10-16 11:41:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
