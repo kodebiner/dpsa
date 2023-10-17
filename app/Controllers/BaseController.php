@@ -58,5 +58,85 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+        $session = \Config\Services::session();
+        $this->agent = $this->request->getUserAgent();
+        $this->locale = service('request')->getLocale();
+        $this->uri = $this->request->uri;
+
+        // Calling Model
+        $this->userModel = new UserModel();
+        $this->GroupModel = new GroupModel();
+        $this->GroupUserModel = new GroupUserModel();
+        // $this->ConfigModel = new GconfigModel();
+
+        // Login Check
+        $auth = service('authentication');
+        if (!$auth->check()) {
+            $this->userId = null;
+            $fullname = '';
+            $this->user = null;
+            // $outletUser = '';
+        }
+        else {
+            $this->userId = $auth->id();
+            $this->user = $this->userModel->find($this->userId);
+            $fullname = $this->user->getname();
+            
+            // Getting User Role
+            $GroupUser = $this->GroupUserModel->where('user_id', $this->userId)->first();
+            $role = $this->GroupModel->find($GroupUser['group_id']);
+
+            // Get User Outlet Access
+            // $outletUser = $this->OutletAccessModel->where('userid',$this->userId)->find();
+        }
+
+        // Language check
+		if ($this->locale === 'id') {
+			$lang = 'id';
+		} else {
+			$lang = 'en';
+		}
+
+        // Load Config
+        // $this->gconfig = $this->ConfigModel->first();
+
+        // if (!empty($this->gconfig)) {
+        //     $gconfig = $this->gconfig;
+        // } else {
+        //     $gconfig = [
+        //         'id'                => null,
+        //         'logo'              => null,
+        //         'bizname'           => null,
+        //         'ppn'               => null,
+        //     ];
+        // }
+
+        // Determining outlet sessionn
+        // $outletSes = $session->get('outlet');
+        // if ($outletSes != null) {
+        //     $outletPick = $outletSes;
+        // } else {
+        //     $outletPick = null;
+        // }
+        
+
+        // Parsing View Data
+        $this->data = [
+			'ismobile'	    => $this->agent->isMobile(),
+            'lang'          => $lang,
+			'uri'		    => $this->uri,
+            'uid'           => $this->userId,
+            'authorize'     => service('authorization'),
+            'account'       => $this->user,
+            'fullname'      => $fullname,
+            // 'outlets'       => $this->OutletModel->findAll(),
+            // 'baseoutlets'   => $outletUser,
+            // 'gconfig'       => $gconfig,
+            // 'outletPick'    => $outletPick,
+		];
+
+        if ($auth->check()) {
+            $this->data['role'] = $role->name;
+        }
     }
 }

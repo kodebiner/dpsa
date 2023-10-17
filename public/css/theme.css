@@ -11686,7 +11686,7 @@ li.tm-main-navbar>a>svg {
 .tm-outlet {
     display: flex;
     color: #000 !important;
-    background-color: #ccc;
+    background-color: #fff;
     padding: 10px;
     align-items: center;
     column-gap: 0.25em;

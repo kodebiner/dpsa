@@ -6,6 +6,11 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+
+        $data = $this->data;
+        $data['title']          =   lang('Auth.Dashboard');
+        $data['description']    =   lang('Auth.dashboardDescription');
+
+        return view('layout', $data);
     }
 }

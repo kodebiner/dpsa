@@ -6,6 +6,7 @@ return[
     
     'firstname' => 'Nama Depan',
     'lastname'  => 'Nama Belakang',
+    'PhoneNumber' => 'No Telphone',
 
     // Button 
 
