@@ -2,12 +2,12 @@
 
 use CodeIgniter\Model;
 
-class RabModel extends Model
+class MdlModel extends Model
 {
     protected $allowedFields = [
-        'mdlid', 'proyekid', 'qty_completed', 'qty_delivered', 'qty',
+        'nama', 'harga',
     ];
-    protected $table            = 'Rab';
+    protected $table            = 'Mdl';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

@@ -40,32 +40,9 @@
         <header class="uk-navbar-container tm-navbar-container" uk-sticky="media: 960;" style="background-color: #204ef1;">
             <div class="uk-container uk-container-expand">
                 <div uk-navbar>
-                    <?php// if ($ismobile === true) { ?>
-                        <!-- <div class="uk-navbar-left">
-                            <a class="uk-navbar-toggle" href="#offcanvas" uk-navbar-toggle-icon uk-toggle role="button" aria-label="Open menu" style="color: #fff;"></a>
-                        </div>
-                        <div class="uk-navbar-center">
-                            <a class="uk-navbar-item uk-logo" href="<?//=base_url();?>" aria-label="<?//=lang('Global.backHome')?>">
-                                <?php// if (($gconfig['logo'] != null) && ($gconfig['bizname'] != null)) { ?>
-                                    <img src="/img/<?//=$gconfig['logo'];?>" alt="<?//=$gconfig['bizname'];?>" style="height: 70px;">
-                                <?php// } else { ?>
-                                    <img src="/img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia" style="height: 70px;">
-                                <?php// } ?>
-                            </a> -->
-                        <!-- </div> -->
-                    <?php// } else { ?>
-                        <div class="uk-navbar-left">
-                           
-                            <a class="uk-navbar-item uk-logo" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"> DBSA STORE</a>
-                            <!-- <a class="uk-navbar-item uk-logo" href="<?//=base_url();?>" aria-label="<?//=lang('Global.backHome')?>">
-                                <?php// if (($gconfig['logo'] != null) && ($gconfig['bizname'] != null)) { ?>
-                                    <img src="/img/<?//=$gconfig['logo'];?>" alt="<//?=$gconfig['bizname'];?>" style="height: 70px;">
-                                <?php// } else { ?>
-                                    <img src="app/public/img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia" style="height: 70px;">
-                                <?php// } ?>
-                            </a> -->
-                        </div>
-                    <?php// } ?>
+                    <div class="uk-navbar-left">
+                        <a class="uk-navbar-item uk-logo uk-margin-top" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"> <img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia" style="height: 70px;">DBSA STORE</a>
+                    </div>
                     <div class="uk-navbar-right">
                         <div id="tm-fullscreen" class="uk-navbar-item">
                             <a id="tm-open-fullscreen" class="tm-h4 tm-outlet" uk-icon="expand" onclick="openFullscreen()"></a>
@@ -121,63 +98,22 @@
                                 closeButton.remove();
                             }
                         </script>
-                         <?php// if ($ismobile === false) { ?>
-                        <!-- //     <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline"> -->
-                                 <?php//
-                        //         if ($outletPick === null)  {
-                        //             $viewOutlet = lang('Global.allOutlets');
-                        //         } else {
-                        //             foreach ($outlets as $outlet) {
-                        //                 if ($outletPick === $outlet['id']) {
-                        //                     $viewOutlet = $outlet['name'];
-                        //                 }
-                        //             }
-                        //         }
-                        //         ?>
-                        <!-- //         <a class="tm-h4 tm-outlet" type="button"><img src="img/layout/union.svg" style="position: relative; top: -2px; margin-right: 5px;" /> <span class="tm-outlet-picker-selector"><?//= $viewOutlet ?></span> <span uk-icon="triangle-down"></span></a> -->
-                        <!-- //         <div class="uk-width-large tm-outlet-dropdown" uk-dropdown="mode: click;"> -->
-                        <!-- //             <ul class="uk-list"> -->
-                                        <?php
-                        //                 $accesscount = count($baseoutlets);
-                        //                 $outletcount = count($outlets);
-                        //                 if ($accesscount === $outletcount) {
-                        //                     if ($outletPick === null) {
-                        //                         echo '<li class="uk-h4 tm-h4"><span uk-icon="triangle-right"></span> '.lang('Global.allOutlets').'</li>';
-                        //                     } else {
-                        //                         echo '<li class="uk-h4 tm-h4"><a href="outlet/pick/0" class="uk-link-reset">'.lang('Global.allOutlets').'</a></li>';
-                        //                     }
-                        //                 }
-                        //                 foreach ($outlets as $outlet) {
-                        //                     foreach ($baseoutlets as $access) {
-                        //                         if ($access['outletid'] === $outlet['id']) {
-                        //                             if ($outletPick === $outlet['id']) {
-                        //                                 echo '<li class="uk-h4 tm-h4"><span uk-icon="triangle-right"></span> '.$outlet['name'].'</li>';
-                        //                             } else {
-                        //                                 echo '<li class="uk-h4 tm-h4"><a href="outlet/pick/'.$outlet['id'].'" class="uk-link-reset">'.$outlet['name'].'</a></li>';
-                        //                             }
-                        //                         }
-                        //                     }
-                        //                 }
-                        //                 ?>
-                        <!-- //             </ul> -->
-                        <!-- //         </div> -->
-                        <!-- //     </div> -->
-                        <!-- // <?php// } ?> -->
+
                         <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
                             <a class="uk-link-reset" type="button">
                                 <?php
                                 if (!empty($account->photo)) {
                                     $profile = 'img/profile/'.$account->photo;
                                 } else {
-                                    $profile = 'img/user.png';
+                                    $profile = 'img/layout/pelanggan.svg';
                                 }
                                 ?>
-                                <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #000;" alt="<?=$fullname?>" />
+                                <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #204ef1;" alt="<?=$fullname?>" />
                             </a>
                             <div class="uk-width-medium" uk-dropdown="mode: click">
                                 <div class="uk-flex-middle uk-grid-small" uk-grid>
                                     <div class="uk-width-auto">
-                                        <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #000;" alt="<?=$fullname?>" /> 
+                                        <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #204ef1;" alt="<?=$fullname?>" /> 
                                     </div>
                                     <div class="uk-width-expand">
                                         <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
@@ -208,49 +144,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <?//php if ($ismobile === true) { ?>
-            <div class="uk-container uk-container-expand">
-                <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
-                    <?//php
-                        //if// ($outletPick === null)  {
-                            //$viewOutlet = lang('Global.allOutlets');
-                        //}// else {
-                            //foreach//($outletPick === $outlet['id']) {
-                                    //$viewOutlet = $outlet['name'];//
-                              //  }
-                            //}
-                       // }//
-                    //?>
-                    <a class="tm-h4 tm-outlet" type="button"><img src="img/layout/union.svg" style="position: relative; top: -2px; margin-right: 5px;" /> <span class="tm-outlet-picker-selector"><?//=$viewOutlet?></span> <span uk-icon="triangle-down"></span></a>
-                    <div class="uk-width-large tm-outlet-dropdown" uk-dropdown="mode: click;">
-                        <ul class="uk-list">
-                        <?//php
-                            // $accesscount = count($baseoutlets);
-                            // $outletcount = count($outlets);
-                            //if ($accesscount === $outletcount) {
-                            //     if ($outletPick === null) {
-                            //         echo '<li class="uk-h4 tm-h4"><span uk-icon="triangle-right"></span> '.lang('Global.allOutlets').'</li>';
-                            //     } else {
-                            //         echo '<li class="uk-h4 tm-h4"><a href="outlet/pick/0" class="uk-link-reset">'.lang('Global.allOutlets').'</a></li>';
-                            //     }
-                            // }
-                        //     foreach ($outlets as $outlet) {
-                        //         foreach ($baseoutlets as $access) {
-                        //             if ($access['outletid'] === $outlet['id']) {
-                        //                 if ($outletPick === $outlet['id']) {
-                        //                     echo '<li class="uk-h4 tm-h4"><span uk-icon="triangle-right"></span> '.$outlet['name'].'</li>';
-                        //                 } else {
-                        //                     echo '<li class="uk-h4 tm-h4"><a href="outlet/pick/'.$outlet['id'].'" class="uk-link-reset">'.$outlet['name'].'</a></li>';
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <?php// } ?> -->
         </header>
         <!-- Header Section end -->
 
@@ -263,6 +156,9 @@
                             <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
                                 <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
                             </li>   
+                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                                <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
+                            </li>   
                         </ul>
                     </nav>
                 </div>
@@ -272,6 +168,9 @@
                 <ul class="uk-nav uk-nav-default tm-nav uk-light" uk-nav>
                     <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
                         <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
+                    </li>
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
                     </li>
                 </ul>
             </nav>
@@ -324,7 +223,7 @@
                                 <div class="uk-margin-small uk-text-center">
                                     Copyright &copy; <?php auto_copyright("2023"); ?>
                                 </div>
-                                <div class="uk-margin-small uk-text-center">
+                                <div class="uk-margin-small uk-text-center uk-link-reset">
                                     Developed by<br/><a href="https://binary111.com" target="_blank">PT. Kodebiner Teknologi Indonesia</a>
                                 </div>
                             </div>
@@ -333,7 +232,7 @@
                                 <div class="uk-margin-left">                                    
                                     Copyright &copy; <?php auto_copyright("2023"); ?>
                                 </div>
-                                <div class="uk-text-right">
+                                <div class="uk-text-right uk-link-reset">
                                     Developed by<br/><a href="https://binary111.com" target="_blank">PT. Kodebiner Teknologi Indonesia</a>
                                 </div>
                             </div>
