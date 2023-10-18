@@ -7,9 +7,9 @@ use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Session\Session;
-use App\Auth\Config\Auth as AuthConfig;
-use App\Auth\Entities\User;
-use App\Auth\Models\UserModel;
+use App\Config\Auth as AuthConfig;
+use App\Entities\User;
+use App\Models\UserModel;
 
 class Auth extends BaseController
 {
@@ -200,6 +200,8 @@ class Auth extends BaseController
         $rules = config('Validation')->registrationRules ?? [
             'username' => 'required|alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]',
             'email'    => 'required|valid_email|is_unique[users.email]',
+            'firstname' => 'required',
+            'lastname'  => 'required',
         ];
 
         if (! $this->validate($rules)) {

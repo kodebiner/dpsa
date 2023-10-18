@@ -37,13 +37,6 @@
                     </div>
 
                     <div class="uk-margin">
-                        <label for="phone"><?=lang('Global.phone')?></label>
-                        <div class="uk-form-controls">
-                            <input type="phone" class="uk-input <?php if (session('errors.phone')) : ?>tm-form-invalid<?php endif ?>" name="phone" placeholder="<?=lang('Global.phone')?>" value="<?= old('phone') ?>" required>
-                        </div>
-                    </div>
-
-                    <div class="uk-margin">
                         <label for="username"><?=lang('Auth.username')?></label>
                         <div class="uk-form-controls">
                             <input type="text" class="uk-input <?php if (session('errors.username')) : ?>tm-form-invalid<?php endif ?>" name="username" placeholder="<?=lang('Auth.username')?>" value="<?= old('username') ?>" required>
