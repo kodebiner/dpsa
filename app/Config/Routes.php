@@ -36,3 +36,11 @@ $routes->group('/', static function ($routes) {
 $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Home::index');
 });
+
+// Bar
+$routes->group('bar',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Bar::index');
+    $routes->post('create', 'Bar::create');
+    $routes->post('update/(:num)', 'Bar::update/$1');
+
+});

@@ -12,7 +12,7 @@
                     <?php if ($config->validFields === ['email']): ?>
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon" uk-icon="icon: user"></span>
-                            <input type="name" class="uk-input <?php if (session('errors.login')) : ?>tm-form-invalid<?php endif ?>" name="login" placeholder="<?=lang('Auth.username')?>" value="<?= old('login')?>" required>
+                            <input type="email" class="uk-input <?php if (session('errors.login')) : ?>tm-form-invalid<?php endif ?>" name="login" placeholder="<?=lang('Auth.username')?>" value="<?= old('login')?>" required>
                         </div>
                         
                         <div class="uk-text-small uk-text-italic uk-text-danger">
@@ -21,7 +21,7 @@
                     <?php else: ?>
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                            <input type="email" class="uk-input <?php if (session('errors.login')) : ?>tm-form-invalid<?php endif ?>" name="login" placeholder="<?=lang('Auth.emailOrUsername')?>" value="<?= old('login')?>" required>
+                            <input type="name" class="uk-input <?php if (session('errors.login')) : ?>tm-form-invalid<?php endif ?>" name="login" placeholder="<?=lang('Auth.emailOrUsername')?>" value="<?= old('login')?>" required>
                         </div>
 
                         <div class="uk-text-small uk-text-italic uk-text-danger">

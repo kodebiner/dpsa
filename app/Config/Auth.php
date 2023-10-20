@@ -1,6 +1,6 @@
 <?php
 
-namespace Myth\Auth\Config;
+namespace App\Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -16,7 +16,7 @@ class Auth extends BaseConfig
      *
      * @var string
      */
-    public $defaultUserGroup ="guests";
+    public $defaultUserGroup = 'guests';
 
     /**
      * --------------------------------------------------------------------
@@ -31,7 +31,7 @@ class Auth extends BaseConfig
      *
      * @var string
      */
-    public $landingRoute = '/';
+    public $landingRoute = 'dashboard';
 
     /**
      * --------------------------------------------------------------------
@@ -77,9 +77,9 @@ class Auth extends BaseConfig
         'login'           => 'App\Views\Auth\login',
         'register'        => 'App\Views\Auth\register',
         'forgot'          => 'App\Views\Auth\forgot',
-        'reset'           => 'Myth\Auth\Views\reset',
-        'emailForgot'     => 'Myth\Auth\Views\emails\forgot',
-        'emailActivation' => 'Myth\Auth\Views\emails\activation',
+        'reset'           => 'App\Views\Auth\reset',
+        'emailForgot'     => 'App\Views\Auth\emails\forgot',
+        'emailActivation' => 'App\Views\Auth\emails\activation',
     ];
 
     /**
@@ -123,7 +123,7 @@ class Auth extends BaseConfig
      *
      * @var string[]
      */
-    public $personalFields = [];
+    public $personalFields = ['firstname', 'lastname', 'phone', 'photo'];
 
     /**
      * --------------------------------------------------------------------
@@ -186,7 +186,7 @@ class Auth extends BaseConfig
      *
      * @var string|null Name of the ActivatorInterface class
      */
-    public $requireActivation = 'Myth\Auth\Authentication\Activators\EmailActivator';
+    public $requireActivation = null;
 
     /**
      * --------------------------------------------------------------------
@@ -213,7 +213,7 @@ class Auth extends BaseConfig
      *
      * @var bool
      */
-    public $allowRemembering = false;
+    public $allowRemembering = true;
 
     /**
      * --------------------------------------------------------------------
@@ -236,7 +236,7 @@ class Auth extends BaseConfig
      *
      * @var bool
      */
-    public $silent = false;
+    public $silent = true;
 
     /**
      * --------------------------------------------------------------------
@@ -314,7 +314,7 @@ class Auth extends BaseConfig
      *
      * @var int
      */
-    public $minimumPasswordLength = 8;
+    public $minimumPasswordLength = 6;
 
     /**
      * --------------------------------------------------------------------

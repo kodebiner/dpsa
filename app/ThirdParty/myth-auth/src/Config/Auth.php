@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Config;
+namespace Myth\Auth\Config;
 
 use CodeIgniter\Config\BaseConfig;
 

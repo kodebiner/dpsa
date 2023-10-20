@@ -197,6 +197,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Footer Section -->
             <footer class="tm-footer" style="background-color: #204ef1; color: #fff;">
                 <?php

@@ -25,8 +25,8 @@ class Auth extends BaseController
     /**
      * @var AuthConfig
      */
-    protected $config;
     protected $data;
+    protected $config;
 
     /**
      * @var Session
@@ -200,8 +200,6 @@ class Auth extends BaseController
         $rules = config('Validation')->registrationRules ?? [
             'username' => 'required|alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]',
             'email'    => 'required|valid_email|is_unique[users.email]',
-            'firstname' => 'required',
-            'lastname'  => 'required',
         ];
 
         if (! $this->validate($rules)) {
