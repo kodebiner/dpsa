@@ -105,15 +105,15 @@
                                 if (!empty($account->photo)) {
                                     $profile = 'img/profile/'.$account->photo;
                                 } else {
-                                    $profile = 'img/layout/pelanggan.svg';
+                                    $profile = 'img/layout/user.svg';
                                 }
                                 ?>
-                                <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #204ef1;" alt="<?=$fullname?>" />
+                                <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" />
                             </a>
                             <div class="uk-width-medium" uk-dropdown="mode: click">
                                 <div class="uk-flex-middle uk-grid-small" uk-grid>
                                     <div class="uk-width-auto">
-                                        <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #204ef1;" alt="<?=$fullname?>" /> 
+                                        <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" /> 
                                     </div>
                                     <div class="uk-width-expand">
                                         <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
@@ -125,7 +125,7 @@
                                     <ul class="uk-nav uk-nav-default tm-nav">
                                         <li class="tm-main-navbar">
                                             <a href="account" class="uk-h5" style="color: #000;">
-                                                <img src="img/layout/pelanggan.svg" /><?=lang('Global.userProfile')?>
+                                                <img src="img/layout/user.svg" /><?=lang('Global.userProfile')?>
                                             </a>
                                         </li>
                                         <?php if ($role === 'owner') { ?>
@@ -157,8 +157,20 @@
                                 <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
                             </li>   
                             <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
+                                <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
+                            </li>
+                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
+                            </li>
+                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
+                            </li>
+                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                                <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?></a>
                             </li>   
+                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?></a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -170,8 +182,20 @@
                         <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
                     </li>
                     <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
+                        <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
                     </li>
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
+                    </li>   
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
+                    </li>   
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?></a>
+                    </li>   
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?></a>
+                    </li>   
                 </ul>
             </nav>
         <?php } ?>

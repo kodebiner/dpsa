@@ -37,10 +37,45 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Home::index');
 });
 
+$routes->group('users',['filter' => 'login'], function ($routes){
+    $routes->get('','User::index');
+});
+
+// Upload Routes
+$routes->group('upload', ['filter' => 'login'], function($routes) {
+    $routes->post('profile', 'Upload::profile', ['filter' => 'role:owner']);
+    $routes->post('removeprofile', 'Upload::removeprofile', ['filter' => 'role:owner']);
+    $routes->post('logo', 'Upload::logo', ['filter' => 'role:owner']);
+    $routes->post('removelogo', 'Upload::removelogo', ['filter' => 'role:owner']);
+});
+
+// Project
+$routes->group('project',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Project::index');
+    $routes->post('update/(:num)', 'Project::update/$1');
+    $routes->post('delete/(:num)', 'Project::delete/$1');
+});
+
+// MDL
+$routes->group('mdl',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Mdl::index');
+    $routes->post('create', 'Mdl::create');
+    $routes->post('update/(:num)', 'Mdl::update/$1');
+    $routes->post('delete/(:num)', 'Mdl::delete/$1');
+    $routes->get('delete/(:num)', 'Mdl::delete/$1');
+});
+
+// Account
+$routes->group('account',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Account::index');
+    $routes->post('update', 'Account::updateaccount');
+});
+
+
 // Bar
 $routes->group('bar',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Bar::index');
     $routes->post('create', 'Bar::create');
+    $routes->get('update/(:num)', 'Bar::index');
     $routes->post('update/(:num)', 'Bar::update/$1');
-
 });

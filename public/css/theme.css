@@ -7,7 +7,7 @@ html {
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     background: #fff;
-    color: #666;
+    color: #000;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility
@@ -738,11 +738,11 @@ a.uk-link-reset {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
-    margin-bottom: 20px
+    margin-bottom: 20px;
 }
 
 *+.uk-table {
-    background: #363636;
+    /* background:rgba(255,255,255,1); */
     margin-top: 20px
 }
 
@@ -752,7 +752,7 @@ a.uk-link-reset {
     vertical-align: bottom;
     font-size: 12px;
     font-weight: 400;
-    color: #fff;
+    color: #000;
     text-transform: uppercase
 }
 
@@ -772,7 +772,7 @@ a.uk-link-reset {
 .uk-table caption {
     font-size: 14px;
     text-align: left;
-    color: #fff
+    color: #000
 }
 
 .uk-table-middle,
@@ -783,7 +783,7 @@ a.uk-link-reset {
 .uk-table-divider>:first-child>tr:not(:first-child),
 .uk-table-divider>:not(:first-child)>tr,
 .uk-table-divider>tr:not(:first-child) {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid #000
 }
 
 .uk-table-striped tbody tr:nth-of-type(odd),
@@ -899,7 +899,7 @@ a.uk-link-reset {
 .dataTables_wrapper .dataTables_info, 
 .dataTables_wrapper .dataTables_processing, 
 .dataTables_wrapper .dataTables_paginate {
-    color: #fff;
+    /* color: #fff; */
 }
 
 .dataTables_wrapper:after {
@@ -2614,7 +2614,7 @@ select.uk-form-width-xsmall {
     margin-bottom: 20px;
     padding: 30px 30px;
     background: 0 0;
-    border: 1px dashed #e5e5e5
+    border: 1px dashed #000000
 }
 
 *+.uk-placeholder {
@@ -7962,7 +7962,7 @@ video) {
 .uk-section-secondary:not(.uk-preserve-color),
 .uk-tile-primary:not(.uk-preserve-color),
 .uk-tile-secondary:not(.uk-preserve-color) {
-    color: rgba(255, 255, 255)
+    color: rgb(0, 0, 0)
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-link,
@@ -7987,7 +7987,7 @@ video) {
 .uk-tile-primary:not(.uk-preserve-color) a,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-link,
 .uk-tile-secondary:not(.uk-preserve-color) a {
-    color: #fff
+    color: #000
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-link-toggle:hover .uk-link,
@@ -8264,7 +8264,7 @@ video) {
 .uk-tile-secondary:not(.uk-preserve-color) h4,
 .uk-tile-secondary:not(.uk-preserve-color) h5,
 .uk-tile-secondary:not(.uk-preserve-color) h6 {
-    color: #fff
+    color: #000
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) blockquote,
@@ -8972,10 +8972,10 @@ video) {
 .uk-tile-secondary:not(.uk-preserve-color) .uk-input,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-select,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-textarea {
-    background-color: rgba(255, 255, 255, .1);
-    color: rgba(255, 255, 255, .8);
+    /* background-color: rgba(255, 255, 255, .1); */
+    /* color: rgba(255, 255, 255, .8); */
     background-clip: padding-box;
-    border-color: rgba(255, 255, 255, .2)
+    /* border-color: rgba(255, 255, 255, .2) */
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-input:focus,
@@ -9011,9 +9011,9 @@ video) {
 .uk-tile-secondary:not(.uk-preserve-color) .uk-input:focus,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-select:focus,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-textarea:focus {
-    background-color: rgba(255, 255, 255, .15);
-    color: rgba(255, 255, 255, .8);
-    border-color: rgba(255, 255, 255, .8)
+    background-color: rgba(255, 255, 255, .8);
+    color: rgba(0, 0, 0, 0.8);
+    border-color: #39f;
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-input::placeholder,
@@ -9261,7 +9261,7 @@ video) {
 .uk-section-secondary:not(.uk-preserve-color) .uk-form-label,
 .uk-tile-primary:not(.uk-preserve-color) .uk-form-label,
 .uk-tile-secondary:not(.uk-preserve-color) .uk-form-label {
-    color: #fff
+    color: #000
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-form-icon,
@@ -11666,7 +11666,7 @@ li.tm-main-navbar>a>svg {
 .tm-card-header {
     display: flow-root;
     padding: 15px 30px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #000;
 }
 
 .tm-header {

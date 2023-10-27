@@ -1,10 +1,6 @@
 
 <?= $this->extend('layout') ?>
 <?= $this->section('main') ?>
-<p uk-margin>
-    <button class="uk-button uk-button-small uk-button-primary uk-margin-bottom uk-text-right" href="#modal-sections" uk-toggle>Add Progress</button>
-    <button class="uk-button uk-button-small uk-button-primary uk-margin-bottom uk-text-right" href="#modalupdate" uk-toggle>Update Progress</button>
-</p>
 
 <!-- add progress modal -->
 <div id="modal-sections" uk-modal>
@@ -42,12 +38,12 @@
             <h2 class="uk-modal-title"> Update Progress</h2>
         </div>
 
-        <form class="uk-margin-left" action="bar/update/1" method="post" onsubmit="myFunction()">
+        <form class="uk-margin-left" action="bar/update/1" method="post">
             
             <div class="uk-margin">
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: pencil"></span>
-                    <input class="uk-input" name="qty" placeholder="Quantity" type="number" aria-label="Not clickable icon" onchange="progress(this.value)">
+                    <input class="uk-input" id="qty" name="qty" placeholder="Quantity" type="number" aria-label="Not clickable icon">
                 </div>
             </div>
 
@@ -66,16 +62,18 @@
 <div class="uk-child-width-1-1@m" uk-grid>
     <div>
         <div class="uk-card uk-card-default uk-card-small uk-card-body">
-            <h3 class="uk-card-title">Progress Bar</h3>
+            <div class="uk-text-center" uk-grid>
+                <div class="uk-width-1-2 uk-text-left">
+                    <h3 class="uk-card-title">Progress Bar</h3>
+                </div>
+                <div class="uk-width-1-2 uk-text-right">
+                    <a class="uk-icon-button  uk-margin-small-right" href="#modalupdate" uk-icon="pencil" uk-toggle></a>
+                </div>
+               
+            </div>
             <progress id="progress" class="uk-progress" value="<?=$qty?>" max="100"></progress>
         </div>
         <script>
-            function progress(val) {
-                var qty = <?= (Int)$qty ?>;
-                var proval = qty + parseInt(val);
-                var pro = document.getElementById('progress');
-                pro.value = <?=$qty?>;
-            }
             
             UIkit.util.ready(function () {
 

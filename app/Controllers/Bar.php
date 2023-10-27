@@ -55,7 +55,7 @@ class Bar extends BaseController
 
         $progress = [
             'id'    => $id,
-            'qty'   => $input['qty'],
+            'qty'   => (int)$bars['qty'] + (int)$input['qty'],
         ];
         $BarModel->save($progress);
 
@@ -66,7 +66,7 @@ class Bar extends BaseController
         $data['description']    =   lang('Global.barDescription');
         $data['qty']            =   $qty;
 
-        return view('bar', $data);
+        return redirect()->back();
     }
 
 }
