@@ -2,12 +2,12 @@
 
 use CodeIgniter\Model;
 
-class ProyekModel extends Model
+class ProjectModel extends Model
 {
     protected $allowedFields = [
-        'clientid', 'brief', 'name', 'created', 'updated_at', 'deleted_at',
+        'clientid', 'brief', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
-    protected $table            = 'proyek';
+    protected $table            = 'project';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $updatedField     = 'updated_at';

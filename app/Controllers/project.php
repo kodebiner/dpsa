@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\BarModel;
-use App\Models\ProyekModel;
+use App\Models\ProjectModel;
 use App\Models\UserModel;
 
 
@@ -28,7 +28,7 @@ class Project extends BaseController
     {
         // Find Model
         $BarModel       = new BarModel;
-        $ProjectModel   = new ProyekModel;
+        $ProjectModel   = new ProjectModel;
         $UserModel      = new UserModel;
 
         // Populating Data
@@ -61,13 +61,15 @@ class Project extends BaseController
             'created_at'    => $time,
         ];
         $ProjectModel->save($project);
+        
+        $idPro = getInsertId($ProjectModel);
 
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
-    public function update()
+    public function update($id)
     {
-
+        $ProjectModel = new ProyekModel;
     }
 
     public function delete(){

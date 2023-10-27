@@ -19,7 +19,7 @@
             <h2 class="uk-modal-title">Add Project</h2>
         </div>
 
-        <form class="uk-margin-left" action="bar/create" method="post">
+        <form class="uk-margin-left" action="project/create" method="post">
             
             <div class="uk-margin">
                 <div class="uk-inline">
@@ -30,13 +30,13 @@
 
             <div class="uk-margin">
                 <div class="uk-inline">
-                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="Brief" aria-label="Brief"></textarea>
+                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" aria-label="Brief"></textarea>
                 </div>
             </div>
 
             <div class="uk-margin">
                 <div uk-form-custom="target: > * > span:first-child">
-                    <select aria-label="Custom controls">
+                    <select name="client" aria-label="Custom controls">
                         <option value="">Client</option>
                         <?php foreach ($clients as $client) { ?>
                             <option value="<?=$client->id?>"> <?= $client->name?></option>
