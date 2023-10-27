@@ -4067,7 +4067,9 @@ ul.uk-nav-sub {
 }
 
 .uk-nav-default>li.uk-active>a {
-    color: #222
+    color: #222;
+    background-color: #fff;
+    border-radius: 15px 0px 0px 15px;
 }
 
 .uk-nav-default .uk-nav-subtitle {
@@ -11364,7 +11366,7 @@ body {
 
 .tm-sidebar-left {
     position: fixed;
-    top: 80px;
+    top: 0px;
     bottom: 0;
     box-sizing: border-box;
     width: 240px !important;
@@ -11405,8 +11407,8 @@ body {
 
 @media (min-width:1400px) {
     .tm-sidebar-left {
-        width: 350px !important;
-        padding: 45px 45px 60px 45px
+        width: 250px !important;
+        padding: 90px 0px 60px 10px
     }
     .tm-sidebar-right {
         left: calc(100% + 60px)
@@ -11458,7 +11460,7 @@ body {
     top: 15px;
     left: -25px;
     width: 15px;
-    border-top: 1px solid #1e87f0
+    border-top: 1px solid #1e87f0;
 }
 
 .tm-nav .uk-nav-header {

@@ -34,119 +34,121 @@
         <!-- Extra Script Section end -->
 
     </head>
-    <body style="background-color: #204ef1;">
+    <body>
 
         <!-- Header Section -->
-        <header class="uk-navbar-container tm-navbar-container" uk-sticky="media: 960;" style="background-color: #204ef1;">
-            <div class="uk-container uk-container-expand">
-                <div uk-navbar>
-                    <div class="uk-navbar-left">
-                        <a class="uk-navbar-item uk-logo uk-margin-top" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"> <img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia" style="height: 70px;">DBSA STORE</a>
-                    </div>
-                    <div class="uk-navbar-right">
-                        <div id="tm-fullscreen" class="uk-navbar-item">
-                            <a id="tm-open-fullscreen" class="tm-h4 tm-outlet" uk-icon="expand" onclick="openFullscreen()"></a>
+        <header>
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
+                <div class="uk-container uk-container-expand">
+                    <div uk-navbar>
+                        <div class="uk-navbar-left">
+                            <a class="uk-navbar-item uk-logo" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia">DPSA</a>
                         </div>
-                        <script type="text/javascript">
-                            var elem = document.documentElement;
+                        <div class="uk-navbar-right">
+                            <div id="tm-fullscreen" class="uk-navbar-item">
+                                <a id="tm-open-fullscreen" class="tm-h4 tm-outlet" uk-icon="expand" onclick="openFullscreen()"></a>
+                            </div>
+                            <script type="text/javascript">
+                                var elem = document.documentElement;
 
-                            function openFullscreen() {
-                                if (elem.requestFullscreen) {
-                                    elem.requestFullscreen();
-                                } else if (elem.webkitRequestFullscreen) { // Safari
-                                    elem.webkitRequestFullscreen();
-                                } else if (elem.msRequestFullscreen) { // IE11
-                                    elem.msRequestFullscreen();
+                                function openFullscreen() {
+                                    if (elem.requestFullscreen) {
+                                        elem.requestFullscreen();
+                                    } else if (elem.webkitRequestFullscreen) { // Safari
+                                        elem.webkitRequestFullscreen();
+                                    } else if (elem.msRequestFullscreen) { // IE11
+                                        elem.msRequestFullscreen();
+                                    }
+
+                                    const fullscreenContainer = document.getElementById('tm-fullscreen');
+                                    const openButton = document.getElementById('tm-open-fullscreen');
+
+                                    // add close button
+                                    const closeButton = document.createElement('a');
+                                    closeButton.setAttribute('id', 'tm-close-fullscreen')
+                                    closeButton.setAttribute('class', 'tm-h4 tm-outlet');
+                                    closeButton.setAttribute('uk-icon', 'shrink');
+                                    closeButton.setAttribute('onclick', 'closeFullscreen()');
+                                    fullscreenContainer.appendChild(closeButton);
+
+                                    // remove open button
+                                    openButton.remove();
                                 }
 
-                                const fullscreenContainer = document.getElementById('tm-fullscreen');
-                                const openButton = document.getElementById('tm-open-fullscreen');
+                                function closeFullscreen() {
+                                    if (document.exitFullscreen) {
+                                        document.exitFullscreen();
+                                    } else if (document.webkitExitFullscreen) { // Safari
+                                        document.webkitExitFullscreen();
+                                    } else if (document.msExitFullscreen) { // IE11
+                                        document.msExitFullscreen();
+                                    }
 
-                                // add close button
-                                const closeButton = document.createElement('a');
-                                closeButton.setAttribute('id', 'tm-close-fullscreen')
-                                closeButton.setAttribute('class', 'tm-h4 tm-outlet');
-                                closeButton.setAttribute('uk-icon', 'shrink');
-                                closeButton.setAttribute('onclick', 'closeFullscreen()');
-                                fullscreenContainer.appendChild(closeButton);
+                                    const fullscreenContainer = document.getElementById('tm-fullscreen');
+                                    const closeButton = document.getElementById('tm-close-fullscreen');
 
-                                // remove open button
-                                openButton.remove();
-                            }
+                                    // add open button
+                                    const openButton = document.createElement('a');
+                                    openButton.setAttribute('id', 'tm-open-fullscreen')
+                                    openButton.setAttribute('class', 'tm-h4 tm-outlet');
+                                    openButton.setAttribute('uk-icon', 'expand');
+                                    openButton.setAttribute('onclick', 'openFullscreen()');
+                                    fullscreenContainer.appendChild(openButton);
 
-                            function closeFullscreen() {
-                                if (document.exitFullscreen) {
-                                    document.exitFullscreen();
-                                } else if (document.webkitExitFullscreen) { // Safari
-                                    document.webkitExitFullscreen();
-                                } else if (document.msExitFullscreen) { // IE11
-                                    document.msExitFullscreen();
+                                    // remove close button
+                                    closeButton.remove();
                                 }
+                            </script>
 
-                                const fullscreenContainer = document.getElementById('tm-fullscreen');
-                                const closeButton = document.getElementById('tm-close-fullscreen');
-
-                                // add open button
-                                const openButton = document.createElement('a');
-                                openButton.setAttribute('id', 'tm-open-fullscreen')
-                                openButton.setAttribute('class', 'tm-h4 tm-outlet');
-                                openButton.setAttribute('uk-icon', 'expand');
-                                openButton.setAttribute('onclick', 'openFullscreen()');
-                                fullscreenContainer.appendChild(openButton);
-
-                                // remove close button
-                                closeButton.remove();
-                            }
-                        </script>
-
-                        <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
-                            <a class="uk-link-reset" type="button">
-                                <?php
-                                if (!empty($account->photo)) {
-                                    $profile = 'img/profile/'.$account->photo;
-                                } else {
-                                    $profile = 'img/layout/user.svg';
-                                }
-                                ?>
-                                <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" />
-                            </a>
-                            <div class="uk-width-medium" uk-dropdown="mode: click">
-                                <div class="uk-flex-middle uk-grid-small" uk-grid>
-                                    <div class="uk-width-auto">
-                                        <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" /> 
+                            <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
+                                <a class="uk-link-reset" type="button">
+                                    <?php
+                                    if (!empty($account->photo)) {
+                                        $profile = 'img/profile/'.$account->photo;
+                                    } else {
+                                        $profile = 'img/layout/user.svg';
+                                    }
+                                    ?>
+                                    <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" />
+                                </a>
+                                <div class="uk-width-medium" uk-dropdown="mode: click">
+                                    <div class="uk-flex-middle uk-grid-small" uk-grid>
+                                        <div class="uk-width-auto">
+                                            <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" /> 
+                                        </div>
+                                        <div class="uk-width-expand">
+                                            <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
+                                            <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><?=$role;?></div>
+                                        </div>
                                     </div>
-                                    <div class="uk-width-expand">
-                                        <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
-                                        <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><?=$role;?></div>
+                                    <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
+                                    <div>
+                                        <ul class="uk-nav uk-nav-default tm-nav">
+                                            <li class="tm-main-navbar">
+                                                <a href="account" class="uk-h5" style="color: #000;">
+                                                    <img src="img/layout/user.svg" /><?=lang('Global.userProfile')?>
+                                                </a>
+                                            </li>
+                                            <?php if ($role === 'owner') { ?>
+                                            <li class="tm-main-navbar">
+                                                <a href="business" class="uk-h5" style="color: #000;">
+                                                    <img src="img/layout/outlet.svg" /><?=lang('Global.businessInfo')?>
+                                                </a>
+                                            </li>
+                                            <?php } ?>
+                                        </ul>
                                     </div>
+                                    <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
+                                    <a class="uk-button uk-button-danger" href="logout"><?=lang('Global.logout')?></a>
                                 </div>
-                                <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
-                                <div>
-                                    <ul class="uk-nav uk-nav-default tm-nav">
-                                        <li class="tm-main-navbar">
-                                            <a href="account" class="uk-h5" style="color: #000;">
-                                                <img src="img/layout/user.svg" /><?=lang('Global.userProfile')?>
-                                            </a>
-                                        </li>
-                                        <?php if ($role === 'owner') { ?>
-                                        <li class="tm-main-navbar">
-                                            <a href="business" class="uk-h5" style="color: #000;">
-                                                <img src="img/layout/outlet.svg" /><?=lang('Global.businessInfo')?>
-                                            </a>
-                                        </li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                                <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
-                                <a class="uk-button uk-button-danger" href="logout"><?=lang('Global.logout')?></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </nav>
         </header>
         <!-- Header Section end -->
-
+        
         <!-- Navbar Section -->
         <?php if ($ismobile === true) { ?>
             <div id="offcanvas" uk-offcanvas="mode: push; overlay: true">
@@ -176,26 +178,50 @@
                 </div>
             </div>
         <?php } else { ?>
-            <nav class="tm-sidebar-left">
-                <ul class="uk-nav uk-nav-default tm-nav uk-light" uk-nav>
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
+            <nav class="tm-sidebar-left" style="background-color: #204ef1;">
+                <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?>
+                            </div>
+                        </a>
                     </li>
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?>
+                            </div>
+                        </a>
                     </li>
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
-                    </li>   
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
-                    </li>   
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?></a>
-                    </li>   
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?></a>
-                    </li>   
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='mdl')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
+                            <div class="uk-margin-left">
+                                <img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         <?php } ?>
@@ -216,7 +242,7 @@
             ?>
             <div class="<?=$mainPadding?>">
                 <div class="<?=$mainContainer?>">
-                    <div class="<?=$mainCard?>uk-panel uk-panel-scrollable" style="background-color: #f3f6f4;" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
+                    <div class="" style="" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
                         <?= $this->renderSection('main') ?>
                     </div>
                 </div>
