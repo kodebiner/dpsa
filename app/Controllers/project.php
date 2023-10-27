@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\BarModel;
 use App\Models\ProjectModel;
 use App\Models\UserModel;
+use App\Models\MdlModel;
 
 
 class Project extends BaseController
@@ -30,9 +31,11 @@ class Project extends BaseController
         $BarModel       = new BarModel;
         $ProjectModel   = new ProjectModel;
         $UserModel      = new UserModel;
+        $MdlModel       = new MdlModel;
 
         // Populating Data
         $bars       = $BarModel->find(1);
+        $projects   = $ProjectModel->findAll();
         $users      = $UserModel->findAll();
 
         // Data Quantiti
@@ -43,6 +46,8 @@ class Project extends BaseController
         $data['description']    =   lang('Global.dashboardDescription');
         $data['qty']            =   $qty;
         $data['clients']        =   $users;
+        $data['projects']       =   $projects;
+        $data['mdls']           =   $MdlModel->findAll();
 
         return view('project', $data);
     }
@@ -62,14 +67,27 @@ class Project extends BaseController
         ];
         $ProjectModel->save($project);
         
-        $idPro = getInsertId($ProjectModel);
-
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
     public function update($id)
     {
-        $ProjectModel = new ProyekModel;
+        $ProjectModel = new ProjectModel;
+
+        // initialisation
+        $input = $this->request->getPost();
+        $time   = date('Y-m-d H:i:s');
+
+        $project = [
+            'id'            => $id,
+            'name'          => $input['name'],
+            'brief'         => $input['brief'],
+            'clientid'      => $input['client'],
+            'updated_at'    => $time,
+        ];
+        $ProjectModel->save($project);
+        
+        return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
     public function delete(){
