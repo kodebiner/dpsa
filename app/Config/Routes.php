@@ -57,6 +57,14 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->post('delete/(:num)', 'Project::delete/$1');
 });
 
+// rab
+$routes->group('rab',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Rab::index');
+    $routes->post('create', 'Rab::create');
+    $routes->post('update/(:num)', 'Rab::update/$1');
+    $routes->post('delete/(:num)', 'Rab::delete/$1');
+});
+
 // MDL
 $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Mdl::index');

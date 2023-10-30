@@ -6,79 +6,56 @@ use App\Models\BarModel;
 use App\Models\ProjectModel;
 use App\Models\UserModel;
 use App\Models\MdlModel;
+use App\Models\RabModel;
 
 
-class Project extends BaseController
+class Rab extends BaseController
 {
     protected $db, $builder;
     protected $auth;
     protected $config;
 
-    public function __construct()
-    {
-        $this->db       = \Config\Database::connect();
-        $validation     = \Config\Services::validation();
-        $this->builder  = $this->db->table('users');
-        $this->config   = config('Auth');
-        $this->auth     = service('authentication');
-        
-    }
 
     public function index()
     {
         // Find Model
-        $BarModel       = new BarModel;
         $ProjectModel   = new ProjectModel;
         $UserModel      = new UserModel;
         $MdlModel       = new MdlModel;
+        $RabModel       = new RabModel;
 
         // Populating Data
-        $bars       = $BarModel->find(1);
         $projects   = $ProjectModel->findAll();
         $users      = $UserModel->findAll();
-
-        // Data Quantiti
-        $qty = $bars['qty'];
+        $rabs       = $RabModel->findAll();
         
         $data = $this->data;
         $data['title']          =   lang('Global.titleDashboard');
         $data['description']    =   lang('Global.dashboardDescription');
-        $data['qty']            =   $qty;
         $data['clients']        =   $users;
         $data['projects']       =   $projects;
         $data['mdls']           =   $MdlModel->findAll();
+        $data['rabs']           =   $RabModel->findAll();
 
-        return view('project', $data);
+        return view('rab', $data);
     }
 
     public function create()
     {
-        $ProjectModel = new ProjectModel;
-        $RabModel     = new RabModel;
+        $RabModel = new RabModel;
 
         $input  =   $this->request->getPost();
-        $time   =   date('Y-m-d H:i:s');
 
         $project = [
-            'name'          => $input['name'],
-            'brief'         => $input['brief'],
-            'clientid'      => $input['client'],
-            'created_at'    => $time,
+            'qty'               => $input['qty'],
+            'qty_deliver'       => $input['qtydeliv'],
+            'qty_complete'      => $input['qtycomp'],
+            'projectid'         => $input['pro'],
+            'mdlid'             => $input['mdl'],
         ];
-        $ProjectModel->save($project);
-
-        $idPro = $ProjectModel->getInsertID();
-
-        $rab    = [
-            'projectid'     =>  $idPro,
-            'mdlid'         =>  $input['mdl'],
-            'qty'           =>  '0',
-            'qty_delivered' =>  '0',
-            'qty_completed' =>  '0',
-        ];
-        $RabModel->save($rab);
+        $RabModel->save($project);
         
-        return redirect()->to('project')->with('massage', lang('Global.saved'));
+        return redirect()->to('rab')->with('massage', lang('Global.saved'));
     }
 
     public function update($id)

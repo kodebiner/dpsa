@@ -57,8 +57,11 @@
                             select: function(e, i) {
                                 <?php foreach ($mdls as $mdl) { ?>
                                 if (i.item.idx == <?=$mdl['id']?>) {
-                                        $("ol").append("<li value='<?=$mdl['id']?>'><?=$mdl['name']?> : <?=$mdl['price']?></li>");
-                                        $("ol").append("<input type='hidden' name='mdl[<?=$mdl['id']?>]' value='<?=$mdl['id']?>'></input>");
+                                        // $("ol").append("<li value='<?//=$mdl['id']?>'><?//=$mdl['name']?> : <?//=$mdl['price']?></li>");
+                                        // $("ol").append("<input type='hidden' name='mdl[<?//=$mdl['id']?>]' value='<?//=$mdl['id']?>'></input>");
+                                        $("#mdl<?=$mdl['name']?>").append(" <div class='tm-h5'><?=$mdl['name']?></div>");
+                                        $("#mdl<?=$mdl['price']?>").append(" <div class='tm-h5'><?=$mdl['price']?></div>");
+                                        $("#qty<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-small uk-text-center' name='qty' min='1' type='number'></input>");
                                     }
                                 <?php } ?>
                             },
@@ -68,8 +71,22 @@
                 </script>
             </div>
 
-            <ol>
-            </ol>
+            <!-- <ol>
+            </ol> -->
+
+            <div>
+                <div id="mdl<?=$mdl['id']?>" class="uk-width-large uk-flex-middle uk-grid" uk-grid>
+                    <div id="mdl<?=$mdl['name']?>" class="uk-flex-middle uk-width-1-4">
+                        <!-- <div class="tm-h5">Kursi</div> -->
+                    </div>
+                    <div id="mdl<?=$mdl['price']?>"class="uk-flex-middle uk-width-1-4">
+                        <!-- <div class="tm-h5">500000</div> -->
+                    </div>
+                    <div id="qty<?=$mdl['id']?>" class="uk-flex-middle uk-width-1-3">
+                        <!-- <input class="uk-input uk-form-width-small uk-text-center" type="number"></input> -->
+                    </div>
+                </div>
+            </div>
 
             <div class="uk-margin">
                 <div class="uk-inline">
@@ -151,7 +168,7 @@
             <div class="uk-text-center" uk-grid>
 
                 <div class="uk-width-1-2 uk-text-left">
-                    <h3 class="uk-card-title">Project <?=$project['name']?></h3>
+                    <h3 class="tm-h1">Project <?=$project['name']?></h3>
                 </div>
 
                 <div class="uk-width-1-2 uk-text-right">
@@ -164,7 +181,7 @@
             <p class="uk-margin-top"><?=$project['brief']?></p>
             <div class="uk-text-center" uk-grid>
                 <div class="uk-width-1-1 uk-text-left">
-                    <span class="uk-card-title">Progress Project</span>
+                    <span class="tm-h2">Progress Project</span>
                     <a class="uk-icon-button-default" href="#updaterab" uk-icon="file-edit" uk-toggle></a>
                 </div>
             </div>
@@ -184,6 +201,93 @@
         </div>
 
         <form class="uk-margin-left" action="project/update/<?=$project['id']?>" method="post">
+            
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span class="uk-form-icon" uk-icon="icon: file-text"></span>
+                    <input class="uk-input uk-form-width-large" name="name" value="<?=$project['name']?>" placeholder="Name" type="text" aria-label="Not clickable icon">
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?=$project['brief']?>" aria-label="Brief"></textarea>
+                </div>
+            </div>
+
+            <h2 class="tm-h4">Update Design</h2>
+
+            <div class="js-upload uk-placeholder uk-form-width-small uk-text-center">
+                <span uk-icon="icon: cloud-upload"></span>
+                <span class="uk-text-middle">Attach binaries by dropping them here or</span>
+                <div uk-form-custom>
+                    <input type="file"multiple>
+                    <span class="uk-link">selecting one</span>
+                </div>
+            </div>
+
+            <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+
+            <script>
+
+                var bar = document.getElementById('js-progressbar');
+
+                UIkit.upload('.js-upload', {
+
+                    url: '',
+                    multiple: true,
+
+                    beforeSend: function () {
+                        console.log('beforeSend', arguments);
+                    },
+                    beforeAll: function () {
+                        console.log('beforeAll', arguments);
+                    },
+                    load: function () {
+                        console.log('load', arguments);
+                    },
+                    error: function () {
+                        console.log('error', arguments);
+                    },
+                    complete: function () {
+                        console.log('complete', arguments);
+                    },
+
+                    loadStart: function (e) {
+                        console.log('loadStart', arguments);
+
+                        bar.removeAttribute('hidden');
+                        bar.max = e.total;
+                        bar.value = e.loaded;
+                    },
+
+                    progress: function (e) {
+                        console.log('progress', arguments);
+
+                        bar.max = e.total;
+                        bar.value = e.loaded;
+                    },
+
+                    loadEnd: function (e) {
+                        console.log('loadEnd', arguments);
+
+                        bar.max = e.total;
+                        bar.value = e.loaded;
+                    },
+
+                    completeAll: function () {
+                        console.log('completeAll', arguments);
+
+                        setTimeout(function () {
+                            bar.setAttribute('hidden', 'hidden');
+                        }, 1000);
+
+                        alert('Upload Completed');
+                    }
+
+                });
+
+            </script>
 
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
@@ -220,17 +324,17 @@
             <ol>
             </ol>
 
-            
-            <div class="uk-margin">
-                <div class="uk-inline">
-                    <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                    <input class="uk-input uk-form-width-large" name="name" value="<?=$project['name']?>" placeholder="Name" type="text" aria-label="Not clickable icon">
-                </div>
-            </div>
-
-            <div class="uk-margin">
-                <div class="uk-inline">
-                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?=$project['brief']?>" aria-label="Brief"></textarea>
+            <div>
+                <div class="uk-width-large uk-flex-middle uk-grid" uk-grid>
+                    <div class="uk-flex-middle uk-width-1-4">
+                        <div class="tm-h5">Kursi</div>
+                    </div>
+                    <div class="uk-flex-middle uk-width-1-4">
+                        <div class="tm-h5">500000</div>
+                    </div>
+                    <div id="mdlname" class="uk-flex-middle uk-width-1-3">
+                        <input class="uk-input uk-form-width-small uk-text-center" type="number"></input>
+                    </div>
                 </div>
             </div>
 

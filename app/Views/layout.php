@@ -161,10 +161,10 @@
                                 <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
                             </li>
                             <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
+                                <a class="uk-h4 tm-h4" href="<?= base_url('design') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
                             </li>
                             <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
+                                <a class="uk-h4 tm-h4" href="<?= base_url('rab') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
                             </li>
                             <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
                                 <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?></a>
@@ -193,15 +193,15 @@
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='design')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('design') ?>">
                             <div class="uk-margin-left">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
+                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='rab')?'uk-active':''?>">
+                        <a class="uk-h4 tm-h4" href="<?= base_url('rab') ?>">
                             <div class="uk-margin-left">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?>
                             </div>

@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class RabModel extends Model
 {
     protected $allowedFields = [
-        'mdlid', 'proyekid', 'qty_completed', 'qty_delivered', 'qty',
+        'mdlid', 'projectid', 'qty_complete', 'qty_deliver', 'qty',
     ];
     protected $table            = 'Rab';
     protected $primaryKey       = 'id';
