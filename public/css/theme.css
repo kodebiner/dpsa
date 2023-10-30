@@ -4059,11 +4059,24 @@ ul.uk-nav-sub {
 }
 
 .uk-nav-default>li>a {
-    color: #000
+    --c: #fff; /* the color */
+    border-radius: 15px 0px 0px 15px;
+    color: #fff;
+    background: 
+        linear-gradient(currentColor 0 0) content-box,
+        linear-gradient(#fff 0 0) 100%/var(--_p,0%) padding-box no-repeat
+        var(--_c,#0000);
+    -webkit-background-clip: text,padding-box,padding-box;
+            background-clip: text,padding-box,padding-box;
+    transition: 0s ,color .5s,background-color .5s;
 }
 
 .uk-nav-default>li>a:hover {
-    color: #666
+    color: #000;
+    --_c: var(--c);
+    --_p: 100%;
+    border-radius: 15px 0px 0px 15px;
+    transition: .5s;
 }
 
 .uk-nav-default>li.uk-active>a {
@@ -7964,7 +7977,7 @@ video) {
 .uk-section-secondary:not(.uk-preserve-color),
 .uk-tile-primary:not(.uk-preserve-color),
 .uk-tile-secondary:not(.uk-preserve-color) {
-    color: rgb(0, 0, 0)
+    color: rgb(255, 255, 255)
 }
 
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-link,
@@ -11460,7 +11473,7 @@ body {
     top: 15px;
     left: -25px;
     width: 15px;
-    border-top: 1px solid #1e87f0;
+    border-top: 2px solid #fff;
 }
 
 .tm-nav .uk-nav-header {

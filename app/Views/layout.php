@@ -35,14 +35,13 @@
 
     </head>
     <body>
-
         <!-- Header Section -->
         <header>
             <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
                 <div class="uk-container uk-container-expand">
                     <div uk-navbar>
                         <div class="uk-navbar-left">
-                            <a class="uk-navbar-item uk-logo" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia">DPSA</a>
+                            <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia">DPSA</a>
                         </div>
                         <div class="uk-navbar-right">
                             <div id="tm-fullscreen" class="uk-navbar-item">
