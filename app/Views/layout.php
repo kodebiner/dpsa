@@ -36,12 +36,12 @@
     </head>
     <body>
         <!-- Header Section -->
-        <header>
+        <header class="uk-margin">
             <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
                 <div class="uk-container uk-container-expand">
                     <div uk-navbar>
                         <div class="uk-navbar-left">
-                            <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/binary111-logo-icon.svg" alt="PT. Kodebiner Teknologi Indonesia">DPSA</a>
+                            <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/logo.png" width="80"></a>
                         </div>
                         <div class="uk-navbar-right">
                             <div id="tm-fullscreen" class="uk-navbar-item">
@@ -177,16 +177,19 @@
                 </div>
             </div>
         <?php } else { ?>
-            <nav class="tm-sidebar-left" style="background-color: #204ef1;">
+            <nav class="tm-sidebar-left" style="background-color: #007ec8;">
                 <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
                     <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
                         <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
                             <div class="uk-margin-left">
-                                <img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?>
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center"><?=lang('Global.dashboard');?></div>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
+                    <!-- <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
                         <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>">
                             <div class="uk-margin-left">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?>
@@ -220,7 +223,7 @@
                                 <img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </nav>
         <?php } ?>
@@ -235,7 +238,7 @@
                 $mainCard = '';
             } else {
                 $mainPadding = 'uk-padding-xlarge-left';
-                $mainContainer = 'uk-container uk-container-expand uk-padding-remove-right';
+                $mainContainer = 'uk-container uk-container-expand';
                 $mainCard = 'tm-main-card tm-main-panel ';
             }
             ?>
@@ -248,7 +251,7 @@
             </div>
             
             <!-- Footer Section -->
-            <footer class="tm-footer" style="background-color: #204ef1; color: #fff;">
+            <footer class="tm-footer" style="background-color: #007ec8; color: #fff;">
                 <?php
                 if ($ismobile === true) {
                     $footerPadding = '';

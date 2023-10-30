@@ -50,6 +50,11 @@ class User extends BaseController
         return view('users', $data);
     }
 
+    public function accesscontrol()
+    {
+        
+    }
+
     // public function create()
 
     // {
