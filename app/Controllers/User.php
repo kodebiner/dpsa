@@ -52,7 +52,19 @@ class User extends BaseController
 
     public function accesscontrol()
     {
+        // Calling Libraries and Services
+        $authorize = $auth = service('authorization');
+
+        // Populating Data
+        $groups = $authorize->groups();
         
+        // Parsing data to view
+        $data                   = $this->data;
+        $data['title']          = lang('Global.employeeList');
+        $data['description']    = lang('Global.employeeListDesc');
+        $data['groups']         = $groups;
+
+        return view('accesscontrol', $data);
     }
 
     // public function create()

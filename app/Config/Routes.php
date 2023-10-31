@@ -39,6 +39,7 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
 
 $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('','User::index');
+    $routes->get('access-control','User::accesscontrol');
 });
 
 // Upload Routes

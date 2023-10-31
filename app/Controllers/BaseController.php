@@ -67,7 +67,6 @@ abstract class BaseController extends Controller
         $this->userModel = new UserModel();
         $this->GroupModel = new GroupModel();
         $this->GroupUserModel = new GroupUserModel();
-        // $this->ConfigModel = new GconfigModel();
 
         // Login Check
         $auth = service('authentication');
@@ -75,7 +74,6 @@ abstract class BaseController extends Controller
             $this->userId = null;
             $fullname = '';
             $this->user = null;
-            // $outletUser = '';
         }
         else {
             $this->userId = $auth->id();
@@ -85,9 +83,6 @@ abstract class BaseController extends Controller
             // Getting User Role
             $GroupUser = $this->GroupUserModel->where('user_id', $this->userId)->first();
             $role = $this->GroupModel->find($GroupUser['group_id']);
-
-            // Get User Outlet Access
-            // $outletUser = $this->OutletAccessModel->where('userid',$this->userId)->find();
         }
 
         // Language check
@@ -96,28 +91,6 @@ abstract class BaseController extends Controller
 		} else {
 			$lang = 'en';
 		}
-
-        // Load Config
-        // $this->gconfig = $this->ConfigModel->first();
-
-        // if (!empty($this->gconfig)) {
-        //     $gconfig = $this->gconfig;
-        // } else {
-        //     $gconfig = [
-        //         'id'                => null,
-        //         'logo'              => null,
-        //         'bizname'           => null,
-        //         'ppn'               => null,
-        //     ];
-        // }
-
-        // Determining outlet sessionn
-        // $outletSes = $session->get('outlet');
-        // if ($outletSes != null) {
-        //     $outletPick = $outletSes;
-        // } else {
-        //     $outletPick = null;
-        // }
         
 
         // Parsing View Data
@@ -129,10 +102,6 @@ abstract class BaseController extends Controller
             'authorize'     => service('authorization'),
             'account'       => $this->user,
             'fullname'      => $fullname,
-            // 'outlets'       => $this->OutletModel->findAll(),
-            // 'baseoutlets'   => $outletUser,
-            // 'gconfig'       => $gconfig,
-            // 'outletPick'    => $outletPick,
 		];
 
         if ($auth->check()) {

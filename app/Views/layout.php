@@ -35,70 +35,113 @@
 
     </head>
     <body>
+        <?php if ($ismobile === true) { ?>
+        <!-- Offcanvas Section -->
+        <div id="offcanvas" uk-offcanvas="mode: push; overlay: true">
+            <div class="uk-offcanvas-bar" role="dialog" aria-modal="true">
+                <nav>
+                    <ul class="uk-nav uk-nav-default tm-nav" uk-nav>                            
+                        <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                            <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/dashboard.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center"><?=lang('Global.dashboard');?></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/client.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Client</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/user.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">User</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                            <a class="uk-h4 tm-h4" href="users/access-control">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/userrole.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Hak Akses</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/marketing.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Marketing</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Produksi</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/finance.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Finance</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/design.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Design</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- Offcanvas Section end -->
+        <?php } ?>
+
         <!-- Header Section -->
         <header class="uk-margin">
             <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
                 <div class="uk-container uk-container-expand">
                     <div uk-navbar>
-                        <div class="uk-navbar-left">
+                        <?php if ($ismobile === true) { ?>
+                            <div class="uk-navbar-left">
+                                <a class="uk-navbar-toggle" href="#offcanvas" uk-navbar-toggle-icon uk-toggle role="button" aria-label="Open menu"></a>
+                            </div>
+                        <?php } ?>
+                        <div class="uk-navbar-center">
                             <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/logo.png" width="80"></a>
                         </div>
                         <div class="uk-navbar-right">
-                            <div id="tm-fullscreen" class="uk-navbar-item">
-                                <a id="tm-open-fullscreen" class="tm-h4 tm-outlet" uk-icon="expand" onclick="openFullscreen()"></a>
-                            </div>
-                            <script type="text/javascript">
-                                var elem = document.documentElement;
-
-                                function openFullscreen() {
-                                    if (elem.requestFullscreen) {
-                                        elem.requestFullscreen();
-                                    } else if (elem.webkitRequestFullscreen) { // Safari
-                                        elem.webkitRequestFullscreen();
-                                    } else if (elem.msRequestFullscreen) { // IE11
-                                        elem.msRequestFullscreen();
-                                    }
-
-                                    const fullscreenContainer = document.getElementById('tm-fullscreen');
-                                    const openButton = document.getElementById('tm-open-fullscreen');
-
-                                    // add close button
-                                    const closeButton = document.createElement('a');
-                                    closeButton.setAttribute('id', 'tm-close-fullscreen')
-                                    closeButton.setAttribute('class', 'tm-h4 tm-outlet');
-                                    closeButton.setAttribute('uk-icon', 'shrink');
-                                    closeButton.setAttribute('onclick', 'closeFullscreen()');
-                                    fullscreenContainer.appendChild(closeButton);
-
-                                    // remove open button
-                                    openButton.remove();
-                                }
-
-                                function closeFullscreen() {
-                                    if (document.exitFullscreen) {
-                                        document.exitFullscreen();
-                                    } else if (document.webkitExitFullscreen) { // Safari
-                                        document.webkitExitFullscreen();
-                                    } else if (document.msExitFullscreen) { // IE11
-                                        document.msExitFullscreen();
-                                    }
-
-                                    const fullscreenContainer = document.getElementById('tm-fullscreen');
-                                    const closeButton = document.getElementById('tm-close-fullscreen');
-
-                                    // add open button
-                                    const openButton = document.createElement('a');
-                                    openButton.setAttribute('id', 'tm-open-fullscreen')
-                                    openButton.setAttribute('class', 'tm-h4 tm-outlet');
-                                    openButton.setAttribute('uk-icon', 'expand');
-                                    openButton.setAttribute('onclick', 'openFullscreen()');
-                                    fullscreenContainer.appendChild(openButton);
-
-                                    // remove close button
-                                    closeButton.remove();
-                                }
-                            </script>
-
                             <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
                                 <a class="uk-link-reset" type="button">
                                     <?php
@@ -122,20 +165,7 @@
                                     </div>
                                     <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
                                     <div>
-                                        <ul class="uk-nav uk-nav-default tm-nav">
-                                            <li class="tm-main-navbar">
-                                                <a href="account" class="uk-h5" style="color: #000;">
-                                                    <img src="img/layout/user.svg" /><?=lang('Global.userProfile')?>
-                                                </a>
-                                            </li>
-                                            <?php if ($role === 'owner') { ?>
-                                            <li class="tm-main-navbar">
-                                                <a href="business" class="uk-h5" style="color: #000;">
-                                                    <img src="img/layout/outlet.svg" /><?=lang('Global.businessInfo')?>
-                                                </a>
-                                            </li>
-                                            <?php } ?>
-                                        </ul>
+                                        <a class="uk-link-reset uk-h4" href="account"><span uk-icon="user"></span> Kelola Akun</a>
                                     </div>
                                     <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
                                     <a class="uk-button uk-button-danger" href="logout"><?=lang('Global.logout')?></a>
@@ -149,43 +179,86 @@
         <!-- Header Section end -->
         
         <!-- Navbar Section -->
-        <?php if ($ismobile === true) { ?>
-            <div id="offcanvas" uk-offcanvas="mode: push; overlay: true">
-                <div class="uk-offcanvas-bar" role="dialog" aria-modal="true">
-                    <nav>
-                        <ul class="uk-nav uk-nav-default tm-nav uk-light" uk-nav>
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('') ?>"><img src="img/layout/dashboard.svg" uk-svg><?=lang('Global.dashboard');?></a>
-                            </li>   
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?></a>
-                            </li>
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('design') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?></a>
-                            </li>
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('rab') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?></a>
-                            </li>
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>"><img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?></a>
-                            </li>   
-                            <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                                <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>"><img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?></a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        <?php } else { ?>
+        <?php if ($ismobile === false) { ?>
             <nav class="tm-sidebar-left" style="background-color: #007ec8;">
                 <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
                     <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
                         <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
-                            <div class="uk-margin-left">
+                            <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
                                 </div>
                                 <div class="tm-navbar-text uk-text-center"><?=lang('Global.dashboard');?></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/client.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Client</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/user.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">User</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                        <a class="uk-h4 tm-h4" href="users/access-control">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/userrole.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Hak Akses</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/marketing.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Marketing</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Produksi</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/finance.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Finance</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/design.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Design</div>
                             </div>
                         </a>
                     </li>
@@ -234,7 +307,7 @@
             <?php
             if ($ismobile === true) {
                 $mainPadding = '';
-                $mainContainer = '';
+                $mainContainer = 'uk-container';
                 $mainCard = '';
             } else {
                 $mainPadding = 'uk-padding-xlarge-left';
@@ -244,7 +317,7 @@
             ?>
             <div class="<?=$mainPadding?>">
                 <div class="<?=$mainContainer?>">
-                    <div class="" style="" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
+                    <div uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
                         <?= $this->renderSection('main') ?>
                     </div>
                 </div>
