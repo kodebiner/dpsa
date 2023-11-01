@@ -98,6 +98,9 @@
                                 if (i.item.idx == <?=$pro['id']?>) {
                                     if(!$("#namepro").length){
                                         $("#pro").append("<input type='hidden' name='pro' value='<?=$pro['id']?>'></input>");
+                                        $("#pro").append("<div id='proname' class='uk-width-1-3'></div>");
+                                        $("#pro").append("<div id='prodate'class='uk-width-expand'></div>");
+                                        $("#pro").append("<div id='prodel' class='uk-width-1-4'></div>");
                                         $("#proname").append("<div id='namepro' style='color:white' class='tm-h6'><?=$pro['name']?></div>");
                                         $("#prodate").append("<div id='datepro' style='color:white' class='tm-h6'><?=$pro['created_at']?></div>");
                                         $("#prodel").append("<a id='btnremovepro' style='color:white' class='uk-icon-link uk-button-xsmall uk-text-left uk-margin-remove-left' uk-icon='close'></a");
@@ -122,15 +125,6 @@
             </div>
 
                 <div id="pro" class="uk-text-center uk-margin-small-left uk-ligth uk-width-large" uk-grid>
-                    <div id="proname" class="uk-width-1-3">
-                        
-                    </div>
-                    <div id="prodate"class="uk-width-expand">
-                       
-                    </div>
-                    <div id="prodel" class="uk-width-1-4">
-                       
-                    </div>
                 </div>
             
             <hr class="uk-width-large">
@@ -241,21 +235,34 @@
 </div>
 <!-- end add rab modal -->
 
-<?php foreach ($rabs as $rab){?>
 <!-- update progress modal -->
+<?php foreach ($rabs as $rab){?>
 <div id="modalupdate<?=$rab['id']?>" uk-modal>
     <div class="uk-modal-dialog">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header uk-margin">
-            <h2 class="uk-modal-title"> Update Progress</h2>
+            <h2 class="uk-modal-title"> Update Rab</h2>
         </div>
 
-        <form class="uk-margin-left" action="bar/update/1" method="post">
-            
+        <form class="uk-margin-left" action="rab/update/$id" method="post">
             <div class="uk-margin">
                 <div class="uk-inline">
-                    <span class="uk-form-icon" uk-icon="icon: pencil"></span>
-                    <input class="uk-input" id="rabqty" value="<?=$rab['qty']?>" name="qty" placeholder="<?=$rab['qty']?>" type="number" aria-label="Not clickable icon">
+                    <span class="uk-form-icon" uk-icon="icon: database"></span>
+                    <input class="uk-input uk-form-width-large" name="qty" value="<?=$rab['qty']?>" placeholder="Quantity" type="number" aria-label="Not clickable icon">
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span class="uk-form-icon" uk-icon="icon:  refresh"></span>
+                    <input class="uk-input uk-form-width-large" name="qtydeliv" value="<?=$rab['qty_deliver']?>" placeholder="Quantity Delivered" type="number" aria-label="Not clickable icon">
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span class="uk-form-icon" uk-icon="icon:  check"></span>
+                    <input class="uk-input uk-form-width-large" name="qtycomp" value="<?=$rab['qty_complete']?>" placeholder="Quantity Completed" type="number" aria-label="Not clickable icon">
                 </div>
             </div>
 
