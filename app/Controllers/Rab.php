@@ -46,40 +46,47 @@ class Rab extends BaseController
 
         $input  =   $this->request->getPost();
 
-        $project = [
+        $rab = [
             'qty'               => $input['qty'],
             'qty_deliver'       => $input['qtydeliv'],
             'qty_complete'      => $input['qtycomp'],
             'projectid'         => $input['pro'],
             'mdlid'             => $input['mdl'],
         ];
-        $RabModel->save($project);
+        $RabModel->save($rab);
         
         return redirect()->to('rab')->with('massage', lang('Global.saved'));
     }
 
     public function update($id)
     {
-        $ProjectModel = new ProjectModel;
+        $RabtModel = new RabtModel;
 
         // initialisation
         $input = $this->request->getPost();
         $time   = date('Y-m-d H:i:s');
 
-        $project = [
-            'id'            => $id,
-            'name'          => $input['name'],
-            'brief'         => $input['brief'],
-            'clientid'      => $input['client'],
-            'updated_at'    => $time,
+        $rab = [
+            'id'                => $id,
+            'qty'               => $input['qty'],
+            'qty_deliver'       => $input['qtydeliv'],
+            'qty_complete'      => $input['qtycomp'],
+            'projectid'         => $input['pro'],
+            'mdlid'             => $input['mdl'],
         ];
-        $ProjectModel->save($project);
+        $RabModel->save($rab);
         
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
-    public function delete(){
+    public function delete($id){
 
+        $RabModel = new RabModel;
+
+        $rab = $RabModel->find($id);
+        $RabModel->delete($rab);
+
+        return redirect()->to('rab')->with('massage', lang('Global.deleted'));
     }
 
     public function approve(){

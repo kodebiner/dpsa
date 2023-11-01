@@ -131,12 +131,12 @@
                 </div>
             </div>
             
-            <hr>
+            <hr class="uk-width-large">
 
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: search"></span>
-                    <input class="uk-input" type="text" placeholder="Search Projects ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="border-radius: 5px;">
+                    <input class="uk-input" type="text" placeholder="Search MDL ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="border-radius: 5px;">
                 </div>
                 <script type="text/javascript">
                     $(function() {
@@ -154,19 +154,35 @@
                             select: function(e, i) {
                                 <?php foreach ($mdls as $mdl) { ?>
                                 if (i.item.idx == <?=$mdl['id']?>) {
-                                    if(!$("#namemdl").length){
-                                        $("#mdl").append("<input type='hidden' name='mdl' value='<?=$mdl['id']?>'></input>");
-                                        $("#mdlname").append("<div id='namemdl' class='tm-h6'><?=$mdl['name']?></div>");
-                                        $("#mdlprice").append("<div id='datemdl' class='tm-h6'><?=$mdl['price']?></div>");
-                                        $("#mdldel").append("<a id='btnremovemdl' class='uk-icon-link uk-button-xsmall' uk-icon='close'></a");
+                                    if(!$("#namemdl<?=$mdl['id']?>").length){
+                                        $('#mdlcontain<?=$mdl['id']?>').removeAttr('hidden');
+                                        $("#mdlcontain<?=$mdl['id']?>").append("<div id='containermdl<?=$mdl['id']?>' style='border:1px blue; border-style: solid;' class='uk-margin uk-width-large'></div>");
+                                        $("#containermdl<?=$mdl['id']?>").append("<div id='mdl<?=$mdl['id']?>' class='uk-flex-middle uk-width-large uk-grid' uk-grid></div>");
+                                        $("#mdl<?=$mdl['id']?>").append("<input type='hidden' name='mdl' value='<?=$mdl['id']?>'></input>");
+                                        $("#mdl<?=$mdl['id']?>").append("<div id='mdlname<?=$mdl['id']?>' class='uk-flex-middle uk-width-1-3'></div>");
+                                        $("#mdl<?=$mdl['id']?>").append("<div id='mdlprice<?=$mdl['id']?>'class='uk-flex-middle  uk-text-center uk-width-1-3'></div>");
+                                        $("#mdl<?=$mdl['id']?>").append("<div id='mdldel<?=$mdl['id']?>' class='uk-flex-middle uk-text-right uk-width-1-3'></div>");
+                                        $("#mdlname<?=$mdl['id']?>").append("<div id='namemdl<?=$mdl['id']?>' class='tm-h6 uk-text-center'><?=$mdl['name']?></div>");
+                                        $("#mdlprice<?=$mdl['id']?>").append("<div id='datemdl' class='tm-h6'><?=$mdl['price']?></div>");
+                                        $("#mdldel<?=$mdl['id']?>").append("<a id='btnremovemdl<?=$mdl['id']?>' class='uk-icon-link uk-button-xsmall' uk-icon='close'></a");
+                                        $("#qty<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: database; ratio:0.5'></span>");
+                                        $("#qty<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qty' placeholder='Quantity' type='number' aria-label='Not clickable icon'>");
+                                        $("#deliv<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: refresh; ratio:0.5'></span>");
+                                        $("#deliv<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qtydeliv' placeholder='Delivered' type='number' aria-label='Not clickable icon'>");
+                                        $("#completed<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: check; ratio:0.5'></span>");
+                                        $("#completed<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='completed' placeholder='Delivered' type='number' aria-label='Not clickable icon'>");
                                     }else{
                                         alert("Already Added");
                                     }
-                                    $("#btnremovemdl").click(function(){
-                                        $("#mdl").empty();
-                                        $("#mdlname").empty();
-                                        $("#mdlprice").empty();
-                                        $("#mdldel").empty();
+                                    $("#btnremovemdl<?=$mdl['id']?>").click(function(){
+                                        $("#mdlcontain<?=$mdl['id']?>").empty();
+                                        $("#mdl<?=$mdl['id']?>").empty();
+                                        $("#mdlname<?=$mdl['id']?>").empty();
+                                        $("#mdlprice<?=$mdl['id']?>").empty();
+                                        $("#mdldel<?=$mdl['id']?>").empty();
+                                        $("#qty<?=$mdl['id']?>").empty();
+                                        $("#deliv<?=$mdl['id']?>").empty();
+                                        $("#completed<?=$mdl['id']?>").empty();
                                     });
                                 }
                                 <?php } ?>
@@ -176,22 +192,30 @@
                     });
                 </script>
             </div>
-
-            <div>
-                <div id="mdl" class="uk-width-large uk-flex-middle uk-grid" uk-grid>
-                    <div id="mdlname" class="uk-flex-middle uk-width-1-3">
-                        
-                    </div>
-                    <div id="mdlprice"class="uk-flex-middle uk-width-1-3">
-                       
-                    </div>
-                    <div id="mdldel" class="uk-flex-middle uk-width-1-3">
-                       
-                    </div>
-                </div>
+            
+            <?php foreach ($mdls as $mdl){?>
+            <div id="mdlcontain<?=$mdl['id']?>">
             </div>
 
-            <hr>
+            <div class="uk-flex-middle uk-margin uk-width-large uk-grid" id="qtycon" uk-grid>
+                <div class="uk-width-1-3 uk-text-xsmall">
+                    <div class="uk-inline" id="qty<?=$mdl['id']?>">
+                    </div>
+                </div>
+                <div class="uk-width-1-3">
+                    <div class="uk-inline  uk-text-xsmall" id="deliv<?=$mdl['id']?>">
+                    </div>
+                </div>
+                <div class="uk-width-1-3  uk-text-xsmall">
+                    <div class="uk-inline" id="completed<?=$mdl['id']?>">
+                    </div>
+                </div>
+            </div>  
+            <?php } ?>
+
+            
+
+            <hr class="uk-width-large">
 
             <div class="uk-margin">
                 <div class="uk-inline">
@@ -216,7 +240,6 @@
 
             <div class="uk-modal-footer uk-text-right">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                <button class="uk-button uk-button-danger uk-modal-close" type="button">Delete</button>
                 <button class="uk-button uk-button-primary" type="submit">Save</button>
             </div>
            
@@ -225,6 +248,37 @@
     </div>
 </div>
 <!-- end add rab modal -->
+
+<?php foreach ($rabs as $rab){?>
+<!-- update progress modal -->
+<div id="modalupdate<?=$rab['id']?>" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header uk-margin">
+            <h2 class="uk-modal-title"> Update Progress</h2>
+        </div>
+
+        <form class="uk-margin-left" action="bar/update/1" method="post">
+            
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span class="uk-form-icon" uk-icon="icon: pencil"></span>
+                    <input class="uk-input" id="rabqty" value="<?=$rab['qty']?>" name="qty" placeholder="<?=$rab['qty']?>" type="number" aria-label="Not clickable icon">
+                </div>
+            </div>
+
+            <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                <a class="uk-button uk-button-danger" href="rab/delete/<?=$rab['id']?>" onclick="return confirm('<?=lang('Global.deleteConfirm')?>')" method="post">Delete</a>
+                <button class="uk-button uk-button-primary" type="submit">Save</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<?php } ?>
+<!-- end update progress modal -->
 
 
 <?= $this->endSection() ?>
