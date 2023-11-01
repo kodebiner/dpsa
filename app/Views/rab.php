@@ -84,7 +84,9 @@
                             {label: 'Pro List', idx: '0'},
                             <?php
                                 foreach ($projects as $pro) {
-                                    echo '{label:"'.$pro['name'].'",idx:'.$pro['id'].'},';
+                                    if ($pro['deleted_at'] === null){
+                                        echo '{label:"'.$pro['name'].'",idx:'.$pro['id'].'},';
+                                    }
                                 }
                             ?>
                         ];
@@ -119,7 +121,7 @@
                 </script>
             </div>
 
-                <div id="pro" class="uk-text-center uk-margin-left uk-ligth uk-width-large" uk-grid>
+                <div id="pro" class="uk-text-center uk-margin-small-left uk-ligth uk-width-large" uk-grid>
                     <div id="proname" class="uk-width-1-3">
                         
                     </div>

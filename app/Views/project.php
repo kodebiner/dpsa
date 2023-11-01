@@ -68,6 +68,7 @@
 </div>
 <!-- end add project modal -->
 
+
 <?php foreach ($projects as $project) { ?>
     <div class="uk-child-width-1-1@m uk-grid-match uk-margin" uk-grid>
 
@@ -87,30 +88,38 @@
                 
                 </div>
                 <hr>
-                <p class="uk-margin-top"><?=$project['brief']?></p>
+
+                <div class="uk-panel">
+                    <img class="uk-align-left uk-margin-remove-adjacent" src="img/binary111-logo-icon.svg" width="225" height="150" alt="Example image">
+                    <p class="uk-h3"> Brief <?=$project['name']?> </p>
+                    <p><?=$project['brief']?></p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+              
 
                 <?php foreach ($rabs as $rab){
                     if($rab['projectid'] === $project['id']){ 
                         foreach ($mdls as $mdl){
-                                if ($mdl['id'] === $rab['mdlid']) {?>
-                                    <div class="uk-text-center" uk-grid>
-                                        <div class="uk-width-1-1 uk-text-left">
-                                            <span class="tm-h2">Progress <?=$mdl['name']?></span>
-                                            <a class="uk-icon-button-default" href="#updaterab" uk-icon="file-edit" uk-toggle></a>
-                                        </div>
+                            if ($mdl['id'] === $rab['mdlid']) {?>
+                                <div class="uk-text-center uk-width-1-1" uk-grid>
+
+                                    <div class="uk-width-1-2 uk-text-left">
+                                        <span class="tm-h2"><?=$mdl['name']?></span>
+                                        <a class="uk-icon-button-default" href="#updaterab" uk-icon="file-edit" uk-toggle></a>
                                     </div>
-                                <?php }
-                                } ?>
-                                <progress id="progress" class="uk-progress" value="<?=$rab['qty_complete']?>" max="<?=$rab['qty']?>"></progress>
-                                <script>
-                                    UIkit.util.ready(function () {
 
-                                        var bar = document.getElementById('js-progressbar');
+                                    <div class="uk-width-1-2 uk-text-right">
+                                        <span class="tm-h5">
+                                            <?php $persent = round($rab['qty_complete']/$rab['qty']*100) ?>
+                                            Progress <?=$persent?> %
+                                        </span>
+                                    </div>
 
-
-                                    });
-                                </script>
-                            <?php
+                                </div>
+                            <?php }
+                            } ?>
+                            <progress id="progress" class="uk-progress" value="<?=$rab['qty_complete']?>" max="<?=$rab['qty']?>"></progress>
+                        <?php
                     }
                 } ?>
             </div>
