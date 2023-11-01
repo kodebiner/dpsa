@@ -76,7 +76,7 @@
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: search"></span>
-                    <input class="uk-input" type="text" placeholder="Search Projects ..." id="prosearch" name="pro" aria-label="Not clickable icon" style="border-radius: 20px;">
+                    <input class="uk-input" type="text" placeholder="Search Projects ..." id="prosearch" name="pro" aria-label="Not clickable icon" style="">
                 </div>
                 <script type="text/javascript">
                     $(function() {
@@ -136,7 +136,7 @@
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: search"></span>
-                    <input class="uk-input" type="text" placeholder="Search MDL ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="border-radius: 20px;">
+                    <input class="uk-input" type="text" placeholder="Search MDL ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="">
                 </div>
                 <script type="text/javascript">
                     $(function() {
