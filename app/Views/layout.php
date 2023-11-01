@@ -202,8 +202,8 @@
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar">
-                        <a class="uk-h4 tm-h4" href="">
+                    <li class="uk-margin-left tm-main-navbar <?= ($uri->getSegment(1) === 'users') ? 'uk-active' : '' ?>">
+                        <a class="uk-h4 tm-h4" href="users">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/user.svg" uk-svg>
