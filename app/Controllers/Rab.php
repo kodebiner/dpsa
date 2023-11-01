@@ -46,14 +46,25 @@ class Rab extends BaseController
 
         $input  =   $this->request->getPost();
 
-        $rab = [
-            'qty'               => $input['qty'],
-            'qty_deliver'       => $input['qtydeliv'],
-            'qty_complete'      => $input['qtycomp'],
-            'projectid'         => $input['pro'],
-            'mdlid'             => $input['mdl'],
-        ];
-        $RabModel->save($rab);
+        foreach ($input['qty'] as $id => $qty){
+            $rabdat [] = [
+                'projectid'     => $input['pro'],
+                'mdlid'         => $id,
+                'qty'           => $qty,
+                'qty_deliver'   => $input['qtydeliv'][$id],
+                'qty_complete'  => $input['completed'][$id],
+            ];
+        }
+        foreach ($rabdat as $rab){
+            $data = [
+                'projectid'     => $rab['projectid'],
+                'mdlid'         => $rab['mdlid'],
+                'qty'           => $rab['qty'],
+                'qty_deliver'   => $rab['qty_deliver'],
+                'qty_complete'  => $rab['qty_complete'],
+            ];
+            $RabModel->save($data);
+        }
         
         return redirect()->to('rab')->with('massage', lang('Global.saved'));
     }

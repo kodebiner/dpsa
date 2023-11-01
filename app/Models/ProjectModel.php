@@ -7,9 +7,12 @@ class ProjectModel extends Model
     protected $allowedFields = [
         'clientid', 'brief', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
+    
+    protected $useAutoIncrement = true;
+    protected $useSoftDeletes = true;
+
     protected $table            = 'project';
     protected $primaryKey       = 'id';
-    protected $useAutoIncrement = true;
     protected $updatedField     = 'updated_at';
     protected $deletedField     = 'deleted_at';
     protected $returnType       = 'array';

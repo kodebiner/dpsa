@@ -6,6 +6,7 @@ use App\Models\BarModel;
 use App\Models\ProjectModel;
 use App\Models\UserModel;
 use App\Models\MdlModel;
+use App\Models\RabModel;
 
 
 class Project extends BaseController
@@ -31,6 +32,7 @@ class Project extends BaseController
         $ProjectModel   = new ProjectModel;
         $UserModel      = new UserModel;
         $MdlModel       = new MdlModel;
+        $RabModel       = new RabModel;
 
         // Populating Data
         $bars       = $BarModel->find(1);
@@ -47,6 +49,7 @@ class Project extends BaseController
         $data['clients']        =   $users;
         $data['projects']       =   $projects;
         $data['mdls']           =   $MdlModel->findAll();
+        $data['rabs']           =   $RabModel->findAll();
 
         return view('project', $data);
     }
@@ -54,7 +57,6 @@ class Project extends BaseController
     public function create()
     {
         $ProjectModel = new ProjectModel;
-        $RabModel     = new RabModel;
 
         $input  =   $this->request->getPost();
         $time   =   date('Y-m-d H:i:s');
@@ -66,17 +68,6 @@ class Project extends BaseController
             'created_at'    => $time,
         ];
         $ProjectModel->save($project);
-
-        $idPro = $ProjectModel->getInsertID();
-
-        $rab    = [
-            'projectid'     =>  $idPro,
-            'mdlid'         =>  $input['mdl'],
-            'qty'           =>  '0',
-            'qty_delivered' =>  '0',
-            'qty_completed' =>  '0',
-        ];
-        $RabModel->save($rab);
         
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
@@ -101,8 +92,27 @@ class Project extends BaseController
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
-    public function delete(){
+    public function delete($id){
 
+        $ProjectModel = new ProjectModel;
+        $RabModel = new RabModel;
+
+        // Delete Rab Project
+        $datarab = $RabModel->findAll();
+        foreach ($datarab as $rabs){
+            if($rabs['projectid'] === $id){
+                $rabdata [] = $rabs['id'];
+            }
+        }
+        if(!empty($rabdata)){
+            $RabModel->delete($rabdata);
+        }
+
+        // Delete Project
+        $project = $ProjectModel->find($id);
+        $ProjectModel->delete($project);
+
+        return redirect()->to('project')->with('massage', lang('Global.deleted'));
     }
 
     public function approve(){

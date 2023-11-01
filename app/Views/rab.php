@@ -76,7 +76,7 @@
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: search"></span>
-                    <input class="uk-input" type="text" placeholder="Search Projects ..." id="pro" name="pro" aria-label="Not clickable icon" style="border-radius: 5px;">
+                    <input class="uk-input" type="text" placeholder="Search Projects ..." id="prosearch" name="pro" aria-label="Not clickable icon" style="border-radius: 20px;">
                 </div>
                 <script type="text/javascript">
                     $(function() {
@@ -89,21 +89,23 @@
                             ?>
                         ];
 
-                        $("#pro").autocomplete({
+                        $("#prosearch").autocomplete({
                             source: proList,
                             select: function(e, i) {
                                 <?php foreach ($projects as $pro) { ?>
                                 if (i.item.idx == <?=$pro['id']?>) {
                                     if(!$("#namepro").length){
                                         $("#pro").append("<input type='hidden' name='pro' value='<?=$pro['id']?>'></input>");
-                                        $("#proname").append("<div id='namepro' class='tm-h6'><?=$pro['name']?></div>");
-                                        $("#prodate").append("<div id='datepro' class='tm-h6'><?=$pro['created_at']?></div>");
-                                        $("#prodel").append("<a id='btnremovepro' class='uk-icon-link uk-button-xsmall' uk-icon='close'></a");
+                                        $("#proname").append("<div id='namepro' style='color:white' class='tm-h6'><?=$pro['name']?></div>");
+                                        $("#prodate").append("<div id='datepro' style='color:white' class='tm-h6'><?=$pro['created_at']?></div>");
+                                        $("#prodel").append("<a id='btnremovepro' style='color:white' class='uk-icon-link uk-button-xsmall uk-text-left uk-margin-remove-left' uk-icon='close'></a");
+                                        $("#pro").attr('style', 'border:1px #39f; border-style: solid; background: #39f; padding: 2px; border-radius: 50px 20px;');
                                     }else{
                                         alert("Already Added");
                                     }
                                     $("#btnremovepro").click(function(){
                                         $("#pro").empty();
+                                        $("#pro").removeAttr('style');
                                         $("#proname").empty();
                                         $("#prodate").empty();
                                         $("#prodel").empty();
@@ -117,26 +119,24 @@
                 </script>
             </div>
 
-            <div>
-                <div id="pro" class="uk-width-large uk-flex-middle uk-grid" uk-grid>
-                    <div id="proname" class="uk-flex-middle uk-width-1-3">
+                <div id="pro" class="uk-text-center uk-margin-left uk-ligth uk-width-large" uk-grid>
+                    <div id="proname" class="uk-width-1-3">
                         
                     </div>
-                    <div id="prodate"class="uk-flex-middle uk-width-1-3">
+                    <div id="prodate"class="uk-width-expand">
                        
                     </div>
-                    <div id="prodel" class="uk-flex-middle uk-width-1-3">
+                    <div id="prodel" class="uk-width-1-4">
                        
                     </div>
                 </div>
-            </div>
             
             <hr class="uk-width-large">
 
             <div class="uk-margin uk-text-left uk-form-width-large">
                 <div class="uk-search uk-search-default uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: search"></span>
-                    <input class="uk-input" type="text" placeholder="Search MDL ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="border-radius: 5px;">
+                    <input class="uk-input" type="text" placeholder="Search MDL ..." id="mdl" name="mdl" aria-label="Not clickable icon" style="border-radius: 20px;">
                 </div>
                 <script type="text/javascript">
                     $(function() {
@@ -155,22 +155,28 @@
                                 <?php foreach ($mdls as $mdl) { ?>
                                 if (i.item.idx == <?=$mdl['id']?>) {
                                     if(!$("#namemdl<?=$mdl['id']?>").length){
-                                        $('#mdlcontain<?=$mdl['id']?>').removeAttr('hidden');
-                                        $("#mdlcontain<?=$mdl['id']?>").append("<div id='containermdl<?=$mdl['id']?>' style='border:1px blue; border-style: solid;' class='uk-margin uk-width-large'></div>");
-                                        $("#containermdl<?=$mdl['id']?>").append("<div id='mdl<?=$mdl['id']?>' class='uk-flex-middle uk-width-large uk-grid' uk-grid></div>");
-                                        $("#mdl<?=$mdl['id']?>").append("<input type='hidden' name='mdl' value='<?=$mdl['id']?>'></input>");
+                                        $("#mdlcontain<?=$mdl['id']?>").append("<div id='containermdl<?=$mdl['id']?>' style='border:1px #39f; border-style: solid; background: #39f; padding: 2px; border-radius: 50px 20px;' class='uk-margin uk-width-large'></div>");
+                                        $("#mdlcontain<?=$mdl['id']?>").append("<div class='uk-flex-middle uk-margin uk-width-large uk-grid' id='qtycontainer<?=$mdl['id']?>' uk-grid></div>");
+                                        $("#containermdl<?=$mdl['id']?>").append("<div id='mdl<?=$mdl['id']?>' class='uk-flex-middle uk-width-large uk-light uk-grid' uk-grid></div>");
+                                        $("#mdl<?=$mdl['id']?>").append("<input type='hidden' name='mdl[<?=$mdl['id']?>]' value='<?=$mdl['id']?>'></input>");
                                         $("#mdl<?=$mdl['id']?>").append("<div id='mdlname<?=$mdl['id']?>' class='uk-flex-middle uk-width-1-3'></div>");
-                                        $("#mdl<?=$mdl['id']?>").append("<div id='mdlprice<?=$mdl['id']?>'class='uk-flex-middle  uk-text-center uk-width-1-3'></div>");
+                                        $("#mdl<?=$mdl['id']?>").append("<div id='mdlprice<?=$mdl['id']?>'class='uk-flex-middle uk-text-center uk-width-1-3'></div>");
                                         $("#mdl<?=$mdl['id']?>").append("<div id='mdldel<?=$mdl['id']?>' class='uk-flex-middle uk-text-right uk-width-1-3'></div>");
                                         $("#mdlname<?=$mdl['id']?>").append("<div id='namemdl<?=$mdl['id']?>' class='tm-h6 uk-text-center'><?=$mdl['name']?></div>");
                                         $("#mdlprice<?=$mdl['id']?>").append("<div id='datemdl' class='tm-h6'><?=$mdl['price']?></div>");
-                                        $("#mdldel<?=$mdl['id']?>").append("<a id='btnremovemdl<?=$mdl['id']?>' class='uk-icon-link uk-button-xsmall' uk-icon='close'></a");
+                                        $("#mdldel<?=$mdl['id']?>").append("<a id='btnremovemdl<?=$mdl['id']?>' class='uk-icon-link uk-button-xsmall' style='color:white' uk-icon='close'></a");
+                                        $("#qtycontainer<?=$mdl['id']?>").append("<div id='qtywidth<?=$mdl['id']?>' class='uk-width-1-3 uk-text-xsmall'></div>");
+                                        $("#qtycontainer<?=$mdl['id']?>").append("<div id='delivwidth<?=$mdl['id']?>' class='uk-width-1-3 uk-text-xsmall'></div>");
+                                        $("#qtycontainer<?=$mdl['id']?>").append("<div id='completedwidth<?=$mdl['id']?>' class='uk-width-1-3 uk-text-xsmall'></div>");
+                                        $("#qtywidth<?=$mdl['id']?>").append("<div class='uk-inline' id='qty<?=$mdl['id']?>'></div>");
                                         $("#qty<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: database; ratio:0.5'></span>");
-                                        $("#qty<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qty' placeholder='Quantity' type='number' aria-label='Not clickable icon'>");
+                                        $("#qty<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qty[<?=$mdl['id']?>]' placeholder='Quantity' type='number' aria-label='Not clickable icon'>");
+                                        $("#delivwidth<?=$mdl['id']?>").append("<div id='deliv<?=$mdl['id']?>' class='uk-inline'></div>");
                                         $("#deliv<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: refresh; ratio:0.5'></span>");
-                                        $("#deliv<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qtydeliv' placeholder='Delivered' type='number' aria-label='Not clickable icon'>");
+                                        $("#deliv<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='qtydeliv[<?=$mdl['id']?>]' placeholder='Delivered' type='number' aria-label='Not clickable icon'>");
+                                        $("#completedwidth<?=$mdl['id']?>").append("<div class='uk-inline' id='completed<?=$mdl['id']?>'></div>")
                                         $("#completed<?=$mdl['id']?>").append("<span class='uk-form-icon' uk-icon='icon: check; ratio:0.5'></span>");
-                                        $("#completed<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='completed' placeholder='Delivered' type='number' aria-label='Not clickable icon'>");
+                                        $("#completed<?=$mdl['id']?>").append("<input class='uk-input uk-form-width-large' name='completed[<?=$mdl['id']?>]' placeholder='Completed' type='number' aria-label='Not clickable icon'>");
                                     }else{
                                         alert("Already Added");
                                     }
@@ -196,29 +202,13 @@
             <?php foreach ($mdls as $mdl){?>
             <div id="mdlcontain<?=$mdl['id']?>">
             </div>
-
-            <div class="uk-flex-middle uk-margin uk-width-large uk-grid" id="qtycon" uk-grid>
-                <div class="uk-width-1-3 uk-text-xsmall">
-                    <div class="uk-inline" id="qty<?=$mdl['id']?>">
-                    </div>
-                </div>
-                <div class="uk-width-1-3">
-                    <div class="uk-inline  uk-text-xsmall" id="deliv<?=$mdl['id']?>">
-                    </div>
-                </div>
-                <div class="uk-width-1-3  uk-text-xsmall">
-                    <div class="uk-inline" id="completed<?=$mdl['id']?>">
-                    </div>
-                </div>
-            </div>  
             <?php } ?>
-
-            
+             
 
             <hr class="uk-width-large">
 
-            <div class="uk-margin">
-                <div class="uk-inline">
+            <!-- <div class="uk-margin"> -->
+                <!-- <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: database"></span>
                     <input class="uk-input uk-form-width-large" name="qty" placeholder="Quantity" type="number" aria-label="Not clickable icon">
                 </div>
@@ -236,7 +226,7 @@
                     <span class="uk-form-icon" uk-icon="icon:  check"></span>
                     <input class="uk-input uk-form-width-large" name="qtycomp" placeholder="Quantity Completed" type="number" aria-label="Not clickable icon">
                 </div>
-            </div>
+            </div> -->
 
             <div class="uk-modal-footer uk-text-right">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
