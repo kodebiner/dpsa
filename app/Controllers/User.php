@@ -271,13 +271,16 @@ class User extends BaseController
         // Create Group
         $id = $authorize->createGroup($input['group'], $input['description']);
         
+        $permission = [];
         foreach ($input['permission'] as $key => $permit){
-            dd($key);   
+            $permission [] = $permit;
+        }
+        
+        foreach ($permission as $permissionid){
+            $authorize->addPermissionToGroup($permissionid, $id);
         }
 
-        $authorize->addPermissionToGroup($permission_id, $id);
-        $authorize->hasPermission(12, $userId);
-
+        return redirect()->to('accesscontrol')->with('message', lang('Global.saved'));
     }
 
 
