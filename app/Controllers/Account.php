@@ -42,12 +42,11 @@ class Account extends BaseController
 
         // Validation basic data
         $rule = [
-            // 'id'            => 'permit_empty|is_natural_no_zero',
             'id'            => 'max_length[19]|is_natural_no_zero',
             'username'      => 'required|max_length[255]|is_unique[users.email,id,{id}]',
             'email'         => 'required|valid_email|max_length[255]|is_unique[users.email,id,{id}]',
-            // 'firstname'     => 'required|max_length[255]',
-            // 'lastname'      => 'required|max_length[255]',
+            'firstname'     => 'required|max_length[255]',
+            'lastname'      => 'required|max_length[255]',
         ];
         if (! $this->validate($rule)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -57,9 +56,8 @@ class Account extends BaseController
         $updateUser->id         = $this->data['uid'];
         $updateUser->username   = $input['username'];
         $updateUser->email      = $input['email'];
-        // $updateUser->firstname  = $input['firstname'];
-        // $updateUser->lastname   = $input['lastname'];
-        // $updateUser->phone      = $input['phone'];
+        $updateUser->firstname  = $input['firstname'];
+        $updateUser->lastname   = $input['lastname'];
 
         // Validating new password
         if (!empty($input['newPass'])) {
@@ -95,6 +93,8 @@ class Account extends BaseController
         $newdata = [
             'id' =>  $this->data['uid'],
             'username' => $input['username'],
+            'firtsname' => $input['username'],
+            'lastname' => $input['email'],
             'email' => $input['email'],
         ];
         

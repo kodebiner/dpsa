@@ -35,24 +35,18 @@
                         <input class="uk-input" id="email" name="email" type="email" value="<?=$account->email?>">
                     </div>
                 </div>
-                <!-- <div class="uk-margin">
-                    <label class="uk-form-label" for="firstname"><?//=lang('Global.firstname')?></label>
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="firstname"><?=lang('Global.firstname')?></label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="firstname" name="firstname" type="text" value="<?//=$account->firstname?>">
+                        <input class="uk-input" id="firstname" name="firstname" type="text" value="<?=$account->firstname?>">
                     </div>
                 </div>
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="lastname"><?//=lang('Global.lastname')?></label>
+                    <label class="uk-form-label" for="lastname"><?=lang('Global.lastname')?></label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="lastname" name="lastname" type="text" value="<?//=$account->lastname?>">
+                        <input class="uk-input" id="lastname" name="lastname" type="text" value="<?=$account->lastname?>">
                     </div>
-                </div> -->
-                <!-- <div class="uk-margin">
-                    <label class="uk-form-label" for="phone"><?//=lang('Global.phone')?></label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input" id="phone" name="phone" type="text" value="<?//=$account->phone?>">
-                    </div>
-                </div> -->
+                </div>
                 <div class="uk-margin">
                     <label class="uk-form-label" for="photo"><?=lang('Global.photo')?></label>
                     <div id="image-container" class="uk-form-controls">

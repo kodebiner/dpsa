@@ -6,8 +6,41 @@
             <h1>Hak Akses</h1>
         </div>
         <div>
-            <button class="uk-button uk-button-large uk-button-secondary">Tambah Hak Akses</button>
+            <a class="uk-button uk-button-large uk-button-secondary"  href="#modal-sections" uk-toggle>Tambah Hak Akses</a>
         </div>
+            <div id="modal-sections" uk-modal>
+                <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Add Permissions</h2>
+                    </div>
+                    <div class="uk-modal-body">
+                    <form method="post" href="users/create/access-control">
+                        <fieldset class="uk-fieldset">
+
+                            <div class="uk-margin">
+                                <input class="uk-input" type="text" name="group" placeholder="Groups" aria-label="Input">
+                            </div>
+
+                            <div class="uk-margin">
+                                <input class="uk-input" type="text" name="description" placeholder="Description" aria-label="Input">
+                            </div>
+                            
+                            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                <?php foreach ($permissions as $permission){?>
+                                    <label><input class="uk-checkbox" name="permission[<?=$permission->id?>]" value="<?=$permission->id?>" type="checkbox"> <?=$permission->name?></label>
+                               <?php } ?>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                        <button class="uk-button uk-button-primary" type="submit">Save</button>
+                    </div>
+                </form>
+                </div>
+            </div>
     </div>
 <?php } else { ?>
     <h1 class="uk-text-center">Hak Akses</h1>

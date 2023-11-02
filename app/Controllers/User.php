@@ -53,23 +53,6 @@ class User extends BaseController
         return view('users', $data);
     }
 
-    public function accesscontrol()
-    {
-        // Calling Libraries and Services
-        $authorize = $auth = service('authorization');
-
-        // Populating Data
-        $groups = $authorize->groups();
-        
-        // Parsing data to view
-        $data                   = $this->data;
-        $data['title']          = lang('Global.employeeList');
-        $data['description']    = lang('Global.employeeListDesc');
-        $data['groups']         = $groups;
-
-        return view('accesscontrol', $data);
-    }
-
     public function create()
 
     {
@@ -224,12 +207,12 @@ class User extends BaseController
 
     public function delete($id)
     {
+
         $authorize = service('authorization');
         $usersModel = new UserModel();
         $GroupUserModel = new GroupUserModel();
 
         $user = $usersModel->find($id);
-        $groupusers = $GroupUserModel->findAll();
         $groups = $GroupUserModel->where('user_id',$id)->find();
         $input = $this->request->getPost();
 
@@ -251,6 +234,49 @@ class User extends BaseController
         ]);
         $usersModel->delete($id);
         return redirect()->to('users')->with('message', lang('Global.deleted'));
+
+    }
+
+    public function accesscontrol()
+    {
+        // Calling Libraries and Services
+        $authorize = $auth = service('authorization');
+
+        // Populating Data
+        $PermissionModel        = new PermissionModel();
+        $groups = $authorize->groups();
+        
+        // Parsing data to view
+        $data                   = $this->data;
+        $data['title']          = lang('Global.employeeList');
+        $data['description']    = lang('Global.employeeListDesc');
+        $data['groups']         = $groups;
+        $data['permissions']    = $PermissionModel->findAll();
+
+
+        return view('accesscontrol', $data);
+    }
+
+    public function createacces(){
+
+        // Calling Libraries and Services
+        $authorize = $auth = service('authorization');
+
+        // Populating Data
+        $groups = $authorize->groups();
+
+        // Initialize
+        $input = $this->request->getPost();
+        
+        // Create Group
+        $id = $authorize->createGroup($input['group'], $input['description']);
+        
+        foreach ($input['permission'] as $key => $permit){
+            dd($key);   
+        }
+
+        $authorize->addPermissionToGroup($permission_id, $id);
+        $authorize->hasPermission(12, $userId);
 
     }
 

@@ -44,6 +44,9 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->post('delete/(:num)','User::delete/$1');
     $routes->get('delete/(:num)','User::delete/$1');
     $routes->get('access-control','User::accesscontrol');
+    $routes->post('access-control','User::createacces');
+    $routes->post('create/access-control','User::createacces');
+    $routes->get('create/access','User::createacces');
 });
 
 // Upload Routes
