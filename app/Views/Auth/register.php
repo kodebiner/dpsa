@@ -14,19 +14,19 @@
                 <form class="uk-form-stacked" action="<?= url_to('register') ?>" method="post">
                     <?= csrf_field() ?>
 
-                    <!-- <div class="uk-margin">
-                        <label for="firstname"><?//=lang('Global.firstname')?></label>
+                    <div class="uk-margin">
+                        <label for="firstname"><?=lang('Global.firstname')?></label>
                         <div class="uk-form-controls">
-                            <input type="text" class="uk-input <?php// if (session('errors.firstname')) : ?>tm-form-invalid<?php// endif ?>" name="firstname" placeholder="<?//=lang('Global.firstname')?>" value="<?//= old('firstname') ?>" required>
+                            <input type="text" class="uk-input <?php if (session('errors.firstname')) : ?>tm-form-invalid<?php endif ?>" name="firstname" placeholder="<?=lang('Global.firstname')?>" value="<?= old('firstname') ?>" required>
                         </div>
                     </div>
 
                     <div class="uk-margin">
-                        <label for="lastname"><?//=lang('Global.lastname')?></label>
+                        <label for="lastname"><?=lang('Global.lastname')?></label>
                         <div class="uk-form-controls">
-                            <input type="text" class="uk-input <?php// if (session('errors.lastname')) : ?>tm-form-invalid<?php// endif ?>" name="lastname" placeholder="<?//=lang('Global.lastname')?>" value="<?//= old('lastname') ?>" required>
+                            <input type="text" class="uk-input <?php if (session('errors.lastname')) : ?>tm-form-invalid<?php endif ?>" name="lastname" placeholder="<?=lang('Global.lastname')?>" value="<?= old('lastname') ?>" required>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="uk-margin">
                         <label for="email"><?=lang('Auth.email')?></label>

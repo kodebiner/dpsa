@@ -1,6 +1,6 @@
 <?php
 
-namespace Myth\Auth\Models;
+namespace App\Models;
 
 use CodeIgniter\Model;
 use Faker\Generator;

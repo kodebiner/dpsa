@@ -33,7 +33,7 @@
                 <h5 class="uk-modal-title" id="tambahdata" ><?=lang('Global.Adduser')?></h5>
             </div>
             <div class="uk-modal-body">
-                <form class="uk-form-stacked" role="form" action="user/create" method="post">
+                <form class="uk-form-stacked" role="form" action="users/create" method="post">
                     <?= csrf_field() ?>
 
                     <div class="uk-margin-bottom">
@@ -65,13 +65,6 @@
                     </div>
 
                     <div class="uk-margin">
-                        <label class="uk-form-label" for="phone"><?=lang('Global.phone')?></label>
-                        <div class="uk-form-controls">
-                            <input type="phone" name="phone" id="phone" placeholder="<?=lang('Global.phone')?>" class="uk-input <?php if (session('errors.phone')) : ?>tm-form-invalid<?php endif ?>"/>
-                        </div>
-                    </div>
-
-                    <div class="uk-margin">
                         <label class="uk-form-label" for="password"><?=lang('Auth.password')?></label>
                         <div class="uk-form-controls">
                             <input type="password" name="password" id="password" required class="uk-input <?php if (session('errors.password')) : ?>tm-form-invalid<?php endif ?>" />
@@ -82,6 +75,32 @@
                         <label class="uk-form-label" for="pass_confirm"><?=lang('Auth.repeatPassword')?></label>
                         <div class="uk-form-controls">
                             <input type="password" name="pass_confirm" id="pass_confirm" required class="uk-input <?php if (session('errors.repeatPassword')) : ?>tm-form-invalid<?php endif ?>" />
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="role"><?=lang('Global.access')?></label>
+                        <div class="uk-form-controls">
+                            <select class="uk-select" name="role" required>
+                                <option value="" selected disabled>Role</option>
+                                <?php foreach ($roles as $role) {
+                                        if ($authorize->inGroup('admin', $uid) === true) {
+                                            if ($role->name != 'admin') {
+                                                echo '<option value="'.$role->id.'">'.$role->name.'</option>';
+                                            }
+                                        }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="role"><?=lang('Global.permission')?></label>
+                        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                            <?php foreach ($permissions as $permission){?>
+                                <label><input class="uk-checkbox" name="permission[]" value="<?=$permission->id?>" type="checkbox"> <?=$permission->name?></label>
+                           <?php }?>
+                            <label><input class="uk-checkbox" type="checkbox" checked> A</label>
                         </div>
                     </div>
 
@@ -126,7 +145,7 @@
 
                             <!-- Button Delete -->
                             <div>
-                                <a uk-icon="trash" class="uk-icon-button-delete" href="user/delete/<?= $user->id ?>" onclick="return confirm('<?=lang('Global.deleteConfirm')?>')"></a>
+                                <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?=lang('Global.deleteConfirm')?>')"></a>
                             </div>
                             <!-- End Of Button Delete -->
                         </td>
@@ -147,7 +166,7 @@
                 </div>
 
                 <div class="uk-modal-body">
-                    <form class="uk-form-stacked" role="form" action="user/update/<?= $user->id ?>" method="post">
+                    <form class="uk-form-stacked" role="form" action="users/update/<?= $user->id ?>" method="post">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $user->id; ?>">
                         <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
@@ -156,6 +175,20 @@
                             <label class="uk-form-label" for="username"><?=lang('Auth.username')?></label>
                             <div class="uk-form-controls">
                                 <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" autofocus />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="firstname"><?=lang('Global.firstname')?></label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="firstname" name="firstname" placeholder="<?= $user->firstname; ?>" autofocus />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="lastname"><?=lang('Global.lastname')?></label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="lastname" name="lastname" placeholder="<?= $user->lastname; ?>" autofocus />
                             </div>
                         </div>
 
@@ -190,17 +223,11 @@
                                 <select class="uk-select" name="role" required>
                                     <option value="" selected disabled>Role</option>
                                     <?php foreach ($roles as $role) {
-                                        if ($role->name != 'guests') {
-                                            if ($authorize->inGroup('admin', $uid) === true) {
-                                                if ($role->name != 'admin') {
-                                                    echo '<option value="'.$role->id.'">'.$role->name.'</option>';
-                                                }
-                                            } elseif ($authorize->inGroup('supervisor', $uid) === true) {
-                                                if (($role->name != 'owner') && ($role->name != 'supervisor')) {
-                                                    echo '<option value="'.$role->id.'">'.$role->name.'</option>';
-                                                }
+                                        if ($authorize->inGroup('admin', $uid) === true) {
+                                            if ($role->name != 'admin') {
+                                                echo '<option value="'.$role->id.'">'.$role->name.'</option>';
                                             }
-                                        }
+                                        } 
                                     } ?>
                                 </select>
                             </div>

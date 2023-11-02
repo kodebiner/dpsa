@@ -39,6 +39,10 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
 
 $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('','User::index');
+    $routes->post('create','User::create');
+    $routes->post('update/(:num)','User::update/$1');
+    $routes->post('delete/(:num)','User::delete/$1');
+    $routes->get('delete/(:num)','User::delete/$1');
     $routes->get('access-control','User::accesscontrol');
 });
 

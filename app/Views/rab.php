@@ -244,7 +244,7 @@
             <h2 class="uk-modal-title"> Update Rab</h2>
         </div>
 
-        <form class="uk-margin-left" action="rab/update/$id" method="post">
+        <form class="uk-margin-left" action="rab/update/<?=$rab['id']?>" method="post">
             <div class="uk-margin">
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: database"></span>

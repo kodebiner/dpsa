@@ -71,7 +71,7 @@ class Rab extends BaseController
 
     public function update($id)
     {
-        $RabtModel = new RabtModel;
+        $RabModel = new RabModel;
 
         // initialisation
         $input = $this->request->getPost();
@@ -82,8 +82,6 @@ class Rab extends BaseController
             'qty'               => $input['qty'],
             'qty_deliver'       => $input['qtydeliv'],
             'qty_complete'      => $input['qtycomp'],
-            'projectid'         => $input['pro'],
-            'mdlid'             => $input['mdl'],
         ];
         $RabModel->save($rab);
         
