@@ -11669,7 +11669,7 @@ li.tm-main-navbar>a>svg {
 
 .tm-main-card {
     border-top-left-radius: 40px;
-    padding: 40px 40px;
+    padding: 40px 0px;
     min-height: calc(100vh - 80px);
     -ms-overflow-style: none;
     scrollbar-width: none; 

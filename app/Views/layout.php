@@ -312,12 +312,12 @@
             } else {
                 $mainPadding = 'uk-padding-xlarge-left';
                 $mainContainer = 'uk-container uk-container-expand';
-                $mainCard = 'tm-main-card tm-main-panel ';
+                $mainCard = 'tm-main-card ';
             }
             ?>
             <div class="<?=$mainPadding?>">
                 <div class="<?=$mainContainer?>">
-                    <div uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
+                    <div class="<?=$mainCard?>uk-panel uk-panel-scrollable" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
                         <?= $this->renderSection('main') ?>
                     </div>
                 </div>
