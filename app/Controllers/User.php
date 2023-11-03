@@ -243,21 +243,21 @@ class User extends BaseController
         $authorize = $auth = service('authorization');
 
         // Populating Data
-        $PermissionModel        = new PermissionModel();
         $groups = $authorize->groups();
-        
+        $permission = $authorize->permissions();
+
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = lang('Global.employeeList');
         $data['description']    = lang('Global.employeeListDesc');
         $data['groups']         = $groups;
-        $data['permissions']    = $PermissionModel->findAll();
-
+        $data['permissions']    = $permission;
+        $data['GroupModel']     = new GroupModel();
 
         return view('accesscontrol', $data);
     }
 
-    public function createacces(){
+    public function createaccess(){
 
         // Calling Libraries and Services
         $authorize = $auth = service('authorization');
@@ -281,6 +281,67 @@ class User extends BaseController
         }
 
         return redirect()->to('accesscontrol')->with('message', lang('Global.saved'));
+    }
+
+    public function updateaccess($id){
+
+        // Caling Libraries
+        $authorize = $auth = service('authorization');
+
+        // Populating Data
+        $groups = $authorize->groups();
+        $GroupModel = new GroupModel;
+        $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
+
+        // Initialize
+        $input = $this->request->getPost();
+
+        $group = $authorize->group($id);
+
+    //    dd($GroupModel);
+    //     // Validation basic data
+    //     $rule = [
+    //         // 'id'            => 'max_length[19]|is_natural_no_zero',
+    //         'name'          => 'required|max_length[255]|is_unique[auth_groups.name,name,{name}]',
+    //         // 'description'   => 'required|max_length[255]|is_unique[auth_groups.description,id,{id}]',
+    //     ];
+    //     if (! $this->validate($rule)) {
+    //         return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+    //     }
+
+    //     // Update Group
+    //     $datagroup = [
+    //         'id'          => $id,
+    //         'name'        => $input['group'],
+    //         'description' => $input['description'],
+    //     ];
+    //     dd($datagroup);
+    //     $GroupModel->save($datagroup);
+
+        // $authorize->updateGroup($id, $input['group'], $input['description']);
+
+        // Get Group Permissions
+        $permissiongroup = [];
+        foreach ($Grouppermissions as $Grouppermission){
+            $permissiongroup [] = $Grouppermission->id;
+        }
+
+        // Remove Permission From Group
+        foreach ($permissiongroup as $permit => $permissionid){
+            $authorize->removePermissionFromGroup($permissionid, $id);
+        }
+
+        // Add New Permissions
+        $permission = [];
+        foreach ($input['permission'] as $key => $permit){
+            $permission [] = $permit;
+        }
+        
+        foreach ($permission as $permissionid){
+            $authorize->addPermissionToGroup($permissionid, $id);
+        }
+
+        return redirect()->to('access-control')->with('message', lang('Global.saved'));
     }
 
 

@@ -94,16 +94,6 @@
                         </div>
                     </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="role"><?=lang('Global.permission')?></label>
-                        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                            <?php foreach ($permissions as $permission){?>
-                                <label><input class="uk-checkbox" name="permission[]" value="<?=$permission->id?>" type="checkbox"> <?=$permission->name?></label>
-                           <?php }?>
-                            <label><input class="uk-checkbox" type="checkbox" checked> A</label>
-                        </div>
-                    </div>
-
                     <hr>
 
                     <div class="uk-margin">

@@ -43,7 +43,7 @@ class Account extends BaseController
         // Validation basic data
         $rule = [
             'id'            => 'max_length[19]|is_natural_no_zero',
-            'username'      => 'required|max_length[255]|is_unique[users.email,id,{id}]',
+            'username'      => 'required|max_length[255]|is_unique[users.username,id,{id}]',
             'email'         => 'required|valid_email|max_length[255]|is_unique[users.email,id,{id}]',
             'firstname'     => 'required|max_length[255]',
             'lastname'      => 'required|max_length[255]',
