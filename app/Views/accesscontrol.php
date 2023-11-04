@@ -40,7 +40,8 @@
             </div>
 
         </div>
-    
+
+        <?= view('Views/Auth/_message_block') ?>
 <?php } else { ?>
     <h1 class="uk-text-center">Hak Akses</h1>
     <div class="uk-margin uk-text-center"><button class="uk-button uk-button-large uk-button-secondary">Tambah Hak Akses</button></div>
@@ -55,7 +56,7 @@
                 <div class="uk-card-footer">
                     <div class="uk-child-width-auto" uk-grid>
                         <div><a class="uk-button uk-button-primary" uk-icon="pencil"  href="#modalupdate<?=$group->id;?>" uk-toggle></a></div>
-                        <div><a class="uk-button uk-button-danger" uk-icon="trash"></a></div>
+                        <div><a class="uk-button uk-button-danger" href="users/delete/access-control/<?=$group->id;?>" onClick="return confirm('<?=lang('Global.deleteConfirm')?>')" uk-icon="trash"></a></div>
                     </div>
                 </div>
             </div>

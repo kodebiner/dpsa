@@ -257,7 +257,8 @@ class User extends BaseController
         return view('accesscontrol', $data);
     }
 
-    public function createaccess(){
+    public function createaccess()
+    {
 
         // Calling Libraries and Services
         $authorize = $auth = service('authorization');
@@ -280,10 +281,11 @@ class User extends BaseController
             $authorize->addPermissionToGroup($permissionid, $id);
         }
 
-        return redirect()->to('accesscontrol')->with('message', lang('Global.saved'));
+        return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
     }
 
-    public function updateaccess($id){
+    public function updateaccess($id)
+    {
 
         // Caling Libraries
         $authorize = $auth = service('authorization');
@@ -317,7 +319,6 @@ class User extends BaseController
             foreach ($permissiongroup as $permit => $permissionid){
                 $authorize->removePermissionFromGroup($permissionid, $id);
             }
-
         }
 
         if (!empty($input['permission'])) {
@@ -333,6 +334,33 @@ class User extends BaseController
         }
 
         return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
+    }
+
+    public function deleteaccess($id)
+    {
+        // Caling Libraries
+        $authorize = $auth = service('authorization');
+        // Populating Data
+        $groups = $authorize->groups();
+        $GroupModel = new GroupModel;
+        $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
+
+        // Get Group Permissions
+        $permissiongroup = [];
+        foreach ($Grouppermissions as $Grouppermission) {
+            $permissiongroup [] = $Grouppermission->id;
+        }
+
+        
+        // Remove Permissions 
+        foreach ($permissiongroup as $permit => $permissionid){
+            $authorize->removePermissionFromGroup($permissionid, $id);
+        }
+
+        // Delete Group
+        $authorize->deleteGroup($id);
+
+        return redirect()->to('users/access-control')->with('message', lang('Global.deleted'));
     }
 
 
