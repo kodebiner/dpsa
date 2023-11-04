@@ -74,12 +74,12 @@
                     <form method="post" action="users/update/access/<?=$group->id;?>">
 
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" name="name" placeholder="<?=$group->name;?>" value="<?=$group->name;?>" aria-label="Input">
+                            <input class="uk-input" type="text" name="name" value="<?=$group->name;?>" aria-label="Input">
                             <input class="uk-input" type="number" name="groupid" value="<?=$group->id;?>" aria-label="Input" hidden>
                         </div>
 
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" name="description" placeholder="<?=$group->description;?>" value="<?=$group->description;?>" aria-label="Input">
+                            <input class="uk-input" type="text" name="description" value="<?=$group->description;?>" aria-label="Input">
                         </div>
                         
                         <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
