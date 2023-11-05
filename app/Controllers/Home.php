@@ -41,7 +41,9 @@ class Home extends BaseController
         }
 
         // Creating Permissions
-        
+        $authorize->createPermission('client.read', 'Melihat daftar Proyek.');
+        $authorize->createPermission('client.auth.holding', 'Otorisasi pusat.');
+        $authorize->createPermission('client.auth.branch', 'Otorisasi cabang.');
     }
 
 }
