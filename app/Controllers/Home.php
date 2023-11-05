@@ -26,4 +26,22 @@ class Home extends BaseController
         return view('bar', $data);
     }
 
+    public function installation()
+    {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        // Database Migration
+        echo command('migrate --all');
+
+        // Remove Old Permission
+        $permissions = $authorize->permissions();
+        foreach ($permissions as $permission) {
+            $authorize->deletePermission($permission['id']);
+        }
+
+        // Creating Permissions
+        
+    }
+
 }
