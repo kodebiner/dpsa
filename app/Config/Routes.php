@@ -44,19 +44,21 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->post('update/(:num)','User::update/$1');
     $routes->post('delete/(:num)','User::delete/$1');
     $routes->get('delete/(:num)','User::delete/$1');
-    // Acceses Control
+    // Access Control
     $routes->get('access-control','User::accesscontrol');
     $routes->post('create/access-control','User::createaccess');
     $routes->post('update/access/(:num)','User::updateaccess/$1');
     $routes->get('delete/access-control/(:num)','User::deleteaccess/$1');
+    // Client
+    $routes->get('client','User::client');
 });
 
 // Upload Routes
 $routes->group('upload', ['filter' => 'login'], function($routes) {
-    $routes->post('profile', 'Upload::profile', ['filter' => 'role:owner']);
-    $routes->post('removeprofile', 'Upload::removeprofile', ['filter' => 'role:owner']);
-    $routes->post('logo', 'Upload::logo', ['filter' => 'role:owner']);
-    $routes->post('removelogo', 'Upload::removelogo', ['filter' => 'role:owner']);
+    $routes->post('profile', 'Upload::profile', ['filter' => 'role:Admin']);
+    $routes->post('removeprofile', 'Upload::removeprofile', ['filter' => 'role:Admin']);
+    $routes->post('logo', 'Upload::logo', ['filter' => 'role:Admin']);
+    $routes->post('removelogo', 'Upload::removelogo', ['filter' => 'role:Admin']);
 });
 
 // Project

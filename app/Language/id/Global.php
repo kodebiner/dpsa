@@ -12,10 +12,11 @@ return[
     'action'        => 'Tindakan',
     'PhoneNumber'   => 'No Telphone',
     'userProfile'   => 'Profil',
+    'updateData'    => 'Ubah Data',
 
     // List
     'usersList'      => 'Daftar Pengguna',
-
+    'clientList'     => 'Klien List',
 
     // Button 
     'logout'        => 'Keluar',    
@@ -23,6 +24,7 @@ return[
     // Add Button
     'Adduser'       => 'Tambah Pengguna',
     'Addproject'    => 'Tambah Proyek',
+    'Addclient'     => 'Tambah Klien',
 
     // Menu 
     'dashboard'     => 'Dashboard',

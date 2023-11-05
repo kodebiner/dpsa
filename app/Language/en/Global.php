@@ -12,9 +12,12 @@ return[
     'action'        => 'Action',
     'phone'         => 'Phone Number',
     'userProfile'   => 'User Profile',
+    'updateData'    => 'Update Data',
+
 
     // List
     'usersList'      => 'User List',
+    'clientList'     => 'Client List',
 
     // Button 
     'logout'        => 'Logout',     
@@ -22,6 +25,7 @@ return[
     // Add Button
     'Adduser'       => 'Add User',
     'Addproject'    => 'Add Project',
+    'Addclient'     => 'Add Client',
 
     // Menu 
     'dashboard'     => 'Dashboard',

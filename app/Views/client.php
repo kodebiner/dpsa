@@ -11,12 +11,12 @@
 <div class="tm-card-header uk-light uk-margin-remove-left">
     <div uk-grid class="uk-flex-middle">
         <div class="uk-width-1-2@m">
-            <h3 class="tm-h3"><?=lang('Global.usersList')?></h3>
+            <h3 class="tm-h3"><?=lang('Global.clientList')?></h3>
         </div>
 
         <!-- Button Trigger Modal Add -->
         <div class="uk-width-1-2@m uk-text-right@m">
-            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?=lang('Global.Adduser')?></button>
+            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?=lang('Global.Addclient')?></button>
         </div>
         <!-- End Of Button Trigger Modal Add -->
     </div>
@@ -30,7 +30,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <div class="uk-modal-content">
             <div class="uk-modal-header">
-                <h5 class="uk-modal-title" id="tambahdata" ><?=lang('Global.Adduser')?></h5>
+                <h5 class="uk-modal-title" id="tambahdata" ><?=lang('Global.Addclient')?></h5>
             </div>
             <div class="uk-modal-body">
                 <form class="uk-form-stacked" role="form" action="users/create" method="post">
@@ -85,7 +85,7 @@
                                 <option value="" selected disabled>Role</option>
                                 <?php foreach ($roles as $role) {
                                         if ($authorize->inGroup('Admin', $uid) === true) {
-                                            if ($role->name != 'client') {
+                                            if ($role->name == 'client') {
                                                 echo '<option value="'.$role->id.'">'.$role->name.'</option>';
                                             }
                                         }
@@ -214,7 +214,7 @@
                                     <option value="" selected disabled>Role</option>
                                     <?php foreach ($roles as $role) {
                                         if ($authorize->inGroup('Admin', $uid) === true) {
-                                            if ($role->name != 'client') {
+                                            if ($role->name == 'client') {
                                                 echo '<option value="'.$role->id.'">'.$role->name.'</option>';
                                             }
                                         } 
