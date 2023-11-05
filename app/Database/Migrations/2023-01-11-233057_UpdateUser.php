@@ -18,6 +18,7 @@ class UpdateUser extends Migration
 
     public function down()
     {
-
+        $fields = ['firstname', 'lastname', 'parentid'];
+        $this->forge->dropColumn('users', $fields);
     }
 }
