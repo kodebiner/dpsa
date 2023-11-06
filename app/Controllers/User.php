@@ -12,6 +12,7 @@ class User extends BaseController
 
     protected $db, $builder;
     protected $auth;
+    protected $data;
     protected $config;
 
     public function __construct()
@@ -44,11 +45,10 @@ class User extends BaseController
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
-
         // Parsing data to view
         $data                   = $this->data;
-        $data['title']          = lang('Global.employeeList');
-        $data['description']    = lang('Global.employeeListDesc');
+        $data['title']          = lang('Global.usersList');
+        $data['description']    = lang('Global.usersListDesc');
         $data['roles']          = $GroupModel->findAll();
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query->getResult();
@@ -99,6 +99,9 @@ class User extends BaseController
         $newUser->lastname  = $input['lastname'];
         $newUser->password  = $input['password'];
         $newUser->active    = 1;
+        if (!empty($input['parent'])){
+            $newUser->parentid = $input['parent'];
+        }
 
         // Save new user
         $UserModel->insert($newUser);
@@ -379,13 +382,13 @@ class User extends BaseController
         $this->builder->where('users.id !=', $this->data['uid']);
         $this->builder->where('auth_groups.name', 'client pusat');
         $this->builder->orWhere('auth_groups.name', 'client cabang');
-        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
+        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
         // Parsing data to view
         $data                   = $this->data;
-        $data['title']          = lang('Global.employeeList');
-        $data['description']    = lang('Global.employeeListDesc');
+        $data['title']          = lang('Global.clientList');
+        $data['description']    = lang('Global.clientListDesc');
         $data['roles']          = $GroupModel->findAll();
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query->getResult();

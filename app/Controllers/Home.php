@@ -9,6 +9,8 @@ use App\Models\UserModel;
 
 class Home extends BaseController
 {
+    protected $data;
+    
     public function index(): string
     {
 
