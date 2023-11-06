@@ -13,6 +13,13 @@ $routes->group('/', static function ($routes) {
     $config         = config(AuthConfig::class);
     $reservedRoutes = $config->reservedRoutes;
 
+    // Installation
+    $routes->get('installation', 'Home::installation');
+    $routes->post('installation', 'Home::attempinstallation');
+
+    // Developer Access Only
+    $routes->get('trial', 'Home::trial');
+
     // Login/out
     $routes->get($reservedRoutes['login'], 'Auth::login', ['as' => 'login']);
     $routes->post($reservedRoutes['login'], 'Auth::attemptLogin');
