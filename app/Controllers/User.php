@@ -39,7 +39,8 @@ class User extends BaseController
         //     $this->builder->where('auth_groups.name', 'operator');
         // }
         $this->builder->where('users.id !=', $this->data['uid']);
-        $this->builder->where('auth_groups.name !=', 'client');
+        $this->builder->where('auth_groups.name !=', 'client pusat');
+        $this->builder->where('auth_groups.name !=', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
@@ -376,7 +377,8 @@ class User extends BaseController
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
-        $this->builder->where('auth_groups.name =', 'client');
+        $this->builder->where('auth_groups.name', 'client pusat');
+        $this->builder->orWhere('auth_groups.name', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
