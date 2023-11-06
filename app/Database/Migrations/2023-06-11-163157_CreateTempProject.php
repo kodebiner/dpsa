@@ -17,12 +17,11 @@ class CreateTempProject extends Migration
             'clientid'      => ['type' => 'int', 'constraint' => 11],
         ];
         $this->forge->addKey('id', true);
-        $this->forge->createTable('temp_project');
+        $this->forge->createTable('temp_project', true);
     }
 
     public function down()
     {
-        $fields = ['firstname', 'lastname', 'parentid'];
-        $this->forge->dropColumn('users', $fields);
+        $this->forge->dropTable('temp_project');
     }
 }
