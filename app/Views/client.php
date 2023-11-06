@@ -99,14 +99,11 @@
                                 <option value="" selected disabled>Role</option>
                                 <?php
                                 foreach ($users as $user) {
-                                    foreach ($roles as $role) {
                                         if ($authorize->inGroup('superuser', $uid) === true) {
-                                            $position = array("client pusat");
-                                            if ((in_array($role->name, $position))) {
+                                            if ($user->role !='client cabang') {
                                                 echo '<option value="' . $user->id . '">' . $user->username . '</option>';
                                             }
                                         }
-                                    }
                                 } ?>
                             </select>
                         </div>
