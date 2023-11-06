@@ -46,12 +46,24 @@
     <h1 class="uk-text-center">Hak Akses</h1>
     <div class="uk-margin uk-text-center"><button class="uk-button uk-button-large uk-button-secondary">Tambah Hak Akses</button></div>
 <?php } ?>
-<div class="uk-child-width-1-3@m" uk-grid>
+<div class="uk-child-width-1-3@m" uk-grid uk-height-match="target: > div > .uk-card > .uk-card-body">
     <?php foreach ($groups as $group) { ?>
         <div>
             <div class="uk-card uk-card-default uk-card-hover">
+                <div class="uk-card-header">
+                    <h3 class="uk-card-title"><?=$group->name;?></h3>
+                </div>
                 <div class="uk-card-body">
-                    <h3><?=$group->name;?></h3>
+                    <div class="uk-child-width-auto uk-grid-collapse" uk-grid>
+                        <?php
+                        $permissionlists = $GroupModel->getPermissionsForGroup($group->id);
+                        foreach ($permissionlists as $permissionlist) {
+                            echo '<div>';
+                            echo '<span class="uk-badge uk-margin-small-right">'.$permissionlist->name.'</span>';
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
                 </div>
                 <div class="uk-card-footer">
                     <div class="uk-child-width-auto" uk-grid>
@@ -83,7 +95,7 @@
                             <input class="uk-input" type="text" name="description" value="<?=$group->description;?>" aria-label="Input">
                         </div>
                         
-                        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                        <div class="uk-margin">
                             <?php
                             foreach ($permissions as $permission) {
                                 $permarr = [];
@@ -97,7 +109,9 @@
                                     $checked = '';
                                 }
                             ?>
-                                <label><input class="uk-checkbox" name="permission[]" value="<?=$permission['id']?>" type="checkbox" <?= $checked ?>> <?=$permission['name']?></label>
+                                <div>
+                                    <label><input class="uk-checkbox" name="permission[]" value="<?=$permission['id']?>" type="checkbox" <?= $checked ?>> <?=$permission['description']?></label>
+                                </div>
                             <?php
                             }
                             ?>
