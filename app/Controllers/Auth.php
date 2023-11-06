@@ -126,7 +126,7 @@ class Auth extends BaseController
                 ->withCookies();
         }
 
-        $redirectURL = session('redirect_url') ?? site_url($this->config->landingRoute);
+        $redirectURL = site_url($this->config->landingRoute);
         unset($_SESSION['redirect_url']);
 
         return redirect()
