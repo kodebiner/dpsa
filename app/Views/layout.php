@@ -52,7 +52,7 @@
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="uk-h4 tm-h4" href="users/client">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/client.svg" uk-svg>
@@ -62,7 +62,7 @@
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="uk-h4 tm-h4" href="users">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/user.svg" uk-svg>
@@ -82,7 +82,7 @@
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="uk-h4 tm-h4" href="rab">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/marketing.svg" uk-svg>
@@ -92,7 +92,17 @@
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="uk-h4 tm-h4" href="project">
+                                <div class="uk-width-1-1 uk-margin-left">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-6" src="img/layout/project.svg" uk-svg>
+                                    </div>
+                                    <div class="tm-navbar-text uk-text-center">Pengelolaan Proyek</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tm-main-navbar">
+                            <a class="uk-h4 tm-h4" href="produksi">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
@@ -127,56 +137,6 @@
         </div>
         <!-- Offcanvas Section end -->
         <?php } ?>
-
-        <!-- Header Section -->
-        <header class="uk-margin">
-            <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
-                <div class="uk-container uk-container-expand">
-                    <div uk-navbar>
-                        <?php if ($ismobile === true) { ?>
-                            <div class="uk-navbar-left">
-                                <a class="uk-navbar-toggle" href="#offcanvas" uk-navbar-toggle-icon uk-toggle role="button" aria-label="Open menu"></a>
-                            </div>
-                        <?php } ?>
-                        <div class="uk-navbar-center">
-                            <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/logo.png" width="80"></a>
-                        </div>
-                        <div class="uk-navbar-right">
-                            <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
-                                <a class="uk-link-reset" type="button">
-                                    <?php
-                                    if (!empty($account->photo)) {
-                                        $profile = 'img/profile/'.$account->photo;
-                                    } else {
-                                        $profile = 'img/layout/user.svg';
-                                    }
-                                    ?>
-                                    <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" />
-                                </a>
-                                <div class="uk-width-medium" uk-dropdown="mode: click">
-                                    <div class="uk-flex-middle uk-grid-small" uk-grid>
-                                        <div class="uk-width-auto">
-                                            <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" /> 
-                                        </div>
-                                        <div class="uk-width-expand">
-                                            <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
-                                            <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><?=$role;?></div>
-                                        </div>
-                                    </div>
-                                    <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
-                                    <div>
-                                        <a class="uk-link-reset uk-h4" href="account"><span uk-icon="user"></span> Kelola Akun</a>
-                                    </div>
-                                    <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
-                                    <a class="uk-button uk-button-danger" href="logout"><?=lang('Global.logout')?></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <!-- Header Section end -->
         
         <!-- Navbar Section -->
         <?php if ($ismobile === false) { ?>
@@ -192,7 +152,7 @@
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar<?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
+                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="users/client">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -234,6 +194,16 @@
                     </li>
                     <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="project">
+                            <div class="uk-width-1-1 uk-margin-left">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
+                                </div>
+                                <div class="tm-navbar-text uk-text-center">Pengelolaan Proyek</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="uk-margin-left tm-main-navbar">
+                        <a class="uk-h4 tm-h4" href="produksi">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
@@ -316,6 +286,57 @@
             }
             ?>
             <div class="<?=$mainPadding?>">
+
+                <!-- Header Section -->
+                <header class="uk-margin">
+                    <nav class="uk-navbar-container uk-navbar-transparent" uk-sticky="media: 960;">
+                        <div class="uk-container uk-container-expand">
+                            <div uk-navbar>
+                                <?php if ($ismobile === true) { ?>
+                                    <div class="uk-navbar-left">
+                                        <a class="uk-navbar-toggle" href="#offcanvas" uk-navbar-toggle-icon uk-toggle role="button" aria-label="Open menu"></a>
+                                    </div>
+                                <?php } ?>
+                                <div class="uk-navbar-center">
+                                    <a class="uk-navbar-item uk-logo uk-light" href="<?=base_url();?>" aria-label="<?=lang('Global.backHome')?>"><img src="img/logo.png" width="80"></a>
+                                </div>
+                                <div class="uk-navbar-right">
+                                    <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
+                                        <a class="uk-link-reset" type="button">
+                                            <?php
+                                            if (!empty($account->photo)) {
+                                                $profile = 'img/profile/'.$account->photo;
+                                            } else {
+                                                $profile = 'img/layout/user.svg';
+                                            }
+                                            ?>
+                                            <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" />
+                                        </a>
+                                        <div class="uk-width-medium" uk-dropdown="mode: click">
+                                            <div class="uk-flex-middle uk-grid-small" uk-grid>
+                                                <div class="uk-width-auto">
+                                                    <img src="<?= $profile ?>" class="uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" alt="<?=$fullname?>" /> 
+                                                </div>
+                                                <div class="uk-width-expand">
+                                                    <div class="uk-h4 uk-margin-remove" style="color: #000;"><?=$fullname?></div>
+                                                    <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><?=$role;?></div>
+                                                </div>
+                                            </div>
+                                            <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
+                                            <div>
+                                                <a class="uk-link-reset uk-h4" href="account"><span uk-icon="user"></span> Kelola Akun</a>
+                                            </div>
+                                            <hr style="border-top-color: rgba(0, 0, 0, .5);"/>
+                                            <a class="uk-button uk-button-danger" href="logout"><?=lang('Global.logout')?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <!-- Header Section end -->
+                
                 <div class="<?=$mainContainer?>">
                     <div class="<?=$mainCard?>uk-panel uk-panel-scrollable" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
                         <?= $this->renderSection('main') ?>

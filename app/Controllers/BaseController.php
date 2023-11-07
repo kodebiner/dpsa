@@ -101,7 +101,7 @@ abstract class BaseController extends Controller
             'uid'           => $this->userId,
             'authorize'     => service('authorization'),
             'account'       => $this->user,
-            'fullname'      => $fullname,
+            'fullname'      => $fullname
 		];
 
         if ($auth->check()) {

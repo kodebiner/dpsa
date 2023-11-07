@@ -1,6 +1,5 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('main') ?>
-
 <!-- add progress modal -->
 <div id="modal-sections" uk-modal>
     <div class="uk-modal-dialog">
