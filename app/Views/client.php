@@ -186,7 +186,7 @@
 
                         <!-- Button Delete -->
                         <div>
-                            <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
+                            <a uk-icon="trash" class="uk-icon-button-delete" href="users/deleteclient/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
                         </div>
                         <!-- End Of Button Delete -->
                     </td>

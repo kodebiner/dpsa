@@ -250,7 +250,40 @@ class User extends BaseController
             'active'   => '0'
         ]);
         $usersModel->delete($id);
-        return redirect()->to('users')->with('message', lang('Global.deleted'));
+
+        return redirect()->to('users')->with('massage', lang('Global.deleted'));
+    }
+
+    public function deleteclient($id)
+    {
+
+        $authorize = service('authorization');
+        $usersModel = new UserModel();
+        $GroupUserModel = new GroupUserModel();
+
+        $user = $usersModel->find($id);
+        $groups = $GroupUserModel->where('user_id', $id)->find();
+        $input = $this->request->getPost();
+
+        $groupid = "";
+        foreach ($groups as $group) {
+            $groupid = $group['group_id'];
+        }
+
+        $data['users'] = $usersModel->find($id);
+        if (empty($data)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Data Password Tidak Ditemukan !');
+        }
+
+        // remove from user group
+        $authorize->removeUserFromGroup($id, $groupid);
+
+        $usersModel->update($id, [
+            'active'   => '0'
+        ]);
+        $usersModel->delete($id);
+        
+        return redirect()->to('users/client')->with('massage', lang('Global.deleted'));
     }
 
     public function accesscontrol()
