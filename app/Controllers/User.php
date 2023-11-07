@@ -22,8 +22,6 @@ class User extends BaseController
         $this->builder  = $this->db->table('users');
         $this->config   = config('Auth');
         $this->auth     = service('authentication');
-
-        
     }
 
     public function index()
@@ -66,7 +64,7 @@ class User extends BaseController
 
         // Calling Model
         $UserModel = new UserModel();
-        
+
         // Defining input
         $input = $this->request->getPost();
 
@@ -78,7 +76,7 @@ class User extends BaseController
             'lastname'      => 'required',
         ];
 
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -88,7 +86,7 @@ class User extends BaseController
             'pass_confirm' => 'required|matches[password]',
         ];
 
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -99,7 +97,7 @@ class User extends BaseController
         $newUser->lastname  = $input['lastname'];
         $newUser->password  = $input['password'];
         $newUser->active    = 1;
-        if (!empty($input['parent'])){
+        if (!empty($input['parent'])) {
             $newUser->parentid = $input['parent'];
         }
 
@@ -112,8 +110,13 @@ class User extends BaseController
         // Adding new user to group
         $authorize->addUserToGroup($userId, $input['role']);
 
+
         // Return back to index
-        return redirect()->to('users')->with('massage',lang('Global.saved'));   
+        if (!empty($input['parent'])) {
+            return redirect()->to('users/client')->with('massage', lang('Global.saved'));
+        } else {
+            return redirect()->to('users')->with('massage', lang('Global.saved'));
+        }
     }
 
     public function update($id)
@@ -128,7 +131,7 @@ class User extends BaseController
         $UserModel      = new UserModel();
         $GroupUserModel = new GroupUserModel();
         $GroupModel     = new GroupModel();
-        
+
         // Defining input
         $input = $this->request->getPost();
 
@@ -144,8 +147,8 @@ class User extends BaseController
         }
 
         $rules['role'] = 'required';
-        
-        if (! $this->validate($rules)) {
+
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -176,6 +179,11 @@ class User extends BaseController
         } else {
             $updateUser->phone  = $user->phone;
         }
+        if (!empty($input['parent'])) {
+            $updateUser->parentid    = $input['parent'];
+        } else {
+            $updateUser->parentid  = $user->parentid;
+        }
 
         // Reset password
         if (!empty($input['password'])) {
@@ -184,7 +192,7 @@ class User extends BaseController
                 'pass_confirm'  => 'required|matches[password]'
             ];
 
-            if (! $this->validate($rules)) {
+            if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
@@ -205,10 +213,13 @@ class User extends BaseController
 
         // Adding to group
         $authorize->addUserToGroup($id, $input['role']);
-        
-        // Redirect to user management
-        return redirect()->to('users')->with('message', lang('Global.saved'));
 
+        // Redirect to user management
+        if (!empty($input['parent'])) {
+            return redirect()->to('users/client')->with('massage', lang('Global.saved'));
+        } else {
+            return redirect()->to('users')->with('massage', lang('Global.saved'));
+        }
     }
 
     public function delete($id)
@@ -219,15 +230,15 @@ class User extends BaseController
         $GroupUserModel = new GroupUserModel();
 
         $user = $usersModel->find($id);
-        $groups = $GroupUserModel->where('user_id',$id)->find();
+        $groups = $GroupUserModel->where('user_id', $id)->find();
         $input = $this->request->getPost();
 
         $groupid = "";
-        foreach ($groups as $group){
+        foreach ($groups as $group) {
             $groupid = $group['group_id'];
         }
 
-        $data['users']= $usersModel->find($id);
+        $data['users'] = $usersModel->find($id);
         if (empty($data)) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Data Password Tidak Ditemukan !');
         }
@@ -240,7 +251,6 @@ class User extends BaseController
         ]);
         $usersModel->delete($id);
         return redirect()->to('users')->with('message', lang('Global.deleted'));
-
     }
 
     public function accesscontrol()
@@ -274,16 +284,16 @@ class User extends BaseController
 
         // Initialize
         $input = $this->request->getPost();
-        
+
         // Create Group
         $id = $authorize->createGroup($input['group'], $input['description']);
-        
+
         $permission = [];
-        foreach ($input['permission'] as $key => $permit){
-            $permission [] = $permit;
+        foreach ($input['permission'] as $key => $permit) {
+            $permission[] = $permit;
         }
-        
-        foreach ($permission as $permissionid){
+
+        foreach ($permission as $permissionid) {
             $authorize->addPermissionToGroup($permissionid, $id);
         }
 
@@ -312,17 +322,17 @@ class User extends BaseController
         ];
         // dd($datagroup);
 
-        $cek = $authorize->updateGroup($id,$datagroup['name'],$datagroup['description']);
+        $cek = $authorize->updateGroup($id, $datagroup['name'], $datagroup['description']);
 
         // Get Group Permissions
         $permissiongroup = [];
         foreach ($Grouppermissions as $Grouppermission) {
-            $permissiongroup [] = $Grouppermission->id;
+            $permissiongroup[] = $Grouppermission->id;
         }
-        
-        if (!empty( $Grouppermissions )) {
+
+        if (!empty($Grouppermissions)) {
             // Remove Permission From Group
-            foreach ($permissiongroup as $permit => $permissionid){
+            foreach ($permissiongroup as $permit => $permissionid) {
                 $authorize->removePermissionFromGroup($permissionid, $id);
             }
         }
@@ -330,11 +340,11 @@ class User extends BaseController
         if (!empty($input['permission'])) {
             // Add New Permissions
             $permission = [];
-            foreach ($input['permission'] as $key => $permit){
-                $permission [] = $permit;
+            foreach ($input['permission'] as $key => $permit) {
+                $permission[] = $permit;
             }
-            
-            foreach ($permission as $permissionid){
+
+            foreach ($permission as $permissionid) {
                 $authorize->addPermissionToGroup($permissionid, $id);
             }
         }
@@ -354,12 +364,12 @@ class User extends BaseController
         // Get Group Permissions
         $permissiongroup = [];
         foreach ($Grouppermissions as $Grouppermission) {
-            $permissiongroup [] = $Grouppermission->id;
+            $permissiongroup[] = $Grouppermission->id;
         }
 
-        
+
         // Remove Permissions 
-        foreach ($permissiongroup as $permit => $permissionid){
+        foreach ($permissiongroup as $permit => $permissionid) {
             $authorize->removePermissionFromGroup($permissionid, $id);
         }
 
@@ -385,6 +395,15 @@ class User extends BaseController
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
+        $users = $query->getResult();
+
+        $parentid = [];
+        foreach ($users as $user) {
+            if ($user->parent != "") {
+                $parentid[] = $user->parent;
+            }
+        }
+
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = lang('Global.clientList');
@@ -392,9 +411,8 @@ class User extends BaseController
         $data['roles']          = $GroupModel->findAll();
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query->getResult();
+        $data['parent']         = $parentid;
 
         return view('client', $data);
     }
-
-
 }

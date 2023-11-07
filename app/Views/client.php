@@ -93,17 +93,17 @@
                     </div>
 
                     <div class="uk-margin" id="parent" hidden>
-                        <label class="uk-form-label" for="parent"><?= lang('Global.access') ?></label>
+                        <label class="uk-form-label" for="parent">Choose <?= lang('Global.center') ?></label>
                         <div class="uk-form-controls">
                             <select class="uk-select" name="parent">
-                                <option value="" selected disabled>Role</option>
+                                <option value="" selected disabled>Center List</option>
                                 <?php
                                 foreach ($users as $user) {
-                                        if ($authorize->inGroup('superuser', $uid) === true) {
-                                            if ($user->role !='client cabang') {
-                                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
-                                            }
+                                    if ($authorize->inGroup('superuser', $uid) === true) {
+                                        if ($user->role != 'client cabang') {
+                                            echo '<option value="' . $user->id . '">' . $user->username . '</option>';
                                         }
+                                    }
                                 } ?>
                             </select>
                         </div>
@@ -153,21 +153,30 @@
         </thead>
         <tbody>
             <?php $i = 1; ?>
-            <?php foreach ($users as $user) { ?>
+            <?php foreach ($users as $user) {
+                foreach ($parent as $idParent) {
+                    if ($user->id === $idParent) {
+                        $name[] = [
+                            'id'    => $user->id,
+                            'name'  => $user->username,
+                        ];
+                    }
+                }
+                if ($user->parent != "") {
+                    foreach ($name as $parentname) {
+                        if ($user->parent === $parentname['id']) {
+                            $client = "Cabang " . $parentname['name'];
+                        }
+                    }
+                } else {
+                    $client = "Pusat";
+                } ?>
                 <tr>
                     <td class="uk-text-center"><?= $i++; ?></td>
                     <td class=""><?= $user->username; ?></td>
                     <td class=""><?= $user->email; ?></td>
                     <td class=""><?= $user->role; ?></td>
-
-                    <?php
-                    $userid[] = $user->id;
-                    if ($user->parent != "") {
-                        $center = "Cabang ";
-                    } else {
-                        $center = "Pusat";
-                    } ?>
-                    <td class=""><?= $center; ?></td>
+                    <td class=""><?= $client; ?></td>
                     <td class="uk-child-width-auto uk-flex-center uk-grid-row-small uk-grid-column-small" uk-grid>
                         <!-- Button Trigger Modal Edit -->
                         <div>
@@ -200,27 +209,27 @@
                 <div class="uk-modal-body">
                     <form class="uk-form-stacked" role="form" action="users/update/<?= $user->id ?>" method="post">
                         <?= csrf_field() ?>
-                        <input type="hidden" name="id" value="<?= $user->id; ?>">
+                        <input type="hidden" name="id<?= $user->id ?>" value="<?= $user->id; ?>">
                         <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" autofocus />
+                                <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" />
                             </div>
                         </div>
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="firstname" name="firstname" placeholder="<?= $user->firstname; ?>" autofocus />
+                                <input type="text" class="uk-input" id="firstname" name="firstname" placeholder="<?= $user->firstname; ?>" />
                             </div>
                         </div>
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="lastname" name="lastname" placeholder="<?= $user->lastname; ?>" autofocus />
+                                <input type="text" class="uk-input" id="lastname<?= $user->id; ?>" name="lastname" placeholder="<?= $user->lastname; ?>" />
                             </div>
                         </div>
 
@@ -250,14 +259,34 @@
                         </div>
 
                         <div class="uk-margin">
-                            <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
+                            <label class="uk-form-label" for="pass_confirm"><?= lang('Global.access') ?></label>
+                            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
+                                <?php foreach ($roles as $role) {
+                                    if ($authorize->inGroup('superuser', $uid) === true) {
+                                        $position = array("client pusat", "client cabang");
+                                        if ((in_array($role->name, $position))) {
+                                            if ($user->role == $role->name) {
+                                                $checked = "checked";
+                                            } else {
+                                                $checked = "";
+                                            }
+                                            echo '<label><input class="uk-checkbox" name="role" id="editrole' . $role->name . $user->id . '" value="' . $role->id . '" type="checkbox" ' . $checked . '> ' . $role->name . '</label>';
+                                        }
+                                    } ?>
+                                <?php  } ?>
+                            </div>
+                        </div>
+
+                        <div class="uk-margin" id="editparent<?= $user->id ?>" hidden>
+                            <label class="uk-form-label" for="parent">Choose <?= lang('Global.center') ?></label>
                             <div class="uk-form-controls">
-                                <select class="uk-select" name="role" required>
-                                    <option value="" selected disabled>Role</option>
-                                    <?php foreach ($roles as $role) {
-                                        if ($authorize->inGroup('Admin', $uid) === true) {
-                                            if ($role->name == 'client') {
-                                                echo '<option value="' . $role->id . '">' . $role->name . '</option>';
+                                <select class="uk-select" name="parent">
+                                    <option value="" selected disabled>Center List</option>
+                                    <?php
+                                    foreach ($users as $user) {
+                                        if ($authorize->inGroup('superuser', $uid) === true) {
+                                            if ($user->role != 'client cabang') {
+                                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
                                             }
                                         }
                                     } ?>
@@ -277,7 +306,31 @@
     </div>
 <?php } ?>
 <!-- End Of Modal Edit -->
+<?php foreach ($users as $user) { ?>
+    <script>
+        $(document).ready(function() {
 
+            if ($("input[id='editroleclient cabang<?= $user->id ?>']").is(':checked')) {
+                $("#editparent<?= $user->id ?>").removeAttr("hidden");
+            }
+
+            $("input[id='editroleclient cabang<?= $user->id ?>']").change(function() {
+                if ($(this).is(':checked')) {
+                    $("input[id='editroleclient pusat<?= $user->id ?>']").prop("checked", false);
+                    $("#editparent<?= $user->id ?>").removeAttr("hidden");
+                } else {
+                    $("#editparent<?= $user->id ?>").attr("hidden", true);
+                }
+            });
+
+            $("input[id='editroleclient pusat<?= $user->id ?>']").click(function() {
+                $("input[id='editroleclient cabang<?= $user->id ?>']").prop("checked", false);
+                $("#editparent<?= $user->id ?>").attr("hidden", true);
+            });
+
+        });
+    </script>
+<?php } ?>
 <!-- Search Engine Script -->
 <script>
     $(document).ready(function() {
