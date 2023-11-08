@@ -16,6 +16,7 @@ class CreateTempProject extends Migration
             'production'    => ['type' => 'int', 'constraint' => 11],
             'clientid'      => ['type' => 'int', 'constraint' => 11],
         ];
+        $this->forge->addField($fields);
         $this->forge->addKey('id', true);
         $this->forge->createTable('temp_project', true);
     }

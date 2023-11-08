@@ -261,7 +261,12 @@ class User extends BaseController
         $usersModel = new UserModel();
         $GroupUserModel = new GroupUserModel();
 
-        $user = $usersModel->find($id);
+        $users = $usersModel->findAll();
+
+        foreach ($users as $user){
+
+        }
+        
         $groups = $GroupUserModel->where('user_id', $id)->find();
         $input = $this->request->getPost();
 

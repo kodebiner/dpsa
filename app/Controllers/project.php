@@ -22,7 +22,6 @@ class Project extends BaseController
         $this->builder  = $this->db->table('users');
         $this->config   = config('Auth');
         $this->auth     = service('authentication');
-        
     }
 
     public function index()
@@ -37,16 +36,23 @@ class Project extends BaseController
         // Populating Data
         $bars       = $BarModel->find(1);
         $projects   = $ProjectModel->findAll();
-        $users      = $UserModel->findAll();
+        $this->builder->where('deleted_at', null);
+        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name', 'client pusat');
+        $this->builder->orWhere('auth_groups.name', 'client cabang');
+        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+        $query =   $this->builder->get();
 
         // Data Quantiti
         $qty = $bars['qty'];
-        
+
         $data = $this->data;
         $data['title']          =   lang('Global.titleDashboard');
         $data['description']    =   lang('Global.dashboardDescription');
         $data['qty']            =   $qty;
-        $data['clients']        =   $users;
+        $data['clients']        =   $query->getResultArray();
         $data['projects']       =   $projects;
         $data['mdls']           =   $MdlModel->findAll();
         $data['rabs']           =   $RabModel->findAll();
@@ -68,7 +74,7 @@ class Project extends BaseController
             'created_at'    => $time,
         ];
         $ProjectModel->save($project);
-        
+
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
@@ -88,23 +94,24 @@ class Project extends BaseController
             'updated_at'    => $time,
         ];
         $ProjectModel->save($project);
-        
+
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
 
         $ProjectModel = new ProjectModel;
         $RabModel = new RabModel;
 
         // Delete Rab Project
         $datarab = $RabModel->findAll();
-        foreach ($datarab as $rabs){
-            if($rabs['projectid'] === $id){
-                $rabdata [] = $rabs['id'];
+        foreach ($datarab as $rabs) {
+            if ($rabs['projectid'] === $id) {
+                $rabdata[] = $rabs['id'];
             }
         }
-        if(!empty($rabdata)){
+        if (!empty($rabdata)) {
             $RabModel->delete($rabdata);
         }
 
@@ -115,8 +122,7 @@ class Project extends BaseController
         return redirect()->to('project')->with('massage', lang('Global.deleted'));
     }
 
-    public function approve(){
-
+    public function approve()
+    {
     }
-
 }
