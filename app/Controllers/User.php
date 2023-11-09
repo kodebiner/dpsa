@@ -98,8 +98,8 @@ class User extends BaseController
         $newUser->lastname  = $input['lastname'];
         $newUser->password  = $input['password'];
         $newUser->active    = 1;
-        if (!empty($input['parent'])) {
-            $newUser->parentid = $input['parent'];
+        if (!empty($input['child'])) {
+            $newUser->parentid = $input['child'];
         }
 
         // Save new user
@@ -109,13 +109,16 @@ class User extends BaseController
         $userId = $UserModel->getInsertID();
 
         // Adding new user to group
-        $authorize->addUserToGroup($userId, $input['role']);
-
+        if (isset($input['parent'])){
+            $authorize->addUserToGroup($userId, $input['parent']);
+        }elseif(isset($input['role'])){
+            $authorize->addUserToGroup($userId, $input['role']);
+        }
 
         // Return back to index
-        if (!empty($input['parent'])) {
+        if (isset($input['parent'])) {
             return redirect()->to('users/client')->with('massage', lang('Global.saved'));
-        } else {
+        } elseif (empty($input['parent'])) {
             return redirect()->to('users')->with('massage', lang('Global.saved'));
         }
     }
@@ -131,10 +134,7 @@ class User extends BaseController
         // Calling Model
         $UserModel      = new UserModel();
         $GroupUserModel = new GroupUserModel();
-
-        $GroupModel     = new GroupModel();
         $groups = $authorize->groups();
-
 
         foreach ($groups as $gr) {
             if ($gr->name === "client pusat") {
@@ -156,7 +156,7 @@ class User extends BaseController
             $rules['email']     = 'valid_email|is_unique[users.email]';
         }
 
-        $rules['role'] = 'required';
+        $rules['role'] = 'max_length[30]';
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -184,17 +184,16 @@ class User extends BaseController
         } else {
             $updateUser->lastname  = $user->lastname;
         }
-        if (!empty($input['phone'])) {
-            $updateUser->phone     = $input['phone'];
-        } else {
-            $updateUser->phone  = $user->phone;
-        }
-        if (!empty($input['parent'])) {
-            $updateUser->parentid    = $input['parent'];
+        if (!empty($input['child'])) {
+            $updateUser->parentid    = $input['child'];
         } else {
             $updateUser->parentid  = $user->parentid;
         }
-        if ($input['role'] === $pusatid) {
+        if (isset($input['parent'])) {
+            if ($input['parent'] === $pusatid) {
+                $updateUser->parentid = Null;
+            }
+        }elseif(isset($input['role'])) {
             $updateUser->parentid = Null;
         }
 
@@ -225,10 +224,14 @@ class User extends BaseController
         }
 
         // Adding to group
-        $authorize->addUserToGroup($id, $input['role']);
+        if (isset($input['parent'])){
+            $authorize->addUserToGroup($id, $input['parent']);
+        }elseif(isset($input['role'])){
+            $authorize->addUserToGroup($id, $input['role']);
+        }
 
         // Redirect to user management
-        if (!empty($input['parent'])) {
+        if (isset($input['parent'])) {
             return redirect()->to('users/client')->with('massage', lang('Global.saved'));
         } elseif (empty($input['parent'])) {
             return redirect()->to('users')->with('massage', lang('Global.saved'));
@@ -272,22 +275,21 @@ class User extends BaseController
 
         $authorize = service('authorization');
 
+        // Calling Model
         $usersModel = new UserModel();
         $GroupUserModel = new GroupUserModel();
         $ProjectModel = new ProjectModel;
 
         $Project = $ProjectModel->where('clientid', $id)->find();
-        // dd($Project);
 
         // remove project
-        foreach ($Project as $project) {
-            $ProjectModel->delete($project['id']);
+        if (!empty($Project)) {
+            foreach ($Project as $project) {
+                $ProjectModel->delete($project['id']);
+            }
         }
 
         $users = $usersModel->findAll();
-
-        // $userchild = $usersModel->where('parentid',$id)->find();
-        $updateUser = new \App\Entities\User();
 
         // Remove Parent
         $parid = [];
@@ -311,9 +313,7 @@ class User extends BaseController
             }
         }
 
-
         $groups = $GroupUserModel->where('user_id', $id)->find();
-        $input = $this->request->getPost();
 
         $groupid = "";
         foreach ($groups as $group) {

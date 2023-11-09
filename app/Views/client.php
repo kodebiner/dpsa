@@ -85,7 +85,7 @@
                                 if ($authorize->inGroup('superuser', $uid) === true) {
                                     $position = array("client pusat", "client cabang");
                                     if ((in_array($role->name, $position))) {
-                                        echo '<label><input class="uk-checkbox" name="role" id="' . $role->name . '" value="' . $role->id . '" type="checkbox"> ' . $role->name . '</label>';
+                                        echo '<label><input class="uk-checkbox" name="parent" id="' . $role->name . '" value="' . $role->id . '" type="checkbox"> ' . $role->name . '</label>';
                                     }
                                 }
                             } ?>
@@ -93,9 +93,9 @@
                     </div>
 
                     <div class="uk-margin" id="parent" hidden>
-                        <label class="uk-form-label" for="parent">Choose <?= lang('Global.center') ?></label>
+                        <label class="uk-form-label" for="child">Choose <?= lang('Global.center') ?></label>
                         <div class="uk-form-controls">
-                            <select class="uk-select" name="parent">
+                            <select class="uk-select" name="child">
                                 <option value="" selected disabled>Center List</option>
                                 <?php
                                 foreach ($users as $user) {
@@ -270,7 +270,7 @@
                                             } else {
                                                 $checked = "";
                                             }
-                                            echo '<label><input class="uk-checkbox" name="role" id="editrole' . $role->name . $user->id . '" value="' . $role->id . '" type="checkbox" ' . $checked . '> ' . $role->name . '</label>';
+                                            echo '<label><input class="uk-checkbox" name="parent" id="editrole' . $role->name . $user->id . '" value="' . $role->id . '" type="checkbox" ' . $checked . '> ' . $role->name . '</label>';
                                         }
                                     } ?>
                                 <?php  } ?>
@@ -278,9 +278,9 @@
                         </div>
 
                         <div class="uk-margin" id="editparent<?= $user->id ?>" hidden>
-                            <label class="uk-form-label" for="parent">Choose <?= lang('Global.center') ?></label>
+                            <label class="uk-form-label" for="child">Choose <?= lang('Global.center') ?></label>
                             <div class="uk-form-controls">
-                                <select class="uk-select" name="parent">
+                                <select class="uk-select" name="child">
                                     <option value="" selected disabled>Center List</option>
                                     <?php
                                     foreach ($users as $user) {

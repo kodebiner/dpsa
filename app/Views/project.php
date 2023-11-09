@@ -32,19 +32,19 @@
             <div class="uk-margin">
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                    <input class="uk-input uk-form-width-large" name="name" placeholder="Name" type="text" aria-label="Not clickable icon">
+                    <input class="uk-input uk-form-width-large" name="name" placeholder="Name" type="text" aria-label="Not clickable icon" required>
                 </div>
             </div>
 
             <div class="uk-margin">
                 <div class="uk-inline">
-                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" aria-label="Brief"></textarea>
+                    <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" aria-label="Brief" required></textarea>
                 </div>
             </div>
 
             <div class="uk-margin">
                 <div class="uk-form-controls uk-form-width-large">
-                    <select class="uk-select" name="status" id="status">
+                    <select class="uk-select" name="status" id="status" required>
                         <option value="" selected disabled>Pilih Progres</option>
                         <option value="1">Proses Desain</option>
                         <option value="2">Menunggu Approval</option>
@@ -76,7 +76,7 @@
 
             <div class="uk-margin">
                 <div class="uk-form-controls uk-form-width-large">
-                    <select class="uk-select" name="client" id="client">
+                    <select class="uk-select" name="client" id="client" required>
                         <option value="" selected disabled>Pilih Client</option>
                         <?php foreach ($clients as $client) { ?>
                             <option value="<?= $client['id'] ?>"> <?= $client['username'] ?></option>
