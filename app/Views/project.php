@@ -9,14 +9,15 @@
 
 <?= $this->section('main') ?>
 
-<div class="uk-child-width-expand@m uk-text-right uk-margin-bottom" uk-grid>
+<div class="uk-child-width-expand@m uk-text-right" uk-grid>
     <div>
         <div class="uk-margin">
             <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Add Proyek</button>
+            <h3 class="tm-h1 uk-align-left uk-margin-remove-bottom">Project Data </h3>
         </div>
     </div>
 </div>
-
+<hr class="uk-divider-icon uk-margin-remove-top">
 <!-- add project modal -->
 <div id="modaladd" uk-modal>
     <div class="uk-modal-dialog">
