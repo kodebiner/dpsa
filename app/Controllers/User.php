@@ -6,6 +6,7 @@ use App\Models\UserModel;
 use App\Models\GroupUserModel;
 use App\Models\PermissionModel;
 use Myth\Auth\Models\GroupModel;
+use App\Models\ProjectModel;
 
 class User extends BaseController
 {
@@ -134,9 +135,9 @@ class User extends BaseController
         $GroupModel     = new GroupModel();
         $groups = $authorize->groups();
 
-        
-        foreach ($groups as $gr){
-            if($gr->name === "client pusat"){
+
+        foreach ($groups as $gr) {
+            if ($gr->name === "client pusat") {
                 $pusatid = $gr->id;
             }
         }
@@ -193,7 +194,7 @@ class User extends BaseController
         } else {
             $updateUser->parentid  = $user->parentid;
         }
-        if($input['role'] === $pusatid) {
+        if ($input['role'] === $pusatid) {
             $updateUser->parentid = Null;
         }
 
@@ -270,24 +271,35 @@ class User extends BaseController
     {
 
         $authorize = service('authorization');
+
         $usersModel = new UserModel();
         $GroupUserModel = new GroupUserModel();
+        $ProjectModel = new ProjectModel;
+
+        $Project = $ProjectModel->where('clientid', $id)->find();
+        // dd($Project);
+
+        // remove project
+        foreach ($Project as $project) {
+            $ProjectModel->delete($project['id']);
+        }
 
         $users = $usersModel->findAll();
 
         // $userchild = $usersModel->where('parentid',$id)->find();
         $updateUser = new \App\Entities\User();
-        
+
+        // Remove Parent
         $parid = [];
         foreach ($users as $child) {
-            if($child->parentid === $id) {
+            if ($child->parentid === $id) {
                 $parid = [
                     'id' => $child->id,
                 ];
             }
         }
 
-    
+        if (!empty($parid)) {
             foreach ($users as $user) {
                 if ($user->id === $parid['id']) {
                     $data = [
@@ -296,8 +308,9 @@ class User extends BaseController
                     ];
                     $usersModel->save($data);
                 }
-            
+            }
         }
+
 
         $groups = $GroupUserModel->where('user_id', $id)->find();
         $input = $this->request->getPost();
@@ -319,7 +332,7 @@ class User extends BaseController
             'active'   => '0'
         ]);
         $usersModel->delete($id);
-        
+
         return redirect()->to('users/client')->with('massage', lang('Global.deleted'));
     }
 

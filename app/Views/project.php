@@ -187,7 +187,9 @@
                                             }
                                         }
                                     } ?>
-                                    <?= $client ?>
+                                    <?php if (!empty($client)) { ?>
+                                        <?= $client ?>
+                                    <?php } ?>
                                 </p>
                             </div>
                         </div>
@@ -295,7 +297,9 @@
                                     }
                                 }
                             } ?>
-                            <option value="" selected disabled>  <?= $client ?></option>
+                            <option value="" selected disabled>
+                                <?php if (!empty($client)) { echo $client; } ?>
+                            </option>
                             <?php foreach ($clients as $client) {
                                 if ($client['role'] === "client pusat") {
                                     $klien = $client['username'] . " pusat";
