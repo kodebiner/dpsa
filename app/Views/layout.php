@@ -71,7 +71,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                        <!-- <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
                             <a class="uk-h4 tm-h4" href="users/access-control">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -90,7 +90,7 @@
                                     <div class="tm-navbar-text uk-text-center">Marketing</div>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="tm-main-navbar">
                             <a class="uk-h4 tm-h4" href="project">
                                 <div class="uk-width-1-1 uk-margin-left">
@@ -101,7 +101,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="tm-main-navbar">
+                        <!-- <li class="tm-main-navbar">
                             <a class="uk-h4 tm-h4" href="produksi">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -130,7 +130,7 @@
                                     <div class="tm-navbar-text uk-text-center">Design</div>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
             </div>
@@ -172,7 +172,7 @@
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                    <!-- <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="users/access-control">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -191,7 +191,7 @@
                                 <div class="tm-navbar-text uk-text-center">Marketing</div>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="project">
                             <div class="uk-width-1-1 uk-margin-left">
@@ -202,7 +202,7 @@
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar">
+                    <!-- <li class="uk-margin-left tm-main-navbar">
                         <a class="uk-h4 tm-h4" href="produksi">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -231,7 +231,7 @@
                                 <div class="tm-navbar-text uk-text-center">Design</div>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
                         <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>">
                             <div class="uk-margin-left">

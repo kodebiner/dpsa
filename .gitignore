@@ -131,5 +131,5 @@ nb-configuration.xml
 
 public/img/profile/*
 public/img/product/*
-public/img/logo.*
+public/img/logo
 .env
