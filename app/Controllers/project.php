@@ -32,10 +32,8 @@ class Project extends BaseController
         $UserModel      = new UserModel;
         $MdlModel       = new MdlModel;
         $RabModel       = new RabModel;
+        $projects       = $ProjectModel->find();
 
-        // Populating Data
-        $bars       = $BarModel->find(1);
-        $projects   = $ProjectModel->findAll();
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
@@ -45,17 +43,20 @@ class Project extends BaseController
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
 
-        // Data Quantiti
-        $qty = $bars['qty'];
+        $users = $query->getResult();
+        $parentid = [];
+        foreach ($users as $user) {
+            if ($user->parent != "") {
+                $parentid[] = $user->parent;
+            }
+        }
 
         $data = $this->data;
         $data['title']          =   lang('Global.titleDashboard');
         $data['description']    =   lang('Global.dashboardDescription');
-        $data['qty']            =   $qty;
         $data['clients']        =   $query->getResultArray();
         $data['projects']       =   $projects;
-        $data['mdls']           =   $MdlModel->findAll();
-        $data['rabs']           =   $RabModel->findAll();
+        $data['parent']         =   $parentid;
 
         return view('project', $data);
     }
@@ -71,7 +72,8 @@ class Project extends BaseController
             'name'          => $input['name'],
             'brief'         => $input['brief'],
             'clientid'      => $input['client'],
-            'created_at'    => $time,
+            'status'        => $input['status'],
+            'production'    => $input['qty'],
         ];
         $ProjectModel->save($project);
 
@@ -84,14 +86,27 @@ class Project extends BaseController
 
         // initialisation
         $input = $this->request->getPost();
-        $time   = date('Y-m-d H:i:s');
+        $pro = $ProjectModel->find($id);
+
+        if (empty($input['client'])){
+            $client = $pro['clientid'];
+        }else{
+            $client = $input['client'];
+        }
+
+        if (empty($input['status'])){
+            $status = $pro['status'];
+        }else{
+            $status = $input['status'];
+        }
 
         $project = [
             'id'            => $id,
             'name'          => $input['name'],
             'brief'         => $input['brief'],
-            'clientid'      => $input['client'],
-            'updated_at'    => $time,
+            'clientid'      => $client,
+            'status'        => $status,
+            'production'    => $input['qty'],
         ];
         $ProjectModel->save($project);
 
@@ -100,21 +115,7 @@ class Project extends BaseController
 
     public function delete($id)
     {
-
         $ProjectModel = new ProjectModel;
-        $RabModel = new RabModel;
-
-        // Delete Rab Project
-        $datarab = $RabModel->findAll();
-        foreach ($datarab as $rabs) {
-            if ($rabs['projectid'] === $id) {
-                $rabdata[] = $rabs['id'];
-            }
-        }
-        if (!empty($rabdata)) {
-            $RabModel->delete($rabdata);
-        }
-
         // Delete Project
         $project = $ProjectModel->find($id);
         $ProjectModel->delete($project);

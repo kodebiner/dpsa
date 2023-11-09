@@ -162,7 +162,7 @@
                         ];
                     }
                 }
-                if ($user->parent != "") {
+                if ($user->parent != "" && !empty($user->parent)) {
                     foreach ($name as $parentname) {
                         if ($user->parent === $parentname['id']) {
                             $client = "Cabang " . $parentname['name'];

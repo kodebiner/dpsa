@@ -130,7 +130,16 @@ class User extends BaseController
         // Calling Model
         $UserModel      = new UserModel();
         $GroupUserModel = new GroupUserModel();
+
         $GroupModel     = new GroupModel();
+        $groups = $authorize->groups();
+
+        
+        foreach ($groups as $gr){
+            if($gr->name === "client pusat"){
+                $pusatid = $gr->id;
+            }
+        }
 
         // Defining input
         $input = $this->request->getPost();
@@ -184,6 +193,9 @@ class User extends BaseController
         } else {
             $updateUser->parentid  = $user->parentid;
         }
+        if($input['role'] === $pusatid) {
+            $updateUser->parentid = Null;
+        }
 
         // Reset password
         if (!empty($input['password'])) {
@@ -217,7 +229,7 @@ class User extends BaseController
         // Redirect to user management
         if (!empty($input['parent'])) {
             return redirect()->to('users/client')->with('massage', lang('Global.saved'));
-        } else {
+        } elseif (empty($input['parent'])) {
             return redirect()->to('users')->with('massage', lang('Global.saved'));
         }
     }
@@ -263,10 +275,30 @@ class User extends BaseController
 
         $users = $usersModel->findAll();
 
-        foreach ($users as $user){
-
-        }
+        // $userchild = $usersModel->where('parentid',$id)->find();
+        $updateUser = new \App\Entities\User();
         
+        $parid = [];
+        foreach ($users as $child) {
+            if($child->parentid === $id) {
+                $parid = [
+                    'id' => $child->id,
+                ];
+            }
+        }
+
+    
+            foreach ($users as $user) {
+                if ($user->id === $parid['id']) {
+                    $data = [
+                        'id'        => $parid['id'],
+                        'parentid'  => 0,
+                    ];
+                    $usersModel->save($data);
+                }
+            
+        }
+
         $groups = $GroupUserModel->where('user_id', $id)->find();
         $input = $this->request->getPost();
 
