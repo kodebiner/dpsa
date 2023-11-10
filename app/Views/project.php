@@ -166,7 +166,8 @@
                             <div class="uk-inline">
                                 <h3 class="tm-h4"><span uk-icon="icon: user; ratio: 1"></span> Client</h3>
                                 <p>
-                                    <?php foreach ($clients as $user) {
+                                    <?php
+                                     foreach ($clients as $user) {
                                         if ($user['id'] == $project['clientid']) {
                                             $clientname = $user['username'];
                                             foreach ($parent as $idParent) {
@@ -177,17 +178,19 @@
                                                     ];
                                                 }
                                             }
+                                            dd($clientname);
                                             if ($user['parent'] != "") {
                                                 foreach ($name as $parentname) {
                                                     if ($user['parent'] === $parentname['id']) {
-                                                        $client = "Cabang " . $parentname['name'];
+                                                        $client = $clientname . " cabang " . $parentname['name'];
                                                     }
                                                 }
                                             } else {
                                                 $client = $clientname . " pusat";
                                             }
                                         }
-                                    } ?>
+                                    } 
+                                    ?>
                                     <?php if (!empty($client)) { ?>
                                         <?= $client ?>
                                     <?php } ?>
@@ -322,8 +325,6 @@
                                 }
                             } ?>
                             <option value="" selected disabled>
-                                <? //php if (!empty($client)) { echo $client; } 
-                                ?>
                                 Pilih Client
                             </option>
                             <?php foreach ($clients as $client) {

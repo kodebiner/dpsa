@@ -51,6 +51,7 @@
                                 </div>
                             </a>
                         </li>
+                        <?php if (in_groups(['owner','superuser','marketing','admin','design','production'])) : ?>
                         <li class="tm-main-navbar">
                             <a class="uk-h4 tm-h4" href="users/client">
                                 <div class="uk-width-1-1 uk-margin-left">
@@ -131,6 +132,7 @@
                                 </div>
                             </a>
                         </li> -->
+                        <?php endif ?>
                     </ul>
                 </nav>
             </div>
@@ -152,6 +154,7 @@
                             </div>
                         </a>
                     </li>
+                    <?php if (in_groups(['owner','superuser','marketing','admin','design','production'])) : ?>
                     <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="users/client">
                             <div class="uk-width-1-1 uk-margin-left">
@@ -267,6 +270,7 @@
                             </div>
                         </a>
                     </li> -->
+                    <?php endif ?>
                 </ul>
             </nav>
         <?php } ?>

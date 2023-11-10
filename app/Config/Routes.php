@@ -42,8 +42,8 @@ $routes->group('/', static function ($routes) {
 
 $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Home::index');
-    $routes->get('dashboard', 'Home::clientdashboard');
-    $routes->get('logedin', 'Home::logedin');
+    $routes->get('dashboard', 'Home::index');
+    $routes->get('logedin', 'Home::index');
 });
 
 $routes->group('users',['filter' => 'login'], function ($routes){

@@ -24,26 +24,52 @@ class Home extends BaseController
         $this->config   = config('Auth');
         $this->auth     = service('authentication');
     }
-    
+
     public function index()
     {
         // Find Model
-        $BarModel = new BarModel;
+        $UserModel = new UserModel;
         $ProjectTempModel = new ProjectTempModel;
-        
+
         // Populating Data
-        $bars = $BarModel->find(1);
         $ProjectTemps   = $ProjectTempModel->findAll();
+
+        $data = $this->data;
+        $role = $data['role'];
+        if ($role === 'client cabang') {
+            $projects = $ProjectTempModel->where('clientid', $data['account']->id)->find();
+        } elseif ($role === 'client pusat') {
+            $projects = array();
+            $cabang = array();
+            $branches = $UserModel->where('parentid', $data['account']->id)->find();
+            foreach ($branches as $branch) {
+                $cabang[] = $branch->id;
+            }
+            $projectbranches = $ProjectTempModel->whereIn('clientid', $cabang)->find();
+            foreach ($projectbranches as $projectbranch) {
+                $projects[] = $projectbranch;
+            }
+            $projectholdings = $ProjectTempModel->where('clientid', $data['account']->id)->find();
+            foreach ($projectholdings as $projectholding) {
+                $projects[] = $projectholding;
+            }
+        } else {
+            $projects = $ProjectTempModel->findAll();
+        }
 
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $this->builder->where('users.id !=', $this->data['uid']);
+        $position = array("client pusat", "client cabang");
+        if ((!in_array($role, $position))) {
+            $this->builder->where('users.id !=', $this->data['uid']);
+        }
         $this->builder->where('auth_groups.name', 'client pusat');
         $this->builder->orWhere('auth_groups.name', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-        $query =   $this->builder->get();
-        $users = $query->getResult();
+        $query =    $this->builder->get();
+        $users =    $query->getResult();
+
         $parentid = [];
         foreach ($users as $user) {
             if ($user->parent != "") {
@@ -51,16 +77,12 @@ class Home extends BaseController
             }
         }
 
-        // Data Quantiti
-        $qty = $bars['qty'];
-        
-        $data = $this->data;
         $data['title']          =   lang('Global.titleDashboard');
         $data['description']    =   lang('Global.dashboardDescription');
         $data['clients']        =   $query->getResultArray();
-        $data['projects']       =   $ProjectTemps;
+        $data['projects']       =   $projects;
         $data['parent']         =   $parentid;
-        $data['qty']            =   $qty;
+        $data['role']           =   $role;
 
         return view('dashboard', $data);
     }
@@ -245,7 +267,7 @@ class Home extends BaseController
             'email'     => 'required|valid_email|is_unique[users.email]',
         ];
 
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             return redirect()->back()->with('errors', $this->validator->getErrors());
         }
 
@@ -255,7 +277,7 @@ class Home extends BaseController
             'pass_confirm' => 'required|matches[password]',
         ];
 
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -280,7 +302,8 @@ class Home extends BaseController
         return redirect()->to('login')->with('message', 'Aplikasi berhasil terpasang. Silahkan melakukan Login');
     }
 
-    public function logedin() {
+    public function logedin()
+    {
         $data = $this->data;
 
         if (($data['role'] === 'client pusat') || ($data['role'] === 'client cabang')) {
@@ -297,8 +320,7 @@ class Home extends BaseController
         $users = $UserModel->findAll();
 
         foreach ($users as $user) {
-            echo $user->id.'<br/>';
+            echo $user->id . '<br/>';
         }
     }
-
 }

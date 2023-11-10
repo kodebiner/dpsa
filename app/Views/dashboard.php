@@ -33,31 +33,63 @@
                             <div class="uk-inline">
                                 <h3 class="tm-h4"><span uk-icon="icon: user; ratio: 1"></span> Client</h3>
                                 <p>
-                                    <?php foreach ($clients as $user) {
-                                        if ($user['id'] == $project['clientid']) {
-                                            $clientname = $user['username'];
-                                            foreach ($parent as $idParent) {
-                                                if ($user['id'] === $idParent) {
-                                                    $name[] = [
-                                                        'id'    => $user['id'],
-                                                        'name'  => $user['username'],
-                                                    ];
-                                                }
-                                            }
-                                            if ($user['parent'] != "") {
-                                                foreach ($name as $parentname) {
-                                                    if ($user['parent'] === $parentname['id']) {
-                                                        $client = "Cabang " . $parentname['name'];
+                                    <?php
+                                    $position = array("client pusat", "client cabang");
+                                    if ((!in_array($role, $position))) {
+                                        foreach ($clients as $user) {
+                                            if ($user['id'] == $project['clientid']) {
+                                                $clientname = $user['username'];
+                                                foreach ($parent as $idParent) {
+                                                    if ($user['id'] === $idParent) {
+                                                        $name[] = [
+                                                            'id'    => $user['id'],
+                                                            'name'  => $user['username'],
+                                                        ];
                                                     }
                                                 }
-                                            } else {
-                                                $client = $clientname . " pusat";
+                                                if ($user['parent'] != "") {
+                                                    foreach ($name as $parentname) {
+                                                        if ($user['parent'] === $parentname['id']) {
+                                                            $client = $clientname . " cabang " . $parentname['name'];
+                                                        }
+                                                    }
+                                                } else {
+                                                    $client = $clientname . " pusat ";
+                                                }
                                             }
                                         }
-                                    } ?>
-                                    <?php if (!empty($client)) { ?>
-                                        <?= $client ?>
-                                    <?php } ?>
+                                        if (!empty($client)) {
+                                            echo $client;
+                                        }
+                                    } elseif ($role === "client pusat") {
+                                        foreach ($clients as $client) {
+                                            $parentname = "";
+                                            if ($client['id'] === $project['clientid']) {
+                                                $parentid = $client['parent'];
+                                                $clientname = $client['username'];
+                                                foreach ($clients as $parent) {
+                                                    if ($parent['id'] === $parentid) {
+                                                        $parentname = $parent['username'];
+                                                    }
+                                                }
+                                                echo $clientname . " cabang " . $parentname;
+                                            }
+                                        }
+                                    } elseif ($role === "client cabang") {
+                                        foreach ($clients as $client) {
+                                            if ($client['id'] === $project['clientid']) {
+                                                $parentid = $client['parent'];
+                                                $clientname = $client['username'];
+                                                foreach ($clients as $parent) {
+                                                    if ($parent['id'] === $parentid) {
+                                                        $parentname = $parent['username'];
+                                                    }
+                                                }
+                                                echo $clientname . " cabang " . $parentname;
+                                            }
+                                        }
+                                    }
+                                    ?>
                                 </p>
                             </div>
                         </div>
@@ -97,20 +129,21 @@
                                     } elseif ($project['status'] === "4") {
                                         if ($project['production'] === "0") {
                                             $persentase = "30";
-                                        } elseif($project['production'] != "0") {
+                                        } elseif ($project['production'] != "0") {
                                             $qty = round($project['production'] / 100 * 65, 2);
                                             $persentase = 30 + $qty;
                                         }
                                         echo "$persentase %";
                                     } elseif ($project['status'] === "5") {
                                         echo "95 %";
+                                        $persentase = "95";
                                     }
                                     ?>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <progress id="progress" class="uk-progress" value="10" max="100"></progress>
+                    <progress id="progress" class="uk-progress" value="<?= $persentase ?>" max="100"></progress>
                 </div>
 
             </div>
