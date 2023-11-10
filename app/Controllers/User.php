@@ -7,6 +7,7 @@ use App\Models\GroupUserModel;
 use App\Models\PermissionModel;
 use Myth\Auth\Models\GroupModel;
 use App\Models\ProjectModel;
+use App\Models\ProjectTempModel;
 
 class User extends BaseController
 {
@@ -35,9 +36,6 @@ class User extends BaseController
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        // if ($this->data['role'] === 'supervisor') {
-        //     $this->builder->where('auth_groups.name', 'operator');
-        // }
         $this->builder->where('users.id !=', $this->data['uid']);
         $this->builder->where('auth_groups.name !=', 'client pusat');
         $this->builder->where('auth_groups.name !=', 'client cabang');
@@ -278,14 +276,15 @@ class User extends BaseController
         // Calling Model
         $usersModel = new UserModel();
         $GroupUserModel = new GroupUserModel();
-        $ProjectModel = new ProjectModel;
+        // $ProjectModel = new ProjectModel;
+        $ProjectTempModel = new ProjectTempModel;
 
-        $Project = $ProjectModel->where('clientid', $id)->find();
+        $Project = $ProjectTempModel->where('clientid', $id)->find();
 
         // remove project
         if (!empty($Project)) {
             foreach ($Project as $project) {
-                $ProjectModel->delete($project['id']);
+                $ProjectTempModel->delete($project['id']);
             }
         }
 

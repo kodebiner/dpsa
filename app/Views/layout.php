@@ -192,7 +192,7 @@
                             </div>
                         </a>
                     </li> -->
-                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
+                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'projectTemp')) ? 'uk-active' : '' ?>">
                         <a class="uk-h4 tm-h4" href="project">
                             <div class="uk-width-1-1 uk-margin-left">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">

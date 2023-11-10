@@ -2,17 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Models\BarModel;
 use App\Models\ProjectModel;
-use App\Models\UserModel;
-use App\Models\MdlModel;
-use App\Models\RabModel;
+use App\Models\ProjectTempModel;
 
 
-class Project extends BaseController
+class ProjectTemp extends BaseController
 {
     protected $db, $builder;
     protected $auth;
+    protected $data;
     protected $config;
 
     public function __construct()
@@ -27,12 +25,8 @@ class Project extends BaseController
     public function index()
     {
         // Find Model
-        $BarModel       = new BarModel;
-        $ProjectModel   = new ProjectModel;
-        $UserModel      = new UserModel;
-        $MdlModel       = new MdlModel;
-        $RabModel       = new RabModel;
-        $projects       = $ProjectModel->findAll();
+        $ProjectTempModel = new ProjectTempModel;
+        $ProjectTemps   = $ProjectTempModel->findAll();
 
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
@@ -42,8 +36,8 @@ class Project extends BaseController
         $this->builder->orWhere('auth_groups.name', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
-
         $users = $query->getResult();
+        
         $parentid = [];
         foreach ($users as $user) {
             if ($user->parent != "") {
@@ -55,18 +49,19 @@ class Project extends BaseController
         $data['title']          =   lang('Global.titleDashboard');
         $data['description']    =   lang('Global.dashboardDescription');
         $data['clients']        =   $query->getResultArray();
-        $data['projects']       =   $projects;
+        $data['projects']       =   $ProjectTemps;
         $data['parent']         =   $parentid;
 
-        return view('project', $data);
+        return view('projectTemp', $data);
     }
 
     public function create()
     {
-        $ProjectModel = new ProjectModel;
+        // Calling Model
+        $ProjectTempModel = new ProjectTempModel;
 
+        // initialize
         $input  =   $this->request->getPost();
-        $time   =   date('Y-m-d H:i:s');
 
         $project = [
             'name'          => $input['name'],
@@ -75,18 +70,19 @@ class Project extends BaseController
             'status'        => $input['status'],
             'production'    => $input['qty'],
         ];
-        $ProjectModel->save($project);
+        $ProjectTempModel->save($project);
 
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
     public function update($id)
     {
-        $ProjectModel = new ProjectModel;
+        // Calling Model
+        $ProjectTempModel = new ProjectTempModel;
 
         // initialisation
         $input = $this->request->getPost();
-        $pro = $ProjectModel->find($id);
+        $pro = $ProjectTempModel->find($id);
 
         if (empty($input['client'])){
             $client = $pro['clientid'];
@@ -108,17 +104,19 @@ class Project extends BaseController
             'status'        => $status,
             'production'    => $input['qty'],
         ];
-        $ProjectModel->save($project);
+        $ProjectTempModel->save($project);
 
         return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
     public function delete($id)
     {
-        $ProjectModel = new ProjectModel;
+        // Calling Model
+        $ProjectTempModel = new ProjectTempModel;
+
         // Delete Project
-        $project = $ProjectModel->find($id);
-        $ProjectModel->delete($project);
+        $project = $ProjectTempModel->find($id);
+        $ProjectTempModel->delete($project);
 
         return redirect()->to('project')->with('massage', lang('Global.deleted'));
     }

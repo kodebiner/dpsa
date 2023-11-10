@@ -12,7 +12,7 @@
 <div class="uk-child-width-expand@m uk-text-right" uk-grid>
     <div>
         <div class="uk-margin">
-            <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Add Proyek</button>
+            <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button>
             <h3 class="tm-h1 uk-align-left uk-margin-remove-bottom">Project Data </h3>
         </div>
     </div>
@@ -217,13 +217,22 @@
                                 <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Produksi</h3>
                                 <p>
                                     <?php
-                                    if ($project['status'] != "4" && $project['status'] != "5") {
-                                        echo "0 %";
-                                    } elseif ($project['status'] == "5") {
-                                        echo "100%";
+                                    if ($project['status'] === "1") {
+                                        echo "5 %";
+                                    } elseif ($project['status'] === "2") {
+                                        echo "10 %";
+                                    } elseif ($project['status'] === "3") {
+                                        echo "20 %";
                                     } elseif ($project['status'] === "4") {
-                                        $persentasi = round($project['production'] / 100 * 100, 2);
+                                        if ($project['production'] === "0") {
+                                            $persentasi = "30";
+                                        } else {
+                                            $qty = round($project['production'] / 100 * 65, 2);
+                                            $persentasi = 30 + $qty;
+                                        }
                                         echo "$persentasi %";
+                                    } elseif ($project['status'] === "5") {
+                                        echo "100%";
                                     }
                                     ?>
                                 </p>

@@ -5,29 +5,94 @@ namespace App\Controllers;
 use App\Models\BarModel;
 use App\Entities\User;
 use App\Models\UserModel;
+use App\Models\ProjectModel;
+use App\Models\ProjectTempModel;
 
 
 class Home extends BaseController
 {
+    protected $db, $builder;
+    protected $auth;
     protected $data;
-    
-    public function index(): string
-    {
+    protected $config;
 
+    public function __construct()
+    {
+        $this->db       = \Config\Database::connect();
+        $validation     = \Config\Services::validation();
+        $this->builder  = $this->db->table('users');
+        $this->config   = config('Auth');
+        $this->auth     = service('authentication');
+    }
+    
+    public function index()
+    {
         // Find Model
         $BarModel = new BarModel;
-
+        $ProjectTempModel = new ProjectTempModel;
+        
         // Populating Data
         $bars = $BarModel->find(1);
+        $ProjectTemps   = $ProjectTempModel->findAll();
+
+        $this->builder->where('deleted_at', null);
+        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name', 'client pusat');
+        $this->builder->orWhere('auth_groups.name', 'client cabang');
+        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+        $query =   $this->builder->get();
+        $users = $query->getResult();
+        $parentid = [];
+        foreach ($users as $user) {
+            if ($user->parent != "") {
+                $parentid[] = $user->parent;
+            }
+        }
 
         // Data Quantiti
         $qty = $bars['qty'];
         
         $data = $this->data;
-        $data['title']          =  lang('Global.titleDashboard');
-        $data['description']    =  lang('Global.dashboardDescription');
-        $data['qty']            = $qty;
-        return view('bar', $data);
+        $data['title']          =   lang('Global.titleDashboard');
+        $data['description']    =   lang('Global.dashboardDescription');
+        $data['clients']        =   $query->getResultArray();
+        $data['projects']       =   $ProjectTemps;
+        $data['parent']         =   $parentid;
+        $data['qty']            =   $qty;
+
+        return view('dashboard', $data);
+    }
+
+    public function clientdashboard()
+    {
+        // Calling Entities & Models
+        $ProjectModel   = new ProjectModel();
+        $UserModel      = new UserModel();
+
+        // Populating Data
+        $data = $this->data;
+
+        $role = $data['role'];
+        if ($role === 'client cabang') {
+            $projects = $ProjectModel->where('clientid', $data['account']->id)->find();
+        } else {
+            $projects = array();
+            $cabang = array();
+            $branches = $UserModel->where('parentid', $data['account']->id)->find();
+            foreach ($branches as $branch) {
+                $cabang[] = $branch->id;
+            }
+            $projectbranches = $ProjectModel->whereIn('clientid', $cabang)->find();
+            foreach ($projectbranches as $projectbranch) {
+                $projects[] = $projectbranch;
+            }
+            $projectholdings = $ProjectModel->where('clientid', $data['account']->id)->find();
+            foreach ($projectholdings as $projectholding) {
+                $projects[] = $projectholding;
+            }
+        }
     }
 
     public function installation()
@@ -213,6 +278,16 @@ class Home extends BaseController
 
         // Redirect to Login
         return redirect()->to('login')->with('message', 'Aplikasi berhasil terpasang. Silahkan melakukan Login');
+    }
+
+    public function logedin() {
+        $data = $this->data;
+
+        if (($data['role'] === 'client pusat') || ($data['role'] === 'client cabang')) {
+            return redirect()->to('dashboard');
+        } else {
+            return redirect()->to('');
+        }
     }
 
     public function trial()
