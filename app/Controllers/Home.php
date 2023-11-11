@@ -45,9 +45,11 @@ class Home extends BaseController
             foreach ($branches as $branch) {
                 $cabang[] = $branch->id;
             }
-            $projectbranches = $ProjectTempModel->whereIn('clientid', $cabang)->find();
-            foreach ($projectbranches as $projectbranch) {
-                $projects[] = $projectbranch;
+            if(!empty($cabang)){
+                $projectbranches = $ProjectTempModel->whereIn('clientid', $cabang)->find();
+                foreach ($projectbranches as $projectbranch) {
+                    $projects[] = $projectbranch;
+                }
             }
             $projectholdings = $ProjectTempModel->where('clientid', $data['account']->id)->find();
             foreach ($projectholdings as $projectholding) {
