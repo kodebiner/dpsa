@@ -72,7 +72,11 @@
                                                         $parentname = $parent['username'];
                                                     }
                                                 }
-                                                echo $clientname . " cabang " . $parentname;
+                                                if(empty($parentname)){
+                                                    echo $clientname . " pusat " ;
+                                                }else{
+                                                    echo $clientname . " cabang " . $parentname;
+                                                }
                                             }
                                         }
                                     } elseif ($role === "client cabang") {
