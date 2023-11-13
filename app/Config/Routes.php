@@ -14,6 +14,7 @@ $routes->group('/', static function ($routes) {
     $reservedRoutes = $config->reservedRoutes;
 
     // Installation
+    $routes->get('info', 'Home::information');
     $routes->get('installation', 'Home::installation');
     $routes->post('installation', 'Home::attempinstallation');
 

@@ -325,4 +325,9 @@ class Home extends BaseController
             echo $user->id . '<br/>';
         }
     }
+
+    public function information()
+    {
+        phpinfo();
+    }
 }
