@@ -13,6 +13,7 @@ return[
     'phone'         => 'Phone Number',
     'userProfile'   => 'User Profile',
     'updateData'    => 'Update Data',
+    'currentPass'   => 'Current Password',
 
 
     // List
@@ -20,7 +21,8 @@ return[
     'clientList'     => 'Client List',
 
     // Button 
-    'logout'        => 'Logout',     
+    'logout'        => 'Logout',
+    'save'          => 'Save',
 
     // Add Button
     'Adduser'       => 'Add User',

@@ -83,14 +83,23 @@
                         <div class="uk-form-controls">
                             <select class="uk-select" name="role" required>
                                 <option value="" selected disabled>Role</option>
-                                <?php foreach ($roles as $role) {
-                                    if ($authorize->inGroup('superuser', $uid) === true) {
-                                        $position = array("owner", "superuser", "client pusat", "client cabang");
+                                <?php
+                                foreach ($roles as $role) {
+                                    if ($authorize->inGroup('admin', $uid) === true) {
+                                        $position = array('owner', 'superuser', 'guests');
                                         if ((!in_array($role->name, $position))) {
                                             echo '<option value="' . $role->id . '">' . $role->name . '</option>';
                                         }
+                                    } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                        $position = array('superuser', 'guests');
+                                        if ((!in_array($role->name, $position))) {
+                                            echo '<option value="' . $role->id . '">' . $role->name . '</option>';
+                                        }
+                                    } elseif ($authorize->inGroup('superuser', $uid) === true) {
+                                        echo '<option value="' . $role->id . '">' . $role->name . '</option>';
                                     }
-                                } ?>
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -109,42 +118,37 @@
 
 <!-- Table Of Content -->
 <div class="uk-overflow-auto uk-margin">
-    <table class="uk-table uk-table-justify uk-table-middle uk-table-divider" id="example" style="width:100%">
+    <table class="uk-table uk-table-middle uk-table-large uk-table-hover uk-table-divider">
         <thead>
             <tr>
-                <th class="uk-text-center uk-width-small">No</th>
-                <th class="uk-width-large"><?= lang('Global.name') ?></th>
-                <th class="uk-width-medium"><?= lang('Global.email') ?></th>
-                <th class="uk-width-medium"><?= lang('Global.access') ?></th>
-                <th class="uk-text-center uk-width-large"><?= lang('Global.action') ?></th>
+                <th><?= lang('Global.name') ?></th>
+                <th><?= lang('Auth.username') ?></th>
+                <th><?= lang('Auth.email') ?></th>
+                <th><?= lang('Global.access') ?></th>
+                <th class="uk-width-small uk-text-center"><?= lang('Global.action') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php $i = 1; ?>
             <?php foreach ($users as $user) { ?>
                 <tr>
-                    <td class="uk-text-center"><?= $i++; ?></td>
-                    <td class=""><?= $user->username; ?></td>
-                    <td class=""><?= $user->email; ?></td>
-                    <td class=""><?= $user->role; ?></td>
-                    <td class="uk-child-width-auto uk-flex-center uk-grid-row-small uk-grid-column-small" uk-grid>
-                        <!-- Button Trigger Modal Edit -->
+                    <td><?= $user->firstname; ?> <?= $user->lastname; ?></td>
+                    <td><?= $user->username; ?></td>
+                    <td><?= $user->email; ?></td>
+                    <td><?= $user->role; ?></td>
+                    <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
                         <div>
                             <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
                         </div>
-                        <!-- End Of Button Trigger Modal Edit -->
-
-                        <!-- Button Delete -->
                         <div>
                             <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
                         </div>
-                        <!-- End Of Button Delete -->
                     </td>
                 </tr>
             <?php } ?>
         </tbody>
     </table>
 </div>
+<?= $pager ?>
 <!-- End Of Table Content -->
 
 <!-- Modal Edit -->
@@ -165,28 +169,28 @@
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" autofocus />
+                                <input type="text" class="uk-input" id="username" name="username" value="<?= $user->username; ?>" autofocus />
                             </div>
                         </div>
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="firstname" name="firstname" placeholder="<?= $user->firstname; ?>" autofocus />
+                                <input type="text" class="uk-input" id="firstname" name="firstname" value="<?= $user->firstname; ?>" autofocus />
                             </div>
                         </div>
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="lastname" name="lastname" placeholder="<?= $user->lastname; ?>" autofocus />
+                                <input type="text" class="uk-input" id="lastname" name="lastname" value="<?= $user->lastname; ?>" autofocus />
                             </div>
                         </div>
 
                         <div class="uk-margin">
                             <label class="uk-form-label" for="email"><?= lang('Auth.email') ?></label>
                             <div class="uk-form-controls">
-                                <input type="email" class="uk-input" id="email" name="email" placeholder="<?= $user->email; ?>" />
+                                <input type="email" class="uk-input" id="email" name="email" value="<?= $user->email; ?>" />
                             </div>
                         </div>
 
@@ -212,15 +216,28 @@
                             <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" name="role" required>
-                                    <option value="" selected disabled>Role</option>
-                                    <?php foreach ($roles as $role) {
-                                        if ($authorize->inGroup('superuser', $uid) === true) {
-                                            $position = array("owner", "superuser", "client pusat", "client cabang");
-                                            if ((!in_array($role->name, $position))) {
-                                                echo '<option value="' . $role->id . '">' . $role->name . '</option>';
-                                            }
+                                    <?php
+                                    foreach ($roles as $role) {
+                                        if ($user->group_id === $role->id) {
+                                            $selected = 'selected';
+                                        } else {
+                                            $selected = '';
                                         }
-                                    } ?>
+                                        if ($authorize->inGroup('admin', $uid) === true) {
+                                            $position = array('owner', 'superuser', 'guests');
+                                            if ((!in_array($role->name, $position))) {
+                                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                            }
+                                        } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                            $position = array('superuser', 'guests');
+                                            if ((!in_array($role->name, $position))) {
+                                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                            }
+                                        } elseif ($authorize->inGroup('superuser', $uid) === true) {
+                                            echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                        }
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>

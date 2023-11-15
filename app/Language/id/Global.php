@@ -13,13 +13,15 @@ return[
     'PhoneNumber'   => 'No Telphone',
     'userProfile'   => 'Profil',
     'updateData'    => 'Ubah Data',
+    'currentPass'   => 'Password Saat Ini',
 
     // List
     'usersList'      => 'Daftar Pengguna',
     'clientList'     => 'Klien List',
 
     // Button 
-    'logout'        => 'Keluar',    
+    'logout'        => 'Keluar',
+    'save'          => 'Simpan',
 
     // Add Button
     'Adduser'       => 'Tambah Pengguna',

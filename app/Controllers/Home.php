@@ -121,6 +121,9 @@ class Home extends BaseController
 
     public function installation()
     {
+        // Database Migration
+        command('migrate --all');
+
         // Calling Libraries and Services
         $authorize = service('authorization');
 
@@ -129,20 +132,21 @@ class Home extends BaseController
 
         // Remove All Users
         $users = $UserModel->findAll();
-        $uids = array();
-        foreach ($users as $user) {
-            $uids[] = $user->id;
+        if (!empty($users)) {
+            $uids = array();
+            foreach ($users as $user) {
+                $uids[] = $user->id;
+            }
+            $UserModel->delete($uids);
+            $UserModel->purgeDeleted();
         }
-        $UserModel->delete($uids);
-        $UserModel->purgeDeleted();
-
-        // Database Migration
-        command('migrate --all');
 
         // Remove Old Permission
         $permissions = $authorize->permissions();
-        foreach ($permissions as $permission) {
-            $authorize->deletePermission($permission['id']);
+        if (!empty($permissions)) {
+            foreach ($permissions as $permission) {
+                $authorize->deletePermission($permission['id']);
+            }
         }
 
         // Creating Permissions
@@ -166,8 +170,10 @@ class Home extends BaseController
 
         // Remove Old Groups
         $groups = $authorize->groups();
-        foreach ($groups as $group) {
-            $authorize->deleteGroup($group->id);
+        if (!empty($groups)) {
+            foreach ($groups as $group) {
+                $authorize->deleteGroup($group->id);
+            }
         }
 
         // Creating Prebuild Groups

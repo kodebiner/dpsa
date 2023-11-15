@@ -28,27 +28,40 @@ class User extends BaseController
 
     public function index()
     {
+        // Calling Services
+        $pager = \Config\Services::pager();
+
         // Calling Model
         $GroupModel             = new GroupModel();
         $PermissionModel        = new PermissionModel();
 
         // Populating data
+        $input = $this->request->getGet();
+
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * 10;
+
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name !=', 'superuser');
+        $this->builder->where('auth_groups.name !=', 'owner');
         $this->builder->where('auth_groups.name !=', 'client pusat');
         $this->builder->where('auth_groups.name !=', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
-        $query =   $this->builder->get();
+        $query =   $this->builder->get(10, $offset)->getResult();
+
+        $total = count($query);
 
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = lang('Global.usersList');
         $data['description']    = lang('Global.usersListDesc');
-        $data['roles']          = $GroupModel->findAll();
+        $data['roles']          = $GroupModel->where('name !=', 'client cabang')->where('name !=', 'client pusat')->find();
         $data['permissions']    = $PermissionModel->findAll();
-        $data['users']          = $query->getResult();
+        $data['users']          = $query;
+        $data['pager']          = $pager->makeLinks($page,10,$total,'uikit_full');
 
         return view('users', $data);
     }
