@@ -9,11 +9,15 @@ return[
     'name'          => 'Nama',
     'email'         => 'Email',
     'access'        => 'Akses',
+    'allAccess'     => 'Semua Access',
     'action'        => 'Tindakan',
     'PhoneNumber'   => 'No Telphone',
     'userProfile'   => 'Profil',
     'updateData'    => 'Ubah Data',
     'currentPass'   => 'Password Saat Ini',
+    'display'       => 'Tampilkan',
+    'perPage'       => 'per Halaman',
+    'search'        => 'Cari',
 
     // List
     'usersList'      => 'Daftar Pengguna',

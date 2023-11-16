@@ -38,8 +38,14 @@ class User extends BaseController
         // Populating data
         $input = $this->request->getGet();
 
+        if (isset($input['perpage'])) {
+            $perpage = $input['perpage'];
+        } else {
+            $perpage = 10;
+        }
+
         $page = (@$_GET['page']) ? $_GET['page'] : 1;
-        $offset = ($page-1) * 10;
+        $offset = ($page-1) * $perpage;
 
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
@@ -49,8 +55,16 @@ class User extends BaseController
         $this->builder->where('auth_groups.name !=', 'owner');
         $this->builder->where('auth_groups.name !=', 'client pusat');
         $this->builder->where('auth_groups.name !=', 'client cabang');
+        if (isset($input['search']) && !empty($input['search'])) {
+            $this->builder->like('users.username', $input['search']);
+            $this->builder->orLike('users.firstname', $input['search']);
+            $this->builder->orLike('users.lastname', $input['search']);
+        }
+        if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
+            $this->builder->where('auth_groups.id', $input['rolesearch']);
+        }
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
-        $query =   $this->builder->get(10, $offset)->getResult();
+        $query =   $this->builder->get($perpage, $offset)->getResult();
 
         $total = count($query);
 
@@ -61,7 +75,8 @@ class User extends BaseController
         $data['roles']          = $GroupModel->where('name !=', 'client cabang')->where('name !=', 'client pusat')->find();
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query;
-        $data['pager']          = $pager->makeLinks($page,10,$total,'uikit_full');
+        $data['pager']          = $pager->makeLinks($page,$perpage,$total,'uikit_full');
+        $data['input']          = $input;
 
         return view('users', $data);
     }

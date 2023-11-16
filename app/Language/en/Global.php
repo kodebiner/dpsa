@@ -9,11 +9,15 @@ return[
     'name'          => 'Name',
     'email'         => 'Email',
     'access'        => 'Access',
+    'allAccess'     => 'All Access',
     'action'        => 'Action',
     'phone'         => 'Phone Number',
     'userProfile'   => 'User Profile',
     'updateData'    => 'Update Data',
     'currentPass'   => 'Current Password',
+    'display'       => 'Display',
+    'perPage'       => 'per Page',
+    'search'        => 'Search',
 
 
     // List
