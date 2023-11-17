@@ -70,7 +70,7 @@
             <div class="uk-margin" id="proqty" hidden>
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                    <input class="uk-input uk-form-width-large" name="qty" placeholder="qty" type="number" aria-label="Not clickable icon">
+                    <input class="uk-input uk-form-width-large" name="qty" placeholder="qty" type="number"  max="100" aria-label="Not clickable icon">
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                 <div class="uk-margin" id="proqty<?= $project['id'] ?>" hidden>
                     <div class="uk-inline">
                         <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                        <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="qty" type="number" aria-label="Not clickable icon">
+                        <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="qty" type="number"  max="100" min="0"  aria-label="Not clickable icon">
                     </div>
                 </div>
 
