@@ -8,7 +8,8 @@ use CodeIgniter\Pager\PagerRenderer;
 $pager->setSurroundCount(2);
 ?>
 
-<?php if ($pager->getPageCount() != 1) { ?>
+<?php //if ($pager->getPageCount() > 1) { ?>
+<?php print_r($pager->links()); ?>
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
     <ul class="uk-pagination uk-flex-right" uk-margin>
         <?php if ($pager->hasPrevious()) { ?>
@@ -40,4 +41,4 @@ $pager->setSurroundCount(2);
         <?php } ?>
     </ul>
 </nav>
-<?php } ?>
+<?php //} ?>

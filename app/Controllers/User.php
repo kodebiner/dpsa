@@ -82,7 +82,6 @@ class User extends BaseController
     }
 
     public function create()
-
     {
         $authorize = service('authorization');
 
@@ -150,7 +149,6 @@ class User extends BaseController
     }
 
     public function update($id)
-
     {
         $authorize = service('authorization');
 
@@ -491,11 +489,25 @@ class User extends BaseController
 
     public function client()
     {
+        // Calling Services
+        $pager = \Config\Services::pager();
+
         // Calling Model
         $GroupModel             = new GroupModel();
         $PermissionModel        = new PermissionModel();
 
         // Populating data
+        $input = $this->request->getGet();
+
+        if (isset($input['perpage'])) {
+            $perpage = $input['perpage'];
+        } else {
+            $perpage = 10;
+        }
+
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * $perpage;
+
         $this->builder->where('deleted_at', null);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
@@ -503,12 +515,12 @@ class User extends BaseController
         $this->builder->where('auth_groups.name', 'client pusat');
         $this->builder->orWhere('auth_groups.name', 'client cabang');
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-        $query =   $this->builder->get();
+        $query =   $this->builder->get($perpage, $offset)->getResult();
 
-        $users = $query->getResult();
+        $total = count($query);
 
         $parentid = [];
-        foreach ($users as $user) {
+        foreach ($query as $user) {
             if ($user->parent != "") {
                 $parentid[] = $user->parent;
             }
@@ -520,7 +532,7 @@ class User extends BaseController
         $data['description']    = lang('Global.clientListDesc');
         $data['roles']          = $GroupModel->findAll();
         $data['permissions']    = $PermissionModel->findAll();
-        $data['users']          = $query->getResult();
+        $data['users']          = $query;
         $data['parent']         = $parentid;
 
         return view('client', $data);
