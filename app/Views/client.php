@@ -82,7 +82,7 @@
                         <label class="uk-form-label" for="pass_confirm"><?= lang('Global.access') ?></label>
                         <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
                             <?php foreach ($roles as $role) {
-                                if ($authorize->inGroup('superuser', $uid) === true) {
+                                if ($authorize->inGroup(['superuser', 'admin'], $uid) === true) {
                                     $position = array("client pusat", "client cabang");
                                     if ((in_array($role->name, $position))) {
                                         echo '<label><input class="uk-checkbox" name="parent" id="' . $role->name . '" value="' . $role->id . '" type="checkbox"> ' . $role->name . '</label>';
@@ -99,11 +99,9 @@
                                 <option value="" selected disabled>Center List</option>
                                 <?php
                                 foreach ($users as $user) {
-                                    if ($authorize->inGroup('superuser', $uid) === true) {
                                         if ($user->role != 'client cabang') {
                                             echo '<option value="' . $user->id . '">' . $user->username . '</option>';
                                         }
-                                    }
                                 } ?>
                             </select>
                         </div>
@@ -137,6 +135,60 @@
     </div>
 </div>
 <!-- End Of Modal Add -->
+
+<!-- form input -->
+<form class="uk-margin" id="searchform" action="users" method="GET">
+    <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
+        <div>
+            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                <div><?= lang('Global.search') ?>:</div>
+                <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                <div>
+                    <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
+                        <option value="0"><?= lang('Global.allAccess') ?></option>
+                        <?php
+                        foreach ($roles as $role) {
+                            if (isset($input['rolesearch']) && ($input['rolesearch'] === $role->id)) {
+                                $selected = 'selected';
+                            } else {
+                                $selected = '';
+                            }
+                            if ($authorize->inGroup('admin', $uid) === true) {
+                                $position = array('owner', 'superuser', 'guests');
+                                if ((!in_array($role->name, $position))) {
+                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                                }
+                            } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                $position = array('superuser', 'guests');
+                                if ((!in_array($role->name, $position))) {
+                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                                }
+                            } elseif ($authorize->inGroup('superuser', $uid) === true) {
+                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                <div><?= lang('Global.display') ?></div>
+                <div>
+                    <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                        <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                        <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                        <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                        <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                    </select>
+                </div>
+                <div><?= lang('Global.perPage') ?></div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- form input -->
 
 <!-- Table Of Content -->
 <div class="uk-overflow-auto uk-margin">
@@ -195,6 +247,7 @@
         </tbody>
     </table>
 </div>
+<?= $pager ?>
 <!-- End Of Table Content -->
 
 <!-- Modal Edit -->
@@ -262,18 +315,16 @@
                             <label class="uk-form-label" for="pass_confirm"><?= lang('Global.access') ?></label>
                             <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
                                 <?php foreach ($roles as $role) {
-                                    if ($authorize->inGroup('superuser', $uid) === true) {
-                                        $position = array("client pusat", "client cabang");
-                                        if ((in_array($role->name, $position))) {
-                                            if ($user->role == $role->name) {
-                                                $checked = "checked";
-                                            } else {
-                                                $checked = "";
-                                            }
-                                            echo '<label><input class="uk-checkbox" name="parent" id="editrole' . $role->name . $user->id . '" value="' . $role->id . '" type="checkbox" ' . $checked . '> ' . $role->name . '</label>';
+                                    $position = array("client pusat", "client cabang");
+                                    if ((in_array($role->name, $position))) {
+                                        if ($user->role == $role->name) {
+                                            $checked = "checked";
+                                        } else {
+                                            $checked = "";
                                         }
-                                    } ?>
-                                <?php  } ?>
+                                        echo '<label><input class="uk-checkbox" name="parent" id="editrole' . $role->name . $user->id . '" value="' . $role->id . '" type="checkbox" ' . $checked . '> ' . $role->name . '</label>';
+                                    }
+                                } ?>
                             </div>
                         </div>
 
@@ -284,7 +335,7 @@
                                     <option value="" selected disabled>Center List</option>
                                     <?php
                                     foreach ($users as $user) {
-                                        if ($authorize->inGroup('superuser', $uid) === true) {
+                                        if ($authorize->inGroup(['superuser', 'admin'], $uid) === true) {
                                             if ($user->role != 'client cabang') {
                                                 echo '<option value="' . $user->id . '">' . $user->username . '</option>';
                                             }
@@ -333,9 +384,7 @@
 <?php } ?>
 <!-- Search Engine Script -->
 <script>
-    $(document).ready(function() {
-        $('#example').DataTable();
-    });
+
 </script>
 <!-- Search Engine Script End -->
 <?= $this->endSection() ?>

@@ -33,67 +33,25 @@
                             <div class="uk-inline">
                                 <h3 class="tm-h4"><span uk-icon="icon: user; ratio: 1"></span> Client</h3>
                                 <p>
-                                    <?php
-                                    $position = array("client pusat", "client cabang");
-                                    if ((!in_array($role, $position))) {
-                                        foreach ($clients as $user) {
-                                            if ($user['id'] == $project['clientid']) {
-                                                $clientname = $user['username'];
-                                                foreach ($parent as $idParent) {
-                                                    if ($user['id'] === $idParent) {
-                                                        $name[] = [
-                                                            'id'    => $user['id'],
-                                                            'name'  => $user['username'],
-                                                        ];
-                                                    }
-                                                }
-                                                if ($user['parent'] != "") {
-                                                    foreach ($name as $parentname) {
-                                                        if ($user['parent'] === $parentname['id']) {
-                                                            $client = $clientname . " cabang " . $parentname['name'];
-                                                        }
-                                                    }
-                                                } else {
-                                                    $client = $clientname . " pusat ";
+                                <?php
+                                foreach ($clients as $user) {
+                                    if ($user['id'] == $project['clientid']) {
+                                        $clientname = $user['username'];
+                                        if ($user['parent'] != "") {
+                                            foreach ($clients as $parent) {
+                                                if ($user['parent'] === $parent['id']) {
+                                                    $client = $clientname . " cabang " . $parent['username'];
                                                 }
                                             }
-                                        }
-                                        if (!empty($client)) {
-                                            echo $client;
-                                        }
-                                    } elseif ($role === "client pusat") {
-                                        foreach ($clients as $client) {
-                                            $parentname = "";
-                                            if ($client['id'] === $project['clientid']) {
-                                                $parentid = $client['parent'];
-                                                $clientname = $client['username'];
-                                                foreach ($clients as $parent) {
-                                                    if ($parent['id'] === $parentid) {
-                                                        $parentname = $parent['username'];
-                                                    }
-                                                }
-                                                if(empty($parentname)){
-                                                    echo $clientname . " pusat " ;
-                                                }else{
-                                                    echo $clientname . " cabang " . $parentname;
-                                                }
-                                            }
-                                        }
-                                    } elseif ($role === "client cabang") {
-                                        foreach ($clients as $client) {
-                                            if ($client['id'] === $project['clientid']) {
-                                                $parentid = $client['parent'];
-                                                $clientname = $client['username'];
-                                                foreach ($clients as $parent) {
-                                                    if ($parent['id'] === $parentid) {
-                                                        $parentname = $parent['username'];
-                                                    }
-                                                }
-                                                echo $clientname . " cabang " . $parentname;
-                                            }
+                                        } else {
+                                            $client = $clientname . " pusat";
                                         }
                                     }
-                                    ?>
+                                }
+                                ?>
+                                <?php if (!empty($client)) { ?>
+                                    <?= $client ?>
+                                <?php } ?>
                                 </p>
                             </div>
                         </div>

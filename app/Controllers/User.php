@@ -174,10 +174,10 @@ class User extends BaseController
 
         // Validation basic form
         if (!empty($input['username'])) {
-            $rules['username']  = 'alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]';
+            $rules['username']  = 'alpha_numeric_space|min_length[3]|max_length[30]';
         }
         if (!empty($input['email'])) {
-            $rules['email']     = 'valid_email|is_unique[users.email]';
+            $rules['email']     = 'valid_email';
         }
 
         $rules['role'] = 'max_length[30]';
@@ -534,7 +534,50 @@ class User extends BaseController
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query;
         $data['parent']         = $parentid;
-
+        $data['pager']          = $pager->makeLinks($page,$perpage,$total,'uikit_full');
+        $data['input']          = $input;
         return view('client', $data);
+    }
+
+    public function test(){
+        // Calling Services
+        $pager = \Config\Services::pager();
+
+        // Calling Model
+        $GroupModel             = new GroupModel();
+        $PermissionModel        = new PermissionModel();
+
+        // Populating data
+        $input = $this->request->getGet();
+
+        if (isset($input['perpage'])) {
+            $perpage = $input['perpage'];
+        } else {
+            $perpage = 10;
+        }
+
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * $perpage;
+
+        $this->builder->where('deleted_at', null);
+        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name !=', 'superuser');
+        $this->builder->where('auth_groups.name !=', 'owner');
+        $this->builder->where('auth_groups.name !=', 'client pusat');
+        $this->builder->where('auth_groups.name !=', 'client cabang');
+        if (isset($input['search']) && !empty($input['search'])) {
+            $this->builder->like('users.username', $input['search']);
+            $this->builder->orLike('users.firstname', $input['search']);
+            $this->builder->orLike('users.lastname', $input['search']);
+        }
+        if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
+            $this->builder->where('auth_groups.id', $input['rolesearch']);
+        }
+        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
+        $query =   $this->builder->get($perpage, $offset)->getResult();
+
+        $total = count($query);
     }
 }

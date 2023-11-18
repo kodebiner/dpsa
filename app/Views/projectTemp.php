@@ -70,7 +70,7 @@
             <div class="uk-margin" id="proqty" hidden>
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                    <input class="uk-input uk-form-width-large" name="qty" placeholder="qty" type="number"  max="100" aria-label="Not clickable icon">
+                    <input class="uk-input uk-form-width-large" name="qty" placeholder="qty" type="number" max="100" aria-label="Not clickable icon">
                 </div>
             </div>
 
@@ -96,51 +96,6 @@
 </div>
 <!-- end add project modal -->
 
-<!-- <div class="uk-child-width-1-2@s" uk-grid>
-    <div>
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-
-            <div class="uk-text-center" uk-grid>
-                <div class="uk-width-1-2 uk-text-left">
-                    <h3 class="tm-h1">Rumah Sakit Bayangkari</h3>
-                </div>
-                <div class="uk-width-1-2 uk-text-right">
-                    <a class="uk-icon-button  uk-margin-small-right" href="#modalupdatepro" uk-icon="pencil" uk-toggle></a>
-                </div>
-            </div>
-            <hr>
-
-            <div class="uk-panel">
-                <p class="tm-h3">Brief</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dolores dignissimos inventore doloremque nam soluta dolorem expedita ratione. Quos reiciendis corrupti vitae? Eius amet eaque sequi dolorem aspernatur perspiciatis et.</p>
-                <hr class="uk-divider-icon">
-                <div class="uk-grid-divider uk-child-width-1-3@s" uk-grid>
-                    <div>
-                        <div class="uk-inline">
-                            <h3 class="tm-h4"><span uk-icon="icon: user; ratio: 1"></span> Client</h3>
-                            <p>Rumah Sakit Bayangkari</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="">
-                            <h3 class="tm-h4"><span uk-icon="icon: list; ratio: 1"></span> Quantity</h3>
-                            <p>50/100</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="">
-                            <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress</h3>
-                            <p>50%</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div> -->
-
-
 <?php foreach ($projects as $project) { ?>
     <div class="uk-child-width-1-1@m uk-grid-match uk-margin" uk-grid>
 
@@ -148,10 +103,33 @@
             <div class="uk-card uk-card-default uk-card-hover uk-card-body">
 
                 <div class="uk-text-center" uk-grid>
-                    <div class="uk-width-1-2 uk-text-left">
-                        <h3 class="tm-h1"><?= $project['name'] ?></h3>
+                    <div class="uk-width-expand uk-text-left">
+                        <h3 class="tm-h1">
+                            <!-- <span uk-icon="icon: user; ratio: 1"></span> -->
+                            <!-- <a class="uk-icon-button  uk-margin-small-right" href="#modalupdatepro<?= $project['id'] ?>" uk-icon="pencil" uk-toggle></a> -->
+                            <?php
+                            foreach ($clients as $user) {
+                                if ($user['id'] == $project['clientid']) {
+                                    $clientname = $user['username'];
+                                    if ($user['parent'] != "") {
+                                        foreach ($clients as $parent) {
+                                            if ($user['parent'] === $parent['id']) {
+                                                $client = $clientname . " cabang " . $parent['username'];
+                                            }
+                                        }
+                                    } else {
+                                        $client = $clientname . " pusat";
+                                    }
+                                }
+                            }
+                            ?>
+                            <?php if (!empty($client)) {
+                                echo $client;
+                            } ?>
+                            <span class="tm-h2"> - <?= $project['name'] ?></span>
+                        </h3>
                     </div>
-                    <div class="uk-width-1-2 uk-text-right">
+                    <div class="uk-text-right">
                         <a class="uk-icon-button  uk-margin-small-right" href="#modalupdatepro<?= $project['id'] ?>" uk-icon="pencil" uk-toggle></a>
                     </div>
                 </div>
@@ -166,29 +144,21 @@
                             <div class="uk-inline">
                                 <h3 class="tm-h4"><span uk-icon="icon: user; ratio: 1"></span> Client</h3>
                                 <p>
-                                <?php
-                                     foreach ($clients as $user) {
+                                    <?php
+                                    foreach ($clients as $user) {
                                         if ($user['id'] == $project['clientid']) {
                                             $clientname = $user['username'];
-                                            foreach ($parent as $idParent) {
-                                                if ($user['id'] === $idParent) {
-                                                    $name[] = [
-                                                        'id'    => $user['id'],
-                                                        'name'  => $user['username'],
-                                                    ];
-                                                }
-                                            }
                                             if ($user['parent'] != "") {
-                                                foreach ($name as $parentname) {
-                                                    if ($user['parent'] === $parentname['id']) {
-                                                        $client = $clientname . " cabang " . $parentname['name'];
+                                                foreach ($clients as $parent) {
+                                                    if ($user['parent'] === $parent['id']) {
+                                                        $client = $clientname . " cabang " . $parent['username'];
                                                     }
                                                 }
                                             } else {
                                                 $client = $clientname . " pusat";
                                             }
                                         }
-                                    } 
+                                    }
                                     ?>
                                     <?php if (!empty($client)) { ?>
                                         <?= $client ?>
@@ -216,7 +186,7 @@
                         </div>
                         <div>
                             <div class="">
-                                <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Produksi</h3>
+                                <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Proyek</h3>
                                 <p>
                                     <?php
                                     if ($project['status'] === "1") {
@@ -303,7 +273,7 @@
                 <div class="uk-margin" id="proqty<?= $project['id'] ?>" hidden>
                     <div class="uk-inline">
                         <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                        <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="qty" type="number"  max="100" min="0"  aria-label="Not clickable icon">
+                        <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="qty" type="number" max="100" min="0" aria-label="Not clickable icon">
                     </div>
                 </div>
 
