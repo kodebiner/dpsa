@@ -514,6 +514,14 @@ class User extends BaseController
         $this->builder->where('users.id !=', $this->data['uid']);
         $this->builder->where('auth_groups.name', 'client pusat');
         $this->builder->orWhere('auth_groups.name', 'client cabang');
+        if (isset($input['search']) && !empty($input['search'])) {
+            $this->builder->like('users.username', $input['search']);
+            $this->builder->orLike('users.firstname', $input['search']);
+            $this->builder->orLike('users.lastname', $input['search']);
+        }
+        if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
+            $this->builder->where('auth_groups.id', $input['rolesearch']);
+        }
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get($perpage, $offset)->getResult();
 
@@ -530,12 +538,15 @@ class User extends BaseController
         $data                   = $this->data;
         $data['title']          = lang('Global.clientList');
         $data['description']    = lang('Global.clientListDesc');
-        $data['roles']          = $GroupModel->findAll();
+        $data['roles']          = $GroupModel->where('name',"client pusat")->orWhere('name','client cabang')->find();
         $data['permissions']    = $PermissionModel->findAll();
         $data['users']          = $query;
         $data['parent']         = $parentid;
+        $data['permissions']    = $PermissionModel->findAll();
+        $data['users']          = $query;
         $data['pager']          = $pager->makeLinks($page,$perpage,$total,'uikit_full');
         $data['input']          = $input;
+
         return view('client', $data);
     }
 

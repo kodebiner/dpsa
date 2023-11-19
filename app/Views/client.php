@@ -137,7 +137,7 @@
 <!-- End Of Modal Add -->
 
 <!-- form input -->
-<form class="uk-margin" id="searchform" action="users" method="GET">
+<form class="uk-margin" id="searchform" action="users/client" method="GET">
     <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
         <div>
             <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -189,6 +189,17 @@
     </div>
 </form>
 <!-- form input -->
+<!-- script form -->
+<script>
+    document.getElementById('rolesearch').addEventListener("change", submitform);
+    document.getElementById('search').addEventListener("change", submitform);
+    document.getElementById('perpage').addEventListener("change", submitform);
+
+    function submitform() {
+        document.getElementById('searchform').submit();
+    };
+</script>
+<!-- end script form -->
 
 <!-- Table Of Content -->
 <div class="uk-overflow-auto uk-margin">
