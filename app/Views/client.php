@@ -99,9 +99,9 @@
                                 <option value="" selected disabled>Center List</option>
                                 <?php
                                 foreach ($users as $user) {
-                                        if ($user->role != 'client cabang') {
-                                            echo '<option value="' . $user->id . '">' . $user->username . '</option>';
-                                        }
+                                    if ($user->role != 'client cabang') {
+                                        echo '<option value="' . $user->id . '">' . $user->username . '</option>';
+                                    }
                                 } ?>
                             </select>
                         </div>
@@ -189,6 +189,7 @@
     </div>
 </form>
 <!-- form input -->
+
 <!-- script form -->
 <script>
     document.getElementById('rolesearch').addEventListener("change", submitform);
@@ -209,37 +210,31 @@
                 <th class="uk-text-center uk-width-small">No</th>
                 <th class="uk-width-large"><?= lang('Global.name') ?></th>
                 <th class="uk-width-medium"><?= lang('Global.email') ?></th>
-                <th class="uk-width-medium"><?= lang('Global.access') ?></th>
-                <th class="uk-width-medium"><?= lang('Global.center') ?></th>
+                <th class="uk-text-center uk-width-medium"><?= lang('Global.access') ?></th>
+                <th class="uk-text-center uk-width-medium"><?= lang('Global.center') ?></th>
                 <th class="uk-text-center uk-width-large"><?= lang('Global.action') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php $i = 1; ?>
             <?php foreach ($users as $user) {
-                foreach ($parent as $idParent) {
-                    if ($user->id === $idParent) {
-                        $name[] = [
-                            'id'    => $user->id,
-                            'name'  => $user->username,
-                        ];
-                    }
-                }
+                $client = "";
                 if ($user->parent != "" && !empty($user->parent)) {
-                    foreach ($name as $parentname) {
-                        if ($user->parent === $parentname['id']) {
-                            $client = "Cabang " . $parentname['name'];
+                    foreach ($parent as $parentid) {
+                        if ($user->parent === $parentid['id']) {
+                            $client = $parentid['name'];
                         }
                     }
                 } else {
-                    $client = "Pusat";
+                    $client = "-";
                 } ?>
+
                 <tr>
                     <td class="uk-text-center"><?= $i++; ?></td>
                     <td class=""><?= $user->username; ?></td>
                     <td class=""><?= $user->email; ?></td>
-                    <td class=""><?= $user->role; ?></td>
-                    <td class=""><?= $client; ?></td>
+                    <td class="uk-text-center"><?= $user->role; ?></td>
+                    <td class="uk-text-center"><?= $client; ?></td>
                     <td class="uk-child-width-auto uk-flex-center uk-grid-row-small uk-grid-column-small" uk-grid>
                         <!-- Button Trigger Modal Edit -->
                         <div>
