@@ -207,7 +207,6 @@
     <table class="uk-table uk-table-justify uk-table-middle uk-table-divider" id="example" style="width:100%">
         <thead>
             <tr>
-                <th class="uk-text-center uk-width-small">No</th>
                 <th class="uk-width-large"><?= lang('Global.name') ?></th>
                 <th class="uk-width-medium"><?= lang('Global.email') ?></th>
                 <th class="uk-text-center uk-width-medium"><?= lang('Global.access') ?></th>
@@ -216,7 +215,6 @@
             </tr>
         </thead>
         <tbody>
-            <?php $i = 1; ?>
             <?php foreach ($users as $user) {
                 $client = "";
                 if ($user->parent != "" && !empty($user->parent)) {
@@ -230,7 +228,6 @@
                 } ?>
 
                 <tr>
-                    <td class="uk-text-center"><?= $i++; ?></td>
                     <td class=""><?= $user->username; ?></td>
                     <td class=""><?= $user->email; ?></td>
                     <td class="uk-text-center"><?= $user->role; ?></td>
