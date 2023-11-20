@@ -75,7 +75,7 @@
                         </div>
                         <div>
                             <div class="">
-                                <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Produksi</h3>
+                                <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Proyek</h3>
                                 <p>
                                     <?php
                                     $persentase = "";
