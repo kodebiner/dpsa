@@ -137,7 +137,7 @@
             <p><?=$project['brief']?></p>
         </div>
         <hr class="uk-divider-icon">
-        <div class="uk-grid-divider uk-child-width-1-2@s" uk-grid>
+        <div class="uk-grid-divider uk-child-width-1-2@m" uk-grid>
             <div>
                 <div class="uk-text-center">
                     <h3 class="tm-h4"><span uk-icon="icon: list; ratio: 1"></span> Status</h3>
