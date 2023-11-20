@@ -65,8 +65,16 @@ class User extends BaseController
         }
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get($perpage, $offset)->getResult();
-
-        $total = count($query);
+        
+        $total = $this->builder
+                ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                ->where('users.id !=', $this->data['uid'])
+                ->where('auth_groups.name !=', 'superuser')
+                ->where('auth_groups.name !=', 'owner')
+                ->where('auth_groups.name !=', 'client pusat')
+                ->where('auth_groups.name !=', 'client cabang')
+                ->countAllResults();
 
         // Parsing data to view
         $data                   = $this->data;
@@ -525,7 +533,13 @@ class User extends BaseController
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get($perpage, $offset)->getResult();
 
-        $total = count($query);
+        $total = $this->builder
+                ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                ->where('users.id !=', $this->data['uid'])
+                ->where('auth_groups.name', 'client pusat')
+                ->orWhere('auth_groups.name', 'client cabang')
+                ->countAllResults();
 
         $parentid = [];
         foreach ($query as $user) {
