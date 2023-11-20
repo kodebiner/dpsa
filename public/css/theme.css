@@ -3326,7 +3326,7 @@ select.uk-form-width-xsmall {
     left: -200px;
     box-sizing: border-box;
     width: 200px;
-    padding: 20px 0px 20px 30px;
+    padding: 20px 0px 20px 0px;
     background: #007ec8;
     overflow-y: auto
 }
@@ -7561,6 +7561,10 @@ video) {
     padding-left: 200px;
 }
 
+.uk-padding-xlarge-left-footer {
+    padding-left: 160px;
+}
+
 .uk-padding-remove {
     padding: 0 !important
 }
@@ -11384,7 +11388,7 @@ body {
     bottom: 0;
     box-sizing: border-box;
     width: 160px !important;
-    padding: 40px 40px 60px 40px;
+    padding: 40px 40px 60px 0px;
     overflow-y: scroll;
 }
 
@@ -11415,14 +11419,14 @@ body {
         left: calc(100% + 0px)
     }
     .tm-sidebar-left+.tm-main {
-        padding-left: 40px
+        padding-left: 0px
     }
 }
 
 @media (min-width:1400px) {
     .tm-sidebar-left {
         width: 160px !important;
-        padding: 20px 0px 20px 10px
+        padding: 20px 0px 20px 0px
     }
     .tm-sidebar-right {
         left: calc(100% + 60px)
@@ -11530,9 +11534,9 @@ body {
 .tm-h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    text-transform: uppercase;
     letter-spacing: 2px;
-    color: #222
+    color: #222;
+    margin-top: 10px
 }
 
 .tm-h4 {

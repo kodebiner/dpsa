@@ -42,93 +42,93 @@
                 <nav>
                     <ul class="uk-nav uk-nav-default tm-nav" uk-nav>                            
                         <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                            <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
+                            <a class="tm-h4" href="<?= base_url('') ?>">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/dashboard.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center"><?=lang('Global.dashboard');?></div>
+                                    <div class="uk-text-center"><?=lang('Global.dashboard');?></div>
                                 </div>
                             </a>
                         </li>
                         <?php if (in_groups(['owner','superuser','marketing','admin','design','production'])) : ?>
-                        <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="users/client">
+                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
+                            <a class="tm-h4" href="users/client">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/client.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Client</div>
+                                    <div class="uk-text-center">Client</div>
                                 </div>
                             </a>
                         </li>
-                        <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="users">
+                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                            <a class="tm-h4" href="users">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/user.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">User</div>
+                                    <div class="uk-text-center">User</div>
                                 </div>
                             </a>
                         </li>
                         <!-- <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
-                            <a class="uk-h4 tm-h4" href="users/access-control">
+                            <a class="tm-h4" href="users/access-control">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/userrole.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Hak Akses</div>
+                                    <div class="uk-text-center">Hak Akses</div>
                                 </div>
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="rab">
+                            <a class="tm-h4" href="rab">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/marketing.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Marketing</div>
+                                    <div class="uk-text-center">Marketing</div>
                                 </div>
                             </a>
                         </li> -->
-                        <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="project">
+                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                            <a class="tm-h4" href="project">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/project.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Pengelolaan Proyek</div>
+                                    <div class="uk-text-center">Pengelolaan Proyek</div>
                                 </div>
                             </a>
                         </li>
                         <!-- <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="produksi">
+                            <a class="tm-h4" href="produksi">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Produksi</div>
+                                    <div class="uk-text-center">Produksi</div>
                                 </div>
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="tm-h4" href="">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/finance.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Finance</div>
+                                    <div class="uk-text-center">Finance</div>
                                 </div>
                             </a>
                         </li>
                         <li class="tm-main-navbar">
-                            <a class="uk-h4 tm-h4" href="">
+                            <a class="tm-h4" href="">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
                                         <img class="uk-width-1-6" src="img/layout/design.svg" uk-svg>
                                     </div>
-                                    <div class="tm-navbar-text uk-text-center">Design</div>
+                                    <div class="uk-text-center">Design</div>
                                 </div>
                             </a>
                         </li> -->
@@ -144,128 +144,128 @@
         <?php if ($ismobile === false) { ?>
             <nav class="tm-sidebar-left" style="background-color: #007ec8;">
                 <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('') ?>">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('') ?>">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center"><?=lang('Global.dashboard');?></div>
+                                <div class="uk-text-center"><?=lang('Global.dashboard');?></div>
                             </div>
                         </a>
                     </li>
                     <?php if (in_groups(['owner','superuser','marketing','admin','design','production'])) : ?>
-                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
-                        <a class="uk-h4 tm-h4" href="users/client">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="users/client">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/client.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Client</div>
+                                <div class="uk-text-center">Client</div>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
-                        <a class="uk-h4 tm-h4" href="users">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="users">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/user.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">User</div>
+                                <div class="uk-text-center">User</div>
                             </div>
                         </a>
                     </li>
-                    <!-- <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
-                        <a class="uk-h4 tm-h4" href="users/access-control">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <!-- <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="users/access-control">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/userrole.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Hak Akses</div>
+                                <div class="uk-text-center">Hak Akses</div>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='rab')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="rab">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='rab')?'uk-active':''?>">
+                        <a class="tm-h4" href="rab">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/marketing.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Marketing</div>
+                                <div class="uk-text-center">Marketing</div>
                             </div>
                         </a>
                     </li> -->
-                    <li class="uk-margin-left tm-main-navbar <?= (($uri->getSegment(1) === 'projectTemp')) ? 'uk-active' : '' ?>">
-                        <a class="uk-h4 tm-h4" href="project">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="project">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Pengelolaan Proyek</div>
+                                <div class="uk-text-center">Pengelolaan Proyek</div>
                             </div>
                         </a>
                     </li>
-                    <!-- <li class="uk-margin-left tm-main-navbar">
-                        <a class="uk-h4 tm-h4" href="produksi">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <!-- <li class="tm-main-navbar">
+                        <a class="tm-h4" href="produksi">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Produksi</div>
+                                <div class="uk-text-center">Produksi</div>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar">
-                        <a class="uk-h4 tm-h4" href="">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar">
+                        <a class="tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/finance.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Finance</div>
+                                <div class="uk-text-center">Finance</div>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar">
-                        <a class="uk-h4 tm-h4" href="">
-                            <div class="uk-width-1-1 uk-margin-left">
+                    <li class="tm-main-navbar">
+                        <a class="tm-h4" href="">
+                            <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/design.svg" uk-svg>
                                 </div>
-                                <div class="tm-navbar-text uk-text-center">Design</div>
+                                <div class="uk-text-center">Design</div>
                             </div>
                         </a>
                     </li> -->
-                    <!-- <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('project') ?>">
-                            <div class="uk-margin-left">
+                    <!-- <li class="tm-main-navbar <?=($uri->getSegment(1)==='project')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('project') ?>">
+                            <div class="uk-margin-right">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.project');?>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='design')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('design') ?>">
-                            <div class="uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='design')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('design') ?>">
+                            <div class="uk-margin-right">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.design');?>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='rab')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('rab') ?>">
-                            <div class="uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='rab')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('rab') ?>">
+                            <div class="uk-margin-right">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.rab');?>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='mdl')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('mdl') ?>">
-                            <div class="uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='mdl')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('mdl') ?>">
+                            <div class="uk-margin-right">
                                 <img src="img/layout/laporan.svg" uk-svg><?=lang('Global.mdl');?>
                             </div>
                         </a>
                     </li>
-                    <li class="uk-margin-left tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
-                        <a class="uk-h4 tm-h4" href="<?= base_url('users') ?>">
-                            <div class="uk-margin-left">
+                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='users')?'uk-active':''?>">
+                        <a class="tm-h4" href="<?= base_url('users') ?>">
+                            <div class="uk-margin-right">
                                 <img src="img/layout/pelanggan.svg" uk-svg><?=lang('Global.user');?>
                             </div>
                         </a>
@@ -355,12 +355,12 @@
                     $footerPadding = '';
                     $footerContainer = '';
                 } else {
-                    $footerPadding = 'uk-padding-xlarge-left';
+                    $footerPadding = 'uk-padding-xlarge-left-footer';
                     $footerContainer = 'uk-container uk-container-expand';
                 }
                 ?>
                 <div class="<?=$footerPadding?>">
-                    <div class="<?=$footerContainer?>">
+                    <div class="<?=$footerContainer?>" style="padding-left: 0px !important;">
                         <?php
                         function auto_copyright($year = 'auto'){
                             if(intval($year) == 'auto'){ $year = date('Y'); }
