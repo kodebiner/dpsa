@@ -9,12 +9,11 @@ $pager->setSurroundCount(2);
 ?>
 
 <?php if ($pager->getPageCount() > 1) { ?>
-<?php print_r($pager->getPageCount()); ?>
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
     <ul class="uk-pagination uk-flex-right" uk-margin>
         <?php if ($pager->hasPrevious()) { ?>
             <li><a href="<?= $pager->getFirst() ?>" aria-label="<?= lang('Pager.first') ?>" uk-icon="chevron-double-left"></a></li>
-            <li><a href="<?= $pager->getPrevious() ?>" aria-label="<?= lang('Pager.previous') ?>" uk-icon="chevron-left"></a></li>
+            <li><a href="<?= $pager->getPreviousPage() ?>" aria-label="<?= lang('Pager.previous') ?>" uk-icon="chevron-left"></a></li>
             <?php if ($pager->getCurrentPageNumber() >= 4) { ?>
                 <li class="uk-disabled"><span>...</span></li>
             <?php } ?>
@@ -33,10 +32,10 @@ $pager->setSurroundCount(2);
         <?php } ?>
 
         <?php if ($pager->hasNext()) { ?>
-            <?php if ($pager->getCurrentPageNumber() <= $pager->getPageCount()-4) { ?>
+            <?php if ($pager->getCurrentPageNumber() <= $pager->getPageCount() - 3) { ?>
                 <li class="uk-disabled"><span>...</span></li>
             <?php } ?>
-            <li><a href="<?= $pager->getNext() ?>" aria-label="<?= lang('Pager.next') ?>" uk-icon="chevron-right"></a></li>
+            <li><a href="<?= $pager->getNextPage() ?>" aria-label="<?= lang('Pager.next') ?>" uk-icon="chevron-right"></a></li>
             <li><a href="<?= $pager->getLast() ?>" aria-label="<?= lang('Pager.last') ?>" uk-icon="chevron-double-right"></a></li>
         <?php } ?>
     </ul>

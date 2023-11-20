@@ -18,6 +18,7 @@ return[
     'display'       => 'Display',
     'perPage'       => 'per Page',
     'search'        => 'Search',
+    'center'        => 'Parent',
 
 
     // List

@@ -18,6 +18,7 @@ return[
     'display'       => 'Tampilkan',
     'perPage'       => 'per Halaman',
     'search'        => 'Cari',
+    'center'        => 'Parent',
 
     // List
     'usersList'      => 'Daftar Pengguna',
