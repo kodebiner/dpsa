@@ -556,7 +556,6 @@ class User extends BaseController
             ];
         }
 
-
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = lang('Global.clientList');

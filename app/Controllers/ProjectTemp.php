@@ -34,7 +34,7 @@ class ProjectTemp extends BaseController
         }
 
         $this->builder->where('deleted_at', null);
-        $this->builder->whereIn('users.id', $uids);
+        $this->builder->whereIn('users.id', $uids);  /* membuat client pusat tidak muncul?? */
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
@@ -43,12 +43,13 @@ class ProjectTemp extends BaseController
         $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $query =   $this->builder->get();
         $users = $query->getResult();
-        
+
         $parentid = [];
         foreach ($users as $user) {
-            if ($user->parent != "") {
-                $parentid[] = $user->parent;
-            }
+            $parentid[] = [
+                'id' => $user->id,
+                'name' => $user->username,
+            ];
         }
 
         $data = $this->data;
@@ -91,15 +92,15 @@ class ProjectTemp extends BaseController
         $input = $this->request->getPost();
         $pro = $ProjectTempModel->find($id);
 
-        if (empty($input['client'])){
+        if (empty($input['client'])) {
             $client = $pro['clientid'];
-        }else{
+        } else {
             $client = $input['client'];
         }
 
-        if (empty($input['status'])){
+        if (empty($input['status'])) {
             $status = $pro['status'];
-        }else{
+        } else {
             $status = $input['status'];
         }
 
