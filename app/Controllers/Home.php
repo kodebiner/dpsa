@@ -349,9 +349,9 @@ class Home extends BaseController
         $data = $this->data;
 
         if (($data['role'] === 'client pusat') || ($data['role'] === 'client cabang')) {
-            return redirect()->to('dashboard');
-        } else {
             return redirect()->to('');
+        } else {
+            return redirect()->to('project');
         }
     }
 
