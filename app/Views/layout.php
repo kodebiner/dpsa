@@ -144,16 +144,18 @@
         <?php if ($ismobile === false) { ?>
             <nav class="tm-sidebar-left" style="background-color: #007ec8;">
                 <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
-                    <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
-                        <a class="tm-h4" href="<?= base_url('') ?>">
-                            <div class="uk-width-1-1 uk-margin-right">
-                                <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                    <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
+                    <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                        <li class="tm-main-navbar <?=($uri->getSegment(1)==='')?'uk-active':''?>">
+                            <a class="tm-h4" href="<?= base_url('') ?>">
+                                <div class="uk-width-1-1 uk-margin-right">
+                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                        <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
+                                    </div>
+                                    <div class="uk-text-center"><?=lang('Global.dashboard');?></div>
                                 </div>
-                                <div class="uk-text-center"><?=lang('Global.dashboard');?></div>
-                            </div>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <?php if (in_groups(['owner','superuser','marketing','admin','design','production'])) : ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="users/client">

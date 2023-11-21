@@ -20,15 +20,21 @@ class ProjectTemp extends BaseController
         $this->builder  = $this->db->table('users');
         $this->config   = config('Auth');
         $this->auth     = service('authentication');
+        $pager          = \Config\Services::pager();
     }
 
     public function index()
     {
         // Find Model
         $ProjectTempModel = new ProjectTempModel;
-        $ProjectTemps   = $ProjectTempModel->findAll();
+        $ProjectTemps   = $ProjectTempModel->paginate(10, 'projects');
+        $uids = array();
+        foreach ($ProjectTemps as $project) {
+            $uids[] = $project['clientid'];
+        }
 
         $this->builder->where('deleted_at', null);
+        $this->builder->whereIn('users.id', $uids);
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
@@ -46,11 +52,12 @@ class ProjectTemp extends BaseController
         }
 
         $data = $this->data;
-        $data['title']          =   lang('Global.titleDashboard');
-        $data['description']    =   lang('Global.dashboardDescription');
-        $data['clients']        =   $query->getResultArray();
-        $data['projects']       =   $ProjectTemps;
-        $data['parent']         =   $parentid;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['clients']        = $query->getResultArray();
+        $data['projects']       = $ProjectTemps;
+        $data['parent']         = $parentid;
+        $data['pager']          = $ProjectTempModel->pager;
 
         return view('projectTemp', $data);
     }
