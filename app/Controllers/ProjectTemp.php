@@ -34,7 +34,9 @@ class ProjectTemp extends BaseController
         }
 
         $this->builder->where('deleted_at', null);
-        $this->builder->whereIn('users.id', $uids);  /* membuat client pusat tidak muncul?? */
+        if(!empty($uids)){
+            $this->builder->whereIn('users.id', $uids);  /* membuat client pusat tidak muncul */
+        }
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
