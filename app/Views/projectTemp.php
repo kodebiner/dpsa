@@ -110,7 +110,7 @@
                 <div class="uk-card-header">
                     <div class="uk-flex-middle uk-grid-small" uk-grid>
                         <div class="uk-width-3-4">
-                            <h3 class="tm-h1">
+                            <h3 class="uk-card-title">
                                 <?php foreach ($clients as $client) {
                                     if ($client['id'] === $project['clientid']) {
                                         if ($client['parent'] != null) {
@@ -121,7 +121,7 @@
                                     }
                                 }
                                 ?>
-                                <span class="tm-h2"> - <?= $project['name'] ?></span>
+                                <span> - <?= $project['name'] ?></span>
                             </h3>
                         </div>
                         <div class="uk-width-1-4 uk-text-center">
@@ -191,28 +191,30 @@
                             <div class="uk-modal-header uk-margin">
                                 <h2 class="uk-modal-title">Update Proyek</h2>
                             </div>
-                            <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
-                                <div class="uk-margin">
-                                    <div class="uk-inline">
-                                        <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                                        <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
+                            <div class="uk-modal-body">
+                                <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
+                                    <div class="uk-margin">
+                                        <div class="uk-inline">
+                                            <span class="uk-form-icon" uk-icon="icon: file-text"></span>
+                                            <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="uk-margin">
-                                    <div class="uk-inline">
-                                        <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                                    <div class="uk-margin">
+                                        <div class="uk-inline">
+                                            <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="uk-margin">
-                                    <div class="uk-form-controls uk-form-width-large">
-                                        <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
-                                            <option value="" selected disabled>Pilih Progres</option>
-                                            <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
-                                            <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
-                                            <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
-                                            <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
-                                            <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
-                                        </select>
+                                    <div class="uk-margin">
+                                        <div class="uk-form-controls uk-form-width-large">
+                                            <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
+                                                <option value="" selected disabled>Pilih Progres</option>
+                                                <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
+                                                <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
+                                                <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
+                                                <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
+                                                <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <script>
                                         $(document).ready(function() {
@@ -237,25 +239,18 @@
                                         <div class="uk-form-controls uk-form-width-large">
                                             <select class="uk-select" name="client" id="client">
                                                 <?php foreach ($clients as $user) {
-                                                    if ($user['id'] == $project['clientid']) {
-                                                        $clientname = $user['username'];
-                                                        foreach ($parent as $idParent) {
-                                                            if ($user['id'] === $idParent) {
-                                                                $name[] = [
-                                                                    'id'    => $user['id'],
-                                                                    'name'  => $user['username'],
-                                                                ];
+                                                    $client = "";
+                                                    if ($user['parent'] != "" && !empty($user['parent'])) {
+                                                        foreach ($parent as $parentid) {
+                                                            if ($user['parent'] === $parentid['id']) {
+                                                                $client = $parentid['name'];
                                                             }
                                                         }
-                                                        if ($user['parent'] != "") {
-                                                            foreach ($name as $parentname) {
-                                                                if ($user['parent'] === $parentname['id']) {
-                                                                    $client =  $parentname['name'] . " cabang";
-                                                                }
-                                                            }
-                                                        } else {
-                                                            $client = $clientname . " pusat";
-                                                        }
+                                                    } else {
+                                                        $client = "-";
+                                                    } ?>
+                                                <?php if (!empty($client)) {
+                                                        echo $client;
                                                     }
                                                 } ?>
                                                 <option value="" selected disabled>
@@ -277,7 +272,8 @@
                                         <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')" type="button">Delete</a>
                                         <button class="uk-button uk-button-primary" type="submit">Save</button>
                                     </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <!-- end update project modal -->
@@ -329,28 +325,30 @@
                                 <div class="uk-modal-header uk-margin">
                                     <h2 class="uk-modal-title">Update Proyek</h2>
                                 </div>
-                                <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
-                                    <div class="uk-margin">
-                                        <div class="uk-inline">
-                                            <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                                            <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
+                                <div class="uk-modal-body">
+                                    <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
+                                        <div class="uk-margin">
+                                            <div class="uk-inline">
+                                                <span class="uk-form-icon" uk-icon="icon: file-text"></span>
+                                                <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="uk-margin">
-                                        <div class="uk-inline">
-                                            <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                                        <div class="uk-margin">
+                                            <div class="uk-inline">
+                                                <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="uk-margin">
-                                        <div class="uk-form-controls uk-form-width-large">
-                                            <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
-                                                <option value="" selected disabled>Pilih Progres</option>
-                                                <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
-                                                <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
-                                                <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
-                                                <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
-                                                <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
-                                            </select>
+                                        <div class="uk-margin">
+                                            <div class="uk-form-controls uk-form-width-large">
+                                                <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
+                                                    <option value="" selected disabled>Pilih Progres</option>
+                                                    <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
+                                                    <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
+                                                    <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
+                                                    <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
+                                                    <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <script>
                                             $(document).ready(function() {
@@ -408,7 +406,8 @@
                                             <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')" type="button">Delete</a>
                                             <button class="uk-button uk-button-primary" type="submit">Save</button>
                                         </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <!-- end update project modal -->
@@ -470,8 +469,5 @@
     <?php } ?>
     <?= $pager->links('projects', 'uikit_full') ?>
 </div>
-
-
-
 
 <?= $this->endSection() ?>
