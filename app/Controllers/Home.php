@@ -34,36 +34,54 @@ class Home extends BaseController
         $UserModel = new UserModel();
         $ProjectTempModel = new ProjectTempModel();
 
-        // Calling global values
-        $data = $this->data;
+        // Populating data
+        $input = $this->request->getGet();
+
+        // parsing data to view
+        $data           = $this->data;
+        $data['input']  = $input;
+
+        // Variable for pagination
+        if (isset($input['perpage'])) {
+            $perpage = $input['perpage'];
+        } else {
+            $perpage = 10;
+        }
+
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page - 1) * $perpage;
         
         if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
             // Superuser & Owner function
-            $input = $this->request->getGet();
-
-            if (isset($input['perpage'])) {
-                $perpage = $input['perpage'];
-            } else {
-                $perpage = 10;
-            }
-
-            $page = (@$_GET['page']) ? $_GET['page'] : 1;
-            $offset = ($page - 1) * $perpage;
-
             $clients = $this->db->table('users');
             $clients->select('users.id as id, users.firstname as firstname, users.lastname as lastname, users.username as username');
             $clients->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $clients->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
             $clients->where('auth_groups.name', 'client pusat');
             $clients->orWhere('auth_groups.name', 'client cabang');
-            $query = $clients->get($perpage, $offset)->getResult();
+            if (isset($input['search']) && !empty($input['search'])) {
+                $clients->like('users.firstname', $input['search']);
+                $clients->orLike('users.lastname', $input['search']);
+            }
+            $query = $clients->get($perpage, $offset)->getResultArray();
 
-            $total = $clients
-                    ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-                    ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-                    ->where('auth_groups.name', 'client pusat')
-                    ->orWhere('auth_groups.name', 'client cabang')
-                    ->countAllResults();
+            if (isset($input['search']) && !empty($input['search'])) {
+                $total = $clients
+                        ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                        ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                        ->where('auth_groups.name', 'client pusat')
+                        ->orWhere('auth_groups.name', 'client cabang')
+                        ->like('users.firstname', $input['search'])
+                        ->orLike('users.lastname', $input['search'])
+                        ->countAllResults();
+            } else {
+                $total = $clients
+                        ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                        ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                        ->where('auth_groups.name', 'client pusat')
+                        ->orWhere('auth_groups.name', 'client cabang')
+                        ->countAllResults();
+            }
 
             $data['title']          = lang('Global.titleDashboard');
             $data['description']    = lang('Global.dashboardDescription');
@@ -73,6 +91,36 @@ class Home extends BaseController
             return view('dashboard-superuser', $data);
         } elseif ($this->data['role'] === 'client pusat') {
             // Client Pusat function
+            $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
+
+            $branches = $UserModel->where('parentid', $this->data['uid'])->find();
+            $clients = array();
+
+            if (!empty($projectpusat)) {
+                $clients[] = [
+                    'id'        => $this->data['uid'],
+                    'firstname' => $this->data['account']->firstname,
+                    'lastname'  => $this->data['account']->lastname
+                ];
+                $holding = true;
+            } else {
+                $holding = false;
+            }
+
+            foreach ($branches as $branch) {
+                $clients[] = [
+                    'id'        => $branch->id,
+                    'firstname' => $branch->firstname,
+                    'lastname'  => $branch->lastname
+                ];
+            }
+
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['clients']        = $$clients->paginate($perpage, 'clients');
+            $data['pager']          = $pager->links('clients', 'uikit_full');
+
+            return view('dashboard-superuser', $data);
         } elseif ($this->data['role'] === 'client cabang') {
             // Client Cabang function
         }
