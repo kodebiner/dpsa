@@ -47,7 +47,7 @@ class Home extends BaseController
         } else {
             $perpage = 10;
         }
-
+        
         $page = (@$_GET['page']) ? $_GET['page'] : 1;
         $offset = ($page - 1) * $perpage;
         
@@ -91,20 +91,20 @@ class Home extends BaseController
             return view('dashboard-superuser', $data);
         } elseif ($this->data['role'] === 'client pusat') {
             // Client Pusat function
-            $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
-
-            $branches = $UserModel->where('parentid', $this->data['uid'])->find();
             $clients = array();
-
-            if (!empty($projectpusat)) {
-                $clients[] = [
-                    'id'        => $this->data['uid'],
-                    'firstname' => $this->data['account']->firstname,
-                    'lastname'  => $this->data['account']->lastname
-                ];
-                $holding = true;
+            
+            if (isset($input['search']) && !empty($input['search'])) {        
+                $branches = $UserModel->where('parentid', $this->data['uid'])->like('firstname', $input['search'])->orLike('lastname', $input['search'])->find();
             } else {
-                $holding = false;
+                $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
+                if (!empty($projectpusat)) {
+                    $clients[] = [
+                        'id'        => $this->data['uid'],
+                        'firstname' => $this->data['account']->firstname,
+                        'lastname'  => $this->data['account']->lastname
+                    ];
+                }
+                $branches = $UserModel->where('parentid', $this->data['uid'])->find();    
             }
 
             foreach ($branches as $branch) {
@@ -115,134 +115,66 @@ class Home extends BaseController
                 ];
             }
 
+            $total = count($clients);
+
             $data['title']          = lang('Global.titleDashboard');
             $data['description']    = lang('Global.dashboardDescription');
-            $data['clients']        = $$clients->paginate($perpage, 'clients');
-            $data['pager']          = $pager->links('clients', 'uikit_full');
+            $data['clients']        = array_slice($clients, $offset, $perpage);
+            $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
 
             return view('dashboard-superuser', $data);
         } elseif ($this->data['role'] === 'client cabang') {
             // Client Cabang function
+            if (isset($input['search']) && !empty($input['search'])) {
+                $projects = $ProjectTempModel->where('clientid', $this->data['uid'])->like('name', $input['search'])->paginate($perpage, 'projects');
+            } else {
+                $projects = $ProjectTempModel->where('clientid', $this->data['uid'])->paginate($perpage, 'projects');
+            }
+
+            // Parsing Data to View
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['client']         = $this->data['account'];
+            $data['projects']       = $projects;
+            $data['pager']          = $pager->links('projects', 'uikit_full');
+
+            return view('dashboard', $data);
         }
-
-        // // Populating Data
-        // $ProjectTemps   = $ProjectTempModel->findAll();
-
-        // $data = $this->data;
-        // $role = $data['role'];
-        // if ($role === 'client cabang') {
-        //     $projects = $ProjectTempModel->where('clientid', $data['account']->id)->find();
-        // } elseif ($role === 'client pusat') {
-        //     $projects = array();
-        //     $cabang = array();
-        //     $branches = $UserModel->where('parentid', $data['account']->id)->find();
-        //     foreach ($branches as $branch) {
-        //         $cabang[] = $branch->id;
-        //     }
-        //     if(!empty($cabang)){
-        //         $projectbranches = $ProjectTempModel->whereIn('clientid', $cabang)->find();
-        //         foreach ($projectbranches as $projectbranch) {
-        //             $projects[] = $projectbranch;
-        //         }
-        //     }
-        //     $projectholdings = $ProjectTempModel->where('clientid', $data['account']->id)->find();
-        //     foreach ($projectholdings as $projectholding) {
-        //         $projects[] = $projectholding;
-        //     }
-        // } else {
-        //     $projects = $ProjectTempModel->findAll();
-        // }
-
-        // $this->builder->where('deleted_at', null);
-        // $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        // $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        // $position = array("client pusat", "client cabang");
-        // if ((!in_array($role, $position))) {
-        //     $this->builder->where('users.id !=', $this->data['uid']);
-        // }
-        // $this->builder->where('auth_groups.name', 'client pusat');
-        // $this->builder->orWhere('auth_groups.name', 'client cabang');
-        // $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-        // $query =    $this->builder->get();
-        // $users =    $query->getResult();
-
-        // $parentid = [];
-        // foreach ($users as $user) {
-        //     if ($user->parent != "") {
-        //         $parentid[] = $user->parent;
-        //     }
-        // }
-
-        // $data['title']          =   lang('Global.titleDashboard');
-        // $data['description']    =   lang('Global.dashboardDescription');
-        // $data['clients']        =   $query->getResultArray();
-        // $data['projects']       =   $projects;
-        // $data['parent']         =   $parentid;
-        // $data['role']           =   $role;
-
-        // return view('dashboard', $data);
     }
 
-    public function clientdashboard()
+    public function clientdashboard($id)
     {
-        // Find Model
+        // Calling Services
+        $pager = \Config\Services::pager();
+
+        // Calling models
         $UserModel = new UserModel;
         $ProjectTempModel = new ProjectTempModel;
 
         // Populating Data
-        $ProjectTemps   = $ProjectTempModel->findAll();
+        $input = $this->request->getGet();
 
-        $data = $this->data;
-        $role = $data['role'];
-        if ($role === 'client cabang') {
-            $projects = $ProjectTempModel->where('clientid', $data['account']->id)->find();
-        } elseif ($role === 'client pusat') {
-            $projects = array();
-            $cabang = array();
-            $branches = $UserModel->where('parentid', $data['account']->id)->find();
-            foreach ($branches as $branch) {
-                $cabang[] = $branch->id;
-            }
-            if(!empty($cabang)){
-                $projectbranches = $ProjectTempModel->whereIn('clientid', $cabang)->find();
-                foreach ($projectbranches as $projectbranch) {
-                    $projects[] = $projectbranch;
-                }
-            }
-            $projectholdings = $ProjectTempModel->where('clientid', $data['account']->id)->find();
-            foreach ($projectholdings as $projectholding) {
-                $projects[] = $projectholding;
-            }
+        if (isset($input['perpage']) && !empty($input['perpage'])) {
+            $perpage = $input['perpage'];
         } else {
-            $projects = $ProjectTempModel->findAll();
+            $perpage = 10;
         }
 
-        $this->builder->where('deleted_at', null);
-        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $position = array("client pusat", "client cabang");
-        if ((!in_array($role, $position))) {
-            $this->builder->where('users.id !=', $this->data['uid']);
-        }
-        $this->builder->where('auth_groups.name', 'client pusat');
-        $this->builder->orWhere('auth_groups.name', 'client cabang');
-        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-        $query =    $this->builder->get();
-        $users =    $query->getResult();
+        $client = $UserModel->find($id);
 
-        $parentid = [];
-        foreach ($users as $user) {
-            if ($user->parent != "") {
-                $parentid[] = $user->parent;
-            }
+        if (isset($input['search']) && !empty($input['search'])) {
+            $projects = $ProjectTempModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
+        } else {
+            $projects = $ProjectTempModel->where('clientid', $id)->paginate($perpage, 'projects');
         }
 
-        $data['title']          =   lang('Global.titleDashboard');
-        $data['description']    =   lang('Global.dashboardDescription');
-        $data['clients']        =   $query->getResultArray();
-        $data['projects']       =   $projects;
-        $data['parent']         =   $parentid;
-        $data['role']           =   $role;
+        // Parsing Data to View
+        $data                   = $this->data;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['client']         = $client;
+        $data['projects']       = $projects;
+        $data['pager']          = $pager->links('projects', 'uikit_full');
 
         return view('dashboard', $data);
     }

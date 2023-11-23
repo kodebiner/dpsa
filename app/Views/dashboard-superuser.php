@@ -4,7 +4,7 @@
 <div class="uk-container uk-container-large">
 <!-- Page Heading -->
 <?php if ($ismobile === true) { ?>
-    <h3 class="tm-h1 uk-text-center uk-margin-remove">Daftar Proyek</h3>
+    <h1 class="tm-h1 uk-text-center uk-margin-remove">Daftar Proyek</h1>
     <div class="uk-margin uk-text-center">
         <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
     </div>
@@ -42,26 +42,30 @@
         }
     </script>
 <?php } else { ?>
-    <h3 class="tm-h1 uk-margin-remove">Daftar Proyek</h3>
+    <h1 class="tm-h1 uk-margin-remove">Daftar Proyek</h1>
 <?php } ?>
 <hr class="uk-divider-icon uk-margin-remove-top">
 <!-- end of Page Heading -->
 
 <!-- Content -->
 <?php if ($ismobile === true) { ?>
-    <?php foreach ($clients as $client) { ?>
-        <a>
-            <div class="uk-margin uk-card uk-card-default uk-card-body">
-                <div class="uk-grid-small uk-flex-middle" uk-grid>
-                    <div class="uk-width-auto"><span uk-icon="folder"></span></div>
-                    <div class="uk-width-expand"><?=$client['firstname']?> <?=$client['lastname']?></div>
-                    <div class="uk-width-auto uk-margin-auto-left"><span uk-icon="chevron-right"></span></div>
+    <?php if (!empty($clients)) { ?>
+        <?php foreach ($clients as $client) { ?>
+            <a href="dashboard/<?=$client['id']?>">
+                <div class="uk-margin uk-card uk-card-default uk-card-body">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-auto"><span uk-icon="folder"></span></div>
+                        <div class="uk-width-expand"><?=$client['firstname']?> <?=$client['lastname']?></div>
+                        <div class="uk-width-auto uk-margin-auto-left"><span uk-icon="chevron-right"></span></div>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php } ?>
+    <?php } else { ?>
+        <div class="uk-width-1-1 uk-text-center uk-text-italic"><?=lang('Global.noData')?></div>
     <?php } ?>
 <?php } else { ?>
-    <form class="uk-margin" id="searchform" action="users" method="GET">
+    <form class="uk-margin" id="searchform" action="" method="GET">
         <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
             <div>
                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -85,23 +89,27 @@
             </div>
         </div>
     </form>
-    <div class="uk-child-width-1-3@m uk-child-width-1-4@l" uk-grid uk-height-match="target: > div > a > .uk-card-body">
-        <?php foreach ($clients as $client) { ?>
-            <div>
-                <a class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-flex uk-flex-middle">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto"><span uk-icon="icon: folder; ratio: 1.5;"></span></div>
-                            <div class="uk-width-expand">
-                                <h3 class="uk-text-uppercase"><?=$client['firstname']?> <?=$client['lastname']?></h3>
+    <?php if (!empty($clients)) { ?>
+        <div class="uk-child-width-1-3@m uk-child-width-1-4@l" uk-grid uk-height-match="target: > div > a > .uk-card-body">
+            <?php foreach ($clients as $client) { ?>
+                <div>
+                    <a href="dashboard/<?=$client['id']?>" class="uk-link-reset">
+                        <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-flex uk-flex-middle">
+                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-auto"><span uk-icon="icon: folder; ratio: 1.5;"></span></div>
+                                <div class="uk-width-expand">
+                                    <h3 class="uk-text-uppercase"><?=$client['firstname']?> <?=$client['lastname']?></h3>
+                                </div>
+                                <div class="uk-width-auto"><span uk-icon="icon: chevron-right; ratio: 1.5;"></span></div>
                             </div>
-                            <div class="uk-width-auto"><span uk-icon="icon: chevron-right; ratio: 1.5;"></span></div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        <?php } ?>
-    </div>
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } else { ?>
+        <div class="uk-width-1-1 uk-text-center uk-text-italic"><?=lang('Global.noData')?></div>
+    <?php } ?>
 <?php } ?>
 <?=$pager?>
 <script>

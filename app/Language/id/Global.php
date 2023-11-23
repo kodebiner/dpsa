@@ -19,6 +19,7 @@ return[
     'perPage'       => 'per Halaman',
     'search'        => 'Cari',
     'center'        => 'Parent',
+    'noData'        => 'Data Tidak Ditemukan',
 
     // List
     'usersList'      => 'Daftar Pengguna',

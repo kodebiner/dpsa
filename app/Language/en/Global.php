@@ -19,6 +19,7 @@ return[
     'perPage'       => 'per Page',
     'search'        => 'Search',
     'center'        => 'Parent',
+    'noData'        => 'No Data Found',
 
 
     // List
