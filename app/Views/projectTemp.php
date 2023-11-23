@@ -297,7 +297,7 @@
                         </div>
                         <div class="uk-margin">
                             <div class="uk-inline">
-                                <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                                <textarea class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" aria-label="Brief"><?= $project['brief'] ?></textarea>
                             </div>
                         </div>
                         <div class="uk-margin">
