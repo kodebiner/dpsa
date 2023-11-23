@@ -27,8 +27,7 @@
 <hr class="uk-divider-icon uk-margin-remove-top">
 <!-- add project modal -->
 <div id="modaladd" uk-modal>
-    <div class="uk-modal-dialog">
-
+    <div class="uk-modal-dialog" uk-overflow-auto>
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header uk-margin">
             <h2 class="uk-modal-title">Tambah Proyek</h2>
@@ -77,7 +76,7 @@
             <div class="uk-margin" id="proqty" hidden>
                 <div class="uk-inline">
                     <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                    <input class="uk-input uk-form-width-large" name="qty" placeholder="qty" type="number" max="100" aria-label="Not clickable icon">
+                    <input class="uk-input uk-form-width-large" name="qty" placeholder="Prosentase Produksi" type="number" max="100" aria-label="Not clickable icon">
                 </div>
             </div>
 
@@ -225,100 +224,6 @@
                         <div class="uk-text-right uk-width-auto">
                             <a class="uk-button uk-button-secondary uk-margin-small-right" href="#modalupdatepro<?= $project['id'] ?>" uk-toggle><?= lang('Global.updateData') ?></a>
                         </div>
-                        <!-- update project modal -->
-                        <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
-                            <div class="uk-modal-dialog">
-                                <button class="uk-modal-close-default" type="button" uk-close></button>
-                                <div class="uk-modal-header uk-margin">
-                                    <h2 class="uk-modal-title">Update Proyek</h2>
-                                </div>
-                                <div class="uk-modal-body">
-                                    <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
-                                        <div class="uk-margin">
-                                            <div class="uk-inline">
-                                                <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                                                <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
-                                            </div>
-                                        </div>
-                                        <div class="uk-margin">
-                                            <div class="uk-inline">
-                                                <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
-                                            </div>
-                                        </div>
-                                        <div class="uk-margin">
-                                            <div class="uk-form-controls uk-form-width-large">
-                                                <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
-                                                    <option value="" selected disabled>Pilih Progres</option>
-                                                    <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
-                                                    <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
-                                                    <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
-                                                    <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
-                                                    <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <script>
-                                            $(document).ready(function() {
-                                                if ($("#status<?= $project['id'] ?>").val() == "4") {
-                                                    $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
-                                                }
-                                                $("select[id='status<?= $project['id']?>']").change(function() {
-                                                    if ((this.value) == 4) {
-                                                        $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
-                                                    }else{
-                                                        $("#proqty<?= $project['id'] ?>").attr("hidden", true);
-                                                    }
-                                                });
-                                            });
-                                        </script>
-                                        <div class="uk-margin" id="proqty<?= $project['id'] ?>" hidden>
-                                            <div class="uk-inline">
-                                                <span class="uk-form-icon" uk-icon="icon: file-text"></span>
-                                                <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="qty" type="number" max="100" min="0" aria-label="Not clickable icon">
-                                            </div>
-                                        </div>
-                                        <div class="uk-margin">
-                                            <div class="uk-form-controls uk-form-width-large">
-                                                <select class="uk-select" name="client" id="client">
-                                                    <?php foreach ($clients as $user) {
-                                                        $client = "";
-                                                        if ($user['parent'] != "" && !empty($user['parent'])) {
-                                                            foreach ($parent as $parentid) {
-                                                                if ($user['parent'] === $parentid['id']) {
-                                                                    $client = $parentid['name'];
-                                                                }
-                                                            }
-                                                        } else {
-                                                            $client = "-";
-                                                        } ?>
-                                                    <?php if (!empty($client)) {
-                                                            echo $client;
-                                                        }
-                                                    } ?>
-                                                    <option value="" selected disabled>
-                                                        Pilih Client
-                                                    </option>
-                                                    <?php foreach ($clients as $client) {
-                                                        if ($client['role'] === "client pusat") {
-                                                            $klien = $client['username'] . " pusat";
-                                                        } else {
-                                                            $klien = $client['username'] . " cabang";
-                                                        } ?>
-                                                        <option value="<?= $client['id'] ?>" <?= ($project['clientid'] === $client['id'] ? 'selected' : '') ?>> <?= $klien  ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="uk-modal-footer uk-text-right">
-                                            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                                            <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')" type="button">Delete</a>
-                                            <button class="uk-button uk-button-primary" type="submit">Save</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end update project modal -->
                     </div>
                 </div>
                 <div class="uk-card-body">
@@ -374,6 +279,101 @@
                 </div>
             </div>
         <?php } ?>
+        
+        <!-- update project modal -->
+        <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
+            <div class="uk-modal-dialog" uk-overflow-auto>
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header uk-margin">
+                    <h2 class="uk-modal-title">Update Proyek</h2>
+                </div>
+                <div class="uk-modal-body">
+                    <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
+                        <div class="uk-margin">
+                            <div class="uk-inline">
+                                <span class="uk-form-icon" uk-icon="icon: file-text"></span>
+                                <input class="uk-input uk-form-width-large" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" aria-label="Not clickable icon">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline">
+                                <input class="uk-textarea uk-form-width-large" rows="5" placeholder="Brief" name="brief" value="<?= $project['brief'] ?>" aria-label="Brief"></input>
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-form-controls uk-form-width-large">
+                                <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
+                                    <option value="" selected disabled>Pilih Progres</option>
+                                    <option value="1" <?= ($project['status'] === '1' ? 'selected' : '') ?>>Proses Desain</option>
+                                    <option value="2" <?= ($project['status'] === '2' ? 'selected' : '') ?>>Menunggu Approval Desain</option>
+                                    <option value="3" <?= ($project['status'] === '3' ? 'selected' : '') ?>>Pengajuan RAB</option>
+                                    <option value="4" <?= ($project['status'] === '4' ? 'selected' : '') ?>>Dalam Proses Produksi</option>
+                                    <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
+                                </select>
+                            </div>
+                        </div>
+                        <script>
+                            $(document).ready(function() {
+                                if ($("#status<?= $project['id'] ?>").val() == "4") {
+                                    $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
+                                }
+                                $("select[id='status<?= $project['id']?>']").change(function() {
+                                    if ((this.value) == 4) {
+                                        $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
+                                    }else{
+                                        $("#proqty<?= $project['id'] ?>").attr("hidden", true);
+                                    }
+                                });
+                            });
+                        </script>
+                        <div class="uk-margin" id="proqty<?= $project['id'] ?>" hidden>
+                            <div class="uk-inline">
+                                <span class="uk-form-icon" uk-icon="icon: file-text"></span>
+                                <input class="uk-input uk-form-width-large" name="qty" value="<?= $project['production'] ?>" placeholder="Prosentase Produksi" type="number" max="100" min="0" aria-label="Not clickable icon">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-form-controls uk-form-width-large">
+                                <select class="uk-select" name="client" id="client">
+                                    <?php foreach ($clients as $user) {
+                                        $client = "";
+                                        if ($user['parent'] != "" && !empty($user['parent'])) {
+                                            foreach ($parent as $parentid) {
+                                                if ($user['parent'] === $parentid['id']) {
+                                                    $client = $parentid['name'];
+                                                }
+                                            }
+                                        } else {
+                                            $client = "-";
+                                        } ?>
+                                    <?php if (!empty($client)) {
+                                            echo $client;
+                                        }
+                                    } ?>
+                                    <option value="" selected disabled>
+                                        Pilih Client
+                                    </option>
+                                    <?php foreach ($clients as $client) {
+                                        if ($client['role'] === "client pusat") {
+                                            $klien = $client['username'] . " pusat";
+                                        } else {
+                                            $klien = $client['username'] . " cabang";
+                                        } ?>
+                                        <option value="<?= $client['id'] ?>" <?= ($project['clientid'] === $client['id'] ? 'selected' : '') ?>> <?= $klien  ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="uk-modal-footer uk-text-right">
+                            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                            <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')" type="button">Delete</a>
+                            <button class="uk-button uk-button-primary" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end update project modal -->
     <?php } ?>
     <?= $pager->links('projects', 'uikit_full') ?>
 </div>
