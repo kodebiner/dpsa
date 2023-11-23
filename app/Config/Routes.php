@@ -43,7 +43,6 @@ $routes->group('/', static function ($routes) {
 
 $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Home::index');
-    $routes->get('dashboard', 'Home::index');
     $routes->get('logedin', 'Home::logedin');
 });
 
