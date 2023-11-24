@@ -397,14 +397,12 @@
                             <label class="uk-form-label" for="child">Choose <?= lang('Global.center') ?></label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" name="child">
-                                    <option value="" selected disabled>Center List</option>
+                                    <!-- <option value="" selected disabled>Center List</option> -->
                                     <?php
-                                    foreach ($users as $user) {
-                                        if ($authorize->inGroup(['superuser', 'admin'], $uid) === true) {
-                                            if ($user->role != 'client cabang') {
-                                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
-                                            }
-                                        }
+                                    foreach ($users as $parent) {
+                                        if ($parent->role != 'client cabang') { ?>
+                                            <option value="<?= $parent->id ?>" <?php if ($parent->id === $user->parent) {echo 'selected';} ?>><?= $parent->username ?></option>
+                                        <?php }
                                     } ?>
                                 </select>
                             </div>
@@ -447,9 +445,4 @@
         });
     </script>
 <?php } ?>
-<!-- Search Engine Script -->
-<script>
-
-</script>
-<!-- Search Engine Script End -->
 <?= $this->endSection() ?>
