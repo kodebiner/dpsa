@@ -23,7 +23,8 @@ return[
 
     // List
     'usersList'      => 'Daftar Pengguna',
-    'clientList'     => 'Klien List',
+    'clientList'     => 'Daftar Klien',
+    'projectList'    => 'Daftar Project',
 
     // Button 
     'logout'        => 'Keluar',
@@ -34,9 +35,15 @@ return[
     'Addproject'    => 'Tambah Proyek',
     'Addclient'     => 'Tambah Klien',
 
+    // Update Button
+    'editProject'   => 'Ubah Data Proyek',
+    'editUser'      => 'Ubah Data Pengguna',
+    'editClient'    => 'Ubah Data Klien',
+
     // Menu 
     'dashboard'     => 'Dashboard',
     'project'       => 'Proyek',
+    'manageProject' => 'Kelola Proyek',
     'design'        => 'Desain',
     'rab'           => 'Rab',
     'mdl'           => 'MDL',

@@ -35,6 +35,7 @@
         <?php } ?>
     </div>
 <?php } ?>
+
 <!-- End Of Page Heading -->
 <?= view('Views/Auth/_message_block') ?>
 
@@ -321,7 +322,7 @@
         <div class="uk-modal-dialog uk-margin-auto-vertical">
             <div class="uk-modal-content">
                 <div class="uk-modal-header">
-                    <h5 class="uk-modal-title" id="editdata"><?= lang('Global.updateData') ?></h5>
+                    <h5 class="uk-modal-title" id="editdata"><?= lang('Global.updateClient') ?></h5>
                 </div>
 
                 <div class="uk-modal-body">
@@ -397,7 +398,6 @@
                             <label class="uk-form-label" for="child">Choose <?= lang('Global.center') ?></label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" name="child">
-                                    <!-- <option value="" selected disabled>Center List</option> -->
                                     <?php
                                     foreach ($users as $parent) {
                                         if ($parent->role != 'client cabang') { ?>

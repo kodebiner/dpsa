@@ -10,17 +10,17 @@
 <?= $this->section('main') ?>
 
 <?php if ($ismobile === true) { ?>
-    <h3 class="tm-h1 uk-text-center uk-margin-remove">Data Proyek</h3>
+    <h3 class="tm-h1 uk-text-center uk-margin-remove"><?= lang("Global.projectList") ?></h3>
     <div class="uk-text-center uk-margin">
-        <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button>
+        <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle><?= lang("Global.Addproject") ?></button>
     </div>
 <?php } else { ?>
     <div class="uk-margin uk-child-width-auto uk-flex-between" uk-grid>
         <div>
-            <h3 class="tm-h1 uk-text-center uk-margin-remove">Data Proyek</h3>
+            <h3 class="tm-h1 uk-text-center uk-margin-remove"><?= lang("Global.projectList") ?></h3>
         </div>
         <div>
-            <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button>
+            <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle><?= lang("Global.Addproject") ?></button>
         </div>
     </div>
 <?php } ?>
@@ -30,7 +30,7 @@
     <div class="uk-modal-dialog" uk-overflow-auto>
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header uk-margin">
-            <h2 class="uk-modal-title">Tambah Proyek</h2>
+            <h2 class="uk-modal-title"><?=lang('Global.Addproject')?></h2>
         </div>
 
         <form class="uk-margin-left" action="project/create" method="post">
@@ -279,13 +279,13 @@
                 </div>
             </div>
         <?php } ?>
-        
+
         <!-- update project modal -->
         <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
             <div class="uk-modal-dialog" uk-overflow-auto>
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <div class="uk-modal-header uk-margin">
-                    <h2 class="uk-modal-title">Update Proyek</h2>
+                    <h2 class="uk-modal-title"><?=lang('Global.editProject')?></h2>
                 </div>
                 <div class="uk-modal-body">
                     <form class="uk-margin-left" action="project/update/<?= $project['id'] ?>" method="post">
@@ -317,10 +317,10 @@
                                 if ($("#status<?= $project['id'] ?>").val() == "4") {
                                     $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
                                 }
-                                $("select[id='status<?= $project['id']?>']").change(function() {
+                                $("select[id='status<?= $project['id'] ?>']").change(function() {
                                     if ((this.value) == 4) {
                                         $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
-                                    }else{
+                                    } else {
                                         $("#proqty<?= $project['id'] ?>").attr("hidden", true);
                                     }
                                 });

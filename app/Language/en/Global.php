@@ -24,6 +24,7 @@ return[
     // List
     'usersList'      => 'User List',
     'clientList'     => 'Client List',
+    'projectList'    => 'Project List',
 
     // Button 
     'logout'        => 'Logout',
@@ -34,9 +35,15 @@ return[
     'Addproject'    => 'Add Project',
     'Addclient'     => 'Add Client',
 
+    // Edit Button
+    'editProject'   => 'Update Project Data',
+    'editUser'      => 'Update User Data',
+    'editClient'    => 'Update Client Data',
+
     // Menu 
     'dashboard'     => 'Dashboard',
     'project'       => 'Project',
+    'manageProject' => 'Manage Project',
     'design'        => 'Design',
     'rab'           => 'Rab',
     'mdl'           => 'MDL',

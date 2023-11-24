@@ -5,7 +5,7 @@
 
     <!-- Page Heading -->
     <?php if ($ismobile) { ?>
-        <h1 class="tm-h1 uk-text-center uk-margin-remove">Daftar Proyek<br/><?=$client->firstname?> <?=$client->lastname?></h1>
+        <h1 class="tm-h1 uk-text-center uk-margin-remove"><?= lang("Global.projectList") ?><br/><?=$client->firstname?> <?=$client->lastname?></h1>
     <div class="uk-margin uk-text-center">
         <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
     </div>
@@ -43,7 +43,7 @@
         }
     </script>
     <?php } else { ?>
-        <h1 class="tm-h1 uk-margin-remove">Daftar Proyek <?=$client->firstname?> <?=$client->lastname?></h1>
+        <h1 class="tm-h1 uk-margin-remove"><?= lang("Global.projectList") ?> <?=$client->firstname?> <?=$client->lastname?></h1>
     <?php } ?>
     <hr class="uk-divider-icon">
     <!-- end of Page Heading -->
