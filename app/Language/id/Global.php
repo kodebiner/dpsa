@@ -48,5 +48,8 @@ return[
     'titleRab'          => 'Rab',
     'titleMdl'          => 'MDL',
 
+    // Alert Notice
+    'deleteConfirm' => 'Anda yakin ingin menghapus data ini?'
+
     // Text Description
 ];
