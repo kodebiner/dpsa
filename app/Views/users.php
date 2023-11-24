@@ -15,9 +15,11 @@
             </div>
 
             <!-- Button Trigger Modal Add -->
-            <div class="uk-width-1-2@m uk-text-right@m">
-                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Adduser') ?></button>
-            </div>
+            <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
+                <div class="uk-width-1-2@m uk-text-right@m">
+                    <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Adduser') ?></button>
+                </div>
+            <?php } ?>
             <!-- End Of Button Trigger Modal Add -->
         </div>
     </div>
@@ -27,9 +29,11 @@
         <div>
             <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
         </div>
-        <div>
-            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Adduser') ?></button>
-        </div>
+        <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
+            <div>
+                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Adduser') ?></button>
+            </div>
+        <?php } ?>
     </div>
 <?php } ?>
 <!-- End Of Page Heading -->
@@ -37,94 +41,96 @@
 <?= view('Views/Auth/_message_block') ?>
 
 <!-- Modal Add -->
-<div uk-modal class="uk-flex-top" id="tambahdata">
-    <div class="uk-modal-dialog uk-margin-auto-vertical">
-        <div class="uk-modal-content">
-            <div class="uk-modal-header">
-                <h5 class="uk-modal-title" id="tambahdata"><?= lang('Global.Adduser') ?></h5>
-            </div>
-            <div class="uk-modal-body">
-                <form class="uk-form-stacked" role="form" action="users/create" method="post">
-                    <?= csrf_field() ?>
+<?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
+    <div uk-modal class="uk-flex-top" id="tambahdata">
+        <div class="uk-modal-dialog uk-margin-auto-vertical">
+            <div class="uk-modal-content">
+                <div class="uk-modal-header">
+                    <h5 class="uk-modal-title" id="tambahdata"><?= lang('Global.Adduser') ?></h5>
+                </div>
+                <div class="uk-modal-body">
+                    <form class="uk-form-stacked" role="form" action="users/create" method="post">
+                        <?= csrf_field() ?>
 
-                    <div class="uk-margin-bottom">
-                        <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="text" class="uk-input <?php if (session('errors.username')) : ?>tm-form-invalid<?php endif ?>" id="username" name="username" placeholder="<?= lang('Auth.username') ?>" autofocus required />
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input <?php if (session('errors.username')) : ?>tm-form-invalid<?php endif ?>" id="username" name="username" placeholder="<?= lang('Auth.username') ?>" autofocus required />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="email"><?= lang('Auth.email') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="email" name="email" id="email" placeholder="<?= lang('Auth.email') ?>" required class="uk-input <?php if (session('errors.email')) : ?>tm-form-invalid<?php endif ?>" />
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="email"><?= lang('Auth.email') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="email" name="email" id="email" placeholder="<?= lang('Auth.email') ?>" required class="uk-input <?php if (session('errors.email')) : ?>tm-form-invalid<?php endif ?>" />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin-bottom">
-                        <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="text" class="uk-input <?php if (session('errors.firstname')) : ?>tm-form-invalid<?php endif ?>" id="firstname" name="firstname" placeholder="<?= lang('Global.firstname') ?>" autofocus required />
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input <?php if (session('errors.firstname')) : ?>tm-form-invalid<?php endif ?>" id="firstname" name="firstname" placeholder="<?= lang('Global.firstname') ?>" autofocus required />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin-bottom">
-                        <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="text" class="uk-input <?php if (session('errors.lastname')) : ?>tm-form-invalid<?php endif ?>" id="lastname" name="lastname" placeholder="<?= lang('Global.lastname') ?>" autofocus required />
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input <?php if (session('errors.lastname')) : ?>tm-form-invalid<?php endif ?>" id="lastname" name="lastname" placeholder="<?= lang('Global.lastname') ?>" autofocus required />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="password"><?= lang('Auth.password') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="password" name="password" id="password" required class="uk-input <?php if (session('errors.password')) : ?>tm-form-invalid<?php endif ?>" />
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="password"><?= lang('Auth.password') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="password" name="password" id="password" required class="uk-input <?php if (session('errors.password')) : ?>tm-form-invalid<?php endif ?>" />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
-                        <div class="uk-form-controls">
-                            <input type="password" name="pass_confirm" id="pass_confirm" required class="uk-input <?php if (session('errors.repeatPassword')) : ?>tm-form-invalid<?php endif ?>" />
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
+                            <div class="uk-form-controls">
+                                <input type="password" name="pass_confirm" id="pass_confirm" required class="uk-input <?php if (session('errors.repeatPassword')) : ?>tm-form-invalid<?php endif ?>" />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" name="role" required>
-                                <option value="" selected disabled>Role</option>
-                                <?php
-                                foreach ($roles as $role) {
-                                    if ($authorize->inGroup('admin', $uid) === true) {
-                                        $position = array('owner', 'superuser', 'guests');
-                                        if ((!in_array($role->name, $position))) {
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" name="role" required>
+                                    <option value="" selected disabled>Role</option>
+                                    <?php
+                                    foreach ($roles as $role) {
+                                        if ($authorize->inGroup('admin', $uid) === true) {
+                                            $position = array('owner', 'superuser', 'guests');
+                                            if ((!in_array($role->name, $position))) {
+                                                echo '<option value="' . $role->id . '">' . $role->name . '</option>';
+                                            }
+                                        } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                            $position = array('superuser', 'guests');
+                                            if ((!in_array($role->name, $position))) {
+                                                echo '<option value="' . $role->id . '">' . $role->name . '</option>';
+                                            }
+                                        } elseif ($authorize->inGroup('superuser', $uid) === true) {
                                             echo '<option value="' . $role->id . '">' . $role->name . '</option>';
                                         }
-                                    } elseif ($authorize->inGroup('owner', $uid) === true) {
-                                        $position = array('superuser', 'guests');
-                                        if ((!in_array($role->name, $position))) {
-                                            echo '<option value="' . $role->id . '">' . $role->name . '</option>';
-                                        }
-                                    } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                                        echo '<option value="' . $role->id . '">' . $role->name . '</option>';
                                     }
-                                }
-                                ?>
-                            </select>
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <hr>
+                        <hr>
 
-                    <div class="uk-margin">
-                        <button type="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
-                    </div>
-                </form>
+                        <div class="uk-margin">
+                            <button type="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php } ?>
 <!-- End Of Modal Add -->
 
 <!-- Table Of Content -->
@@ -257,12 +263,16 @@
                         <td><?= $user->email; ?></td>
                         <td><?= $user->role; ?></td>
                         <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
-                            <div>
-                                <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
-                            </div>
-                            <div>
-                                <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
-                            </div>
+                            <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
+                                <div>
+                                    <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
+                                </div>
+                            <?php } ?>
+                            <?php if ($authorize->hasPermission('admin.user.delete', $uid)) { ?>
+                                <div>
+                                    <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
+                                </div>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } elseif ($user->role !== 'guests') { ?>
@@ -271,14 +281,18 @@
                         <td><?= $user->username; ?></td>
                         <td><?= $user->email; ?></td>
                         <td><?= $user->role; ?></td>
-                        <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
-                            <div>
-                                <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
-                            </div>
-                            <div>
-                                <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
-                            </div>
-                        </td>
+                            <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
+                                <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
+                                    <div>
+                                        <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
+                                    </div>
+                                <?php } ?>
+                                <?php if ($authorize->hasPermission('admin.user.delete', $uid)) { ?>
+                                    <div>
+                                        <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
+                                    </div>
+                                <?php } ?>
+                            </td>
                     </tr>
                 <?php } ?>
             <?php } ?>
@@ -289,106 +303,108 @@
 <!-- End Of Table Content -->
 
 <!-- Modal Edit -->
-<?php foreach ($users as $user) { ?>
-    <div uk-modal class="uk-flex-top" id="editdata<?= $user->id ?>">
-        <div class="uk-modal-dialog uk-margin-auto-vertical">
-            <div class="uk-modal-content">
-                <div class="uk-modal-header">
-                    <h5 class="uk-modal-title" id="editdata"><?= lang('Global.updateData') ?></h5>
-                </div>
+<?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
+    <?php foreach ($users as $user) { ?>
+        <div uk-modal class="uk-flex-top" id="editdata<?= $user->id ?>">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <div class="uk-modal-content">
+                    <div class="uk-modal-header">
+                        <h5 class="uk-modal-title" id="editdata"><?= lang('Global.updateData') ?></h5>
+                    </div>
 
-                <div class="uk-modal-body">
-                    <form class="uk-form-stacked" role="form" action="users/update/<?= $user->id ?>" method="post">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="id" value="<?= $user->id; ?>">
-                        <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
+                    <div class="uk-modal-body">
+                        <form class="uk-form-stacked" role="form" action="users/update/<?= $user->id ?>" method="post">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="id" value="<?= $user->id; ?>">
+                            <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
 
-                        <div class="uk-margin-bottom">
-                            <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="username" name="username" value="<?= $user->username; ?>" autofocus />
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="username"><?= lang('Auth.username') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="username" name="username" value="<?= $user->username; ?>" autofocus />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="uk-margin-bottom">
-                            <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="firstname" name="firstname" value="<?= $user->firstname; ?>" autofocus />
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="firstname"><?= lang('Global.firstname') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="firstname" name="firstname" value="<?= $user->firstname; ?>" autofocus />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="uk-margin-bottom">
-                            <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="lastname" name="lastname" value="<?= $user->lastname; ?>" autofocus />
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="lastname"><?= lang('Global.lastname') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="lastname" name="lastname" value="<?= $user->lastname; ?>" autofocus />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="email"><?= lang('Auth.email') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="email" class="uk-input" id="email" name="email" value="<?= $user->email; ?>" />
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="email"><?= lang('Auth.email') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="email" class="uk-input" id="email" name="email" value="<?= $user->email; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="uk-margin">
-                            <button class="uk-button uk-button-default" type="button" uk-toggle="target: .reset-password"><?= lang('Auth.resetPassword') ?></button>
-                        </div>
-
-                        <div class="uk-margin reset-password" hidden>
-                            <label class="uk-form-label" for="password"><?= lang('Auth.password') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="password" class="uk-input" name="password" id="password" placeholder="<?= lang('Auth.password') ?>" autocomplete="off" />
+                            <div class="uk-margin">
+                                <button class="uk-button uk-button-default" type="button" uk-toggle="target: .reset-password"><?= lang('Auth.resetPassword') ?></button>
                             </div>
-                        </div>
 
-                        <div class="uk-margin reset-password" hidden>
-                            <label class="uk-form-label" for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
-                            <div class="uk-form-controls">
-                                <input type="password" class="uk-input" name="pass_confirm" id="pass_confirm" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off" />
+                            <div class="uk-margin reset-password" hidden>
+                                <label class="uk-form-label" for="password"><?= lang('Auth.password') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="password" class="uk-input" name="password" id="password" placeholder="<?= lang('Auth.password') ?>" autocomplete="off" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
-                            <div class="uk-form-controls">
-                                <select class="uk-select" name="role" required>
-                                    <?php
-                                    foreach ($roles as $role) {
-                                        if ($user->group_id === $role->id) {
-                                            $selected = 'selected';
-                                        } else {
-                                            $selected = '';
-                                        }
-                                        if ($authorize->inGroup('admin', $uid) === true) {
-                                            $position = array('owner', 'superuser', 'guests');
-                                            if ((!in_array($role->name, $position))) {
+                            <div class="uk-margin reset-password" hidden>
+                                <label class="uk-form-label" for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
+                                <div class="uk-form-controls">
+                                    <input type="password" class="uk-input" name="pass_confirm" id="pass_confirm" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off" />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="role"><?= lang('Global.access') ?></label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select" name="role" required>
+                                        <?php
+                                        foreach ($roles as $role) {
+                                            if ($user->group_id === $role->id) {
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = '';
+                                            }
+                                            if ($authorize->inGroup('admin', $uid) === true) {
+                                                $position = array('owner', 'superuser', 'guests');
+                                                if ((!in_array($role->name, $position))) {
+                                                    echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                                }
+                                            } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                                $position = array('superuser', 'guests');
+                                                if ((!in_array($role->name, $position))) {
+                                                    echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                                }
+                                            } elseif ($authorize->inGroup('superuser', $uid) === true) {
                                                 echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
                                             }
-                                        } elseif ($authorize->inGroup('owner', $uid) === true) {
-                                            $position = array('superuser', 'guests');
-                                            if ((!in_array($role->name, $position))) {
-                                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
-                                            }
-                                        } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                                            echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
                                         }
-                                    }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <hr>
+                            <hr>
 
-                        <div class="uk-margin">
-                            <button type="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
-                        </div>
-                    </form>
+                            <div class="uk-margin">
+                                <button type="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
 <!-- End Of Modal Edit -->
 <?= $this->endSection() ?>
