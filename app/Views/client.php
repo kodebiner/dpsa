@@ -6,20 +6,35 @@
 
 <?= $this->section('main') ?>
 
-<!-- Page Heading -->
-<div class="tm-card-header uk-light uk-margin-remove-left">
-    <div uk-grid class="uk-flex-middle">
-        <div class="uk-width-1-2@m">
-            <h3 class="tm-h3"><?= lang('Global.clientList') ?></h3>
-        </div>
 
-        <!-- Button Trigger Modal Add -->
-        <div class="uk-width-1-2@m uk-text-right@m">
-            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Addclient') ?></button>
+<!-- Page Heading -->
+<?php if ($ismobile === false) { ?>
+    <div class="tm-card-header uk-light uk-margin-remove-left">
+        <div uk-grid class="uk-flex-middle">
+            <div class="uk-width-1-2@m">
+                <h3 class="tm-h3"><?= lang('Global.clientList') ?></h3>
+            </div>
+
+            <!-- Button Trigger Modal Add -->
+            <div class="uk-width-1-2@m uk-text-right@m">
+                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Addclient') ?></button>
+            </div>
+            <!-- End Of Button Trigger Modal Add -->
         </div>
-        <!-- End Of Button Trigger Modal Add -->
     </div>
-</div>
+<?php } else { ?>
+    <h3 class="tm-h3 uk-text-center"><?= lang('Global.clientList') ?></h3>
+    <div class="uk-child-width-auto uk-flex-center" uk-grid>
+        <div>
+            <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
+        </div>
+        <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
+            <div>
+                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata"><?= lang('Global.Addclient') ?></button>
+            </div>
+        <?php } ?>
+    </div>
+<?php } ?>
 <!-- End Of Page Heading -->
 
 <?= view('Views/Auth/_message_block') ?>
@@ -136,43 +151,92 @@
 <!-- End Of Modal Add -->
 
 <!-- form input -->
-<form class="uk-margin" id="searchform" action="users/client" method="GET">
-    <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
-        <div>
-            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                <div><?= lang('Global.search') ?>:</div>
-                <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
-                <div>
-                    <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                        <option value="0"><?= lang('Global.allAccess') ?></option>
-                        <?php
-                        foreach ($roles as $role) {
-                            if (isset($input['rolesearch']) && ($input['rolesearch'] === $role->id)) {
-                                $selected = 'selected';
-                            } else {
-                                $selected = '';
-                            }
-                            if ($authorize->inGroup('admin', $uid) === true) {
-                                $position = array('owner', 'superuser', 'guests');
-                                if ((!in_array($role->name, $position))) {
+<?php if ($ismobile === false) { ?>
+    <form class="uk-margin" id="searchform" action="users/client" method="GET">
+        <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
+            <div>
+                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                    <div><?= lang('Global.search') ?>:</div>
+                    <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                    <div>
+                        <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
+                            <option value="0"><?= lang('Global.allAccess') ?></option>
+                            <?php
+                            foreach ($roles as $role) {
+                                if (isset($input['rolesearch']) && ($input['rolesearch'] === $role->id)) {
+                                    $selected = 'selected';
+                                } else {
+                                    $selected = '';
+                                }
+                                if ($authorize->inGroup('admin', $uid) === true) {
+                                    $position = array('owner', 'superuser', 'guests');
+                                    if ((!in_array($role->name, $position))) {
+                                        echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                                    }
+                                } elseif ($authorize->inGroup('owner', $uid) === true) {
+                                    $position = array('superuser', 'guests');
+                                    if ((!in_array($role->name, $position))) {
+                                        echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                                    }
+                                } elseif ($authorize->inGroup('superuser', $uid) === true) {
                                     echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                 }
-                            } elseif ($authorize->inGroup('owner', $uid) === true) {
-                                $position = array('superuser', 'guests');
-                                if ((!in_array($role->name, $position))) {
-                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
-                                }
-                            } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                             }
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                    <div><?= lang('Global.display') ?></div>
+                    <div>
+                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                            <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                            <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                            <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                            <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                        </select>
+                    </div>
+                    <div><?= lang('Global.perPage') ?></div>
                 </div>
             </div>
         </div>
-        <div>
-            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+    </form>
+<?php } else { ?>
+    <div id="filter" class="uk-margin" hidden>
+        <form id="searchform" action="users/client" method="GET">
+            <div class="uk-margin-small uk-flex uk-flex-center">
+                <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+            </div>
+            <div class="uk-margin-small uk-flex uk-flex-center">
+                <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
+                    <option value="0"><?= lang('Global.allAccess') ?></option>
+                    <?php
+                    foreach ($roles as $role) {
+                        if (isset($input['rolesearch']) && ($input['rolesearch'] === $role->id)) {
+                            $selected = 'selected';
+                        } else {
+                            $selected = '';
+                        }
+                        if ($authorize->inGroup('admin', $uid) === true) {
+                            $position = array('owner', 'superuser', 'guests');
+                            if ((!in_array($role->name, $position))) {
+                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                            }
+                        } elseif ($authorize->inGroup('owner', $uid) === true) {
+                            $position = array('superuser', 'guests');
+                            if ((!in_array($role->name, $position))) {
+                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                            }
+                        } elseif ($authorize->inGroup('superuser', $uid) === true) {
+                            echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                 <div><?= lang('Global.display') ?></div>
                 <div>
                     <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
@@ -184,9 +248,9 @@
                 </div>
                 <div><?= lang('Global.perPage') ?></div>
             </div>
-        </div>
+        </form>
     </div>
-</form>
+<?php } ?>
 <!-- form input -->
 
 <!-- script form -->

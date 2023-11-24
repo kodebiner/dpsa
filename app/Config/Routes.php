@@ -64,14 +64,6 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('deleteclient/(:num)','User::deleteclient/$1');
 });
 
-// Upload Routes
-$routes->group('upload', ['filter' => 'login'], function($routes) {
-    $routes->post('profile', 'Upload::profile', ['filter' => 'role:Admin']);
-    $routes->post('removeprofile', 'Upload::removeprofile', ['filter' => 'role:Admin']);
-    $routes->post('logo', 'Upload::logo', ['filter' => 'role:Admin']);
-    $routes->post('removelogo', 'Upload::removelogo', ['filter' => 'role:Admin']);
-});
-
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
 

@@ -140,7 +140,7 @@
             <div>
                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                     <div><?= lang('Global.search') ?>:</div>
-                    <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="'.$input['search'].'"' : '') ?> /></div>
+                    <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
                     <div>
                         <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
                             <option value="0"><?= lang('Global.allAccess') ?></option>
@@ -154,15 +154,15 @@
                                 if ($authorize->inGroup('admin', $uid) === true) {
                                     $position = array('owner', 'superuser', 'guests');
                                     if ((!in_array($role->name, $position))) {
-                                        echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                        echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                     }
                                 } elseif ($authorize->inGroup('owner', $uid) === true) {
                                     $position = array('superuser', 'guests');
                                     if ((!in_array($role->name, $position))) {
-                                        echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                        echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                     }
                                 } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                                    echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                 }
                             }
                             ?>
@@ -190,7 +190,7 @@
     <div id="filter" class="uk-margin" hidden>
         <form id="searchform" action="users" method="GET">
             <div class="uk-margin-small uk-flex uk-flex-center">
-                <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="'.$input['search'].'"' : '') ?> />
+                <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
             </div>
             <div class="uk-margin-small uk-flex uk-flex-center">
                 <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
@@ -205,15 +205,15 @@
                         if ($authorize->inGroup('admin', $uid) === true) {
                             $position = array('owner', 'superuser', 'guests');
                             if ((!in_array($role->name, $position))) {
-                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                             }
                         } elseif ($authorize->inGroup('owner', $uid) === true) {
                             $position = array('superuser', 'guests');
                             if ((!in_array($role->name, $position))) {
-                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                             }
                         } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                            echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                            echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                         }
                     }
                     ?>
@@ -281,18 +281,18 @@
                         <td><?= $user->username; ?></td>
                         <td><?= $user->email; ?></td>
                         <td><?= $user->role; ?></td>
-                            <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
-                                <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
-                                    <div>
-                                        <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
-                                    </div>
-                                <?php } ?>
-                                <?php if ($authorize->hasPermission('admin.user.delete', $uid)) { ?>
-                                    <div>
-                                        <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
-                                    </div>
-                                <?php } ?>
-                            </td>
+                        <td class="uk-child-width-auto uk-grid-small uk-flex-center" uk-grid>
+                            <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
+                                <div>
+                                    <a class="uk-icon-button" uk-icon="pencil" uk-toggle="target: #editdata<?= $user->id ?>"></a>
+                                </div>
+                            <?php } ?>
+                            <?php if ($authorize->hasPermission('admin.user.delete', $uid)) { ?>
+                                <div>
+                                    <a uk-icon="trash" class="uk-icon-button-delete" href="users/delete/<?= $user->id ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
+                                </div>
+                            <?php } ?>
+                        </td>
                     </tr>
                 <?php } ?>
             <?php } ?>
@@ -378,15 +378,15 @@
                                             if ($authorize->inGroup('admin', $uid) === true) {
                                                 $position = array('owner', 'superuser', 'guests');
                                                 if ((!in_array($role->name, $position))) {
-                                                    echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                                 }
                                             } elseif ($authorize->inGroup('owner', $uid) === true) {
                                                 $position = array('superuser', 'guests');
                                                 if ((!in_array($role->name, $position))) {
-                                                    echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                                    echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                                 }
                                             } elseif ($authorize->inGroup('superuser', $uid) === true) {
-                                                echo '<option value="' . $role->id . '" '.$selected.'>' . $role->name . '</option>';
+                                                echo '<option value="' . $role->id . '" ' . $selected . '>' . $role->name . '</option>';
                                             }
                                         }
                                         ?>
