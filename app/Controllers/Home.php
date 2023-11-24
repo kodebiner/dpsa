@@ -391,13 +391,8 @@ class Home extends BaseController
 
     public function trial()
     {
-        $UserModel = new UserModel();
-
-        $users = $UserModel->findAll();
-
-        foreach ($users as $user) {
-            echo $user->id . '<br/>';
-        }
+        $authorize = service('authorization');
+        $authorize->removeUserFromGroup(3, 9);
     }
 
     public function information()
