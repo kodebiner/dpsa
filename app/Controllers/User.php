@@ -396,6 +396,9 @@ class User extends BaseController
         $groups = $authorize->groups();
         $permission = $authorize->permissions();
 
+        // permanent groups
+        $grouparr = ['superuser', 'admin', 'owner', 'marketing', 'design', 'production', 'client pusat', 'client cabang'];
+
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = lang('Global.employeeList');
@@ -403,6 +406,7 @@ class User extends BaseController
         $data['groups']         = $groups;
         $data['permissions']    = $permission;
         $data['GroupModel']     = new GroupModel();
+        $data['grouparr']       = $grouparr;
 
         return view('accesscontrol', $data);
     }

@@ -21,7 +21,6 @@ return[
     'center'        => 'Parent',
     'noData'        => 'No Data Found',
 
-
     // List
     'usersList'      => 'User List',
     'clientList'     => 'Client List',
@@ -48,6 +47,9 @@ return[
     'titleProject'      => 'Project',
     'titleRab'          => 'Rab',
     'titleMdl'          => 'MDL',
+
+    // Alert Notice
+    'deleteConfirm' => 'Are you sure delete this data ?',
 
     // Text Description
 ];
