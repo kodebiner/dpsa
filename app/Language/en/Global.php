@@ -50,6 +50,8 @@ return[
 
     // Alert Notice
     'deleteConfirm' => 'Are you sure delete this data ?',
+    'saved'         => 'data has been saved',
+    'updated'       => 'data has been updated'
 
     // Text Description
 ];

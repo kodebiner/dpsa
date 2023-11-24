@@ -49,7 +49,9 @@ return[
     'titleMdl'          => 'MDL',
 
     // Alert Notice
-    'deleteConfirm' => 'Anda yakin ingin menghapus data ini?'
+    'deleteConfirm' => 'Anda yakin ingin menghapus data ini?',
+    'saved'         => 'Data Berhasil Di Simpan',
+    'updated'       => 'Data Behasil Di Ubah',
 
     // Text Description
 ];

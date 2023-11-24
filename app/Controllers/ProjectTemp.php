@@ -52,8 +52,8 @@ class ProjectTemp extends BaseController
         }
 
         $data = $this->data;
-        $data['title']          = lang('Global.titleDashboard');
-        $data['description']    = lang('Global.dashboardDescription');
+        $data['title']          = lang('Global.titleProject');
+        $data['description']    = lang('Global.projectDescription');
         $data['clients']        = $query->getResultArray();
         $data['projects']       = $ProjectTemps;
         $data['parent']         = $parentid;

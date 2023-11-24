@@ -36,7 +36,6 @@
     </div>
 <?php } ?>
 <!-- End Of Page Heading -->
-
 <?= view('Views/Auth/_message_block') ?>
 
 <!-- Modal Add -->
