@@ -5,9 +5,9 @@ use CodeIgniter\Model;
 class MdlModel extends Model
 {
     protected $allowedFields = [
-        'name', 'price',
+        'name', 'length', 'width', 'height', 'volume', 'denomination', 'price',
     ];
-    protected $table            = 'Mdl';
+    protected $table            = 'mdl';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

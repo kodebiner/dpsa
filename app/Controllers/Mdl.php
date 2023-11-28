@@ -12,23 +12,17 @@ class Mdl extends BaseController
     {
 
         // Find Model
-        $BarModel   = new BarModel;
         $MdlModel   = new MdlModel;
 
         // Populating Data
-        $bars = $BarModel->find(1);
         $mdls = $MdlModel->findAll();
-
-        // Data Quantiti
-        $qty = $bars['qty'];
         
         $data = $this->data;
-        $data['title']          =   lang('Global.titleDashboard');
-        $data['description']    =   lang('Global.dashboardDescription');
-        $data['qty']            =   $qty;
+        $data['title']          =   "MDL";
+        $data['description']    =   "Daftar MDL yang tersedia";
         $data['mdls']           =   $mdls;
 
-        return view('Mdl', $data);
+        return view('mdl', $data);
     }
 
     public function create()
@@ -40,13 +34,27 @@ class Mdl extends BaseController
         $input = $this->request->getPost();
         
         // Save Data
-        $mdl = [
-            'name'  => $input['name'],
-            'price' => $input['price'],
-        ];
-        $MdlModel->save($mdl);
+        if (($input['denomination'] === "2") || ($input['denomination'] === "3")) {
+            $mdl = [
+                'name'          => $input['name'],
+                'length'        => $input['length'],
+                'width'         => $input['width'],
+                'height'        => $input['height'],
+                'volume'        => $input['volume'],
+                'denomination'  => $input['denomination'],
+                'price'         => $input['price'],
+            ];
+            $MdlModel->save($mdl);
+        } else {
+            $mdl = [
+                'name'          => $input['name'],
+                'denomination'  => $input['denomination'],
+                'price'         => $input['price'],
+            ];
+            $MdlModel->save($mdl);
+        }
 
-        return redirect()->to('mdl')->with('massage',lang('Global.saved'));
+        return redirect()->to('mdl')->with('massage',"Data Tersimpan");
     }
 
     public function update($id)
