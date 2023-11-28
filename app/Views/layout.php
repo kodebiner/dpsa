@@ -97,6 +97,7 @@
                                 </div>
                             </a>
                         </li> -->
+                        <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
                         <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                             <a class="tm-h4" href="project">
                                 <div class="uk-width-1-1 uk-margin-left">
@@ -107,6 +108,7 @@
                                 </div>
                             </a>
                         </li>
+                        <?php } ?>
                         <!-- <li class="tm-main-navbar">
                             <a class="tm-h4" href="produksi">
                                 <div class="uk-width-1-1 uk-margin-left">
@@ -202,16 +204,18 @@
                             </div>
                         </a>
                     </li> -->
-                <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
-                    <a class="tm-h4" href="project">
-                        <div class="uk-width-1-1 uk-margin-right">
-                            <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
+                <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="project">
+                            <div class="uk-width-1-1 uk-margin-right">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
+                                </div>
+                                <div class="uk-text-center"><?= lang('Global.manageProject') ?></div>
                             </div>
-                            <div class="uk-text-center"><?= lang('Global.manageProject') ?></div>
-                        </div>
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                <?php } ?>
                 <!-- <li class="tm-main-navbar">
                         <a class="tm-h4" href="produksi">
                             <div class="uk-width-1-1 uk-margin-right">

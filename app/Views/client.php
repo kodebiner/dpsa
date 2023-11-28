@@ -322,7 +322,7 @@
         <div class="uk-modal-dialog uk-margin-auto-vertical">
             <div class="uk-modal-content">
                 <div class="uk-modal-header">
-                    <h5 class="uk-modal-title" id="editdata"><?= lang('Global.updateClient') ?></h5>
+                    <h5 class="uk-modal-title" id="editdata"><?= lang('Global.editClient') ?></h5>
                 </div>
 
                 <div class="uk-modal-body">
@@ -420,6 +420,7 @@
     </div>
 <?php } ?>
 <!-- End Of Modal Edit -->
+
 <?php foreach ($users as $user) { ?>
     <script>
         $(document).ready(function() {
