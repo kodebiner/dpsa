@@ -24,7 +24,7 @@
             </div>
         </div>
     <?php } else { ?>
-        <h3 class="tm-h3 uk-text-center"><?= lang('Global.clientList') ?></h3>
+        <h3 class="tm-h3 uk-text-center">Daftar MDL</h3>
         <div class="uk-child-width-auto uk-flex-center" uk-grid>
             <div>
                 <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
@@ -76,7 +76,7 @@
         <div id="filter" class="uk-margin" hidden>
             <form id="searchform" action="mdl" method="GET">
                 <div class="uk-margin-small uk-flex uk-flex-center">
-                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
                 </div>
                 <div class="uk-margin-small uk-flex uk-flex-center">
                     <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
@@ -84,6 +84,7 @@
                         <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Unit</option>
                         <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Meter Lari</option>
                         <option value="3" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '3') ? 'selected' : '') ?>>Meter Persegi</option>
+                    </select>
                 </div>
                 <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                     <div><?= lang('Global.display') ?></div>

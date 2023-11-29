@@ -234,6 +234,7 @@
         </form>
     </div>
 <?php } ?>
+
 <script>
     document.getElementById('rolesearch').addEventListener("change", submitform);
     document.getElementById('search').addEventListener("change", submitform);
@@ -243,6 +244,7 @@
         document.getElementById('searchform').submit();
     };
 </script>
+
 <div class="uk-overflow-auto uk-margin">
     <table class="uk-table uk-table-middle uk-table-large uk-table-hover uk-table-divider">
         <thead>
