@@ -95,9 +95,9 @@ $routes->group('rab',['filter' => 'login'], function ($routes) {
 $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Mdl::index');
     $routes->post('create', 'Mdl::create');
-    // $routes->post('update/(:num)', 'Mdl::update/$1');
+    $routes->post('update/(:num)', 'Mdl::update/$1');
     // $routes->post('delete/(:num)', 'Mdl::delete/$1');
-    // $routes->get('delete/(:num)', 'Mdl::delete/$1');
+    $routes->get('delete/(:num)', 'Mdl::delete/$1');
 });
 
 // Account

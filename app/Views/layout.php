@@ -98,16 +98,28 @@
                             </a>
                         </li> -->
                         <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
-                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
-                            <a class="tm-h4" href="project">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/project.svg" uk-svg>
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="project">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/project.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Pengelolaan Proyek</div>
                                     </div>
-                                    <div class="uk-text-center">Pengelolaan Proyek</div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        <?php } ?>
+                        <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="mdl">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Pengelolaan Proyek</div>
+                                    </div>
+                                </a>
+                            </li>
                         <?php } ?>
                         <!-- <li class="tm-main-navbar">
                             <a class="tm-h4" href="produksi">
@@ -212,6 +224,18 @@
                                     <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
                                 </div>
                                 <div class="uk-text-center"><?= lang('Global.manageProject') ?></div>
+                            </div>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="mdl">
+                            <div class="uk-width-1-1 uk-margin-right">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
+                                </div>
+                                <div class="uk-text-center">MDL</div>
                             </div>
                         </a>
                     </li>
