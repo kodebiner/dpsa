@@ -116,7 +116,7 @@
                                         <div class="uk-width-1-1 uk-flex uk-flex-center">
                                             <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
                                         </div>
-                                        <div class="uk-text-center">Pengelolaan Proyek</div>
+                                        <div class="uk-text-center">MDL</div>
                                     </div>
                                 </a>
                             </li>
