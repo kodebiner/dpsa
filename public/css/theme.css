@@ -2334,7 +2334,8 @@ select.uk-form-width-xsmall {
 .uk-card-primary {
     background-color: #007ec8;
     color: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .08)
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    border-radius: 20px;
 }
 
 .uk-card-primary .uk-card-title {
@@ -2349,7 +2350,8 @@ select.uk-form-width-xsmall {
 .uk-card-secondary {
     background-color: #222;
     color: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .08)
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    border-radius: 20px;
 }
 
 .uk-card-secondary .uk-card-title {

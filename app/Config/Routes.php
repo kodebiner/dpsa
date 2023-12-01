@@ -41,6 +41,10 @@ $routes->group('/', static function ($routes) {
     $routes->post($reservedRoutes['reset-password'], 'Auth::attemptReset');
 });
 
+$routes->group('clientreg', static function ($routes) {
+    $routes->get('', 'Clientregister::index');
+});
+
 $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Home::index');
     $routes->get('dashboard/(:num)', 'Home::clientdashboard/$1');
