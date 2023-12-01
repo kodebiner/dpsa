@@ -43,23 +43,12 @@ class Mdl extends BaseController
 
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('mdl.name', $input['search']);
-                $this->builder->orLike('mdl.denomination', $input['search']);
                 $this->builder->orLike('mdl.price', $input['search']);
-            }
-            if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
-                $this->builder->where('denomination', $input['rolesearch']);
             }
             $this->builder->select('mdl.id as id, mdl.name as name, mdl.length as length, mdl.height as height, mdl.width as width, mdl.volume as volume, mdl.denomination as denomination, mdl.price as price');
             $query =   $this->builder->get($perpage, $offset)->getResultArray();
 
             $total = $this->builder->countAllResults();
-            // dd($total);
-
-            // Find Model
-            $MdlModel   = new MdlModel;
-
-            // Populating Data
-            $mdls = $MdlModel->findAll();
 
             $data = $this->data;
             $data['title']          =   "MDL";

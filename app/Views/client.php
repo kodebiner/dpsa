@@ -41,7 +41,7 @@
 
 <!-- Modal Add -->
 <div uk-modal class="uk-flex-top" id="tambahdata">
-    <div class="uk-modal-dialog uk-margin-auto-vertical">
+    <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
         <div class="uk-modal-content">
             <div class="uk-modal-header">
                 <h5 class="uk-modal-title" id="tambahdata"><?= lang('Global.Addclient') ?></h5>
@@ -319,7 +319,7 @@
 <!-- Modal Edit -->
 <?php foreach ($users as $user) { ?>
     <div uk-modal class="uk-flex-top" id="editdata<?= $user->id ?>">
-        <div class="uk-modal-dialog uk-margin-auto-vertical">
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
             <div class="uk-modal-content">
                 <div class="uk-modal-header">
                     <h5 class="uk-modal-title" id="editdata"><?= lang('Global.editClient') ?></h5>

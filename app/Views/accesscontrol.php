@@ -10,7 +10,7 @@
         </div>
 
         <div id="modaladd" uk-modal>
-            <div class="uk-modal-dialog">
+            <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <div class="uk-modal-header">
                     <h2 class="uk-modal-title">Add Permissions</h2>
@@ -79,7 +79,7 @@
 
         <!-- update permission modal -->
         <div id="modalupdate<?= $group->id; ?>" uk-modal>
-            <div class="uk-modal-dialog">
+            <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <button class="uk-modal-close-default" type="button" uk-close></button>
 
                 <div class="uk-modal-header">

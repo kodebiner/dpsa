@@ -1790,6 +1790,23 @@ select.uk-form-width-xsmall {
     color: #fff
 }
 
+.uk-button-tersier {
+    background-color: #f08519;
+    color: #fff;
+    border: 1px solid transparent
+}
+
+.uk-button-tersier:hover {
+    background-color: #ce6f10;
+    color: #fff
+}
+
+.uk-button-tersier.uk-active,
+.uk-button-tersier:active {
+    background-color: #9b4e01;
+    color: #fff
+}
+
 .uk-button-danger {
     background-color: #f0506e;
     color: #fff;
@@ -9485,6 +9502,62 @@ video) {
     color: #666
 }
 
+.tm-navbar-container:not(.uk-navbar-transparent) .uk-button-tersier,
+.uk-card-primary.uk-card-body .uk-button-tersier,
+.uk-card-primary>:not([class*=uk-card-media]) .uk-button-tersier,
+.uk-card-secondary.uk-card-body .uk-button-tersier,
+.uk-card-secondary>:not([class*=uk-card-media]) .uk-button-tersier,
+.uk-light .uk-button-tersier:not([class*=uk-preserve-color]),
+.uk-overlay-primary .uk-button-tersier,
+.uk-section-primary:not(.uk-preserve-color) .uk-button-tersier,
+.uk-section-secondary:not(.uk-preserve-color) .uk-button-tersier,
+.uk-tile-primary:not(.uk-preserve-color) .uk-button-tersier,
+.uk-tile-secondary:not(.uk-preserve-color) .uk-button-tersier {
+    background-color: #fff;
+    color: #666
+}
+
+.tm-navbar-container:not(.uk-navbar-transparent) .uk-button-tersier:hover,
+.uk-card-primary.uk-card-body .uk-button-tersier:hover,
+.uk-card-primary>:not([class*=uk-card-media]) .uk-button-tersier:hover,
+.uk-card-secondary.uk-card-body .uk-button-tersier:hover,
+.uk-card-secondary>:not([class*=uk-card-media]) .uk-button-tersier:hover,
+.uk-light .uk-button-tersier:hover,
+.uk-overlay-primary .uk-button-tersier:hover,
+.uk-section-primary:not(.uk-preserve-color) .uk-button-tersier:hover,
+.uk-section-secondary:not(.uk-preserve-color) .uk-button-tersier:hover,
+.uk-tile-primary:not(.uk-preserve-color) .uk-button-tersier:hover,
+.uk-tile-secondary:not(.uk-preserve-color) .uk-button-tersier:hover {
+    background-color: #f2f2f2;
+    color: #666
+}
+
+.tm-navbar-container:not(.uk-navbar-transparent) .uk-button-tersier.uk-active,
+.tm-navbar-container:not(.uk-navbar-transparent) .uk-button-tersier:active,
+.uk-card-primary.uk-card-body .uk-button-tersier.uk-active,
+.uk-card-primary.uk-card-body .uk-button-tersier:active,
+.uk-card-primary>:not([class*=uk-card-media]) .uk-button-tersier.uk-active,
+.uk-card-primary>:not([class*=uk-card-media]) .uk-button-tersier:active,
+.uk-card-secondary.uk-card-body .uk-button-tersier.uk-active,
+.uk-card-secondary.uk-card-body .uk-button-tersier:active,
+.uk-card-secondary>:not([class*=uk-card-media]) .uk-button-tersier.uk-active,
+.uk-card-secondary>:not([class*=uk-card-media]) .uk-button-tersier:active,
+.uk-light .uk-button-tersier.uk-active,
+.uk-light .uk-button-tersier:active,
+.uk-overlay-primary .uk-button-tersier.uk-active,
+.uk-overlay-primary .uk-button-tersier:active,
+.uk-section-primary:not(.uk-preserve-color) .uk-button-tersier.uk-active,
+.uk-section-primary:not(.uk-preserve-color) .uk-button-tersier:active,
+.uk-section-secondary:not(.uk-preserve-color) .uk-button-tersier.uk-active,
+.uk-section-secondary:not(.uk-preserve-color) .uk-button-tersier:active,
+.uk-tile-primary:not(.uk-preserve-color) .uk-button-tersier.uk-active,
+.uk-tile-primary:not(.uk-preserve-color) .uk-button-tersier:active,
+.uk-tile-secondary:not(.uk-preserve-color) .uk-button-tersier.uk-active,
+.uk-tile-secondary:not(.uk-preserve-color) .uk-button-tersier:active {
+    background-color: #e6e6e6;
+    color: #666
+}
+
 .tm-navbar-container:not(.uk-navbar-transparent) .uk-button-text,
 .uk-card-primary.uk-card-body .uk-button-text,
 .uk-card-primary>:not([class*=uk-card-media]) .uk-button-text,
@@ -11823,6 +11896,12 @@ li.tm-main-navbar>a>svg {
     color: #f08519;
 }
 
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
-
-  
+* html .ui-autocomplete {
+    height: 100px;
+}

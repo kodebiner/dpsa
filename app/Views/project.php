@@ -242,7 +242,7 @@
 
     <!-- update project modal -->
     <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
-        <div class="uk-modal-dialog">
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
             <button class="uk-modal-close-default" type="button" uk-close></button>
 
             <div class="uk-modal-header uk-margin">
@@ -354,7 +354,7 @@
 
 <!-- update progress modal -->
 <div id="updaterab" uk-modal>
-    <div class="uk-modal-dialog">
+    <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header uk-margin">
             <h2 class="uk-modal-title"> Update Progress</h2>

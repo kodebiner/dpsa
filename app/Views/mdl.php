@@ -5,35 +5,56 @@
 <?= $this->endSection() ?>
 <?= $this->section('main') ?>
 
-<!-- Page Heading -->
 <?php if ($this->data['authorize']->hasPermission('admin.mdl.read', $this->data['uid'])) { ?>
+    <!-- Page Heading -->
     <?php if ($ismobile === false) { ?>
         <div class="tm-card-header uk-light uk-margin-remove-left">
-            <div uk-grid class="uk-flex-middle">
-                <div class="uk-width-1-2@m">
+            <div uk-grid class="uk-flex-middle uk-child-width-1-2@m">
+                <div>
                     <h3 class="tm-h3">Daftar MDL</h3>
                 </div>
 
-                <!-- Button Trigger Modal Add -->
-                <?php if ($this->data['authorize']->hasPermission('admin.mdl.create', $this->data['uid'])) { ?>
-                    <div class="uk-width-1-2@m uk-text-right@m">
-                        <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah MDL</button>
+                <div>
+                    <div class="uk-child-width-1-4@m uk-text-right uk-flex-right" uk-grid>
+                        <!-- Button Paket -->
+                        <div class="">
+                            <a class="uk-button uk-button-tersier uk-preserve-color" href="paket">Kelola Paket</a>
+                        </div>
+                        <!-- Button Paket End -->
+
+                        <!-- Button Trigger Modal Add -->
+                        <?php if ($this->data['authorize']->hasPermission('admin.mdl.create', $this->data['uid'])) { ?>
+                            <div class="">
+                                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah MDL</button>
+                            </div>
+                        <?php } ?>
+                        <!-- End Of Button Trigger Modal Add -->
                     </div>
-                <?php } ?>
-                <!-- End Of Button Trigger Modal Add -->
+                </div>
             </div>
         </div>
     <?php } else { ?>
         <h3 class="tm-h3 uk-text-center">Daftar MDL</h3>
         <div class="uk-child-width-auto uk-flex-center" uk-grid>
+            <!-- Button Paket -->
             <div>
-                <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
+                <a class="uk-button uk-button-tersier uk-preserve-color" href="paket">Kelola Paket</a>
             </div>
+            <!-- Button Paket End -->
+
+            <!-- Button Trigger Modal Add -->
             <?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
                 <div>
                     <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah MDL</button>
                 </div>
             <?php } ?>
+            <!-- Button Trigger Modal Add End -->
+
+            <!-- Button Filter -->
+            <div>
+                <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
+            </div>
+            <!-- Button Filter End -->
         </div>
     <?php } ?>
     <!-- End Of Page Heading -->
@@ -46,14 +67,6 @@
                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                         <div>Cari :</div>
                         <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
-                        <div>
-                            <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                                <option value="0" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '0') ? 'selected' : '') ?>>satuan</option>
-                                <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Unit</option>
-                                <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Meter Lari</option>
-                                <option value="3" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '3') ? 'selected' : '') ?>>Meter Persegi</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div>
@@ -78,14 +91,6 @@
                 <div class="uk-margin-small uk-flex uk-flex-center">
                     <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
                 </div>
-                <div class="uk-margin-small uk-flex uk-flex-center">
-                    <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                        <option value="0" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '0') ? 'selected' : '') ?>>satuan</option>
-                        <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Unit</option>
-                        <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Meter Lari</option>
-                        <option value="3" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '3') ? 'selected' : '') ?>>Meter Persegi</option>
-                    </select>
-                </div>
                 <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                     <div><?= lang('Global.display') ?></div>
                     <div>
@@ -104,7 +109,6 @@
 
     <!-- script form -->
     <script>
-        document.getElementById('rolesearch').addEventListener("change", submitform);
         document.getElementById('search').addEventListener("change", submitform);
         document.getElementById('perpage').addEventListener("change", submitform);
 
@@ -168,7 +172,7 @@
     <!-- Modal Add MDL -->
     <?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
         <div id="modaladd" uk-modal>
-            <div class="uk-modal-dialog" uk-overflow-auto>
+            <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-header">
                     <h2 class="uk-modal-title">Tambah MDL</h2>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -334,7 +338,7 @@
     <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
         <?php foreach ($mdls as $mdl) { ?>
             <div id="modalupdate<?= $mdl['id'] ?>" uk-modal>
-                <div class="uk-modal-dialog" uk-overflow-auto>
+                <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <div class="uk-modal-header">
                         <h2 class="uk-modal-title">Ubah MDL</h2>
                         <button class="uk-modal-close-default" type="button" uk-close></button>

@@ -32,7 +32,7 @@
     <!-- add project modal -->
     <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
     <div id="modaladd" uk-modal>
-        <div class="uk-modal-dialog" uk-overflow-auto>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <div class="uk-modal-header uk-margin">
                 <h2 class="uk-modal-title"><?= lang('Global.Addproject') ?></h2>
@@ -293,7 +293,7 @@
             <!-- update project modal -->
             <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
                 <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
-                    <div class="uk-modal-dialog" uk-overflow-auto>
+                    <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                         <button class="uk-modal-close-default" type="button" uk-close></button>
                         <div class="uk-modal-header uk-margin">
                             <h2 class="uk-modal-title"><?= lang('Global.editProject') ?></h2>
