@@ -51,6 +51,7 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('logedin', 'Home::logedin');
 });
 
+// Users
 $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('','User::index');
     // Users
@@ -65,6 +66,14 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('delete/access-control/(:num)','User::deleteaccess/$1');
     // Client
     $routes->get('client','User::client');
+    $routes->get('deleteclient/(:num)','User::deleteclient/$1');
+});
+
+// Client
+$routes->group('client',['filter' => 'login'], function ($routes){
+    $routes->get('','Client::index');
+    $routes->post('create','Client::create');
+    // $routes->get('client','User::client');
     $routes->get('deleteclient/(:num)','User::deleteclient/$1');
 });
 

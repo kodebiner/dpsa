@@ -33,9 +33,11 @@ class User extends BaseController
             $pager = \Config\Services::pager();
 
             // Calling Model
+            $UserModel              = new UserModel();
             $GroupModel             = new GroupModel();
             $PermissionModel        = new PermissionModel();
 
+            $users = $UserModel->findAll();
             // Populating data
             $input = $this->request->getGet();
 
@@ -52,10 +54,6 @@ class User extends BaseController
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
             $this->builder->where('users.id !=', $this->data['uid']);
-            $this->builder->where('auth_groups.name !=', 'superuser');
-            $this->builder->where('auth_groups.name !=', 'owner');
-            $this->builder->where('auth_groups.name !=', 'client pusat');
-            $this->builder->where('auth_groups.name !=', 'client cabang');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('users.username', $input['search']);
                 $this->builder->orLike('users.firstname', $input['search']);
@@ -64,26 +62,32 @@ class User extends BaseController
             if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
                 $this->builder->where('auth_groups.id', $input['rolesearch']);
             }
-            $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, auth_groups.id as group_id, auth_groups.name as role');
+            $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $query =   $this->builder->get($perpage, $offset)->getResult();
 
             $total = $this->builder
                 ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
                 ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
                 ->where('users.id !=', $this->data['uid'])
-                ->where('auth_groups.name !=', 'superuser')
-                ->where('auth_groups.name !=', 'owner')
-                ->where('auth_groups.name !=', 'client pusat')
-                ->where('auth_groups.name !=', 'client cabang')
+                ->where('auth_groups.name', 'client pusat')
+                ->orWhere('auth_groups.name', 'client cabang')
                 ->countAllResults();
+
+            $parentid = [];
+            foreach ($users as $user) {
+                $parentid[] = [
+                    'id' => $user->id,
+                    'name' => $user->username,
+                ];
+            }
 
             // Parsing data to view
             $data                   = $this->data;
             $data['title']          = lang('Global.usersList');
             $data['description']    = lang('Global.usersListDesc');
-            $data['roles']          = $GroupModel->where('name !=', 'client cabang')->where('name !=', 'client pusat')->find();
-            $data['permissions']    = $PermissionModel->findAll();
+            $data['roles']          = $GroupModel->findAll();
             $data['users']          = $query;
+            $data['parent']         = $parentid;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
             $data['input']          = $input;
 
@@ -555,13 +559,13 @@ class User extends BaseController
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
             $this->builder->where('users.id !=', $this->data['uid']);
-            $this->builder->where('auth_groups.name !=', 'superuser');
-            $this->builder->where('auth_groups.name !=', 'owner');
-            $this->builder->where('auth_groups.name !=', 'admin');
-            $this->builder->where('auth_groups.name !=', 'marketing');
-            $this->builder->where('auth_groups.name !=', 'design');
-            $this->builder->where('auth_groups.name !=', 'production');
-            $this->builder->where('auth_groups.name !=', 'guests');
+            // $this->builder->where('auth_groups.name !=', 'superuser');
+            // $this->builder->where('auth_groups.name !=', 'owner');
+            // $this->builder->where('auth_groups.name !=', 'admin');
+            // $this->builder->where('auth_groups.name !=', 'marketing');
+            // $this->builder->where('auth_groups.name !=', 'design');
+            // $this->builder->where('auth_groups.name !=', 'production');
+            // $this->builder->where('auth_groups.name !=', 'guests');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('users.username', $input['search']);
                 $this->builder->orLike('users.firstname', $input['search']);
