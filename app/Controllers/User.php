@@ -348,7 +348,7 @@ class User extends BaseController
             $parid = [];
             foreach ($users as $child) {
                 if ($child->parentid === $id) {
-                    $parid = [
+                    $parid[] = [
                         'id' => $child->id,
                     ];
                 }

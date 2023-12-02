@@ -56,8 +56,8 @@
                             </li>
                         <?php } ?>
                         <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
-                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
-                                <a class="tm-h4" href="users/client">
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'client')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="client">
                                     <div class="uk-width-1-1 uk-margin-left">
                                         <div class="uk-width-1-1 uk-flex uk-flex-center">
                                             <img class="uk-width-1-6" src="img/layout/client.svg" uk-svg>
@@ -175,8 +175,8 @@
                     </li>
                 <?php } ?>
                 <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
-                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'client')) ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="users/client">
+                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'client') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="client">
                             <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/client.svg" uk-svg>

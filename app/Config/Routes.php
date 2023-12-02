@@ -65,21 +65,20 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->post('update/access/(:num)','User::updateaccess/$1');
     $routes->get('delete/access-control/(:num)','User::deleteaccess/$1');
     // Client
-    $routes->get('client','User::client');
-    $routes->get('deleteclient/(:num)','User::deleteclient/$1');
+    // $routes->get('client','User::client');
+    // $routes->get('deleteclient/(:num)','User::deleteclient/$1');
 });
 
 // Client
 $routes->group('client',['filter' => 'login'], function ($routes){
     $routes->get('','Client::index');
     $routes->post('create','Client::create');
-    // $routes->get('client','User::client');
-    $routes->get('deleteclient/(:num)','User::deleteclient/$1');
+    $routes->post('update/(:num)','Client::update/$1');
+    $routes->get('delete/(:num)','Client::delete/$1');
 });
 
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
-
     // $routes->get('', 'Project::index');
     // $routes->post('create', 'Project::create');
     // $routes->post('update/(:num)', 'Project::update/$1');
