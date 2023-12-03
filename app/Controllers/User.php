@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\GroupUserModel;
 use App\Models\PermissionModel;
@@ -36,9 +37,13 @@ class User extends BaseController
             $UserModel              = new UserModel();
             $GroupModel             = new GroupModel();
             $PermissionModel        = new PermissionModel();
+            $CompanyModel           = new CompanyModel();
 
-            $users = $UserModel->findAll();
             // Populating data
+            $users = $UserModel->findAll();
+            $company = $CompanyModel->findAll();
+
+            // Initilize
             $input = $this->request->getGet();
 
             if (isset($input['perpage'])) {
@@ -90,6 +95,7 @@ class User extends BaseController
             $data['parent']         = $parentid;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
             $data['input']          = $input;
+            $data['Companys']       = $company;
 
             return view('users', $data);
         } else {
@@ -140,8 +146,10 @@ class User extends BaseController
             $newUser->lastname  = $input['lastname'];
             $newUser->password  = $input['password'];
             $newUser->active    = 1;
-            if (!empty($input['child'])) {
-                $newUser->parentid = $input['child'];
+            if (!empty($input['compid'])) {
+                $newUser->parentid = $input['compid'];
+            }else{
+                $newUser->parentid = NULL;
             }
 
             // Save new user
@@ -151,18 +159,22 @@ class User extends BaseController
             $userId = $UserModel->getInsertID();
 
             // Adding new user to group
-            if (isset($input['parent'])) {
-                $authorize->addUserToGroup($userId, $input['parent']);
-            } elseif (isset($input['role'])) {
+            // if (isset($input['parent'])) {
+            //     $authorize->addUserToGroup($userId, $input['parent']);
+            // } elseif (isset($input['role'])) {
+            //     $authorize->addUserToGroup($userId, $input['role']);
+            // }
+
+            if (isset($input['role'])){
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
             // Return back to index
-            if (isset($input['parent'])) {
-                return redirect()->to('users/client')->with('massage', lang('Global.saved'));
-            } elseif (empty($input['parent'])) {
+            // if (isset($input['parent'])) {
+            //     return redirect()->to('users/client')->with('massage', lang('Global.saved'));
+            // } elseif (empty($input['parent'])) {
                 return redirect()->to('users')->with('massage', lang('Global.saved'));
-            }
+            // }
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -229,18 +241,30 @@ class User extends BaseController
             } else {
                 $updateUser->lastname  = $user->lastname;
             }
-            if (!empty($input['child'])) {
-                $updateUser->parentid    = $input['child'];
+            if (!empty($input['compid'])) {
+                $updateUser->parentid    = $input['compid'];
             } else {
-                $updateUser->parentid  = $user->parentid;
+                $updateUser->parentid  = NULL;
             }
-            if (isset($input['parent'])) {
-                if ($input['parent'] === $pusatid) {
-                    $updateUser->parentid = Null;
-                }
-            } elseif (isset($input['role'])) {
-                $updateUser->parentid = Null;
-            }
+            // if (isset($input['parent'])) {
+            //     if ($input['parent'] === $pusatid) {
+            //         $updateUser->parentid = Null;
+            //     }
+            // } elseif (isset($input['role'])) {
+            //     $updateUser->parentid = Null;
+            // }
+            // if (!empty($input['child'])) {
+            //     $updateUser->parentid    = $input['child'];
+            // } else {
+            //     $updateUser->parentid  = $user->parentid;
+            // }
+            // if (isset($input['parent'])) {
+            //     if ($input['parent'] === $pusatid) {
+            //         $updateUser->parentid = Null;
+            //     }
+            // } elseif (isset($input['role'])) {
+            //     $updateUser->parentid = Null;
+            // }
 
             // Reset password
             if (!empty($input['password'])) {
