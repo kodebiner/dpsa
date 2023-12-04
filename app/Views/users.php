@@ -153,13 +153,15 @@
                                 <script type="text/javascript">
                                     $(function() {
                                         var company = [
-                                            <?php foreach ($Companys as $comp) {
-                                                if ($comp['parentid'] === "0") {
-                                                    $rsklasification = $comp['rsname'] . " (pusat)";
-                                                } else {
-                                                    $rsklasification = $comp['rsname'] . " (cabang)";
+                                            <?php if (!empty($Companys)) {
+                                                foreach ($Companys as $comp) {
+                                                    if ($comp['parentid'] === "0") {
+                                                        $rsklasification = $comp['rsname'] . " (pusat)";
+                                                    } else {
+                                                        $rsklasification = $comp['rsname'] . " (cabang)";
+                                                    }
+                                                    echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                 }
-                                                echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                             } ?>
                                         ];
                                         $("#company").autocomplete({
@@ -320,19 +322,23 @@
                 <?php foreach ($users as $user) {
                     $client = "";
                     $pusat = "";
-                    foreach ($Companys as $comp) {
-                        if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
-                            $client = $comp['rsname'] . " Pusat";
-                        } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
-                            foreach ($Companys as $parent) {
-                                if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
-                                    $pusat = $parent['rsname'];
+                    if (!empty($Companys)) {
+                        foreach ($Companys as $comp) {
+                            if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
+                                $client = $comp['rsname'] . " Pusat";
+                            } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
+                                foreach ($Companys as $parent) {
+                                    if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
+                                        $pusat = $parent['rsname'];
+                                    }
                                 }
+                                $client = $comp['rsname'] . "</br> Cabang " . $pusat;
+                            } elseif ($user->parent === null) {
+                                $client = " DPSA ";
                             }
-                            $client = $comp['rsname'] . "</br> Cabang " . $pusat;
-                        } elseif ($user->parent === null) {
-                            $client = " DPSA ";
                         }
+                    } else {
+                        $client = " DPSA ";
                     } ?>
 
                     <tr>
@@ -389,8 +395,7 @@
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="id<?= $user->id ?>" value="<?= $user->id; ?>">
                                 <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
-                                <input type="hidden" name="status" id="statusval" value="<?= $comp['status'] ?>">
-
+                                <input type="hidden" name="status" id="statusval" value="<?= $user->status ?>">
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="username">Nama</label>
                                     <div class="uk-form-controls">
@@ -497,18 +502,20 @@
                                 <?php
                                 $client = "";
                                 $pusat = "";
-                                foreach ($Companys as $comp) {
-                                    if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
-                                        $client = $comp['rsname'] . " Pusat";
-                                    } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
-                                        foreach ($Companys as $parent) {
-                                            if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
-                                                $pusat = $parent['rsname'];
+                                if (!empty($Companys)) {
+                                    foreach ($Companys as $comp) {
+                                        if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
+                                            $client = $comp['rsname'] . " Pusat";
+                                        } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
+                                            foreach ($Companys as $parent) {
+                                                if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
+                                                    $pusat = $parent['rsname'];
+                                                }
                                             }
+                                            $client = $comp['rsname'] . " Cabang " . $pusat;
+                                        } elseif ($user->parent === null) {
+                                            $client = " DPSA ";
                                         }
-                                        $client = $comp['rsname'] . " Cabang " . $pusat;
-                                    } elseif ($user->parent === null) {
-                                        $client = " DPSA ";
                                     }
                                 } ?>
 
@@ -522,13 +529,15 @@
                                     <script type="text/javascript">
                                         $(function() {
                                             var company = [
-                                                <?php foreach ($Companys as $comp) {
-                                                    if ($comp['parentid'] === "0") {
-                                                        $rsklasification = $comp['rsname'] . " (pusat)";
-                                                    } else {
-                                                        $rsklasification = $comp['rsname'] . " (cabang)";
+                                                <?php if (!empty($Companys)) {
+                                                    foreach ($Companys as $comp) {
+                                                        if ($comp['parentid'] === "0") {
+                                                            $rsklasification = $comp['rsname'] . " (pusat)";
+                                                        } else {
+                                                            $rsklasification = $comp['rsname'] . " (cabang)";
+                                                        }
+                                                        echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                     }
-                                                    echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                 } ?>
                                             ];
                                             $("#company<?= $user->id; ?>").autocomplete({
@@ -542,19 +551,19 @@
                                     </script>
                                 </div>
 
+
                                 <label class="uk-form-label" for="status">Status</label>
                                 <label class="switch">
                                     <?php if ($user->status != "0") { ?>
-                                        <input id="status<?= $comp['id'] ?>" type="checkbox" checked>
+                                        <input id="status<?= $user->id ?>" type="checkbox" checked>
                                     <?php } else { ?>
-                                        <input id="status<?= $comp['id'] ?>" type="checkbox">
+                                        <input id="status<?= $user->id ?>" type="checkbox">
                                     <?php } ?>
                                     <span class="slider round"></span>
                                 </label>
-
                                 <script>
                                     $(document).ready(function() {
-                                        $("input[id='status<?= $comp['id'] ?>']").change(function() {
+                                        $("input[id='status<?= $user->id ?>']").change(function() {
                                             if ($(this).is(':checked')) {
                                                 $("input[id='statusval']").val("1");
                                             } else {
