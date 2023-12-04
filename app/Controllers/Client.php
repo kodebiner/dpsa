@@ -16,6 +16,7 @@ class Client extends BaseController
     protected $db, $builder;
     protected $auth;
     protected $data;
+    protected $helpers = ['form'];
     protected $config;
 
     public function __construct()
@@ -97,10 +98,59 @@ class Client extends BaseController
         if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) {
 
             // Calling Models
+            $validation = \Config\Services::validation();
             $CompanyModel = new CompanyModel();
 
             // Initialize
             $input = $this->request->getPost();
+
+            // Validation Rules
+            $rules = [
+                'rsname' => [
+                    'label'  => 'Nama Rumah Sakit / Nama Alias',
+                    'rules'  => 'required|is_unique[company.rsname]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'ptname' => [
+                    'label'  => 'Nama PT',
+                    'rules'  => 'required|is_unique[company.ptname]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'address' => [
+                    'label'  => 'Alamat',
+                    'rules'  => 'required|is_unique[company.address]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'phone' => [
+                    'label'  => 'No Telepon',
+                    'rules'  => 'required|is_unique[company.phone]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'npwp' => [
+                    'label'  => 'NPWP',
+                    'rules'  => 'required|is_unique[company.npwp]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
 
             $data = [
                 'rsname'    => $input['rsname'],
@@ -127,6 +177,81 @@ class Client extends BaseController
 
             // Initialize
             $input = $this->request->getPost();
+            $company = $CompanyModel->find($id);
+
+            // Validation Rules
+            if ($input['rsname'] === $company['rsname']) {
+                $is_unique =  '';
+            } else {
+                $is_unique =  '|is_unique[company.rsname]';
+            }
+            if ($input['ptname'] === $company['ptname']) {
+                $ptis_unique =  '';
+            } else {
+                $ptis_unique =  '|is_unique[company.ptname]';
+            }
+            if ($input['address'] === $company['address']) {
+                $addressis_unique =  '';
+            } else {
+                $addressis_unique =  '|is_unique[company.address]';
+            }
+            if ($input['notelp'] === $company['phone']) {
+                $phoneis_unique =  '';
+            } else {
+                $phoneis_unique =  '|is_unique[company.phone]';
+            }
+            if ($input['npwp'] === $company['npwp']) {
+                $npwpis_unique =  '';
+            } else {
+                $npwpis_unique =  '|is_unique[company.npwp]';
+            }
+
+            $rules = [
+                'rsname' => [
+                    'label'  => 'Nama Rumah Sakit / Nama Alias',
+                    'rules'  => 'required'. $is_unique ,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'ptname' => [
+                    'label'  => 'Nama PT',
+                    'rules'  => 'required'.$ptis_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'address' => [
+                    'label'  => 'Alamat',
+                    'rules'  => 'required'.$addressis_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'notelp' => [
+                    'label'  => 'No Telepon',
+                    'rules'  => 'required'.$phoneis_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'npwp' => [
+                    'label'  => 'NPWP',
+                    'rules'  => 'required'.$npwpis_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
 
             $data = [
                 'id'        => $id,

@@ -289,148 +289,148 @@
 
     <!-- Modal Edit -->
     <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
-    <?php foreach ($company as $comp) { ?>
-        <div uk-modal class="uk-flex-top" id="editdata<?= $comp['id'] ?>">
-            <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
-                <div class="uk-modal-content">
-                    <div class="uk-modal-header">
-                        <h5 class="uk-modal-title">Ubah Data Client</h5>
-                    </div>
-                    <div class="uk-modal-body">
-                        <form class="uk-form-stacked" role="form" action="client/update/<?= $comp['id'] ?>" method="post">
+        <?php foreach ($company as $comp) { ?>
+            <div uk-modal class="uk-flex-top" id="editdata<?= $comp['id'] ?>">
+                <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+                    <div class="uk-modal-content">
+                        <div class="uk-modal-header">
+                            <h5 class="uk-modal-title">Ubah Data Client</h5>
+                        </div>
+                        <div class="uk-modal-body">
+                            <form class="uk-form-stacked" role="form" action="client/update/<?= $comp['id'] ?>" method="post">
 
-                            <?= csrf_field() ?>
-                            <input type="hidden" name="id<?= $comp['id'] ?>" value="<?= $comp['id'] ?>">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="id<?= $comp['id'] ?>" value="<?= $comp['id'] ?>">
 
-                            <input type="hidden" name="status" id="statusval" value="<?= $comp['status'] ?>">
+                                <input type="hidden" name="status" id="statusval" value="<?= $comp['status'] ?>">
 
-                            <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="rsname">Nama Rumah Sakit</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="rsname" name="rsname" value="<?= $comp['rs'] ?>" placeholder="<?= $comp['rs'] ?>" />
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="rsname">Nama Rumah Sakit</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="rsname" name="rsname" value="<?= $comp['rs'] ?>" placeholder="<?= $comp['rs'] ?>" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin">
-                                <label class="uk-form-label" for="ptname">Nama PT</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" name="ptname" id="ptname" placeholder="<?= $comp['pt'] ?>" value="<?= $comp['pt'] ?>" class="uk-input" />
+                                <div class="uk-margin">
+                                    <label class="uk-form-label" for="ptname">Nama PT</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" name="ptname" id="ptname" placeholder="<?= $comp['pt'] ?>" value="<?= $comp['pt'] ?>" class="uk-input" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="address">Alamat</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="address" name="address" value="<?= $comp['address'] ?>" placeholder="<?= $comp['address'] ?>" />
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="address">Alamat</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="address" name="address" value="<?= $comp['address'] ?>" placeholder="<?= $comp['address'] ?>" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="lastname">NPWP</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="npwp" name="npwp" value="<?= $comp['npwp'] ?>" placeholder="<?= $comp['npwp'] ?>" />
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="lastname">NPWP</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="npwp" name="npwp" value="<?= $comp['npwp'] ?>" placeholder="<?= $comp['npwp'] ?>" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="lastname">No Telphone</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="notelp" name="notelp" value="<?= $comp['phone'] ?>" placeholder="<?= $comp['phone'] ?>" />
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="lastname">No Telphone</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="notelp" name="notelp" value="<?= $comp['phone'] ?>" placeholder="<?= $comp['phone'] ?>" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin">
-                                <label class="uk-form-label" for="parent">Keterangan</label>
-                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
-                                    <?php if ($comp['parent'] != "0") { ?>
-                                        <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox"> Pusat</label>
-                                        <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox" checked> Cabang</label>
-                                    <?php } else { ?>
-                                        <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox" checked> Pusat</label>
-                                        <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox"> Cabang</label>
-                                    <?php } ?>
+                                <div class="uk-margin">
+                                    <label class="uk-form-label" for="parent">Keterangan</label>
+                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
+                                        <?php if ($comp['parent'] != "0") { ?>
+                                            <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox"> Pusat</label>
+                                            <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox" checked> Cabang</label>
+                                        <?php } else { ?>
+                                            <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox" checked> Pusat</label>
+                                            <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox"> Cabang</label>
+                                        <?php } ?>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="uk-margin" id="parent<?= $comp['id'] ?>" hidden>
-                                <label class="uk-form-label" for="parent">Pilih Pusat</label>
-                                <div class="uk-form-controls">
-                                    <select class="uk-select" name="parent" id="select<?= $comp['id'] ?>">
-                                        <option value="" selected disabled>Daftar Pusat</option>
-                                        <?php
-                                        foreach ($roles as $role) {
-                                            if ($role['parentid'] == "0" && $role['id'] != $comp['id']) {
-                                                if ($role['id'] === $comp['parent']) {
-                                                    $selected = 'selected';
-                                                } else {
-                                                    $selected = "";
+                                <div class="uk-margin" id="parent<?= $comp['id'] ?>" hidden>
+                                    <label class="uk-form-label" for="parent">Pilih Pusat</label>
+                                    <div class="uk-form-controls">
+                                        <select class="uk-select" name="parent" id="select<?= $comp['id'] ?>">
+                                            <option value="" selected disabled>Daftar Pusat</option>
+                                            <?php
+                                            foreach ($roles as $role) {
+                                                if ($role['parentid'] == "0" && $role['id'] != $comp['id']) {
+                                                    if ($role['id'] === $comp['parent']) {
+                                                        $selected = 'selected';
+                                                    } else {
+                                                        $selected = "";
+                                                    }
+                                                    echo '<option value="' . $role['id'] . '" ' . $selected . '>' . $role['rsname'] . '</option>';
                                                 }
-                                                echo '<option value="' . $role['id'] . '" ' . $selected . '>' . $role['rsname'] . '</option>';
-                                            }
-                                        } ?>
-                                    </select>
+                                            } ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <label class="uk-form-label" for="status">Status</label>
-                            <label class="switch">
-                                <?php if ($comp['status'] != "0") { ?>
-                                    <input id="status<?= $comp['id'] ?>" type="checkbox" checked>
-                                <?php } else { ?>
-                                    <input id="status<?= $comp['id'] ?>" type="checkbox">
-                                <?php } ?>
-                                <span class="slider round"></span>
-                            </label>
+                                <label class="uk-form-label" for="status">Status</label>
+                                <label class="switch">
+                                    <?php if ($comp['status'] != "0") { ?>
+                                        <input id="status<?= $comp['id'] ?>" type="checkbox" checked>
+                                    <?php } else { ?>
+                                        <input id="status<?= $comp['id'] ?>" type="checkbox">
+                                    <?php } ?>
+                                    <span class="slider round"></span>
+                                </label>
 
 
-                            <script>
-                                $(document).ready(function() {
-                                    if ($("input[id='editroleclient cabang<?= $comp['id'] ?>']").is(':checked')) {
-                                        $("#parent<?= $comp['id'] ?>").removeAttr("hidden");
-                                        $("#select<?= $comp['id'] ?>").prop("required", true);
-                                    }
-
-                                    $("input[id='editroleclient cabang<?= $comp['id'] ?>']").change(function() {
-                                        if ($(this).is(':checked')) {
-                                            $("input[id='editroleclient pusat<?= $comp['id'] ?>']").prop("checked", false);
+                                <script>
+                                    $(document).ready(function() {
+                                        if ($("input[id='editroleclient cabang<?= $comp['id'] ?>']").is(':checked')) {
                                             $("#parent<?= $comp['id'] ?>").removeAttr("hidden");
                                             $("#select<?= $comp['id'] ?>").prop("required", true);
-                                        } else {
-                                            $("#editparent<?= $comp['id'] ?>").attr("hidden", true);
+                                        }
+
+                                        $("input[id='editroleclient cabang<?= $comp['id'] ?>']").change(function() {
+                                            if ($(this).is(':checked')) {
+                                                $("input[id='editroleclient pusat<?= $comp['id'] ?>']").prop("checked", false);
+                                                $("#parent<?= $comp['id'] ?>").removeAttr("hidden");
+                                                $("#select<?= $comp['id'] ?>").prop("required", true);
+                                            } else {
+                                                $("#editparent<?= $comp['id'] ?>").attr("hidden", true);
+                                                $("#select<?= $comp['id'] ?>").prop("required", false);
+                                                $("#select<?= $comp['id'] ?>").val("0");
+                                            }
+                                        });
+
+                                        $("input[id='editroleclient pusat<?= $comp['id'] ?>']").click(function() {
+                                            $("input[id='editroleclient cabang<?= $comp['id'] ?>']").prop("checked", false);
+                                            $("#parent<?= $comp['id'] ?>").attr("hidden", true);
                                             $("#select<?= $comp['id'] ?>").prop("required", false);
                                             $("#select<?= $comp['id'] ?>").val("0");
-                                        }
+                                        });
+
+                                        $("input[id='status<?= $comp['id'] ?>']").change(function() {
+                                            if ($(this).is(':checked')) {
+                                                $("input[id='statusval']").val("1");
+                                            } else {
+                                                $("input[id='statusval']").val("0");
+                                            }
+                                        });
+
                                     });
+                                </script>
 
-                                    $("input[id='editroleclient pusat<?= $comp['id'] ?>']").click(function() {
-                                        $("input[id='editroleclient cabang<?= $comp['id'] ?>']").prop("checked", false);
-                                        $("#parent<?= $comp['id'] ?>").attr("hidden", true);
-                                        $("#select<?= $comp['id'] ?>").prop("required", false);
-                                        $("#select<?= $comp['id'] ?>").val("0");
-                                    });
+                                <hr>
 
-                                    $("input[id='status<?= $comp['id'] ?>']").change(function() {
-                                        if ($(this).is(':checked')) {
-                                            $("input[id='statusval']").val("1");
-                                        } else {
-                                            $("input[id='statusval']").val("0");
-                                        }
-                                    });
-
-                                });
-                            </script>
-
-                            <hr>
-
-                            <div class="uk-margin">
-                                <button type="submit" value="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
-                            </div>
-                        </form>
+                                <div class="uk-margin">
+                                    <button type="submit" value="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    <?php } ?>
+        <?php } ?>
     <?php } ?>
     <!-- End Of Modal Edit -->
 <?php } ?>
