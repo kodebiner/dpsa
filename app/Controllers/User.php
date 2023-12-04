@@ -67,7 +67,7 @@ class User extends BaseController
             if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
                 $this->builder->where('auth_groups.id', $input['rolesearch']);
             }
-            $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $this->builder->select('users.id as id, users.username as username, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $query =   $this->builder->get($perpage, $offset)->getResult();
 
             $total = $this->builder
@@ -246,6 +246,12 @@ class User extends BaseController
             } else {
                 $updateUser->parentid  = NULL;
             }
+            if (!empty($input['status'])) {
+                $updateUser->active    = $input['status'];
+            } else {
+                $updateUser->active     = $updateUser->active;
+            }
+
             // if (isset($input['parent'])) {
             //     if ($input['parent'] === $pusatid) {
             //         $updateUser->parentid = Null;

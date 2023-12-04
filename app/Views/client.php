@@ -256,9 +256,9 @@
                         <td class="uk-text-center">
                             <?php
                             if ($comp['status'] === "0") {
-                                echo '<div class="uk-text-danger" style="border-style: solid; border-color: #ff0000;"> Non Aktif </div>';
+                                echo '<div class="uk-text-light" style="border-style: solid; border-color: #ff0000; color: white; background-color:#ff0000;  font-weight: bold;"> Non Aktif </div>';
                             } else {
-                                echo '<div class="uk-text-primary" style="border-style: solid; border-color: #007Ec8;"> Aktif </div>';
+                                echo '<div class="uk-text-light" style="border-style: solid; color: white; background-color:#32CD32;  font-weight: bold;"> Aktif </div>';
                             }
                             ?>
                         </td>

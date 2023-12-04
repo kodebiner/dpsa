@@ -144,9 +144,9 @@
                             </script>
 
                             <div class="uk-margin" id="pusat" hidden>
-                                <label class="uk-form-label" for="company">Otorisasi Klien</label>
+                                <label class="uk-form-label" for="company">Perusahaan</label>
                                 <div class="uk-form-controls">
-                                    <input class="uk-input" id="company" name="company" placeholder="Klien" required>
+                                    <input class="uk-input" id="company" name="company" placeholder="Masukkan Perusahaan..." required>
                                     <input id="compid" name="compid" hidden />
                                 </div>
 
@@ -310,6 +310,7 @@
                     <th class="uk-width-medium">Email</th>
                     <th class="uk-text-center uk-width-medium">Akses</th>
                     <th class="uk-text-center uk-width-medium">Perusahaan</th>
+                    <th class="uk-text-center uk-width-medium">Status</th>
                     <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
                         <th class="uk-text-center uk-width-large">Ubah</th>
                     <?php } ?>
@@ -339,6 +340,15 @@
                         <td class=""><?= $user->email; ?></td>
                         <td class="uk-text-center"><?= $user->role; ?></td>
                         <td class="uk-text-center"><?= $client; ?></td>
+                        <td class="uk-text-center">
+                            <?php
+                            if ($user->status == "0") {
+                                echo '<div class="uk-text-light" style="border-style: solid; border-color: #ff0000; color: white; background-color:#ff0000;  font-weight: bold;"> Non Aktif </div>';
+                            } else {
+                                echo '<div class="uk-text-light" style="border-style: solid; color: white; background-color:#32CD32;  font-weight: bold;"> Aktif </div>';
+                            }
+                            ?>
+                        </td>
                         <td class="uk-child-width-auto uk-flex-center uk-grid-row-small uk-grid-column-small" uk-grid>
                             <!-- Button Trigger Modal Edit -->
                             <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
@@ -379,6 +389,7 @@
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="id<?= $user->id ?>" value="<?= $user->id; ?>">
                                 <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
+                                <input type="hidden" name="status" id="statusval" value="<?= $comp['status'] ?>">
 
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="username">Nama</label>
@@ -502,7 +513,7 @@
                                 } ?>
 
                                 <div class="uk-margin" id="pusat<?= $user->id; ?>" hidden>
-                                    <label class="uk-form-label" for="company">Otorisasi Klien</label>
+                                    <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
                                         <input class="uk-input" id="company<?= $user->id; ?>" name="company" placeholder="<?= $client; ?>">
                                         <input id="compid" name="compid" hidden />
@@ -530,6 +541,28 @@
                                         });
                                     </script>
                                 </div>
+
+                                <label class="uk-form-label" for="status">Status</label>
+                                <label class="switch">
+                                    <?php if ($user->status != "0") { ?>
+                                        <input id="status<?= $comp['id'] ?>" type="checkbox" checked>
+                                    <?php } else { ?>
+                                        <input id="status<?= $comp['id'] ?>" type="checkbox">
+                                    <?php } ?>
+                                    <span class="slider round"></span>
+                                </label>
+
+                                <script>
+                                    $(document).ready(function() {
+                                        $("input[id='status<?= $comp['id'] ?>']").change(function() {
+                                            if ($(this).is(':checked')) {
+                                                $("input[id='statusval']").val("1");
+                                            } else {
+                                                $("input[id='statusval']").val("0");
+                                            }
+                                        });
+                                    });
+                                </script>
 
                                 <hr>
 
