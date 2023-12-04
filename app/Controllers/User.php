@@ -41,7 +41,7 @@ class User extends BaseController
 
             // Populating data
             $users = $UserModel->findAll();
-            $company = $CompanyModel->findAll();
+            $company = $CompanyModel->where('status !=', "0")->find();
 
             // Initilize
             $input = $this->request->getGet();
@@ -148,7 +148,7 @@ class User extends BaseController
             $newUser->active    = 1;
             if (!empty($input['compid'])) {
                 $newUser->parentid = $input['compid'];
-            }else{
+            } else {
                 $newUser->parentid = NULL;
             }
 
@@ -165,7 +165,7 @@ class User extends BaseController
             //     $authorize->addUserToGroup($userId, $input['role']);
             // }
 
-            if (isset($input['role'])){
+            if (isset($input['role'])) {
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
@@ -173,7 +173,7 @@ class User extends BaseController
             // if (isset($input['parent'])) {
             //     return redirect()->to('users/client')->with('massage', lang('Global.saved'));
             // } elseif (empty($input['parent'])) {
-                return redirect()->to('users')->with('massage', lang('Global.saved'));
+            return redirect()->to('users')->with('massage', lang('Global.saved'));
             // }
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
