@@ -117,12 +117,38 @@ class User extends BaseController
             // Defining input
             $input = $this->request->getPost();
 
-            // Validation basic form
+            // Validation Rules
             $rules = [
-                'username'      => 'required|alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]',
-                'email'         => 'required|valid_email|is_unique[users.email]',
-                'firstname'     => 'required',
-                'lastname'      => 'required',
+                'username' => [
+                    'label'  => 'Nama',
+                    'rules'  => 'required|is_unique[users.username]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'email' => [
+                    'label'  => 'Email',
+                    'rules'  => 'required|is_unique[users.email]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'firstname' => [
+                    'label'  => 'Nama Depan',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'lastname' => [
+                    'label'  => 'Nama Belakang',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
             ];
 
             if (!$this->validate($rules)) {
@@ -131,8 +157,24 @@ class User extends BaseController
 
             // Validation password
             $rules = [
-                'password'     => 'required|strong_password',
-                'pass_confirm' => 'required|matches[password]',
+                // 'password'     => 'required|strong_password',
+                // 'pass_confirm' => 'required|matches[password]',
+                'password' => [
+                    'label'  => 'Kata Sandi',
+                    'rules'  => 'required|strong_password',
+                    'errors' => [
+                        'required'          => '{field} wajib diisi',
+                        'strong_password'   => '{field} Lemah. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'pass_confirm' => [
+                    'label'  => 'Konfirmasi Kata Sandi',
+                    'rules'  => 'required|matches[password]',
+                    'errors' => [
+                        'required'              => '{field} wajib diisi',
+                        'matches[password]'     => '{field} Tidak Cocok. Harap coba kembali dengan teliti',
+                    ],
+                ],
             ];
 
             if (!$this->validate($rules)) {

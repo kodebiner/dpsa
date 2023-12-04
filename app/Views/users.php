@@ -57,9 +57,10 @@
                     <div class="uk-modal-body">
                         <form class="uk-form-stacked" role="form" action="users/create" method="post">
                             <?= csrf_field() ?>
+                            <input id="compid" name="compid" hidden />
 
                             <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="username">Nama</label>
+                                <label class="uk-form-label" for="username">Nama Pengguna</label>
                                 <div class="uk-form-controls">
                                     <input type="text" class="uk-input <?php if (session('errors.username')) : ?>tm-form-invalid<?php endif ?>" id="username" name="username" placeholder="Nama" autofocus required />
                                 </div>
@@ -131,12 +132,18 @@
                                     $("select[id='role']").change(function() {
                                         if ($('#role').find(":selected").text() === "client pusat") {
                                             $("#pusat").removeAttr("hidden");
+                                            $("#kliencabang").attr("hidden", true);
+                                            $("#cabang").attr("required", false);
                                         } else if ($('#role').find(":selected").text() === "client cabang") {
-                                            $("#pusat").removeAttr("hidden");
+                                            $("#kliencabang").removeAttr("hidden");
+                                            $("#pusat").attr("hidden", true);
+                                            $("#company").attr("required", false);
                                         } else {
                                             $("#pusat").attr("hidden", true);
+                                            $("#kliencabang").attr("hidden", true);
                                             $("#company").val("");
                                             $("#company").attr("required", false);
+                                            $("#cabang").attr("required", false);
                                             $("#compid").val("");
                                         }
                                     });
@@ -147,7 +154,6 @@
                                 <label class="uk-form-label" for="company">Perusahaan</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" id="company" name="company" placeholder="Masukkan Perusahaan..." required>
-                                    <input id="compid" name="compid" hidden />
                                 </div>
 
                                 <script type="text/javascript">
@@ -157,17 +163,44 @@
                                                 foreach ($Companys as $comp) {
                                                     if ($comp['parentid'] === "0") {
                                                         $rsklasification = $comp['rsname'] . " (pusat)";
-                                                    } else {
-                                                        $rsklasification = $comp['rsname'] . " (cabang)";
+                                                        echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                     }
-                                                    echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                 }
                                             } ?>
                                         ];
                                         $("#company").autocomplete({
                                             source: company,
                                             select: function(e, i) {
-                                                $("#compid").val(i.item.idx); // save selected id to hidden input
+                                                $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
+                                            },
+                                            minLength: 2
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+                            <div class="uk-margin" id="kliencabang" hidden>
+                                <label class="uk-form-label" for="cabang">Perusahaan Cabang</label>
+                                <div class="uk-form-controls">
+                                    <input class="uk-input" id="cabang" name="cabang" placeholder="Masukkan Perusahaan Cabang..." required>
+                                </div>
+
+                                <script type="text/javascript">
+                                    $(function() {
+                                        var cabang = [
+                                            <?php if (!empty($Companys)) {
+                                                foreach ($Companys as $comp) {
+                                                    if ($comp['parentid'] != "0") {
+                                                        $rsklasification = $comp['rsname'] . " (cabang)";
+                                                        echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
+                                                    }
+                                                }
+                                            } ?>
+                                        ];
+                                        $("#cabang").autocomplete({
+                                            source: cabang,
+                                            select: function(e, i) {
+                                                $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
                                             },
                                             minLength: 2
                                         });
@@ -396,8 +429,10 @@
                                 <input type="hidden" name="id<?= $user->id ?>" value="<?= $user->id; ?>">
                                 <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
                                 <input type="hidden" name="status" id="statusval" value="<?= $user->status ?>">
+                                <input id="compid" name="compid" value="<?= $user->parent ?>" hidden />
+
                                 <div class="uk-margin-bottom">
-                                    <label class="uk-form-label" for="username">Nama</label>
+                                    <label class="uk-form-label" for="username">Nama Pengguna</label>
                                     <div class="uk-form-controls">
                                         <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" />
                                     </div>
@@ -479,22 +514,36 @@
                                         $("select[id='role<?= $user->id; ?>']").change(function() {
                                             if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                                 $("#pusat<?= $user->id; ?>").removeAttr("hidden");
+                                                $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
+                                                $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
-                                                $("#pusat<?= $user->id; ?>").removeAttr("hidden");
+                                                $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
+                                                $("#pusat<?= $user->id; ?>").attr("hidden",true);
                                             } else {
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                                 $("#company<?= $user->id; ?>").val("");
                                                 $("#company<?= $user->id; ?>").attr("required", false);
                                                 $("#compid").val(null);
+                                                $("#pusat<?= $user->id; ?>").attr("required",false);
+                                                $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
                                             }
                                         });
 
                                         if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                             $("#pusat<?= $user->id; ?>").removeAttr("hidden");
+                                            $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
+                                            $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
                                         } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
-                                            $("#pusat<?= $user->id; ?>").removeAttr("hidden");
+                                            $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
+                                            $("#pusat<?= $user->id; ?>").attr("hidden",true);
+                                            $("#pusat<?= $user->id; ?>").attr("required",false);
+                                            $("input[id='company<?= $user->id; ?>']").attr("required",false);
                                         } else {
                                             $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                            $("#pusat<?= $user->id; ?>").attr("required",false);
+                                            $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
+                                            $("input[id='company<?= $user->id; ?>']").attr("required",false);
+                                            $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
                                         }
                                     });
                                 </script>
@@ -523,7 +572,6 @@
                                     <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
                                         <input class="uk-input" id="company<?= $user->id; ?>" name="company" placeholder="<?= $client; ?>">
-                                        <input id="compid" name="compid" hidden />
                                     </div>
 
                                     <script type="text/javascript">
@@ -533,10 +581,8 @@
                                                     foreach ($Companys as $comp) {
                                                         if ($comp['parentid'] === "0") {
                                                             $rsklasification = $comp['rsname'] . " (pusat)";
-                                                        } else {
-                                                            $rsklasification = $comp['rsname'] . " (cabang)";
+                                                            echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                         }
-                                                        echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
                                                     }
                                                 } ?>
                                             ];
@@ -551,6 +597,34 @@
                                     </script>
                                 </div>
 
+                                <div class="uk-margin" id="kliencabang<?= $user->id; ?>" hidden>
+                                    <label class="uk-form-label" for="cabang">Perusahaan Cabang</label>
+                                    <div class="uk-form-controls">
+                                        <input class="uk-input" id="cabang<?= $user->id; ?>" name="cabang" placeholder="<?= $client; ?>" required>
+                                    </div>
+
+                                    <script type="text/javascript">
+                                        $(function() {
+                                            var cabang = [
+                                                <?php if (!empty($Companys)) {
+                                                    foreach ($Companys as $comp) {
+                                                        if ($comp['parentid'] != "0") {
+                                                            $rsklasification = $comp['rsname'] . " (cabang)";
+                                                            echo '{label:"' . $rsklasification . '",idx:' . (int)$comp['id'] . '},';
+                                                        }
+                                                    }
+                                                } ?>
+                                            ];
+                                            $("#cabang<?= $user->id; ?>").autocomplete({
+                                                source: cabang,
+                                                select: function(e, i) {
+                                                    $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
+                                                },
+                                                minLength: 2
+                                            });
+                                        });
+                                    </script>
+                                </div>
 
                                 <label class="uk-form-label" for="status">Status</label>
                                 <label class="switch">
