@@ -43,6 +43,7 @@ $routes->group('/', static function ($routes) {
 
 $routes->group('clientreg', static function ($routes) {
     $routes->get('', 'Clientregister::index');
+    $routes->post('', 'Clientregister::submit');
 });
 
 $routes->group('/',['filter' => 'login'], function ($routes) {
