@@ -83,6 +83,14 @@ class Mdl extends BaseController
                     'denomination'  => $input['denomination'],
                     'price'         => $input['price'],
                 ];
+        
+                if (! $this->validate([
+                    'name'      => "required|max_length[255]|is_unique[mdl.name]",
+                ])) {
+                        
+                   return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                }
+
                 $MdlModel->save($mdl);
             } else {
                 $mdl = [
@@ -90,6 +98,13 @@ class Mdl extends BaseController
                     'denomination'  => $input['denomination'],
                     'price'         => $input['price'],
                 ];
+        
+                if (! $this->validate([
+                    'name'      => "required|max_length[255]|is_unique[mdl.name]",
+                ])) {
+                        
+                   return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                }
                 $MdlModel->save($mdl);
             }
 
@@ -119,6 +134,14 @@ class Mdl extends BaseController
                     'volume'        => $input['volume'],
                     'price'         => $input['price'],
                 ];
+        
+                if (! $this->validate([
+                    'name'      => "required|max_length[255]|is_unique[mdl.name]",
+                ])) {
+                        
+                   return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                }
+
                 $MdlModel->save($mdlup);
             } else {
 
@@ -132,6 +155,14 @@ class Mdl extends BaseController
                     'volume'        => Null,
                     'price'         => $input['price'],
                 ];
+        
+                if (! $this->validate([
+                    'name'      => "required|max_length[255]|is_unique[mdl.name]",
+                ])) {
+                        
+                   return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                }
+                
                 $MdlModel->save($mdlup);
             }
             return redirect()->to('mdl')->with('massage', lang('Global.updated'));

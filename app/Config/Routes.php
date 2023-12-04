@@ -120,10 +120,16 @@ $routes->group('account',['filter' => 'login'], function ($routes) {
 
 // Paket
 $routes->group('paket',['filter' => 'login'], function ($routes) {
+    // Paket
     $routes->get('', 'Paket::index');
     $routes->post('create', 'Paket::create');
     $routes->post('update/(:num)', 'Paket::update/$1');
     $routes->get('delete/(:num)', 'Paket::delete/$1');
+
+    // Paket Detail
+    $routes->get('detail/(:num)', 'Paket::indexdetail/$1');
+    $routes->post('createdetail/(:num)', 'Paket::createdetail/$1');
+    $routes->post('detaildelete/(:num)', 'Paket::deletedetail/$1');
 });
 
 // Bar

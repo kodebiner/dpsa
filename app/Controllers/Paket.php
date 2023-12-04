@@ -46,7 +46,6 @@ class Paket extends BaseController
 
         if (isset($input['search']) && !empty($input['search'])) {
             $this->builder->like('paket.name', $input['search']);
-            $this->builder->orLike('paket.price', $input['search']);
         }
 
         // Populating data
@@ -57,7 +56,7 @@ class Paket extends BaseController
         $total      = $this->builder->countAllResults();
 
         // Parsing Data to View
-        $data                   = $this->data;
+        $data                   =   $this->data;
         $data['title']          =   "Paket";
         $data['description']    =   "Daftar Paket yang tersedia";
         $data['pakets']         =   $query;
@@ -130,16 +129,115 @@ class Paket extends BaseController
         $PaketModel         = new PaketModel;
         $PaketDetailModel   = new PaketDetailModel;
 
-        // Finding Paket Detail
-        $detail = $PaketDetailModel->where('paketid',$id)->find();
-
         // Delete Paket Detail
-        $PaketDetailModel->delete($detail);
+        $PaketDetailModel->where('paketid', $id)->delete();
 
         // Delete Data
         $PaketModel->delete($id);
 
         // Return
         return redirect()->to('paket')->with('massage', 'Data telah dihapuskan');
+    }
+
+    public function indexdetail($id)
+    {
+        // Connecting Databse
+        $db         = \Config\Database::connect();
+
+        // Calling Services
+        $pager = \Config\Services::pager();
+
+        // Calling Models
+        $MdlModel   = new MdlModel;
+        $PaketModel = new PaketModel;
+
+        // Filter Input
+        $input = $this->request->getGet();
+
+        if (isset($input['perpage'])) {
+            $perpage = $input['perpage'];
+        } else {
+            $perpage = 10;
+        }
+
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page - 1) * $perpage;
+
+        // Populating data
+        $detailbuilder      =   $db->table('paketdetail');
+
+        $detailsbuilder     =   $detailbuilder->select('paketdetail.mdlid as id, paketdetail.paketid as paketid, mdl.name as name, mdl.price as price');
+        $detailsbuilder     =   $detailbuilder->join('mdl', 'paketdetail.mdlid = mdl.id', 'left');
+        $detailsbuilder     =   $detailbuilder->where('paketdetail.paketid', $id);
+
+        if (isset($input['search']) && !empty($input['search'])) {
+            $detailsbuilder     =   $detailbuilder->like('name', $input['search'])->where('paketdetail.paketid', $id);
+            $detailsbuilder     =   $detailbuilder->orLike('price', $input['search'])->where('paketdetail.paketid', $id);
+        }
+
+        // Paginate MDL
+        $query              =   $detailsbuilder->get($perpage, $offset)->getResultArray();
+        $total              =   $detailsbuilder->countAllResults();
+        
+        // Not Paginate MDL
+        $detailsbuilder     =   $detailbuilder->where('paketdetail.paketid', $id);
+        $mdlarray           =   $detailsbuilder->get()->getResultArray();
+
+        // Get MDL Array
+        $mdl                =   array();
+        foreach ($mdlarray as $mdlarr) {
+            $mdl[]          =   $mdlarr['mdlid'];
+        }
+
+        $mdls               =   $MdlModel->whereNotIn('id', $mdl)->find();
+
+        // Parsing Data to View
+        $data                   =   $this->data;
+        $data['title']          =   "Detail Paket";
+        $data['description']    =   "Daftar Detail Paket yang tersedia";
+        $data['paketdetails']   =   $query;
+        $data['input']          =   $input;
+        $data['mdls']           =   $mdls;
+        $data['pager']          =   $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+        $data['pakets']         =   $PaketModel->find($id);
+
+        // Return
+        return view('paketdetail', $data);
+    }
+
+    public function createdetail($id)
+    {
+        // Calling Models
+        $PaketDetailModel   = new PaketDetailModel;
+
+        // Get Data
+        $input = $this->request->getPost();
+
+        // Creating Paket Detail
+        $detail = [
+            'paketid'   => $id,
+            'mdlid'     => $input['mdlid'],
+        ];
+
+        // Insert Data Paket Detail
+        $PaketDetailModel->insert($detail);
+
+        // Return
+        return redirect()->back()->with('massage', "Data Tersimpan");
+    }
+
+    public function deletedetail($id)
+    {
+        // Calling Models
+        $PaketDetailModel   =   new PaketDetailModel;
+
+        // Get Data
+        $input = $this->request->getPost();
+        
+        // Deleting Paket Detail Data
+        $PaketDetailModel->where('paketid', $input['paketid'])->where('mdlid', $id)->delete();
+
+        // Return
+        return redirect()->back()->with('massage', 'Data telah dihapuskan');
     }
 }

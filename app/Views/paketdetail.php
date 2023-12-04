@@ -14,22 +14,22 @@
     <div class="tm-card-header uk-light uk-margin-remove-left">
         <div uk-grid class="uk-flex-middle uk-child-width-1-2@m">
             <div>
-                <h3 class="tm-h3">Daftar Paket</h3>
+                <h3 class="tm-h3">Daftar Detail Paket - <?= $pakets['name'] ?></h3>
             </div>
 
             <!-- Button Trigger Modal Add -->
             <div class="uk-text-right">
-                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah Paket</button>
+                <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah Detail Paket</button>
             </div>
             <!-- End Of Button Trigger Modal Add -->
         </div>
     </div>
 <?php } else { ?>
-    <h3 class="tm-h3 uk-text-center">Daftar Paket</h3>
+    <h3 class="tm-h3 uk-text-center">Daftar Detail Paket - <?= $pakets['name'] ?></h3>
     <div class="uk-child-width-auto uk-flex-center" uk-grid>
         <!-- Button Trigger Modal Add -->
         <div>
-            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah Paket</button>
+            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Tambah Detail Paket</button>
         </div>
         <!-- Button Trigger Modal Add End -->
 
@@ -43,8 +43,8 @@
 <!-- End Of Page Heading -->
 
 <!-- Form Filter Input -->
-<?php if ($ismobile === false) { ?>
-    <form class="uk-margin" id="searchform" action="paket" method="GET">
+<?php  if ($ismobile === false) { ?>
+    <form class="uk-margin" id="searchform" action="paket/detail/<?= $pakets['id'] ?>" method="GET">
         <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
             <div>
                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -70,7 +70,7 @@
     </form>
 <?php } else { ?>
     <div id="filter" class="uk-margin" hidden>
-        <form id="searchform" action="paket" method="GET">
+        <form id="searchform" action="paket/detail/<?= $pakets['id'] ?>" method="GET">
             <div class="uk-margin-small uk-flex uk-flex-center">
                 <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
             </div>
@@ -111,16 +111,25 @@
             <tr>
                 <th>No</th>
                 <th>Nama</th>
+                <th>Harga</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
             <?php $i = 1; ?>
-            <?php foreach ($pakets as $paket) { ?>
+            <?php foreach ($paketdetails as $pakdet) { ?>
                 <tr>
                     <td><?= $i++ ?></td>
-                    <td><?= $paket['name'] ?></td>
-                    <td><a class="uk-icon-button" href="#modalupdate<?= $paket['id'] ?>" uk-icon="pencil" uk-toggle></a></td>
+                    <td><?= $pakdet['name'] ?></td>
+                    <td><?= $pakdet['price'] ?></td>
+                    <td>
+                        <form class="uk-form-stacked" role="form" action="paket/detaildelete/<?= $pakdet['id'] ?>" method="post">
+                            <?= csrf_field() ?>
+                            <input hidden type="text" class="uk-input" id="paketid" name="paketid" value="<?= $pakdet['paketid']; ?>"/>
+
+                            <button class="uk-icon-button-delete" onclick="return confirm('Anda yakin ingin menghapus data ini?')" type="submit" uk-icon="trash"></button>
+                        </form>
+                    </td>
                 </tr>
             <?php } ?>
         </tbody>
@@ -129,24 +138,16 @@
 <?= $pager ?>
 <!-- End Table Of Content -->
 
-<!-- Modal Add Paket -->
-<div id="modaladd" uk-modal>
+<!-- Modal Add Paket Detail -->
+<div uk-modal id="modaladd">
     <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Tambah Paket</h2>
+            <h2 class="uk-modal-title">Tambah Detail Paket - <?= $pakets['name'] ?></h2>
             <button class="uk-modal-close-default" type="button" uk-close></button>
         </div>
-
         <div class="uk-modal-body">
-            <form class="uk-form-stacked" role="form" action="paket/create" method="post">
+            <form class="uk-form-stacked" role="form" action="paket/createdetail/<?= $pakets['id']; ?>" method="post">
                 <?= csrf_field() ?>
-
-                <div class="uk-margin-bottom">
-                    <label class="uk-form-label" for="name">Nama</label>
-                    <div class="uk-form-controls">
-                        <input type="text" class="uk-input" id="name" name="name" placeholder="Nama" required />
-                    </div>
-                </div>
 
                 <div class="uk-margin-bottom">
                     <label class="uk-form-label" for="product">MDL</label>
@@ -225,50 +226,5 @@
         </div>
     </div>
 </div>
-<!-- Modal Add Paket End -->
-
-<!-- Modal Edit Paket -->
-<?php foreach ($pakets as $paket) { ?>
-    <div id="modalupdate<?= $paket['id'] ?>" uk-modal>
-        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
-            <div class="uk-modal-content">
-                <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Ubah Paket</h2>
-                    <button class="uk-modal-close-default" type="button" uk-close></button>
-                </div>
-
-                <div class="uk-modal-body">
-                    <form class="uk-form-stacked" role="form" action="paket/update/<?= $paket['id'] ?>" method="post">
-                        <?= csrf_field() ?>
-                        <div class="uk-margin-bottom">
-                            <label class="uk-form-label" for="name">Paket</label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="name" name="name" value="<?= $paket['name']; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="uk-margin-bottom">
-                            <h4 class="tm-h4 uk-margin-remove">Detail Paket</h4>
-                            <div class="uk-h6 uk-margin-remove">
-                                <a href="paket/detail/<?= $paket['id']; ?>">Kelola Detail Paket</a>
-                            </div>
-                        </div>
-
-                        <div class="uk-modal-footer">
-                            <div class="uk-child-width-auto uk-flex-right" uk-grid>
-                                <div>
-                                    <a class="uk-button uk-button-danger" href="paket/delete/<?= $paket['id'] ?>" onclick="return confirm('Anda yakin ingin menghapus data ini?')" type="button">Hapus</a>
-                                </div>
-                                <div>
-                                    <button class="uk-button uk-button-primary" type="submit">Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-<!-- Modal Edit Paket End -->
+<!-- Modal Add Paket Detail End -->
 <?= $this->endSection() ?>
