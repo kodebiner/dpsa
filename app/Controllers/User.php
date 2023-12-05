@@ -146,33 +146,25 @@ class User extends BaseController
                     'label'  => 'Nama Belakang',
                     'rules'  => 'required',
                     'errors' => [
-                        'required'      => '{field} wajib diisi',
+                        'required' => '{field} wajib diisi',
                     ],
                 ],
-            ];
 
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            // Validation password
-            $rules = [
-                // 'password'     => 'required|strong_password',
-                // 'pass_confirm' => 'required|matches[password]',
+                // Password Validation
                 'password' => [
                     'label'  => 'Kata Sandi',
-                    'rules'  => 'required|strong_password',
+                    'rules'  => 'required|min_length[8]',
                     'errors' => [
-                        'required'          => '{field} wajib diisi',
-                        'strong_password'   => '{field} Lemah. Harap menggunakan {field} lain',
+                        'required'      => '{field} wajib diisi',
+                        'min_length'    => '{field} harus lebih panjang atau sama dengan {param}',
                     ],
                 ],
                 'pass_confirm' => [
                     'label'  => 'Konfirmasi Kata Sandi',
                     'rules'  => 'required|matches[password]',
                     'errors' => [
-                        'required'              => '{field} wajib diisi',
-                        'matches[password]'     => '{field} Tidak Cocok. Harap coba kembali dengan teliti',
+                        'required'    => '{field} wajib diisi',
+                        'matches'     => '{field} harus sama dengan {param}.',
                     ],
                 ],
             ];
@@ -200,21 +192,10 @@ class User extends BaseController
             // Get new user id
             $userId = $UserModel->getInsertID();
 
-            // Adding new user to group
-            // if (isset($input['parent'])) {
-            //     $authorize->addUserToGroup($userId, $input['parent']);
-            // } elseif (isset($input['role'])) {
-            //     $authorize->addUserToGroup($userId, $input['role']);
-            // }
-
             if (isset($input['role'])) {
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
-            // Return back to index
-            // if (isset($input['parent'])) {
-            //     return redirect()->to('users/client')->with('massage', lang('Global.saved'));
-            // } elseif (empty($input['parent'])) {
             return redirect()->to('users')->with('massage', lang('Global.saved'));
             // }
         } else {
@@ -247,15 +228,58 @@ class User extends BaseController
             // Finding user
             $user = $UserModel->find($id);
 
-            // Validation basic form
-            if (!empty($input['username'])) {
-                $rules['username']  = 'alpha_numeric_space|min_length[3]|max_length[30]';
+            // Validation Rules
+            if ($input['username'] === $user->username) {
+                $is_unique =  '';
+            } else {
+                $is_unique =  'is_unique[user.username]';
             }
-            if (!empty($input['email'])) {
-                $rules['email']     = 'valid_email';
+            if ($input['email'] === $user->email) {
+                $emailis_unique =  '';
+            } else {
+                $emailis_unique =  'is_unique[user.email]';
             }
 
-            $rules['role'] = 'max_length[30]';
+            // Validation Rules
+            $rules = [
+                'username' => [
+                    'label'  => 'Nama',
+                    'rules'  => 'required' . $is_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'email' => [
+                    'Email',
+                    'rules'  => 'required' . $emailis_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'firstname' => [
+                    'label'  => 'Nama Depan',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'lastname' => [
+                    'label'  => 'Nama Belakang',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'role' => [
+                    'label'  => 'Akses',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+            ];
 
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -294,31 +318,26 @@ class User extends BaseController
                 $updateUser->active     = $updateUser->active;
             }
 
-            // if (isset($input['parent'])) {
-            //     if ($input['parent'] === $pusatid) {
-            //         $updateUser->parentid = Null;
-            //     }
-            // } elseif (isset($input['role'])) {
-            //     $updateUser->parentid = Null;
-            // }
-            // if (!empty($input['child'])) {
-            //     $updateUser->parentid    = $input['child'];
-            // } else {
-            //     $updateUser->parentid  = $user->parentid;
-            // }
-            // if (isset($input['parent'])) {
-            //     if ($input['parent'] === $pusatid) {
-            //         $updateUser->parentid = Null;
-            //     }
-            // } elseif (isset($input['role'])) {
-            //     $updateUser->parentid = Null;
-            // }
-
             // Reset password
             if (!empty($input['password'])) {
                 $rules = [
-                    'password'      => 'strong_password',
-                    'pass_confirm'  => 'required|matches[password]'
+                    // Password Validation
+                    'password' => [
+                        'label'  => 'Kata Sandi',
+                        'rules'  => 'required|min_length[8]',
+                        'errors' => [
+                            'required'      => '{field} wajib diisi',
+                            'min_length'    => '{field} harus lebih panjang atau sama dengan {param}',
+                        ],
+                    ],
+                    'pass_confirm' => [
+                        'label'  => 'Konfirmasi Kata Sandi',
+                        'rules'  => 'required|matches[password]',
+                        'errors' => [
+                            'required'    => '{field} wajib diisi',
+                            'matches'     => '{field} harus sama dengan {param}.',
+                        ],
+                    ],
                 ];
 
                 if (!$this->validate($rules)) {
@@ -601,83 +620,5 @@ class User extends BaseController
         $authorize->deleteGroup($id);
 
         return redirect()->to('users/access-control')->with('message', lang('Global.deleted'));
-    }
-
-    public function client()
-    {
-        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) {
-            // Calling Services
-            $pager = \Config\Services::pager();
-
-            // Calling Model
-            $UserModel              = new UserModel();
-            $GroupModel             = new GroupModel();
-            $PermissionModel        = new PermissionModel();
-
-            $users = $UserModel->findAll();
-            // Populating data
-            $input = $this->request->getGet();
-
-            if (isset($input['perpage'])) {
-                $perpage = $input['perpage'];
-            } else {
-                $perpage = 10;
-            }
-
-            $page = (@$_GET['page']) ? $_GET['page'] : 1;
-            $offset = ($page - 1) * $perpage;
-
-            $this->builder->where('deleted_at', null);
-            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-            $this->builder->where('users.id !=', $this->data['uid']);
-            // $this->builder->where('auth_groups.name !=', 'superuser');
-            // $this->builder->where('auth_groups.name !=', 'owner');
-            // $this->builder->where('auth_groups.name !=', 'admin');
-            // $this->builder->where('auth_groups.name !=', 'marketing');
-            // $this->builder->where('auth_groups.name !=', 'design');
-            // $this->builder->where('auth_groups.name !=', 'production');
-            // $this->builder->where('auth_groups.name !=', 'guests');
-            if (isset($input['search']) && !empty($input['search'])) {
-                $this->builder->like('users.username', $input['search']);
-                $this->builder->orLike('users.firstname', $input['search']);
-                $this->builder->orLike('users.lastname', $input['search']);
-            }
-            if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
-                $this->builder->where('auth_groups.id', $input['rolesearch']);
-            }
-            $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-            $query =   $this->builder->get($perpage, $offset)->getResult();
-
-            $total = $this->builder
-                ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-                ->where('users.id !=', $this->data['uid'])
-                ->where('auth_groups.name', 'client pusat')
-                ->orWhere('auth_groups.name', 'client cabang')
-                ->countAllResults();
-
-            $parentid = [];
-            foreach ($users as $user) {
-                $parentid[] = [
-                    'id' => $user->id,
-                    'name' => $user->username,
-                ];
-            }
-
-            // Parsing data to view
-            $data                   = $this->data;
-            $data['title']          = lang('Global.clientList');
-            $data['description']    = lang('Global.clientListDesc');
-            $data['roles']          = $GroupModel->where('name', "client pusat")->orWhere('name', 'client cabang')->find();
-            $data['users']          = $query;
-            $data['parent']         = $parentid;
-            $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
-            $data['input']          = $input;
-
-            return view('client', $data);
-        } else {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
     }
 }

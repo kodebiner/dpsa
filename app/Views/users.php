@@ -153,7 +153,7 @@
                             <div class="uk-margin" id="pusat" hidden>
                                 <label class="uk-form-label" for="company">Perusahaan</label>
                                 <div class="uk-form-controls">
-                                    <input class="uk-input" id="company" name="company" placeholder="Masukkan Perusahaan..." required>
+                                    <input class="uk-input" id="company" name="company" placeholder="Masukkan nama perusahaan yang terdaftar sebagai pusat..." required>
                                 </div>
 
                                 <script type="text/javascript">
@@ -182,7 +182,7 @@
                             <div class="uk-margin" id="kliencabang" hidden>
                                 <label class="uk-form-label" for="cabang">Perusahaan Cabang</label>
                                 <div class="uk-form-controls">
-                                    <input class="uk-input" id="cabang" name="cabang" placeholder="Masukkan Perusahaan Cabang..." required>
+                                    <input class="uk-input" id="cabang" name="cabang" placeholder="Masukkan nama perusahaan yang terdaftar sebagai cabang..." required>
                                 </div>
 
                                 <script type="text/javascript">
@@ -343,8 +343,8 @@
                 <tr>
                     <th class="uk-width-large">Nama</th>
                     <th class="uk-width-medium">Email</th>
-                    <th class="uk-text-center uk-width-medium">Akses</th>
-                    <th class="uk-text-center uk-width-medium">Perusahaan</th>
+                    <th class="uk-width-medium">Akses</th>
+                    <th class="uk-width-medium">Perusahaan</th>
                     <th class="uk-text-center uk-width-medium">Status</th>
                     <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
                         <th class="uk-text-center uk-width-large">Ubah</th>
@@ -358,14 +358,14 @@
                     if (!empty($Companys)) {
                         foreach ($Companys as $comp) {
                             if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
-                                $client = $comp['rsname'] . " Pusat";
+                                $client = $comp['rsname'];
                             } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
                                 foreach ($Companys as $parent) {
                                     if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
                                         $pusat = $parent['rsname'];
                                     }
                                 }
-                                $client = $comp['rsname'] . "</br> Cabang " . $pusat;
+                                $client = $comp['rsname'];
                             } elseif ($user->parent === null) {
                                 $client = " DPSA ";
                             }
@@ -377,8 +377,8 @@
                     <tr>
                         <td class=""><?= $user->username; ?></td>
                         <td class=""><?= $user->email; ?></td>
-                        <td class="uk-text-center"><?= $user->role; ?></td>
-                        <td class="uk-text-center"><?= $client; ?></td>
+                        <td class=""><?= $user->role; ?></td>
+                        <td class=""><?= $client; ?></td>
                         <td class="uk-text-center">
                             <?php
                             if ($user->status == "0") {
@@ -434,28 +434,28 @@
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="username">Nama Pengguna</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="username" name="username" placeholder="<?= $user->username; ?>" />
+                                        <input type="text" class="uk-input" id="username" name="username" value="<?= $user->username ?>" placeholder="<?= $user->username; ?>" />
                                     </div>
                                 </div>
 
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="firstname">Nama Depan</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="firstname" name="firstname" placeholder="<?= $user->firstname; ?>" />
+                                        <input type="text" class="uk-input" id="firstname" name="firstname" value="<?=$user->firstname?>" placeholder="<?= $user->firstname; ?>" />
                                     </div>
                                 </div>
 
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="lastname">Nama Belakang</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="lastname<?= $user->id; ?>" name="lastname" placeholder="<?= $user->lastname; ?>" />
+                                        <input type="text" class="uk-input" id="lastname<?= $user->id; ?>" name="lastname" value="<?=$user->lastname?>" placeholder="<?= $user->lastname; ?>" />
                                     </div>
                                 </div>
 
                                 <div class="uk-margin">
                                     <label class="uk-form-label" for="email">Email</label>
                                     <div class="uk-form-controls">
-                                        <input type="email" class="uk-input" id="email" name="email" placeholder="<?= $user->email; ?>" />
+                                        <input type="email" class="uk-input" id="email" name="email" value="<?= $user->email ?>" placeholder=" <?= $user->email; ?>" />
                                     </div>
                                 </div>
 
@@ -514,36 +514,36 @@
                                         $("select[id='role<?= $user->id; ?>']").change(function() {
                                             if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                                 $("#pusat<?= $user->id; ?>").removeAttr("hidden");
-                                                $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
-                                                $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
+                                                $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                                $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
                                                 $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
-                                                $("#pusat<?= $user->id; ?>").attr("hidden",true);
+                                                $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                             } else {
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                                 $("#company<?= $user->id; ?>").val("");
                                                 $("#company<?= $user->id; ?>").attr("required", false);
                                                 $("#compid").val(null);
-                                                $("#pusat<?= $user->id; ?>").attr("required",false);
-                                                $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
+                                                $("#pusat<?= $user->id; ?>").attr("required", false);
+                                                $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
                                             }
                                         });
 
                                         if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                             $("#pusat<?= $user->id; ?>").removeAttr("hidden");
-                                            $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
-                                            $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
+                                            $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                            $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
                                         } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
                                             $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
-                                            $("#pusat<?= $user->id; ?>").attr("hidden",true);
-                                            $("#pusat<?= $user->id; ?>").attr("required",false);
-                                            $("input[id='company<?= $user->id; ?>']").attr("required",false);
+                                            $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                            $("#pusat<?= $user->id; ?>").attr("required", false);
+                                            $("input[id='company<?= $user->id; ?>']").attr("required", false);
                                         } else {
                                             $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                            $("#pusat<?= $user->id; ?>").attr("required",false);
-                                            $("#kliencabang<?= $user->id; ?>").attr("hidden",true);
-                                            $("input[id='company<?= $user->id; ?>']").attr("required",false);
-                                            $("input[id='cabang<?= $user->id; ?>']").attr("required",false);
+                                            $("#pusat<?= $user->id; ?>").attr("required", false);
+                                            $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                            $("input[id='company<?= $user->id; ?>']").attr("required", false);
+                                            $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
                                         }
                                     });
                                 </script>
@@ -600,7 +600,7 @@
                                 <div class="uk-margin" id="kliencabang<?= $user->id; ?>" hidden>
                                     <label class="uk-form-label" for="cabang">Perusahaan Cabang</label>
                                     <div class="uk-form-controls">
-                                        <input class="uk-input" id="cabang<?= $user->id; ?>" name="cabang" placeholder="<?= $client; ?>" required>
+                                        <input class="uk-input" id="cabang<?= $user->id; ?>" name="cabang" placeholder="<?= $client; ?>">
                                     </div>
 
                                     <script type="text/javascript">
