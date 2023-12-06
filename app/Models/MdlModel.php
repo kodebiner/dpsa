@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class MdlModel extends Model
 {
     protected $allowedFields = [
-        'name', 'length', 'width', 'height', 'volume', 'denomination', 'price',
+        'name', 'length', 'width', 'height', 'volume', 'denomination', 'price', 'paketid',
     ];
     protected $table            = 'mdl';
     protected $primaryKey       = 'id';
