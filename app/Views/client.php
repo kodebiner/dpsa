@@ -13,27 +13,27 @@
         <div class="tm-card-header uk-light uk-margin-remove-left">
             <div uk-grid class="uk-flex-middle">
                 <div class="uk-width-1-2@m">
-                    <h3 class="tm-h3">Daftar Client</h3>
+                    <h3 class="tm-h3">Daftar Klien</h3>
                 </div>
 
                 <!-- Button Trigger Modal Add -->
                 <?php if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) { ?>
                     <div class="uk-width-1-2@m uk-text-right@m">
-                        <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata">Tambah Client</button>
+                        <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata">Tambah Klien</button>
                     </div>
                 <?php } ?>
                 <!-- End Of Button Trigger Modal Add -->
             </div>
         </div>
     <?php } else { ?>
-        <h3 class="tm-h3 uk-text-center">Daftar Client</h3>
+        <h3 class="tm-h3 uk-text-center">Daftar Klien</h3>
         <div class="uk-child-width-auto uk-flex-center" uk-grid>
             <div>
                 <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
             </div>
             <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
                 <div>
-                    <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata">Tambah Client</button>
+                    <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata">Tambah Klien</button>
                 </div>
             <?php } ?>
         </div>
@@ -48,7 +48,7 @@
             <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-content">
                     <div class="uk-modal-header">
-                        <h5 class="uk-modal-title" id="tambahdata"><?= lang('Global.Addclient') ?></h5>
+                        <h5 class="uk-modal-title" id="tambahdata">Tambah Klien</h5>
                     </div>
                     <div class="uk-modal-body">
                         <form class="uk-form-stacked" role="form" action="client/create" method="post">
@@ -133,7 +133,7 @@
                             <hr>
 
                             <div class="uk-margin">
-                                <button type="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
+                                <button type="submit" class="uk-button uk-button-primary">Simpan</button>
                             </div>
                         </form>
                     </div>
@@ -149,11 +149,11 @@
             <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                 <div>
                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                        <div><?= lang('Global.search') ?>:</div>
+                        <div>Cari:</div>
                         <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
                         <div>
                             <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                                <option value="0"><?= lang('Global.allAccess') ?></option>
+                                <option value="0">Semua Akses</option>
                                 <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Pusat</option>
                                 <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Cabang</option>
                             </select>
@@ -162,7 +162,7 @@
                 </div>
                 <div>
                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                        <div><?= lang('Global.display') ?></div>
+                        <div>Tampilan</div>
                         <div>
                             <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
                                 <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
@@ -171,7 +171,7 @@
                                 <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
                             </select>
                         </div>
-                        <div><?= lang('Global.perPage') ?></div>
+                        <div>Per Halaman</div>
                     </div>
                 </div>
             </div>
@@ -180,17 +180,17 @@
         <div id="filter" class="uk-margin" hidden>
             <form id="searchform" action="client" method="GET">
                 <div class="uk-margin-small uk-flex uk-flex-center">
-                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
                 </div>
                 <div class="uk-margin-small uk-flex uk-flex-center">
                     <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                        <option value="0"><?= lang('Global.allAccess') ?></option>
+                        <option value="0">Semua Akses</option>
                         <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Pusat</option>
                         <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Cabang</option>
                     </select>
                 </div>
                 <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
-                    <div><?= lang('Global.display') ?></div>
+                    <div>Tampilan</div>
                     <div>
                         <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
                             <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
@@ -199,7 +199,7 @@
                             <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
                         </select>
                     </div>
-                    <div><?= lang('Global.perPage') ?></div>
+                    <div>Per Halaman</div>
                 </div>
             </form>
         </div>
@@ -423,7 +423,7 @@
                                 <hr>
 
                                 <div class="uk-margin">
-                                    <button type="submit" value="submit" class="uk-button uk-button-primary"><?= lang('Global.save') ?></button>
+                                    <button type="submit" value="submit" class="uk-button uk-button-primary">Simpan</button>
                                 </div>
                             </form>
                         </div>

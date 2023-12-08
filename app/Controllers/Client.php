@@ -163,7 +163,7 @@ class Client extends BaseController
             ];
             $CompanyModel->save($data);
 
-            return redirect()->to('client')->with('massage', 'Data Berhasil Disimpan');
+            return redirect()->to('client')->with('message', 'Data berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -264,7 +264,7 @@ class Client extends BaseController
                 'parentid'  => $input['parent'],
             ];
             $CompanyModel->save($data);
-            return redirect()->to('client')->with('massage', 'Data Berhasil Disimpan');
+            return redirect()->to('client')->with('message', 'Data berhasil di perbaharui');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -316,7 +316,7 @@ class Client extends BaseController
             $CompanyModel->delete($company['id']);
 
             // Redirect to View
-            return redirect()->to('client')->with('massage', lang('Global.deleted'));
+            return redirect()->to('client')->with('message', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

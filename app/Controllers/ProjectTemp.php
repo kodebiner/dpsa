@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CompanyModel;
 use App\Models\ProjectModel;
 use App\Models\ProjectTempModel;
 
@@ -27,6 +28,9 @@ class ProjectTemp extends BaseController
     {
         // Find Model
         $ProjectTempModel = new ProjectTempModel;
+        $CompanyModel = new CompanyModel();
+        $company = $CompanyModel->where('status !=', "0")->find();
+        
         $ProjectTemps   = $ProjectTempModel->paginate(10, 'projects');
         $uids = array();
         foreach ($ProjectTemps as $project) {
@@ -56,6 +60,7 @@ class ProjectTemp extends BaseController
         $data['description']    = lang('Global.projectDescription');
         $data['clients']        = $query->getResultArray();
         $data['projects']       = $ProjectTemps;
+        $data['company']        = $company;
         $data['parent']         = $parentid;
         $data['pager']          = $ProjectTempModel->pager;
 
@@ -73,13 +78,13 @@ class ProjectTemp extends BaseController
         $project = [
             'name'          => $input['name'],
             'brief'         => $input['brief'],
-            'clientid'      => $input['client'],
+            'clientid'      => $input['company'],
             'status'        => $input['status'],
             'production'    => $input['qty'],
         ];
         $ProjectTempModel->save($project);
 
-        return redirect()->to('project')->with('massage', lang('Global.saved'));
+        return redirect()->to('project')->with('message', lang('Global.saved'));
     }
 
     public function update($id)

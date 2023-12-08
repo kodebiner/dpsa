@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CompanyModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -13,6 +14,7 @@ use App\Models\UserModel;
 use Myth\Auth\Models\GroupModel;
 use App\Models\GroupUserModel;
 use App\Models\GconfigModel;
+
 /**
  * Class BaseController
  *
@@ -67,6 +69,7 @@ abstract class BaseController extends Controller
         $this->userModel = new UserModel();
         $this->GroupModel = new GroupModel();
         $this->GroupUserModel = new GroupUserModel();
+        $this->CompanyModel = new CompanyModel();
 
         // Login Check
         $auth = service('authentication');
@@ -74,35 +77,64 @@ abstract class BaseController extends Controller
             $this->userId = null;
             $fullname = '';
             $this->user = null;
-        }
-        else {
+        } else {
             $this->userId = $auth->id();
             $this->user = $this->userModel->find($this->userId);
             $fullname = $this->user->getname();
-            
+
             // Getting User Role
             $GroupUser = $this->GroupUserModel->where('user_id', $this->userId)->first();
             $role = $this->GroupModel->find($GroupUser['group_id']);
         }
 
         // Language check
-		if ($this->locale === 'id') {
-			$lang = 'id';
-		} else {
-			$lang = 'en';
-		}
-        
+        if ($this->locale === 'id') {
+            $lang = 'id';
+        } else {
+            $lang = 'en';
+        }
+
+        // $userparent = $this->userModel->find($this->userId);
+
+        // Getting Company
+        // company id
+        $compid = [];
+        $userparent = $this->userModel->where('id', $this->userId)->first();
+        if(!empty($userparent)){
+            $userpar = $this->userModel->find($this->userId);
+            if (!empty($userpar->parentid)) {
+            $company    = $this->CompanyModel->find($userparent->parentid);
+            $compid[] = $company['id'];
+        } else {
+            $company    = $this->CompanyModel->find($userparent);
+
+            $comparr    = [];
+            foreach ($company as $comp) {
+                $comparr[] = [
+                    'id'    => $comp['id'],
+                    'rs'    => $comp['rsname'],
+                ];
+            }
+
+            foreach ($comparr as $comp) {
+                $compid[] = $comp['id'];
+            }
+        }
+    }
+
 
         // Parsing View Data
         $this->data = [
-			'ismobile'	    => $this->agent->isMobile(),
+            'ismobile'        => $this->agent->isMobile(),
             'lang'          => $lang,
-			'uri'		    => $this->uri,
+            'uri'            => $this->uri,
             'uid'           => $this->userId,
             'authorize'     => service('authorization'),
             'account'       => $this->user,
-            'fullname'      => $fullname
-		];
+            'fullname'      => $fullname,
+            'parentid'      => $compid,
+        ];
+
 
         if ($auth->check()) {
             $this->data['role'] = $role->name;

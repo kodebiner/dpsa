@@ -115,7 +115,7 @@ class Paket extends BaseController
             'id'            => $id,
             'name'          => $input['name'],
         ];
-        
+
         // Save Data Paket
         $PaketModel->save($paketup);
 

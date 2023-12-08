@@ -341,7 +341,7 @@
         <table class="uk-table uk-table-justify uk-table-middle uk-table-divider" id="example" style="width:100%">
             <thead>
                 <tr>
-                    <th class="uk-width-large">Nama</th>
+                    <th class="uk-width-large">Nama Pengguna</th>
                     <th class="uk-width-medium">Email</th>
                     <th class="uk-width-medium">Akses</th>
                     <th class="uk-width-medium">Perusahaan</th>

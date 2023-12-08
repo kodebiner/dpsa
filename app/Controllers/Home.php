@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\BarModel;
 use App\Entities\User;
+use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\ProjectModel;
 use App\Models\ProjectTempModel;
@@ -34,6 +35,7 @@ class Home extends BaseController
             // Calling Models
             $UserModel = new UserModel();
             $ProjectTempModel = new ProjectTempModel();
+            $CompanyModel   = new CompanyModel();
 
             // Populating data
             $input = $this->request->getGet();
@@ -48,40 +50,62 @@ class Home extends BaseController
             } else {
                 $perpage = 10;
             }
-            
+
             $page = (@$_GET['page']) ? $_GET['page'] : 1;
             $offset = ($page - 1) * $perpage;
-            
+
             if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
                 // Superuser & Owner function
-                $clients = $this->db->table('users');
-                $clients->select('users.id as id, users.firstname as firstname, users.lastname as lastname, users.username as username');
-                $clients->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-                $clients->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-                $clients->where('auth_groups.name', 'client pusat');
-                $clients->orWhere('auth_groups.name', 'client cabang');
+                // $clients = $this->db->table('users');
+                // $clients->select('users.id as id, users.firstname as firstname, users.lastname as lastname, users.username as username');
+                // $clients->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+                // $clients->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+                // $clients->where('auth_groups.name', 'client pusat');
+                // $clients->orWhere('auth_groups.name', 'client cabang');
+                // if (isset($input['search']) && !empty($input['search'])) {
+                //     $clients->like('users.firstname', $input['search']);
+                //     $clients->orLike('users.lastname', $input['search']);
+                // }
+                // $query = $clients->get($perpage, $offset)->getResultArray();
+
+                // if (isset($input['search']) && !empty($input['search'])) {
+                //     $total = $clients
+                //         ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                //         ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                //         ->where('auth_groups.name', 'client pusat')
+                //         ->orWhere('auth_groups.name', 'client cabang')
+                //         ->like('users.firstname', $input['search'])
+                //         ->orLike('users.lastname', $input['search'])
+                //         ->countAllResults();
+                // } else {
+                //     $total = $clients
+                //         ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                //         ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                //         ->where('auth_groups.name', 'client pusat')
+                //         ->orWhere('auth_groups.name', 'client cabang')
+                //         ->countAllResults();
+                // }
+
+                // New Client Data 
+                $clients = $this->db->table('company');
+                $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
+                $clients->where('company.status !=', '0');
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $clients->like('users.firstname', $input['search']);
-                    $clients->orLike('users.lastname', $input['search']);
+                    $clients->like('company.name', $input['search']);
+                    $clients->orLike('company.name', $input['search']);
                 }
                 $query = $clients->get($perpage, $offset)->getResultArray();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $total = $clients
-                            ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-                            ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-                            ->where('auth_groups.name', 'client pusat')
-                            ->orWhere('auth_groups.name', 'client cabang')
-                            ->like('users.firstname', $input['search'])
-                            ->orLike('users.lastname', $input['search'])
-                            ->countAllResults();
+                        ->where('company.status !=', '0')
+                        ->like('company.name', $input['search'])
+                        ->orLike('company.name', $input['search'])
+                        ->countAllResults();
                 } else {
                     $total = $clients
-                            ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-                            ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-                            ->where('auth_groups.name', 'client pusat')
-                            ->orWhere('auth_groups.name', 'client cabang')
-                            ->countAllResults();
+                        ->where('company.status !=', '0')
+                        ->countAllResults();
                 }
 
                 $data['title']          = lang('Global.titleDashboard');
@@ -92,27 +116,54 @@ class Home extends BaseController
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client pusat') {
                 // Client Pusat function
+                // $clients = array();
+
+                // if (isset($input['search']) && !empty($input['search'])) {
+                //     $branches = $UserModel->where('parentid', $this->data['uid'])->like('firstname', $input['search'])->orLike('lastname', $input['search'])->find();
+                // } else {
+                //     $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
+                //     if (!empty($projectpusat)) {
+                //         $clients[] = [
+                //             'id'        => $this->data['uid'],
+                //             'firstname' => $this->data['account']->firstname,
+                //             'lastname'  => $this->data['account']->lastname
+                //         ];
+                //     }
+                //     $branches = $UserModel->where('parentid', $this->data['parentid'])->find();
+                // }
+
+                // foreach ($branches as $branch) {
+                //     $clients[] = [
+                //         'id'        => $branch->id,
+                //         'firstname' => $branch->firstname,
+                //         'lastname'  => $branch->lastname
+                //     ];
+                // }
+
+                // $total = count($clients);
+
+                // New Client Pusat Function
                 $clients = array();
-                
-                if (isset($input['search']) && !empty($input['search'])) {        
-                    $branches = $UserModel->where('parentid', $this->data['uid'])->like('firstname', $input['search'])->orLike('lastname', $input['search'])->find();
+
+                if (isset($input['search']) && !empty($input['search'])) {
+                    $branches = $CompanyModel->where('parentid', $this->data['parentid'])->like('rsname', $input['search'])->orLike('ptname', $input['search'])->find();
                 } else {
-                    $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
+                    $projectpusat = $ProjectTempModel->where('clientid', $this->data['parentid'])->find();
                     if (!empty($projectpusat)) {
+                        $company = $CompanyModel->where('id', $this->data['parentid'])->first();
                         $clients[] = [
-                            'id'        => $this->data['uid'],
-                            'firstname' => $this->data['account']->firstname,
-                            'lastname'  => $this->data['account']->lastname
+                            'id'        => $company['id'],
+                            'rsname'    => $company['rsname'],
                         ];
                     }
-                    $branches = $UserModel->where('parentid', $this->data['uid'])->find();    
+                    $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->find();
                 }
 
+                // dd($this->data['parentid']);
                 foreach ($branches as $branch) {
                     $clients[] = [
-                        'id'        => $branch->id,
-                        'firstname' => $branch->firstname,
-                        'lastname'  => $branch->lastname
+                        'id'        => $branch['id'],
+                        'rsname'    => $branch['rsname'],
                     ];
                 }
 
@@ -126,16 +177,29 @@ class Home extends BaseController
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client cabang') {
                 // Client Cabang function
+
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $projects = $ProjectTempModel->where('clientid', $this->data['uid'])->like('name', $input['search'])->paginate($perpage, 'projects');
+                    $projects = $ProjectTempModel->where('clientid', $this->data['parentid'])->like('name', $input['search'])->paginate($perpage, 'projects');
                 } else {
-                    $projects = $ProjectTempModel->where('clientid', $this->data['uid'])->paginate($perpage, 'projects');
+                    $projects = $ProjectTempModel->where('clientid', $this->data['parentid'])->paginate($perpage, 'projects');
+                }
+
+                $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->find();
+                
+                $clients = array();
+                foreach ($company as $comp){
+                    if (!empty($clients)){
+                        $clients[] = [
+                            'id'  => $comp['id'],
+                            'rsname' => $comp['rsname'],
+                        ];
+                    }
                 }
 
                 // Parsing Data to View
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
-                $data['client']         = $this->data['account'];
+                $data['client']         = $clients;
                 $data['projects']       = $projects;
                 $data['pager']          = $pager->links('projects', 'uikit_full');
 
@@ -149,12 +213,38 @@ class Home extends BaseController
     public function clientdashboard($id)
     {
         if ($this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
+            // // Calling Services
+            // $pager = \Config\Services::pager();
+            // // Calling models
+            // $UserModel = new UserModel;
+            // $ProjectTempModel = new ProjectTempModel;
+            // $CompanyModel   = new CompanyModel();
+
+            // // Populating Data
+            // $input = $this->request->getGet();
+
+            // if (isset($input['perpage']) && !empty($input['perpage'])) {
+            //     $perpage = $input['perpage'];
+            // } else {
+            //     $perpage = 10;
+            // }
+
+            // $client = $UserModel->find($id);
+
+            // if (isset($input['search']) && !empty($input['search'])) {
+            //     $projects = $ProjectTempModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
+            // } else {
+            //     $projects = $ProjectTempModel->where('clientid', $id)->paginate($perpage, 'projects');
+            // }
+
+            // New Client Dashboard System
+
             // Calling Services
             $pager = \Config\Services::pager();
-
             // Calling models
             $UserModel = new UserModel;
             $ProjectTempModel = new ProjectTempModel;
+            $CompanyModel   = new CompanyModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -165,7 +255,7 @@ class Home extends BaseController
                 $perpage = 10;
             }
 
-            $client = $UserModel->find($id);
+            $client = $CompanyModel->find($id);
 
             if (isset($input['search']) && !empty($input['search'])) {
                 $projects = $ProjectTempModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');

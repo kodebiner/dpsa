@@ -7,8 +7,6 @@ use App\Models\UserModel;
 use App\Models\GroupUserModel;
 use App\Models\PermissionModel;
 use Myth\Auth\Models\GroupModel;
-use App\Models\ProjectModel;
-use App\Models\ProjectTempModel;
 
 class User extends BaseController
 {
@@ -74,8 +72,6 @@ class User extends BaseController
                 ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
                 ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
                 ->where('users.id !=', $this->data['uid'])
-                ->where('auth_groups.name', 'client pusat')
-                ->orWhere('auth_groups.name', 'client cabang')
                 ->countAllResults();
 
             $parentid = [];
@@ -88,8 +84,8 @@ class User extends BaseController
 
             // Parsing data to view
             $data                   = $this->data;
-            $data['title']          = lang('Global.usersList');
-            $data['description']    = lang('Global.usersListDesc');
+            $data['title']          = "Daftar Pengguna";
+            $data['description']    = "Daftar Pengguna Aplikasi";
             $data['roles']          = $GroupModel->findAll();
             $data['users']          = $query;
             $data['parent']         = $parentid;
@@ -196,8 +192,7 @@ class User extends BaseController
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
-            return redirect()->to('users')->with('massage', lang('Global.saved'));
-            // }
+            return redirect()->back()->with('message', 'Data pengguna berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -367,12 +362,7 @@ class User extends BaseController
             }
 
             // Redirect to user management
-            if (isset($input['parent'])) {
-                // return redirect()->route("users/client")->with("massage", lang('Global.saved'));
-                return redirect()->to('users/client')->with('massage', 'halo');
-            } elseif (empty($input['parent'])) {
-                return redirect()->to('users')->with('massage', lang('Global.saved'));
-            }
+            return redirect()->back()->with('message', 'Data berhasil diperbaharui.');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -385,9 +375,7 @@ class User extends BaseController
             $usersModel = new UserModel();
             $GroupUserModel = new GroupUserModel();
 
-            $user = $usersModel->find($id);
             $groups = $GroupUserModel->where('user_id', $id)->find();
-            $input = $this->request->getPost();
 
             $groupid = "";
             foreach ($groups as $group) {
@@ -413,90 +401,17 @@ class User extends BaseController
         }
     }
 
-    public function deleteclient($id)
-    {
-        if ($this->data['authorize']->hasPermission('admin.user.delete', $this->data['uid'])) {
-            $authorize = service('authorization');
-
-            // Calling Model
-            $usersModel = new UserModel();
-            $GroupUserModel = new GroupUserModel();
-            // $ProjectModel = new ProjectModel;
-            $ProjectTempModel = new ProjectTempModel;
-
-            $Project = $ProjectTempModel->where('clientid', $id)->find();
-
-            // remove project
-            if (!empty($Project)) {
-                foreach ($Project as $project) {
-                    $ProjectTempModel->delete($project['id']);
-                }
-            }
-
-            $users = $usersModel->findAll();
-
-            // Remove Parent
-            $parid = [];
-            foreach ($users as $child) {
-                if ($child->parentid === $id) {
-                    $parid[] = [
-                        'id' => $child->id,
-                    ];
-                }
-            }
-
-            if (!empty($parid)) {
-                foreach ($users as $user) {
-                    if ($user->id === $parid['id']) {
-                        $data = [
-                            'id'        => $parid['id'],
-                            'parentid'  => 0,
-                        ];
-                        $usersModel->save($data);
-                    }
-                }
-            }
-
-            $groups = $GroupUserModel->where('user_id', $id)->find();
-
-            $groupid = "";
-            foreach ($groups as $group) {
-                $groupid = $group['group_id'];
-            }
-
-            $data['users'] = $usersModel->find($id);
-            if (empty($data)) {
-                throw new \CodeIgniter\Exceptions\PageNotFoundException('Data Password Tidak Ditemukan !');
-            }
-
-            // remove from user group
-            $authorize->removeUserFromGroup($id, $groupid);
-
-            $usersModel->update($id, [
-                'active'   => '0'
-            ]);
-            $usersModel->delete($id);
-
-            return redirect()->to('users/client')->with('massage', lang('Global.deleted'));
-        } else {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-    }
-
     public function accesscontrol()
     {
         if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) {
             $authorize = service('authorization');
             // Calling Libraries and Services
             $authorize = $auth = service('authorization');
-
             // Populating Data
             $groups = $authorize->groups();
             $permission = $authorize->permissions();
-
             // permanent groups
             $grouparr = ['superuser', 'admin', 'owner', 'marketing', 'design', 'production', 'client pusat', 'client cabang'];
-
             // Parsing data to view
             $data                   = $this->data;
             $data['title']          = lang('Global.employeeList');
@@ -505,38 +420,31 @@ class User extends BaseController
             $data['permissions']    = $permission;
             $data['GroupModel']     = new GroupModel();
             $data['grouparr']       = $grouparr;
-
             return view('accesscontrol', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
-
+    
     public function createaccess()
     {
         if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) {
             $authorize = service('authorization');
             // Calling Libraries and Services
             $authorize = $auth = service('authorization');
-
             // Populating Data
             $groups = $authorize->groups();
-
             // Initialize
             $input = $this->request->getPost();
-
             // Create Group
             $id = $authorize->createGroup($input['group'], $input['description']);
-
             $permission = [];
             foreach ($input['permission'] as $key => $permit) {
                 $permission[] = $permit;
             }
-
             foreach ($permission as $permissionid) {
                 $authorize->addPermissionToGroup($permissionid, $id);
             }
-
             return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -592,7 +500,7 @@ class User extends BaseController
             }
         }
 
-        return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
+        return redirect()->to('users/access-control')->with('message', "Akses berhasil di perbaharui");
     }
 
     public function deleteaccess($id)
@@ -619,6 +527,6 @@ class User extends BaseController
         // Delete Group
         $authorize->deleteGroup($id);
 
-        return redirect()->to('users/access-control')->with('message', lang('Global.deleted'));
+        return redirect()->to('users/access-control')->with('message', "Akses berhasil di delete.");
     }
 }

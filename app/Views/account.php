@@ -9,7 +9,7 @@
 <div class="tm-card-header uk-light">
     <div uk-grid class="uk-width-1-1@m uk-flex-middle">
         <div class="uk-width-1-2@m">
-            <h3 class="tm-h3"><?=lang('Global.userProfile')?></h3>
+            <h3 class="tm-h3">Profil Pengguna</h3>
         </div>
     </div>
 </div>
@@ -24,25 +24,25 @@
         <div class="uk-child-width-1-2@m" uk-grid>
             <div>
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="username"><?=lang('Auth.username')?></label>
+                    <label class="uk-form-label" for="username">Nama Pengguna</label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="username" name="username" type="text" value="<?=$account->username?>">
                     </div>
                 </div>
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="email"><?=lang('Auth.email')?></label>
+                    <label class="uk-form-label" for="email">Email</label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="email" name="email" type="email" value="<?=$account->email?>">
                     </div>
                 </div>
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="firstname"><?=lang('Global.firstname')?></label>
+                    <label class="uk-form-label" for="firstname">Nama Depan</label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="firstname" name="firstname" type="text" value="<?=$account->firstname?>">
                     </div>
                 </div>
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="lastname"><?=lang('Global.lastname')?></label>
+                    <label class="uk-form-label" for="lastname"></label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="lastname" name="lastname" type="text" value="<?=$account->lastname?>">
                     </div>
@@ -51,24 +51,24 @@
             <div>
                 <div class="uk-card uk-card-default">
                     <div class="uk-card-header">
-                        <h3 class="uk-card-title uk-margin-remove"><?=lang('Auth.resetPassword')?></h3>
-                        <p class="uk-margin-remove"><?=lang('Global.resetPassDesc')?></p>
+                        <h3 class="uk-card-title uk-margin-remove">Ubah Kata Sandi</h3>
+                        <p class="uk-margin-remove">Ubah Kata Sandi Akun Anda</p>
                     </div>
                     <div class="uk-card-body">
                         <div class="uk-margin">
-                            <label class="uk-form-label uk-preserve-color" for="oldPass"><?=lang('Global.currentPass')?></label>
+                            <label class="uk-form-label uk-preserve-color" for="oldPass">Kata Sandi Lama</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input uk-preserve-color" id="oldPass" name="oldPass" type="password">
                             </div>
                         </div>
                         <div class="uk-margin">
-                            <label class="uk-form-label uk-preserve-color" for="newPass"><?=lang('Auth.newPassword')?></label>
+                            <label class="uk-form-label uk-preserve-color" for="newPass">Kata Sandi Baru</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input uk-preserve-color" id="newPass" name="newPass" type="password">
                             </div>
                         </div>
                         <div class="uk-margin">
-                            <label class="uk-form-label uk-preserve-color" for="newPassConf"><?=lang('Auth.newPasswordRepeat')?></label>
+                            <label class="uk-form-label uk-preserve-color" for="newPassConf">Konfirmasi Kata Sandi Baru</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input uk-preserve-color" id="newPassConf" name="newPassConf" type="password">
                             </div>
