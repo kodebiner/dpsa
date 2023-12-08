@@ -29,7 +29,7 @@ class Project extends BaseController
             // Find Model
             $ProjectModel = new ProjectModel;
             $CompanyModel = new CompanyModel();
-            $company = $CompanyModel->where('status !=', "0")->find();
+            $company = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
 
             $projects   = $ProjectModel->where('deleted_at', null)->paginate(10, 'projects');
 

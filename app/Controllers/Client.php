@@ -82,7 +82,7 @@ class Client extends BaseController
             $data                   = $this->data;
             $data['title']          = lang('Global.clientList');
             $data['description']    = lang('Global.clientListDesc');
-            $data['roles']          = $CompanyModel->findAll();
+            $data['roles']          = $CompanyModel->where('deleted_at',null)->find();
             $data['company']        = $query;
             $data['parent']         = $parentid;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');

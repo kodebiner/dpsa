@@ -39,7 +39,7 @@ class User extends BaseController
 
             // Populating data
             $users = $UserModel->findAll();
-            $company = $CompanyModel->where('status !=', "0")->find();
+            $company = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
 
             // Initilize
             $input = $this->request->getGet();
