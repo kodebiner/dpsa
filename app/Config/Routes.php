@@ -80,18 +80,18 @@ $routes->group('client',['filter' => 'login'], function ($routes){
 
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
-    // $routes->get('', 'Project::index');
-    // $routes->post('create', 'Project::create');
-    // $routes->post('update/(:num)', 'Project::update/$1');
-    // $routes->post('delete/(:num)', 'Project::delete/$1');
-    // $routes->get('delete/(:num)', 'Project::delete/$1');
+    $routes->get('', 'Project::index');
+    $routes->post('create', 'Project::create');
+    $routes->post('update/(:num)', 'Project::update/$1');
+    $routes->post('delete/(:num)', 'Project::delete/$1');
+    $routes->get('delete/(:num)', 'Project::delete/$1');
 
     // Project Temp Routes
-    $routes->get('', 'ProjectTemp::index');
-    $routes->post('create', 'ProjectTemp::create');
-    $routes->post('update/(:num)', 'ProjectTemp::update/$1');
-    $routes->post('delete/(:num)', 'ProjectTemp::delete/$1');
-    $routes->get('delete/(:num)', 'ProjectTemp::delete/$1');
+    // $routes->get('', 'ProjectTemp::index');
+    // $routes->post('create', 'ProjectTemp::create');
+    // $routes->post('update/(:num)', 'ProjectTemp::update/$1');
+    // $routes->post('delete/(:num)', 'ProjectTemp::delete/$1');
+    // $routes->get('delete/(:num)', 'ProjectTemp::delete/$1');
 
 });
 

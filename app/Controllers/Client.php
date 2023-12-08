@@ -52,6 +52,7 @@ class Client extends BaseController
             $page = (@$_GET['page']) ? $_GET['page'] : 1;
             $offset = ($page - 1) * $perpage;
 
+            $this->builder->where('deleted_at', null);
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('company.rsname', $input['search']);
                 $this->builder->orLike('company.ptname', $input['search']);
@@ -130,7 +131,7 @@ class Client extends BaseController
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
-                'phone' => [
+                'notelp' => [
                     'label'  => 'No Telepon',
                     'rules'  => 'required|is_unique[company.phone]',
                     'errors' => [
@@ -160,6 +161,7 @@ class Client extends BaseController
                 'phone'     => $input['notelp'],
                 'status'    => '1',
                 'parentid'  => $input['parent'],
+                'created_at'    => date('Y-m-d h:i:s'),
             ];
             $CompanyModel->save($data);
 
@@ -209,7 +211,7 @@ class Client extends BaseController
             $rules = [
                 'rsname' => [
                     'label'  => 'Nama Rumah Sakit / Nama Alias',
-                    'rules'  => 'required'. $is_unique ,
+                    'rules'  => 'required' . $is_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -217,7 +219,7 @@ class Client extends BaseController
                 ],
                 'ptname' => [
                     'label'  => 'Nama PT',
-                    'rules'  => 'required'.$ptis_unique,
+                    'rules'  => 'required' . $ptis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -225,7 +227,7 @@ class Client extends BaseController
                 ],
                 'address' => [
                     'label'  => 'Alamat',
-                    'rules'  => 'required'.$addressis_unique,
+                    'rules'  => 'required' . $addressis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -233,7 +235,7 @@ class Client extends BaseController
                 ],
                 'notelp' => [
                     'label'  => 'No Telepon',
-                    'rules'  => 'required'.$phoneis_unique,
+                    'rules'  => 'required' . $phoneis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -241,7 +243,7 @@ class Client extends BaseController
                 ],
                 'npwp' => [
                     'label'  => 'NPWP',
-                    'rules'  => 'required'.$npwpis_unique,
+                    'rules'  => 'required' . $npwpis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -262,6 +264,7 @@ class Client extends BaseController
                 'phone'     => $input['notelp'],
                 'status'    => $input['status'],
                 'parentid'  => $input['parent'],
+                'updated_at'    => date('Y-m-d h:i:s'),
             ];
             $CompanyModel->save($data);
             return redirect()->to('client')->with('message', 'Data berhasil di perbaharui');
@@ -276,17 +279,20 @@ class Client extends BaseController
 
             // Calling Model
             $CompanyModel = new CompanyModel();
-            $ProjectModel = new ProjectTempModel();
+            $ProjectModel = new ProjectModel();
 
             // Getting Data 
-            $company = $CompanyModel->find($id);
             $companys = $CompanyModel->findAll();
             $Project = $ProjectModel->where('clientid', $id)->find();
 
             // remove project
             if (!empty($Project)) {
                 foreach ($Project as $project) {
-                    $ProjectModel->delete($project['id']);
+                    $pro = [
+                        'id'            => $project['id'],
+                        'deleted_at'    => date('Y-m-d H:i:s'),
+                    ];
+                    $ProjectModel->save($pro);
                 }
             }
 
@@ -312,8 +318,12 @@ class Client extends BaseController
                 }
             }
 
-            // Remove Data Client
-            $CompanyModel->delete($company['id']);
+            // Soft Delete Data Client
+            $data   = [
+                'id'            => $id,
+                'deleted_at'    => date('Y-m-d H:i:s'),
+            ];
+            $CompanyModel->save($data);
 
             // Redirect to View
             return redirect()->to('client')->with('message', "Data berhasil di hapus");

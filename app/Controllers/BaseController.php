@@ -94,34 +94,33 @@ abstract class BaseController extends Controller
             $lang = 'en';
         }
 
-        // $userparent = $this->userModel->find($this->userId);
+        // Get Accurate Date
+        date_default_timezone_set('Asia/Jakarta');
 
-        // Getting Company
-        // company id
+        // Get Data Company
         $compid = [];
         $userparent = $this->userModel->where('id', $this->userId)->first();
-        if(!empty($userparent)){
+        if (!empty($userparent)) {
             $userpar = $this->userModel->find($this->userId);
             if (!empty($userpar->parentid)) {
-            $company    = $this->CompanyModel->find($userparent->parentid);
-            $compid[] = $company['id'];
-        } else {
-            $company    = $this->CompanyModel->find($userparent);
+                $company    = $this->CompanyModel->find($userparent->parentid);
+                $compid[] = $company['id'];
+            } else {
+                $company    = $this->CompanyModel->find($userparent);
 
-            $comparr    = [];
-            foreach ($company as $comp) {
-                $comparr[] = [
-                    'id'    => $comp['id'],
-                    'rs'    => $comp['rsname'],
-                ];
-            }
+                $comparr    = [];
+                foreach ($company as $comp) {
+                    $comparr[] = [
+                        'id'    => $comp['id'],
+                        'rs'    => $comp['rsname'],
+                    ];
+                }
 
-            foreach ($comparr as $comp) {
-                $compid[] = $comp['id'];
+                foreach ($comparr as $comp) {
+                    $compid[] = $comp['id'];
+                }
             }
         }
-    }
-
 
         // Parsing View Data
         $this->data = [

@@ -246,7 +246,7 @@ class User extends BaseController
                     ],
                 ],
                 'email' => [
-                    'Email',
+                    'label'  => 'Email',
                     'rules'  => 'required' . $emailis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',

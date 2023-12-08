@@ -4,10 +4,9 @@ namespace App\Controllers;
 
 use App\Models\CompanyModel;
 use App\Models\ProjectModel;
-// use App\Models\ProjectModel;
 
 
-class ProjectTemp extends BaseController
+class Project extends BaseController
 {
     protected $db, $builder;
     protected $auth;
@@ -18,7 +17,7 @@ class ProjectTemp extends BaseController
     {
         $this->db       = \Config\Database::connect();
         $validation     = \Config\Services::validation();
-        $this->builder  = $this->db->table('users');
+        $this->builder  = $this->db->table('project');
         $this->config   = config('Auth');
         $this->auth     = service('authentication');
         $pager          = \Config\Services::pager();
@@ -26,122 +25,205 @@ class ProjectTemp extends BaseController
 
     public function index()
     {
-        // Find Model
-        $ProjectModel = new ProjectModel;
-        $CompanyModel = new CompanyModel();
-        $company = $CompanyModel->where('status !=', "0")->find();
-        
-        $projects   = $ProjectModel->paginate(10, 'projects');
-        $uids = array();
-        foreach ($projects as $project) {
-            $uids[] = $project['clientid'];
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // Find Model
+            $ProjectModel = new ProjectModel;
+            $CompanyModel = new CompanyModel();
+            $company = $CompanyModel->where('status !=', "0")->find();
+
+            $projects   = $ProjectModel->where('deleted_at', null)->paginate(10, 'projects');
+
+            $data = $this->data;
+            $data['title']          = "Proyek";
+            $data['description']    = "Data Proyek";
+            $data['projects']       = $projects;
+            $data['company']        = $company;
+            $data['pager']          = $ProjectModel->pager;
+
+            return view('project', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
-        $this->builder->where('deleted_at', null);
-        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $this->builder->where('users.id !=', $this->data['uid']);
-        $this->builder->where('auth_groups.name', 'client pusat');
-        $this->builder->orWhere('auth_groups.name', 'client cabang');
-        $this->builder->select('users.id as id, users.username as username, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
-        $query =   $this->builder->get();
-        $users = $query->getResult();
-
-        $parentid = [];
-        foreach ($users as $user) {
-            $parentid[] = [
-                'id' => $user->id,
-                'name' => $user->username,
-            ];
-        }
-
-        $data = $this->data;
-        $data['title']          = lang('Global.titleProject');
-        $data['description']    = lang('Global.projectDescription');
-        $data['clients']        = $query->getResultArray();
-        $data['projects']       = $projects;
-        $data['company']        = $company;
-        $data['parent']         = $parentid;
-        $data['pager']          = $ProjectModel->pager;
-
-        return view('projectTemp', $data);
     }
 
     public function create()
     {
-        // Calling Model
-        $ProjectModel = new ProjectModel;
+        if ($this->data['authorize']->hasPermission('admin.project.create', $this->data['uid'])) {
+            // Calling Model
+            $ProjectModel = new ProjectModel;
 
-        // initialize
-        $input  = $this->request->getPost();
-        $time   = time();
-        $project = [
-            'name'          => $input['name'],
-            'brief'         => $input['brief'],
-            'clientid'      => $input['company'],
-            'status'        => $input['status'],
-            'production'    => $input['qty'],
-            'created_at'    => date('Y-m-d H:i:s',$time),
-        ];
-        $ProjectModel->save($project);
+            // initialize
+            $input  = $this->request->getPost();
 
-        return redirect()->to('project')->with('message', "Data berhasil di simpan.");
+            // Validation Rules
+            $rules = [
+                'name' => [
+                    'label'  => 'Nama Proyek',
+                    'rules'  => 'required|is_unique[project.name]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'brief' => [
+                    'label'  => 'Detail Pesanan',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'company' => [
+                    'label'  => 'Nama Klien',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'status' => [
+                    'label'  => 'Progres Proyek',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            $project = [
+                'name'          => $input['name'],
+                'brief'         => $input['brief'],
+                'clientid'      => $input['company'],
+                'status'        => $input['status'],
+                'production'    => $input['qty'],
+                'created_at'    => date('Y-m-d h:i:s'),
+            ];
+            $ProjectModel->save($project);
+
+            return redirect()->back()->with('message', "Data berhasil di simpan.");
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 
     public function update($id)
     {
-        // Calling Model
-        $ProjectModel = new ProjectModel;
+        if ($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])) {
+            // Calling Model
+            $ProjectModel = new ProjectModel;
 
-        // initialize
-        $input = $this->request->getPost();
-        $pro = $ProjectModel->find($id);
-        $time   = time();
+            // initialize
+            $input = $this->request->getPost();
+            $pro = $ProjectModel->find($id);
 
-        if (empty($input['client'])) {
-            $client = $pro['clientid'];
+            if (isset($input['name'])) {
+                $name = $pro['name'];
+            } else {
+                $name = $input['name'];
+            }
+
+            if (isset($input['brief'])) {
+                $brief = $pro['brief'];
+            } else {
+                $brief = $input['brief'];
+            }
+            
+            if (isset($input['company'])) {
+                $client = $pro['clientid'];
+            } else {
+                $client = $input['company'];
+            }
+
+            if (isset($input['status'])) {
+                $status = $pro['status'];
+            } else {
+                $status = $input['status'];
+            }
+
+            if (isset($input['qty'])) {
+                $qty = $pro['production'];
+            } else {
+                $qty = $input['qty'];
+            }
+
+            if ($input['name'] === $pro['name']) {
+                $is_unique =  '';
+            } else {
+                $is_unique =  'is_unique[project.name]';
+            }
+
+            // Validation Rules
+            $rules = [
+                'name' => [
+                    'label'  => 'Nama Proyek',
+                    'rules'  => 'required|'.$is_unique,
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+                'brief' => [
+                    'label'  => 'Detail Pemesanan',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'company' => [
+                    'label'  => 'Nama Klien',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+                'status' => [
+                    'label'  => 'Progres Proyek',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            $project = [
+                'id'            => $id,
+                'name'          => $name,
+                'brief'         => $brief,
+                'clientid'      => $client,
+                'status'        => $status,
+                'production'    => $qty,
+                'updated_at'    => date('Y-m-d H:i:s'),
+            ];
+            $ProjectModel->save($project);
+
+            return redirect()->back()->with('message', "Data berhasil di perbaharui.");
         } else {
-            $client = $input['client'];
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
-        if (empty($input['status'])) {
-            $status = $pro['status'];
-        } else {
-            $status = $input['status'];
-        }
-
-        $project = [
-            'id'            => $id,
-            'name'          => $input['name'],
-            'brief'         => $input['brief'],
-            'clientid'      => $client,
-            'status'        => $status,
-            'production'    => $input['qty'],
-            'updated_at'    => date('Y-m-d H:i:s',$time),
-        ];
-        $ProjectModel->save($project);
-
-        return redirect()->to('project')->with('massage', lang('Global.saved'));
     }
 
     public function delete($id)
     {
-        // Calling Model
-        $ProjectModel = new ProjectModel;
+        if ($this->data['authorize']->hasPermission('admin.project.delete', $this->data['uid'])) {
+            // Calling Model
+            $ProjectModel = new ProjectModel;
 
-        // Soft Delete Project
-        $project = $ProjectModel->find($id);
-        $time   = time();
-        $data   = [
-            'id'            => $id,
-            'deleted_at'    => date('Y-m-d H:i:s',$time),
-        ];
-        $ProjectModel->save($data);
+            // Soft Delete Project
+            $data   = [
+                'id'            => $id,
+                'deleted_at'    => date('Y-m-d H:i:s'),
+            ];
+            $ProjectModel->save($data);
 
-        return redirect()->to('project')->with('massage', lang('Global.deleted'));
-    }
-
-    public function approve()
-    {
+            return redirect()->back()->with('message', "Data berhasil di hapus");
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 }

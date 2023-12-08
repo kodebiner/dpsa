@@ -7,7 +7,6 @@ use App\Entities\User;
 use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\ProjectModel;
-use App\Models\ProjectTempModel;
 
 
 class Home extends BaseController
@@ -34,7 +33,7 @@ class Home extends BaseController
 
             // Calling Models
             $UserModel = new UserModel();
-            $ProjectTempModel = new ProjectTempModel();
+            $ProjectModel = new ProjectModel();
             $CompanyModel   = new CompanyModel();
 
             // Populating data
@@ -121,7 +120,7 @@ class Home extends BaseController
                 // if (isset($input['search']) && !empty($input['search'])) {
                 //     $branches = $UserModel->where('parentid', $this->data['uid'])->like('firstname', $input['search'])->orLike('lastname', $input['search'])->find();
                 // } else {
-                //     $projectpusat = $ProjectTempModel->where('clientid', $this->data['uid'])->find();
+                //     $projectpusat = $ProjectModel->where('clientid', $this->data['uid'])->find();
                 //     if (!empty($projectpusat)) {
                 //         $clients[] = [
                 //             'id'        => $this->data['uid'],
@@ -148,7 +147,7 @@ class Home extends BaseController
                 if (isset($input['search']) && !empty($input['search'])) {
                     $branches = $CompanyModel->where('parentid', $this->data['parentid'])->like('rsname', $input['search'])->orLike('ptname', $input['search'])->find();
                 } else {
-                    $projectpusat = $ProjectTempModel->where('clientid', $this->data['parentid'])->find();
+                    $projectpusat = $ProjectModel->where('clientid', $this->data['parentid'])->find();
                     if (!empty($projectpusat)) {
                         $company = $CompanyModel->where('id', $this->data['parentid'])->first();
                         $clients[] = [
@@ -179,9 +178,9 @@ class Home extends BaseController
                 // Client Cabang function
 
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $projects = $ProjectTempModel->where('clientid', $this->data['parentid'])->like('name', $input['search'])->paginate($perpage, 'projects');
+                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->like('name', $input['search'])->paginate($perpage, 'projects');
                 } else {
-                    $projects = $ProjectTempModel->where('clientid', $this->data['parentid'])->paginate($perpage, 'projects');
+                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->paginate($perpage, 'projects');
                 }
 
                 $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->find();
@@ -217,7 +216,7 @@ class Home extends BaseController
             // $pager = \Config\Services::pager();
             // // Calling models
             // $UserModel = new UserModel;
-            // $ProjectTempModel = new ProjectTempModel;
+            // $ProjectModel = new ProjectModel;
             // $CompanyModel   = new CompanyModel();
 
             // // Populating Data
@@ -232,9 +231,9 @@ class Home extends BaseController
             // $client = $UserModel->find($id);
 
             // if (isset($input['search']) && !empty($input['search'])) {
-            //     $projects = $ProjectTempModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
+            //     $projects = $ProjectModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
             // } else {
-            //     $projects = $ProjectTempModel->where('clientid', $id)->paginate($perpage, 'projects');
+            //     $projects = $ProjectModel->where('clientid', $id)->paginate($perpage, 'projects');
             // }
 
             // New Client Dashboard System
@@ -243,7 +242,7 @@ class Home extends BaseController
             $pager = \Config\Services::pager();
             // Calling models
             $UserModel = new UserModel;
-            $ProjectTempModel = new ProjectTempModel;
+            $ProjectModel = new ProjectModel;
             $CompanyModel   = new CompanyModel();
 
             // Populating Data
@@ -258,9 +257,9 @@ class Home extends BaseController
             $client = $CompanyModel->find($id);
 
             if (isset($input['search']) && !empty($input['search'])) {
-                $projects = $ProjectTempModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->like('name', $input['search'])->paginate($perpage, 'projects');
             } else {
-                $projects = $ProjectTempModel->where('clientid', $id)->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->paginate($perpage, 'projects');
             }
 
             // Parsing Data to View

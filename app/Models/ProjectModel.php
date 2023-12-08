@@ -5,10 +5,10 @@ use CodeIgniter\Model;
 class ProjectModel extends Model
 {
     protected $allowedFields = [
-        'clientid', 'brief', 'name', 'status', 'production',
+        'clientid', 'brief', 'name', 'status', 'production', 'created_at', 'updated_at', 'deleted_at',
     ];
     
     protected $useAutoIncrement = true;
-    protected $table            = 'temp_project';
+    protected $table            = 'project';
     protected $primaryKey       = 'id';
 }
