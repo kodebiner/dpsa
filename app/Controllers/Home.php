@@ -55,7 +55,7 @@ class Home extends BaseController
             if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
 
                 // New Client Data 
-                $clients = $this->db->table('company');
+                $clients = $this->db->table('company')->where('deleted_at',null);
                 $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
                 $clients->where('company.status !=', '0');
                 if (isset($input['search']) && !empty($input['search'])) {
