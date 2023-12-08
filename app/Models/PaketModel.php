@@ -5,11 +5,16 @@ use CodeIgniter\Model;
 class PaketModel extends Model
 {
     protected $allowedFields = [
-        'name',
+        'name', 'created_at', 'updated_at', 'deleted_at',
     ];
     
-    protected $returnType       = 'array';
-    protected $useAutoIncrement = true;
     protected $table            = 'paket';
     protected $primaryKey       = 'id';
+    protected $useAutoIncrement = true;
+    protected $returnType       = 'array';
+    protected $useTimestamps    = true;
+    protected $useSoftDeletes   = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
+    protected $deletedField     = 'deleted_at';
 }

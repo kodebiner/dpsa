@@ -131,6 +131,9 @@
                             <div>
                                 <a class="uk-icon-button" href="#modalupdate<?= $paket['id'] ?>" uk-icon="pencil" uk-toggle></a>
                             </div>
+                            <div>
+                                <a class="uk-icon-button-delete" href="paket/delete/<?= $paket['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                            </div>
                         </div>
                     </td>
                     <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
@@ -154,7 +157,14 @@
                             </td>
                             <td><?= $mdl['price'] ?></td>
                             <td class="uk-text-center">
-                                <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                                <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
+                                    <div>
+                                        <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                                    </div>
+                                    <div>
+                                        <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     <?php } ?>
@@ -195,255 +205,289 @@
                     </div>
                 </div>
 
-                <div id="createMDL" class="uk-margin-bottom">
-                    <h4 class="tm-h4 uk-margin-remove">MDL</h4>
-                    <div class="uk-text-right"><a onclick="createNewMDL()">+ Tambah Daftar MDL</a></div>
-                    <div id="create0" class="uk-margin uk-child-width-1-3" uk-grid>
-                        <div id="createMDLName0"><input type="text" class="uk-input" id="mdlName[0]" name="mdlName[0]" placeholder="Nama" required /></div>
-                        <div id="createMDLDen0">
-                            <select class="uk-select" id="mdlD[0]" name="mdlD[0]" required>
-                                <option value="" selected disabled hidden>Pilih Satuan</option>
-                                <option value="1">Unit</option>
-                                <option value="2">Meter Lari</option>
-                                <option value="3">Meter Persegi</option>
-                            </select>
-                        </div>
-                        <div id="createMDLPrice0"><input type="number" class="uk-input" id="mdlP[0]" name="mdlP[0]" placeholder="Harga" required /></div>
+                <div class="uk-modal-footer">
+                    <div class="uk-text-right">
+                        <button class="uk-button uk-button-primary" type="submit">Simpan</button>
                     </div>
-                    <div id="dimentions0"></div>
                 </div>
-                
-                <script type="text/javascript">
-                    var createCount = 0;
-                    document.getElementById('mdlD[0]').addEventListener('change', function() {
-                        if (this.value == "2" || this.value == "3") {
-                            var elements = document.getElementById('contdim[0]');
-                            if (elements) {
-                                elements.remove();
-                            }
-                            var dimentions = document.getElementById('dimentions0');
-
-                            var contdim = document.createElement('div');
-                            contdim.setAttribute('id', 'contdim[0]');
-                            contdim.setAttribute('class', 'uk-child-width-1-3');
-                            contdim.setAttribute('uk-grid', '');
-
-                            var mdlL = document.createElement('div');
-                            mdlL.setAttribute('id', 'mdlL[0]');
-
-                            var mdlLInput = document.createElement('input');
-                            mdlLInput.setAttribute('type', 'number');
-                            mdlLInput.setAttribute('class', 'uk-input');
-                            mdlLInput.setAttribute('placeholder', 'Panjang');
-                            mdlLInput.setAttribute('id', 'mdlL[0]');
-                            mdlLInput.setAttribute('name', 'mdlL[0]');
-                            mdlLInput.setAttribute('required', '');
-
-                            var mdlW = document.createElement('div');
-                            mdlW.setAttribute('id', 'mdlW[0]');
-
-                            var mdlWInput = document.createElement('input');
-                            mdlWInput.setAttribute('type', 'number');
-                            mdlWInput.setAttribute('class', 'uk-input');
-                            mdlWInput.setAttribute('placeholder', 'Lebar');
-                            mdlWInput.setAttribute('id', 'mdlW[0]');
-                            mdlWInput.setAttribute('name', 'mdlW[0]');
-                            mdlWInput.setAttribute('required', '');
-
-                            var mdlH = document.createElement('div');
-                            mdlH.setAttribute('id', 'mdlH[0]');
-
-                            var mdlHInput = document.createElement('input');
-                            mdlHInput.setAttribute('type', 'number');
-                            mdlHInput.setAttribute('class', 'uk-input');
-                            mdlHInput.setAttribute('placeholder', 'Tinggi');
-                            mdlHInput.setAttribute('id', 'mdlH[0]');
-                            mdlHInput.setAttribute('name', 'mdlH[0]');
-                            mdlHInput.setAttribute('required', 'Tinggi')
-
-                            mdlL.appendChild(mdlLInput);
-                            contdim.appendChild(mdlL);
-                            mdlW.appendChild(mdlWInput);
-                            contdim.appendChild(mdlW);
-                            mdlH.appendChild(mdlHInput);
-                            contdim.appendChild(mdlH);
-                            dimentions.appendChild(contdim);
-                        } else {
-                            var dimentions = document.getElementById('contdim[0]');
-                            if (dimentions) {
-                                dimentions.remove();
-                            }
-                        }
-                    });
-
-                    function createNewMDL() {
-                        createCount++;
-
-                        var createMDL = document.getElementById("createMDL");
-
-                        var divdel = document.createElement('div');
-                        divdel.setAttribute('id', 'delete' + createCount);
-
-                        var divider = document.createElement('hr');
-                        divider.setAttribute('id', 'divider' + createCount);
-                        divider.setAttribute('class', 'uk-margin-top');
-
-                        var newCreateMDL = document.createElement('div');
-                        newCreateMDL.setAttribute('id', 'create' + createCount);
-                        newCreateMDL.setAttribute('class', 'uk-margin uk-child-width-1-3');
-                        newCreateMDL.setAttribute('uk-grid', '');
-
-                        var newCreateDimentions = document.createElement('div');
-                        newCreateDimentions.setAttribute('id', 'dimentions' + createCount);
-
-                        var createMDLName = document.createElement('div');
-                        createMDLName.setAttribute('id', 'createMDLName' + createCount);
-
-                        var createMDLNameInput = document.createElement('input');
-                        createMDLNameInput.setAttribute('type', 'text');
-                        createMDLNameInput.setAttribute('class', 'uk-input');
-                        createMDLNameInput.setAttribute('placeholder', 'Nama');
-                        createMDLNameInput.setAttribute('id', 'mdlName[' + createCount + ']');
-                        createMDLNameInput.setAttribute('name', 'mdlName[' + createCount + ']');
-                        createMDLNameInput.setAttribute('required', '');
-
-                        var createMDLPrice = document.createElement('div');
-                        createMDLPrice.setAttribute('id', 'createMDLPrice' + createCount);
-
-                        var createMDLPriceInput = document.createElement('input');
-                        createMDLPriceInput.setAttribute('type', 'number');
-                        createMDLPriceInput.setAttribute('class', 'uk-input');
-                        createMDLPriceInput.setAttribute('placeholder', 'Harga');
-                        createMDLPriceInput.setAttribute('id', 'mdlP[' + createCount + ']');
-                        createMDLPriceInput.setAttribute('name', 'mdlP[' + createCount + ']');
-
-                        var createMDLDen = document.createElement('div');
-                        createMDLDen.setAttribute('id', 'createMDLDen' + createCount);
-
-                        var createMDLDenInput = document.createElement('select');
-                        createMDLDenInput.setAttribute('class', 'uk-select');
-                        createMDLDenInput.setAttribute('id', 'mdlD[' + createCount + ']');
-                        createMDLDenInput.setAttribute('name', 'mdlD[' + createCount + ']');
-
-                        var option = document.createElement('option');
-                        option.setAttribute('value', '');
-                        option.setAttribute('selected', '');
-                        option.setAttribute('disabled', '');
-                        option.setAttribute('hidden', '');
-                        option.innerHTML = "Pilih Satuan";
-
-                        var option1 = document.createElement('option');
-                        option1.setAttribute('value', '1');
-                        option1.innerHTML = "Unit";
-
-                        var option2 = document.createElement('option');
-                        option2.setAttribute('value', '2');
-                        option2.innerHTML = "Meter Lari";
-
-                        var option3 = document.createElement('option');
-                        option3.setAttribute('value', '3');
-                        option3.innerHTML = "Meter Persegi";
-
-                        var createRemove = document.createElement('div');
-                        createRemove.setAttribute('id', 'remove' + createCount);
-                        createRemove.setAttribute('class', 'uk-text-right');
-
-                        var createRemoveButton = document.createElement('button');
-                        createRemoveButton.setAttribute('onclick', 'createRemove(' + createCount + ')');
-                        createRemoveButton.setAttribute('class', 'uk-button uk-button-danger');
-                        createRemoveButton.setAttribute('uk-icon', 'close');
-
-                        createMDLName.appendChild(createMDLNameInput);
-                        newCreateMDL.appendChild(createMDLName);
-                        createMDLDen.appendChild(createMDLDenInput);
-                        newCreateMDL.appendChild(createMDLDen);
-                        createMDLPrice.appendChild(createMDLPriceInput);
-                        newCreateMDL.appendChild(createMDLPrice);
-                        createMDLDenInput.appendChild(option);
-                        createMDLDenInput.appendChild(option1);
-                        createMDLDenInput.appendChild(option2);
-                        createMDLDenInput.appendChild(option3);
-                        divdel.appendChild(divider);
-                        createRemove.appendChild(createRemoveButton);
-                        divdel.appendChild(createRemove);
-                        createMDL.appendChild(divdel);
-                        createMDL.appendChild(newCreateMDL);
-                        createMDL.appendChild(newCreateDimentions);
-
-                        document.getElementById('mdlD[' + createCount + ']').addEventListener('change', function(createCount) {
-                            if ((this.value == "2") || (this.value == "3")) {
-                                var elements = document.getElementById('contdim[' + createCount + ']');
-                                if (elements) {
-                                    elements.remove();
-                                }
-                                var dimentions = document.getElementById('dimentions' + createCount);
-
-                                var contdim = document.createElement('div');
-                                contdim.setAttribute('id', 'contdim[' + createCount + ']');
-                                contdim.setAttribute('class', 'uk-child-width-1-3 uk-flex-middle');
-                                contdim.setAttribute('uk-grid', '');
-
-                                var mdlL = document.createElement('div');
-                                mdlL.setAttribute('id', 'mdlL[' + createCount + ']');
-
-                                var mdlLInput = document.createElement('input');
-                                mdlLInput.setAttribute('type', 'number');
-                                mdlLInput.setAttribute('class', 'uk-input');
-                                mdlLInput.setAttribute('placeholder', 'Panjang');
-                                mdlLInput.setAttribute('id', 'mdlL[' + createCount + ']');
-                                mdlLInput.setAttribute('name', 'mdlL[' + createCount + ']');
-                                mdlLInput.setAttribute('required', '');
-
-                                var mdlW = document.createElement('div');
-                                mdlW.setAttribute('id', 'mdlW[' + createCount + ']');
-
-                                var mdlWInput = document.createElement('input');
-                                mdlWInput.setAttribute('type', 'number');
-                                mdlWInput.setAttribute('class', 'uk-input');
-                                mdlWInput.setAttribute('placeholder', 'Lebar');
-                                mdlWInput.setAttribute('id', 'mdlW[' + createCount + ']');
-                                mdlWInput.setAttribute('name', 'mdlW[' + createCount + ']');
-                                mdlWInput.setAttribute('required', '');
-
-                                var mdlH = document.createElement('div');
-                                mdlH.setAttribute('id', 'mdlH[' + createCount + ']');
-
-                                var mdlHInput = document.createElement('input');
-                                mdlHInput.setAttribute('type', 'number');
-                                mdlHInput.setAttribute('class', 'uk-input');
-                                mdlHInput.setAttribute('placeholder', 'Tinggi');
-                                mdlHInput.setAttribute('id', 'mdlH[' + createCount + ']');
-                                mdlHInput.setAttribute('name', 'mdlH[' + createCount + ']');
-                                mdlHInput.setAttribute('required', 'Tinggi')
-
-                                mdlL.appendChild(mdlLInput);
-                                contdim.appendChild(mdlL);
-                                mdlW.appendChild(mdlWInput);
-                                contdim.appendChild(mdlW);
-                                mdlH.appendChild(mdlHInput);
-                                contdim.appendChild(mdlH);
-                                dimentions.appendChild(contdim);
-                            } else {
-                                var dim = document.getElementById('contdim[' + createCount + ']');
-                                if (dim) {
-                                    dim.remove();
-                                }
-                            }
-                        });
-                    };
-
-                    function createRemove(i) {
-                        var createRemoveElement = document.getElementById('create' + i);
-                        var ElementRemoveDim    = document.getElementById('dimentions' + i);
-                        var ElementRemoveDel    = document.getElementById('delete' + i);
-                        createRemoveElement.remove();
-                        ElementRemoveDim.remove();
-                        ElementRemoveDel.remove();
-                    };
-                </script>
             </form>
         </div>
     </div>
 </div>
 <!-- Modal Add Paket End -->
+
+<?php foreach ($pakets as $paket) { ?>
+    <!-- Modal Edit Paket -->
+    <div class="uk-modal-container" id="modalupdate<?= $paket['id'] ?>" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+            <div class="uk-modal-content">
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">Ubah Paket</h2>
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                </div>
+
+                <div class="uk-modal-body">
+                    <form class="uk-form-stacked" role="form" action="paket/update/<?= $paket['id'] ?>" method="post">
+                        <?= csrf_field() ?>
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="name">Nama</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="name" name="name" value="<?= $paket['name']; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="uk-modal-footer">
+                            <div class="uk-flex-right">
+                                <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit Paket End -->
+
+    <!-- Modal Add MDL per Paket -->
+    <div class="uk-modal-container" id="modaladdmdl<?= $paket['id'] ?>" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Tambah MDL</h2>
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+            </div>
+
+            <div class="uk-modal-body">
+                <form class="uk-form-stacked" role="form" action="mdl/create/<?= $paket['id'] ?>" method="post">
+                    <?= csrf_field() ?>
+
+                    <div class="uk-margin-bottom">
+                        <label class="uk-form-label" for="name">Nama</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" id="name" name="name" placeholder="Nama" required />
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="denomination">Satuan</label>
+                        <select class="uk-select" aria-label="Satuan" id="denomination<?= $paket['id'] ?>" name="denomination" required>
+                            <option value="" selected disabled hidden>Pilih Satuan</option>
+                            <option value="1">Unit</option>
+                            <option value="2">Meter Lari</option>
+                            <option value="3">Meter Persegi</option>
+                        </select>
+                    </div>
+
+                    <div id="dimentions<?= $paket['id'] ?>"></div>
+
+                    <script>
+                        document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
+                            if (this.value == "2" || this.value == "3") {
+                                var elements = document.getElementById('contdim<?= $paket['id'] ?>');
+                                if (elements) {
+                                    elements.remove();
+                                }
+                                var dimentions = document.getElementById('dimentions<?= $paket['id'] ?>');
+
+                                var contdim = document.createElement('div');
+                                contdim.setAttribute('id', 'contdim<?= $paket['id'] ?>');
+
+                                var contlength = document.createElement('div');
+                                contlength.setAttribute('class', 'uk-margin');
+
+                                var lablength = document.createElement('label');
+                                lablength.setAttribute('class', 'uk-form-label');
+                                lablength.setAttribute('for', 'length');
+                                lablength.innerHTML = "Panjang";
+
+                                var coninputl = document.createElement('div');
+                                coninputl.setAttribute('class', 'uk-form-controls');
+
+                                var inputl = document.createElement('input');
+                                inputl.setAttribute('class', 'uk-input');
+                                inputl.setAttribute('type', 'number');
+                                inputl.setAttribute('id', 'length<?= $paket['id'] ?>');
+                                inputl.setAttribute('name', 'length');
+                                inputl.setAttribute('placeholder', 'Panjang');
+                                inputl.setAttribute('required', '');
+
+                                var contw = document.createElement('div');
+                                contw.setAttribute('class', 'uk-margin');
+
+                                var labw = document.createElement('label');
+                                labw.setAttribute('class', 'uk-form-label');
+                                labw.setAttribute('for', 'width');
+                                labw.innerHTML = "Lebar";
+
+                                var coninputw = document.createElement('div');
+                                coninputw.setAttribute('class', 'uk-form-controls');
+
+                                var inputw = document.createElement('input');
+                                inputw.setAttribute('class', 'uk-input');
+                                inputw.setAttribute('type', 'number');
+                                inputw.setAttribute('id', 'width<?= $paket['id'] ?>');
+                                inputw.setAttribute('name', 'width');
+                                inputw.setAttribute('placeholder', 'Lebar');
+                                inputw.setAttribute('required', '');
+
+                                var conth = document.createElement('div');
+                                conth.setAttribute('class', 'uk-margin');
+
+                                var labh = document.createElement('label');
+                                labh.setAttribute('class', 'uk-form-label');
+                                labh.setAttribute('for', 'height');
+                                labh.innerHTML = "Tinggi";
+
+                                var coninputh = document.createElement('div');
+                                coninputh.setAttribute('class', 'uk-form-controls');
+
+                                var inputh = document.createElement('input');
+                                inputh.setAttribute('class', 'uk-input');
+                                inputh.setAttribute('type', 'number');
+                                inputh.setAttribute('id', 'height<?= $paket['id'] ?>');
+                                inputh.setAttribute('name', 'height');
+                                inputh.setAttribute('placeholder', 'Tinggi');
+                                inputh.setAttribute('required', '');
+
+                                coninputl.appendChild(inputl);
+                                contlength.appendChild(lablength);
+                                contlength.appendChild(coninputl);
+                                contdim.appendChild(contlength);
+                                coninputw.appendChild(inputw);
+                                contw.appendChild(labw);
+                                contw.appendChild(coninputw);
+                                contdim.appendChild(contw);
+                                coninputh.appendChild(inputh);
+                                conth.appendChild(labh);
+                                conth.appendChild(coninputh);
+                                contdim.appendChild(conth);
+                                dimentions.appendChild(contdim);
+                            } else {
+                                var dim = document.getElementById('contdim<?= $paket['id'] ?>');
+                                if (dim) {
+                                    dim.remove();
+                                }
+                            }
+                        });
+                    </script>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="price">Harga</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" id="price" name="price" placeholder="Harga" required />
+                        </div>
+                    </div>
+
+                    <div class="uk-modal-footer">
+                        <div class="uk-text-right">
+                            <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Add MDL per Paket End -->
+
+    <!-- Modal Update MDL per Paket -->
+    <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
+        <div id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
+            <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">Ubah MDL</h2>
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                </div>
+
+                <div class="uk-modal-body">
+                    <form class="uk-form-stacked" role="form" action="mdl/update/<?= $mdl['id'] ?>" method="post">
+                        <?= csrf_field() ?>
+                        <input hidden type="text" class="uk-input" id="paketid" name="paketid" value="<?= $mdl['paketid']; ?>"/>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="name">Nama</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="name" name="name" value="<?= $mdl['name'] ?>" />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="denomination"> Satuan</label>
+                            <select class="uk-select" aria-label="Satuan" id="denominations<?= $mdl['id'] ?>" name="denomination" required>
+                                <option value="1" <?php if ($mdl['denomination'] === "1") {
+                                                        echo 'selected';
+                                                    } ?>>Unit</option>
+                                <option value="2" <?php if ($mdl['denomination'] === "2") {
+                                                        echo 'selected';
+                                                    } ?>>Meter Lari</option>
+                                <option value="3" <?php if ($mdl['denomination'] === "3") {
+                                                        echo 'selected';
+                                                    } ?>>Meter Persegi</option>
+                            </select>
+                        </div>
+
+                        <script>
+                            $(document).ready(function() {
+                                if ($("#denominations<?= $mdl['id'] ?>").val() == "1") {
+                                    $("#contupmdl<?= $mdl['id'] ?>").attr("hidden", true);
+                                }
+
+                                $("select[id='denominations<?= $mdl['id'] ?>']").change(function() {
+                                    if ((this.value) === "1") {
+                                        $('#contupmdl<?= $mdl['id'] ?>').attr("hidden", true);
+                                    } else {
+                                        $('#contupmdl<?= $mdl['id'] ?>').removeAttr("hidden");
+                                    }
+                                });
+                            });
+                        </script>
+
+                        <div id="contupmdl<?= $mdl['id'] ?>">
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="length">Panjang</label>
+                                <div class="uk-form-controls">
+                                    <input type="number" class="uk-input" id="length" name="length" value="<?= $mdl['length'] ?>" />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="width">Lebar</label>
+                                <div class="uk-form-controls">
+                                    <input type="number" class="uk-input" id="width" name="width" value="<?= $mdl['width'] ?>" />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="height">Tinggi</label>
+                                <div class="uk-form-controls">
+                                    <input type="number" class="uk-input" id="height" name="height" value="<?= $mdl['height'] ?>" />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="volume">Volume</label>
+                                <div class="uk-form-controls">
+                                    <input type="number" class="uk-input" id="volume" name="volume" value="<?= $mdl['volume'] ?>" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="price">Harga</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="price" name="price" value="<?= $mdl['price'] ?>" />
+                            </div>
+                        </div>
+                        <div class="uk-modal-footer">
+                            <div class="uk-text-right">
+                                <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+    <!-- Modal Update MDL per Paket End -->
+<?php } ?>
 <?= $this->endSection() ?>

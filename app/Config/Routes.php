@@ -107,9 +107,9 @@ $routes->group('rab',['filter' => 'login'], function ($routes) {
 // MDL
 $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Mdl::index');
-    $routes->post('create', 'Mdl::create');
-    $routes->post('update/(:num)', 'Mdl::update/$1');
-    $routes->get('delete/(:num)', 'Mdl::delete/$1');
+    $routes->post('create/(:num)', 'Mdl::createmdl/$1');
+    $routes->post('update/(:num)', 'Mdl::updatemdl/$1');
+    $routes->get('delete/(:num)', 'Mdl::deletemdl/$1');
 });
 
 // Account
@@ -120,16 +120,9 @@ $routes->group('account',['filter' => 'login'], function ($routes) {
 
 // Paket
 $routes->group('paket',['filter' => 'login'], function ($routes) {
-    // Paket
-    $routes->get('', 'Paket::index');
-    $routes->post('create', 'Paket::create');
-    $routes->post('update/(:num)', 'Paket::update/$1');
-    $routes->get('delete/(:num)', 'Paket::delete/$1');
-
-    // Paket Detail
-    $routes->get('detail/(:num)', 'Paket::indexdetail/$1');
-    $routes->post('createdetail/(:num)', 'Paket::createdetail/$1');
-    $routes->post('detaildelete/(:num)', 'Paket::deletedetail/$1');
+    $routes->post('create', 'MDL::create');
+    $routes->post('update/(:num)', 'MDL::update/$1');
+    $routes->get('delete/(:num)', 'MDL::delete/$1');
 });
 
 // Bar
