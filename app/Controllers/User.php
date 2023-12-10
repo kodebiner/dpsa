@@ -57,6 +57,7 @@ class User extends BaseController
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
             $this->builder->where('users.id !=', $this->data['uid']);
+            $this->builder->where('auth_groups.name !=', 'superuser');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('users.username', $input['search']);
                 $this->builder->orLike('users.firstname', $input['search']);
@@ -86,7 +87,7 @@ class User extends BaseController
             $data                   = $this->data;
             $data['title']          = "Daftar Pengguna";
             $data['description']    = "Daftar Pengguna Aplikasi";
-            $data['roles']          = $GroupModel->findAll();
+            $data['roles']          = $GroupModel->where('name !=', 'superuser')->find();
             $data['users']          = $query;
             $data['parent']         = $parentid;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
