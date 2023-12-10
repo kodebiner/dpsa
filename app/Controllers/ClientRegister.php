@@ -214,7 +214,7 @@ class ClientRegister extends BaseController
                 $NewUser->lastname = $input['lastname'];
                 $NewUser->username = $input['username'];
                 if (!empty($input['email'])) {
-                    $NewUser->firstname = $input['firstname'];
+                    $NewUser->email = $input['email'];
                 }
                 $NewUser->active = '0';
                 $NewUser->password = $input['password'];
