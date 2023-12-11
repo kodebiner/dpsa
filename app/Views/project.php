@@ -469,6 +469,11 @@
             });
         });
 
+        function removeList(i) {
+            const removeList = document.getElementById('mdldraft' + i);
+            removeList.remove();
+        };
+
         // Percentation Production
         $(document).ready(function() {
             $("#status").change(function() {
