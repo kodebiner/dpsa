@@ -22,10 +22,13 @@ class UpdateTypeMdl extends Migration
     public function down()
     {
         $fields = [
-            'width',
-            'height',
-            'volume',
+            'width'         => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'length'],
+            'height'        => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'width'],
+            'volume'        => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'height'],
         ];
-        $this->forge->dropColumn('mdl', $fields);
+        $this->forge->dropColumn('mdl', 'width');
+        $this->forge->dropColumn('mdl', 'height');
+        $this->forge->dropColumn('mdl', 'volume');
+        $this->forge->addColumn('mdl', $fields);
     }
 }
