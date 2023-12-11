@@ -9,26 +9,44 @@ class UpdateTypeMdl extends Migration
     public function up()
     {
         $fields = [
-            'width'         => ['type' => 'VARCHAR', 'constraint' => 255, 'NULL' => true, 'after' => 'length'],
-            'height'        => ['type' => 'VARCHAR', 'constraint' => 255, 'NULL' => true, 'after' => 'width'],
-            'volume'        => ['type' => 'VARCHAR', 'constraint' => 255, 'NULL' => true, 'after' => 'height'],
+            'width' => [
+                'name'          => 'width',
+                'type'          => 'VARCHAR',
+                'constraint'    => 255,
+            ],
+            'height' => [
+                'name'          => 'height',
+                'type'          => 'VARCHAR',
+                'constraint'    => 255,
+            ],
+            'volume' => [
+                'name'          => 'volume',
+                'type'          => 'VARCHAR',
+                'constraint'    => 255,
+            ],
         ];
-        $this->forge->dropColumn('mdl', 'width');
-        $this->forge->dropColumn('mdl', 'height');
-        $this->forge->dropColumn('mdl', 'volume');
-        $this->forge->addColumn('mdl', $fields);
+        $this->forge->modifyColumn('mdl', $fields);
     }
 
     public function down()
     {
         $fields = [
-            'width'         => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'length'],
-            'height'        => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'width'],
-            'volume'        => ['type' => 'INT', 'constraint' => 11, 'NULL' => true, 'after' => 'height'],
+            'width' => [
+                'name'          => 'width',
+                'type'          => 'INT',
+                'constraint'    => 11,
+            ],
+            'height' => [
+                'name'          => 'height',
+                'type'          => 'INT',
+                'constraint'    => 11,
+            ],
+            'volume' => [
+                'name'          => 'volume',
+                'type'          => 'INT',
+                'constraint'    => 11,
+            ],
         ];
-        $this->forge->dropColumn('mdl', 'width');
-        $this->forge->dropColumn('mdl', 'height');
-        $this->forge->dropColumn('mdl', 'volume');
-        $this->forge->addColumn('mdl', $fields);
+        $this->forge->modifyColumn('mdl', $fields);
     }
 }
