@@ -304,7 +304,7 @@
 
                                 var inputl = document.createElement('input');
                                 inputl.setAttribute('class', 'uk-input');
-                                inputl.setAttribute('type', 'number');
+                                inputl.setAttribute('type', 'text');
                                 inputl.setAttribute('id', 'length<?= $paket['id'] ?>');
                                 inputl.setAttribute('name', 'length');
                                 inputl.setAttribute('placeholder', 'Panjang');
@@ -323,7 +323,7 @@
 
                                 var inputw = document.createElement('input');
                                 inputw.setAttribute('class', 'uk-input');
-                                inputw.setAttribute('type', 'number');
+                                inputw.setAttribute('type', 'text');
                                 inputw.setAttribute('id', 'width<?= $paket['id'] ?>');
                                 inputw.setAttribute('name', 'width');
                                 inputw.setAttribute('placeholder', 'Lebar');
@@ -342,7 +342,7 @@
 
                                 var inputh = document.createElement('input');
                                 inputh.setAttribute('class', 'uk-input');
-                                inputh.setAttribute('type', 'number');
+                                inputh.setAttribute('type', 'text');
                                 inputh.setAttribute('id', 'height<?= $paket['id'] ?>');
                                 inputh.setAttribute('name', 'height');
                                 inputh.setAttribute('placeholder', 'Tinggi');
@@ -445,28 +445,28 @@
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="length">Panjang</label>
                                 <div class="uk-form-controls">
-                                    <input type="number" class="uk-input" id="length" name="length" value="<?= $mdl['length'] ?>" />
+                                    <input type="text" class="uk-input" id="length" name="length" value="<?= $mdl['length'] ?>" />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="width">Lebar</label>
                                 <div class="uk-form-controls">
-                                    <input type="number" class="uk-input" id="width" name="width" value="<?= $mdl['width'] ?>" />
+                                    <input type="text" class="uk-input" id="width" name="width" value="<?= $mdl['width'] ?>" />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="height">Tinggi</label>
                                 <div class="uk-form-controls">
-                                    <input type="number" class="uk-input" id="height" name="height" value="<?= $mdl['height'] ?>" />
+                                    <input type="text" class="uk-input" id="height" name="height" value="<?= $mdl['height'] ?>" />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="volume">Volume</label>
                                 <div class="uk-form-controls">
-                                    <input type="number" class="uk-input" id="volume" name="volume" value="<?= $mdl['volume'] ?>" />
+                                    <input type="text" class="uk-input" id="volume" name="volume" value="<?= $mdl['volume'] ?>" />
                                 </div>
                             </div>
 
