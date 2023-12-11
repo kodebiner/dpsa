@@ -136,41 +136,70 @@ class Mdl extends BaseController
         $input = $this->request->getPost();
 
         // Save Data
-        if (($input['denomination'] === "2") || ($input['denomination'] === "3")) {
+        if ($input['denomination'] === "2") {
             $mdl = [
                 'name'          => $input['name'],
                 'length'        => $input['length'],
                 'width'         => $input['width'],
                 'height'        => $input['height'],
-                'volume'        => NULL,
+                'volume'        => $input['length'],
                 'denomination'  => $input['denomination'],
                 'price'         => $input['price'],
                 'paketid'       => $id,
             ];
     
+            // Validating Data MDL
             if (! $this->validate([
                 'name'      => "required|max_length[255]|is_unique[mdl.name]",
             ])) {
-                    
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
+            // Save Data MDL
             $MdlModel->save($mdl);
-        } else {
+
+        } elseif ($input['denomination'] === "3") {
             $mdl = [
                 'name'          => $input['name'],
-                'volume'        => NULL,
+                'length'        => $input['length'],
+                'width'         => $input['width'],
+                'height'        => $input['height'],
+                'volume'        => (Int)$input['length'] * $input['height'],
                 'denomination'  => $input['denomination'],
                 'price'         => $input['price'],
                 'paketid'       => $id,
             ];
     
+            // Validating Data MDL
             if (! $this->validate([
                 'name'      => "required|max_length[255]|is_unique[mdl.name]",
             ])) {
-                    
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
+
+            // Save Data MDL
+            $MdlModel->save($mdl);
+
+        } else {
+            $mdl = [
+                'name'          => $input['name'],
+                'length'        => NULL,
+                'width'         => NULL,
+                'height'        => NULL,
+                'volume'        => '1',
+                'denomination'  => $input['denomination'],
+                'price'         => $input['price'],
+                'paketid'       => $id,
+            ];
+    
+            // Validating Data MDL
+            if (! $this->validate([
+                'name'      => "required|max_length[255]|is_unique[mdl.name]",
+            ])) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            // Save Data MDL
             $MdlModel->save($mdl);
         }
 
@@ -186,7 +215,7 @@ class Mdl extends BaseController
         $input = $this->request->getPost();
 
         // Filter Condition Meters Or Unit
-        if (($input['denomination'] === "2") || ($input['denomination'] === "3")) {
+        if ($input['denomination'] === "2") {
             $mdlup = [
                 'id'            => $id,
                 'name'          => $input['name'],
@@ -194,11 +223,12 @@ class Mdl extends BaseController
                 'length'        => $input['length'],
                 'width'         => $input['width'],
                 'height'        => $input['height'],
-                'volume'        => NULL,
+                'volume'        => $input['length'],
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
     
+            // Validating Data MDL
             if (! $this->validate([
                 'name'      => "required|max_length[255]|is_unique[mdl.name]",
             ])) {
@@ -207,6 +237,29 @@ class Mdl extends BaseController
 
             // Save Data MDL
             $MdlModel->save($mdlup);
+        } elseif ($input['denomination'] === "3") {
+            $mdlup = [
+                'id'            => $id,
+                'name'          => $input['name'],
+                'denomination'  => $input['denomination'],
+                'length'        => $input['length'],
+                'width'         => $input['width'],
+                'height'        => $input['height'],
+                'volume'        => (Int)$input['length'] * (Int)$input['height'],
+                'price'         => $input['price'],
+                'paketid'       => $input['paketid'],
+            ];
+    
+            // Validating Data MDL
+            if (! $this->validate([
+                'name'      => "required|max_length[255]|is_unique[mdl.name]",
+            ])) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            // Save Data MDL
+            $MdlModel->save($mdlup);
+
         } else {
             $mdlup = [
                 'id'            => $id,
@@ -215,11 +268,12 @@ class Mdl extends BaseController
                 'length'        => NULL,
                 'width'         => NULL,
                 'height'        => NULL,
-                'volume'        => NULL,
+                'volume'        => '1',
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
     
+            // Validating Data MDL
             if (! $this->validate([
                 'name'      => "required|max_length[255]|is_unique[mdl.name]",
             ])) {

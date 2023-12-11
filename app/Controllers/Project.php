@@ -4,7 +4,8 @@ namespace App\Controllers;
 
 use App\Models\CompanyModel;
 use App\Models\ProjectModel;
-
+use App\Models\MdlModel;
+use App\Models\PaketModel;
 
 class Project extends BaseController
 {
@@ -26,24 +27,64 @@ class Project extends BaseController
     public function index()
     {
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
-            // Find Model
-            $ProjectModel = new ProjectModel;
-            $CompanyModel = new CompanyModel();
-            $company = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
+            // Calling Model
+            $ProjectModel   = new ProjectModel();
+            $CompanyModel   = new CompanyModel();
+            $MdlModel       = new MdlModel();
+            $PaketModel     = new PaketModel();
 
-            $projects   = $ProjectModel->where('deleted_at', null)->paginate(10, 'projects');
+            // Populating Data
+            $pakets         = $PaketModel->findAll();
+            $company        = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
+            $projects       = $ProjectModel->where('deleted_at', null)->paginate(10, 'projects');
 
             $data = $this->data;
             $data['title']          = "Proyek";
             $data['description']    = "Data Proyek";
             $data['projects']       = $projects;
             $data['company']        = $company;
+            $data['pakets']         = $pakets;
             $data['pager']          = $ProjectModel->pager;
 
             return view('project', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function mdl()
+    {
+        // Calling Model
+        $MdlModel       = new MdlModel();
+        $PaketModel     = new PaketModel();
+
+        // Initialize
+        $input      = $this->request->getPost();
+
+        // Populating Data
+        $pakets     = $PaketModel->find($input['id']);
+        $mdls       = $MdlModel->where('paketid', $input['id'])->find();
+
+        $mdlid = array();
+        foreach ($mdls as $mdl) {
+            $mdlid[]    = $mdl['id'];
+        }
+
+        $return = array();
+        foreach ($mdls as $mdl) {
+            $return[] = [
+                'id'            => $mdl['id'],
+                'name'          => $mdl['name'],
+                'length'        => $mdl['length'],
+                'width'         => $mdl['width'],
+                'height'        => $mdl['height'],
+                'volume'        => $mdl['volume'],
+                'denomination'  => $mdl['denomination'],
+                'price'         => $mdl['price'],
+            ];
+        }
+        
+        die(json_encode($return));
     }
 
     public function create()

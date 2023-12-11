@@ -222,7 +222,7 @@
         <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
             <div class="uk-modal-content">
                 <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Ubah Paket</h2>
+                    <h2 class="uk-modal-title">Ubah Paket <?= $paket['name'] ?></h2>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                 </div>
 
@@ -252,7 +252,7 @@
     <div class="uk-modal-container" id="modaladdmdl<?= $paket['id'] ?>" uk-modal>
         <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
             <div class="uk-modal-header">
-                <h2 class="uk-modal-title">Tambah MDL</h2>
+                <h2 class="uk-modal-title">Tambah MDL <?= $paket['name'] ?></h2>
                 <button class="uk-modal-close-default" type="button" uk-close></button>
             </div>
 
@@ -393,7 +393,7 @@
         <div id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
             <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Ubah MDL</h2>
+                    <h2 class="uk-modal-title">Ubah MDL <?= $mdl['name'] ?></h2>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                 </div>
 

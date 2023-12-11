@@ -81,6 +81,7 @@ $routes->group('client',['filter' => 'login'], function ($routes){
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Project::index');
+    $routes->post('mdl', 'Project::mdl');
     $routes->post('create', 'Project::create');
     $routes->post('update/(:num)', 'Project::update/$1');
     $routes->post('delete/(:num)', 'Project::delete/$1');
