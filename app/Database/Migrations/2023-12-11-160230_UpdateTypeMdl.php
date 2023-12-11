@@ -10,17 +10,14 @@ class UpdateTypeMdl extends Migration
     {
         $fields = [
             'width' => [
-                'name'          => 'width',
                 'type'          => 'VARCHAR',
                 'constraint'    => 255,
             ],
             'height' => [
-                'name'          => 'height',
                 'type'          => 'VARCHAR',
                 'constraint'    => 255,
             ],
             'volume' => [
-                'name'          => 'volume',
                 'type'          => 'VARCHAR',
                 'constraint'    => 255,
             ],
@@ -32,17 +29,14 @@ class UpdateTypeMdl extends Migration
     {
         $fields = [
             'width' => [
-                'name'          => 'width',
                 'type'          => 'INT',
                 'constraint'    => 11,
             ],
             'height' => [
-                'name'          => 'height',
                 'type'          => 'INT',
                 'constraint'    => 11,
             ],
             'volume' => [
-                'name'          => 'volume',
                 'type'          => 'INT',
                 'constraint'    => 11,
             ],
