@@ -198,7 +198,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'width'      => [
@@ -206,7 +206,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'height'      => [
@@ -214,7 +214,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
             ];
@@ -245,7 +245,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'width'      => [
@@ -253,7 +253,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'height'      => [
@@ -261,7 +261,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
             ];
@@ -274,7 +274,7 @@ class Mdl extends BaseController
                 'length'        => $input['length'],
                 'width'         => $input['width'],
                 'height'        => $input['height'],
-                'volume'        => (Int)$input['length'] * $input['height'],
+                'volume'        => $input['length'] * $input['height'],
                 'denomination'  => $input['denomination'],
                 'price'         => $input['price'],
                 'paketid'       => $id,
@@ -343,7 +343,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'width'      => [
@@ -351,7 +351,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'height'      => [
@@ -359,7 +359,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
             ];
@@ -390,7 +390,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'width'      => [
@@ -398,7 +398,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
                 'height'      => [
@@ -406,7 +406,7 @@ class Mdl extends BaseController
                     'rules'     => 'required|decimal',
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka.',
+                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                     ],
                 ],
             ];
@@ -421,7 +421,7 @@ class Mdl extends BaseController
                 'length'        => $input['length'],
                 'width'         => $input['width'],
                 'height'        => $input['height'],
-                'volume'        => (Int)$input['length'] * (Int)$input['height'],
+                'volume'        => $input['length'] * $input['height'],
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
