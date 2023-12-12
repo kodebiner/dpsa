@@ -125,10 +125,9 @@ class Client extends BaseController
                 ],
                 'address' => [
                     'label'  => 'Alamat',
-                    'rules'  => 'required|is_unique[company.address]',
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
                 'notelp' => [
@@ -181,37 +180,10 @@ class Client extends BaseController
             $input = $this->request->getPost();
             $company = $CompanyModel->find($id);
 
-            // Validation Rules
-            if ($input['rsname'] === $company['rsname']) {
-                $is_unique =  '';
-            } else {
-                $is_unique =  '|is_unique[company.rsname]';
-            }
-            if ($input['ptname'] === $company['ptname']) {
-                $ptis_unique =  '';
-            } else {
-                $ptis_unique =  '|is_unique[company.ptname]';
-            }
-            if ($input['address'] === $company['address']) {
-                $addressis_unique =  '';
-            } else {
-                $addressis_unique =  '|is_unique[company.address]';
-            }
-            if ($input['notelp'] === $company['phone']) {
-                $phoneis_unique =  '';
-            } else {
-                $phoneis_unique =  '|is_unique[company.phone]';
-            }
-            if ($input['npwp'] === $company['npwp']) {
-                $npwpis_unique =  '';
-            } else {
-                $npwpis_unique =  '|is_unique[company.npwp]';
-            }
-
             $rules = [
                 'rsname' => [
                     'label'  => 'Nama Rumah Sakit / Nama Alias',
-                    'rules'  => 'required' . $is_unique,
+                    'rules'  => 'required|is_unique[company.rsname,company.id,'.$id.']',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -219,7 +191,7 @@ class Client extends BaseController
                 ],
                 'ptname' => [
                     'label'  => 'Nama PT',
-                    'rules'  => 'required' . $ptis_unique,
+                    'rules'  => 'required|is_unique[company.ptname,company.id,'.$id.']',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -227,7 +199,7 @@ class Client extends BaseController
                 ],
                 'address' => [
                     'label'  => 'Alamat',
-                    'rules'  => 'required' . $addressis_unique,
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -235,7 +207,7 @@ class Client extends BaseController
                 ],
                 'notelp' => [
                     'label'  => 'No Telepon',
-                    'rules'  => 'required' . $phoneis_unique,
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -243,7 +215,7 @@ class Client extends BaseController
                 ],
                 'npwp' => [
                     'label'  => 'NPWP',
-                    'rules'  => 'required' . $npwpis_unique,
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
