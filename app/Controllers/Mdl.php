@@ -165,8 +165,63 @@ class Mdl extends BaseController
         // Get Data
         $input = $this->request->getPost();
 
+        // Validation
+        $rules = [
+            'name'      => [
+                'label'     => 'Nama',
+                'rules'     => 'required|is_unique[mdl.name]',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                ],
+            ],
+            'price'     => [
+                'label'     => 'Harga',
+                'rules'     => 'required|decimal',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'decimal'       => '{field} hanya boleh berisi angka.',
+                ],
+            ],
+        ];
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         // Save Data
         if ($input['denomination'] === "2") {
+
+            // Validation
+            $rules = [
+                'length'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'width'      => [
+                    'label'     => 'Lebar',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'height'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
             $mdl = [
                 'name'          => $input['name'],
                 'length'        => $input['length'],
@@ -177,18 +232,43 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $id,
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
 
             // Save Data MDL
             $MdlModel->save($mdl);
 
         } elseif ($input['denomination'] === "3") {
+            
+            // Validation
+            $rules = [
+                'length'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'width'      => [
+                    'label'     => 'Lebar',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'height'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
             $mdl = [
                 'name'          => $input['name'],
                 'length'        => $input['length'],
@@ -199,13 +279,6 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $id,
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
 
             // Save Data MDL
             $MdlModel->save($mdl);
@@ -221,13 +294,6 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $id,
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
 
             // Save Data MDL
             $MdlModel->save($mdl);
@@ -244,8 +310,63 @@ class Mdl extends BaseController
         // Get Data
         $input = $this->request->getPost();
 
+        // Validation
+        $rules = [
+            'name'      => [
+                'label'     => 'Nama',
+                'rules'     => 'required|is_unique[mdl.name,mdl.id,'.$id.']',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                ],
+            ],
+            'price'     => [
+                'label'     => 'Harga',
+                'rules'     => 'required|decimal',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'decimal'       => '{field} hanya boleh berisi angka.',
+                ],
+            ],
+        ];
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         // Filter Condition Meters Or Unit
         if ($input['denomination'] === "2") {
+            
+            // Validation
+            $rules = [
+                'length'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'width'      => [
+                    'label'     => 'Lebar',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'height'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
             $mdlup = [
                 'id'            => $id,
                 'name'          => $input['name'],
@@ -257,17 +378,42 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
 
             // Save Data MDL
             $MdlModel->save($mdlup);
         } elseif ($input['denomination'] === "3") {
+            
+            // Validation
+            $rules = [
+                'length'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'width'      => [
+                    'label'     => 'Lebar',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+                'height'      => [
+                    'label'     => 'Panjang',
+                    'rules'     => 'required|decimal',
+                    'errors'    => [
+                        'required'      => '{field} wajib diisi.',
+                        'decimal'       => '{field} hanya boleh berisi angka.',
+                    ],
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
             $mdlup = [
                 'id'            => $id,
                 'name'          => $input['name'],
@@ -279,13 +425,6 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
 
             // Save Data MDL
             $MdlModel->save($mdlup);
@@ -302,13 +441,6 @@ class Mdl extends BaseController
                 'price'         => $input['price'],
                 'paketid'       => $input['paketid'],
             ];
-    
-            // Validating Data MDL
-            if (! $this->validate([
-                'name'      => "required|max_length[255]|is_unique[mdl.name]",
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
             
             // Save Data MDL
             $MdlModel->save($mdlup);

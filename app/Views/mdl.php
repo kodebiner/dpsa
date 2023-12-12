@@ -373,7 +373,7 @@
                     <div class="uk-margin">
                         <label class="uk-form-label" for="price">Harga</label>
                         <div class="uk-form-controls">
-                            <input type="text" class="uk-input" id="price" name="price" placeholder="Harga" required />
+                            <input type="number" class="uk-input" id="price" name="price" placeholder="Harga" required />
                         </div>
                     </div>
 
@@ -475,7 +475,7 @@
                         <div class="uk-margin">
                             <label class="uk-form-label" for="price">Harga</label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="price" name="price" value="<?= $mdl['price'] ?>" />
+                                <input type="number" class="uk-input" id="price" name="price" value="<?= $mdl['price'] ?>" />
                             </div>
                         </div>
                         <div class="uk-modal-footer">
