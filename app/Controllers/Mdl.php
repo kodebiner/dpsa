@@ -154,7 +154,7 @@ class Mdl extends BaseController
         $PaketModel->delete($id);
 
         // Return
-        return redirect()->back()->with('message', 'Data Telah Dihapuskan');
+        return redirect()->back()->with('errors', 'Data Telah Dihapuskan');
     }
 
     public function createmdl($id)
@@ -447,7 +447,7 @@ class Mdl extends BaseController
         }
 
         // Return
-        return redirect()->back()->with('message', lang('Global.updated'));
+        return redirect()->back()->with('message', 'Data Behasil Diperbaharui');
     }
 
     public function deletemdl($id)
@@ -459,6 +459,6 @@ class Mdl extends BaseController
         $MdlModel->delete($id);
 
         // Return
-        return redirect()->back()->with('message', 'Data Telah Dihapuskan');
+        return redirect()->back()->with('errors', 'Data Telah Dihapuskan');
     }
 }

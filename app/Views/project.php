@@ -383,6 +383,7 @@
                                 var tdchecklist             = document.createElement('td');
 
                                 var inputchecklist          = document.createElement('input');
+                                inputchecklist.setAttribute('type', 'checkbox');
                                 inputchecklist.setAttribute('class', 'uk-checkbox');
                                 inputchecklist.setAttribute('id', 'checklist'+mdlarray[k]['id']);
                                 inputchecklist.setAttribute('name', 'checklist'+mdlarray[k]['id']);
@@ -413,20 +414,15 @@
                                 inputqty.setAttribute('id', 'qty'+mdlarray[k]['id']);
                                 inputqty.setAttribute('name', 'qty'+mdlarray[k]['id']);
                                 inputqty.setAttribute('value', '1');
+                                inputqty.setAttribute('onchange', 'price('+ mdlarray[k]['id'] +')');
 
                                 var tdprice                 = document.createElement('td');
+                                tdprice.setAttribute('id', 'showprice'+mdlarray[k]['id']);
 
-                                totalprice();
-                                tdprice.addEventListener('change', totalprice);
-                                inputqty.addEventListener('change', totalprice);
-
-                                function totalprice() {
-                                    var mdlprice    = mdlarray[k]['price'];
-                                    var mdlqty      = inputqty.value;
-                                    var proyekprice = mdlprice * mdlqty;
-                                    tdprice.setAttribute('value', proyekprice);
-                                    tdprice.innerHTML = proyekprice;
-                                }
+                                var hiddenprice = document.createElement('div');
+                                hiddenprice.setAttribute('id', 'price' + mdlarray[k]['id']);
+                                hiddenprice.setAttribute('hidden', '');
+                                hiddenprice.innerHTML = mdlarray[k]['price'];
 
                                 tdqty.appendChild(inputqty);
                                 tdchecklist.appendChild(inputchecklist);
@@ -439,6 +435,7 @@
                                 trbody.appendChild(tdden);
                                 trbody.appendChild(tdqty);
                                 trbody.appendChild(tdprice);
+                                trbody.appendChild(hiddenprice);                                
                                 tbody.appendChild(trbody);
                             }
                             trhead.appendChild(thchecklist);
@@ -468,6 +465,14 @@
                 minLength: 2
             });
         });
+
+        function price(z) {
+            var baseprice   = document.getElementById('price' + z).innerHTML;
+            var baseqty     = document.getElementById('qty' + z).value;
+            var pricetd     = document.getElementById('showprice' + z);
+            var projprice = baseprice * baseqty;
+            pricetd.innerHTML = projprice;
+        };
 
         function removeList(i) {
             const removeList = document.getElementById('mdldraft' + i);

@@ -262,7 +262,7 @@ class Project extends BaseController
             ];
             $ProjectModel->save($data);
 
-            return redirect()->back()->with('message', "Data berhasil di hapus");
+            return redirect()->back()->with('errors', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
