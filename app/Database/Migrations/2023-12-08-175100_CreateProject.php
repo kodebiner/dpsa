@@ -22,7 +22,7 @@ class CreateProject extends Migration
         $this->forge->addField($fields);
         $this->forge->addKey('id', true);
         $this->forge->createTable('project', true);
-        $this->forge->dropTable('temp_project');
+        $this->forge->dropTable('temp_project', true);
     }
     
     public function down()

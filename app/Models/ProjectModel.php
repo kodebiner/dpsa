@@ -8,9 +8,9 @@ class ProjectModel extends Model
         'clientid', 'brief', 'name', 'status', 'production', 'created_at', 'updated_at', 'deleted_at',
     ];
     
-    protected $useAutoIncrement = true;
     protected $table            = 'project';
     protected $primaryKey       = 'id';
+    protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useTimestamps    = true;
     protected $useSoftDeletes   = true;

@@ -6,6 +6,7 @@ use App\Models\CompanyModel;
 use App\Models\ProjectModel;
 use App\Models\MdlModel;
 use App\Models\PaketModel;
+use App\Models\RabModel;
 
 class Project extends BaseController
 {
@@ -91,7 +92,9 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.project.create', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel = new ProjectModel;
+            $ProjectModel   = new ProjectModel();
+            $MdlModel       = new MdlModel();
+            $RabModel       = new RabModel();
 
             // initialize
             $input  = $this->request->getPost();
@@ -133,15 +136,29 @@ class Project extends BaseController
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
+            // Project Data
             $project = [
                 'name'          => $input['name'],
                 'brief'         => $input['brief'],
                 'clientid'      => $input['company'],
                 'status'        => $input['status'],
-                'production'    => $input['qty'],
-                'created_at'    => date('Y-m-d h:i:s'),
+                'production'    => $input['proqty'],
             ];
-            $ProjectModel->save($project);
+            $ProjectModel->insert($project);
+
+            // Get Purchase ID
+            $projectid = $ProjectModel->getInsertID();
+
+            // RAB Data
+            foreach ($input['qty'] as $mdlid => $value) {
+                $datarab     = [
+                    'projectid' => $projectid,
+                    'mdlid'     => $mdlid,
+                    'qty'       => $value,
+                ];
+                // Save Data RAB
+                $RabModel->insert($datarab);
+            }
 
             return redirect()->back()->with('message', "Data berhasil di simpan.");
         } else {
