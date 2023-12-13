@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\MdlModel;
 use App\Models\PaketModel;
-
+use App\Models\LogModel;
 
 class Mdl extends BaseController
 {
@@ -71,6 +71,7 @@ class Mdl extends BaseController
     {
         // Calling Models
         $PaketModel         = new PaketModel();
+        $LogModel           = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -98,6 +99,11 @@ class Mdl extends BaseController
         // Insert Data Paket
         $PaketModel->insert($paket);
 
+        // Recording Log
+        $paketid = $PaketModel->getInsertID();
+        $Paket = $PaketModel->find($paketid);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan paket MDL '.$Paket['name']]);
+
         // Return
         return redirect()->back()->with('message', "Data Tersimpan");
     }
@@ -106,6 +112,7 @@ class Mdl extends BaseController
     {
         // Calling Models
         $PaketModel = new PaketModel();
+        $LogModel = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -125,6 +132,10 @@ class Mdl extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // Recording Log
+        $Paket = $PaketModel->find($id);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah paket MDL '.$Paket['name'].' menjadi '.$input['name']]);
+
         // Input Data
         $paketup = [
             'id'            => $id,
@@ -143,9 +154,16 @@ class Mdl extends BaseController
         // Calling Models
         $PaketModel         = new PaketModel();
         $MdlModel           = new MdlModel();
+        $LogModel           = new LogModel();
 
-        // Populating and Delete MDL
+        // Populating Data
+        $Paket              = $PaketModel->find($id);
         $mdls               = $MdlModel->where('paketid', $id)->find();
+
+        // Record Log
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus paket MDL '.$Paket['name'].' dan seluruh item MDL di dalamnya.']);
+
+        // Delete MDL
         foreach ($mdls as $mdl) {
             $MdlModel->delete($mdl['id']);
         }
@@ -154,13 +172,15 @@ class Mdl extends BaseController
         $PaketModel->delete($id);
 
         // Return
-        return redirect()->back()->with('errors', 'Data Telah Dihapuskan');
+        return redirect()->back()->with('error', 'Data Telah Dihapuskan');
     }
 
     public function createmdl($id)
     {
         // Calling Models
-        $MdlModel = new MdlModel;
+        $MdlModel = new MdlModel();
+        $PaketModel = new PaketModel();
+        $LogModel = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -298,6 +318,10 @@ class Mdl extends BaseController
             // Save Data MDL
             $MdlModel->save($mdl);
         }
+
+        // Record Log
+        $Paket = $PaketModel->find($id);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan item '.$input['name'].' kedalam paket MDL '.$Paket['name']]);
 
         return redirect()->back()->with('message', "Data Tersimpan");
     }
