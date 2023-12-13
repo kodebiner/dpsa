@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\LogModel;
 
 class Account extends BaseController
 {
@@ -33,6 +34,7 @@ class Account extends BaseController
     {
         // Calling Models
         $UserModel = new UserModel();
+        $LogModel = new LogModel();
         
         // Calling Entities
         $updateUser = new \App\Entities\User();
@@ -101,7 +103,10 @@ class Account extends BaseController
         // Saving user data
         $UserModel->save($updateUser);
 
+        // Record Log
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah data akun sendiri']);
+
         // redirectiong
-        return redirect()->back()->with('message', lang('Global.saved'));
+        return redirect()->back()->with('message', 'Data berhasil disimpan');
     }
 }

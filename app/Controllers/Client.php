@@ -9,6 +9,7 @@ use Myth\Auth\Models\GroupModel;
 use App\Models\CompanyModel;
 use App\Models\ProjectModel;
 use App\Models\ProjectTempModel;
+use App\Models\LogModel;
 
 class Client extends BaseController
 {
@@ -98,9 +99,10 @@ class Client extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) {
 
-            // Calling Models
+            // Calling Models & Services
             $validation = \Config\Services::validation();
             $CompanyModel = new CompanyModel();
+            $LogModel = new LogModel();
 
             // Initialize
             $input = $this->request->getPost();
@@ -164,6 +166,8 @@ class Client extends BaseController
             ];
             $CompanyModel->save($data);
 
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan client '.$input['ptname']]);
+
             return redirect()->to('client')->with('message', 'Data berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -173,8 +177,10 @@ class Client extends BaseController
     public function update($id)
     {
         if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) {
+
             // Calling Models
             $CompanyModel = new CompanyModel();
+            $LogModel = new LogModel();
 
             // Initialize
             $input = $this->request->getPost();
@@ -239,6 +245,9 @@ class Client extends BaseController
                 'updated_at'    => date('Y-m-d h:i:s'),
             ];
             $CompanyModel->save($data);
+
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah data '.$input['ptname']]);
+
             return redirect()->to('client')->with('message', 'Data berhasil di perbaharui');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
