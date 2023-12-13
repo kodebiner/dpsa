@@ -246,6 +246,7 @@ class Client extends BaseController
             ];
             $CompanyModel->save($data);
 
+            // Recording Logs
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah data '.$input['ptname']]);
 
             return redirect()->to('client')->with('message', 'Data berhasil di perbaharui');
@@ -261,50 +262,42 @@ class Client extends BaseController
             // Calling Model
             $CompanyModel = new CompanyModel();
             $ProjectModel = new ProjectModel();
+            $LogModel = new LogModel();
 
             // Getting Data 
-            $companys = $CompanyModel->findAll();
+            $companys = $CompanyModel->where('parentid', $id)->find();
             $Project = $ProjectModel->where('clientid', $id)->find();
 
-            // remove project
+            // Remove this client projects
             if (!empty($Project)) {
                 foreach ($Project as $project) {
-                    $pro = [
-                        'id'            => $project['id'],
-                        'deleted_at'    => date('Y-m-d H:i:s'),
-                    ];
-                    $ProjectModel->save($pro);
+                    $ProjectModel->delete($project['id']);
                 }
             }
 
-            // Remove Parent
-            $parid = [];
-            foreach ($companys as $comp) {
-                if ($comp['parentid'] === $id) {
-                    $parid[] = $comp['id'];
-                }
-            }
+            // Child Company
+            if (!empty($companys)) {
+                foreach ($companys as $company) {
+                    $comprojects = $ProjectModel->where('clientid', $company['id'])->find();
 
-            if (!empty($parid)) {
-                foreach ($companys as $comps) {
-                    foreach ($parid as $pid) {
-                        if ($comps['id'] === $pid) {
-                            $data = [
-                                'id'        => $pid,
-                                'parentid'  => 0,
-                            ];
-                            $CompanyModel->save($data);
+                    // Remove Child Projects
+                    if (!empty($comprojects)) {
+                        foreach ($comprojects as $comproject) {
+                            $ProjectModel->delete($comproject['id']);
                         }
                     }
+
+                    // Remove Child
+                    $CompanyModel->delete($company['id']);
                 }
             }
 
-            // Soft Delete Data Client
-            $data   = [
-                'id'            => $id,
-                'deleted_at'    => date('Y-m-d H:i:s'),
-            ];
-            $CompanyModel->save($data);
+            // Recording Logs
+            $currentcompany = $CompanyModel->find($id);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus client '.$currentcompany['ptname'].' dan seluruh client di bawahnya beserta semua proyek yang bersangkutan.']);
+
+            // Remove Current Company
+            $CompanyModel->delete($id);
 
             // Redirect to View
             return redirect()->to('client')->with('message', "Data berhasil di hapus");
