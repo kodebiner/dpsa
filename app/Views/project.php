@@ -593,7 +593,7 @@
                                                                 $checked = '';
                                                             }
                                                             ?>
-                                                            <input type="checkbox" class="uk-checkbox" <?=$checked?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" />
+                                                            <input type="checkbox" class="uk-checkbox" <?=$checked?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
                                                         </td>
                                                         <td><?= $mdl['name'] ?></td>
                                                         <td><?= $mdl['length'] ?></td>
@@ -612,7 +612,7 @@
                                                             ?>
                                                         </td>
                                                         <td class="uk-form-controls">
-                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
+                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
                                                         </td>
                                                         <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
                                                         <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?= (Int)$mdl['qty'] * (Int)$mdl['price'] ?></td>
@@ -646,6 +646,12 @@
                                         }
                                     });
                                 });
+
+                                autopaket<?=$project['id']?> = [
+                                    <?php foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
+                                        echo '{label:"'.$autopaket['name'].'",idx:'.$autopaket['id'].'},';
+                                    } ?>
+                                ];
                             </script>
 
                             <div class="uk-margin" id="proqty<?= $project['id'] ?>" hidden>
