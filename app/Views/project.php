@@ -310,6 +310,11 @@
 
                             var pakets              = document.getElementById('listmdl');
 
+                            var elements = document.getElementById('mdldraft'+i.item.idx);
+                            if (elements){
+                                elements.remove();
+                            }
+
                             var containerlist       = document.createElement('div');
                             containerlist.setAttribute('id', 'mdldraft'+i.item.idx)
 
@@ -407,17 +412,19 @@
                                 tdden.innerHTML             = mdlarray[k]['denomination']
 
                                 var tdqty                   = document.createElement('td');
+                                tdqty.setAttribute('class', 'uk-form-controls');
 
                                 var inputqty                = document.createElement('input');
-                                inputqty.setAttribute('class', 'uk-input');
+                                inputqty.setAttribute('class', 'uk-input uk-form-width-small');
                                 inputqty.setAttribute('type', 'number');
                                 inputqty.setAttribute('id', 'qty['+mdlarray[k]['id']+']');
                                 inputqty.setAttribute('name', 'qty['+mdlarray[k]['id']+']');
-                                inputqty.setAttribute('value', '1');
+                                inputqty.setAttribute('value', '0');
                                 inputqty.setAttribute('onchange', 'price('+ mdlarray[k]['id'] +')');
 
                                 var tdprice                 = document.createElement('td');
                                 tdprice.setAttribute('id', 'showprice['+mdlarray[k]['id']+']');
+                                tdprice.innerHTML           = 0;
 
                                 var hiddenprice = document.createElement('div');
                                 hiddenprice.setAttribute('id', 'price['+mdlarray[k]['id']+']');
@@ -520,7 +527,7 @@
     <!-- Modal Update Proyek -->
     <?php if ($authorize->hasPermission('admin.project.read', $uid)) {
         foreach ($projects as $project) { ?>
-            <div id="modalupdatepro<?= $project['id'] ?>" uk-modal>
+            <div class="uk-modal-container" id="modalupdatepro<?= $project['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-header">
@@ -554,6 +561,76 @@
                                         <option value="5" <?= ($project['status'] === '5' ? 'selected' : '') ?>>Setting</option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="uk-overflow-auto uk-margin">
+                                <table class="uk-table uk-table-middle uk-table-divider">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Nama</th>
+                                            <th>Panjang</th>
+                                            <th>Lebar</th>
+                                            <th>Tinggi</th>
+                                            <th>Volume</th>
+                                            <th>Satuan</th>
+                                            <th>Jumlah Pesanan</th>
+                                            <th>Harga</th>
+                                            <th class="uk-text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
+                                            <tr>
+                                                <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                                                <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php
+                                                            if ($mdl['checked']) {
+                                                                $checked = 'checked';
+                                                            } else {
+                                                                $checked = '';
+                                                            }
+                                                            ?>
+                                                            <input type="checkbox" class="uk-checkbox" <?=$checked?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" />
+                                                        </td>
+                                                        <td><?= $mdl['name'] ?></td>
+                                                        <td><?= $mdl['length'] ?></td>
+                                                        <td><?= $mdl['width'] ?></td>
+                                                        <td><?= $mdl['height'] ?></td>
+                                                        <td><?= $mdl['volume'] ?></td>
+                                                        <td>
+                                                            <?php
+                                                            if ($mdl['denomination'] === "1") {
+                                                                echo "Unit";
+                                                            } elseif ($mdl['denomination'] === "2") {
+                                                                echo "Meter Lari";
+                                                            } elseif ($mdl['denomination'] === "3") {
+                                                                echo "Meter Persegi";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td class="uk-form-controls">
+                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
+                                                        </td>
+                                                        <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                        <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?= (Int)$mdl['qty'] * (Int)$mdl['price'] ?></td>
+                                                    </tr>
+                                                    <script>
+                                                        function eprice(n) {
+                                                            var ebaseprice      = document.getElementById('eprice['+ n +']').innerHTML;
+                                                            var ebaseqty        = document.getElementById('eqty['+ n +']').value;
+                                                            var epricetd        = document.getElementById('eshowprice['+ n +']');
+                                                            var eprojprice      = ebaseprice * ebaseqty;
+                                                            epricetd.innerHTML  = eprojprice;
+                                                        };
+                                                    </script>
+                                                <?php } ?>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <script>

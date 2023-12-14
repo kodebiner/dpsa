@@ -29,20 +29,59 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel   = new ProjectModel();
-            $CompanyModel   = new CompanyModel();
-            $MdlModel       = new MdlModel();
-            $PaketModel     = new PaketModel();
+            $ProjectModel           = new ProjectModel();
+            $CompanyModel           = new CompanyModel();
+            $MdlModel               = new MdlModel();
+            $PaketModel             = new PaketModel();
+            $RabModel               = new RabModel();
 
             // Populating Data
-            $pakets         = $PaketModel->findAll();
-            $company        = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
-            $projects       = $ProjectModel->where('deleted_at', null)->paginate(10, 'projects');
+            $pakets                 = $PaketModel->findAll();
+            $company                = $CompanyModel->where('status !=', "0")->find();
+            $projects               = $ProjectModel->paginate(10, 'projects');
 
-            $data = $this->data;
+            $projectdata = [];
+            foreach ($projects as $project) {
+                $paketid = [];
+                $mdlid = [];
+                $rabs = $RabModel->where('projectid', $project['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[] = $rab['paketid'];
+                    $mdlid[] = $rab['mdlid'];
+                }
+                $paketdata = [];
+                $paketproject = $PaketModel->find($paketid);
+                foreach ($paketproject as $pack) {
+                    $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
+                    $mdlpack = $MdlModel->where('paketid', $pack['id'])->find();
+                    foreach ($mdlpack as $mdl) {
+                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
+                            'id'            => $mdl['id'],
+                            'name'          => $mdl['name'],
+                            'length'        => $mdl['length'],
+                            'width'         => $mdl['width'],
+                            'height'        => $mdl['height'],
+                            'volume'        => $mdl['volume'],
+                            'denomination'  => $mdl['denomination'],
+                            'price'         => $mdl['price'],
+                        ];
+                        $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
+                        if (!empty($rabpack)) {
+                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
+                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
+                        } else {
+                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
+                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
+                        }
+                    }
+                }
+            }
+
+            $data                   = $this->data;
             $data['title']          = "Proyek";
             $data['description']    = "Data Proyek";
             $data['projects']       = $projects;
+            $data['projectdata']    = $projectdata;
             $data['company']        = $company;
             $data['pakets']         = $pakets;
             $data['pager']          = $ProjectModel->pager;
@@ -150,14 +189,18 @@ class Project extends BaseController
             $projectid = $ProjectModel->getInsertID();
 
             // RAB Data
-            foreach ($input['qty'] as $mdlid => $value) {
-                $datarab     = [
-                    'projectid' => $projectid,
-                    'mdlid'     => $mdlid,
-                    'qty'       => $value,
-                ];
-                // Save Data RAB
-                $RabModel->insert($datarab);
+            foreach ($input['checklist'] as $mdlid => $checklist) {
+                if ($checklist) {
+                    $mdl = $MdlModel->find($mdlid);
+                    $datarab     = [
+                        'projectid' => $projectid,
+                        'paketid'   => $mdl['paketid'],
+                        'mdlid'     => $mdlid,
+                        'qty'       => $input['qty'][$mdlid],
+                    ];
+                    // Save Data RAB
+                    $RabModel->insert($datarab);
+                }
             }
 
             return redirect()->back()->with('message', "Data berhasil di simpan.");
