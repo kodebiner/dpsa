@@ -247,10 +247,10 @@ class Project extends BaseController
                 $status = $input['status'];
             }
 
-            if (isset($input['qty'])) {
+            if (isset($input['proqty'])) {
                 $qty = $pro['production'];
             } else {
-                $qty = $input['qty'];
+                $qty = $input['proqty'];
             }
 
             if ($input['name'] === $pro['name']) {
@@ -297,14 +297,9 @@ class Project extends BaseController
             }
 
             // RAB Data
-            $rabs = $RabModel->where('projectid', $id)->find();
-            $paketid = [];
-            foreach ($rabs as $rab) {
-                $paketid[] = $rab['paketid'];
-            }
             foreach ($input['eqty'.$id] as $mdlid => $qty) {
                 if (isset($input['checked'.$id][$mdlid])) {
-                    $rab = $RabModel->where('mdlid', $mdlid)->first();
+                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
                     if ((!empty($rab)) && ($rab['qty'] != $input['eqty'.$id][$mdlid])) {
                         $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
                     } elseif (empty($rab)) {
@@ -318,7 +313,7 @@ class Project extends BaseController
                         $RabModel->save($datarab);
                     }
                 } else {
-                    $rab = $RabModel->where('mdlid', $mdlid)->first();
+                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
                     if (!empty($rab)) {
                         $RabModel->delete($rab['id']);
                     }
@@ -332,7 +327,6 @@ class Project extends BaseController
                 'clientid'      => $client,
                 'status'        => $status,
                 'production'    => $qty,
-                'updated_at'    => date('Y-m-d H:i:s'),
             ];
             $ProjectModel->save($project);
 
@@ -346,14 +340,18 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.project.delete', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel = new ProjectModel;
+            $ProjectModel = new ProjectModel();
+            $RabModel = new RabModel();
 
-            // Soft Delete Project
-            $data   = [
-                'id'            => $id,
-                'deleted_at'    => date('Y-m-d H:i:s'),
-            ];
-            $ProjectModel->save($data);
+            // Populating Data
+            $rabs       = $RabModel->where('proejctid', $id)->find();
+
+            // Deleting Rab
+            foreach ($rabs as $rab) {
+                $RabModel->delete($rab['id']);
+            }
+            // Delete Project
+            $ProjectModel->delete($id);
 
             return redirect()->back()->with('errors', "Data berhasil di hapus");
         } else {
