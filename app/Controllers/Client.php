@@ -186,10 +186,36 @@ class Client extends BaseController
             $input = $this->request->getPost();
             $company = $CompanyModel->find($id);
 
+            if ($input['rsname'] === $company['rsname']) {
+                $is_unique =  '';
+            } else {
+                $is_unique =  '|is_unique[company.rsname,'.$id.']';
+            }
+            if ($input['ptname'] === $company['ptname']) {
+                $ptnameis_unique =  '';
+            } else {
+                $ptnameis_unique =  '|is_unique[company.ptname,'.$id.']';
+            }
+            if ($input['address'] === $company['address']) {
+                $addressis_unique =  '';
+            } else {
+                $addressis_unique =  '|is_unique[company.address]';
+            }
+            if ($input['notelp'] === $company['phone']) {
+                $notelpis_unique =  '';
+            } else {
+                $notelpis_unique =  '|is_unique[company.notelp]';
+            }
+            if ($input['npwp'] === $company['npwp']) {
+                $npwpis_unique =  '';
+            } else {
+                $npwpis_unique =  '|is_unique[company.npwp]';
+            }
+
             $rules = [
                 'rsname' => [
                     'label'  => 'Nama Rumah Sakit / Nama Alias',
-                    'rules'  => 'required|is_unique[company.rsname,company.id,'.$id.']',
+                    'rules'  => 'required'.$is_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -197,7 +223,7 @@ class Client extends BaseController
                 ],
                 'ptname' => [
                     'label'  => 'Nama PT',
-                    'rules'  => 'required|is_unique[company.ptname,company.id,'.$id.']',
+                    'rules'  => 'required'.$ptnameis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -205,7 +231,7 @@ class Client extends BaseController
                 ],
                 'address' => [
                     'label'  => 'Alamat',
-                    'rules'  => 'required',
+                    'rules'  => 'required'.$addressis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -213,7 +239,7 @@ class Client extends BaseController
                 ],
                 'notelp' => [
                     'label'  => 'No Telepon',
-                    'rules'  => 'required',
+                    'rules'  => 'required'.$notelpis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -221,7 +247,7 @@ class Client extends BaseController
                 ],
                 'npwp' => [
                     'label'  => 'NPWP',
-                    'rules'  => 'required',
+                    'rules'  => 'required'.$npwpis_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',

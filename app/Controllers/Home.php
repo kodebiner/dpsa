@@ -6,7 +6,9 @@ use App\Entities\User;
 use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\ProjectModel;
-
+use App\Models\RabModel;
+use App\Models\PaketModel;
+use App\Models\MdlModel;
 
 class Home extends BaseController
 {
@@ -31,9 +33,12 @@ class Home extends BaseController
             $pager = \Config\Services::pager();
 
             // Calling Models
-            $UserModel = new UserModel();
-            $ProjectModel = new ProjectModel();
+            $UserModel      = new UserModel();
+            $ProjectModel   = new ProjectModel();
             $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
 
             // Populating data
             $input = $this->request->getGet();
@@ -59,16 +64,16 @@ class Home extends BaseController
                 $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
                 $clients->where('company.status !=', '0');
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $clients->like('company.name', $input['search']);
-                    $clients->orLike('company.name', $input['search']);
+                    $clients->like('company.rsname', $input['search']);
+                    $clients->orLike('company.rsname', $input['search']);
                 }
                 $query = $clients->get($perpage, $offset)->getResultArray();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $total = $clients
                         ->where('company.status !=', '0')
-                        ->like('company.name', $input['search'])
-                        ->orLike('company.name', $input['search'])
+                        ->like('company.rsname', $input['search'])
+                        ->orLike('company.rsname', $input['search'])
                         ->countAllResults();
                 } else {
                     $total = $clients
@@ -79,6 +84,9 @@ class Home extends BaseController
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
                 $data['clients']        = $query;
+                $data['rabs']           = $RabModel->findAll();
+                $data['pakets']         = $PaketModel->findAll();
+                $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
 
                 return view('dashboard-superuser', $data);
@@ -101,7 +109,6 @@ class Home extends BaseController
                     $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at',null)->find();
                 }
 
-                // dd($this->data['parentid']);
                 foreach ($branches as $branch) {
                     $clients[] = [
                         'id'        => $branch['id'],
@@ -113,6 +120,8 @@ class Home extends BaseController
 
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
+                $data['rabs']           = $RabModel->findAll();
+                $data['pakets']         = $PaketModel->findAll();
                 $data['clients']        = array_slice($clients, $offset, $perpage);
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
 
@@ -138,11 +147,15 @@ class Home extends BaseController
                     }
                 }
 
+                // $rabs = $RabModel->where('projectid')->
+
                 // Parsing Data to View
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
                 $data['client']         = $clients;
                 $data['projects']       = $projects;
+                $data['rabs']           = $RabModel->findAll();
+                $data['pakets']         = $PaketModel->findAll();
                 $data['pager']          = $pager->links('projects', 'uikit_full');
 
                 return view('dashboard', $data);
@@ -159,8 +172,11 @@ class Home extends BaseController
             // Calling Services
             $pager = \Config\Services::pager();
             // Calling models
-            $ProjectModel = new ProjectModel;
+            $ProjectModel   = new ProjectModel;
             $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -185,6 +201,9 @@ class Home extends BaseController
             $data['description']    = lang('Global.dashboardDescription');
             $data['client']         = $client;
             $data['projects']       = $projects;
+            $data['rabs']           = $RabModel->findAll();
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
             $data['pager']          = $pager->links('projects', 'uikit_full');
 
             return view('dashboard', $data);

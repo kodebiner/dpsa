@@ -127,9 +127,55 @@
                         <div id="body<?= $project['id'] ?>" class="uk-card-body" hidden>
                             <div class="uk-grid-divider" uk-grid>
                                 <div class="uk-width-1-1">
-                                    <h4>Brief</h4>
-                                    <p><?= $project['brief'] ?></p>
+                                    <h4>Detail Pesanan</h4>
                                 </div>
+                                <?php if (!empty($project['id'])) { ?>
+                                    <div class="uk-overflow-auto uk-margin">
+                                        <table class="uk-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">Nama</th>
+                                                    <th class="uk-text-center">Panjang</th>
+                                                    <th class="uk-text-center">Lebar</th>
+                                                    <th class="uk-text-center">Tinggi</th>
+                                                    <th class="uk-text-center">Volume</th>
+                                                    <th class="uk-text-center">Satuan</th>
+                                                    <th class="uk-text-center">Jumlah Pesanan</th>
+                                                    <th class="uk-text-center">Harga</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if (!empty($project['id'])) {
+                                                    foreach ($rabs as $rab) {
+                                                        if ($rab['projectid'] === $project['id']) {
+                                                            foreach ($pakets as $paket) {
+                                                                if ($paket['id'] === $rab['paketid']) {
+                                                                    foreach ($mdls as $mdl) {
+                                                                        if ($mdl['id'] === $rab['mdlid']) { ?>
+                                                                            <tr>
+                                                                                <td class=""><?= $mdl['name'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['length'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['width'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['height'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['volume'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
+                                                                                <td class="uk-text-center"><?= $rab['qty'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['price'] ?></td>
+                                                                            </tr>
+                                                <?php
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php } ?>
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center">Status Proyek</h4>
                                     <div class="uk-text-center"><?= $status ?></div>
@@ -167,8 +213,54 @@
                             <div class="uk-grid-divider" uk-grid>
                                 <div class="uk-width-1-1">
                                     <h4>Detail Pesanan</h4>
-                                    <p><?= $project['brief'] ?></p>
                                 </div>
+                                <?php if (!empty($project['id'])) { ?>
+                                    <div class="uk-width-1-1">
+                                        <table class="uk-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">Nama</th>
+                                                    <th class="uk-text-center">Panjang</th>
+                                                    <th class="uk-text-center">Lebar</th>
+                                                    <th class="uk-text-center">Tinggi</th>
+                                                    <th class="uk-text-center">Volume</th>
+                                                    <th class="uk-text-center">Satuan</th>
+                                                    <th class="uk-text-center">Jumlah Pesanan</th>
+                                                    <th class="uk-text-center">Harga</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if (!empty($project['id'])) {
+                                                    foreach ($rabs as $rab) {
+                                                        if ($rab['projectid'] === $project['id']) {
+                                                            foreach ($pakets as $paket) {
+                                                                if ($paket['id'] === $rab['paketid']) {
+                                                                    foreach ($mdls as $mdl) {
+                                                                        if ($mdl['id'] === $rab['mdlid']) { ?>
+                                                                            <tr>
+                                                                                <td class=""><?= $mdl['name'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['length'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['width'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['height'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['volume'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
+                                                                                <td class="uk-text-center"><?= $rab['qty'] ?></td>
+                                                                                <td class="uk-text-center"><?= $mdl['price'] ?></td>
+                                                                            </tr>
+                                                <?php
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php } ?>
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center">Status Proyek</h4>
                                     <div class="uk-text-center"><?= $status ?></div>
