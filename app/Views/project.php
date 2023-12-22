@@ -1,10 +1,10 @@
 <?= $this->extend('layout') ?>
 
 <?= $this->section('extraScript') ?>
-    <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-3.7.0.js"></script>
-    <script src="js/jquery-ui.js"></script>
+<link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-3.7.0.js"></script>
+<script src="js/jquery-ui.js"></script>
 <?= $this->endSection() ?>
 
 <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
@@ -288,146 +288,148 @@
         // Auto Complete Paket
         paketList = [
             <?php foreach ($pakets as $paket) {
-                echo '{label:"'.$paket['name'].'",idx:'.$paket['id'].'},';
+                echo '{label:"' . $paket['name'] . '",idx:' . $paket['id'] . '},';
             } ?>
         ];
         $(function() {
             $("#paketname").autocomplete({
                 source: paketList,
                 select: function(e, i) {
-                    var data = { 'id' : i.item.idx };
+                    var data = {
+                        'id': i.item.idx
+                    };
                     $.ajax({
-                        url:"project/mdl",
-                        method:"POST",
+                        url: "project/mdl",
+                        method: "POST",
                         data: data,
                         dataType: "json",
-                        error:function() {
+                        error: function() {
                             console.log('error', arguments);
                         },
-                        success:function() {
+                        success: function() {
                             console.log('success', arguments);
                             document.getElementById('listmdl').removeAttribute('hidden');
 
-                            var pakets              = document.getElementById('listmdl');
+                            var pakets = document.getElementById('listmdl');
 
-                            var elements = document.getElementById('mdldraft'+i.item.idx);
-                            if (elements){
+                            var elements = document.getElementById('mdldraft' + i.item.idx);
+                            if (elements) {
                                 elements.remove();
                             }
 
-                            var containerlist       = document.createElement('div');
-                            containerlist.setAttribute('id', 'mdldraft'+i.item.idx)
+                            var containerlist = document.createElement('div');
+                            containerlist.setAttribute('id', 'mdldraft' + i.item.idx)
 
-                            var divider             = document.createElement('hr');
+                            var divider = document.createElement('hr');
                             divider.setAttribute('style', 'border-bottom: 2px solid #000;');
 
-                            var paketnamegrid       = document.createElement('div');
+                            var paketnamegrid = document.createElement('div');
                             paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
                             paketnamegrid.setAttribute('uk-grid', '');
 
-                            var paketnamecon        = document.createElement('div');
+                            var paketnamecon = document.createElement('div');
                             paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
 
-                            var paketname           = document.createElement('div');
+                            var paketname = document.createElement('div');
                             paketname.setAttribute('class', 'uk-h3');
                             paketname.setAttribute('style', 'text-transform: uppercase;');
-                            paketname.innerHTML     = i.item.label;
+                            paketname.innerHTML = i.item.label;
 
-                            var closecontainer      = document.createElement('div');
+                            var closecontainer = document.createElement('div');
                             closecontainer.setAttribute('class', 'uk-width-1-6');
 
-                            var closebutton         = document.createElement('a');
+                            var closebutton = document.createElement('a');
                             closebutton.setAttribute('class', 'uk-icon-button-delete');
                             closebutton.setAttribute('uk-icon', 'close');
-                            closebutton.setAttribute('onclick', 'removeList('+i.item.idx+')');
+                            closebutton.setAttribute('onclick', 'removeList(' + i.item.idx + ')');
 
-                            var tablecon            = document.createElement('div');
+                            var tablecon = document.createElement('div');
                             tablecon.setAttribute('class', 'uk-overflow-auto');
 
-                            var tables              = document.createElement('table');
+                            var tables = document.createElement('table');
                             tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
 
-                            var thead               = document.createElement('thead');
+                            var thead = document.createElement('thead');
 
-                            var trhead              = document.createElement('tr');
+                            var trhead = document.createElement('tr');
 
-                            var thchecklist         = document.createElement('th');
-                            thchecklist.innerHTML   = 'Checklist';
+                            var thchecklist = document.createElement('th');
+                            thchecklist.innerHTML = 'Checklist';
 
-                            var thname              = document.createElement('th');
-                            thname.innerHTML        = 'Nama';
+                            var thname = document.createElement('th');
+                            thname.innerHTML = 'Nama';
 
-                            var thlength            = document.createElement('th');
-                            thlength.innerHTML      = 'Panjang';
+                            var thlength = document.createElement('th');
+                            thlength.innerHTML = 'Panjang';
 
-                            var thwidth             = document.createElement('th');
-                            thwidth.innerHTML       = 'Lebar';
+                            var thwidth = document.createElement('th');
+                            thwidth.innerHTML = 'Lebar';
 
-                            var thheigth            = document.createElement('th');
-                            thheigth.innerHTML      = 'Tinggi';
+                            var thheigth = document.createElement('th');
+                            thheigth.innerHTML = 'Tinggi';
 
-                            var thvol               = document.createElement('th');
-                            thvol.innerHTML         = 'Volume';
+                            var thvol = document.createElement('th');
+                            thvol.innerHTML = 'Volume';
 
-                            var thden               = document.createElement('th');
-                            thden.innerHTML         = 'Satuan';
+                            var thden = document.createElement('th');
+                            thden.innerHTML = 'Satuan';
 
-                            var thqty               = document.createElement('th');
-                            thqty.innerHTML         = 'Jumlah Item';
+                            var thqty = document.createElement('th');
+                            thqty.innerHTML = 'Jumlah Item';
 
-                            var thprice             = document.createElement('th');
-                            thprice.innerHTML       = 'Harga';
+                            var thprice = document.createElement('th');
+                            thprice.innerHTML = 'Harga';
 
-                            var tbody               = document.createElement('tbody');
+                            var tbody = document.createElement('tbody');
 
                             mdlarray = arguments[0];
 
                             for (k in mdlarray) {
-                                var trbody                  = document.createElement('tr');
+                                var trbody = document.createElement('tr');
 
-                                var tdchecklist             = document.createElement('td');
+                                var tdchecklist = document.createElement('td');
 
-                                var inputchecklist          = document.createElement('input');
+                                var inputchecklist = document.createElement('input');
                                 inputchecklist.setAttribute('type', 'checkbox');
                                 inputchecklist.setAttribute('class', 'uk-checkbox');
-                                inputchecklist.setAttribute('id', 'checklist['+mdlarray[k]['id']+']');
-                                inputchecklist.setAttribute('name', 'checklist['+mdlarray[k]['id']+']');
+                                inputchecklist.setAttribute('id', 'checklist[' + mdlarray[k]['id'] + ']');
+                                inputchecklist.setAttribute('name', 'checklist[' + mdlarray[k]['id'] + ']');
 
-                                var tdname                  = document.createElement('td');
-                                tdname.innerHTML            = mdlarray[k]['name']
+                                var tdname = document.createElement('td');
+                                tdname.innerHTML = mdlarray[k]['name']
 
-                                var tdlength                = document.createElement('td');
-                                tdlength.innerHTML          = mdlarray[k]['length']
+                                var tdlength = document.createElement('td');
+                                tdlength.innerHTML = mdlarray[k]['length']
 
-                                var tdwidth                 = document.createElement('td');
-                                tdwidth.innerHTML           = mdlarray[k]['width']
+                                var tdwidth = document.createElement('td');
+                                tdwidth.innerHTML = mdlarray[k]['width']
 
-                                var tdheight                = document.createElement('td');
-                                tdheight.innerHTML          = mdlarray[k]['height']
+                                var tdheight = document.createElement('td');
+                                tdheight.innerHTML = mdlarray[k]['height']
 
-                                var tdvol                   = document.createElement('td');
-                                tdvol.innerHTML             = mdlarray[k]['volume']
+                                var tdvol = document.createElement('td');
+                                tdvol.innerHTML = mdlarray[k]['volume']
 
-                                var tdden                   = document.createElement('td');
-                                tdden.innerHTML             = mdlarray[k]['denomination']
+                                var tdden = document.createElement('td');
+                                tdden.innerHTML = mdlarray[k]['denomination']
 
-                                var tdqty                   = document.createElement('td');
+                                var tdqty = document.createElement('td');
                                 tdqty.setAttribute('class', 'uk-form-controls');
 
-                                var inputqty                = document.createElement('input');
+                                var inputqty = document.createElement('input');
                                 inputqty.setAttribute('class', 'uk-input uk-form-width-small');
                                 inputqty.setAttribute('type', 'number');
-                                inputqty.setAttribute('id', 'qty['+mdlarray[k]['id']+']');
-                                inputqty.setAttribute('name', 'qty['+mdlarray[k]['id']+']');
+                                inputqty.setAttribute('id', 'qty[' + mdlarray[k]['id'] + ']');
+                                inputqty.setAttribute('name', 'qty[' + mdlarray[k]['id'] + ']');
                                 inputqty.setAttribute('value', '0');
-                                inputqty.setAttribute('onchange', 'price('+ mdlarray[k]['id'] +')');
+                                inputqty.setAttribute('onchange', 'price(' + mdlarray[k]['id'] + ')');
 
-                                var tdprice                 = document.createElement('td');
-                                tdprice.setAttribute('id', 'showprice['+mdlarray[k]['id']+']');
-                                tdprice.innerHTML           = 0;
+                                var tdprice = document.createElement('td');
+                                tdprice.setAttribute('id', 'showprice[' + mdlarray[k]['id'] + ']');
+                                tdprice.innerHTML = 0;
 
                                 var hiddenprice = document.createElement('div');
-                                hiddenprice.setAttribute('id', 'price['+mdlarray[k]['id']+']');
+                                hiddenprice.setAttribute('id', 'price[' + mdlarray[k]['id'] + ']');
                                 hiddenprice.setAttribute('hidden', '');
                                 hiddenprice.innerHTML = mdlarray[k]['price'];
 
@@ -442,7 +444,7 @@
                                 trbody.appendChild(tdden);
                                 trbody.appendChild(tdqty);
                                 trbody.appendChild(tdprice);
-                                trbody.appendChild(hiddenprice);                                
+                                trbody.appendChild(hiddenprice);
                                 tbody.appendChild(trbody);
                             }
                             trhead.appendChild(thchecklist);
@@ -474,12 +476,12 @@
         });
 
         function price(z) {
-            var baseprice       = document.getElementById('price['+ z +']').innerHTML;
-            var baseqty         = document.getElementById('qty['+ z +']').value;
-            var pricetd         = document.getElementById('showprice['+ z +']');
-            var projprice       = baseprice * baseqty;
-            var checkbox        = document.getElementById('checklist['+ z +']');
-            pricetd.innerHTML   = projprice;
+            var baseprice = document.getElementById('price[' + z + ']').innerHTML;
+            var baseqty = document.getElementById('qty[' + z + ']').value;
+            var pricetd = document.getElementById('showprice[' + z + ']');
+            var projprice = baseprice * baseqty;
+            var checkbox = document.getElementById('checklist[' + z + ']');
+            pricetd.innerHTML = projprice;
 
             if (baseqty > 0) {
                 checkbox.checked = true;
@@ -571,7 +573,14 @@
                             </div>
 
                             <div class="uk-padding uk-padding-remove-vertical">
-                                <div class="uk-h3 uk-margin-remove" style="text-transform: uppercase;">Daftar Pesanan</div>
+                                <div  class="uk-child-width-1-2@m uk-text-center" uk-grid>
+                                    <div class="uk-h3 uk-margin-remove uk-text-left" style="text-transform: uppercase;">Daftar Pesanan</div>
+                                    <div class="uk-text-right">
+                                        <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/download/</?=$project['id']?>">Download SPH</a> -->
+                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                     <table class="uk-table uk-table-middle uk-table-divider">
                                         <thead>
@@ -593,58 +602,58 @@
                                                 <tr>
                                                     <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                                                     <?php foreach ($paket['mdl'] as $mdl) { ?>
-                                                        <tr>
-                                                            <td>
-                                                                <?php
-                                                                if ($mdl['checked']) {
-                                                                    $checked = 'checked';
-                                                                } else {
-                                                                    $checked = '';
-                                                                }
-                                                                ?>
-                                                                <input type="checkbox" class="uk-checkbox" <?=$checked?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
-                                                            </td>
-                                                            <td><?= $mdl['name'] ?></td>
-                                                            <td><?= $mdl['length'] ?></td>
-                                                            <td><?= $mdl['width'] ?></td>
-                                                            <td><?= $mdl['height'] ?></td>
-                                                            <td><?= $mdl['volume'] ?></td>
-                                                            <td>
-                                                                <?php
-                                                                if ($mdl['denomination'] === "1") {
-                                                                    echo "Unit";
-                                                                } elseif ($mdl['denomination'] === "2") {
-                                                                    echo "Meter Lari";
-                                                                } elseif ($mdl['denomination'] === "3") {
-                                                                    echo "Meter Persegi";
-                                                                }
-                                                                ?>
-                                                            </td>
-                                                            <td class="uk-form-controls">
-                                                                <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
-                                                            </td>
-                                                            <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                            <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?= (Int)$mdl['qty'] * (Int)$mdl['price'] ?></td>
-                                                        </tr>
-                                                        <script>
-                                                            function eprice(n) {
-                                                                var ebaseprice      = document.getElementById('eprice['+ n +']').innerHTML;
-                                                                var ebaseqty        = document.getElementById('eqty['+ n +']').value;
-                                                                var epricetd        = document.getElementById('eshowprice['+ n +']');
-                                                                var echeckbox       = document.getElementById('checked['+ n +']');
-                                                                var eprojprice      = ebaseprice * ebaseqty;
-                                                                epricetd.innerHTML  = eprojprice;
-
-                                                                if (ebaseqty > 0) {
-                                                                    echeckbox.checked = true;
-                                                                } else {
-                                                                    echeckbox.checked = false;
-                                                                }
-                                                            };
-                                                        </script>
-                                                    <?php } ?>
+                                                <tr>
+                                                    <td>
+                                                        <?php
+                                                        if ($mdl['checked']) {
+                                                            $checked = 'checked';
+                                                        } else {
+                                                            $checked = '';
+                                                        }
+                                                        ?>
+                                                        <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
+                                                    </td>
+                                                    <td><?= $mdl['name'] ?></td>
+                                                    <td><?= $mdl['length'] ?></td>
+                                                    <td><?= $mdl['width'] ?></td>
+                                                    <td><?= $mdl['height'] ?></td>
+                                                    <td><?= $mdl['volume'] ?></td>
+                                                    <td>
+                                                        <?php
+                                                        if ($mdl['denomination'] === "1") {
+                                                            echo "Unit";
+                                                        } elseif ($mdl['denomination'] === "2") {
+                                                            echo "Meter Lari";
+                                                        } elseif ($mdl['denomination'] === "3") {
+                                                            echo "Meter Persegi";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td class="uk-form-controls">
+                                                        <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
+                                                    </td>
+                                                    <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                    <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?= (int)$mdl['qty'] * (int)$mdl['price'] ?></td>
                                                 </tr>
+                                                <script>
+                                                    function eprice(n) {
+                                                        var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
+                                                        var ebaseqty = document.getElementById('eqty[' + n + ']').value;
+                                                        var epricetd = document.getElementById('eshowprice[' + n + ']');
+                                                        var echeckbox = document.getElementById('checked[' + n + ']');
+                                                        var eprojprice = ebaseprice * ebaseqty;
+                                                        epricetd.innerHTML = eprojprice;
+
+                                                        if (ebaseqty > 0) {
+                                                            echeckbox.checked = true;
+                                                        } else {
+                                                            echeckbox.checked = false;
+                                                        }
+                                                    };
+                                                </script>
                                             <?php } ?>
+                                            </tr>
+                                        <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -687,148 +696,150 @@
                                     });
                                 });
 
-                                autopaket<?=$project['id']?> = [
+                                autopaket<?= $project['id'] ?> = [
                                     <?php foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
-                                        echo '{label:"'.$autopaket['name'].'",idx:'.$autopaket['id'].'},';
+                                        echo '{label:"' . $autopaket['name'] . '",idx:' . $autopaket['id'] . '},';
                                     } ?>
                                 ];
                                 $(function() {
-                                    $("#paketname<?=$project['id']?>").autocomplete({
-                                        source: autopaket<?=$project['id']?>,
+                                    $("#paketname<?= $project['id'] ?>").autocomplete({
+                                        source: autopaket<?= $project['id'] ?>,
                                         select: function(e, i) {
-                                            var data = { 'id' : i.item.idx };
+                                            var data = {
+                                                'id': i.item.idx
+                                            };
                                             $.ajax({
-                                                url:"project/mdl",
-                                                method:"POST",
+                                                url: "project/mdl",
+                                                method: "POST",
                                                 data: data,
                                                 dataType: "json",
-                                                error:function() {
+                                                error: function() {
                                                     console.log('error', arguments);
                                                 },
-                                                success:function() {
+                                                success: function() {
                                                     console.log('success', arguments);
                                                     document.getElementById('listmdl<?= $project['id'] ?>').removeAttribute('hidden');
 
-                                                    var pakets              = document.getElementById('listmdl<?= $project['id'] ?>');
+                                                    var pakets = document.getElementById('listmdl<?= $project['id'] ?>');
 
-                                                    var elements = document.getElementById('mdldraft<?= $project['id'] ?>'+i.item.idx);
-                                                    if (elements){
+                                                    var elements = document.getElementById('mdldraft<?= $project['id'] ?>' + i.item.idx);
+                                                    if (elements) {
                                                         elements.remove();
                                                     }
 
-                                                    var containerlist       = document.createElement('div');
-                                                    containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>'+i.item.idx)
+                                                    var containerlist = document.createElement('div');
+                                                    containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>' + i.item.idx)
 
-                                                    var divider             = document.createElement('hr');
+                                                    var divider = document.createElement('hr');
                                                     divider.setAttribute('style', 'border-bottom: 2px solid #000;');
 
-                                                    var paketnamegrid       = document.createElement('div');
+                                                    var paketnamegrid = document.createElement('div');
                                                     paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
                                                     paketnamegrid.setAttribute('uk-grid', '');
 
-                                                    var paketnamecon        = document.createElement('div');
+                                                    var paketnamecon = document.createElement('div');
                                                     paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
 
-                                                    var paketname           = document.createElement('div');
+                                                    var paketname = document.createElement('div');
                                                     paketname.setAttribute('class', 'uk-h3');
                                                     paketname.setAttribute('style', 'text-transform: uppercase;');
-                                                    paketname.innerHTML     = i.item.label;
+                                                    paketname.innerHTML = i.item.label;
 
-                                                    var closecontainer      = document.createElement('div');
+                                                    var closecontainer = document.createElement('div');
                                                     closecontainer.setAttribute('class', 'uk-width-1-6');
 
-                                                    var closebutton         = document.createElement('a');
+                                                    var closebutton = document.createElement('a');
                                                     closebutton.setAttribute('class', 'uk-icon-button-delete');
                                                     closebutton.setAttribute('uk-icon', 'close');
-                                                    closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>('+i.item.idx+')');
+                                                    closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>(' + i.item.idx + ')');
 
-                                                    var tablecon            = document.createElement('div');
+                                                    var tablecon = document.createElement('div');
                                                     tablecon.setAttribute('class', 'uk-overflow-auto');
 
-                                                    var tables              = document.createElement('table');
+                                                    var tables = document.createElement('table');
                                                     tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
 
-                                                    var thead               = document.createElement('thead');
+                                                    var thead = document.createElement('thead');
 
-                                                    var trhead              = document.createElement('tr');
+                                                    var trhead = document.createElement('tr');
 
-                                                    var thchecklist         = document.createElement('th');
-                                                    thchecklist.innerHTML   = 'Checklist';
+                                                    var thchecklist = document.createElement('th');
+                                                    thchecklist.innerHTML = 'Checklist';
 
-                                                    var thname              = document.createElement('th');
-                                                    thname.innerHTML        = 'Nama';
+                                                    var thname = document.createElement('th');
+                                                    thname.innerHTML = 'Nama';
 
-                                                    var thlength            = document.createElement('th');
-                                                    thlength.innerHTML      = 'Panjang';
+                                                    var thlength = document.createElement('th');
+                                                    thlength.innerHTML = 'Panjang';
 
-                                                    var thwidth             = document.createElement('th');
-                                                    thwidth.innerHTML       = 'Lebar';
+                                                    var thwidth = document.createElement('th');
+                                                    thwidth.innerHTML = 'Lebar';
 
-                                                    var thheigth            = document.createElement('th');
-                                                    thheigth.innerHTML      = 'Tinggi';
+                                                    var thheigth = document.createElement('th');
+                                                    thheigth.innerHTML = 'Tinggi';
 
-                                                    var thvol               = document.createElement('th');
-                                                    thvol.innerHTML         = 'Volume';
+                                                    var thvol = document.createElement('th');
+                                                    thvol.innerHTML = 'Volume';
 
-                                                    var thden               = document.createElement('th');
-                                                    thden.innerHTML         = 'Satuan';
+                                                    var thden = document.createElement('th');
+                                                    thden.innerHTML = 'Satuan';
 
-                                                    var thqty               = document.createElement('th');
-                                                    thqty.innerHTML         = 'Jumlah Item';
+                                                    var thqty = document.createElement('th');
+                                                    thqty.innerHTML = 'Jumlah Item';
 
-                                                    var thprice             = document.createElement('th');
-                                                    thprice.innerHTML       = 'Harga';
+                                                    var thprice = document.createElement('th');
+                                                    thprice.innerHTML = 'Harga';
 
-                                                    var tbody               = document.createElement('tbody');
+                                                    var tbody = document.createElement('tbody');
 
                                                     emdlarray = arguments[0];
 
                                                     for (t in emdlarray) {
-                                                        var trbody                  = document.createElement('tr');
+                                                        var trbody = document.createElement('tr');
 
-                                                        var tdchecklist             = document.createElement('td');
+                                                        var tdchecklist = document.createElement('td');
 
-                                                        var inputchecklist          = document.createElement('input');
+                                                        var inputchecklist = document.createElement('input');
                                                         inputchecklist.setAttribute('type', 'checkbox');
                                                         inputchecklist.setAttribute('class', 'uk-checkbox');
-                                                        inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>'+emdlarray[t]['id']+']');
-                                                        inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>['+emdlarray[t]['id']+']');
+                                                        inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                        inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
 
-                                                        var tdname                  = document.createElement('td');
-                                                        tdname.innerHTML            = emdlarray[t]['name']
+                                                        var tdname = document.createElement('td');
+                                                        tdname.innerHTML = emdlarray[t]['name']
 
-                                                        var tdlength                = document.createElement('td');
-                                                        tdlength.innerHTML          = emdlarray[t]['length']
+                                                        var tdlength = document.createElement('td');
+                                                        tdlength.innerHTML = emdlarray[t]['length']
 
-                                                        var tdwidth                 = document.createElement('td');
-                                                        tdwidth.innerHTML           = emdlarray[t]['width']
+                                                        var tdwidth = document.createElement('td');
+                                                        tdwidth.innerHTML = emdlarray[t]['width']
 
-                                                        var tdheight                = document.createElement('td');
-                                                        tdheight.innerHTML          = emdlarray[t]['height']
+                                                        var tdheight = document.createElement('td');
+                                                        tdheight.innerHTML = emdlarray[t]['height']
 
-                                                        var tdvol                   = document.createElement('td');
-                                                        tdvol.innerHTML             = emdlarray[t]['volume']
+                                                        var tdvol = document.createElement('td');
+                                                        tdvol.innerHTML = emdlarray[t]['volume']
 
-                                                        var tdden                   = document.createElement('td');
-                                                        tdden.innerHTML             = emdlarray[t]['denomination']
+                                                        var tdden = document.createElement('td');
+                                                        tdden.innerHTML = emdlarray[t]['denomination']
 
-                                                        var tdqty                   = document.createElement('td');
+                                                        var tdqty = document.createElement('td');
                                                         tdqty.setAttribute('class', 'uk-form-controls');
 
-                                                        var inputqty                = document.createElement('input');
+                                                        var inputqty = document.createElement('input');
                                                         inputqty.setAttribute('class', 'uk-input uk-form-width-small');
                                                         inputqty.setAttribute('type', 'number');
-                                                        inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>'+emdlarray[t]['id']+']');
-                                                        inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>['+emdlarray[t]['id']+']');
+                                                        inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                        inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
                                                         inputqty.setAttribute('value', '0');
-                                                        inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>('+ emdlarray[t]['id'] +')');
+                                                        inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + emdlarray[t]['id'] + ')');
 
-                                                        var tdprice                 = document.createElement('td');
-                                                        tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>'+emdlarray[t]['id']+']');
-                                                        tdprice.innerHTML           = 0;
+                                                        var tdprice = document.createElement('td');
+                                                        tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                        tdprice.innerHTML = 0;
 
                                                         var hiddenprice = document.createElement('div');
-                                                        hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>'+emdlarray[t]['id']+']');
+                                                        hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
                                                         hiddenprice.setAttribute('hidden', '');
                                                         hiddenprice.innerHTML = emdlarray[t]['price'];
 
@@ -843,7 +854,7 @@
                                                         trbody.appendChild(tdden);
                                                         trbody.appendChild(tdqty);
                                                         trbody.appendChild(tdprice);
-                                                        trbody.appendChild(hiddenprice);                                
+                                                        trbody.appendChild(hiddenprice);
                                                         tbody.appendChild(trbody);
                                                     }
                                                     trhead.appendChild(thchecklist);
@@ -875,12 +886,12 @@
                                 })
 
                                 function price<?= $project['id'] ?>(l) {
-                                    var ebaseprice      = document.getElementById('eprice[<?= $project['id'] ?>'+ l +']').innerHTML;
-                                    var ebaseqty        = document.getElementById('eqty[<?= $project['id'] ?>'+ l +']').value;
-                                    var epricetd        = document.getElementById('eshowprice[<?= $project['id'] ?>'+ l +']');
-                                    var echeckbox       = document.getElementById('checked[<?= $project['id'] ?>'+ l +']');
-                                    var eprojprice      = ebaseprice * ebaseqty;
-                                    epricetd.innerHTML  = eprojprice;
+                                    var ebaseprice = document.getElementById('eprice[<?= $project['id'] ?>' + l + ']').innerHTML;
+                                    var ebaseqty = document.getElementById('eqty[<?= $project['id'] ?>' + l + ']').value;
+                                    var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
+                                    var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
+                                    var eprojprice = ebaseprice * ebaseqty;
+                                    epricetd.innerHTML = eprojprice;
 
                                     if (ebaseqty > 0) {
                                         echeckbox.checked = true;
@@ -1042,7 +1053,7 @@
                             <!-- Add Client Auto Complete -->
                             <?php if (!empty($company)) {
                                 foreach ($company as $comp) {
-                                    if($comp['id'] === $project['id']){
+                                    if ($comp['id'] === $project['id']) {
                                         $klien = $comp['rsname'];
                                     }
                                 }
@@ -1092,7 +1103,7 @@
                     </div>
                 </div>
             </div>
-        <?php }
+    <?php }
     } ?>
     <!-- Modal Update Proyek End -->
 <?php } else {

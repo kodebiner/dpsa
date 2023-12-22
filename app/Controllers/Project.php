@@ -125,7 +125,7 @@ class Project extends BaseController
                 'price'         => $mdl['price'],
             ];
         }
-        
+
         die(json_encode($return));
     }
 
@@ -234,7 +234,7 @@ class Project extends BaseController
             } else {
                 $brief = $input['brief'];
             }
-            
+
             if (isset($input['company'])) {
                 $client = $pro['clientid'];
             } else {
@@ -263,7 +263,7 @@ class Project extends BaseController
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|'.$is_unique,
+                    'rules'  => 'required|' . $is_unique,
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -297,10 +297,10 @@ class Project extends BaseController
             }
 
             // RAB Data
-            foreach ($input['eqty'.$id] as $mdlid => $qty) {
-                if (isset($input['checked'.$id][$mdlid])) {
+            foreach ($input['eqty' . $id] as $mdlid => $qty) {
+                if (isset($input['checked' . $id][$mdlid])) {
                     $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                    if ((!empty($rab)) && ($rab['qty'] != $input['eqty'.$id][$mdlid])) {
+                    if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
                         $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
                     } elseif (empty($rab)) {
                         $mdl = $MdlModel->find($mdlid);
@@ -358,4 +358,39 @@ class Project extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
+
+    public function sphprint($id)
+    {
+        // Calling models
+        $ProjectModel   = new ProjectModel;
+        $CompanyModel   = new CompanyModel();
+        $RabModel       = new RabModel();
+        $PaketModel     = new PaketModel();
+        $MdlModel       = new MdlModel();
+
+        $projects = $ProjectModel->find($id);
+        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+
+        // Parsing Data to View
+        $data                   = $this->data;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['projects']       = $projects;
+        $data['rabs']           = $RabModel->findAll();
+        $data['pakets']         = $PaketModel->findAll();
+        $data['mdls']           = $MdlModel->findAll();
+        $data['client']         = $client;
+
+        require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->AddPage("P", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+
+        $date = date_create($projects['created_at']);
+        $filename = "LaporanSph".$projects['name']." ".date_format($date,'d-m-Y').".pdf";
+        $html = view('Views/sphprint',$data);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($filename, 'D');
+
+    }
+
 }
