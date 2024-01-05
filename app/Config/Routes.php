@@ -43,18 +43,8 @@ $routes->group('/', static function ($routes) {
 
 // Upload Routes
 $routes->group('upload', ['filter' => 'login'], function($routes) {
-    $routes->post('profile', 'Upload::profile');
-    $routes->post('removeprofile', 'Upload::removeprofile');
-    // $routes->post('logo', 'Upload::logo');
-    // $routes->post('removelogo', 'Upload::removelogo');
     $routes->post('designcreate', 'Upload::designcreate');
     $routes->post('removedesigncreate', 'Upload::removedesigncreate');
-    // $routes->post('productedit/(:num)', 'Upload::productedit/$1');
-    // $routes->post('removeproductedit/(:num)', 'Upload::removeproductedit/$1');
-    // $routes->post('promocreate', 'Upload::promocreate');
-    // $routes->post('removepromocreate', 'Upload::removepromocreate');
-    // $routes->post('promoedit/(:num)', 'Upload::promoedit/$1');
-    // $routes->post('removepromoedit/(:num)', 'Upload::removepromoedit/$1');
 });
 
 $routes->group('clientreg', static function ($routes) {

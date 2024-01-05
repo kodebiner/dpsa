@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class DesignModel extends Model
 {
     protected $allowedFields = [
-        'proyekid', 'submitted', 'revision', 'status', 'created_at', 'updated_at', 'deleted_at',
+        'projectid', 'submitted', 'revision', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
     protected $table            = 'design';
     protected $primaryKey       = 'id';

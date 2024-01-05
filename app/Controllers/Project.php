@@ -7,6 +7,7 @@ use App\Models\ProjectModel;
 use App\Models\MdlModel;
 use App\Models\PaketModel;
 use App\Models\RabModel;
+use App\Models\DesignModel;
 
 class Project extends BaseController
 {
@@ -34,27 +35,34 @@ class Project extends BaseController
             $MdlModel               = new MdlModel();
             $PaketModel             = new PaketModel();
             $RabModel               = new RabModel();
+            $DesignModel            = new DesignModel();
 
             // Populating Data
             $pakets                 = $PaketModel->findAll();
             $company                = $CompanyModel->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
 
-            $projectdata = [];
+            $projectdata    = [];
             foreach ($projects as $project) {
-                $paketid = [];
-                $mdlid = [];
-                $rabs = $RabModel->where('projectid', $project['id'])->find();
+                $paketid    = [];
+                $mdlid      = [];
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $project['id'])->find();
                 foreach ($rabs as $rab) {
-                    $paketid[] = $rab['paketid'];
-                    $mdlid[] = $rab['mdlid'];
+                    $paketid[]  = $rab['paketid'];
+                    $mdlid[]    = $rab['mdlid'];
                 }
-                $paketdata = [];
-                $paketproject = $PaketModel->find($paketid);
+
+                // Paket
+                $paketdata      = [];
+                $paketproject   = $PaketModel->find($paketid);
                 foreach ($paketproject as $pack) {
-                    $paketdata[] = $pack['id'];
+                    $paketdata[]    = $pack['id'];
                     $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
-                    $mdlpack = $MdlModel->where('paketid', $pack['id'])->find();
+
+                    // MDL
+                    $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
                     foreach ($mdlpack as $mdl) {
                         $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
                             'id'            => $mdl['id'],
@@ -66,6 +74,8 @@ class Project extends BaseController
                             'denomination'  => $mdl['denomination'],
                             'price'         => $mdl['price'],
                         ];
+
+                        // Checklist RAB
                         $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
                         if (!empty($rabpack)) {
                             $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
@@ -76,7 +86,12 @@ class Project extends BaseController
                         }
                     }
                 }
-                $projectdata[$project['id']]['autopaket'] = $PaketModel->whereNotIn('id', $paketdata)->find();
+
+                // Autocomplete Paket
+                $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
+
+                // Design
+                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
             }
 
             $data                   = $this->data;
@@ -215,9 +230,10 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel = new ProjectModel();
-            $RabModel = new RabModel();
-            $MdlModel = new MdlModel();
+            $ProjectModel   = new ProjectModel();
+            $RabModel       = new RabModel();
+            $MdlModel       = new MdlModel();
+            $DesignModel    = new DesignModel();
 
             // initialize
             $input = $this->request->getPost();
@@ -320,6 +336,29 @@ class Project extends BaseController
                 }
             }
 
+            // Design Data
+            if (isset($input['submitted'])) {
+                $design = $DesignModel->where('projectid', $id)->first();
+                if (empty($design)) {
+                    $datadesign = [
+                        'projectid'     => $id,
+                        'submitted'     => $input['submitted'],
+                        'status'        => 0,
+                    ];
+                    $DesignModel->insert($datadesign);
+                } else {
+                    unlink(FCPATH.'/img/design/'.$design['submitted']);
+                    $datadesign = [
+                        'id'            => $design['id'],
+                        'projectid'     => $id,
+                        'submitted'     => $input['submitted'],
+                        'status'        => 0,
+                    ];
+                    $DesignModel->save($datadesign);
+                }
+            }
+
+            // Project Data
             $project = [
                 'id'            => $id,
                 'name'          => $name,
