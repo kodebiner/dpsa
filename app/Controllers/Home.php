@@ -9,6 +9,7 @@ use App\Models\ProjectModel;
 use App\Models\RabModel;
 use App\Models\PaketModel;
 use App\Models\MdlModel;
+use App\Models\DesignModel;
 
 class Home extends BaseController
 {
@@ -177,6 +178,7 @@ class Home extends BaseController
             $RabModel       = new RabModel();
             $PaketModel     = new PaketModel();
             $MdlModel       = new MdlModel();
+            $DesignModel    = new DesignModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -201,6 +203,7 @@ class Home extends BaseController
             $data['description']    = lang('Global.dashboardDescription');
             $data['client']         = $client;
             $data['projects']       = $projects;
+            $data['design']         = $DesignModel->findAll();
             $data['rabs']           = $RabModel->findAll();
             $data['pakets']         = $PaketModel->findAll();
             $data['mdls']           = $MdlModel->findAll();
@@ -210,6 +213,10 @@ class Home extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function approval($id)
+    {
     }
 
     public function installation()
