@@ -61,7 +61,7 @@ class Home extends BaseController
             if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
 
                 // New Client Data 
-                $clients = $this->db->table('company')->where('deleted_at',null);
+                $clients = $this->db->table('company')->where('deleted_at', null);
                 $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
                 $clients->where('company.status !=', '0');
                 if (isset($input['search']) && !empty($input['search'])) {
@@ -97,9 +97,9 @@ class Home extends BaseController
                 $clients = array();
 
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $branches = $CompanyModel->where('parentid', $this->data['parentid'])->where('deleted_at',null)->like('rsname', $input['search'])->orLike('ptname', $input['search'])->find();
+                    $branches = $CompanyModel->where('parentid', $this->data['parentid'])->where('deleted_at', null)->like('rsname', $input['search'])->orLike('ptname', $input['search'])->find();
                 } else {
-                    $projectpusat = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at',null)->find();
+                    $projectpusat = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->find();
                     if (!empty($projectpusat)) {
                         $company = $CompanyModel->where('id', $this->data['parentid'])->first();
                         $clients[] = [
@@ -107,7 +107,7 @@ class Home extends BaseController
                             'rsname'    => $company['rsname'],
                         ];
                     }
-                    $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at',null)->find();
+                    $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
                 }
 
                 foreach ($branches as $branch) {
@@ -131,24 +131,22 @@ class Home extends BaseController
                 // Client Cabang function
 
                 if (isset($input['search']) && !empty($input['search'])) {
-                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at',null)->like('name', $input['search'])->paginate($perpage, 'projects');
+                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
                 } else {
-                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at',null)->paginate($perpage, 'projects');
+                    $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->paginate($perpage, 'projects');
                 }
 
-                $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at',null)->find();
-                
+                $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
+
                 $clients = array();
-                foreach ($company as $comp){
-                    if (!empty($clients)){
+                foreach ($company as $comp) {
+                    if (!empty($clients)) {
                         $clients[] = [
                             'id'  => $comp['id'],
                             'rsname' => $comp['rsname'],
                         ];
                     }
                 }
-
-                // $rabs = $RabModel->where('projectid')->
 
                 // Parsing Data to View
                 $data['title']          = lang('Global.titleDashboard');
@@ -192,9 +190,14 @@ class Home extends BaseController
             $client = $CompanyModel->find($id);
 
             if (isset($input['search']) && !empty($input['search'])) {
-                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at',null)->like('name', $input['search'])->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
             } else {
-                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at',null)->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->paginate($perpage, 'projects');
+            }
+
+            $projectdata = [];
+            foreach ($projects as $project) {
+                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
             }
 
             // Parsing Data to View
@@ -208,6 +211,7 @@ class Home extends BaseController
             $data['pakets']         = $PaketModel->findAll();
             $data['mdls']           = $MdlModel->findAll();
             $data['pager']          = $pager->links('projects', 'uikit_full');
+            $data['projectdata']    = $projectdata;
 
             return view('dashboard', $data);
         } else {
@@ -215,8 +219,101 @@ class Home extends BaseController
         }
     }
 
-    public function approval($id)
+    public function acc($id)
     {
+        $DesignModel = new DesignModel();
+        $input = $this->request->getPost('status');
+
+        $status = [
+            'id'        => $id,
+            'status'    => $input,
+        ];
+        $DesignModel->save($status);
+        $data = $this->data;
+        die(json_encode(array($input)));
+    }
+
+    public function revisi()
+    {
+        $image      = \Config\Services::image();
+        $validation = \Config\Services::validation();
+        $input      = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|is_image[uploads]|max_size[uploads,2048]|ext_in[uploads,png,jpg,jpeg]',
+        ];
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH . '/img/revisi/', $filename);
+
+            // Resizing Design Image
+            $image->withFile(FCPATH . '/img/revisi/' . $filename)
+                // ->fit(300, 300, 'center')
+                // ->crop(300, 300, 0, 0)
+                ->flatten(255, 255, 255)
+                ->convert(IMAGETYPE_JPEG)
+                ->save(FCPATH . '/img/revisi/' . $truename . '.jpg');
+
+            // Removing uploaded if it's not the same filename
+            if ($filename != $truename . '.jpg') {
+                unlink(FCPATH . '/img/revisi/' . $filename);
+            }
+
+            // Getting True Filename
+            $returnFile = $truename . '.jpg';
+
+            // Returning Message
+            die(json_encode($returnFile));
+        }
+    }
+
+    public function saverevisi($id)
+    {
+        $DesignModel = new DesignModel();
+
+        $input = $this->request->getPost();
+        // Design Data
+        if (isset($input['revisi'])) {
+            $design = $DesignModel->where('projectid', $id)->first();
+            if (empty($design)) {
+                unlink(FCPATH . '/img/revisi/' . $design['revision']);
+                $datadesign = [
+                    'projectid'     => $id,
+                    'revision'     => $input['revisi'],
+                    'status'        => 1,
+                ];
+                $DesignModel->insert($datadesign);
+            } else {
+                $datadesign = [
+                    'id'            => $design['id'],
+                    'projectid'     => $id,
+                    'revision'      => $input['revisi'],
+                    'status'        => 1,
+                ];
+                $DesignModel->save($datadesign);
+            }
+        }
+        return redirect()->back()->with('message','Revisi terkirim');
+    }
+
+    public function removerevisi()
+    {
+        // Removing File
+        $input = $this->request->getPost('revisi');
+        unlink(FCPATH . 'img/revisi/' . $input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 
     public function installation()
