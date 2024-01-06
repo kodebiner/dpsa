@@ -922,7 +922,7 @@
                                 <label class="uk-form-label" for="photocreate">Desain</label>
                                 <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
                                     <input id="photocreate<?= $project['id'] ?>" name="submitted" hidden />
-                                    <div class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                    <div id="js-upload-create-<?= $project['id'] ?>" class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
                                         <span uk-icon="icon: cloud-upload"></span>
                                         <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
                                         <div uk-form-custom>
@@ -994,7 +994,7 @@
                                         displayContainer.appendChild(closeContainer);
                                         imgContainer.appendChild(displayContainer);
 
-                                        document.getElementsByClassName('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        document.getElementById('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
                                     },
 
                                     loadStart: function(e) {
@@ -1052,6 +1052,8 @@
                                             document.getElementById('photocreate<?= $project['id'] ?>').value = '';
 
                                             alert(pesan);
+
+                                            document.getElementById('js-upload-create-<?= $project['id'] ?>').removeAttribute('hidden', '');
                                         }
                                     });
                                 };
