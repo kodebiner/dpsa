@@ -207,8 +207,9 @@ class Home extends BaseController
 
             $projectdata = [];
             foreach ($projects as $project) {
-                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
+                $projectdata[$project['id']]['design'] = $DesignModel->where('projectid', $project['id'])->find();
             }
+            // dd($projectdata);
 
             // Parsing Data to View
             $data                   = $this->data;

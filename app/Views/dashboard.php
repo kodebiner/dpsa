@@ -170,7 +170,7 @@
                                                                                 <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                 <td class="uk-text-center"><?= $mdl['price'] ?></td>
                                                                             </tr>
-                                                <?php
+                                                                            <?php
                                                                         }
                                                                     }
                                                                 }
@@ -213,15 +213,14 @@
                 <?php } else { ?>
                     <div class="uk-margin uk-card uk-card-default uk-card-hover">
                         <div class="uk-card-header">
-                            <h3 class="uk-card-title"><?= $project['name'] ?></h3>
+                            <h3 class="uk-card-title">Proyek <?= $project['name'] ?></h3>
                             <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
                         </div>
                         <?php
                         $desainpro  = "";
                         $tanggal    = "";
                         $designId   = "";
-                        foreach ($design as $desain) {
-                            if ($desain['projectid'] === $project['id']) {
+                        foreach ($projectdata[$project['id']]['design'] as $desain) {
                                 $desainpro      = $desain['submitted'];
                                 $designId       = $desain['id'];
                                 $designStatus   = $desain['status'];
@@ -233,7 +232,6 @@
                                         'id'
                                     );
                                 $tanggal = ucwords($dateFormatted);
-                            }
                         }
                         ?>
                         <div class="uk-card-body">
@@ -278,8 +276,7 @@
                                             </div>
                                             <?php if ($designStatus != "2") { ?>
                                                 <p id="btndesain" uk-margin>
-                                                    <!-- <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="return confirm('Anda sudah yakin dengan desain tersebut?')">Setuju</button> -->
-                                                    <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Setuju</button>
+                                                    <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
                                                     <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
                                                 </p>
                                             <?php } ?>
