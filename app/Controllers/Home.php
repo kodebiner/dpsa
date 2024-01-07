@@ -40,6 +40,8 @@ class Home extends BaseController
             $RabModel       = new RabModel();
             $PaketModel     = new PaketModel();
             $MdlModel       = new MdlModel();
+            $DesignModel    = new DesignModel();
+
 
             // Populating data
             $input = $this->request->getGet();
@@ -136,6 +138,11 @@ class Home extends BaseController
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->paginate($perpage, 'projects');
                 }
 
+                $projectdata = [];
+                foreach ($projects as $project) {
+                    $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
+                }
+
                 $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
 
                 $clients = array();
@@ -153,8 +160,11 @@ class Home extends BaseController
                 $data['description']    = lang('Global.dashboardDescription');
                 $data['client']         = $clients;
                 $data['projects']       = $projects;
+                $data['design']         = $DesignModel->findAll();
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
+                $data['projectdata']    = $projectdata;
+                $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->links('projects', 'uikit_full');
 
                 return view('dashboard', $data);
@@ -303,7 +313,7 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
             }
         }
-        return redirect()->back()->with('message','Revisi terkirim');
+        return redirect()->back()->with('message', 'Revisi terkirim');
     }
 
     public function removerevisi()

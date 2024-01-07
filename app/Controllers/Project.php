@@ -383,7 +383,7 @@ class Project extends BaseController
             $RabModel = new RabModel();
 
             // Populating Data
-            $rabs       = $RabModel->where('proejctid', $id)->find();
+            $rabs       = $RabModel->where('projectid', $id)->find();
 
             // Deleting Rab
             foreach ($rabs as $rab) {

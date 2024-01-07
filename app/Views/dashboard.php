@@ -262,11 +262,11 @@
                                                     <div class="" id="st">
                                                         <?php
                                                         if ($designStatus === "0") {
-                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status'.$designId.'" style="border-style: solid; border-color: #ff0000; color: white; background-color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
+                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
                                                         } elseif ($designStatus === "1") {
-                                                            echo '<div class="uk-text-light" id="status'.$designId.'" style="border-style: solid; color: white; background-color:#32CD32;  font-weight: bold;"> Dalam proses revisi </div>';
+                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
                                                         } else {
-                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status'.$designId.'" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
                                                         }
                                                         ?>
                                                     </div>
@@ -276,13 +276,17 @@
                                             <div uk-lightbox>
                                                 <a class="uk-height-medium uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light" href="img/design/<?= $desainpro ?>" data-src="img/design/<?= $desainpro ?>" uk-img></a>
                                             </div>
-                                            <p uk-margin>
-                                                <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>">Setuju</button>
-                                                <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
-                                            </p>
+                                            <?php if ($designStatus != "2") { ?>
+                                                <p id="btndesain" uk-margin>
+                                                    <!-- <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="return confirm('Anda sudah yakin dengan desain tersebut?')">Setuju</button> -->
+                                                    <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Setuju</button>
+                                                    <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
+                                                </p>
+                                            <?php } ?>
                                             <script>
-                                                $(document).ready(function() {
-                                                    $("#acc<?= $designId ?>").click(function() {
+                                                function myFunction() {
+                                                    let text = "Anda sudah yakin dengan desain tersebut?";
+                                                    if (confirm(text) == true) {
                                                         $.ajax({
                                                             url: "home/acc/<?= $designId ?>",
                                                             method: "POST",
@@ -295,12 +299,13 @@
                                                             },
                                                             success: function() {
                                                                 console.log('success', arguments);
-                                                                $("#status<?=$designId?>").remove();
+                                                                $("#status<?= $designId ?>").remove();
+                                                                $("#btndesain").remove();
                                                                 $("#st").append("<div class='uk-text-light uk-width-1-2 uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
                                                             },
                                                         })
-                                                    });
-                                                });
+                                                    }
+                                                }
                                             </script>
                                         </div>
                                     </div>
