@@ -130,5 +130,5 @@ nb-configuration.xml
 /.php-cs-fixer.php
 
 public/img/design/*
-# public/img/revisi/*
+public/img/revisi/*
 .env
