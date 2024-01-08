@@ -16,7 +16,7 @@ class Upload extends BaseController
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|is_image[uploads]|max_size[uploads,2048]|ext_in[uploads,png,jpg,jpeg]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
         ];
 
         // Validating
@@ -32,20 +32,20 @@ class Upload extends BaseController
             $input->move(FCPATH.'/img/design/', $filename);
 
             // Resizing Design Image
-            $image->withFile(FCPATH.'/img/design/'.$filename)
-                // ->fit(300, 300, 'center')
-                // ->crop(300, 300, 0, 0)
-                ->flatten(255, 255, 255)
-                ->convert(IMAGETYPE_JPEG)
-                ->save(FCPATH.'/img/design/'.$truename.'.jpg');
+            // $image->withFile(FCPATH.'/img/design/'.$filename)
+            //     // ->fit(300, 300, 'center')
+            //     // ->crop(300, 300, 0, 0)
+            //     ->flatten(255, 255, 255)
+            //     ->convert(IMAGETYPE_JPEG)
+            //     ->save(FCPATH.'/img/design/'.$truename.'.jpg');
             
             // Removing uploaded if it's not the same filename
-            if ($filename != $truename.'.jpg') {
+            if ($filename != $truename.'.pdf') {
                 unlink(FCPATH.'/img/design/'.$filename);
             }
 
             // Getting True Filename
-            $returnFile = $truename.'.jpg';
+            $returnFile = $truename.'.pdf';
 
             // Returning Message
             die(json_encode($returnFile));

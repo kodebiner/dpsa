@@ -913,9 +913,29 @@
                                 </div>
                             </div>
 
-                            <?php foreach ($projectdata[$project['id']]['design'] as $design) { ?>
-                                <label class="uk-form-label">Desain Tanggal : <?= date('l, d M Y, H:i:s', strtotime($design['updated_at'])) ?></label>
-                                <img class="uk-width-1-4" src="/img/design/<?= $design['submitted'] ?>" />
+                            <?php foreach ($projectdata[$project['id']]['design'] as $design) {
+                                if (!empty($design['submitted'])) { ?>
+                                    <div class="uk-margin">
+                                        <div class="uk-h4 uk-text-center">Desain Tanggal : <?= date('d M Y, H:i', strtotime($design['updated_at'])) ?></div>
+                                        <?php if (!empty($design['revision'])) { ?>
+                                            <div class="uk-child-width-1-2 uk-text-center" uk-grid>
+                                                <div>
+                                                    <object width="400" height="500" type="application/pdf" data="/img/design/<?= $design['submitted'] ?>"></object>
+                                                    <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Desain</div>
+                                                </div>
+                                                <div>
+                                                    <object width="400" height="500" type="application/pdf" data="/img/revisi/<?= $design['revision'] ?>"></object>
+                                                    <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Revisi</div>
+                                                </div>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="uk-text-center">
+                                                <object width="400" height="500" type="application/pdf" data="/img/design/<?= $design['submitted'] ?>"></object>
+                                                <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Desain</div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                <?php } ?>
                             <?php } ?>
 
                             <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
@@ -976,10 +996,10 @@
                                         displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
                                         displayContainer.setAttribute('class', 'uk-inline');
 
-                                        var displayImg = document.createElement('img');
+                                        var displayImg = document.createElement('embed');
                                         displayImg.setAttribute('src', 'img/design/' + filename);
-                                        // displayImg.setAttribute('width', '150');
-                                        // displayImg.setAttribute('height', '150');
+                                        displayImg.setAttribute('width', '400');
+                                        displayImg.setAttribute('height', '500');
 
                                         var closeContainer = document.createElement('div');
                                         closeContainer.setAttribute('class', 'uk-position-small uk-position-top-right');
