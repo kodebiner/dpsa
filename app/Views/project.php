@@ -559,7 +559,7 @@
                             </div>
 
                             <div class="uk-margin">
-                                <label class="uk-form-label" for="company">Progres Produksi</label>
+                                <label class="uk-form-label" for="status">Progres Produksi</label>
                                 <div class="uk-form-controls">
                                     <select class="uk-select" name="status" id="status<?= $project['id'] ?>">
                                         <option value="" selected disabled>Pilih Progres</option>
@@ -572,14 +572,17 @@
                                 </div>
                             </div>
 
-                            <div class="uk-padding uk-padding-remove-vertical">
-                                <div  class="uk-child-width-1-2@m uk-text-center" uk-grid>
-                                    <div class="uk-h3 uk-margin-remove uk-text-left" style="text-transform: uppercase;">Daftar Pesanan</div>
-                                    <div class="uk-text-right">
-                                        <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/download/</?=$project['id']?>">Download SPH</a> -->
-                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
-                                    </div>
+                            <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                <div>
+                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Detail Pemesanan</div>
                                 </div>
+                                <div class="uk-text-right">
+                                    <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                </div>
+                            </div>
+
+                            <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
                                 <hr>
                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                     <table class="uk-table uk-table-middle uk-table-divider">
@@ -670,6 +673,16 @@
                             </div>
 
                             <script>
+                                document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('close<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('close<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('open<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('open<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('close<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                
                                 $(document).ready(function() {
                                     if ($("#status<?= $project['id'] ?>").val() == "4") {
                                         $("#proqty<?= $project['id'] ?>").removeAttr("hidden");
@@ -913,171 +926,189 @@
                                 </div>
                             </div>
 
-                            <?php foreach ($projectdata[$project['id']]['design'] as $design) {
-                                if (!empty($design['submitted'])) { ?>
-                                    <div class="uk-margin">
-                                        <div class="uk-h4 uk-text-center">Desain Tanggal : <?= date('d M Y, H:i', strtotime($design['updated_at'])) ?></div>
-                                        <?php if (!empty($design['revision'])) { ?>
-                                            <div class="uk-child-width-1-2 uk-text-center" uk-grid>
-                                                <div>
-                                                    <object width="400" height="500" type="application/pdf" data="/img/design/<?= $design['submitted'] ?>"></object>
-                                                    <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Desain</div>
-                                                </div>
-                                                <div>
-                                                    <object width="400" height="500" type="application/pdf" data="/img/revisi/<?= $design['revision'] ?>"></object>
-                                                    <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Revisi</div>
-                                                </div>
+                            <div>
+                                <label class="uk-form-label" for="desain">Desain</label>
+                                <?php foreach ($projectdata[$project['id']]['design'] as $design) {
+                                    if (!empty($design['submitted'])) { ?>
+                                        <div class="uk-form-horizontal">
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label uk-margin-remove-top">Tanggal Desain</label>
+                                                <div class="uk-form-controls"> : <?= date('d M Y, H:i', strtotime($design['updated_at'])); ?></div>
                                             </div>
-                                        <?php } else { ?>
-                                            <div class="uk-text-center">
-                                                <object width="400" height="500" type="application/pdf" data="/img/design/<?= $design['submitted'] ?>"></object>
-                                                <div class="tm-h3 uk-text-center" style="text-transform: uppercase;">Desain</div>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                <?php } ?>
-                            <?php } ?>
 
-                            <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
-                                <label class="uk-form-label" for="photocreate">Desain</label>
-                                <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
-                                    <input id="photocreate<?= $project['id'] ?>" name="submitted" hidden />
-                                    <div id="js-upload-create-<?= $project['id'] ?>" class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
-                                        <span uk-icon="icon: cloud-upload"></span>
-                                        <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                        <div uk-form-custom>
-                                            <input type="file">
-                                            <span class="uk-link uk-preserve-color">pilih satu</span>
+                                            <?php if (!empty($design['revision'])) { ?>
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label uk-margin-remove-top">File Design</label>
+                                                    <div class="uk-form-controls"> : <a href="/img/design/<?= $design['submitted'] ?>"><span uk-icon="file-pdf"></span><?= $design['submitted'] ?></a></div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label uk-margin-remove-top">File Revisi</label>
+                                                    <div class="uk-form-controls"> : <a href="/img/revisi/<?= $design['revision'] ?>"><span uk-icon="file-pdf"></span><?= $design['revision'] ?></a></div>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label uk-margin-remove-top">File Design</label>
+                                                    <div class="uk-form-controls"> : <a href="/img/design/<?= $design['submitted'] ?>"><span uk-icon="file-pdf"></span><?= $design['submitted'] ?></a></div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
+                                    <?php } ?>
+                                <?php } ?>
+
+                                <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
+                                    <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
+                                        <input id="photocreate<?= $project['id'] ?>" name="submitted" hidden />
+                                        <div id="js-upload-create-<?= $project['id'] ?>" class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                            <span uk-icon="icon: cloud-upload"></span>
+                                            <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                            <div uk-form-custom>
+                                                <input type="file">
+                                                <span class="uk-link uk-preserve-color">pilih satu</span>
+                                            </div>
+                                        </div>
+                                        <progress id="js-progressbar-create-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                     </div>
-                                    <progress id="js-progressbar-create-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                 </div>
-                            </div>
 
-                            <script type="text/javascript">
-                                var bar = document.getElementById('js-progressbar-create-<?= $project['id'] ?>');
+                                <script type="text/javascript">
+                                    var bar = document.getElementById('js-progressbar-create-<?= $project['id'] ?>');
 
-                                UIkit.upload('.js-upload-create-<?= $project['id'] ?>', {
-                                    url: 'upload/designcreate',
-                                    multiple: false,
-                                    name: 'uploads',
-                                    param: {lorem:'ipsum'},
-                                    method: 'POST',
-                                    type: 'json',
+                                    UIkit.upload('.js-upload-create-<?= $project['id'] ?>', {
+                                        url: 'upload/designcreate',
+                                        multiple: false,
+                                        name: 'uploads',
+                                        param: {lorem:'ipsum'},
+                                        method: 'POST',
+                                        type: 'json',
 
-                                    beforeSend: function() {
-                                        console.log('beforeSend', arguments);
-                                    },
-                                    beforeAll: function() {
-                                        console.log('beforeAll', arguments);
-                                    },
-                                    load: function() {
-                                        console.log('load', arguments);
-                                    },
-                                    error: function() {
-                                        console.log('error', arguments);
-                                        var error = arguments[0].xhr.response.message.uploads;
-                                        alert(error);
-                                    },
-                                    complete: function() {
-                                        console.log('complete', arguments);
-
-                                        var filename = arguments[0].response;
-
-                                        if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
-                                            document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
-                                        };
-
-                                        document.getElementById('photocreate<?= $project['id'] ?>').value = filename;
-
-                                        var imgContainer = document.getElementById('image-container-create-<?= $project['id'] ?>');
-
-                                        var displayContainer = document.createElement('div');
-                                        displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
-                                        displayContainer.setAttribute('class', 'uk-inline');
-
-                                        var displayImg = document.createElement('embed');
-                                        displayImg.setAttribute('src', 'img/design/' + filename);
-                                        displayImg.setAttribute('width', '400');
-                                        displayImg.setAttribute('height', '500');
-
-                                        var closeContainer = document.createElement('div');
-                                        closeContainer.setAttribute('class', 'uk-position-small uk-position-top-right');
-
-                                        var closeButton = document.createElement('a');
-                                        closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                        closeButton.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
-                                        closeButton.setAttribute('uk-icon', 'close');
-
-                                        closeContainer.appendChild(closeButton);
-                                        displayContainer.appendChild(displayImg);
-                                        displayContainer.appendChild(closeContainer);
-                                        imgContainer.appendChild(displayContainer);
-
-                                        document.getElementById('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
-                                    },
-
-                                    loadStart: function(e) {
-                                        console.log('loadStart', arguments);
-
-                                        bar.removeAttribute('hidden');
-                                        bar.max = e.total;
-                                        bar.value = e.loaded;
-                                    },
-
-                                    progress: function(e) {
-                                        console.log('progress', arguments);
-
-                                        bar.max = e.total;
-                                        bar.value = e.loaded;
-                                    },
-
-                                    loadEnd: function(e) {
-                                        console.log('loadEnd', arguments);
-
-                                        bar.max = e.total;
-                                        bar.value = e.loaded;
-                                    },
-
-                                    completeAll: function() {
-                                        console.log('completeAll', arguments);
-
-                                        setTimeout(function() {
-                                            bar.setAttribute('hidden', 'hidden');
-                                        }, 1000);
-
-                                        alert('Data Berhasil Terunggah');
-                                    }
-                                });
-
-                                function removeImgCreate<?= $project['id'] ?>() {
-                                    $.ajax({
-                                        type: 'post',
-                                        url: 'upload/removedesigncreate',
-                                        data: {
-                                            'submitted': document.getElementById('photocreate<?= $project['id'] ?>').value
+                                        beforeSend: function() {
+                                            console.log('beforeSend', arguments);
                                         },
-                                        dataType: 'json',
-
+                                        beforeAll: function() {
+                                            console.log('beforeAll', arguments);
+                                        },
+                                        load: function() {
+                                            console.log('load', arguments);
+                                        },
                                         error: function() {
                                             console.log('error', arguments);
+                                            var error = arguments[0].xhr.response.message.uploads;
+                                            alert(error);
+                                        },
+                                        complete: function() {
+                                            console.log('complete', arguments);
+
+                                            var filename = arguments[0].response;
+
+                                            if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
+                                                document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                            };
+
+                                            document.getElementById('photocreate<?= $project['id'] ?>').value = filename;
+
+                                            var imgContainer = document.getElementById('image-container-create-<?= $project['id'] ?>');
+
+                                            var displayContainer = document.createElement('div');
+                                            displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
+                                            displayContainer.setAttribute('class', 'uk-inline uk-width-1-1');
+
+                                            var displayImg = document.createElement('div');
+                                            displayImg.setAttribute('class', 'uk-placeholder uk-text-center');
+
+                                            var textfont = document.createElement('h6');
+
+                                            var linkrev = document.createElement('span')
+                                            linkrev.setAttribute('uk-icon', 'file-pdf');
+
+                                            var link = document.createElement('a');
+                                            link.setAttribute('href', 'img/design/' + filename);
+                                            link.setAttribute('target', '_blank');
+
+                                            var closeContainer = document.createElement('div');
+                                            closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                            var closeButton = document.createElement('a');
+                                            closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                            closeButton.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
+                                            closeButton.setAttribute('uk-icon', 'close');
+
+                                            var linktext = document.createTextNode(filename);
+
+                                            closeContainer.appendChild(closeButton);
+                                            displayContainer.appendChild(displayImg);
+                                            displayContainer.appendChild(closeContainer);
+                                            displayImg.appendChild(textfont);
+                                            textfont.appendChild(link);
+                                            link.appendChild(linkrev);
+                                            link.appendChild(linktext);
+                                            imgContainer.appendChild(displayContainer);
+
+                                            document.getElementById('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
                                         },
 
-                                        success: function() {
-                                            console.log('success', arguments);
+                                        loadStart: function(e) {
+                                            console.log('loadStart', arguments);
 
-                                            var pesan = arguments[0][1];
+                                            bar.removeAttribute('hidden');
+                                            bar.max = e.total;
+                                            bar.value = e.loaded;
+                                        },
 
-                                            document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
-                                            document.getElementById('photocreate<?= $project['id'] ?>').value = '';
+                                        progress: function(e) {
+                                            console.log('progress', arguments);
 
-                                            alert(pesan);
+                                            bar.max = e.total;
+                                            bar.value = e.loaded;
+                                        },
 
-                                            document.getElementById('js-upload-create-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                        loadEnd: function(e) {
+                                            console.log('loadEnd', arguments);
+
+                                            bar.max = e.total;
+                                            bar.value = e.loaded;
+                                        },
+
+                                        completeAll: function() {
+                                            console.log('completeAll', arguments);
+
+                                            setTimeout(function() {
+                                                bar.setAttribute('hidden', 'hidden');
+                                            }, 1000);
+
+                                            alert('Data Berhasil Terunggah');
                                         }
                                     });
-                                };
-                            </script>
+
+                                    function removeImgCreate<?= $project['id'] ?>() {
+                                        $.ajax({
+                                            type: 'post',
+                                            url: 'upload/removedesigncreate',
+                                            data: {
+                                                'submitted': document.getElementById('photocreate<?= $project['id'] ?>').value
+                                            },
+                                            dataType: 'json',
+
+                                            error: function() {
+                                                console.log('error', arguments);
+                                            },
+
+                                            success: function() {
+                                                console.log('success', arguments);
+
+                                                var pesan = arguments[0][1];
+
+                                                document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                                document.getElementById('photocreate<?= $project['id'] ?>').value = '';
+
+                                                alert(pesan);
+
+                                                document.getElementById('js-upload-create-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                            }
+                                        });
+                                    };
+                                </script>
+                            </div>
 
                             <!-- Add Client Auto Complete -->
                             <?php if (!empty($company)) {

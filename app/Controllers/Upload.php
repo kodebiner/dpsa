@@ -30,14 +30,6 @@ class Upload extends BaseController
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
             $input->move(FCPATH.'/img/design/', $filename);
-
-            // Resizing Design Image
-            // $image->withFile(FCPATH.'/img/design/'.$filename)
-            //     // ->fit(300, 300, 'center')
-            //     // ->crop(300, 300, 0, 0)
-            //     ->flatten(255, 255, 255)
-            //     ->convert(IMAGETYPE_JPEG)
-            //     ->save(FCPATH.'/img/design/'.$truename.'.jpg');
             
             // Removing uploaded if it's not the same filename
             if ($filename != $truename.'.pdf') {
