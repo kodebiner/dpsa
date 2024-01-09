@@ -471,14 +471,9 @@
 
                                                         <div class="uk-margin-large-top" id="image-container-create-<?= $project['id'] ?>">
                                                             <label class="uk-form-label" for="photocreate">Unggah Catatan Revisi</label>
-                                                            <div class="uk-placeholder uk-text-center uk-flex-middle">
-                                                                <h6>
-                                                                    <a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a> <span class="uk-text-left" uk-icon="close"></span>
-                                                                </h6>
-                                                            </div>
                                                             <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
                                                                 <input id="photocreate<?= $project['id'] ?>" name="revisi" hidden />
-                                                                <div class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                                <div id="js-upload-create-<?= $project['id'] ?>" class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
                                                                     <span uk-icon="icon: cloud-upload"></span>
                                                                     <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
                                                                     <div uk-form-custom>
@@ -532,51 +527,37 @@
 
                                                                     var displayContainer = document.createElement('div');
                                                                     displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
-                                                                    displayContainer.setAttribute('class', 'uk-inline');
-
-                                                                    <div class="uk-placeholder uk-text-center uk-flex-middle">
-                                                                        <h6>
-                                                                            <a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> 
-                                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a>
-                                                                            <span class="uk-text-left" uk-icon="close"></span>
-                                                                        </h6>
-                                                                    </div>
+                                                                    displayContainer.setAttribute('class', 'uk-inline uk-width-1-1');
 
                                                                     var displayImg = document.createElement('div');
-                                                                    displayImg.setAttribute('class', 'uk-placeholder uk-text-center');
+                                                                    displayImg.setAttribute('class', 'uk-placeholder uk-flex-middle');
 
                                                                     var textfont = document.createElement('h6');
 
                                                                     var linkrev = document.createElement('a');
-                                                                    linkrev.setAttribute('href','img/revisi/<?= $revisi ?>');
-                                                                    linkrev.setAttribute('uk-icon','file-pdf');
+                                                                    linkrev.setAttribute('href', 'img/revisi/' + filename);
+                                                                    linkrev.setAttribute('uk-icon', 'file-pdf');
 
                                                                     var link = document.createElement('a');
-                                                                    link.setAttribute('href','img/revisi/<?= $revisi ?>');
-                                                                    link.setAttribute('target','_blank');
+                                                                    link.setAttribute('href', 'img/revisi/' + filename);
+                                                                    link.setAttribute('target', '_blank');
 
-                                                                    var linktext = document.createTextNode('<?= $revisi ?>');
+                                                                    var close = document.createElement('span');
+                                                                    close.setAttribute('class', 'uk-text-left');
+                                                                    close.setAttribute('uk-icon', 'close');
+                                                                    close.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
 
-                                                                    // var displayImg = document.createElement('embed');
-                                                                    // displayImg.setAttribute('src', 'img/revisi/' + filename);
+                                                                    var linktext = document.createTextNode(filename);
 
-                                                                    var closeContainer = document.createElement('div');
-                                                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-top-right');
-
-                                                                    var closeButton = document.createElement('a');
-                                                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                                                    closeButton.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
-                                                                    closeButton.setAttribute('uk-icon', 'close');
-
-                                                                    closeContainer.appendChild(closeButton);
                                                                     displayContainer.appendChild(displayImg);
-                                                                    displayImg.appendChild(linkrev);
-                                                                    linkrev.appendChild(link);
-
-                                                                    // displayContainer.appendChild(closeContainer);
+                                                                    displayImg.appendChild(textfont);
+                                                                    textfont.appendChild(linkrev);
+                                                                    textfont.appendChild(link);
+                                                                    link.appendChild(linktext);
+                                                                    textfont.appendChild(close);
                                                                     imgContainer.appendChild(displayContainer);
 
-                                                                    document.getElementsByClassName('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                                    document.getElementById('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
                                                                 },
 
                                                                 loadStart: function(e) {
