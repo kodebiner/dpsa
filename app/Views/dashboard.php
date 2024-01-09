@@ -616,6 +616,7 @@
                                                                         document.getElementById('photocreate<?= $project['id'] ?>').value = '';
 
                                                                         alert(pesan);
+                                                                        document.getElementById('js-upload-create-<?= $project['id'] ?>').removeAttribute('hidden', '');
                                                                     }
                                                                 });
                                                             };
