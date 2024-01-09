@@ -170,7 +170,7 @@
                                                                                 <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                 <td class="uk-text-center"><?= $mdl['price'] ?></td>
                                                                             </tr>
-                                                                            <?php
+                                                <?php
                                                                         }
                                                                     }
                                                                 }
@@ -213,335 +213,444 @@
                 <?php } else { ?>
                     <div class="uk-margin uk-card uk-card-default uk-card-hover">
                         <div class="uk-card-header">
-                            <h3 class="uk-card-title">Proyek <?= $project['name'] ?></h3>
+                            <div class="uk-child-width-1-2" uk-grid>
+                                <div>
+                                    <div class="">
+                                        <h3 class="uk-card-title">Proyek <?= $project['name'] ?></h3>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                        <div>
+                                            <div id="containerbtn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndown<?= $project['id'] ?>"></div>
+                                            <div id="containerbtnup<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnup<?= $project['id'] ?>"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
                         </div>
+
+                        <script>
+                            $(document).ready(function() {
+                                $("span[id='btndown<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
+                                $("span[id='btnup<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+                            });
+                        </script>
                         <?php
                         $desainpro  = "";
                         $tanggal    = "";
                         $designId   = "";
+                        $revisi     = "";
                         foreach ($projectdata[$project['id']]['design'] as $desain) {
-                                $desainpro      = $desain['submitted'];
-                                $designId       = $desain['id'];
-                                $designStatus   = $desain['status'];
-                                $dateTimeObj = new DateTime($desain['updated_at'], new DateTimeZone('Asia/Jakarta'));
-                                $dateFormatted =
-                                    IntlDateFormatter::formatObject(
-                                        $dateTimeObj,
-                                        'eeee, d MMMM y, HH:mm:ss',
-                                        'id'
-                                    );
-                                $tanggal = ucwords($dateFormatted);
+                            $desainpro      = $desain['submitted'];
+                            $revisi         = $desain['revision'];
+                            $designId       = $desain['id'];
+                            $designStatus   = $desain['status'];
+                            $dateTimeObj = new DateTime($desain['updated_at'], new DateTimeZone('Asia/Jakarta'));
+                            $dateFormatted =
+                                IntlDateFormatter::formatObject(
+                                    $dateTimeObj,
+                                    'eeee, d MMMM y, HH:mm:ss',
+                                    'id'
+                                );
+                            $tanggal = ucwords($dateFormatted);
                         }
                         ?>
-                        <div class="uk-card-body">
-                            <div class="uk-grid-divider" uk-grid>
-                                <?php if (!empty($desainpro)) { ?>
-                                    <div class="uk-width-1-1">
-                                        <?= view('Views/Auth/_message_block') ?>
-                                        <div>
-                                            <h4>Desain</h4>
-                                            <div class="uk-margin" uk-grid>
-                                                <div class="uk-width-auto@m">
-                                                    <div class="">Tanggal Desain</div>
-                                                </div>
-                                                <div class="uk-width-1-3@m">
-                                                    <div>
-                                                        <?= $tanggal ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="uk-margin" uk-grid>
-                                                <div class="uk-width-auto@m">
-                                                    <div class="">Status Desain</div>
-                                                </div>
-                                                <div class="uk-width-1-3@m uk-text-right">
-                                                    <div class="" id="st">
-                                                        <?php
-                                                        if ($designStatus === "0") {
-                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
-                                                        } elseif ($designStatus === "1") {
-                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
-                                                        } else {
-                                                            echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div uk-lightbox>
-                                                <a class="uk-height-medium uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light" href="img/design/<?= $desainpro ?>" data-src="img/design/<?= $desainpro ?>" uk-img></a>
-                                            </div>
-                                            <?php if ($designStatus != "2") { ?>
-                                                <p id="btndesain" uk-margin>
-                                                    <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
-                                                    <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
-                                                </p>
-                                            <?php } ?>
-                                            <script>
-                                                function myFunction() {
-                                                    let text = "Anda sudah yakin dengan desain tersebut?";
-                                                    if (confirm(text) == true) {
-                                                        $.ajax({
-                                                            url: "home/acc/<?= $designId ?>",
-                                                            method: "POST",
-                                                            data: {
-                                                                status: $('#acc<?= $designId ?>').val()
-                                                            },
-                                                            dataType: "json",
-                                                            error: function() {
-                                                                console.log('error', arguments);
-                                                            },
-                                                            success: function() {
-                                                                console.log('success', arguments);
-                                                                $("#status<?= $designId ?>").remove();
-                                                                $("#btndesain").remove();
-                                                                $("#st").append("<div class='uk-text-light uk-width-1-2 uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
-                                                            },
-                                                        })
-                                                    }
-                                                }
-                                            </script>
-                                        </div>
+                        <div id="content<?= $project['id'] ?>" hidden>
+                            <div class="uk-card-body">
+                                <div class="uk-grid-divider" uk-grid>
+                                    <div class="uk-width-1-2">
+                                        <h4 class="">Status Proyek</h4>
+                                        <div class=""><?= $status ?></div>
                                     </div>
-
-                                    <!-- This is the modal -->
-                                    <div id="modal-revisi<?= $project['id'] ?>" uk-modal>
-                                        <div class="uk-modal-dialog uk-modal-body">
-                                            <div class="uk-modal-header">
-                                                <h2 class="uk-modal-title">Revisi Desain</h2>
-                                            </div>
-                                            <div class="uk-modal-body">
-                                                <form class="uk-form-stacked" action="home/saverevisi/<?= $project['id'] ?>" method="post">
-                                                    <?php foreach ($projectdata[$project['id']]['design'] as $design) { ?>
-                                                        <?php
-                                                        $dateTimeObj = new DateTime($design['updated_at'], new DateTimeZone('Asia/Jakarta'));
-                                                        $dateFormatted =
-                                                            IntlDateFormatter::formatObject(
-                                                                $dateTimeObj,
-                                                                'eeee, d MMMM y, HH:mm:ss',
-                                                                'id'
-                                                            );
-                                                        ?>
-                                                        <?php if (!empty($design['revision'])) { ?>
-                                                            <img class="uk-width-1-1" src="/img/revisi/<?= $design['revision'] ?>" />
-                                                            <div class="uk-text-center uk-margin-small-top">
-                                                                <label class="uk-text-middle uk-align-center">Tanggal Revisi : <?= ucwords($dateFormatted) ?></label>
-                                                            </div>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
-                                                        <label class="uk-form-label" for="photocreate">Unggah Revisi</label>
-                                                        <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
-                                                            <input id="photocreate<?= $project['id'] ?>" name="revisi" hidden />
-                                                            <div class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
-                                                                <span uk-icon="icon: cloud-upload"></span>
-                                                                <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                                                <div uk-form-custom>
-                                                                    <input type="file">
-                                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
-                                                                </div>
-                                                            </div>
-                                                            <progress id="js-progressbar-create-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                        </div>
-                                                    </div>
-
-                                                    <script type="text/javascript">
-                                                        var bar = document.getElementById('js-progressbar-create-<?= $project['id'] ?>');
-
-                                                        UIkit.upload('.js-upload-create-<?= $project['id'] ?>', {
-                                                            url: 'home/revisi',
-                                                            multiple: false,
-                                                            name: 'uploads',
-                                                            param: {
-                                                                lorem: 'ipsum'
-                                                            },
-                                                            method: 'POST',
-                                                            type: 'json',
-
-                                                            beforeSend: function() {
-                                                                console.log('beforeSend', arguments);
-                                                            },
-                                                            beforeAll: function() {
-                                                                console.log('beforeAll', arguments);
-                                                            },
-                                                            load: function() {
-                                                                console.log('load', arguments);
-                                                            },
-                                                            error: function() {
-                                                                console.log('error', arguments);
-                                                                var error = arguments[0].xhr.response.message.uploads;
-                                                                alert(error);
-                                                            },
-                                                            complete: function() {
-                                                                console.log('complete', arguments);
-
-                                                                var filename = arguments[0].response;
-
-                                                                if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
-                                                                    document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
-                                                                };
-
-                                                                document.getElementById('photocreate<?= $project['id'] ?>').value = filename;
-
-                                                                var imgContainer = document.getElementById('image-container-create-<?= $project['id'] ?>');
-
-                                                                var displayContainer = document.createElement('div');
-                                                                displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
-                                                                displayContainer.setAttribute('class', 'uk-inline');
-
-                                                                var displayImg = document.createElement('img');
-                                                                displayImg.setAttribute('src', 'img/revisi/' + filename);
-
-                                                                var closeContainer = document.createElement('div');
-                                                                closeContainer.setAttribute('class', 'uk-position-small uk-position-top-right');
-
-                                                                var closeButton = document.createElement('a');
-                                                                closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                                                closeButton.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
-                                                                closeButton.setAttribute('uk-icon', 'close');
-
-                                                                closeContainer.appendChild(closeButton);
-                                                                displayContainer.appendChild(displayImg);
-                                                                displayContainer.appendChild(closeContainer);
-                                                                imgContainer.appendChild(displayContainer);
-
-                                                                document.getElementsByClassName('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                            },
-
-                                                            loadStart: function(e) {
-                                                                console.log('loadStart', arguments);
-
-                                                                bar.removeAttribute('hidden');
-                                                                bar.max = e.total;
-                                                                bar.value = e.loaded;
-                                                            },
-
-                                                            progress: function(e) {
-                                                                console.log('progress', arguments);
-
-                                                                bar.max = e.total;
-                                                                bar.value = e.loaded;
-                                                            },
-
-                                                            loadEnd: function(e) {
-                                                                console.log('loadEnd', arguments);
-
-                                                                bar.max = e.total;
-                                                                bar.value = e.loaded;
-                                                            },
-
-                                                            completeAll: function() {
-                                                                console.log('completeAll', arguments);
-
-                                                                setTimeout(function() {
-                                                                    bar.setAttribute('hidden', 'hidden');
-                                                                }, 1000);
-
-                                                                alert('Data Berhasil Terunggah');
-                                                            }
-                                                        });
-
-                                                        function removeImgCreate<?= $project['id'] ?>() {
-                                                            $.ajax({
-                                                                type: 'post',
-                                                                url: 'home/removerevisi',
-                                                                data: {
-                                                                    'revisi': document.getElementById('photocreate<?= $project['id'] ?>').value
-                                                                },
-                                                                dataType: 'json',
-
-                                                                error: function() {
-                                                                    console.log('error', arguments);
-                                                                },
-
-                                                                success: function() {
-                                                                    console.log('success', arguments);
-
-                                                                    var pesan = arguments[0][1];
-
-                                                                    document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
-                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').remove();
-                                                                    document.getElementById('photocreate<?= $project['id'] ?>').value = '';
-
-                                                                    alert(pesan);
-                                                                }
-                                                            });
-                                                        };
-                                                    </script>
-                                                    <div class="uk-modal-footer uk-text-center">
-                                                        <button class="uk-button uk-button-primary" type="submit">Simpan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                    <?php if ($project['status'] === '4') { ?>
+                                        <div class="uk-width-1-2">
+                                            <h4 class="uk-text-center">Progress Produksi</h4>
+                                            <div class="uk-text-center"><?= $project['production'] ?>%</div>
                                         </div>
-                                    </div>
-                                    <!-- end of modal revisi -->
-                                <?php } ?>
-
-                                <div class="uk-width-1-1">
-                                    <h4>Detail Pesanan</h4>
-                                </div>
-                                <?php if (!empty($project['id'])) { ?>
+                                    <?php } ?>
                                     <div class="uk-width-1-1">
-                                        <table class="uk-table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="">Nama</th>
-                                                    <th class="uk-text-center">Panjang</th>
-                                                    <th class="uk-text-center">Lebar</th>
-                                                    <th class="uk-text-center">Tinggi</th>
-                                                    <th class="uk-text-center">Volume</th>
-                                                    <th class="uk-text-center">Satuan</th>
-                                                    <th class="uk-text-center">Jumlah Pesanan</th>
-                                                    <th class="uk-text-center">Harga</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                if (!empty($project['id'])) {
-                                                    foreach ($rabs as $rab) {
-                                                        if ($rab['projectid'] === $project['id']) {
-                                                            foreach ($pakets as $paket) {
-                                                                if ($paket['id'] === $rab['paketid']) {
-                                                                    foreach ($mdls as $mdl) {
-                                                                        if ($mdl['id'] === $rab['mdlid']) { ?>
-                                                                            <tr>
-                                                                                <td class=""><?= $mdl['name'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['length'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['width'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['height'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['volume'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
-                                                                                <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                                                                <td class="uk-text-center"><?= $mdl['price'] ?></td>
-                                                                            </tr>
-                                                <?php
+                                        <h4>Detail Pesanan</h4>
+                                    </div>
+                                    <?php if (!empty($project['id'])) { ?>
+                                        <div class="uk-width-1-1">
+                                            <table class="uk-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="">Nama</th>
+                                                        <th class="uk-text-center">Panjang</th>
+                                                        <th class="uk-text-center">Lebar</th>
+                                                        <th class="uk-text-center">Tinggi</th>
+                                                        <th class="uk-text-center">Volume</th>
+                                                        <th class="uk-text-center">Satuan</th>
+                                                        <th class="uk-text-center">Jumlah Pesanan</th>
+                                                        <th class="uk-text-center">Harga</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    if (!empty($project['id'])) {
+                                                        foreach ($rabs as $rab) {
+                                                            if ($rab['projectid'] === $project['id']) {
+                                                                foreach ($pakets as $paket) {
+                                                                    if ($paket['id'] === $rab['paketid']) {
+                                                                        foreach ($mdls as $mdl) {
+                                                                            if ($mdl['id'] === $rab['mdlid']) { ?>
+                                                                                <tr>
+                                                                                    <td class=""><?= $mdl['name'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['length'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['width'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['height'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['volume'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $rab['qty'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['price'] ?></td>
+                                                                                </tr>
+                                                    <?php
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                <?php } ?>
-                                <div class="uk-width-1-2">
-                                    <h4 class="uk-text-center">Status Proyek</h4>
-                                    <div class="uk-text-center"><?= $status ?></div>
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                            <p class="uk-text-right" uk-margin>
+                                                <button class="uk-button uk-button-primary">Upload SPK</button>
+                                            </p>
+                                        </div>
+                                    <?php } ?>
+
+                                    <!-- Desain -->
+                                    <?php if (!empty($desainpro)) { ?>
+                                        <div class="uk-width-1-1">
+                                            <?= view('Views/Auth/_message_block') ?>
+                                            <div>
+                                                <h4>Desain</h4>
+                                                <div class="uk-margin" uk-grid>
+                                                    <div class="uk-width-small@m">
+                                                        <div class="">Tanggal Desain</div>
+                                                    </div>
+                                                    <div class="uk-width-1-3@m">
+                                                        <div>
+                                                            <?= $tanggal ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin" uk-grid>
+                                                    <div class="uk-width-small@m">
+                                                        <div class="">File Design</div>
+                                                    </div>
+                                                    <div class="uk-width-1-3@m">
+                                                        <div>
+                                                            <a href="" uk-icon="file-pdf"></a> <?= $desainpro ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin" uk-grid>
+                                                    <div class="uk-width-small@m">
+                                                        <div class="">File Revisi</div>
+                                                    </div>
+                                                    <div class="uk-width-1-3@m">
+                                                        <div>
+                                                            <?php if (!empty($revisi)) { ?>
+                                                                <a href="" uk-icon="file-pdf"></a> <?= $revisi ?>
+                                                            <?php } else { ?>
+                                                                -
+                                                            <?php } ?>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin" uk-grid>
+                                                    <div class="uk-width-small@m">
+                                                        <div class="">Status Desain</div>
+                                                    </div>
+                                                    <div class="uk-width-1-3@m uk-text-right">
+                                                        <div class="" id="st">
+                                                            <?php
+                                                            if ($designStatus === "0") {
+                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
+                                                            } elseif ($designStatus === "1") {
+                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
+                                                            } else {
+                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <?php if ($designStatus != "2") { ?>
+                                                    <div class="uk-text-right" id="btndesain" uk-margin>
+                                                        <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
+                                                        <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
+                                                    </div>
+                                                <?php } ?>
+                                                <script>
+                                                    function myFunction() {
+                                                        let text = "Anda sudah yakin dengan desain tersebut?";
+                                                        if (confirm(text) == true) {
+                                                            $.ajax({
+                                                                url: "home/acc/<?= $designId ?>",
+                                                                method: "POST",
+                                                                data: {
+                                                                    status: $('#acc<?= $designId ?>').val()
+                                                                },
+                                                                dataType: "json",
+                                                                error: function() {
+                                                                    console.log('error', arguments);
+                                                                },
+                                                                success: function() {
+                                                                    console.log('success', arguments);
+                                                                    $("#status<?= $designId ?>").remove();
+                                                                    $("#btndesain").remove();
+                                                                    $("#st").append("<div class='uk-text-light uk-width-1-2 uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
+                                                                },
+                                                            })
+                                                        }
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
+
+                                        <!-- This is the modal -->
+                                        <div id="modal-revisi<?= $project['id'] ?>" uk-modal>
+                                            <div class="uk-modal-dialog uk-modal-body">
+                                                <div class="uk-modal-header">
+                                                    <h2 class="uk-modal-title">Revisi Desain</h2>
+                                                </div>
+                                                <div class="uk-modal-body">
+                                                    <form class="uk-form-stacked" action="home/saverevisi/<?= $project['id'] ?>" method="post">
+                                                        <?php foreach ($projectdata[$project['id']]['design'] as $design) { ?>
+                                                            <?php
+                                                            $dateTimeObj = new DateTime($design['updated_at'], new DateTimeZone('Asia/Jakarta'));
+                                                            $dateFormatted =
+                                                                IntlDateFormatter::formatObject(
+                                                                    $dateTimeObj,
+                                                                    'eeee, d MMMM y, HH:mm:ss',
+                                                                    'id'
+                                                                );
+                                                            ?>
+                                                            <?php if (!empty($design['revision'])) { ?>
+                                                                <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
+                                                                    <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
+                                                                        <div class="uk-card-header">
+                                                                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                                                                <div class="uk-width-expand">
+                                                                                    <h6 class="uk-margin-remove-bottom">File Revisi</h6>
+                                                                                    <p class="uk-text-meta uk-margin-remove-top"><?= ucwords($dateFormatted) ?></p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="uk-card-body">
+                                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
+                                                                                <h6><a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a></h6>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            <?php } ?>
+                                                        <?php } ?>
+
+                                                        <div class="uk-margin-large-top" id="image-container-create-<?= $project['id'] ?>">
+                                                            <label class="uk-form-label" for="photocreate">Unggah Catatan Revisi</label>
+                                                            <div class="uk-placeholder uk-text-center uk-flex-middle">
+                                                                <h6>
+                                                                    <a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a> <span class="uk-text-left" uk-icon="close"></span>
+                                                                </h6>
+                                                            </div>
+                                                            <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
+                                                                <input id="photocreate<?= $project['id'] ?>" name="revisi" hidden />
+                                                                <div class="js-upload-create-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                                    <div uk-form-custom>
+                                                                        <input type="file">
+                                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                                    </div>
+                                                                </div>
+                                                                <progress id="js-progressbar-create-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                            </div>
+                                                        </div>
+
+                                                        <script type="text/javascript">
+                                                            var bar = document.getElementById('js-progressbar-create-<?= $project['id'] ?>');
+
+                                                            UIkit.upload('.js-upload-create-<?= $project['id'] ?>', {
+                                                                url: 'home/revisi',
+                                                                multiple: false,
+                                                                name: 'uploads',
+                                                                param: {
+                                                                    lorem: 'ipsum'
+                                                                },
+                                                                method: 'POST',
+                                                                type: 'json',
+
+                                                                beforeSend: function() {
+                                                                    console.log('beforeSend', arguments);
+                                                                },
+                                                                beforeAll: function() {
+                                                                    console.log('beforeAll', arguments);
+                                                                },
+                                                                load: function() {
+                                                                    console.log('load', arguments);
+                                                                },
+                                                                error: function() {
+                                                                    console.log('error', arguments);
+                                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                                    alert(error);
+                                                                },
+                                                                complete: function() {
+                                                                    console.log('complete', arguments);
+
+                                                                    var filename = arguments[0].response;
+
+                                                                    if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
+                                                                        document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                                                    };
+
+                                                                    document.getElementById('photocreate<?= $project['id'] ?>').value = filename;
+
+                                                                    var imgContainer = document.getElementById('image-container-create-<?= $project['id'] ?>');
+
+                                                                    var displayContainer = document.createElement('div');
+                                                                    displayContainer.setAttribute('id', 'display-container-create-<?= $project['id'] ?>');
+                                                                    displayContainer.setAttribute('class', 'uk-inline');
+
+                                                                    <div class="uk-placeholder uk-text-center uk-flex-middle">
+                                                                        <h6>
+                                                                            <a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> 
+                                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a>
+                                                                            <span class="uk-text-left" uk-icon="close"></span>
+                                                                        </h6>
+                                                                    </div>
+
+                                                                    var displayImg = document.createElement('div');
+                                                                    displayImg.setAttribute('class', 'uk-placeholder uk-text-center');
+
+                                                                    var textfont = document.createElement('h6');
+
+                                                                    var linkrev = document.createElement('a');
+                                                                    linkrev.setAttribute('href','img/revisi/<?= $revisi ?>');
+                                                                    linkrev.setAttribute('uk-icon','file-pdf');
+
+                                                                    var link = document.createElement('a');
+                                                                    link.setAttribute('href','img/revisi/<?= $revisi ?>');
+                                                                    link.setAttribute('target','_blank');
+
+                                                                    var linktext = document.createTextNode('<?= $revisi ?>');
+
+                                                                    // var displayImg = document.createElement('embed');
+                                                                    // displayImg.setAttribute('src', 'img/revisi/' + filename);
+
+                                                                    var closeContainer = document.createElement('div');
+                                                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-top-right');
+
+                                                                    var closeButton = document.createElement('a');
+                                                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                                                    closeButton.setAttribute('onClick', 'removeImgCreate<?= $project['id'] ?>()');
+                                                                    closeButton.setAttribute('uk-icon', 'close');
+
+                                                                    closeContainer.appendChild(closeButton);
+                                                                    displayContainer.appendChild(displayImg);
+                                                                    displayImg.appendChild(linkrev);
+                                                                    linkrev.appendChild(link);
+
+                                                                    // displayContainer.appendChild(closeContainer);
+                                                                    imgContainer.appendChild(displayContainer);
+
+                                                                    document.getElementsByClassName('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                                },
+
+                                                                loadStart: function(e) {
+                                                                    console.log('loadStart', arguments);
+
+                                                                    bar.removeAttribute('hidden');
+                                                                    bar.max = e.total;
+                                                                    bar.value = e.loaded;
+                                                                },
+
+                                                                progress: function(e) {
+                                                                    console.log('progress', arguments);
+
+                                                                    bar.max = e.total;
+                                                                    bar.value = e.loaded;
+                                                                },
+
+                                                                loadEnd: function(e) {
+                                                                    console.log('loadEnd', arguments);
+
+                                                                    bar.max = e.total;
+                                                                    bar.value = e.loaded;
+                                                                },
+
+                                                                completeAll: function() {
+                                                                    console.log('completeAll', arguments);
+
+                                                                    setTimeout(function() {
+                                                                        bar.setAttribute('hidden', 'hidden');
+                                                                    }, 1000);
+
+                                                                    alert('Data Berhasil Terunggah');
+                                                                }
+                                                            });
+
+                                                            function removeImgCreate<?= $project['id'] ?>() {
+                                                                $.ajax({
+                                                                    type: 'post',
+                                                                    url: 'home/removerevisi',
+                                                                    data: {
+                                                                        'revisi': document.getElementById('photocreate<?= $project['id'] ?>').value
+                                                                    },
+                                                                    dataType: 'json',
+
+                                                                    error: function() {
+                                                                        console.log('error', arguments);
+                                                                    },
+
+                                                                    success: function() {
+                                                                        console.log('success', arguments);
+
+                                                                        var pesan = arguments[0][1];
+
+                                                                        document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                                                        document.getElementById('js-progressbar-create-<?= $project['id'] ?>').remove();
+                                                                        document.getElementById('photocreate<?= $project['id'] ?>').value = '';
+
+                                                                        alert(pesan);
+                                                                    }
+                                                                });
+                                                            };
+                                                        </script>
+                                                        <div class="uk-modal-footer uk-text-center">
+                                                            <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end of modal revisi -->
+                                    <?php } ?>
+                                    <!-- end of desain -->
+
                                 </div>
-                                <?php if ($project['status'] === '4') { ?>
-                                    <div class="uk-width-1-2">
-                                        <h4 class="uk-text-center">Progress Produksi</h4>
-                                        <div class="uk-text-center"><?= $project['production'] ?>%</div>
-                                    </div>
-                                <?php } ?>
                             </div>
                         </div>
                     </div>
