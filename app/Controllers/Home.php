@@ -286,6 +286,21 @@ class Home extends BaseController
         $DesignModel = new DesignModel();
 
         $input = $this->request->getPost();
+
+       // Validation Rules
+            $rules = [
+                'revisi' => [
+                    'label'  => 'Revisi',
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'      => '{field} Belum Di Unggah',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
         // Design Data
         if (isset($input['revisi'])) {
             $design = $DesignModel->where('projectid', $id)->first();
