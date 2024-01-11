@@ -173,6 +173,22 @@ class Upload extends BaseController
         $ProjectModel = new ProjectModel();
 
         $input = $this->request->getPost();
+
+        // Validation Rules
+        $rules = [
+            'spk' => [
+                'label'  => 'SPK',
+                'rules'  => 'required',
+                'errors' => [
+                    'required'      => 'File {field} Belum Di Unggah',
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         // Design Data
         if (isset($input['spk'])) {
             $spk = $ProjectModel->find($id);

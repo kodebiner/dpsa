@@ -69,6 +69,9 @@
 
         <!-- Content -->
         <?php if (!$ismobile) { ?>
+            <div>
+                <?= view('Views/Auth/_message_block') ?>
+            </div>
             <form class="uk-margin" id="searchform" action="<?= $uri ?>" method="GET">
                 <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                     <div>
@@ -95,10 +98,10 @@
             </form>
         <?php } ?>
         <?php if (!empty($projects)) { ?>
-            <?php 
-                $progress= "";
-                $status= "";
-                foreach ($projects as $project) { ?>
+            <?php
+            $progress = "";
+            $status = "";
+            foreach ($projects as $project) { ?>
                 <?php if ($project['status'] === "1") {
                     $status = "Proses Desain";
                     $progress = '5';
@@ -231,7 +234,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <?= view('Views/Auth/_message_block') ?>
                             <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
                         </div>
 
