@@ -205,11 +205,12 @@ class Home extends BaseController
                 $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->paginate($perpage, 'projects');
             }
 
-            $projectdata = [];
+            $projectdata    = [];
+            $projectspk     = [];
             foreach ($projects as $project) {
                 $projectdata[$project['id']]['design'] = $DesignModel->where('projectid', $project['id'])->find();
+                $projectspk[$project['id']]['spk']     = $ProjectModel->where('id', $project['id'])->find();
             }
-            // dd($projectdata);
 
             // Parsing Data to View
             $data                   = $this->data;
@@ -223,6 +224,7 @@ class Home extends BaseController
             $data['mdls']           = $MdlModel->findAll();
             $data['pager']          = $pager->links('projects', 'uikit_full');
             $data['projectdata']    = $projectdata;
+            $data['projectspk']     = $projectspk;
 
             return view('dashboard', $data);
         } else {
@@ -249,7 +251,6 @@ class Home extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-        // die(json_encode($this->request->getPost()));
 
         // Validation Rules
         $rules = [
@@ -257,24 +258,24 @@ class Home extends BaseController
         ];
 
         // Validating
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             http_response_code(400);
             die(json_encode(array('message' => $this->validator->getErrors())));
         }
 
-        if ($input->isValid() && ! $input->hasMoved()) {
+        if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH.'/img/revisi/', $filename);
-            
+            $input->move(FCPATH . '/img/revisi/', $filename);
+
             // Removing uploaded if it's not the same filename
-            if ($filename != $truename.'.pdf') {
-                unlink(FCPATH.'/img/revisi/'.$filename);
+            if ($filename != $truename . '.pdf') {
+                unlink(FCPATH . '/img/revisi/' . $filename);
             }
 
             // Getting True Filename
-            $returnFile = $truename.'.pdf';
+            $returnFile = $truename . '.pdf';
 
             // Returning Message
             die(json_encode($returnFile));
@@ -287,20 +288,20 @@ class Home extends BaseController
 
         $input = $this->request->getPost();
 
-       // Validation Rules
-            $rules = [
-                'revisi' => [
-                    'label'  => 'Revisi',
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required'      => '{field} Belum Di Unggah',
-                    ],
+        // Validation Rules
+        $rules = [
+            'revisi' => [
+                'label'  => 'Revisi',
+                'rules'  => 'required',
+                'errors' => [
+                    'required'      => '{field} Belum Di Unggah',
                 ],
-            ];
+            ],
+        ];
 
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
         // Design Data
         if (isset($input['revisi'])) {
             $design = $DesignModel->where('projectid', $id)->first();
@@ -322,7 +323,8 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
             }
         }
-        return redirect()->back()->with('message', 'Revisi terkirim');
+        // return redirect()->back()->with('message', 'Revisi terkirim');
+        die(json_encode(array('message' => 'terkirim')));
     }
 
     public function removerevisi()

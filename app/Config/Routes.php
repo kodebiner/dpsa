@@ -45,6 +45,9 @@ $routes->group('/', static function ($routes) {
 $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('designcreate', 'Upload::designcreate');
     $routes->post('removedesigncreate', 'Upload::removedesigncreate');
+    $routes->post('spk', 'Upload::spk');
+    $routes->post('savespk/(:num)', 'Upload::savespk/$1');
+    $routes->post('removespk', 'Upload::removespk');
 });
 
 $routes->group('clientreg', static function ($routes) {
@@ -58,7 +61,16 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
     $routes->get('logedin', 'Home::logedin');
 });
 
+
 // Revisi & Acc Design
+$routes->group('home', ['filter' => 'login'], function($routes) {
+    $routes->post('revisi', 'Home::revisi');
+    $routes->post('removerevisi', 'Home::removerevisi');
+    $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
+    $routes->post('acc/(:num)', 'Home::acc/$1');
+});
+
+// SPK
 $routes->group('home', ['filter' => 'login'], function($routes) {
     $routes->post('revisi', 'Home::revisi');
     $routes->post('removerevisi', 'Home::removerevisi');
