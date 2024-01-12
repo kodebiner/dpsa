@@ -250,31 +250,85 @@
                                     $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
                                     $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
                                 });
+
+                                $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
+                                $("span[id='btnupsph<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
+                                $("span[id='btndowndsn<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
+                                $("span[id='btnupdsn<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
                             });
                         </script>
+
                         <?php
-                        $desainpro  = "";
-                        $tanggal    = "";
-                        $designId   = "";
-                        $revisi     = "";
-                        foreach ($projectdata[$project['id']]['design'] as $desain) {
-                            $desainpro      = $desain['submitted'];
-                            $revisi         = $desain['revision'];
-                            $designId       = $desain['id'];
-                            $designStatus   = $desain['status'];
-                            $dateTimeObj = new DateTime($desain['updated_at'], new DateTimeZone('Asia/Jakarta'));
-                            $dateFormatted =
-                                IntlDateFormatter::formatObject(
-                                    $dateTimeObj,
-                                    'eeee, d MMMM y, HH:mm:ss',
-                                    'id'
-                                );
-                            $tanggal = ucwords($dateFormatted);
+                        // Data project initialize
+                        if (!empty($projectdesign[$project['id']]['design']['updated_at'])) {
+                            $projectId          = $projectdata[$project['id']]['project']['id'];
+                            $projectStatus      = $projectdata[$project['id']]['project']['status'];
+                            $datepro            = $projectdata[$project['id']]['project']['updated_at'];
+                            $spkpro             = $projectdata[$project['id']]['project']['spk'];
+                            $spkstatus          = $projectdata[$project['id']]['project']['status_spk'];
+                        } else {
+                            $projectId          = "";
+                            $projectStatus      = "";
+                            $datepro            = "";
+                            $spkpro             = "";
+                            $spkstatus          = "";
                         }
+                        $dateTimeObj = new DateTime($datepro, new DateTimeZone('Asia/Jakarta'));
+                        $dateFormatted =
+                            IntlDateFormatter::formatObject(
+                                $dateTimeObj,
+                                'eeee, d MMMM y, HH:mm:ss',
+                                'id'
+                            );
+                        $tanggalpro = ucwords($dateFormatted);
+
+                        // Data design initialize
+                        if (!empty($projectdesign[$project['id']]['design']['submitted'])) {
+                            // dd($projectdesign);
+                            $desainpro          = $projectdesign[$project['id']]['design']['submitted'];
+                            $revisi             = $projectdesign[$project['id']]['design']['revision'];
+                            $designId           = $projectdesign[$project['id']]['design']['id'];
+                            $designStatus       = $projectdesign[$project['id']]['design']['status'];
+                            $datedesign         = $projectdesign[$project['id']]['design']['updated_at'];
+                        } else {
+                            $desainpro      = "";
+                            $revisi         = "";
+                            $designId       = "";
+                            $designStatus   = "";
+                            $datedesign     = "";
+                        }
+                        $dateTimeObj = new DateTime($datedesign, new DateTimeZone('Asia/Jakarta'));
+                        $dateFormatted =
+                            IntlDateFormatter::formatObject(
+                                $dateTimeObj,
+                                'eeee, d MMMM y, HH:mm:ss',
+                                'id'
+                            );
+                        $tanggaldesign = ucwords($dateFormatted);
                         ?>
                         <div id="content<?= $project['id'] ?>" hidden>
                             <div class="uk-card-body">
-                                <div class="uk-grid-divider" uk-grid>
+                                <div class="uk-grid" uk-grid>
                                     <div class="uk-width-1-2">
                                         <h4 class="">Status Proyek</h4>
                                         <div class=""><?= $status ?></div>
@@ -285,11 +339,27 @@
                                             <div class="uk-text-center"><?= $project['production'] ?>%</div>
                                         </div>
                                     <?php } ?>
-                                    <div class="uk-width-1-1">
-                                        <h4>Detail Pesanan</h4>
+
+                                    <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                        <div class="uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="">
+                                                    <h4 class="uk-width-1-1">Detail Pesanan</h4>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                    <div>
+                                                        <div id="containerbtnsph<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndownsph<?= $project['id'] ?>"></div>
+                                                        <div id="containerbtnupsph<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupsph<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="uk-margin">
                                     </div>
                                     <?php if (!empty($project['id'])) { ?>
-                                        <div class="uk-width-1-1">
+                                        <div class="uk-width-1-1 uk-margin-remove" id="contentsph<?= $project['id'] ?>" hidden>
                                             <table class="uk-table">
                                                 <thead>
                                                     <tr>
@@ -333,291 +403,129 @@
                                                     ?>
                                                 </tbody>
                                             </table>
-                                            <hr>
-                                            <p class="uk-text-right" uk-margin>
-                                                <button class="uk-button uk-button-primary" uk-toggle="target: #modal-spk<?= $project['id'] ?>">Unggah SPK</button>
+                                            <p class="uk-text-right uk-width-1-1" uk-margin>
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
                                             </p>
                                         </div>
                                     <?php } ?>
 
-                                    <!-- modal SPK -->
-                                    <div id="modal-spk<?= $project['id'] ?>" uk-modal>
-                                        <div class="uk-modal-dialog">
-                                            <button class="uk-modal-close-default" type="button" uk-close></button>
-                                            <div class="uk-modal-header">
-                                                <h2 class="uk-modal-title">Unggah File SPK</h2>
-                                            </div>
-                                            <div class="uk-modal-body">
-                                                <form class="uk-form-stacked" action="upload/savespk/<?= $project['id'] ?>" method="post">
-
-                                                    <?php
-                                                    foreach ($projectspk[$project['id']]['spk'] as $spk) { ?>
-                                                        <?php
-                                                        $dateTimeObj = new DateTime($spk['updated_at'], new DateTimeZone('Asia/Jakarta'));
-                                                        $dateFormatted =
-                                                            IntlDateFormatter::formatObject(
-                                                                $dateTimeObj,
-                                                                'eeee, d MMMM y, HH:mm:ss',
-                                                                'id'
-                                                            );
-                                                        ?>
-                                                        <?php if (!empty($spk['spk'])) { ?>
-                                                            <a href="img/spk/<?= $spk['spk'] ?>" target="_blank" class="uk-link-reset">
-                                                                <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
-                                                                    <div class="uk-card-header">
-                                                                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                                                                            <div class="uk-width-expand">
-                                                                                <h6 class="uk-margin-remove-bottom">File SPK</h6>
-                                                                                <p class="uk-text-meta uk-margin-remove-top"><?= ucwords($dateFormatted) ?></p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="uk-card-body">
-                                                                        <a href="img/spk/<?= $spk['spk'] ?>" target="_blank" class="uk-link-reset">
-                                                                            <h6><a href="img/spk/<?= $spk['spk'] ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $spk['spk'] ?>" target="_blank"><?= $spk['spk'] ?></a></h6>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
-                                                        <label class="uk-form-label" for="photocreate">Unggah File SPK</label>
-                                                        <div class="uk-placeholder" id="placespk<?= $project['id'] ?>" hidden>
-                                                            <div uk-grid>
-                                                                <div class="uk-text-left uk-width-3-4">
-                                                                    <div id="upspk<?= $project['id'] ?>">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="uk-text-right uk-width-1-4">
-                                                                    <div id="closespk<?= $project['id'] ?>">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div id="image-containerspk-<?= $project['id'] ?>" class="uk-form-controls">
-                                                            <input id="photocreatespk<?= $project['id'] ?>" name="spk" hidden />
-                                                            <div id="js-upload-createspk-<?= $project['id'] ?>" class="js-upload-createspk-<?= $project['id'] ?> uk-placeholder uk-text-center">
-                                                                <span uk-icon="icon: cloud-upload"></span>
-                                                                <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                                                <div uk-form-custom>
-                                                                    <input type="file">
-                                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
-                                                                </div>
-                                                            </div>
-                                                            <progress id="js-progressbar-createspk-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                        </div>
-                                                    </div>
-
-                                                    <script type="text/javascript">
-                                                        var bar = document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>');
-
-                                                        UIkit.upload('.js-upload-createspk-<?= $project['id'] ?>', {
-                                                            url: 'upload/spk',
-                                                            multiple: false,
-                                                            name: 'uploads',
-                                                            param: {
-                                                                lorem: 'ipsum'
-                                                            },
-                                                            method: 'POST',
-                                                            type: 'json',
-
-                                                            beforeSend: function() {
-                                                                console.log('beforeSend', arguments);
-                                                            },
-                                                            beforeAll: function() {
-                                                                console.log('beforeAll', arguments);
-                                                            },
-                                                            load: function() {
-                                                                console.log('load', arguments);
-                                                            },
-                                                            error: function() {
-                                                                console.log('error', arguments);
-                                                                var error = arguments[0].xhr.response.message.uploads;
-                                                                alert(error);
-                                                            },
-
-                                                            complete: function() {
-                                                                console.log('complete', arguments);
-
-                                                                var filename = arguments[0].response;
-
-                                                                if (document.getElementById('display-container-createspk-<?= $project['id'] ?>')) {
-                                                                    document.getElementById('display-container-createspk-<?= $project['id'] ?>').remove();
-                                                                };
-
-                                                                document.getElementById('photocreatespk<?= $project['id'] ?>').value = filename;
-
-                                                                document.getElementById('placespk<?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                                var uprev = document.getElementById('upspk<?= $project['id'] ?>');
-                                                                var closed = document.getElementById('closespk<?= $project['id'] ?>');
-
-                                                                var divuprev = document.createElement('h6');
-                                                                divuprev.setAttribute('class', 'uk-margin-remove');
-                                                                divuprev.setAttribute('id', 'spk<?= $project['id'] ?>');
-
-                                                                var linkrev = document.createElement('a');
-                                                                linkrev.setAttribute('href', 'img/revisi/' + filename);
-                                                                linkrev.setAttribute('uk-icon', 'file-pdf');
-
-                                                                var link = document.createElement('a');
-                                                                link.setAttribute('href', 'img/revisi/' + filename);
-                                                                link.setAttribute('target', '_blank');
-
-                                                                var linktext = document.createTextNode(filename);
-
-                                                                var divclosed = document.createElement('a');
-                                                                divclosed.setAttribute('uk-icon', 'icon: close');
-                                                                divclosed.setAttribute('onClick', 'removeImgCreatespk<?= $project['id'] ?>()');
-                                                                divclosed.setAttribute('id', 'closespk<?= $project['id'] ?>');
-
-                                                                uprev.appendChild(divuprev);
-                                                                divuprev.appendChild(linkrev);
-                                                                divuprev.appendChild(link);
-                                                                link.appendChild(linktext);
-                                                                closed.appendChild(divclosed);
-
-                                                                document.getElementById('js-upload-createspk-<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                            },
-
-                                                        });
-
-                                                        function removeImgCreatespk<?= $project['id'] ?>() {
-                                                            $.ajax({
-                                                                type: 'post',
-                                                                url: 'upload/removespk',
-                                                                data: {
-                                                                    'spk': document.getElementById('photocreatespk<?= $project['id'] ?>').value
-                                                                },
-                                                                dataType: 'json',
-
-                                                                error: function() {
-                                                                    console.log('error', arguments);
-                                                                },
-
-                                                                success: function() {
-                                                                    console.log('success', arguments);
-
-                                                                    var pesan = arguments[0][1];
-
-                                                                    document.getElementById('spk<?= $project['id'] ?>').remove();
-                                                                    document.getElementById('closespk<?= $project['id'] ?>').remove();
-                                                                    document.getElementById('placespk<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                                    // document.getElementById('js-progressbar-create-<//?= $project['id'] ?>').remove();
-                                                                    document.getElementById('photocreatespk<?= $project['id'] ?>').value = '';
-
-                                                                    document.getElementById('js-upload-createspk-<?= $project['id'] ?>').removeAttribute('hidden', '');
-                                                                    alert(pesan);
-                                                                }
-                                                            });
-                                                        };
-                                                    </script>
-                                                    <div class="uk-modal-footer uk-text-center">
-                                                        <button class="uk-button uk-button-primary" type="submit">Kirim</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end of modal revisi -->
-
-                                    <!-- End Modal SPK -->
-
                                     <!-- Desain -->
-                                    <?php if (!empty($desainpro)) { ?>
+                                    <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
                                         <div class="uk-width-1-1">
                                             <div>
-                                                <h4>Desain</h4>
-                                                <div class="uk-margin" uk-grid>
-                                                    <div class="uk-width-small@m">
-                                                        <div class="">Tanggal Desain</div>
+                                                <div class="uk-child-width-1-2" uk-grid>
+                                                    <div>
+                                                        <div class="uk-child-width-1-2" uk-grid>
+                                                            <div class="uk-width-1-6">
+                                                                <div>
+                                                                    <h4>Desain</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="uk-child-width-expand" id="st<?= $designId ?>">
+                                                                <?php
+                                                                if ($designStatus === "0") {
+                                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
+                                                                } elseif ($designStatus === "1") {
+                                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
+                                                                } else {
+                                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="uk-width-1-3@m">
-                                                        <div>
-                                                            <?= $tanggal ?>
+                                                    <div>
+                                                        <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                            <div>
+                                                                <div id="containerbtndsn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndowndsn<?= $project['id'] ?>"></div>
+                                                                <div id="containerbtnupdsn<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupdsn<?= $project['id'] ?>"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="uk-margin" uk-grid>
-                                                    <div class="uk-width-small@m">
-                                                        <div class="">File Design</div>
-                                                    </div>
-                                                    <div class="uk-width-1-3@m">
-                                                        <div>
-                                                            <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
+                                                <div id="contentdsn<?= $project['id'] ?>" hidden>
+                                                    <div class="uk-margin" uk-grid>
+                                                        <div class="uk-width-small@m">
+                                                            <div class="">
+                                                                <?php
+                                                                if ($designStatus === "0") {
+                                                                    echo "Tanggal Upload Desain";
+                                                                } elseif ($designStatus === "1") {
+                                                                    echo "Tanggal Revisi Desain";
+                                                                } else {
+                                                                    echo "Tanggal Disetujui";
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-width-1-3@m">
+                                                            <div>
+                                                                <?= $tanggaldesign ?>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="uk-margin" uk-grid>
-                                                    <div class="uk-width-small@m">
-                                                        <div class="">File Revisi</div>
-                                                    </div>
-                                                    <div class="uk-width-1-3@m">
-                                                        <div>
-                                                            <?php if (!empty($revisi)) { ?>
-                                                                <a href="img/revisi/<?= $revisi ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?> </a>
-                                                            <?php } else { ?>
-                                                                -
-                                                            <?php } ?>
-
+                                                    <div class="uk-margin" uk-grid>
+                                                        <div class="uk-width-small@m">
+                                                            <div class="">File Design</div>
+                                                        </div>
+                                                        <div class="uk-width-1-3@m">
+                                                            <div>
+                                                                <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="uk-margin" uk-grid>
-                                                    <div class="uk-width-small@m">
-                                                        <div class="">Status Desain</div>
+                                                    <div class="uk-margin" uk-grid>
+                                                        <div class="uk-width-small@m">
+                                                            <div class="">File Revisi</div>
+                                                        </div>
+                                                        <div class="uk-width-1-3@m">
+                                                            <div>
+                                                                <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                                                    <a href="img/revisi/<?= $revisi ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?> </a>
+                                                                <?php } else { ?>
+                                                                    -
+                                                                <?php } ?>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="uk-width-1-3@m uk-text-right">
-                                                        <div class="" id="st">
-                                                            <?php
-                                                            if ($designStatus === "0") {
-                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
-                                                            } elseif ($designStatus === "1") {
-                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
-                                                            } else {
-                                                                echo '<div class="uk-text-light uk-width-1-2 uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+
+                                                    <?php if ($designStatus != "2") { ?>
+                                                        <div class="uk-text-right" id="btndesain<?= $designId ?>" uk-margin>
+                                                            <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
+                                                            <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <script>
+                                                        function myFunction() {
+                                                            let text = "Anda sudah yakin dengan desain ini?";
+                                                            if (confirm(text) == true) {
+                                                                $.ajax({
+                                                                    url: "home/acc/<?= $designId ?>",
+                                                                    method: "POST",
+                                                                    data: {
+                                                                        status: $('#acc<?= $designId ?>').val()
+                                                                    },
+                                                                    dataType: "json",
+                                                                    error: function() {
+                                                                        console.log('error', arguments);
+                                                                    },
+                                                                    success: function() {
+                                                                        console.log('success', arguments);
+                                                                        $("#status<?= $designId ?>").remove();
+                                                                        $("#btndesain<?= $designId ?>").remove();
+                                                                        $("#st<?= $designId ?>").append("<div class='uk-text-light uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
+                                                                    },
+                                                                })
                                                             }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <?php if ($designStatus != "2") { ?>
-                                                    <div class="uk-text-right" id="btndesain" uk-margin>
-                                                        <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
-                                                        <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
-                                                    </div>
-                                                <?php } ?>
-                                                <script>
-                                                    function myFunction() {
-                                                        let text = "Anda sudah yakin dengan desain ini?";
-                                                        if (confirm(text) == true) {
-                                                            $.ajax({
-                                                                url: "home/acc/<?= $designId ?>",
-                                                                method: "POST",
-                                                                data: {
-                                                                    status: $('#acc<?= $designId ?>').val()
-                                                                },
-                                                                dataType: "json",
-                                                                error: function() {
-                                                                    console.log('error', arguments);
-                                                                },
-                                                                success: function() {
-                                                                    console.log('success', arguments);
-                                                                    $("#status<?= $designId ?>").remove();
-                                                                    $("#btndesain").remove();
-                                                                    $("#st").append("<div class='uk-text-light uk-width-1-2 uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
-                                                                },
-                                                            })
+
                                                         }
-                                                    }
-                                                </script>
+                                                    </script>
+                                                </div>
                                             </div>
+                                            <hr class="uk-margin">
                                         </div>
 
                                         <!-- This is the modal -->
@@ -629,35 +537,24 @@
                                                 </div>
                                                 <div class="uk-modal-body">
                                                     <form class="uk-form-stacked" action="home/saverevisi/<?= $project['id'] ?>" method="post">
-                                                        <?php foreach ($projectdata[$project['id']]['design'] as $design) { ?>
-                                                            <?php
-                                                            $dateTimeObj = new DateTime($design['updated_at'], new DateTimeZone('Asia/Jakarta'));
-                                                            $dateFormatted =
-                                                                IntlDateFormatter::formatObject(
-                                                                    $dateTimeObj,
-                                                                    'eeee, d MMMM y, HH:mm:ss',
-                                                                    'id'
-                                                                );
-                                                            ?>
-                                                            <?php if (!empty($design['revision'])) { ?>
-                                                                <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
-                                                                    <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
-                                                                        <div class="uk-card-header">
-                                                                            <div class="uk-grid-small uk-flex-middle" uk-grid>
-                                                                                <div class="uk-width-expand">
-                                                                                    <h6 class="uk-margin-remove-bottom">File Revisi</h6>
-                                                                                    <p class="uk-text-meta uk-margin-remove-top"><?= ucwords($dateFormatted) ?></p>
-                                                                                </div>
+                                                        <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
+                                                                <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
+                                                                    <div class="uk-card-header">
+                                                                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                                                            <div class="uk-width-expand">
+                                                                                <h6 class="uk-margin-remove-bottom">File Revisi</h6>
+                                                                                <p class="uk-text-meta uk-margin-remove-top"><?= $tanggaldesign ?></p>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="uk-card-body">
-                                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
-                                                                                <h6><a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a></h6>
-                                                                            </a>
-                                                                        </div>
                                                                     </div>
-                                                                </a>
-                                                            <?php } ?>
+                                                                    <div class="uk-card-body">
+                                                                        <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
+                                                                            <h6><a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a></h6>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
                                                         <?php } ?>
 
                                                         <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
@@ -761,6 +658,39 @@
                                                                     document.getElementById('js-upload-create-<?= $project['id'] ?>').setAttribute('hidden', '');
                                                                 },
 
+                                                                loadStart: function(e) {
+                                                                    console.log('loadStart', arguments);
+
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').max = e.total;
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').value = e.loaded;
+
+                                                                },
+
+                                                                progress: function(e) {
+                                                                    console.log('progress', arguments);
+
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').max = e.total;
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').value = e.loaded;
+                                                                },
+
+                                                                loadEnd: function(e) {
+                                                                    console.log('loadEnd', arguments);
+
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').max = e.total;
+                                                                    document.getElementById('js-progressbar-create-<?= $project['id'] ?>').value = e.loaded;
+                                                                },
+
+                                                                completeAll: function() {
+                                                                    console.log('completeAll', arguments);
+
+                                                                    setTimeout(function() {
+                                                                        document.getElementById('js-progressbar-create-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                                        alert('Proses unggah data selesai, Silahkan kirim data revisi.');
+                                                                    }, 1000);
+                                                                }
+
                                                             });
 
                                                             function removeImgCreate<?= $project['id'] ?>() {
@@ -784,7 +714,6 @@
                                                                         document.getElementById('revision<?= $project['id'] ?>').remove();
                                                                         document.getElementById('closerev<?= $project['id'] ?>').remove();
                                                                         document.getElementById('placerev<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                                        // document.getElementById('js-progressbar-create-<//?= $project['id'] ?>').remove();
                                                                         document.getElementById('photocreate<?= $project['id'] ?>').value = '';
 
                                                                         document.getElementById('js-upload-create-<?= $project['id'] ?>').removeAttribute('hidden', '');
@@ -794,7 +723,7 @@
                                                             };
                                                         </script>
                                                         <div class="uk-modal-footer uk-text-center">
-                                                            <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                                                            <button class="uk-button uk-button-primary" type="submit">Kirim</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -804,26 +733,274 @@
                                     <?php } ?>
                                     <!-- end of desain -->
 
+                                    <!-- Invoice -->
+                                    <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                        <div class="uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="">
+                                                    <h4 class="uk-width-1-1">Invoice</h4>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                    <div>
+                                                        <div id="containerbtninv<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndowninv<?= $project['id'] ?>"></div>
+                                                        <div id="containerbtnupinv<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="uk-margin">
+                                    </div>
+                                    <!-- End Of Invoice -->
+
+                                    <!-- SPK -->
+                                    <p class="uk-text-right uk-width-1-1" uk-margin>
+                                        <?php
+                                        if ($projectdata[$project['id']]['project']['status_spk'] === null) {
+                                            echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
+                                        } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                            echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'>Download SPK</a>";
+                                        } else {
+                                            echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'>Download SPK</a>";
+                                        }
+                                        ?>
+                                    </p>
+
+                                    <!-- modal SPK -->
+                                    <div id="modal-spk<?= $project['id'] ?>" uk-modal>
+                                        <div class="uk-modal-dialog">
+                                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                                            <div class="uk-modal-header">
+                                                <h2 class="uk-modal-title">Unggah File SPK</h2>
+                                            </div>
+                                            <div class="uk-modal-body">
+                                                <form class="uk-form-stacked" action="upload/savespk/<?= $project['id'] ?>" method="post">
+
+                                                    <?php
+                                                    $dateTimeObj = new DateTime($datepro, new DateTimeZone('Asia/Jakarta'));
+                                                    $dateFormatted =
+                                                        IntlDateFormatter::formatObject(
+                                                            $dateTimeObj,
+                                                            'eeee, d MMMM y',
+                                                            'id'
+                                                        );
+                                                    ?>
+                                                    <?php if (!empty($spkpro)) { ?>
+                                                        <a href="img/spk/<?= $spkpro ?>" target="_blank" class="uk-link-reset">
+                                                            <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
+                                                                <div class="uk-card-header">
+                                                                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                                                        <div class="uk-width-expand">
+                                                                            <h6 class="uk-margin-remove-bottom">File SPK</h6>
+                                                                            <p class="uk-text-meta uk-margin-remove-top"><?= ucwords($dateFormatted) ?></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="uk-card-body">
+                                                                    <a href="img/spk/<?= $spkpro ?>" target="_blank" class="uk-link-reset">
+                                                                        <h6><a href="img/spk/<?= $spkpro ?>" uk-icon="file-pdf"></a> <a href="img/spk/<?= $spkpro ?>" target="_blank"><?= $spkpro ?></a></h6>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    <?php } ?>
+
+                                                    <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
+                                                        <label class="uk-form-label" for="photocreate">Kirim File SPK</label>
+                                                        <div class="uk-placeholder" id="placespk<?= $project['id'] ?>" hidden>
+                                                            <div uk-grid>
+                                                                <div class="uk-text-left uk-width-3-4">
+                                                                    <div id="upspk<?= $project['id'] ?>">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="uk-text-right uk-width-1-4">
+                                                                    <div id="closespk<?= $project['id'] ?>">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="image-containerspk-<?= $project['id'] ?>" class="uk-form-controls">
+                                                            <input id="photocreatespk<?= $project['id'] ?>" name="spk" hidden />
+                                                            <div id="js-upload-createspk-<?= $project['id'] ?>" class="js-upload-createspk-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                                <span uk-icon="icon: cloud-upload"></span>
+                                                                <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                                <div uk-form-custom>
+                                                                    <input type="file">
+                                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                                </div>
+                                                            </div>
+                                                            <progress id="js-progressbar-createspk-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                        </div>
+                                                    </div>
+
+                                                    <script type="text/javascript">
+                                                        var barspk = document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>');
+                                                        UIkit.upload('.js-upload-createspk-<?= $project['id'] ?>', {
+                                                            url: 'upload/spk',
+                                                            multiple: false,
+                                                            name: 'uploads',
+                                                            param: {
+                                                                lorem: 'ipsum'
+                                                            },
+                                                            method: 'POST',
+                                                            type: 'json',
+
+                                                            beforeSend: function() {
+                                                                console.log('beforeSend', arguments);
+                                                            },
+                                                            beforeAll: function() {
+                                                                console.log('beforeAll', arguments);
+                                                            },
+                                                            load: function() {
+                                                                console.log('load', arguments);
+                                                            },
+                                                            error: function() {
+                                                                console.log('error', arguments);
+                                                                var error = arguments[0].xhr.response.message.uploads;
+                                                                alert(error);
+                                                            },
+
+                                                            complete: function() {
+                                                                console.log('complete', arguments);
+
+
+                                                                var filename = arguments[0].response;
+
+                                                                if (document.getElementById('display-container-createspk-<?= $project['id'] ?>')) {
+                                                                    document.getElementById('display-container-createspk-<?= $project['id'] ?>').remove();
+                                                                };
+
+                                                                document.getElementById('photocreatespk<?= $project['id'] ?>').value = filename;
+
+                                                                document.getElementById('placespk<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                                var uprev = document.getElementById('upspk<?= $project['id'] ?>');
+                                                                var closed = document.getElementById('closespk<?= $project['id'] ?>');
+
+                                                                var divuprev = document.createElement('h6');
+                                                                divuprev.setAttribute('class', 'uk-margin-remove');
+                                                                divuprev.setAttribute('id', 'spk<?= $project['id'] ?>');
+
+                                                                var linkrev = document.createElement('a');
+                                                                linkrev.setAttribute('href', 'img/revisi/' + filename);
+                                                                linkrev.setAttribute('uk-icon', 'file-pdf');
+
+                                                                var link = document.createElement('a');
+                                                                link.setAttribute('href', 'img/revisi/' + filename);
+                                                                link.setAttribute('target', '_blank');
+
+                                                                var linktext = document.createTextNode(filename);
+
+                                                                var divclosed = document.createElement('a');
+                                                                divclosed.setAttribute('uk-icon', 'icon: close');
+                                                                divclosed.setAttribute('onClick', 'removeImgCreatespk<?= $project['id'] ?>()');
+                                                                divclosed.setAttribute('id', 'closedspk<?= $project['id'] ?>');
+
+                                                                uprev.appendChild(divuprev);
+                                                                divuprev.appendChild(linkrev);
+                                                                divuprev.appendChild(link);
+                                                                link.appendChild(linktext);
+                                                                closed.appendChild(divclosed);
+
+                                                                document.getElementById('js-upload-createspk-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                            },
+
+                                                            loadStart: function(e) {
+                                                                console.log('loadStart', arguments);
+
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').max = e.total;
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').value = e.loaded;
+
+                                                            },
+
+                                                            progress: function(e) {
+                                                                console.log('progress', arguments);
+
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').max = e.total;
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').value = e.loaded;
+                                                            },
+
+                                                            loadEnd: function(e) {
+                                                                console.log('loadEnd', arguments);
+
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').max = e.total;
+                                                                document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').value = e.loaded;
+                                                            },
+
+                                                            completeAll: function() {
+                                                                console.log('completeAll', arguments);
+
+                                                                setTimeout(function() {
+                                                                    document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                                    alert('<?= lang('Proses selesai, Silahkan Unggah Data.') ?>');
+                                                                }, 1000);
+                                                            }
+
+                                                        });
+
+                                                        function removeImgCreatespk<?= $project['id'] ?>() {
+                                                            $.ajax({
+                                                                type: 'post',
+                                                                url: 'upload/removespk',
+                                                                data: {
+                                                                    'spk': document.getElementById('photocreatespk<?= $project['id'] ?>').value
+                                                                },
+                                                                dataType: 'json',
+
+                                                                error: function() {
+                                                                    console.log('error', arguments);
+                                                                },
+
+                                                                success: function() {
+                                                                    console.log('success', arguments);
+
+                                                                    var pesan = arguments[0][1];
+
+                                                                    document.getElementById('spk<?= $project['id'] ?>').remove();
+                                                                    document.getElementById('closedspk<?= $project['id'] ?>').remove();
+                                                                    document.getElementById('placespk<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                                    document.getElementById('photocreatespk<?= $project['id'] ?>').value = '';
+
+                                                                    document.getElementById('js-upload-createspk-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                                    alert(pesan);
+                                                                }
+                                                            });
+                                                        };
+                                                    </script>
+                                                    <div class="uk-modal-footer uk-text-center">
+                                                        <button class="uk-button uk-button-primary" type="submit">Kirim</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Modal SPK -->
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                <?php } ?>
-            <?php } ?>
-        <?php } else { ?>
-            <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
-        <?php } ?>
-        <!-- end of Content -->
+</div>
+<?php } ?>
+<?php } ?>
+<?php } else { ?>
+    <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
+<?php } ?>
+<!-- end of Content -->
 
-        <?= $pager ?>
-        <script>
-            document.getElementById('search').addEventListener("change", submitform);
-            document.getElementById('perpage').addEventListener("change", submitform);
+<?= $pager ?>
+<script>
+    document.getElementById('search').addEventListener("change", submitform);
+    document.getElementById('perpage').addEventListener("change", submitform);
 
-            function submitform() {
-                document.getElementById('searchform').submit();
-            };
-        </script>
-    <?php } ?>
+    function submitform() {
+        document.getElementById('searchform').submit();
+    };
+</script>
+<?php } ?>
 </div>
 <?= $this->endSection() ?>

@@ -180,7 +180,7 @@ class Upload extends BaseController
                 'label'  => 'SPK',
                 'rules'  => 'required',
                 'errors' => [
-                    'required'      => 'File {field} Belum Di Unggah',
+                    'required'      => 'File SPK {field} Belum Di Unggah',
                 ],
             ],
         ];

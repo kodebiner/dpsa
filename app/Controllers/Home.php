@@ -205,11 +205,11 @@ class Home extends BaseController
                 $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->paginate($perpage, 'projects');
             }
 
-            $projectdata    = [];
-            $projectspk     = [];
+            $projectdata        = [];
+            $projectdesign      = [];
             foreach ($projects as $project) {
-                $projectdata[$project['id']]['design'] = $DesignModel->where('projectid', $project['id'])->find();
-                $projectspk[$project['id']]['spk']     = $ProjectModel->where('id', $project['id'])->find();
+                $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
+                $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
             }
 
             // Parsing Data to View
@@ -224,7 +224,7 @@ class Home extends BaseController
             $data['mdls']           = $MdlModel->findAll();
             $data['pager']          = $pager->links('projects', 'uikit_full');
             $data['projectdata']    = $projectdata;
-            $data['projectspk']     = $projectspk;
+            $data['projectdesign']  = $projectdesign;
 
             return view('dashboard', $data);
         } else {
@@ -244,6 +244,19 @@ class Home extends BaseController
         $DesignModel->save($status);
         $data = $this->data;
         die(json_encode(array($input)));
+    }
+
+    public function accres($id)
+    {
+        $DesignModel = new DesignModel();
+
+        $design = $DesignModel->find($id);
+
+        $status = [
+            'id'        => $id,
+            'status'    => $design['status'],
+        ];
+        return $this->response->setJSON($status);
     }
 
     public function revisi()
@@ -302,7 +315,7 @@ class Home extends BaseController
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        
+
         // Design Data
         if (isset($input['revisi'])) {
             $design = $DesignModel->where('projectid', $id)->first();
