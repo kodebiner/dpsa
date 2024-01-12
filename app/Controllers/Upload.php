@@ -13,7 +13,6 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-        // die(json_encode($this->request->getPost()));
 
         // Validation Rules
         $rules = [
