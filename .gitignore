@@ -131,4 +131,5 @@ nb-configuration.xml
 
 public/img/design/*
 public/img/revisi/*
+public/img/spk/*
 .env
