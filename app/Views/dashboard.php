@@ -226,7 +226,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                    <div class="uk-child-width-1-1@m uk-text-right" uk-grid>
                                         <div>
                                             <div id="containerbtn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndown<?= $project['id'] ?>"></div>
                                             <div id="containerbtnup<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnup<?= $project['id'] ?>"></div>
@@ -236,47 +236,6 @@
                             </div>
                             <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
                         </div>
-
-                        <script>
-                            $(document).ready(function() {
-                                $("span[id='btndown<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                                $("span[id='btnup<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
-                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                                $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                                $("span[id='btnupsph<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", true);
-                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                                $("span[id='btndowndsn<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                                $("span[id='btnupdsn<?= $project['id'] ?>']").click(function() {
-                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", false);
-                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", true);
-                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
-                                });
-
-                            });
-                        </script>
 
                         <?php
                         // Data project initialize
@@ -407,7 +366,49 @@
                                                 <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
                                             </p>
                                         </div>
+
+                                        <script>
+                                            $(document).ready(function() {
+                                                $("span[id='btndown<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                                $("span[id='btnup<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
+                                                    $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                                $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                                $("span[id='btnupsph<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                    $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                                $("span[id='btndowndsn<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                                $("span[id='btnupdsn<?= $project['id'] ?>']").click(function() {
+                                                    $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                    $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                });
+
+                                            });
+                                        </script>
                                     <?php } ?>
+
 
                                     <!-- Desain -->
                                     <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
@@ -984,23 +985,22 @@
                             </div>
                         </div>
                     </div>
-</div>
-<?php } ?>
-<?php } ?>
-<?php } else { ?>
-    <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
-<?php } ?>
-<!-- end of Content -->
+                <?php } ?>
+            <?php } ?>
+        <?php } else { ?>
+            <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
+        <?php } ?>
+        <!-- end of Content -->
 
-<?= $pager ?>
-<script>
-    document.getElementById('search').addEventListener("change", submitform);
-    document.getElementById('perpage').addEventListener("change", submitform);
+        <?= $pager ?>
+        <script>
+            document.getElementById('search').addEventListener("change", submitform);
+            document.getElementById('perpage').addEventListener("change", submitform);
 
-    function submitform() {
-        document.getElementById('searchform').submit();
-    };
-</script>
-<?php } ?>
+            function submitform() {
+                document.getElementById('searchform').submit();
+            };
+        </script>
+    <?php } ?>
 </div>
 <?= $this->endSection() ?>
