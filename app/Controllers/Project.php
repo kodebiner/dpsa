@@ -91,7 +91,7 @@ class Project extends BaseController
                 $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
 
                 // Design
-                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
+                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
             }
 
             $data                   = $this->data;
@@ -236,50 +236,58 @@ class Project extends BaseController
             $DesignModel    = new DesignModel();
 
             // initialize
-            $input = $this->request->getPost();
-            $pro = $ProjectModel->find($id);
+            $input  = $this->request->getPost();
+            $pro    = $ProjectModel->find($id);
 
-            if (isset($input['name'])) {
-                $name = $pro['name'];
-            } else {
+            if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
+            } else {
+                $name = $pro['name'];
             }
 
-            if (isset($input['brief'])) {
-                $brief = $pro['brief'];
-            } else {
+            if ($input['brief'] != $pro['brief']) {
                 $brief = $input['brief'];
+            } else {
+                $brief = $pro['brief'];
             }
 
-            if (isset($input['company'])) {
-                $client = $pro['clientid'];
-            } else {
+            if ($input['company'] != $pro['clientid']) {
                 $client = $input['company'];
+            } else {
+                $client = $pro['clientid'];
             }
 
-            if (isset($input['status'])) {
-                $status = $pro['status'];
-            } else {
+            if ($input['status'] != $pro['status']) {
                 $status = $input['status'];
+            } else {
+                $status = $pro['status'];
             }
 
-            if (isset($input['proqty'])) {
-                $qty = $pro['production'];
-            } else {
+            if ($input['proqty'] != $pro['production']) {
                 $qty = $input['proqty'];
+            } else {
+                $qty = $pro['production'];
             }
 
-            if ($input['name'] === $pro['name']) {
-                $is_unique =  '';
+            if (!empty($input['spk'])) {
+                if ($input['spk'] != $pro['spk']) {
+                    unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                    $spk        = $input['spk'];
+                    $statusspk  = 1;
+                } else {
+                    $spk        = $pro['spk'];
+                    $statusspk  = $pro['status_spk'];
+                }
             } else {
-                $is_unique =  'is_unique[project.name]';
+                $spk        = $pro['spk'];
+                $statusspk  = $pro['status_spk'];
             }
 
             // Validation Rules
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|' . $is_unique,
+                    'rules'  => 'required|is_unique[project.name,project.id,'.$id.']',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -337,7 +345,7 @@ class Project extends BaseController
             }
 
             // Design Data
-            if (isset($input['submitted'])) {
+            if (!empty($input['submitted'])) {
                 $design = $DesignModel->where('projectid', $id)->first();
                 if (empty($design)) {
                     $datadesign = [
@@ -364,11 +372,13 @@ class Project extends BaseController
                 'name'          => $name,
                 'brief'         => $brief,
                 'clientid'      => $client,
+                'spk'           => $spk,
+                'status_spk'    => $statusspk,
                 'status'        => $status,
                 'production'    => $qty,
             ];
             $ProjectModel->save($project);
-
+            
             return redirect()->back()->with('message', "Data berhasil di perbaharui.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
