@@ -217,7 +217,7 @@
                         }
                     </script>
                 <?php } else { ?>
-                    <div class="uk-margin uk-card uk-card-default uk-card-hover">
+                    <div class="uk-margin uk-card uk-card-default uk-card-hover uk-width-1-1">
                         <div class="uk-card-header">
                             <div class="uk-child-width-1-2" uk-grid>
                                 <div>
@@ -228,8 +228,8 @@
                                 <div>
                                     <div class="uk-child-width-1-1@m uk-text-right" uk-grid>
                                         <div>
-                                            <div id="containerbtn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndown<?= $project['id'] ?>"></div>
-                                            <div id="containerbtnup<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnup<?= $project['id'] ?>"></div>
+                                            <div id="containerbtn<?= $project['id'] ?>"><span class="uk-icon-button" uk-icon="icon: chevron-down; ratio: 1.5" id="btndown<?= $project['id'] ?>"></div>
+                                            <div id="containerbtnup<?= $project['id'] ?>" hidden><span class="uk-icon-button" uk-icon="icon: chevron-up; ratio: 1.5" id="btnup<?= $project['id'] ?>"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -985,22 +985,22 @@
                             </div>
                         </div>
                     </div>
-                <?php } ?>
-            <?php } ?>
-        <?php } else { ?>
-            <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
-        <?php } ?>
-        <!-- end of Content -->
+<?php } ?>
+<?php } ?>
+<?php } else { ?>
+    <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
+<?php } ?>
+<!-- end of Content -->
 
-        <?= $pager ?>
-        <script>
-            document.getElementById('search').addEventListener("change", submitform);
-            document.getElementById('perpage').addEventListener("change", submitform);
+<?= $pager ?>
+<script>
+    document.getElementById('search').addEventListener("change", submitform);
+    document.getElementById('perpage').addEventListener("change", submitform);
 
-            function submitform() {
-                document.getElementById('searchform').submit();
-            };
-        </script>
-    <?php } ?>
+    function submitform() {
+        document.getElementById('searchform').submit();
+    };
+</script>
+<?php } ?>
 </div>
 <?= $this->endSection() ?>
