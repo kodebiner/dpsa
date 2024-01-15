@@ -389,16 +389,22 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.project.delete', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel = new ProjectModel();
-            $RabModel = new RabModel();
+            $ProjectModel   = new ProjectModel();
+            $RabModel       = new RabModel();
+            $DesignModel    = new DesignModel();
 
             // Populating Data
             $rabs       = $RabModel->where('projectid', $id)->find();
+            $design     = $DesignModel->where('projectid', $id)->first();
 
             // Deleting Rab
             foreach ($rabs as $rab) {
                 $RabModel->delete($rab['id']);
             }
+
+            // Deleting Design
+            $DesignModel->delete($design['id']);
+
             // Delete Project
             $ProjectModel->delete($id);
 
