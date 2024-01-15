@@ -204,7 +204,7 @@ class Client extends BaseController
             if ($input['notelp'] === $company['phone']) {
                 $notelpis_unique =  '';
             } else {
-                $notelpis_unique =  '|is_unique[company.notelp]';
+                $notelpis_unique =  '|is_unique[company.phone]';
             }
             if ($input['npwp'] === $company['npwp']) {
                 $npwpis_unique =  '';
