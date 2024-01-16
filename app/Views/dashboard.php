@@ -507,7 +507,7 @@
                                                                     url: "home/acc/<?= $designId ?>",
                                                                     method: "POST",
                                                                     data: {
-                                                                        status: $('#acc<?= $designId ?>').val()
+                                                                        status: $('#acc<?= $designId ?>').val(),
                                                                     },
                                                                     dataType: "json",
                                                                     error: function() {

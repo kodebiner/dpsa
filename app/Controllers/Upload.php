@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
 use App\Models\DesignModel;
 use App\Models\ProjectModel;
 

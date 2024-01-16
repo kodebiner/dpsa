@@ -78,7 +78,7 @@
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="lastname">NPWP</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="npwp" name="npwp" placeholder="NPWP" autofocus required />
+                                    <input type="text" class="uk-input" id="npwp" name="npwp" placeholder="NPWP" autofocus />
                                 </div>
                             </div>
 

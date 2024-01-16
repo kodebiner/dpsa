@@ -10,6 +10,7 @@ use App\Models\RabModel;
 use App\Models\PaketModel;
 use App\Models\MdlModel;
 use App\Models\DesignModel;
+use App\Models\LogModel;
 
 class Home extends BaseController
 {
@@ -235,13 +236,28 @@ class Home extends BaseController
     public function acc($id)
     {
         $DesignModel = new DesignModel();
+        $ProjectModel = new ProjectModel();
+        $LogModel    = new LogModel();
         $input = $this->request->getPost('status');
 
+        $design = $DesignModel->find($id);
+
+        $project = $ProjectModel->find($design['projectid']);
+
+        $project = [
+            'id' => $project['id'],
+            'status' => '3',
+        ];
+        $ProjectModel->save($project);
+        
         $status = [
             'id'        => $id,
             'status'    => $input,
         ];
         $DesignModel->save($status);
+
+
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi']);
         $data = $this->data;
         die(json_encode(array($input)));
     }
@@ -298,6 +314,7 @@ class Home extends BaseController
     public function saverevisi($id)
     {
         $DesignModel = new DesignModel();
+        $LogModel    = new LogModel();
 
         $input = $this->request->getPost();
 
@@ -337,7 +354,7 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
             }
         }
-        // return redirect()->back()->with('message', 'Revisi terkirim');
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi']);
         die(json_encode(array('message' => 'terkirim')));
     }
 

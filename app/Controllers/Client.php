@@ -140,14 +140,14 @@ class Client extends BaseController
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
-                'npwp' => [
-                    'label'  => 'NPWP',
-                    'rules'  => 'required|is_unique[company.npwp]',
-                    'errors' => [
-                        'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
-                    ],
-                ],
+                // 'npwp' => [
+                //     'label'  => 'NPWP',
+                //     'rules'  => 'is_unique[company.npwp]',
+                //     'errors' => [
+                //         // 'required'      => '{field} wajib diisi',
+                //         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                //     ],
+                // ],
             ];
 
             if (!$this->validate($rules)) {
@@ -247,9 +247,9 @@ class Client extends BaseController
                 ],
                 'npwp' => [
                     'label'  => 'NPWP',
-                    'rules'  => 'required'.$npwpis_unique,
+                    'rules'  => 'is_unique[company.npwp]',
                     'errors' => [
-                        'required'      => '{field} wajib diisi',
+                        // 'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],

@@ -1,9 +1,9 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('extraScript') ?>
-    <script src="js/jquery-3.7.0.js"></script>
-    <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
-    <script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
-    <script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
+<script src="js/jquery-3.7.0.js"></script>
+<link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
+<script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
+<script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
 <?= $this->endSection() ?>
 <?= $this->section('main') ?>
 
@@ -113,6 +113,7 @@
                 <th>Tinggi</th>
                 <th>Volume</th>
                 <th>Satuan</th>
+                <th class="uk-table-width-medium">Keterangan</th>
                 <th>Harga</th>
                 <th class="uk-text-center">Aksi</th>
             </tr>
@@ -121,8 +122,8 @@
             <?php $i = 1; ?>
             <?php foreach ($pakets as $paket) { ?>
                 <tr>
-                    <td><a class="uk-link-reset" id="toggle<?=$paket['id']?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?=$paket['id']?>" uk-icon="chevron-down" hidden></span><span id="open<?=$paket['id']?>" uk-icon="chevron-right"></span></a></td>
-                    <td colspan="7" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                    <td><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
+                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                     <td class="uk-text-center">
                         <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                             <div>
@@ -137,46 +138,50 @@
                         </div>
                     </td>
                     <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
-                        <tr class="togglemdl<?= $paket['id'] ?>" hidden>
-                            <td></td>
-                            <td><?= $mdl['name'] ?></td>
-                            <td><?= $mdl['length'] ?></td>
-                            <td><?= $mdl['width'] ?></td>
-                            <td><?= $mdl['height'] ?></td>
-                            <td><?= $mdl['volume'] ?></td>
-                            <td>
-                                <?php
-                                if ($mdl['denomination'] === "1") {
-                                    echo "Unit";
-                                } elseif ($mdl['denomination'] === "2") {
-                                    echo "Meter Lari";
-                                } elseif ($mdl['denomination'] === "3") {
-                                    echo "Meter Persegi";
-                                }
-                                ?>
-                            </td>
-                            <td><?= $mdl['price'] ?></td>
-                            <td class="uk-text-center">
-                                <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
-                                    <div>
-                                        <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
-                                    </div>
-                                    <div>
-                                        <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php } ?>
+                <tr class="togglemdl<?= $paket['id'] ?>" hidden>
+                    <td></td>
+                    <td><?= $mdl['name'] ?></td>
+                    <td><?= $mdl['length'] ?></td>
+                    <td><?= $mdl['width'] ?></td>
+                    <td><?= $mdl['height'] ?></td>
+                    <td><?= $mdl['volume'] ?></td>
+                    <td>
+                        <?php
+                        if ($mdl['denomination'] === "1") {
+                            echo "Unit";
+                        } elseif ($mdl['denomination'] === "2") {
+                            echo "Meter Lari";
+                        } elseif ($mdl['denomination'] === "3") {
+                            echo "Meter Persegi";
+                        }
+                        ?>
+                    </td>
+                    <td class=""><?= $mdl['keterangan'] ?></td>
+                    <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');
+                        " "; ?></td>
+                    <td class="uk-text-center">
+                        <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
+                            <div>
+                                <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                            </div>
+                            <div>
+                                <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                            </div>
+                        </div>
+                    </td>
+                <?php } ?>
                 </tr>
                 <script>
-                    document.getElementById('toggle<?=$paket['id']?>').addEventListener('click', function() {
-                        if (document.getElementById('close<?=$paket['id']?>').hasAttribute('hidden')) {
-                            document.getElementById('close<?=$paket['id']?>').removeAttribute('hidden');
-                            document.getElementById('open<?=$paket['id']?>').setAttribute('hidden', '');
+                    document.getElementById('toggle<?= $paket['id'] ?>').addEventListener('click', function() {
+                        if (document.getElementById('close<?= $paket['id'] ?>').hasAttribute('hidden')) {
+                            document.getElementById('close<?= $paket['id'] ?>').removeAttribute('hidden');
+                            document.getElementById('open<?= $paket['id'] ?>').setAttribute('hidden', '');
+                            document.getElementById('keterangan<?= $paket['id'] ?>').removeAttribute('hidden');
                         } else {
-                            document.getElementById('open<?=$paket['id']?>').removeAttribute('hidden');
-                            document.getElementById('close<?=$paket['id']?>').setAttribute('hidden', '');
+                            document.getElementById('open<?= $paket['id'] ?>').removeAttribute('hidden');
+                            document.getElementById('close<?= $paket['id'] ?>').setAttribute('hidden', '');
+                            document.getElementById('keterangan<?= $paket['id'] ?>').setAttribute('hidden');
+
                         }
                     });
                 </script>
@@ -232,7 +237,7 @@
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="name">Nama</label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="name" name="name" value="<?= $paket['name']; ?>"/>
+                                <input type="text" class="uk-input" id="name" name="name" value="<?= $paket['name']; ?>" />
                             </div>
                         </div>
 
@@ -281,7 +286,7 @@
 
                     <script>
                         document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
-                            if (this.value == "2" || this.value == "3") {
+                            if (this.value == "1" || this.value == "2" || this.value == "3") {
                                 var elements = document.getElementById('contdim<?= $paket['id'] ?>');
                                 if (elements) {
                                     elements.remove();
@@ -371,11 +376,79 @@
                     </script>
 
                     <div class="uk-margin">
-                        <label class="uk-form-label" for="price">Harga</label>
-                        <div class="uk-form-controls">
-                            <input type="number" class="uk-input" id="price" name="price" placeholder="Harga" required />
+                        <label class="uk-form-label" for="price">Keterangan</label>
+                        <div class="uk-margin">
+                            <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="Keterangan" aria-label="Textarea"></textarea>
                         </div>
                     </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="price">Harga</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" id="price" name="price" placeholder="Harga" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="currency" required />
+                        </div>
+                    </div>
+
+                    <script>
+                        $("input[data-type='currency']").on({
+                            keyup: function() {
+                                formatCurrency($(this));
+                            },
+                            blur: function() {
+                                formatCurrency($(this), "blur");
+                            }
+                        });
+
+                        function formatNumber(n) {
+                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+
+                        function formatCurrency(input, blur) {
+
+                            var input_val = input.val();
+                            if (input_val === "") {
+                                return;
+                            }
+
+                            var original_len = input_val.length;
+
+                            var caret_pos = input.prop("selectionStart");
+
+                            if (input_val.indexOf(".") >= 0) {
+
+                                var decimal_pos = input_val.indexOf(".");
+
+                                var left_side = input_val.substring(0, decimal_pos);
+                                var right_side = input_val.substring(decimal_pos);
+
+                                left_side = formatNumber(left_side);
+
+                                right_side = formatNumber(right_side);
+
+                                if (blur === "blur") {
+                                    right_side += "00";
+                                }
+
+                                right_side = right_side.substring(0, 2);
+
+                                input_val = "Rp" + left_side + "." + right_side;
+
+                            } else {
+                                input_val = formatNumber(input_val);
+                                input_val = "Rp" + input_val;
+
+                                if (blur === "blur") {
+                                    input_val += ".00";
+                                }
+                            }
+
+                            input.val(input_val);
+
+                            var updated_len = input_val.length;
+                            caret_pos = updated_len - original_len + caret_pos;
+                            input[0].setSelectionRange(caret_pos, caret_pos);
+                        }
+                    </script>
 
                     <div class="uk-modal-footer">
                         <div class="uk-text-right">
@@ -400,7 +473,7 @@
                 <div class="uk-modal-body">
                     <form class="uk-form-stacked" role="form" action="mdl/update/<?= $mdl['id'] ?>" method="post">
                         <?= csrf_field() ?>
-                        <input hidden type="text" class="uk-input" id="paketid" name="paketid" value="<?= $mdl['paketid']; ?>"/>
+                        <input hidden type="text" class="uk-input" id="paketid" name="paketid" value="<?= $mdl['paketid']; ?>" />
 
                         <div class="uk-margin-bottom">
                             <label class="uk-form-label" for="name">Nama</label>
@@ -412,22 +485,16 @@
                         <div class="uk-margin">
                             <label class="uk-form-label" for="denomination"> Satuan</label>
                             <select class="uk-select" aria-label="Satuan" id="denominations<?= $mdl['id'] ?>" name="denomination" required>
-                                <option value="1" <?php if ($mdl['denomination'] === "1") {
-                                                        echo 'selected';
-                                                    } ?>>Unit</option>
-                                <option value="2" <?php if ($mdl['denomination'] === "2") {
-                                                        echo 'selected';
-                                                    } ?>>Meter Lari</option>
-                                <option value="3" <?php if ($mdl['denomination'] === "3") {
-                                                        echo 'selected';
-                                                    } ?>>Meter Persegi</option>
+                                <option value="1" <?php if ($mdl['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                                <option value="2" <?php if ($mdl['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                                <option value="3" <?php if ($mdl['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
                             </select>
                         </div>
 
                         <script>
                             $(document).ready(function() {
                                 if ($("#denominations<?= $mdl['id'] ?>").val() == "1") {
-                                    $("#contupmdl<?= $mdl['id'] ?>").attr("hidden", true);
+                                    $("#contupmdl<?= $mdl['id'] ?>").attr("hidden", false);
                                 }
 
                                 $("select[id='denominations<?= $mdl['id'] ?>']").change(function() {
@@ -445,28 +512,28 @@
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="length">Panjang</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="length" name="length" value="<?= $mdl['length'] ?>" />
+                                    <input type="text" class="uk-input" id="length" name="length" value="<?= $mdl['length'] ?>" required />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="width">Lebar</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="width" name="width" value="<?= $mdl['width'] ?>" />
+                                    <input type="text" class="uk-input" id="width" name="width" value="<?= $mdl['width'] ?>" required />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="height">Tinggi</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="height" name="height" value="<?= $mdl['height'] ?>" />
+                                    <input type="text" class="uk-input" id="height" name="height" value="<?= $mdl['height'] ?>" required />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="volume">Volume</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="volume" name="volume" value="<?= $mdl['volume'] ?>" />
+                                    <input type="text" class="uk-input" id="volume" name="volume" value="<?= $mdl['volume'] ?>" required />
                                 </div>
                             </div>
 
@@ -475,9 +542,82 @@
                         <div class="uk-margin">
                             <label class="uk-form-label" for="price">Harga</label>
                             <div class="uk-form-controls">
-                                <input type="number" class="uk-input" id="price" name="price" value="<?= $mdl['price'] ?>" />
+                                <input type="text" class="uk-input" id="price" name="price" placeholder="<?php echo "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');
+                                                                                                            " "; ?>" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="curencyupdate" />
                             </div>
                         </div>
+
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="price">Keterangan</label>
+                            <div class="uk-margin">
+                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdl['keterangan'] ?>" aria-label="Textarea"></textarea>
+                            </div>
+                        </div>
+
+                        <script>
+                            $("input[data-type='curencyupdate']").on({
+                                keyup: function() {
+                                    formatCurrency($(this));
+                                },
+                                blur: function() {
+                                    formatCurrency($(this), "blur");
+                                }
+                            });
+
+
+                            function formatNumber(n) {
+                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+
+                            function formatCurrency(input, blur) {
+
+                                var input_val = input.val();
+
+                                if (input_val === "") {
+                                    return;
+                                }
+
+                                var original_len = input_val.length;
+
+                                var caret_pos = input.prop("selectionStart");
+
+                                if (input_val.indexOf(".") >= 0) {
+
+                                    var decimal_pos = input_val.indexOf(".");
+
+                                    var left_side = input_val.substring(0, decimal_pos);
+                                    var right_side = input_val.substring(decimal_pos);
+
+                                    left_side = formatNumber(left_side);
+
+                                    right_side = formatNumber(right_side);
+
+                                    if (blur === "blur") {
+                                        right_side += "00";
+                                    }
+
+                                    right_side = right_side.substring(0, 2);
+
+                                    input_val = "Rp" + left_side + "." + right_side;
+
+                                } else {
+
+                                    input_val = formatNumber(input_val);
+                                    input_val = "Rp" + input_val;
+
+                                    if (blur === "blur") {
+                                        input_val += ".00";
+                                    }
+                                }
+
+                                input.val(input_val);
+
+                                var updated_len = input_val.length;
+                                caret_pos = updated_len - original_len + caret_pos;
+                                input[0].setSelectionRange(caret_pos, caret_pos);
+                            }
+                        </script>
+
                         <div class="uk-modal-footer">
                             <div class="uk-text-right">
                                 <button class="uk-button uk-button-primary" type="submit">Simpan</button>

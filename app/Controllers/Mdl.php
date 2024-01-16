@@ -102,7 +102,7 @@ class Mdl extends BaseController
         // Recording Log
         $paketid = $PaketModel->getInsertID();
         $Paket = $PaketModel->find($paketid);
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan paket MDL '.$Paket['name']]);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan paket MDL ' . $Paket['name']]);
 
         // Return
         return redirect()->back()->with('message', "Data Tersimpan");
@@ -121,7 +121,7 @@ class Mdl extends BaseController
         $rules = [
             'name'      => [
                 'label'     => 'Nama Paket/Kategori',
-                'rules'     => 'required|is_unique[paket.name,paket.id,'.$id.']',
+                'rules'     => 'required|is_unique[paket.name,paket.id,' . $id . ']',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
                     'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
@@ -134,14 +134,14 @@ class Mdl extends BaseController
 
         // Recording Log
         $Paket = $PaketModel->find($id);
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah paket MDL '.$Paket['name'].' menjadi '.$input['name']]);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah paket MDL ' . $Paket['name'] . ' menjadi ' . $input['name']]);
 
         // Input Data
         $paketup = [
             'id'            => $id,
             'name'          => $input['name'],
         ];
-        
+
         // Save Data Paket
         $PaketModel->save($paketup);
 
@@ -161,7 +161,7 @@ class Mdl extends BaseController
         $mdls               = $MdlModel->where('paketid', $id)->find();
 
         // Record Log
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus paket MDL '.$Paket['name'].' dan seluruh item MDL di dalamnya.']);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus paket MDL ' . $Paket['name'] . ' dan seluruh item MDL di dalamnya.']);
 
         // Delete MDL
         foreach ($mdls as $mdl) {
@@ -184,6 +184,13 @@ class Mdl extends BaseController
 
         // Get Data
         $input = $this->request->getPost();
+        $str = $input['price'];
+
+
+        function toInt($str)
+        {
+            return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
+        }
 
         // Validation
         $rules = [
@@ -197,10 +204,10 @@ class Mdl extends BaseController
             ],
             'price'     => [
                 'label'     => 'Harga',
-                'rules'     => 'required|decimal',
+                'rules'     => 'required',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    'decimal'       => '{field} hanya boleh berisi angka.',
+                    // 'decimal'       => '{field} hanya boleh berisi angka.',
                 ],
             ],
         ];
@@ -249,15 +256,15 @@ class Mdl extends BaseController
                 'height'        => $input['height'],
                 'volume'        => $input['length'],
                 'denomination'  => $input['denomination'],
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => toInt($str),
                 'paketid'       => $id,
             ];
 
             // Save Data MDL
             $MdlModel->save($mdl);
-
         } elseif ($input['denomination'] === "3") {
-            
+
             // Validation
             $rules = [
                 'length'      => [
@@ -296,13 +303,13 @@ class Mdl extends BaseController
                 'height'        => $input['height'],
                 'volume'        => $input['length'] * $input['height'],
                 'denomination'  => $input['denomination'],
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => toInt($str),
                 'paketid'       => $id,
             ];
 
             // Save Data MDL
             $MdlModel->save($mdl);
-
         } else {
             $mdl = [
                 'name'          => $input['name'],
@@ -311,7 +318,8 @@ class Mdl extends BaseController
                 'height'        => NULL,
                 'volume'        => '1',
                 'denomination'  => $input['denomination'],
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => toInt($str),
                 'paketid'       => $id,
             ];
 
@@ -321,7 +329,7 @@ class Mdl extends BaseController
 
         // Record Log
         $Paket = $PaketModel->find($id);
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan item '.$input['name'].' kedalam paket MDL '.$Paket['name']]);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan item ' . $input['name'] . ' kedalam paket MDL ' . $Paket['name']]);
 
         return redirect()->back()->with('message', "Data Tersimpan");
     }
@@ -333,12 +341,18 @@ class Mdl extends BaseController
 
         // Get Data
         $input = $this->request->getPost();
+        $str = $input['price'];
+
+        function strupdate($str)
+        {
+            return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
+        }
 
         // Validation
         $rules = [
             'name'      => [
                 'label'     => 'Nama',
-                'rules'     => 'required|is_unique[mdl.name,mdl.id,'.$id.']',
+                'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
                     'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
@@ -346,10 +360,10 @@ class Mdl extends BaseController
             ],
             'price'     => [
                 'label'     => 'Harga',
-                'rules'     => 'required|decimal',
+                'rules'     => 'required',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    'decimal'       => '{field} hanya boleh berisi angka.',
+                    // 'decimal'       => '{field} hanya boleh berisi angka.',
                 ],
             ],
         ];
@@ -359,7 +373,7 @@ class Mdl extends BaseController
 
         // Filter Condition Meters Or Unit
         if ($input['denomination'] === "2") {
-            
+
             // Validation
             $rules = [
                 'length'      => [
@@ -399,14 +413,15 @@ class Mdl extends BaseController
                 'width'         => $input['width'],
                 'height'        => $input['height'],
                 'volume'        => $input['length'],
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => strupdate($str),
                 'paketid'       => $input['paketid'],
             ];
 
             // Save Data MDL
             $MdlModel->save($mdlup);
         } elseif ($input['denomination'] === "3") {
-            
+
             // Validation
             $rules = [
                 'length'      => [
@@ -446,13 +461,13 @@ class Mdl extends BaseController
                 'width'         => $input['width'],
                 'height'        => $input['height'],
                 'volume'        => $input['length'] * $input['height'],
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => strupdate($str),
                 'paketid'       => $input['paketid'],
             ];
 
             // Save Data MDL
             $MdlModel->save($mdlup);
-
         } else {
             $mdlup = [
                 'id'            => $id,
@@ -462,10 +477,11 @@ class Mdl extends BaseController
                 'width'         => NULL,
                 'height'        => NULL,
                 'volume'        => '1',
-                'price'         => $input['price'],
+                'keterangan'    => $input['keterangan'],
+                'price'         => strupdate($str),
                 'paketid'       => $input['paketid'],
             ];
-            
+
             // Save Data MDL
             $MdlModel->save($mdlup);
         }
