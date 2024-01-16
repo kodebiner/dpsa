@@ -43,48 +43,70 @@ class Project extends BaseController
             $projects               = $ProjectModel->paginate(10, 'projects');
 
             $projectdata    = [];
+            $mdlid          = [];
             foreach ($projects as $project) {
                 $paketid    = [];
-                $mdlid      = [];
 
                 // RAB
                 $rabs       = $RabModel->where('projectid', $project['id'])->find();
                 foreach ($rabs as $rab) {
                     $paketid[]  = $rab['paketid'];
                     $mdlid[]    = $rab['mdlid'];
-                }
-
-                // Paket
-                $paketdata      = [];
-                $paketproject   = $PaketModel->find($paketid);
-                foreach ($paketproject as $pack) {
-                    $paketdata[]    = $pack['id'];
-                    $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
 
                     // MDL
-                    $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
-                    foreach ($mdlpack as $mdl) {
-                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
-                            'id'            => $mdl['id'],
-                            'name'          => $mdl['name'],
-                            'length'        => $mdl['length'],
-                            'width'         => $mdl['width'],
-                            'height'        => $mdl['height'],
-                            'volume'        => $mdl['volume'],
-                            'denomination'  => $mdl['denomination'],
-                            'price'         => $mdl['price'],
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                            'id'            => $rab['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (Int)$rab['qty'] * (Int)$mdlr['price'],
                         ];
+                    }
+                }
 
-                        // Checklist RAB
-                        $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
-                        if (!empty($rabpack)) {
-                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
-                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
-                        } else {
-                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
-                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
+                if (!empty($rabs)) {
+                    // Paket
+                    $paketdata      = [];
+                    $paketproject   = $PaketModel->find($paketid);
+                    foreach ($paketproject as $pack) {
+                        $paketdata[]    = $pack['id'];
+                        $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
+    
+                        // MDL
+                        $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
+                        foreach ($mdlpack as $mdl) {
+                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
+                                'id'            => $rab['id'],
+                                'name'          => $mdl['name'],
+                                'length'        => $mdl['length'],
+                                'width'         => $mdl['width'],
+                                'height'        => $mdl['height'],
+                                'volume'        => $mdl['volume'],
+                                'denomination'  => $mdl['denomination'],
+                                'keterangan'    => $mdl['keterangan'],
+                                'price'         => $mdl['price'],
+                            ];
+    
+                            // Checklist RAB
+                            $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
+                            if (!empty($rabpack)) {
+                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
+                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
+                            } else {
+                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
+                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
+                            }
                         }
                     }
+                } else {
+                    $paketproject   = [];
                 }
 
                 // Autocomplete Paket
@@ -101,6 +123,7 @@ class Project extends BaseController
             $data['projectdata']    = $projectdata;
             $data['company']        = $company;
             $data['pakets']         = $pakets;
+            $data['rabs']           = $rabs;
             $data['pager']          = $ProjectModel->pager;
 
             return view('project', $data);
@@ -165,22 +188,8 @@ class Project extends BaseController
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
-                'brief' => [
-                    'label'  => 'Detail Pesanan',
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required'      => '{field} wajib diisi',
-                    ],
-                ],
                 'company' => [
                     'label'  => 'Nama Klien',
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required'      => '{field} wajib diisi',
-                    ],
-                ],
-                'status' => [
-                    'label'  => 'Progres Proyek',
                     'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
@@ -195,30 +204,28 @@ class Project extends BaseController
             // Project Data
             $project = [
                 'name'          => $input['name'],
-                'brief'         => $input['brief'],
                 'clientid'      => $input['company'],
-                'status'        => $input['status'],
-                'production'    => $input['proqty'],
+                'status'        => 1,
             ];
             $ProjectModel->insert($project);
 
-            // Get Purchase ID
-            $projectid = $ProjectModel->getInsertID();
+            // // Get Project ID
+            // $projectid = $ProjectModel->getInsertID();
 
-            // RAB Data
-            foreach ($input['checklist'] as $mdlid => $checklist) {
-                if ($checklist) {
-                    $mdl = $MdlModel->find($mdlid);
-                    $datarab     = [
-                        'projectid' => $projectid,
-                        'paketid'   => $mdl['paketid'],
-                        'mdlid'     => $mdlid,
-                        'qty'       => $input['qty'][$mdlid],
-                    ];
-                    // Save Data RAB
-                    $RabModel->insert($datarab);
-                }
-            }
+            // // RAB Data
+            // foreach ($input['checklist'] as $mdlid => $checklist) {
+            //     if ($checklist) {
+            //         $mdl = $MdlModel->find($mdlid);
+            //         $datarab     = [
+            //             'projectid' => $projectid,
+            //             'paketid'   => $mdl['paketid'],
+            //             'mdlid'     => $mdlid,
+            //             'qty'       => $input['qty'][$mdlid],
+            //         ];
+            //         // Save Data RAB
+            //         $RabModel->insert($datarab);
+            //     }
+            // }
 
             return redirect()->back()->with('message', "Data berhasil di simpan.");
         } else {
@@ -245,28 +252,10 @@ class Project extends BaseController
                 $name = $pro['name'];
             }
 
-            if ($input['brief'] != $pro['brief']) {
-                $brief = $input['brief'];
-            } else {
-                $brief = $pro['brief'];
-            }
-
             if ($input['company'] != $pro['clientid']) {
                 $client = $input['company'];
             } else {
                 $client = $pro['clientid'];
-            }
-
-            if ($input['status'] != $pro['status']) {
-                $status = $input['status'];
-            } else {
-                $status = $pro['status'];
-            }
-
-            if ($input['proqty'] != $pro['production']) {
-                $qty = $input['proqty'];
-            } else {
-                $qty = $pro['production'];
             }
 
             if (!empty($input['spk'])) {
@@ -274,6 +263,7 @@ class Project extends BaseController
                     unlink(FCPATH . '/img/spk/' . $pro['spk']);
                     $spk        = $input['spk'];
                     $statusspk  = 1;
+                    $status     = 4;
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
@@ -293,22 +283,8 @@ class Project extends BaseController
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
-                'brief' => [
-                    'label'  => 'Detail Pemesanan',
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required'      => '{field} wajib diisi',
-                    ],
-                ],
                 'company' => [
                     'label'  => 'Nama Klien',
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required'      => '{field} wajib diisi',
-                    ],
-                ],
-                'status' => [
-                    'label'  => 'Progres Proyek',
                     'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
@@ -321,25 +297,27 @@ class Project extends BaseController
             }
 
             // RAB Data
-            foreach ($input['eqty' . $id] as $mdlid => $qty) {
-                if (isset($input['checked' . $id][$mdlid])) {
-                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                    if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
-                        $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
-                    } elseif (empty($rab)) {
-                        $mdl = $MdlModel->find($mdlid);
-                        $datarab = [
-                            'mdlid'     => $mdlid,
-                            'projectid' => $id,
-                            'paketid'   => $mdl['paketid'],
-                            'qty'       => $qty
-                        ];
-                        $RabModel->save($datarab);
-                    }
-                } else {
-                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                    if (!empty($rab)) {
-                        $RabModel->delete($rab['id']);
+            if (isset($input['checked' . $id])) {
+                foreach ($input['eqty' . $id] as $mdlid => $qty) {
+                    if (isset($input['checked' . $id][$mdlid])) {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
+                        if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
+                            $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                        } elseif (empty($rab)) {
+                            $mdl = $MdlModel->find($mdlid);
+                            $datarab = [
+                                'mdlid'     => $mdlid,
+                                'projectid' => $id,
+                                'paketid'   => $mdl['paketid'],
+                                'qty'       => $qty
+                            ];
+                            $RabModel->save($datarab);
+                        }
+                    } else {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
+                        if (!empty($rab)) {
+                            $RabModel->delete($rab['id']);
+                        }
                     }
                 }
             }
@@ -364,18 +342,21 @@ class Project extends BaseController
                     ];
                     $DesignModel->save($datadesign);
                 }
+
+                // Save Status Project
+                $status = 2;
+            } else {
+                $status = 1;
             }
 
             // Project Data
             $project = [
                 'id'            => $id,
                 'name'          => $name,
-                'brief'         => $brief,
                 'clientid'      => $client,
                 'spk'           => $spk,
                 'status_spk'    => $statusspk,
                 'status'        => $status,
-                'production'    => $qty,
             ];
             $ProjectModel->save($project);
             
