@@ -8,6 +8,7 @@ use App\Models\MdlModel;
 use App\Models\PaketModel;
 use App\Models\RabModel;
 use App\Models\DesignModel;
+use App\Models\ProductionModel;
 
 class Project extends BaseController
 {
@@ -36,6 +37,7 @@ class Project extends BaseController
             $PaketModel             = new PaketModel();
             $RabModel               = new RabModel();
             $DesignModel            = new DesignModel();
+            $ProductionModel        = new ProductionModel();
 
             // Populating Data
             $pakets                 = $PaketModel->findAll();
@@ -107,6 +109,7 @@ class Project extends BaseController
                             }
                         }
                     } else {
+                        $paketdata      = [];
                         $paketproject   = [];
                     }
 
@@ -213,24 +216,6 @@ class Project extends BaseController
             ];
             $ProjectModel->insert($project);
 
-            // // Get Project ID
-            // $projectid = $ProjectModel->getInsertID();
-
-            // // RAB Data
-            // foreach ($input['checklist'] as $mdlid => $checklist) {
-            //     if ($checklist) {
-            //         $mdl = $MdlModel->find($mdlid);
-            //         $datarab     = [
-            //             'projectid' => $projectid,
-            //             'paketid'   => $mdl['paketid'],
-            //             'mdlid'     => $mdlid,
-            //             'qty'       => $input['qty'][$mdlid],
-            //         ];
-            //         // Save Data RAB
-            //         $RabModel->insert($datarab);
-            //     }
-            // }
-
             return redirect()->back()->with('message', "Data berhasil di simpan.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -241,10 +226,11 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel   = new ProjectModel();
-            $RabModel       = new RabModel();
-            $MdlModel       = new MdlModel();
-            $DesignModel    = new DesignModel();
+            $ProjectModel       = new ProjectModel();
+            $RabModel           = new RabModel();
+            $MdlModel           = new MdlModel();
+            $DesignModel        = new DesignModel();
+            $ProductionModel    = new ProductionModel();
 
             // initialize
             $input  = $this->request->getPost();
@@ -268,6 +254,9 @@ class Project extends BaseController
                     $spk        = $input['spk'];
                     $statusspk  = 1;
                     $status     = 4;
+
+                    // Crating Rows In Production
+
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
