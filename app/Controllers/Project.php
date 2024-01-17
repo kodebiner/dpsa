@@ -44,76 +44,78 @@ class Project extends BaseController
 
             $projectdata    = [];
             $mdlid          = [];
-            foreach ($projects as $project) {
-                $paketid    = [];
+            if (!empty($projects)) {
+                foreach ($projects as $project) {
+                    $paketid    = [];
 
-                // RAB
-                $rabs       = $RabModel->where('projectid', $project['id'])->find();
-                foreach ($rabs as $rab) {
-                    $paketid[]  = $rab['paketid'];
-                    $mdlid[]    = $rab['mdlid'];
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    foreach ($rabs as $rab) {
+                        $paketid[]  = $rab['paketid'];
+                        $mdlid[]    = $rab['mdlid'];
 
-                    // MDL
-                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
-                    foreach ($rabmdl as $mdlr) {
-                        $projectdata[$project['id']]['rab'][$rab['id']]  = [
-                            'id'            => $rab['id'],
-                            'name'          => $mdlr['name'],
-                            'length'        => $mdlr['length'],
-                            'width'         => $mdlr['width'],
-                            'height'        => $mdlr['height'],
-                            'volume'        => $mdlr['volume'],
-                            'denomination'  => $mdlr['denomination'],
-                            'keterangan'    => $mdlr['keterangan'],
-                            'qty'           => $rab['qty'],
-                            'price'         => (Int)$rab['qty'] * (Int)$mdlr['price'],
-                        ];
-                    }
-                }
-
-                if (!empty($rabs)) {
-                    // Paket
-                    $paketdata      = [];
-                    $paketproject   = $PaketModel->find($paketid);
-                    foreach ($paketproject as $pack) {
-                        $paketdata[]    = $pack['id'];
-                        $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
-    
                         // MDL
-                        $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
-                        foreach ($mdlpack as $mdl) {
-                            $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
+                        $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                        foreach ($rabmdl as $mdlr) {
+                            $projectdata[$project['id']]['rab'][$rab['id']]  = [
                                 'id'            => $rab['id'],
-                                'name'          => $mdl['name'],
-                                'length'        => $mdl['length'],
-                                'width'         => $mdl['width'],
-                                'height'        => $mdl['height'],
-                                'volume'        => $mdl['volume'],
-                                'denomination'  => $mdl['denomination'],
-                                'keterangan'    => $mdl['keterangan'],
-                                'price'         => $mdl['price'],
+                                'name'          => $mdlr['name'],
+                                'length'        => $mdlr['length'],
+                                'width'         => $mdlr['width'],
+                                'height'        => $mdlr['height'],
+                                'volume'        => $mdlr['volume'],
+                                'denomination'  => $mdlr['denomination'],
+                                'keterangan'    => $mdlr['keterangan'],
+                                'qty'           => $rab['qty'],
+                                'price'         => (Int)$rab['qty'] * (Int)$mdlr['price'],
                             ];
-    
-                            // Checklist RAB
-                            $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
-                            if (!empty($rabpack)) {
-                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
-                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
-                            } else {
-                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
-                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
-                            }
                         }
                     }
-                } else {
-                    $paketproject   = [];
+
+                    if (!empty($rabs)) {
+                        // Paket
+                        $paketdata      = [];
+                        $paketproject   = $PaketModel->find($paketid);
+                        foreach ($paketproject as $pack) {
+                            $paketdata[]    = $pack['id'];
+                            $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
+        
+                            // MDL
+                            $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
+                            foreach ($mdlpack as $mdl) {
+                                $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
+                                    'id'            => $rab['id'],
+                                    'name'          => $mdl['name'],
+                                    'length'        => $mdl['length'],
+                                    'width'         => $mdl['width'],
+                                    'height'        => $mdl['height'],
+                                    'volume'        => $mdl['volume'],
+                                    'denomination'  => $mdl['denomination'],
+                                    'keterangan'    => $mdl['keterangan'],
+                                    'price'         => $mdl['price'],
+                                ];
+        
+                                // Checklist RAB
+                                $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
+                                if (!empty($rabpack)) {
+                                    $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
+                                    $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
+                                } else {
+                                    $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
+                                    $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
+                                }
+                            }
+                        }
+                    } else {
+                        $paketproject   = [];
+                    }
+
+                    // Autocomplete Paket
+                    $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
+
+                    // Design
+                    $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
                 }
-
-                // Autocomplete Paket
-                $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
-
-                // Design
-                $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
             }
 
             $data                   = $this->data;
