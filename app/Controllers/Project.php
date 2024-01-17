@@ -47,7 +47,6 @@ class Project extends BaseController
             $projects               = $ProjectModel->paginate(10, 'projects');
 
             $projectdata    = [];
-            $mdlid          = [];
             if (!empty($projects)) {
                 foreach ($projects as $project) {
                     $paketid    = [];
@@ -56,13 +55,12 @@ class Project extends BaseController
                     $rabs       = $RabModel->where('projectid', $project['id'])->find();
                     foreach ($rabs as $rab) {
                         $paketid[]  = $rab['paketid'];
-                        $mdlid[]    = $rab['mdlid'];
 
-                        // MDL
+                        // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
                             $projectdata[$project['id']]['rab'][$rab['id']]  = [
-                                'id'            => $rab['id'],
+                                'id'            => $mdlr['id'],
                                 'name'          => $mdlr['name'],
                                 'length'        => $mdlr['length'],
                                 'width'         => $mdlr['width'],
@@ -84,11 +82,11 @@ class Project extends BaseController
                             $paketdata[]    = $pack['id'];
                             $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
         
-                            // MDL
+                            // MDL Paket
                             $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
                             foreach ($mdlpack as $mdl) {
                                 $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
-                                    'id'            => $rab['id'],
+                                    'id'            => $mdl['id'],
                                     'name'          => $mdl['name'],
                                     'length'        => $mdl['length'],
                                     'width'         => $mdl['width'],
@@ -123,13 +121,37 @@ class Project extends BaseController
                     }
 
                     // Design
-                    $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
+                    $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
+
+                    // Production
+                    $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
+                    if (!empty($productions)) {
+                        foreach ($productions as $production) {
+    
+                            // MDL Production
+                            $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                            foreach ($mdlprod as $mdlp) {
+                                $projectdata[$project['id']]['production'][$production['id']]  = [
+                                    'id'                => $production['id'],
+                                    'name'              => $mdlp['name'],
+                                    'gambar_kerja'      => $production['gambar_kerja'],
+                                    'mesin_awal'        => $production['mesin_awal'],
+                                    'tukang'            => $production['tukang'],
+                                    'mesin_lanjutan'    => $production['mesin_lanjutan'],
+                                    'finishing'         => $production['finishing'],
+                                    'packing'           => $production['packing'],
+                                    'setting'           => $production['setting'],
+                                ];
+                            }
+                        }
+                    } else {
+                        $mdlprod    = [];
+                        $projectdata[$project['id']]['production']   = [];
+                    }
                 }
             } else {
-                $rabs = [];
+                $rabs           = [];
             }
-
-            // dd($projectdata[$project['id']]['paket']);
 
             $data                   = $this->data;
             $data['title']          = "Proyek";
@@ -264,7 +286,16 @@ class Project extends BaseController
                     $status     = 4;
 
                     // Crating Rows In Production
-
+                    $sphs = $RabModel->where('projectid', $id)->where('qty !=', '0')->find();
+                    foreach ($sphs as $sph) {
+                        for ($i = 1; $i <= $sph['qty']; $i++) {
+                            $productiondata = [
+                                'mdlid'     => $sph['mdlid'],
+                                'projectid' => $sph['projectid'],
+                            ];
+                            $ProductionModel->insert($productiondata);
+                        }
+                    }
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
@@ -303,16 +334,22 @@ class Project extends BaseController
                     if (isset($input['checked' . $id][$mdlid])) {
                         $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
                         if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
-                            $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                            if ($input['eqty' . $id][$mdlid] != 0) {
+                                $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                            } else {
+                                $RabModel->delete($rab);
+                            }
                         } elseif (empty($rab)) {
                             $mdl = $MdlModel->find($mdlid);
-                            $datarab = [
-                                'mdlid'     => $mdlid,
-                                'projectid' => $id,
-                                'paketid'   => $mdl['paketid'],
-                                'qty'       => $qty
-                            ];
-                            $RabModel->save($datarab);
+                            if ($input['eqty' . $id][$mdlid] != 0) {
+                                $datarab = [
+                                    'mdlid'     => $mdlid,
+                                    'projectid' => $id,
+                                    'paketid'   => $mdl['paketid'],
+                                    'qty'       => $qty
+                                ];
+                                $RabModel->save($datarab);
+                            }
                         }
                     } else {
                         $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
@@ -390,7 +427,7 @@ class Project extends BaseController
             // Delete Project
             $ProjectModel->delete($id);
 
-            return redirect()->back()->with('errors', "Data berhasil di hapus");
+            return redirect()->back()->with('error', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

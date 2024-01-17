@@ -659,6 +659,7 @@
                             }
                         });
                     </script>
+                    <!-- Desain Section End -->
 
                     <!-- Detail Pemesanan Seciton -->
                     <?php if (!empty($projectdata[$project['id']]['design'])) {
@@ -671,9 +672,6 @@
                                     <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
                                 </div>
                             </div>
-                            <?php 
-                        }
-                    } ?>
 
                     <?php if ($project['status_spk'] != 1) { ?>
                         <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
@@ -746,324 +744,327 @@
                                                                 var eprojprice = ebaseprice * ebaseqty;
                                                                 epricetd.innerHTML = eprojprice;
 
-                                                                if (ebaseqty > 0) {
-                                                                    echeckbox.checked = true;
-                                                                } else {
-                                                                    echeckbox.checked = false;
-                                                                }
-                                                            };
-                                                        </script>
+                                                                        if (ebaseqty > 0) {
+                                                                            echeckbox.checked = true;
+                                                                        } else {
+                                                                            echeckbox.checked = false;
+                                                                        }
+                                                                    };
+                                                                </script>
+                                                            <?php } ?>
+                                                        </tr>
                                                     <?php } ?>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="uk-h4">Tambah Pesanan</div>
+                                    <?php } ?>
+
+                                    <div class="uk-margin-bottom">
+                                        <label class="uk-form-label" for="paket">Cari Paket</label>
+                                        <div class="uk-form-controls">
+                                            <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Paket">
+                                        </div>
+                                    </div>
+
+                                    <div id="listmdl<?= $project['id'] ?>"></div>
                                 </div>
-                                <div class="uk-h4">Tambah Pesanan</div>
-                            <?php } ?>
 
-                            <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="paket">Cari Paket</label>
-                                <div class="uk-form-controls">
-                                    <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Paket">
-                                </div>
-                            </div>
+                                <script>
+                                    // Dropdown SPH
+                                    document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
+                                        if (document.getElementById('close<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                            document.getElementById('close<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('open<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        } else {
+                                            document.getElementById('open<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('close<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        }
+                                    });
 
-                            <div id="listmdl<?= $project['id'] ?>"></div>
-                        </div>
+                                    $(document).ready(function() {
+                                        if ($("#status<?= $project['id'] ?>").val() == "1") {
+                                            $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
+                                        }
+                                        $("select[id='status<?= $project['id'] ?>']").change(function() {
+                                            if ((this.value) == 1) {
+                                                $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
+                                            } else {
+                                                $("#image-container-create-<?= $project['id'] ?>").attr("hidden", true);
+                                            }
+                                        });
+                                    });
 
-                        <script>
-                            document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
-                                if (document.getElementById('close<?= $project['id'] ?>').hasAttribute('hidden')) {
-                                    document.getElementById('close<?= $project['id'] ?>').removeAttribute('hidden');
-                                    document.getElementById('open<?= $project['id'] ?>').setAttribute('hidden', '');
-                                } else {
-                                    document.getElementById('open<?= $project['id'] ?>').removeAttribute('hidden');
-                                    document.getElementById('close<?= $project['id'] ?>').setAttribute('hidden', '');
-                                }
-                            });
+                                    autopaket<?= $project['id'] ?> = [
+                                        <?php if (!empty($projectdata[$project['id']]['paket'])) {
+                                            foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
+                                                echo '{label:"' . $autopaket['name'] . '",idx:' . $autopaket['id'] . '},';
+                                            }
+                                        } else {
+                                            foreach ($pakets as $paket) {
+                                                echo '{label:"' . $paket['name'] . '",idx:' . $paket['id'] . '},';
+                                            }
+                                        } ?>
+                                    ];
+                                    $(function() {
+                                        $("#paketname<?= $project['id'] ?>").autocomplete({
+                                            source: autopaket<?= $project['id'] ?>,
+                                            select: function(e, i) {
+                                                var data = {
+                                                    'id': i.item.idx
+                                                };
+                                                $.ajax({
+                                                    url: "project/mdl",
+                                                    method: "POST",
+                                                    data: data,
+                                                    dataType: "json",
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+                                                    success: function() {
+                                                        console.log('success', arguments);
+                                                        document.getElementById('listmdl<?= $project['id'] ?>').removeAttribute('hidden');
 
-                            $(document).ready(function() {
-                                if ($("#status<?= $project['id'] ?>").val() == "1") {
-                                    $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
-                                }
-                                $("select[id='status<?= $project['id'] ?>']").change(function() {
-                                    if ((this.value) == 1) {
-                                        $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
-                                    } else {
-                                        $("#image-container-create-<?= $project['id'] ?>").attr("hidden", true);
-                                    }
-                                });
-                            });
+                                                        var pakets = document.getElementById('listmdl<?= $project['id'] ?>');
 
-                            autopaket<?= $project['id'] ?> = [
-                                <?php if (!empty($projectdata[$project['id']]['paket'])) {
-                                    foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
-                                        echo '{label:"' . $autopaket['name'] . '",idx:' . $autopaket['id'] . '},';
-                                    }
-                                } else {
-                                    foreach ($pakets as $paket) {
-                                        echo '{label:"' . $paket['name'] . '",idx:' . $paket['id'] . '},';
-                                    }
-                                } ?>
-                            ];
-                            $(function() {
-                                $("#paketname<?= $project['id'] ?>").autocomplete({
-                                    source: autopaket<?= $project['id'] ?>,
-                                    select: function(e, i) {
-                                        var data = {
-                                            'id': i.item.idx
-                                        };
-                                        $.ajax({
-                                            url: "project/mdl",
-                                            method: "POST",
-                                            data: data,
-                                            dataType: "json",
-                                            error: function() {
-                                                console.log('error', arguments);
+                                                        var elements = document.getElementById('mdldraft<?= $project['id'] ?>' + i.item.idx);
+                                                        if (elements) {
+                                                            elements.remove();
+                                                        }
+
+                                                        var containerlist = document.createElement('div');
+                                                        containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>' + i.item.idx)
+
+                                                        var divider = document.createElement('hr');
+                                                        divider.setAttribute('style', 'border-bottom: 2px solid #000;');
+
+                                                        var paketnamegrid = document.createElement('div');
+                                                        paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
+                                                        paketnamegrid.setAttribute('uk-grid', '');
+
+                                                        var paketnamecon = document.createElement('div');
+                                                        paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
+
+                                                        var paketname = document.createElement('div');
+                                                        paketname.setAttribute('class', 'uk-h3');
+                                                        paketname.setAttribute('style', 'text-transform: uppercase;');
+                                                        paketname.innerHTML = i.item.label;
+
+                                                        var closecontainer = document.createElement('div');
+                                                        closecontainer.setAttribute('class', 'uk-width-1-6');
+
+                                                        var closebutton = document.createElement('a');
+                                                        closebutton.setAttribute('class', 'uk-icon-button-delete');
+                                                        closebutton.setAttribute('uk-icon', 'close');
+                                                        closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>(' + i.item.idx + ')');
+
+                                                        var tablecon = document.createElement('div');
+                                                        tablecon.setAttribute('class', 'uk-overflow-auto');
+
+                                                        var tables = document.createElement('table');
+                                                        tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
+
+                                                        var thead = document.createElement('thead');
+
+                                                        var trhead = document.createElement('tr');
+
+                                                        var thchecklist = document.createElement('th');
+                                                        thchecklist.innerHTML = 'Checklist';
+
+                                                        var thname = document.createElement('th');
+                                                        thname.innerHTML = 'Nama';
+
+                                                        var thlength = document.createElement('th');
+                                                        thlength.innerHTML = 'Panjang';
+
+                                                        var thwidth = document.createElement('th');
+                                                        thwidth.innerHTML = 'Lebar';
+
+                                                        var thheigth = document.createElement('th');
+                                                        thheigth.innerHTML = 'Tinggi';
+
+                                                        var thvol = document.createElement('th');
+                                                        thvol.innerHTML = 'Volume';
+
+                                                        var thden = document.createElement('th');
+                                                        thden.innerHTML = 'Satuan';
+
+                                                        var thqty = document.createElement('th');
+                                                        thqty.innerHTML = 'Jumlah Item';
+
+                                                        var thprice = document.createElement('th');
+                                                        thprice.innerHTML = 'Harga';
+
+                                                        var tbody = document.createElement('tbody');
+
+                                                        emdlarray = arguments[0];
+
+                                                        for (t in emdlarray) {
+                                                            var trbody = document.createElement('tr');
+
+                                                            var tdchecklist = document.createElement('td');
+
+                                                            var inputchecklist = document.createElement('input');
+                                                            inputchecklist.setAttribute('type', 'checkbox');
+                                                            inputchecklist.setAttribute('class', 'uk-checkbox');
+                                                            inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                            inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
+
+                                                            var tdname = document.createElement('td');
+                                                            tdname.innerHTML = emdlarray[t]['name']
+
+                                                            var tdlength = document.createElement('td');
+                                                            tdlength.innerHTML = emdlarray[t]['length']
+
+                                                            var tdwidth = document.createElement('td');
+                                                            tdwidth.innerHTML = emdlarray[t]['width']
+
+                                                            var tdheight = document.createElement('td');
+                                                            tdheight.innerHTML = emdlarray[t]['height']
+
+                                                            var tdvol = document.createElement('td');
+                                                            tdvol.innerHTML = emdlarray[t]['volume']
+
+                                                            var tdden = document.createElement('td');
+                                                            if (emdlarray[t]['denomination'] === '1') {
+                                                                tdden.innerHTML = 'Unit'
+                                                            } else if (emdlarray[t]['denomination'] === '2') {
+                                                                tdden.innerHTML = 'Meter'
+                                                            } else if (emdlarray[t]['denomination'] === '3') {
+                                                                tdden.innerHTML = 'Meter Persegi'
+                                                            }
+
+                                                            var tdqty = document.createElement('td');
+                                                            tdqty.setAttribute('class', 'uk-form-controls');
+
+                                                            var inputqty = document.createElement('input');
+                                                            inputqty.setAttribute('class', 'uk-input uk-form-width-small');
+                                                            inputqty.setAttribute('type', 'number');
+                                                            inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                            inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
+                                                            inputqty.setAttribute('value', '0');
+                                                            inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + emdlarray[t]['id'] + ')');
+
+                                                            var tdprice = document.createElement('td');
+                                                            tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                            tdprice.innerHTML = 0;
+
+                                                            var hiddenprice = document.createElement('div');
+                                                            hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                            hiddenprice.setAttribute('hidden', '');
+                                                            hiddenprice.innerHTML = emdlarray[t]['price'];
+
+                                                            tdqty.appendChild(inputqty);
+                                                            tdchecklist.appendChild(inputchecklist);
+                                                            trbody.appendChild(tdchecklist);
+                                                            trbody.appendChild(tdname);
+                                                            trbody.appendChild(tdlength);
+                                                            trbody.appendChild(tdwidth);
+                                                            trbody.appendChild(tdheight);
+                                                            trbody.appendChild(tdvol);
+                                                            trbody.appendChild(tdden);
+                                                            trbody.appendChild(tdqty);
+                                                            trbody.appendChild(tdprice);
+                                                            trbody.appendChild(hiddenprice);
+                                                            tbody.appendChild(trbody);
+                                                        }
+                                                        trhead.appendChild(thchecklist);
+                                                        trhead.appendChild(thname);
+                                                        trhead.appendChild(thlength);
+                                                        trhead.appendChild(thwidth);
+                                                        trhead.appendChild(thheigth);
+                                                        trhead.appendChild(thvol);
+                                                        trhead.appendChild(thden);
+                                                        trhead.appendChild(thqty);
+                                                        trhead.appendChild(thprice);
+                                                        thead.appendChild(trhead);
+                                                        tables.appendChild(thead);
+                                                        tables.appendChild(tbody);
+                                                        tablecon.appendChild(tables);
+                                                        paketnamegrid.appendChild(paketnamecon);
+                                                        paketnamecon.appendChild(paketname);
+                                                        paketnamegrid.appendChild(closecontainer);
+                                                        closecontainer.appendChild(closebutton);
+                                                        containerlist.appendChild(paketnamegrid);
+                                                        containerlist.appendChild(tablecon);
+                                                        containerlist.appendChild(divider);
+                                                        pakets.appendChild(containerlist);
+                                                    },
+                                                })
                                             },
-                                            success: function() {
-                                                console.log('success', arguments);
-                                                document.getElementById('listmdl<?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                var pakets = document.getElementById('listmdl<?= $project['id'] ?>');
-
-                                                var elements = document.getElementById('mdldraft<?= $project['id'] ?>' + i.item.idx);
-                                                if (elements) {
-                                                    elements.remove();
-                                                }
-
-                                                var containerlist = document.createElement('div');
-                                                containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>' + i.item.idx)
-
-                                                var divider = document.createElement('hr');
-                                                divider.setAttribute('style', 'border-bottom: 2px solid #000;');
-
-                                                var paketnamegrid = document.createElement('div');
-                                                paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
-                                                paketnamegrid.setAttribute('uk-grid', '');
-
-                                                var paketnamecon = document.createElement('div');
-                                                paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
-
-                                                var paketname = document.createElement('div');
-                                                paketname.setAttribute('class', 'uk-h3');
-                                                paketname.setAttribute('style', 'text-transform: uppercase;');
-                                                paketname.innerHTML = i.item.label;
-
-                                                var closecontainer = document.createElement('div');
-                                                closecontainer.setAttribute('class', 'uk-width-1-6');
-
-                                                var closebutton = document.createElement('a');
-                                                closebutton.setAttribute('class', 'uk-icon-button-delete');
-                                                closebutton.setAttribute('uk-icon', 'close');
-                                                closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>(' + i.item.idx + ')');
-
-                                                var tablecon = document.createElement('div');
-                                                tablecon.setAttribute('class', 'uk-overflow-auto');
-
-                                                var tables = document.createElement('table');
-                                                tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
-
-                                                var thead = document.createElement('thead');
-
-                                                var trhead = document.createElement('tr');
-
-                                                var thchecklist = document.createElement('th');
-                                                thchecklist.innerHTML = 'Checklist';
-
-                                                var thname = document.createElement('th');
-                                                thname.innerHTML = 'Nama';
-
-                                                var thlength = document.createElement('th');
-                                                thlength.innerHTML = 'Panjang';
-
-                                                var thwidth = document.createElement('th');
-                                                thwidth.innerHTML = 'Lebar';
-
-                                                var thheigth = document.createElement('th');
-                                                thheigth.innerHTML = 'Tinggi';
-
-                                                var thvol = document.createElement('th');
-                                                thvol.innerHTML = 'Volume';
-
-                                                var thden = document.createElement('th');
-                                                thden.innerHTML = 'Satuan';
-
-                                                var thqty = document.createElement('th');
-                                                thqty.innerHTML = 'Jumlah Item';
-
-                                                var thprice = document.createElement('th');
-                                                thprice.innerHTML = 'Harga';
-
-                                                var tbody = document.createElement('tbody');
-
-                                                emdlarray = arguments[0];
-
-                                                for (t in emdlarray) {
-                                                    var trbody = document.createElement('tr');
-
-                                                    var tdchecklist = document.createElement('td');
-
-                                                    var inputchecklist = document.createElement('input');
-                                                    inputchecklist.setAttribute('type', 'checkbox');
-                                                    inputchecklist.setAttribute('class', 'uk-checkbox');
-                                                    inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
-
-                                                    var tdname = document.createElement('td');
-                                                    tdname.innerHTML = emdlarray[t]['name']
-
-                                                    var tdlength = document.createElement('td');
-                                                    tdlength.innerHTML = emdlarray[t]['length']
-
-                                                    var tdwidth = document.createElement('td');
-                                                    tdwidth.innerHTML = emdlarray[t]['width']
-
-                                                    var tdheight = document.createElement('td');
-                                                    tdheight.innerHTML = emdlarray[t]['height']
-
-                                                    var tdvol = document.createElement('td');
-                                                    tdvol.innerHTML = emdlarray[t]['volume']
-
-                                                    var tdden = document.createElement('td');
-                                                    if (emdlarray[t]['denomination'] === '1') {
-                                                        tdden.innerHTML = 'Unit'
-                                                    } else if (emdlarray[t]['denomination'] === '2') {
-                                                        tdden.innerHTML = 'Meter'
-                                                    } else if (emdlarray[t]['denomination'] === '3') {
-                                                        tdden.innerHTML = 'Meter Persegi'
-                                                    }
-
-                                                    var tdqty = document.createElement('td');
-                                                    tdqty.setAttribute('class', 'uk-form-controls');
-
-                                                    var inputqty = document.createElement('input');
-                                                    inputqty.setAttribute('class', 'uk-input uk-form-width-small');
-                                                    inputqty.setAttribute('type', 'number');
-                                                    inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
-                                                    inputqty.setAttribute('value', '0');
-                                                    inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + emdlarray[t]['id'] + ')');
-
-                                                    var tdprice = document.createElement('td');
-                                                    tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                    tdprice.innerHTML = 0;
-
-                                                    var hiddenprice = document.createElement('div');
-                                                    hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                    hiddenprice.setAttribute('hidden', '');
-                                                    hiddenprice.innerHTML = emdlarray[t]['price'];
-
-                                                    tdqty.appendChild(inputqty);
-                                                    tdchecklist.appendChild(inputchecklist);
-                                                    trbody.appendChild(tdchecklist);
-                                                    trbody.appendChild(tdname);
-                                                    trbody.appendChild(tdlength);
-                                                    trbody.appendChild(tdwidth);
-                                                    trbody.appendChild(tdheight);
-                                                    trbody.appendChild(tdvol);
-                                                    trbody.appendChild(tdden);
-                                                    trbody.appendChild(tdqty);
-                                                    trbody.appendChild(tdprice);
-                                                    trbody.appendChild(hiddenprice);
-                                                    tbody.appendChild(trbody);
-                                                }
-                                                trhead.appendChild(thchecklist);
-                                                trhead.appendChild(thname);
-                                                trhead.appendChild(thlength);
-                                                trhead.appendChild(thwidth);
-                                                trhead.appendChild(thheigth);
-                                                trhead.appendChild(thvol);
-                                                trhead.appendChild(thden);
-                                                trhead.appendChild(thqty);
-                                                trhead.appendChild(thprice);
-                                                thead.appendChild(trhead);
-                                                tables.appendChild(thead);
-                                                tables.appendChild(tbody);
-                                                tablecon.appendChild(tables);
-                                                paketnamegrid.appendChild(paketnamecon);
-                                                paketnamecon.appendChild(paketname);
-                                                paketnamegrid.appendChild(closecontainer);
-                                                closecontainer.appendChild(closebutton);
-                                                containerlist.appendChild(paketnamegrid);
-                                                containerlist.appendChild(tablecon);
-                                                containerlist.appendChild(divider);
-                                                pakets.appendChild(containerlist);
-                                            },
+                                            minLength: 2
                                         })
-                                    },
-                                    minLength: 2
-                                })
-                            })
+                                    })
 
-                            function price<?= $project['id'] ?>(l) {
-                                var ebaseprice = document.getElementById('eprice[<?= $project['id'] ?>' + l + ']').innerHTML;
-                                var ebaseqty = document.getElementById('eqty[<?= $project['id'] ?>' + l + ']').value;
-                                var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
-                                var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
-                                var eprojprice = ebaseprice * ebaseqty;
-                                epricetd.innerHTML = eprojprice;
+                                    function price<?= $project['id'] ?>(l) {
+                                        var ebaseprice = document.getElementById('eprice[<?= $project['id'] ?>' + l + ']').innerHTML;
+                                        var ebaseqty = document.getElementById('eqty[<?= $project['id'] ?>' + l + ']').value;
+                                        var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
+                                        var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
+                                        var eprojprice = ebaseprice * ebaseqty;
+                                        epricetd.innerHTML = eprojprice;
 
-                                if (ebaseqty > 0) {
-                                    echeckbox.checked = true;
-                                } else {
-                                    echeckbox.checked = false;
-                                }
-                            };
+                                        if (ebaseqty > 0) {
+                                            echeckbox.checked = true;
+                                        } else {
+                                            echeckbox.checked = false;
+                                        }
+                                    };
 
-                            function removeList<?= $project['id'] ?>(d) {
-                                const removeList = document.getElementById('mdldraft<?= $project['id'] ?>' + d);
-                                removeList.remove();
-                            };
-                        </script>
-                    <?php } else { ?>
-                        <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                            <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
-                            <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                <table class="uk-table uk-table-middle uk-table-divider">
-                                    <thead>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <th>Panjang</th>
-                                            <th>Lebar</th>
-                                            <th>Tinggi</th>
-                                            <th>Volume</th>
-                                            <th>Satuan</th>
-                                            <th>Keterangan</th>
-                                            <th>Jumlah Pesanan</th>
-                                            <th>Harga</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
-                                            <tr>
-                                                <td><?= $mdlrab['name'] ?></td>
-                                                <td><?= $mdlrab['length'] ?></td>
-                                                <td><?= $mdlrab['width'] ?></td>
-                                                <td><?= $mdlrab['height'] ?></td>
-                                                <td><?= $mdlrab['volume'] ?></td>
-                                                <td>
-                                                    <?php
-                                                    if ($mdlrab['denomination'] === "1") {
-                                                        echo "Unit";
-                                                    } elseif ($mdlrab['denomination'] === "2") {
-                                                        echo "Meter Lari";
-                                                    } elseif ($mdlrab['denomination'] === "3") {
-                                                        echo "Meter Persegi";
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td><?= $mdlrab['keterangan'] ?></td>
-                                                <td><?= $mdlrab['qty'] ?></td>
-                                                <td><?= $mdlrab['price'] ?></td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                                </div>
-                            </div>
-                    <?php } ?>
+                                    function removeList<?= $project['id'] ?>(d) {
+                                        const removeList = document.getElementById('mdldraft<?= $project['id'] ?>' + d);
+                                        removeList.remove();
+                                    };
+                                </script>
+                            <?php } else { ?>
+                                <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                    <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
+                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                        <table class="uk-table uk-table-middle uk-table-divider">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama</th>
+                                                    <th>Panjang</th>
+                                                    <th>Lebar</th>
+                                                    <th>Tinggi</th>
+                                                    <th>Volume</th>
+                                                    <th>Satuan</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Jumlah Pesanan</th>
+                                                    <th>Harga</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
+                                                    <tr>
+                                                        <td><?= $mdlrab['name'] ?></td>
+                                                        <td><?= $mdlrab['length'] ?></td>
+                                                        <td><?= $mdlrab['width'] ?></td>
+                                                        <td><?= $mdlrab['height'] ?></td>
+                                                        <td><?= $mdlrab['volume'] ?></td>
+                                                        <td>
+                                                            <?php
+                                                            if ($mdlrab['denomination'] === "1") {
+                                                                echo "Unit";
+                                                            } elseif ($mdlrab['denomination'] === "2") {
+                                                                echo "Meter Lari";
+                                                            } elseif ($mdlrab['denomination'] === "3") {
+                                                                echo "Meter Persegi";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td><?= $mdlrab['keterangan'] ?></td>
+                                                        <td><?= $mdlrab['qty'] ?></td>
+                                                        <td><?= $mdlrab['price'] ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                            <?php }
+                        }
+                    } ?>
                     <!-- Detail Pemesanan Seciton End -->
 
                     <!-- SPK Section -->
@@ -1298,6 +1299,66 @@
                         </script>
                     <?php } ?>
                     <!-- SPK Section End -->
+
+                    <!-- Production Section -->
+                    <?php if ($project['status_spk'] = 1) { ?>
+                        <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                            <div>
+                                <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
+                            </div>
+                            <div class="uk-text-right">
+                                <a class="uk-link-reset uk-icon-button" id="toggleproduction<?= $project['id'] ?>" uk-toggle="target: .toggleproduction<?= $project['id'] ?>"><span class="uk-light" id="closeproduction<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openproduction<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                            </div>
+                        </div>
+
+                        <div class="toggleproduction<?= $project['id'] ?>" hidden>
+                            <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                <table class="uk-table uk-table-middle uk-table-divider">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Gambar Kerja</th>
+                                            <th>Mesin Awal</th>
+                                            <th>Tukang</th>
+                                            <th>Mesin Lanjutan</th>
+                                            <th>Finishing</th>
+                                            <th>Packing</th>
+                                            <th>Setting</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
+                                            <tr>
+                                                <td><?= $production['name'] ?></td>
+                                                <td><?= $production['gambar_kerja'] ?></td>
+                                                <td><?= $production['mesin_awal'] ?></td>
+                                                <td><?= $production['tukang'] ?></td>
+                                                <td><?= $production['mesin_lanjutan'] ?></td>
+                                                <td><?= $production['finishing'] ?></td>
+                                                <td><?= $production['packing'] ?></td>
+                                                <td><?= $production['setting'] ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                            // Dropdown Production
+                            document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
+                                if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                    document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                    document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                } else {
+                                    document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                    document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                }
+                            });
+                        </script>
+                    <?php } ?>
+                    <!-- Production Section End -->
 
                     <div class="uk-modal-footer uk-text-right">
                         <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
