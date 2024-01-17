@@ -115,6 +115,8 @@ class Project extends BaseController
 
                     // Design
                     $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
+                } else {
+                    $rabs = [];
                 }
             }
 
