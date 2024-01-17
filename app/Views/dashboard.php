@@ -315,11 +315,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr class="uk-margin">
+                                        <hr class="uk-margin-bottom">
                                     </div>
                                     <?php if (!empty($project['id'])) { ?>
                                         <div class="uk-width-1-1 uk-margin-remove" id="contentsph<?= $project['id'] ?>" hidden>
-                                            <table class="uk-table">
+                                            <table class="uk-table uk-table-responsive uk-table-divider">
                                                 <thead>
                                                     <tr>
                                                         <th class="">Nama</th>
@@ -347,9 +347,21 @@
                                                                                     <td class="uk-text-center"><?= $mdl['width'] ?></td>
                                                                                     <td class="uk-text-center"><?= $mdl['height'] ?></td>
                                                                                     <td class="uk-text-center"><?= $mdl['volume'] ?></td>
-                                                                                    <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
+                                                                                    <td class="uk-text-center">
+                                                                                        <?php
+                                                                                        if ($mdl['denomination'] === "1") {
+                                                                                            echo "Unit";
+                                                                                        } elseif ($mdl['denomination'] === "2") {
+                                                                                            echo "Meter Lari";
+                                                                                        } elseif ($mdl['denomination'] === "3") {
+                                                                                            echo "Meter Persegi";
+                                                                                        } elseif ($mdl['denomination'] === "4") {
+                                                                                            echo "Set";
+                                                                                        }
+                                                                                        ?>
+                                                                                    </td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                                                                    <td class="uk-text-center"><?= $mdl['price'] ?></td>
+                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format((int)$rab['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -365,6 +377,7 @@
                                             <p class="uk-text-right uk-width-1-1" uk-margin>
                                                 <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
                                             </p>
+                                            <hr class="uk-margin">
                                         </div>
 
                                         <script>
@@ -985,22 +998,22 @@
                             </div>
                         </div>
                     </div>
-<?php } ?>
-<?php } ?>
-<?php } else { ?>
-    <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
-<?php } ?>
-<!-- end of Content -->
+                <?php } ?>
+            <?php } ?>
+        <?php } else { ?>
+            <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
+        <?php } ?>
+        <!-- end of Content -->
 
-<?= $pager ?>
-<script>
-    document.getElementById('search').addEventListener("change", submitform);
-    document.getElementById('perpage').addEventListener("change", submitform);
+        <?= $pager ?>
+        <script>
+            document.getElementById('search').addEventListener("change", submitform);
+            document.getElementById('perpage').addEventListener("change", submitform);
 
-    function submitform() {
-        document.getElementById('searchform').submit();
-    };
-</script>
-<?php } ?>
+            function submitform() {
+                document.getElementById('searchform').submit();
+            };
+        </script>
+    <?php } ?>
 </div>
 <?= $this->endSection() ?>

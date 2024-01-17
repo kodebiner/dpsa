@@ -694,7 +694,6 @@
                                                 <th>Keterangan</th>
                                                 <th>Jumlah Pesanan</th>
                                                 <th>Harga</th>
-                                                <th class="uk-text-center">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -726,6 +725,8 @@
                                                                     echo "Meter Lari";
                                                                 } elseif ($mdl['denomination'] === "3") {
                                                                     echo "Meter Persegi";
+                                                                } elseif ($mdl['denomination'] === "4") {
+                                                                    echo "Set";
                                                                 }
                                                                 ?>
                                                             </td>
@@ -734,7 +735,7 @@
                                                                 <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
                                                             </td>
                                                             <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                            <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?= (int)$mdl['qty'] * (int)$mdl['price'] ?></td>
+                                                            <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?="Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?></td>
                                                         </tr>
                                                         <script>
                                                             function eprice(n) {

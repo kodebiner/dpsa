@@ -153,12 +153,13 @@
                             echo "Meter Lari";
                         } elseif ($mdl['denomination'] === "3") {
                             echo "Meter Persegi";
+                        } elseif ($mdl['denomination'] === "4") {
+                            echo "Set";
                         }
                         ?>
                     </td>
                     <td class=""><?= $mdl['keterangan'] ?></td>
-                    <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');
-                        " "; ?></td>
+                    <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?> </td>
                     <td class="uk-text-center">
                         <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                             <div>
@@ -279,6 +280,7 @@
                             <option value="1">Unit</option>
                             <option value="2">Meter Lari</option>
                             <option value="3">Meter Persegi</option>
+                            <option value="4">Set</option>
                         </select>
                     </div>
 
@@ -286,7 +288,7 @@
 
                     <script>
                         document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
-                            if (this.value == "1" || this.value == "2" || this.value == "3") {
+                            if (this.value == "1" || this.value == "2" || this.value == "3" || this.value == "4") {
                                 var elements = document.getElementById('contdim<?= $paket['id'] ?>');
                                 if (elements) {
                                     elements.remove();
@@ -488,6 +490,7 @@
                                 <option value="1" <?php if ($mdl['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
                                 <option value="2" <?php if ($mdl['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
                                 <option value="3" <?php if ($mdl['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                                <option value="4" <?php if ($mdl['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
                             </select>
                         </div>
 
@@ -542,15 +545,14 @@
                         <div class="uk-margin">
                             <label class="uk-form-label" for="price">Harga</label>
                             <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="price" name="price" placeholder="<?php echo "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');
-                                                                                                            " "; ?>" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="curencyupdate" />
+                                <input type="text" class="uk-input" id="price" name="price" placeholder="<?php echo "Rp. " . number_format((int)$mdl['price'], 0, ',', '.'); " "; ?>" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="<?= $mdl['price'] ?>" data-type="curencyupdate" />
                             </div>
                         </div>
 
                         <div class="uk-margin">
                             <label class="uk-form-label" for="price">Keterangan</label>
                             <div class="uk-margin">
-                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdl['keterangan'] ?>" aria-label="Textarea"></textarea>
+                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdl['keterangan'] ?>" value="<?= $mdl['keterangan'] ?>" aria-label="Textarea"></textarea>
                             </div>
                         </div>
 
