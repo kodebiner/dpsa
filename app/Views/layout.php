@@ -415,20 +415,12 @@
                     <?php if ($ismobile === true) { ?>
                         <div>
                             <div class="uk-margin-small uk-text-center">
-                                Copyright &copy; <?php auto_copyright("2023"); ?>
-                            </div>
-                            <div class="uk-margin-small uk-text-center uk-link-reset">
-                                Developed by<br /><a href="https://binary111.com" target="_blank">PT. Kodebiner Teknologi Indonesia</a>
+                                Copyright &copy; <?php auto_copyright("2023"); ?><br/>PT Dharma Putra Sejahtera Abadi
                             </div>
                         </div>
                     <?php } else { ?>
-                        <div class=" uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
-                            <div class="uk-margin-left">
-                                Copyright &copy; <?php auto_copyright("2023"); ?>
-                            </div>
-                            <div class="uk-text-right uk-link-reset">
-                                Developed by<br /><a href="https://binary111.com" target="_blank">PT. Kodebiner Teknologi Indonesia</a>
-                            </div>
+                        <div class="uk-margin-left">
+                            Copyright &copy; <?php auto_copyright("2023"); ?><br/>PT Dharma Putra Sejahtera Abadi
                         </div>
                     <?php } ?>
                 </div>
