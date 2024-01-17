@@ -10,6 +10,8 @@ use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
 
+use Mpdf\Mpdf;
+
 class Project extends BaseController
 {
     protected $db, $builder;
@@ -114,7 +116,11 @@ class Project extends BaseController
                     }
 
                     // Autocomplete Paket
-                    $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
+                    if (!empty($paketdata)) {
+                        $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
+                    } else {
+                        $projectdata[$project['id']]['autopaket']   = [];
+                    }
 
                     // Design
                     $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->first();
@@ -122,6 +128,8 @@ class Project extends BaseController
             } else {
                 $rabs = [];
             }
+
+            // dd($projectdata[$project['id']]['paket']);
 
             $data                   = $this->data;
             $data['title']          = "Proyek";
@@ -410,8 +418,8 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
 
-        require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
-        $mpdf = new \Mpdf\Mpdf();
+        // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
+        $mpdf = new Mpdf();
         $mpdf->AddPage("P", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);
