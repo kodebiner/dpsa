@@ -148,9 +148,9 @@ $routes->group('account',['filter' => 'login'], function ($routes) {
 
 // Paket
 $routes->group('paket',['filter' => 'login'], function ($routes) {
-    $routes->post('create', 'MDL::create');
-    $routes->post('update/(:num)', 'MDL::update/$1');
-    $routes->get('delete/(:num)', 'MDL::delete/$1');
+    $routes->post('create', 'Mdl::create');
+    $routes->post('update/(:num)', 'Mdl::update/$1');
+    $routes->get('delete/(:num)', 'Mdl::delete/$1');
 });
 
 // Bar
