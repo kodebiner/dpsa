@@ -10,7 +10,7 @@ use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
 
-use Mpdf\Mpdf;
+// use Mpdf;
 
 class Project extends BaseController
 {
@@ -456,7 +456,7 @@ class Project extends BaseController
         $data['client']         = $client;
 
         // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
-        $mpdf = new Mpdf();
+        $mpdf = new Mpdf\mPDF();
         $mpdf->AddPage("P", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);
