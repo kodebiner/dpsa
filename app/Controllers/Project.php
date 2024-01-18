@@ -390,63 +390,80 @@ class Project extends BaseController
             // Production Data
             // Gambar Kerja
             if (isset($input['gambarkerja' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['gambarkerja' . $id] as $prodid => $gambar) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'gambar_kerja'      => $gambar,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Mesin Awal
             if (isset($input['mesinawal' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['mesinawal' . $id] as $prodid => $mesinawal) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'mesin_awal'        => $mesinawal,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Tukang
             if (isset($input['tukang' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['tukang' . $id] as $prodid => $tukang) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'tukang'            => $tukang,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Mesin Lanjutan
             if (isset($input['mesinlanjutan' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['mesinlanjutan' . $id] as $prodid => $mesinlanjutan) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'mesin_lanjutan'    => $mesinlanjutan,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Finishing
             if (isset($input['finishing' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['finishing' . $id] as $prodid => $finishing) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'finishing'         => $finishing,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Packing
             if (isset($input['packing' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['packing' . $id] as $prodid => $packing) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'packing'           => $packing,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
 
             // Setting
             if (isset($input['setting' . $id])) {
-                $checked    = TRUE;
-            } else {
-                $checked    = FALSE;
+                foreach ($input['setting' . $id] as $prodid => $setting) {
+                    $productioninput = [
+                        'id'                => $prodid,
+                        'setting'           => $setting,
+                    ];
+                    $ProductionModel->save($productioninput);
+                }
             }
-
-            $productioninput = [
-                'gambar_kerja'      => $checked,
-                'mesin_awal'        => $checked,
-                'tukang'            => $checked,
-                'mesin_lanjutan'    => $checked,
-                'finishing'         => $checked,
-                'packing'           => $checked,
-                'setting'           => $checked,
-            ];
-            $ProductionModel->save($productioninput);
 
             // Project Data
             $project = [

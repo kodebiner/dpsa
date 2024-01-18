@@ -1331,52 +1331,52 @@
                                             <tr>
                                                 <td><?= $production['name'] ?></td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['gambar_kerja']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['mesin_awal']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['tukang']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['tukang']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['mesin_lanjutan']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['finishing']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['finishing']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['packing']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['packing']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                                 <td class="uk-text-center">
-                                                    <?php if (strtoupper($production['setting']) == 'TRUE') { ?>
+                                                    <?php if (strtoupper($production['setting']) == '1') { ?>
                                                         <div uk-icon="check"></div>
                                                     <?php } else { ?>
-                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id']?>]" value="1">
                                                     <?php } ?>
                                                 </td>
                                             </tr>
