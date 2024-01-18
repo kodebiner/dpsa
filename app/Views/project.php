@@ -1317,26 +1317,68 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
-                                            <th>Gambar Kerja</th>
-                                            <th>Mesin Awal</th>
-                                            <th>Tukang</th>
-                                            <th>Mesin Lanjutan</th>
-                                            <th>Finishing</th>
-                                            <th>Packing</th>
-                                            <th>Setting</th>
+                                            <th class="uk-text-center">Gambar Kerja</th>
+                                            <th class="uk-text-center">Mesin Awal</th>
+                                            <th class="uk-text-center">Tukang</th>
+                                            <th class="uk-text-center">Mesin Lanjutan</th>
+                                            <th class="uk-text-center">Finishing</th>
+                                            <th class="uk-text-center">Packing</th>
+                                            <th class="uk-text-center">Setting</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
                                             <tr>
                                                 <td><?= $production['name'] ?></td>
-                                                <td><?= $production['gambar_kerja'] ?></td>
-                                                <td><?= $production['mesin_awal'] ?></td>
-                                                <td><?= $production['tukang'] ?></td>
-                                                <td><?= $production['mesin_lanjutan'] ?></td>
-                                                <td><?= $production['finishing'] ?></td>
-                                                <td><?= $production['packing'] ?></td>
-                                                <td><?= $production['setting'] ?></td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['gambar_kerja']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['mesin_awal']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['tukang']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['mesin_lanjutan']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['finishing']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['packing']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    <?php if (strtoupper($production['setting']) == 'TRUE') { ?>
+                                                        <div uk-icon="check"></div>
+                                                    <?php } else { ?>
+                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id']?>]">
+                                                    <?php } ?>
+                                                </td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

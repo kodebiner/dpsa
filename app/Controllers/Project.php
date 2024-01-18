@@ -10,7 +10,7 @@ use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
 
-// use Mpdf;
+use Mpdf\Mpdf;
 
 class Project extends BaseController
 {
@@ -387,6 +387,67 @@ class Project extends BaseController
                 $status = 1;
             }
 
+            // Production Data
+            // Gambar Kerja
+            if (isset($input['gambarkerja' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Mesin Awal
+            if (isset($input['mesinawal' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Tukang
+            if (isset($input['tukang' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Mesin Lanjutan
+            if (isset($input['mesinlanjutan' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Finishing
+            if (isset($input['finishing' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Packing
+            if (isset($input['packing' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            // Setting
+            if (isset($input['setting' . $id])) {
+                $checked    = TRUE;
+            } else {
+                $checked    = FALSE;
+            }
+
+            $productioninput = [
+                'gambar_kerja'      => $checked,
+                'mesin_awal'        => $checked,
+                'tukang'            => $checked,
+                'mesin_lanjutan'    => $checked,
+                'finishing'         => $checked,
+                'packing'           => $checked,
+                'setting'           => $checked,
+            ];
+            $ProductionModel->save($productioninput);
+
             // Project Data
             $project = [
                 'id'            => $id,
@@ -455,8 +516,8 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
 
-        // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
-        $mpdf = new Mpdf\mPDF();
+        require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
+        $mpdf = new \Mpdf\Mpdf();
         $mpdf->AddPage("P", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);

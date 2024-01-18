@@ -194,20 +194,28 @@ class Mdl extends BaseController
 
         // Validation
         $rules = [
-            'name'      => [
-                'label'     => 'Nama',
-                'rules'     => 'required|is_unique[mdl.name]',
+            'length'      => [
+                'label'     => 'Panjang',
+                'rules'     => 'required|decimal',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                 ],
             ],
-            'price'     => [
-                'label'     => 'Harga',
-                'rules'     => 'required',
+            'width'      => [
+                'label'     => 'Lebar',
+                'rules'     => 'required|decimal',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    // 'decimal'       => '{field} hanya boleh berisi angka.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
+                ],
+            ],
+            'height'      => [
+                'label'     => 'Panjang',
+                'rules'     => 'required|decimal',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                 ],
             ],
         ];
@@ -215,117 +223,20 @@ class Mdl extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Save Data
-        if ($input['denomination'] === "2") {
+        $mdl = [
+            'name'          => $input['name'],
+            'length'        => $input['length'],
+            'width'         => $input['width'],
+            'height'        => $input['height'],
+            'volume'        => $input['length'],
+            'denomination'  => $input['denomination'],
+            'keterangan'    => $input['keterangan'],
+            'price'         => toInt($str),
+            'paketid'       => $id,
+        ];
 
-            // Validation
-            $rules = [
-                'length'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'width'      => [
-                    'label'     => 'Lebar',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'height'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            $mdl = [
-                'name'          => $input['name'],
-                'length'        => $input['length'],
-                'width'         => $input['width'],
-                'height'        => $input['height'],
-                'volume'        => $input['length'],
-                'denomination'  => $input['denomination'],
-                'keterangan'    => $input['keterangan'],
-                'price'         => toInt($str),
-                'paketid'       => $id,
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdl);
-        } elseif ($input['denomination'] === "3") {
-
-            // Validation
-            $rules = [
-                'length'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'width'      => [
-                    'label'     => 'Lebar',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'height'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            $mdl = [
-                'name'          => $input['name'],
-                'length'        => $input['length'],
-                'width'         => $input['width'],
-                'height'        => $input['height'],
-                'volume'        => $input['length'] * $input['height'],
-                'denomination'  => $input['denomination'],
-                'keterangan'    => $input['keterangan'],
-                'price'         => toInt($str),
-                'paketid'       => $id,
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdl);
-        } else {
-            $mdl = [
-                'name'          => $input['name'],
-                'length'        => NULL,
-                'width'         => NULL,
-                'height'        => NULL,
-                'volume'        => '1',
-                'denomination'  => $input['denomination'],
-                'keterangan'    => $input['keterangan'],
-                'price'         => toInt($str),
-                'paketid'       => $id,
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdl);
-        }
+        // Save Data MDL
+        $MdlModel->save($mdl);
 
         // Record Log
         $Paket = $PaketModel->find($id);
@@ -348,22 +259,31 @@ class Mdl extends BaseController
             return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
         }
 
+
         // Validation
         $rules = [
-            'name'      => [
-                'label'     => 'Nama',
-                'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
+            'length'      => [
+                'label'     => 'Panjang',
+                'rules'     => 'required|decimal',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                 ],
             ],
-            'price'     => [
-                'label'     => 'Harga',
-                'rules'     => 'required',
+            'width'      => [
+                'label'     => 'Lebar',
+                'rules'     => 'required|decimal',
                 'errors'    => [
                     'required'      => '{field} wajib diisi.',
-                    // 'decimal'       => '{field} hanya boleh berisi angka.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
+                ],
+            ],
+            'height'      => [
+                'label'     => 'Panjang',
+                'rules'     => 'required|decimal',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
                 ],
             ],
         ];
@@ -371,120 +291,21 @@ class Mdl extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Filter Condition Meters Or Unit
-        if ($input['denomination'] === "2") {
+        $mdlup = [
+            'id'            => $id,
+            'name'          => $input['name'],
+            'denomination'  => $input['denomination'],
+            'length'        => $input['length'],
+            'width'         => $input['width'],
+            'height'        => $input['height'],
+            'volume'        => $input['length'],
+            'keterangan'    => $input['keterangan'],
+            'price'         => strupdate($str),
+            'paketid'       => $input['paketid'],
+        ];
 
-            // Validation
-            $rules = [
-                'length'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'width'      => [
-                    'label'     => 'Lebar',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'height'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            $mdlup = [
-                'id'            => $id,
-                'name'          => $input['name'],
-                'denomination'  => $input['denomination'],
-                'length'        => $input['length'],
-                'width'         => $input['width'],
-                'height'        => $input['height'],
-                'volume'        => $input['length'],
-                'keterangan'    => $input['keterangan'],
-                'price'         => strupdate($str),
-                'paketid'       => $input['paketid'],
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdlup);
-        } elseif ($input['denomination'] === "3") {
-
-            // Validation
-            $rules = [
-                'length'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'width'      => [
-                    'label'     => 'Lebar',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-                'height'      => [
-                    'label'     => 'Panjang',
-                    'rules'     => 'required|decimal',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'decimal'       => '{field} hanya boleh berisi angka desimal (koma "," desimal menggunakan titik ".").',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            $mdlup = [
-                'id'            => $id,
-                'name'          => $input['name'],
-                'denomination'  => $input['denomination'],
-                'length'        => $input['length'],
-                'width'         => $input['width'],
-                'height'        => $input['height'],
-                'volume'        => $input['length'] * $input['height'],
-                'keterangan'    => $input['keterangan'],
-                'price'         => strupdate($str),
-                'paketid'       => $input['paketid'],
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdlup);
-        } else {
-            $mdlup = [
-                'id'            => $id,
-                'name'          => $input['name'],
-                'denomination'  => $input['denomination'],
-                'length'        => NULL,
-                'width'         => NULL,
-                'height'        => NULL,
-                'volume'        => '1',
-                'keterangan'    => $input['keterangan'],
-                'price'         => strupdate($str),
-                'paketid'       => $input['paketid'],
-            ];
-
-            // Save Data MDL
-            $MdlModel->save($mdlup);
-        }
+        // Save Data MDL
+        $MdlModel->save($mdlup);
 
         // Return
         return redirect()->back()->with('message', 'Data Behasil Diperbaharui');
@@ -499,6 +320,6 @@ class Mdl extends BaseController
         $MdlModel->delete($id);
 
         // Return
-        return redirect()->back()->with('errors', 'Data Telah Dihapuskan');
+        return redirect()->back()->with('error', 'Data Telah Dihapuskan');
     }
 }
