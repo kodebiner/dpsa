@@ -1301,7 +1301,7 @@
                     <!-- SPK Section End -->
 
                     <!-- Production Section -->
-                    <?php if ($project['status_spk'] = 1) { ?>
+                    <?php if ($project['status_spk'] == 1) { ?>
                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                             <div>
                                 <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
