@@ -177,11 +177,9 @@
                         if (document.getElementById('close<?= $paket['id'] ?>').hasAttribute('hidden')) {
                             document.getElementById('close<?= $paket['id'] ?>').removeAttribute('hidden');
                             document.getElementById('open<?= $paket['id'] ?>').setAttribute('hidden', '');
-                            document.getElementById('keterangan<?= $paket['id'] ?>').removeAttribute('hidden');
                         } else {
                             document.getElementById('open<?= $paket['id'] ?>').removeAttribute('hidden');
                             document.getElementById('close<?= $paket['id'] ?>').setAttribute('hidden', '');
-                            document.getElementById('keterangan<?= $paket['id'] ?>').setAttribute('hidden');
 
                         }
                     });
