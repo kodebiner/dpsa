@@ -113,8 +113,8 @@
                 <th>Tinggi</th>
                 <th>Volume</th>
                 <th>Satuan</th>
-                <th class="uk-table-width-medium">Keterangan</th>
-                <th>Harga</th>
+                <th class="uk-width-medium">Keterangan</th>
+                <th class="uk-width-small">Harga</th>
                 <th class="uk-text-center">Aksi</th>
             </tr>
         </thead>
