@@ -69,7 +69,7 @@ class Project extends BaseController
                                 'denomination'  => $mdlr['denomination'],
                                 'keterangan'    => $mdlr['keterangan'],
                                 'qty'           => $rab['qty'],
-                                'price'         => (Int)$rab['qty'] * (Int)$mdlr['price'],
+                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
                             ];
                         }
                     }
@@ -81,7 +81,7 @@ class Project extends BaseController
                         foreach ($paketproject as $pack) {
                             $paketdata[]    = $pack['id'];
                             $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
-        
+
                             // MDL Paket
                             $mdlpack        = $MdlModel->where('paketid', $pack['id'])->find();
                             foreach ($mdlpack as $mdl) {
@@ -96,7 +96,7 @@ class Project extends BaseController
                                     'keterangan'    => $mdl['keterangan'],
                                     'price'         => $mdl['price'],
                                 ];
-        
+
                                 // Checklist RAB
                                 $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
                                 if (!empty($rabpack)) {
@@ -127,7 +127,7 @@ class Project extends BaseController
                     $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
                     if (!empty($productions)) {
                         foreach ($productions as $production) {
-    
+
                             // MDL Production
                             $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
                             foreach ($mdlprod as $mdlp) {
@@ -309,7 +309,7 @@ class Project extends BaseController
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|is_unique[project.name,project.id,'.$id.']',
+                    'rules'  => 'required|is_unique[project.name,project.id,' . $id . ']',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
@@ -371,7 +371,7 @@ class Project extends BaseController
                     ];
                     $DesignModel->insert($datadesign);
                 } else {
-                    unlink(FCPATH.'/img/design/'.$design['submitted']);
+                    unlink(FCPATH . '/img/design/' . $design['submitted']);
                     $datadesign = [
                         'id'            => $design['id'],
                         'projectid'     => $id,
@@ -475,7 +475,7 @@ class Project extends BaseController
                 'status'        => $status,
             ];
             $ProjectModel->save($project);
-            
+
             return redirect()->back()->with('message', "Data berhasil di perbaharui.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -533,16 +533,38 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
 
-        require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
+        // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
         $mpdf = new \Mpdf\Mpdf();
-        $mpdf->AddPage("P", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+        $mpdf->AddPage("L", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);
-        $filename = "LaporanSph".$projects['name']." ".date_format($date,'d-m-Y').".pdf";
-        $html = view('Views/sphprint',$data);
+        $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
+        $html = view('Views/sphprint', $data);
         $mpdf->WriteHTML($html);
         $mpdf->Output($filename, 'D');
-
     }
 
+    public function sphview($id)
+    {
+        // Calling models
+        $ProjectModel   = new ProjectModel;
+        $CompanyModel   = new CompanyModel();
+        $RabModel       = new RabModel();
+        $PaketModel     = new PaketModel();
+        $MdlModel       = new MdlModel();
+
+        $projects = $ProjectModel->find($id);
+        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+
+        // Parsing Data to View
+        $data                   = $this->data;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['projects']       = $projects;
+        $data['rabs']           = $RabModel->findAll();
+        $data['pakets']         = $PaketModel->findAll();
+        $data['mdls']           = $MdlModel->findAll();
+        $data['client']         = $client;
+        return view('sphview', $data);
+    }
 }

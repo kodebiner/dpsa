@@ -114,6 +114,7 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->post('update/(:num)', 'Project::update/$1');
     $routes->get('delete/(:num)', 'Project::delete/$1');
     $routes->get('sphprint/(:num)', 'Project::sphprint/$1');
+    $routes->get('sphview/(:num)', 'Project::sphview/$1');
 
     // Project Temp Routes
     // $routes->get('', 'ProjectTemp::index');

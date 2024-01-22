@@ -666,7 +666,7 @@
                         <div class="uk-margin">
                             <label class="uk-form-label" for="price">Keterangan</label>
                             <div class="uk-margin">
-                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdl['keterangan'] ?>" value="<?= $mdl['keterangan'] ?>" aria-label="Textarea"></textarea>
+                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdl['keterangan'] ?>" value="<?= $mdl['keterangan'] ?>" aria-label="Textarea"><?= $mdl['keterangan'] ?></textarea>
                             </div>
                         </div>
 

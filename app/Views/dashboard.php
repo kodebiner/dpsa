@@ -361,7 +361,20 @@
                                                                                         ?>
                                                                                     </td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format((int)$rab['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?></td>
+                                                                                    <?php
+                                                                                    $price = "";
+                                                                                    if ($mdl['denomination'] === "1") {
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    } elseif ($mdl['denomination'] === "2") {
+                                                                                        $price  = $mdl['length'] * $mdl['price'];
+                                                                                    } elseif ($mdl['denomination'] === "3") {
+                                                                                        $luas   =   $mdl['height'] * $mdl['length'];
+                                                                                        $price  =   $mdl['price'] * $luas;
+                                                                                    } elseif ($mdl['denomination'] === "4") {
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    }
+                                                                                    ?>
+                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format($price, 0, ',', '.');" "; ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -375,7 +388,8 @@
                                                 </tbody>
                                             </table>
                                             <p class="uk-text-right uk-width-1-1" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
+                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a> -->
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a>
                                             </p>
                                             <hr class="uk-margin">
                                         </div>
@@ -485,7 +499,7 @@
                                                         </div>
                                                         <div class="uk-width-1-3@m">
                                                             <div>
-                                                                <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
+                                                                <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-text"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -497,7 +511,7 @@
                                                         <div class="uk-width-1-3@m">
                                                             <div>
                                                                 <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
-                                                                    <a href="img/revisi/<?= $revisi ?>" target="_blank" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?> </a>
+                                                                    <a href="img/revisi/<?= $revisi ?>" target="_blank" uk-icon="file-text"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?> </a>
                                                                 <?php } else { ?>
                                                                     -
                                                                 <?php } ?>
@@ -564,7 +578,7 @@
                                                                     </div>
                                                                     <div class="uk-card-body">
                                                                         <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
-                                                                            <h6><a href="img/revisi/<?= $revisi ?>" uk-icon="file-pdf"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a></h6>
+                                                                            <h6><a href="img/revisi/<?= $revisi ?>" uk-icon="file-text"></a> <a href="img/revisi/<?= $revisi ?>" target="_blank"><?= $revisi ?></a></h6>
                                                                         </a>
                                                                     </div>
                                                                 </div>
@@ -650,7 +664,7 @@
 
                                                                     var linkrev = document.createElement('a');
                                                                     linkrev.setAttribute('href', 'img/revisi/' + filename);
-                                                                    linkrev.setAttribute('uk-icon', 'file-pdf');
+                                                                    linkrev.setAttribute('uk-icon', 'file-text');
 
                                                                     var link = document.createElement('a');
                                                                     link.setAttribute('href', 'img/revisi/' + filename);
@@ -813,7 +827,7 @@
                                                                 </div>
                                                                 <div class="uk-card-body">
                                                                     <a href="img/spk/<?= $spkpro ?>" target="_blank" class="uk-link-reset">
-                                                                        <h6><a href="img/spk/<?= $spkpro ?>" uk-icon="file-pdf"></a> <a href="img/spk/<?= $spkpro ?>" target="_blank"><?= $spkpro ?></a></h6>
+                                                                        <h6><a href="img/spk/<?= $spkpro ?>" uk-icon="file-text"></a> <a href="img/spk/<?= $spkpro ?>" target="_blank"><?= $spkpro ?></a></h6>
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -898,7 +912,7 @@
 
                                                                 var linkrev = document.createElement('a');
                                                                 linkrev.setAttribute('href', 'img/revisi/' + filename);
-                                                                linkrev.setAttribute('uk-icon', 'file-pdf');
+                                                                linkrev.setAttribute('uk-icon', 'file-text');
 
                                                                 var link = document.createElement('a');
                                                                 link.setAttribute('href', 'img/revisi/' + filename);

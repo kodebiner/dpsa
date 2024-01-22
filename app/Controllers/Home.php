@@ -283,7 +283,7 @@ class Home extends BaseController
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,image/jpeg,image/png,image/pjpeg]',
         ];
 
         // Validating
@@ -295,16 +295,17 @@ class Home extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $ext = $input->guessExtension();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
             $input->move(FCPATH . '/img/revisi/', $filename);
 
             // Removing uploaded if it's not the same filename
-            if ($filename != $truename . '.pdf') {
+            if ($filename != $truename .'.'. $ext) {
                 unlink(FCPATH . '/img/revisi/' . $filename);
             }
 
             // Getting True Filename
-            $returnFile = $truename . '.pdf';
+            $returnFile = $truename .'.'. $ext;
 
             // Returning Message
             die(json_encode($returnFile));
@@ -354,8 +355,9 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
             }
         }
+        // die(json_encode(array('message' => 'terkirim')));
         $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi']);
-        die(json_encode(array('message' => 'terkirim')));
+        return redirect()->back()->with('message','Revisi telah tekirim');
     }
 
     public function removerevisi()
