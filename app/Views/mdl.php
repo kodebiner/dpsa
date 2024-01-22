@@ -175,7 +175,7 @@
                             ?>
                         </td>
                         <td class=""><?= $mdl['keterangan'] ?></td>
-                        <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?> </td>
+                        <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?></td>
                         <td class="uk-text-center">
                             <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                 <div>

@@ -673,68 +673,70 @@
                                 </div>
                             </div>
 
-                    <?php if ($project['status_spk'] != 1) { ?>
-                        <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                            <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
-                                <hr>
-                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                    <table class="uk-table uk-table-middle uk-table-divider">
-                                        <thead>
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Nama</th>
-                                                <th>Panjang</th>
-                                                <th>Lebar</th>
-                                                <th>Tinggi</th>
-                                                <th>Volume</th>
-                                                <th>Satuan</th>
-                                                <th>Keterangan</th>
-                                                <th>Jumlah Pesanan</th>
-                                                <th>Harga</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
-                                                <tr>
-                                                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
-                                                    <?php foreach ($paket['mdl'] as $mdl) { ?>
+                            <?php if ($project['status_spk'] != 1) { ?>
+                                <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                    <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
+                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?=$project['id']?>">Download SPH</a>
+                                        <hr>
+                                        <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                            <table class="uk-table uk-table-middle uk-table-divider">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th>Nama</th>
+                                                        <th>Panjang</th>
+                                                        <th>Lebar</th>
+                                                        <th>Tinggi</th>
+                                                        <th>Volume</th>
+                                                        <th>Satuan</th>
+                                                        <th>Keterangan</th>
+                                                        <th>Jumlah Pesanan</th>
+                                                        <th>Harga</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
                                                         <tr>
-                                                            <td>
-                                                                <?php
-                                                                if ($mdl['checked']) {
-                                                                    $checked = 'checked';
-                                                                } else {
-                                                                    $checked = '';
-                                                                }
-                                                                ?>
-                                                                <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
-                                                            </td>
-                                                            <td><?= $mdl['name'] ?></td>
-                                                            <td><?= $mdl['length'] ?></td>
-                                                            <td><?= $mdl['width'] ?></td>
-                                                            <td><?= $mdl['height'] ?></td>
-                                                            <td><?= $mdl['volume'] ?></td>
-                                                            <td>
-                                                                <?php
-                                                                if ($mdl['denomination'] === "1") {
-                                                                    echo "Unit";
-                                                                } elseif ($mdl['denomination'] === "2") {
-                                                                    echo "Meter Lari";
-                                                                } elseif ($mdl['denomination'] === "3") {
-                                                                    echo "Meter Persegi";
-                                                                } elseif ($mdl['denomination'] === "4") {
-                                                                    echo "Set";
-                                                                }
-                                                                ?>
-                                                            </td>
-                                                            <td><?= $mdl['keterangan'] ?></td>
-                                                            <td class="uk-form-controls">
-                                                                <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
-                                                            </td>
-                                                            <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                            <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?="Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?></td>
+                                                            <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                                                         </tr>
+                                                        <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <?php
+                                                                    if ($mdl['checked']) {
+                                                                        $checked = 'checked';
+                                                                    } else {
+                                                                        $checked = '';
+                                                                    }
+                                                                    ?>
+                                                                    <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
+                                                                </td>
+                                                                <td><?= $mdl['name'] ?></td>
+                                                                <td><?= $mdl['length'] ?></td>
+                                                                <td><?= $mdl['width'] ?></td>
+                                                                <td><?= $mdl['height'] ?></td>
+                                                                <td><?= $mdl['volume'] ?></td>
+                                                                <td>
+                                                                    <?php
+                                                                    if ($mdl['denomination'] === "1") {
+                                                                        echo "Unit";
+                                                                    } elseif ($mdl['denomination'] === "2") {
+                                                                        echo "Meter Lari";
+                                                                    } elseif ($mdl['denomination'] === "3") {
+                                                                        echo "Meter Persegi";
+                                                                    } elseif ($mdl['denomination'] === "4") {
+                                                                        echo "Set";
+                                                                    }
+                                                                    ?>
+                                                                </td>
+                                                                <td><?= $mdl['keterangan'] ?></td>
+                                                                <td class="uk-form-controls">
+                                                                    <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
+                                                                </td>
+                                                                <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                                <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]"><?="Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
                                                         <script>
                                                             function eprice(n) {
                                                                 var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
@@ -742,17 +744,15 @@
                                                                 var epricetd = document.getElementById('eshowprice[' + n + ']');
                                                                 var echeckbox = document.getElementById('checked[' + n + ']');
                                                                 var eprojprice = ebaseprice * ebaseqty;
-                                                                epricetd.innerHTML = eprojprice;
+                                                                epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
 
-                                                                        if (ebaseqty > 0) {
-                                                                            echeckbox.checked = true;
-                                                                        } else {
-                                                                            echeckbox.checked = false;
-                                                                        }
-                                                                    };
-                                                                </script>
-                                                            <?php } ?>
-                                                        </tr>
+                                                                if (ebaseqty > 0) {
+                                                                    echeckbox.checked = true;
+                                                                } else {
+                                                                    echeckbox.checked = false;
+                                                                }
+                                                            };
+                                                        </script>
                                                     <?php } ?>
                                                 </tbody>
                                             </table>
@@ -1002,7 +1002,7 @@
                                         var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
                                         var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
                                         var eprojprice = ebaseprice * ebaseqty;
-                                        epricetd.innerHTML = eprojprice;
+                                        epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
 
                                         if (ebaseqty > 0) {
                                             echeckbox.checked = true;
@@ -1060,8 +1060,8 @@
                                                 <?php } ?>
                                             </tbody>
                                         </table>
-                                        </div>
                                     </div>
+                                </div>
                             <?php }
                         }
                     } ?>
