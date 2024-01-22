@@ -6,6 +6,8 @@ use App\Models\MdlModel;
 use App\Models\PaketModel;
 use App\Models\LogModel;
 
+use \phpoffice\PhpOffice\PhpSpreadsheet;
+
 class Mdl extends BaseController
 {
     protected $db, $builder;
@@ -186,7 +188,6 @@ class Mdl extends BaseController
         $input = $this->request->getPost();
         $str = $input['price'];
 
-
         function toInt($str)
         {
             return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
@@ -259,7 +260,6 @@ class Mdl extends BaseController
             return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
         }
 
-
         // Validation
         $rules = [
             'length'      => [
@@ -318,6 +318,78 @@ class Mdl extends BaseController
 
         // Delete Data MDL
         $MdlModel->delete($id);
+
+        // Return
+        return redirect()->back()->with('error', 'Data Telah Dihapuskan');
+    }
+
+	public function importExcel($id)
+    {
+        // Populating Data
+        $MdlModel = new MdlModel();
+
+        // Get Data
+        $file_excel = $this->request->getFile('fileexcel');
+        $ext = $file_excel->getClientExtension();
+        if ($ext == 'xls') {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        } else {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        }
+        $spreadsheet = $render->load($file_excel);
+        dd($ext);
+
+        $data = $spreadsheet->getActiveSheet()->toArray();
+        foreach($data as $x => $row) {
+            if ($x == 0) {
+                continue;
+            }
+
+            // Define Row
+            $mdlid          = $row[0];
+            $mdlname        = $row[1];
+            $length         = $row[2];
+            $width          = $row[3];
+            $height         = $row[4];
+            $volume         = $row[5];
+            if ($row[6] == 'Unit') {
+                $denomination     = 1;
+            } elseif ($row[6] == 'Meter Lari') {
+                $denomination     = 2;
+            } elseif ($row[6] == 'Meter Persegi') {
+                $denomination     = 3;
+            } elseif ($row[6] == 'Set') {
+                $denomination     = 4;
+            }
+            $keterangan     = $row[7];
+            $price          = $row[8];
+
+            $datamdl = [
+                'name'          => $mdlname,
+                'length'        => $length,
+                'width'         => $width,
+                'height'        => $height,
+                'volume'        => $volume,
+                'denomination'  => $denomination,
+                'keterangan'    => $keterangan,
+                'price'         => $price,
+                'paketid'       => $id,
+            ];
+
+            $MdlModel->insert($datamdl);
+        }
+        unlink(FCPATH . '/img/spk/' . $file_excel);
+        
+        return redirect()->back()->with('message', 'Berhasil Import Data');
+    }
+
+    public function deleteallmdl($id)
+    {
+        // Populating Data
+        $MdlModel   = new MdlModel();
+
+        // Delete Data MDL
+        $MdlModel->where('paketid', $id)->delete();
 
         // Return
         return redirect()->back()->with('error', 'Data Telah Dihapuskan');

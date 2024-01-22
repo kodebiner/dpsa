@@ -1,9 +1,11 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('extraScript') ?>
-<script src="js/jquery-3.7.0.js"></script>
-<link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
-<script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
-<script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
+    <script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
+    <script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-3.7.0.js"></script>
+    <script src="js/jquery-ui.js"></script>
 <?= $this->endSection() ?>
 <?= $this->section('main') ?>
 
@@ -137,41 +139,55 @@
                             </div>
                         </div>
                     </td>
-                    <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
+                </tr>
                 <tr class="togglemdl<?= $paket['id'] ?>" hidden>
                     <td></td>
-                    <td><?= $mdl['name'] ?></td>
-                    <td><?= $mdl['length'] ?></td>
-                    <td><?= $mdl['width'] ?></td>
-                    <td><?= $mdl['height'] ?></td>
-                    <td><?= $mdl['volume'] ?></td>
-                    <td>
-                        <?php
-                        if ($mdl['denomination'] === "1") {
-                            echo "Unit";
-                        } elseif ($mdl['denomination'] === "2") {
-                            echo "Meter Lari";
-                        } elseif ($mdl['denomination'] === "3") {
-                            echo "Meter Persegi";
-                        } elseif ($mdl['denomination'] === "4") {
-                            echo "Set";
-                        }
-                        ?>
-                    </td>
-                    <td class=""><?= $mdl['keterangan'] ?></td>
-                    <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?> </td>
-                    <td class="uk-text-center">
-                        <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
+                    <td colspan="9">
+                        <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                             <div>
-                                <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                                <button class="uk-button uk-button-primary" uk-toggle="target: #modalimport<?= $paket['id'] ?>">Import MDL</button>
                             </div>
                             <div>
-                                <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                                <a class="uk-button uk-button-danger" href="paket/deleteallmdl/<?= $paket['id'] ?>" onclick="return confirm('Anda yakin ingin menghapus semua data MDL?')">Hapus Semua MDL</a>
                             </div>
                         </div>
                     </td>
-                <?php } ?>
                 </tr>
+                <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
+                    <tr class="togglemdl<?= $paket['id'] ?>" hidden>
+                        <td></td>
+                        <td><?= $mdl['name'] ?></td>
+                        <td><?= $mdl['length'] ?></td>
+                        <td><?= $mdl['width'] ?></td>
+                        <td><?= $mdl['height'] ?></td>
+                        <td><?= $mdl['volume'] ?></td>
+                        <td>
+                            <?php
+                            if ($mdl['denomination'] === "1") {
+                                echo "Unit";
+                            } elseif ($mdl['denomination'] === "2") {
+                                echo "Meter Lari";
+                            } elseif ($mdl['denomination'] === "3") {
+                                echo "Meter Persegi";
+                            } elseif ($mdl['denomination'] === "4") {
+                                echo "Set";
+                            }
+                            ?>
+                        </td>
+                        <td class=""><?= $mdl['keterangan'] ?></td>
+                        <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?> </td>
+                        <td class="uk-text-center">
+                            <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
+                                <div>
+                                    <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                                </div>
+                                <div>
+                                    <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
                 <script>
                     document.getElementById('toggle<?= $paket['id'] ?>').addEventListener('click', function() {
                         if (document.getElementById('close<?= $paket['id'] ?>').hasAttribute('hidden')) {
@@ -460,6 +476,106 @@
         </div>
     </div>
     <!-- Modal Add MDL per Paket End -->
+
+    <!-- Modal Import MDL -->
+    <div class="uk-modal-container" id="modalimport<?= $paket['id'] ?>" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Upload File MDL</h2>
+            </div>
+            <div class="uk-modal-body">
+                <form class="uk-form-stacked" action="upload/importmdl/<?= $paket['id'] ?>" method="post" enctype="multipart/form-data">
+                    <div class="uk-margin" id="image-container-importmdl-<?= $paket['id'] ?>">
+                        <div class="uk-form-controls">
+                            <input id="fileimportmdl<?= $paket['id'] ?>" name="mdl" hidden />
+                            <div id="js-upload-importmdl-<?= $paket['id'] ?>" class="js-upload-importmdl-<?= $paket['id'] ?> uk-placeholder uk-text-center">
+                                <span uk-icon="icon: cloud-upload"></span>
+                                <span class="uk-text-middle">Tarik dan lepas file MDL disini atau</span>
+                                <div uk-form-custom>
+                                    <input type="file">
+                                    <span class="uk-link uk-preserve-color">pilih satu</span>
+                                </div>
+                            </div>
+                            <progress id="js-progressbar-importmdl-<?= $paket['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                        </div>
+                    </div>
+
+                    <!-- Script Import MDL -->
+                    <script type="text/javascript">
+                        var bar = document.getElementById('js-progressbar-importmdl-<?= $paket['id'] ?>');
+
+                        UIkit.upload('.js-upload-importmdl-<?= $paket['id'] ?>', {
+                            url: 'upload/mdl/<?= $paket['id'] ?>',
+                            multiple: false,
+                            name: 'uploads',
+                            param: {
+                                lorem: 'ipsum'
+                            },
+                            method: 'POST',
+                            type: 'json',
+
+                            beforeSend: function() {
+                                console.log('beforeSend', arguments);
+                            },
+                            beforeAll: function() {
+                                console.log('beforeAll', arguments);
+                            },
+                            load: function() {
+                                console.log('load', arguments);
+                            },
+                            error: function() {
+                                console.log('error', arguments);
+                                var error = arguments[0].xhr.response.message.uploads;
+                                alert(error);
+                            },
+
+                            complete: function() {
+                                console.log('complete', arguments);
+                            },
+
+                            loadStart: function(e) {
+                                console.log('loadStart', arguments);
+
+                                bar.removeAttribute('hidden');
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+
+                            progress: function(e) {
+                                console.log('progress', arguments);
+
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+
+                            loadEnd: function(e) {
+                                console.log('loadEnd', arguments);
+
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+
+                            completeAll: function() {
+                                console.log('completeAll', arguments);
+
+                                setTimeout(function() {
+                                    bar.setAttribute('hidden', 'hidden');
+                                }, 1000);
+
+                                location.reload();
+                            }
+                        });
+                    </script>
+                    <!-- Script Import MDL End -->
+                    <!-- <div class="uk-modal-footer uk-text-center">
+                        <button class="uk-button uk-button-primary" type="submit">Kirim</button>
+                    </div> -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Import MDL End -->
 
     <!-- Modal Update MDL per Paket -->
     <?php foreach ($mdls[$paket['id']] as $mdl) { ?>

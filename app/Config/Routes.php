@@ -48,6 +48,7 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('spk', 'Upload::spk');
     $routes->post('savespk/(:num)', 'Upload::savespk/$1');
     $routes->post('removespk', 'Upload::removespk');
+    $routes->post('mdl/(:num)', 'Upload::mdl/$1');
 });
 
 $routes->group('clientreg', static function ($routes) {
@@ -151,6 +152,7 @@ $routes->group('paket',['filter' => 'login'], function ($routes) {
     $routes->post('create', 'Mdl::create');
     $routes->post('update/(:num)', 'Mdl::update/$1');
     $routes->get('delete/(:num)', 'Mdl::delete/$1');
+    $routes->get('deleteallmdl/(:num)', 'Mdl::deleteallmdl/$1');
 });
 
 // Bar

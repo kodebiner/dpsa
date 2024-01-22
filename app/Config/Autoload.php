@@ -56,6 +56,14 @@ class Autoload extends AutoloadConfig
         'psr/log'                       => APPPATH . 'ThirdParty/log-3.0.0/src',
         'setasign\Fpdi'                 => APPPATH . 'ThirdParty/FPDI-2.6.0/src',
         'Mpdf'                          => APPPATH . 'ThirdParty/mpdf-8.1.0/src',
+        'PhpOffice\PhpSpreadsheet'      => APPPATH . 'ThirdParty/phpoffice',
+        'ZipStream'                     => APPPATH . 'ThirdParty/ZipStream-PHP-3.1.0/src',
+        'Complex'                       => APPPATH . 'ThirdParty/PHPComplex-3.0.2/classes/src',
+        'Matrix'                        => APPPATH . 'ThirdParty/PHPMatrix-3.0.1/classes/src',
+        'Psr\Http\Client'               => APPPATH . 'ThirdParty/http-client-master/src',
+        'Psr\Http\Message'              => APPPATH . 'ThirdParty/http-factory-master/src',
+        'Psr\SimpleCache'               => APPPATH . 'ThirdParty/simple-cache-master/src',
+        'voku\helper'                   => APPPATH . 'ThirdParty/anti-xss-master/src/voku/helper',
         // 'mockery/mockery'               => APPPATH . 'ThirdParty/mockery-1.6.7/library',
     ];
 

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\DesignModel;
 use App\Models\ProjectModel;
+use App\Models\MdlModel;
 
 class Upload extends BaseController
 {
@@ -192,20 +193,20 @@ class Upload extends BaseController
             $spk = $ProjectModel->find($id);
             if (empty($spk)) {
                 unlink(FCPATH . '/img/spk/' . $spk['spk']);
-                $datadesign = [
+                $dataspk = [
                     'projectid'     => $id,
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
                 ];
-                $ProjectModel->insert($datadesign);
+                $ProjectModel->insert($dataspk);
             } else {
-                $datadesign = [
+                $dataspk = [
                     'id'            => $spk['id'],
                     'projectid'     => $id,
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
                 ];
-                $ProjectModel->save($datadesign);
+                $ProjectModel->save($dataspk);
             }
         }
 
@@ -220,5 +221,73 @@ class Upload extends BaseController
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
+
+    public function mdl($id)
+    {
+        // Populating Data
+        $MdlModel   = new MdlModel();
+        $input      = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]',
+        ];
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        $ext = $input->getClientExtension();
+        if ($ext == 'xls') {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        } else {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        }
+        $spreadsheet = $render->load($input);
+
+        $data = $spreadsheet->getActiveSheet()->toArray();
+        foreach($data as $x => $row) {
+            if ($x == 0) {
+                continue;
+            }
+
+            // Define Row
+            $mdlid          = $row[0];
+            $mdlname        = $row[1];
+            $length         = $row[2];
+            $width          = $row[3];
+            $height         = $row[4];
+            $volume         = $row[5];
+            if ($row[6] == 'Unit') {
+                $denomination     = 1;
+            } elseif ($row[6] == 'Meter Lari') {
+                $denomination     = 2;
+            } elseif ($row[6] == 'Meter Persegi') {
+                $denomination     = 3;
+            } elseif ($row[6] == 'Set') {
+                $denomination     = 4;
+            }
+            $keterangan     = $row[7];
+            $price          = $row[8];
+
+            $datamdl = [
+                'name'          => $mdlname,
+                'length'        => $length,
+                'width'         => $width,
+                'height'        => $height,
+                'volume'        => $volume,
+                'denomination'  => $denomination,
+                'keterangan'    => $keterangan,
+                'price'         => $price,
+                'paketid'       => $id,
+            ];
+
+            $MdlModel->insert($datamdl);
+        }
+
+        die('Berhasil Import Data MDL');
     }
 }
