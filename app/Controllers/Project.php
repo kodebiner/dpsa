@@ -10,8 +10,6 @@ use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
 
-use Mpdf\Mpdf;
-
 class Project extends BaseController
 {
     protected $db, $builder;
@@ -534,13 +532,23 @@ class Project extends BaseController
         $data['client']         = $client;
 
         // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
+        // include(APPPATH . "ThirdParty/mpdf-8.1.0/src/mpdf.php");
+        // include('mpdf.php');
         $mpdf = new \Mpdf\Mpdf();
+        $mpdf->showImageErrors = true;
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);
         $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
-        $html = view('Views/sphprint', $data);
+        $html = view('Views/sphview', $data);
+        // $stylesheet = file_get_contents('C:\xampp\htdocs\dpsa\public/css/theme.css');
+        // $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
+        // $mpdf->WriteHTML($stylesheet, 1);
+        // $mpdf->WriteHTML($html, 2);
+        // $mpdf->Output('css/theme.css');
         $mpdf->WriteHTML($html);
+        // $mpdf->Output('js/uikit.min.js');
+        // $mpdf->Output('js/uikit-icons.min.js');
         $mpdf->Output($filename, 'D');
     }
 
@@ -565,6 +573,6 @@ class Project extends BaseController
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
-        return view('sphview', $data);
+        return view('sphprint', $data);
     }
 }
