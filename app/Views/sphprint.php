@@ -5,206 +5,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- <link rel="stylesheet" href="/css/theme.css"> -->
+    <!-- </link> -->
+    <!-- <script src="js/uikit.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" /> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script> -->
     <style>
-        h1,
-        h3,
-        h5,
-        h6 {
-            text-align: center;
-            padding-right: 200px;
+        table,
+        th,
+        td {
+            /* border: 1pt solid black; */
+            border-collapse: collapse;
         }
 
-        .row {
-            margin-top: 20px;
-        }
-
-        .keclogo {
-            font-size: 24px;
-            font-size: 3vw;
-        }
-
-        .kablogo {
-            font-size: 2vw;
-        }
-
-        .alamatlogo {
-            font-size: 1.5vw;
-        }
-
-        .kodeposlogo {
-            font-size: 1.7vw;
-        }
-
-        #tls {
-            text-align: right;
-        }
-
-        .alamat-tujuan {
-            margin-left: 50%;
-        }
-
-        .garis1 {
-            border-top: 3px solid black;
-            height: 2px;
-            border-bottom: 1px solid black;
-        }
-
-        #logo {
-            margin: auto;
-            margin-left: 50%;
-            margin-right: auto;
-        }
-
-        #tempat-tgl {
-            margin-left: 120px;
-        }
-
-        #camat {
+        .img2 {
+            float: left;
             text-align: center;
         }
 
-        #nama-camat {
-            margin-top: 100px;
-            text-align: center;
-        }
-
-        table {
-            font-family: arial, sans-serif;
-            /* border-collapse: collapse; */
-            width: 100%;
-        }
-
-        td,
-        th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+            /* margin: auto;  */
+            width: 50%;
         }
     </style>
 </head>
 
 <body>
 
-    <div>
-        <header>
-            <div class="row">
-                <div id="img" class="col-md-3">
-                    <img id="logo" src="https://getasanbersinar.files.wordpress.com/2016/02/logo-kabupaten-semarang-jawa-tengah.png" width="140" height="160" />
-                </div>
-                <div id="text-header" class="col-md-9">
-                    <h3 class="kablogo">PEMERINTAH KABUPATEN SEMARANG</h3>
-                    <h1 class="keclogo"><strong>KECAMATAN BERGAS</strong></h1>
-                    <h6 class="alamatlogo">Jl. Soekarno-Hatta, No. 68, Telepon/Faximile (0298) 523024</h6>
-                    <h5 class="kodeposlogo"><strong>BERGAS 50552</strong></h5>
-                </div>
-            </div>
-        </header>
-
-        <div class="container">
-            <hr class="garis1" />
-            <div id="alamat" class="row">
-                <div id="lampiran" class="col-md-6">
-                    Nomor : 005 / <br />
-                    Lampiran : - <br />
-                    Perihal : Undangan
-                </div>
-                <div id="tgl-srt" class="col-md-6">
-                    <p id="tls">Bergas, 30 April 2018</p>
-
-                    <p class="alamat-tujuan">Kepada Yth. :<br />
-                        Kepala Desa</p>
-
-                    <p class="alamat-tujuan">se - Kecamatan Bergas
-                    </p>
-                </div>
-            </div>
-            <div id="pembuka" class="row">&emsp; &emsp; &emsp; Menindak lanjuti surat dari Sekretariat Daerah Kabupaten Semarang Nomor : 005/001819/2018 perihal Peraturan Baru mengenai Badan Permusyawaratan Desa (BPD) berdasarkan Perda Nomor 4 Tahun 2018 dan Perbup Nomor 21 Tahun 2018 serta Tahapan Pengisian Anggota BPD, bersama ini kami mengharap atas kehadiran saudara besok pada :</div>
-            <div id="tempat-tgl">
-                <table>
-                    <tr>
-                        <td>Hari</td>
-                        <td>:</td>
-                        <td>Kamis</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal</td>
-                        <td>:</td>
-                        <td>28 Juni 2018</td>
-                    </tr>
-                    <tr>
-                        <td>Jam</td>
-                        <td>:</td>
-                        <td>08.00 WIB</td>
-                    </tr>
-                    <tr>
-                        <td>Tempat</td>
-                        <td>:</td>
-                        <td>Aula PP PAUD dan Dikmas Jawa Tengah Jl. Diponegoro No 250 Ungaran</td>
-                    </tr>
-                    <tr>
-                        <td>Catatan</td>
-                        <td>:</td>
-                        <td>-</td>
-                    </tr>
-                </table>
-            </div>
-            <div id="penutup">Demikian untuk menjadikan perhatian dan atas kehadirannya diucapkan terimakasih.</div>
-            <div id="ttd" class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <p id="camat"><strong>CAMAT BERGAS</strong></p>
-                    <div id="nama-camat"><strong><u>TRI MARTONO, SH, MM</u></strong><br />
-                        Pembina Tk. I<br />
-                        NIP. 196703221995031001</div>
-                </div>
-            </div>
+    <!-- <div style="margin: auto; width: 100%;border: 3px solid green;padding: 10px;">
+        <div class="clearfix">
+            <img class="img2" src="./img/logo.png" alt="logo" width="100">
+            <p>PT. DHARMA PUTRA SEJAHTERA ABADI</p>
+            <p>Interior & Furniture Manufaktur</p>
+            <p>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</p>
         </div>
-    </div>
+    </div> -->
 
-    <table>
-        <thead>
-            <tr>
-                <th class="">Nama</th>
-                <th class="">Panjang</th>
-                <th class="">Lebar</th>
-                <th class="">Tinggi</th>
-                <th class="">Volume</th>
-                <th class="">Satuan</th>
-                <th class="">Jml Pesanan</th>
-                <th class="">Harga</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($projects['id'])) {
-                foreach ($rabs as $rab) {
-                    if ($rab['projectid'] === $projects['id']) {
-                        foreach ($pakets as $paket) {
-                            if ($paket['id'] === $rab['paketid']) {
-                                foreach ($mdls as $mdl) {
-                                    if ($mdl['id'] === $rab['mdlid']) { ?>
-                                        <tr>
-                                            <td class=""><?= $mdl['name'] ?></td>
-                                            <td class="uk-text-center"><?= $mdl['length'] ?></td>
-                                            <td class="uk-text-center"><?= $mdl['width'] ?></td>
-                                            <td class="uk-text-center"><?= $mdl['height'] ?></td>
-                                            <td class="uk-text-center"><?= $mdl['volume'] ?></td>
-                                            <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
-                                            <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                            <td class="uk-text-center"><?= "Rp " . number_format($mdl['price'], 0, ',', '.')  ?></td>
-                                        </tr>
-            <?php
+    <table style="width:100%;">
+        <tr>
+            <th style="width:30%; text-align:right;" rowspan="2"><img style="margin: 5px;" src="./img/logo.png" width="100"></img></th>
+            <td style="font-weight:bold" ;>PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
+        </tr>
+        <tr>
+            <td style="font-size:10pt" ;>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : <br> Email :<br> Website : </td>
+        </tr>
+    </table>
+
+    <hr style="border: 1pt solid black;">
+
+    <table style="width:100%;">
+        <tr>
+            <th style="width:70%; text-align:left; font-weight:normal;">Kepada Yth.</th>
+            <th style="width:10%; text-align:left; font-weight:normal; font-size:10pt">Nomor</th>
+            <th style="width:20%; text-align:left; font-weight:normal; font-size:10pt"> : 1234</th>
+        </tr>
+        <tr>
+            <td style="font-size:10pt"></td>
+            <td style="font-size:10pt;">Perihal</td>
+            <td style="font-size:10pt"> : Penawaran</td>
+        </tr>
+        <tr>
+            <td style="font-size:10pt"></td>
+            <td style="font-size:10pt">Pekerjaan</td>
+            <td style="font-size:10pt"> : Renovasi</td>
+        </tr>
+        <tr>
+            <td style="font-size:10pt"></td>
+            <td style="font-size:10pt;">Lokasi</td>
+            <td style="font-size:10pt"> : RS Hermina</td>
+        <tr>
+            <td style="font-size:10pt"></td>
+            <td style="font-size:10pt;">Tanggal</td>
+            <td style="font-size:10pt"> : 23 Januari 2024</td>
+        </tr>
+    </table>
+
+    <div class="uk-section uk-section-default uk-margin-remove uk-padding-remove">
+        <div class="uk-container uk-container-large">
+            <div>
+                <div class="uk-text-left">Dengan hormat,</div>
+                <p class="uk-text-left">Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
+            </div>
+
+            <table style="width:100%; border: 1pt solid black;">
+                <tr style="border: 1pt solid black;">
+                    <th style="border: 1pt solid black;" rowspan="2">No</th>
+                    <th style="border: 1pt solid black;" rowspan="2">Ruang</th>
+                    <th style="border: 1pt solid black;" rowspan="2">Jenis Furniture</th>
+                    <td colspan="6" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Dimensi & Qty</td>
+                    <td colspan="2" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Harga</td>
+                    <th style="border: 1pt solid black;" rowspan="2">Keterangan</th>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">P</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">L</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">T</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">VOL</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">SAT</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">JML</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">Satuan</td>
+                    <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">Total</td>
+                </tr>
+
+                <?php
+                if (!empty($projects['id'])) {
+                    foreach ($rabs as $rab) {
+                        if ($rab['projectid'] === $projects['id']) {
+                            foreach ($pakets as $paket) {
+                                if ($paket['id'] === $rab['paketid']) {
+                                    foreach ($mdls as $mdl) {
+                                        if ($mdl['id'] === $rab['mdlid']) {
+                                            $denom = "";
+                                            $price = "";
+                                            // $total = [];
+                                            if ($mdl['denomination'] === "1") {
+                                                $price  = $rab['qty'] * $mdl['price'];
+                                                $denom  = "Unit";
+                                            } elseif ($mdl['denomination'] === "2") {
+                                                $price  = $mdl['length'] * $mdl['price'];
+                                                $denom  = "M";
+                                            } elseif ($mdl['denomination'] === "3") {
+                                                $luas   =   $mdl['height'] * $mdl['length'];
+                                                $price  =   $mdl['price'] * $luas;
+                                                $denom  = "M2";
+                                            } elseif ($mdl['denomination'] === "4") {
+                                                $price  = $rab['qty'] * $mdl['price'];
+                                                $denom  = "Set";
+                                            }
+                                            $total[] = $price;
+                ?>
+
+                                            <tr class="uk-text-center">
+                                                <td style="border: 1pt solid black;"></td>
+                                                <td style="border: 1pt solid black;"><?= $projects['name'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['length'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['width'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['height'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['volume'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $denom ?></td>
+                                                <td style="border: 1pt solid black;"><?= $rab['qty'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['price'], 0, ',', '.')  ?></td>
+                                                <td style="border: 1pt solid black;"><?= "Rp." . number_format($price, 0, ',', '.')  ?></td>
+                                                <td style="border: 1pt solid black;"><?= $mdl['keterangan'] ?></td>
+                                            </tr>
+                <?php   }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            ?>
-        </tbody>
-    </table>
+                ?>
+                <tr class="uk-text-center">
+                    <td style="border: 1pt solid black;">-</td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-left">Total</td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-right"><?= "Rp." . number_format(array_sum($total), 0, ',', '.')  ?></td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-left">Biaya Kirim</td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-right">500.000</td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-left"> Total + Biaya Kirim</td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-right"> 1.500.000</td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;" class="uk-text-left" colspan="9">PPN</td>
+                    <td style="border: 1pt solid black;" class="uk-text-center">11%</td>
+                    <td style="border: 1pt solid black;" class="uk-text-right"> 1.500.000</td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;" class="uk-text-left" colspan="10">Grand Total</td>
+                    <td style="border: 1pt solid black;" class="uk-text-right">1.500.000</td>
+                </tr>
+                <tr style="border: 1pt solid black;">
+                    <td style="border: 1pt solid black;"></td>
+                    <td class="uk-text-left" colspan="11" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:left;">Terbilang : Satu Juta Lima Ratus Ribu Rupiah</td>
+                </tr>
+            </table>
+            <dl class="uk-description-list" style="font-size: 12pt;">
+                <dt>Catatan :</dt>
+                <dd>Harga diatas sudah termasuk Biaya transport</dd>
+                <dd>Harga diatas sudah termasuk Pajak PPN</dd>
+                <dd>Harga diatas tidak termasuk biaya setting</dd>
+                <dt>Tatacara Pembayaran :</dt>
+                <dd>Progres I (30%) : Alat umum (furniture) masih dalam proses produksi dan masih dalam proses rekanan/Vendor JV</dd>
+                <dd>Progres III (35%) : Alat umum (furniture) sebagian sudah terkirim dan terpasang di lokasi milik RS Hermina, dan sebagian lainnyaa masih dalam proses produksi dan masih berada di lokasi rekanan/Vendor JV</dd>
+                <dd>Progres III (30%) : Alat umum (furniture) seluruhnya sudah terkirim dan terpasang di lokasi RS Hermina</dd>
+                <dd>Retensi (5%) : Tagihan sertelah masa retensi selesai, yaitu 3 bulan setelah Alat umum (furniture) selesai terpasang 100% yang didasarkan oleh Berita Acara Serah Terima (BAST) dan telah ditandatangani oleh perwakilan RS Hermina dan rekanan / Vendor JV</dd>
+            </dl>
+
+            <div>
+                <p class="uk-text-left">Demikian kami sampaikan, atas perhatian dan kerjasama yang telah terjalin dengan baik selama ini, kami ucapkan banyak terima kasih</p>
+            </div>
+
+            <div class="uk-child-width-1-2 uk-text-center" uk-grid>
+                <div>
+                    <div class="uk-text-left"></div>
+                </div>
+                <div>
+                    <div class="uk-child-width-1-2 uk-text-center" uk-grid>
+                        <div>
+                            <div class="uk-text-left"></div>
+                        </div>
+                        <div>
+                            <div class="uk-text-center">Yogyakarta, 13 Januari 2024</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-margin-large-top">
+                    <div class="uk-text-left"></div>
+                </div>
+                <div class="uk-margin-large-top">
+                    <div class="uk-child-width-1-2 uk-text-center" uk-grid>
+                        <div>
+                            <div class="uk-text-left uk-width-1-6"></div>
+                        </div>
+                        <div>
+                            <hr>
+                            <div class="uk-text-center">Direktur</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 
 </html>

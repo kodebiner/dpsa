@@ -5,18 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- UIkit CSS -->
-    <!-- <link rel="stylesheet" href="css/theme.css" /> -->
-
-    <!-- UIkit JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script> -->
-    <!-- <script src="js/uikit.min.js"></script>
-    <script src="js/uikit-icons.min.js"></script> -->
-</head>
-
-<body>
-
+    <link rel="stylesheet" href="/css/theme.css"></link>
+    <!-- <script src="js/uikit.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" /> -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
     <style>
         table,
         th,
@@ -24,20 +16,23 @@
             border: 1pt solid black;
             border-collapse: collapse;
         }
+        
     </style>
+</head>
 
+<body>
     <div class="uk-section uk-section-default uk-padding-small">
         <div class="uk-container">
             <div class="uk-panel uk-flex uk-flex-center">
                 <div>
-                    <!-- <img class="uk-align-left uk-margin-remove-adjacent" src="/img/logo.png" width="100"> -->
+                    <img class="uk-align-left uk-margin-remove-adjacent" src="/img/logo.png" width="100"></img>
                 </div>
                 <div class="uk-text-middle">
                     <div class="uk-text-large uk-text-bold uk-margin-remove">PT. DHARMA PUTRA SEJAHTERA ABADI</div>
                     <div class="uk-text-small uk-text-bold uk-margin-remove">Interior & Furniture Manufaktur</div>
-                    <div class="uk-margin-remove" style="font-size: 12pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</div>
+                    <div class="uk-margin-remove" style="font-size: 10pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</div>
 
-                    <div class="uk-child-width-1-2 uk-margin-remove uk-grid-small" style="font-size: 12pt" uk-grid>
+                    <div class="uk-child-width-1-2 uk-margin-remove uk-grid-small" style="font-size: 10pt" uk-grid>
                         <div class="uk-width-1-6 uk-padding-remove">
                             <div>Telepon</div>
                         </div>
