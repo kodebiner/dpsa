@@ -534,14 +534,14 @@ class Project extends BaseController
         // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
         // include(APPPATH . "ThirdParty/mpdf-8.1.0/src/mpdf.php");
         // include('C:\xampp\htdocs\dpsa\public/css/theme.css');
-        $mpdf = new \Mpdf\Mpdf();
+        $mpdf = new \Mpdf\Mpdf([]);
         // $stylesheet = file_get_contents('pdf.css');
         // $stylesheet = file_get_contents('C:\xampp\htdocs\dpsa\public/css/theme.css');
         // $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
         // $mpdf->Image('./img/logo.png', 0, 0, 210, 297, 'png', '', true, false);
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
-        $mpdf->AddPage("L", "", "", "", "", "15", "15", "15", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+        $mpdf->AddPage("L", "", "", "", "", "15", "15", "0", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $date = date_create($projects['created_at']);
         $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";

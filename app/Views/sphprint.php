@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="/css/theme.css"> -->
-    <!-- </link> -->
-    <!-- <script src="js/uikit.min.js"></script> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" /> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script> -->
     <style>
+        html {
+            font-size: 10pt
+        }
+
         table,
         th,
         td {
             /* border: 1pt solid black; */
             border-collapse: collapse;
+            padding: 3px;
         }
 
         .img2 {
@@ -35,22 +35,13 @@
 
 <body>
 
-    <!-- <div style="margin: auto; width: 100%;border: 3px solid green;padding: 10px;">
-        <div class="clearfix">
-            <img class="img2" src="./img/logo.png" alt="logo" width="100">
-            <p>PT. DHARMA PUTRA SEJAHTERA ABADI</p>
-            <p>Interior & Furniture Manufaktur</p>
-            <p>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</p>
-        </div>
-    </div> -->
-
-    <table style="width:100%;">
+    <table style="width:100%; margin-top:0;">
         <tr>
             <th style="width:30%; text-align:right;" rowspan="2"><img style="margin: 5px;" src="./img/logo.png" width="100"></img></th>
-            <td style="font-weight:bold" ;>PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
+            <td style="font-weight:bold">PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
         </tr>
         <tr>
-            <td style="font-size:10pt" ;>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : <br> Email :<br> Website : </td>
+            <td style="font-size:10pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : (0274) 2800089 Fax : (0274) 4332246<br> Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com<br> Website : www.dharmaputrainterior.com</td>
         </tr>
     </table>
 
@@ -58,36 +49,36 @@
 
     <table style="width:100%;">
         <tr>
-            <th style="width:70%; text-align:left; font-weight:normal;">Kepada Yth.</th>
+            <th style="width:60%; text-align:left; font-weight:normal;">Kepada Yth.</th>
             <th style="width:10%; text-align:left; font-weight:normal; font-size:10pt">Nomor</th>
-            <th style="width:20%; text-align:left; font-weight:normal; font-size:10pt"> : 1234</th>
+            <th style="width:30%; text-align:left; font-weight:normal; font-size:10pt"> : 006/DPSA/ARP/PNWRN/RSHMND/2024</th>
         </tr>
         <tr>
-            <td style="font-size:10pt"></td>
+            <td style="font-size:10pt">Direktur RS Hermina Manado</td>
             <td style="font-size:10pt;">Perihal</td>
-            <td style="font-size:10pt"> : Penawaran</td>
+            <td style="font-size:10pt"> : Surat Penawaran Harga</td>
         </tr>
         <tr>
             <td style="font-size:10pt"></td>
             <td style="font-size:10pt">Pekerjaan</td>
-            <td style="font-size:10pt"> : Renovasi</td>
+            <td style="font-size:10pt"> : Lukisan Dinding</td>
         </tr>
         <tr>
             <td style="font-size:10pt"></td>
             <td style="font-size:10pt;">Lokasi</td>
-            <td style="font-size:10pt"> : RS Hermina</td>
+            <td style="font-size:10pt"> : RS Hermina Manado</td>
         <tr>
             <td style="font-size:10pt"></td>
             <td style="font-size:10pt;">Tanggal</td>
-            <td style="font-size:10pt"> : 23 Januari 2024</td>
+            <td style="font-size:10pt"> : 13 Januari 2024</td>
         </tr>
     </table>
 
-    <div class="uk-section uk-section-default uk-margin-remove uk-padding-remove">
-        <div class="uk-container uk-container-large">
+    <div>
+        <div>
             <div>
-                <div class="uk-text-left">Dengan hormat,</div>
-                <p class="uk-text-left">Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
+                <div><hr style="width: 10%;">Up. Ibu Bunga(Kepala Jangum) <br><br>Dengan hormat,</div>
+                <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
             </div>
 
             <table style="width:100%; border: 1pt solid black;">
@@ -161,7 +152,7 @@
                 }
                 ?>
                 <tr class="uk-text-center">
-                    <td style="border: 1pt solid black;">-</td>
+                    <td style="border: 1pt solid black;">&nbsp;</td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
@@ -232,7 +223,7 @@
                     <td class="uk-text-left" colspan="11" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:left;">Terbilang : Satu Juta Lima Ratus Ribu Rupiah</td>
                 </tr>
             </table>
-            <dl class="uk-description-list" style="font-size: 12pt;">
+            <dl>
                 <dt>Catatan :</dt>
                 <dd>Harga diatas sudah termasuk Biaya transport</dd>
                 <dd>Harga diatas sudah termasuk Pajak PPN</dd>
@@ -248,37 +239,24 @@
                 <p class="uk-text-left">Demikian kami sampaikan, atas perhatian dan kerjasama yang telah terjalin dengan baik selama ini, kami ucapkan banyak terima kasih</p>
             </div>
 
-            <div class="uk-child-width-1-2 uk-text-center" uk-grid>
-                <div>
-                    <div class="uk-text-left"></div>
-                </div>
-                <div>
-                    <div class="uk-child-width-1-2 uk-text-center" uk-grid>
-                        <div>
-                            <div class="uk-text-left"></div>
-                        </div>
-                        <div>
-                            <div class="uk-text-center">Yogyakarta, 13 Januari 2024</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="uk-margin-large-top">
-                    <div class="uk-text-left"></div>
-                </div>
-                <div class="uk-margin-large-top">
-                    <div class="uk-child-width-1-2 uk-text-center" uk-grid>
-                        <div>
-                            <div class="uk-text-left uk-width-1-6"></div>
-                        </div>
-                        <div>
-                            <hr>
-                            <div class="uk-text-center">Direktur</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <table style="width:100%">
+                <tr>
+                    <th style="width:70%"></th>
+                    <th>Yogyakarta, 13 Januari 2024</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center;">Direktur</td>
+                </tr>
+            </table>
 
         </div>
     </div>
