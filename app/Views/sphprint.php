@@ -4,10 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dokumen SPH</title>
     <style>
         html {
-            font-size: 10pt
+            font-size: 8pt
+        }
+
+        hr {
+            margin: 0;
         }
 
         table,
@@ -41,7 +45,7 @@
             <td style="font-weight:bold">PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
         </tr>
         <tr>
-            <td style="font-size:10pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : (0274) 2800089 Fax : (0274) 4332246<br> Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com<br> Website : www.dharmaputrainterior.com</td>
+            <td>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : (0274) 2800089 Fax : (0274) 4332246<br> Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com<br> Website : www.dharmaputrainterior.com</td>
         </tr>
     </table>
 
@@ -50,34 +54,36 @@
     <table style="width:100%;">
         <tr>
             <th style="width:60%; text-align:left; font-weight:normal;">Kepada Yth.</th>
-            <th style="width:10%; text-align:left; font-weight:normal; font-size:10pt">Nomor</th>
-            <th style="width:30%; text-align:left; font-weight:normal; font-size:10pt"> : 006/DPSA/ARP/PNWRN/RSHMND/2024</th>
+            <th style="width:10%; text-align:left; font-weight:normal;">Nomor</th>
+            <th style="width:30%; text-align:left; font-weight:normal;"> : 006/DPSA/ARP/PNWRN/RSHMND/2024</th>
         </tr>
         <tr>
-            <td style="font-size:10pt">Direktur RS Hermina Manado</td>
-            <td style="font-size:10pt;">Perihal</td>
-            <td style="font-size:10pt"> : Surat Penawaran Harga</td>
+            <td>Direktur RS Hermina Manado</td>
+            <td>Perihal</td>
+            <td> : Surat Penawaran Harga</td>
         </tr>
         <tr>
-            <td style="font-size:10pt"></td>
-            <td style="font-size:10pt">Pekerjaan</td>
-            <td style="font-size:10pt"> : Lukisan Dinding</td>
+            <td></td>
+            <td>Pekerjaan</td>
+            <td> : Lukisan Dinding</td>
         </tr>
         <tr>
-            <td style="font-size:10pt"></td>
-            <td style="font-size:10pt;">Lokasi</td>
-            <td style="font-size:10pt"> : RS Hermina Manado</td>
+            <td></td>
+            <td>Lokasi</td>
+            <td> : RS Hermina Manado</td>
         <tr>
-            <td style="font-size:10pt"></td>
-            <td style="font-size:10pt;">Tanggal</td>
-            <td style="font-size:10pt"> : 13 Januari 2024</td>
+            <td></td>
+            <td>Tanggal</td>
+            <td> : 13 Januari 2024</td>
         </tr>
     </table>
 
     <div>
         <div>
             <div>
-                <div><hr style="width: 10%;">Up. Ibu Bunga(Kepala Jangum) <br><br>Dengan hormat,</div>
+                <div>
+                    Up. Ibu Bunga(Kepala Jangum) <br><br>Dengan hormat,
+                </div>
                 <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
             </div>
 
@@ -128,9 +134,8 @@
                                             }
                                             $total[] = $price;
                 ?>
-
                                             <tr class="uk-text-center">
-                                                <td style="border: 1pt solid black;"></td>
+                                                <td style="border: 1pt solid black;">1.</td>
                                                 <td style="border: 1pt solid black;"><?= $projects['name'] ?></td>
                                                 <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
                                                 <td style="border: 1pt solid black;"><?= $mdl['length'] ?></td>
@@ -176,8 +181,11 @@
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td class="uk-text-right"><?= "Rp." . number_format(array_sum($total), 0, ',', '.')  ?></td>
+                    <td style="border: 1pt solid black;">
+                        <?php if (!empty($total)) {
+                            echo "Rp." . number_format(array_sum($total), 0, ',', '.');
+                        } ?>
+                    </td>
                 </tr>
                 <tr style="border: 1pt solid black;">
                     <td style="border: 1pt solid black;"></td>

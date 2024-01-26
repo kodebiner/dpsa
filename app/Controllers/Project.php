@@ -541,7 +541,7 @@ class Project extends BaseController
         // $mpdf->Image('./img/logo.png', 0, 0, 210, 297, 'png', '', true, false);
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
-        $mpdf->AddPage("L", "", "", "", "", "15", "15", "0", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+        $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4-L");
 
         $date = date_create($projects['created_at']);
         $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
@@ -580,5 +580,65 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
         return view('sphprint', $data);
+    }
+
+    public function invoice($id)
+    {
+        // Calling models
+        $ProjectModel   = new ProjectModel;
+        $CompanyModel   = new CompanyModel();
+        $RabModel       = new RabModel();
+        $PaketModel     = new PaketModel();
+        $MdlModel       = new MdlModel();
+
+        $projects = $ProjectModel->find($id);
+        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+
+        // Parsing Data to View
+        $data                   = $this->data;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['projects']       = $projects;
+        $data['rabs']           = $RabModel->findAll();
+        $data['pakets']         = $PaketModel->findAll();
+        $data['mdls']           = $MdlModel->findAll();
+        $data['client']         = $client;
+
+        $mpdf = new \Mpdf\Mpdf([
+            'default_font_size' => 5,
+        ]);
+        $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
+        $mpdf->showImageErrors = true;
+        $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+
+        $date = date_create($projects['created_at']);
+        $filename = "invoice" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
+        $html = view('Views/invoice', $data);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($filename, 'D');
+    }
+
+    public function invoiceview($id)
+    {
+        // Calling models
+        $ProjectModel   = new ProjectModel;
+        $CompanyModel   = new CompanyModel();
+        $RabModel       = new RabModel();
+        $PaketModel     = new PaketModel();
+        $MdlModel       = new MdlModel();
+
+        $projects = $ProjectModel->find($id);
+        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+
+        // Parsing Data to View
+        $data                   = $this->data;
+        $data['title']          = lang('Global.titleDashboard');
+        $data['description']    = lang('Global.dashboardDescription');
+        $data['projects']       = $projects;
+        $data['rabs']           = $RabModel->findAll();
+        $data['pakets']         = $PaketModel->findAll();
+        $data['mdls']           = $MdlModel->findAll();
+        $data['client']         = $client;
+        return view('invoice', $data);
     }
 }

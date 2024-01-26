@@ -374,7 +374,8 @@
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }
                                                                                     ?>
-                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format($price, 0, ',', '.');" "; ?></td>
+                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format($price, 0, ',', '.');
+                                                                                                                " "; ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -388,8 +389,8 @@
                                                 </tbody>
                                             </table>
                                             <p class="uk-text-right uk-width-1-1" uk-margin>
-                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a> -->
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a>
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
+                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a> -->
                                             </p>
                                             <hr class="uk-margin">
                                         </div>
@@ -762,7 +763,7 @@
                                     <!-- end of desain -->
 
                                     <!-- Invoice -->
-                                    <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                    <!-- <div class="uk-width-1-1 uk-margin-bottom-remove">
                                         <div class="uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="">
@@ -778,12 +779,27 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr class="uk-margin">
-                                    </div>
+
+                                        <!-- <div class="uk-margin" uk-grid>
+                                            <div class="uk-width-small@m">
+                                                <div class="">Invoice PDF</div>
+                                            </div>
+                                            <div class="uk-width-1-3@m">
+                                                <div>
+                                                    <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-text"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    <!-- <hr class="uk-margin">
+                                        <a class="uk-button uk-button-primary uk-margin-small-right" uk-icon="trash" href="project/invoice/<?= $project['id'] ?>"></a>
+                                    </div> -->
+
+
                                     <!-- End Of Invoice -->
 
                                     <!-- SPK -->
                                     <p class="uk-text-right uk-width-1-1" uk-margin>
+                                        <a class="uk-button uk-button-primary uk-margin-right" href="project/invoice/<?= $project['id'] ?>">Invoice</a>
                                         <?php
                                         if ($projectdata[$project['id']]['project']['status_spk'] === null) {
                                             echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";

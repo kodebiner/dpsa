@@ -115,6 +115,8 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('delete/(:num)', 'Project::delete/$1');
     $routes->get('sphprint/(:num)', 'Project::sphprint/$1');
     $routes->get('sphview/(:num)', 'Project::sphview/$1');
+    $routes->get('invoice/(:num)', 'Project::invoice/$1');
+    $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
 
     // Project Temp Routes
     // $routes->get('', 'ProjectTemp::index');
