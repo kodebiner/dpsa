@@ -32,10 +32,10 @@ class Upload extends BaseController
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/design/', $truename.'.'.$ext);
+            $input->move(FCPATH . '/img/design/', $truename . '.' . $ext);
 
             // Getting True Filename
-            $returnFile = $truename.'.'.$ext;
+            $returnFile = $truename . '.' . $ext;
 
             // Returning Message
             die(json_encode($returnFile));
@@ -58,7 +58,6 @@ class Upload extends BaseController
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
         // die(json_encode($this->request->getPost()));
-
         // Validation Rules
         $rules = [
             'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
@@ -131,14 +130,18 @@ class Upload extends BaseController
 
     public function spk()
     {
+
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream]',
         ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
 
         // Validating
         if (!$this->validate($rules)) {
@@ -150,15 +153,10 @@ class Upload extends BaseController
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/spk/', $filename);
-
-            // Removing uploaded if it's not the same filename
-            if ($filename != $truename . '.pdf') {
-                unlink(FCPATH . '/img/spk/' . $filename);
-            }
+            $input->move(FCPATH . '/img/spk/', $truename . '.' . $ext);
 
             // Getting True Filename
-            $returnFile = $truename . '.pdf';
+            $returnFile = $truename . '.' . $ext;
 
             // Returning Message
             die(json_encode($returnFile));
@@ -177,7 +175,7 @@ class Upload extends BaseController
                 'label'  => 'SPK',
                 'rules'  => 'required',
                 'errors' => [
-                    'required'      => 'File SPK {field} Belum Di Unggah',
+                    'required'      => 'File {field} Belum Di Unggah',
                 ],
             ],
         ];
@@ -247,7 +245,7 @@ class Upload extends BaseController
         $spreadsheet = $render->load($input);
 
         $data = $spreadsheet->getActiveSheet()->toArray();
-        foreach($data as $x => $row) {
+        foreach ($data as $x => $row) {
             if ($x == 0) {
                 continue;
             }

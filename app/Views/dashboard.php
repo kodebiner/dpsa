@@ -763,53 +763,42 @@
                                     <!-- end of desain -->
 
                                     <!-- Invoice -->
-                                    <!-- <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                    <div class="uk-width-1-1 uk-margin-remove-bottom">
                                         <div class="uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="">
-                                                    <h4 class="uk-width-1-1">Invoice</h4>
+                                                    <h4 class="uk-width-1-1">FILE INVOICE & SPK</h4>
                                                 </div>
                                             </div>
                                             <div>
                                                 <div class="uk-child-width-1-1 uk-text-right" uk-grid>
                                                     <div>
-                                                        <div id="containerbtninv<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndowninv<?= $project['id'] ?>"></div>
-                                                        <div id="containerbtnupinv<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv<?= $project['id'] ?>"></div>
+                                                        <!-- <div id="containerbtninv<?= $project['id'] ?>"><span uk-icon="icon: file-text; ratio: 2" id="btndowninv<?= $project['id'] ?>"></div>
+                                                        <div id="containerbtnupinv<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv<?= $project['id'] ?>"></div> -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- <div class="uk-margin" uk-grid>
-                                            <div class="uk-width-small@m">
-                                                <div class="">Invoice PDF</div>
+                                        <div class="uk-margin" uk-grid>
+                                            <div class="uk-width-1-1">
+                                                <!-- SPK -->
+                                                <p class="uk-margin-remove-top" uk-margin>
+                                                    <a class="uk-button uk-button-primary uk-margin-right" href="project/invoice/<?= $project['id'] ?>"><span class="uk-margin-small-right uk-icon" uk-icon="icon:  credit-card; ratio: 1.2"></span>Invoice</a>
+                                                    <?php
+                                                    if ($projectdata[$project['id']]['project']['status_spk'] === null) {
+                                                        echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
+                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'>Download SPK</a>";
+                                                    } else {
+                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'>Download SPK</a>";
+                                                    }
+                                                    ?>
+                                                </p>
                                             </div>
-                                            <div class="uk-width-1-3@m">
-                                                <div>
-                                                    <a href="img/revisi/<?= $desainpro ?>" target="_blank" uk-icon="file-text"></a> <a href="img/design/<?= $desainpro ?>" target="_blank"> <?= $desainpro ?> </a>
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                    <!-- <hr class="uk-margin">
-                                        <a class="uk-button uk-button-primary uk-margin-small-right" uk-icon="trash" href="project/invoice/<?= $project['id'] ?>"></a>
-                                    </div> -->
-
-
+                                        </div>
+                                        <hr class="uk-margin">
+                                    </div>
                                     <!-- End Of Invoice -->
-
-                                    <!-- SPK -->
-                                    <p class="uk-text-right uk-width-1-1" uk-margin>
-                                        <a class="uk-button uk-button-primary uk-margin-right" href="project/invoice/<?= $project['id'] ?>">Invoice</a>
-                                        <?php
-                                        if ($projectdata[$project['id']]['project']['status_spk'] === null) {
-                                            echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
-                                        } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
-                                            echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'>Download SPK</a>";
-                                        } else {
-                                            echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'>Download SPK</a>";
-                                        }
-                                        ?>
-                                    </p>
 
                                     <!-- modal SPK -->
                                     <div id="modal-spk<?= $project['id'] ?>" uk-modal>
@@ -855,12 +844,10 @@
                                                         <div class="uk-placeholder" id="placespk<?= $project['id'] ?>" hidden>
                                                             <div uk-grid>
                                                                 <div class="uk-text-left uk-width-3-4">
-                                                                    <div id="upspk<?= $project['id'] ?>">
-                                                                    </div>
+                                                                    <div id="upspk<?= $project['id'] ?>"></div>
                                                                 </div>
                                                                 <div class="uk-text-right uk-width-1-4">
-                                                                    <div id="closespk<?= $project['id'] ?>">
-                                                                    </div>
+                                                                    <div id="closespk<?= $project['id'] ?>"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1022,7 +1009,6 @@
                                         </div>
                                     </div>
                                     <!-- End Modal SPK -->
-
                                 </div>
 
                             </div>

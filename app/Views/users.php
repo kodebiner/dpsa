@@ -47,7 +47,7 @@
     <?= view('Views/Auth/_message_block') ?>
 
     <!-- Modal Add -->
-    <?php if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) { ?>
+    <?php if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) { ?>
         <div uk-modal class="uk-flex-top" id="tambahdata">
             <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-content">
