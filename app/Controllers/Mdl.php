@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\MdlModel;
+use App\Models\MdlPaketModel;
 use App\Models\PaketModel;
 use App\Models\LogModel;
 
@@ -30,37 +31,72 @@ class Mdl extends BaseController
         $pager      = \Config\Services::pager();
 
         // Calling Models
-        $MdlModel   = new MdlModel();
-        $PaketModel = new PaketModel();
+        $MdlModel       = new MdlModel();
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
 
         // Filter Input
-        $input      = $this->request->getGet();
+        $input          = $this->request->getGet();
 
         if (isset($input['perpage'])) {
-            $perpage = $input['perpage'];
+            $perpage    = $input['perpage'];
         } else {
-            $perpage = 10;
+            $perpage    = 10;
         }
 
         // Populating Data
+        // List Parent
+        $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+
+        // List Parent Auto Complete
+        $autoparent     = $PaketModel->where('parentid', 0)->find();
+
+        // LAST UPDATE HERE
         // List Paket
-        if (isset($input['search']) && !empty($input['search'])) {
-            $pakets = $PaketModel->like('name', $input['search'])->paginate($perpage, 'paket');
-        } else {
-            $pakets = $PaketModel->paginate($perpage, 'paket');
-        }
+        // $mdldata        = [];
+        // $paketdata      = [];
+        // $mdlpaketdata   = [];
+        // foreach ($parents as $parent) {
+        //     $paketdata[]    = $PaketModel->where('parentid', $parent['id'])->find();
+            
+        //     foreach ($paketdata as $paket) {
+        //         $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
+
+        //         if (!empty($mdlpaket)) {
+        //             foreach ($mdlpaket as $mdlp) {
+        //                 $mdlpaketdata[] = $MdlModel->find($mdlp['mdlid']);
+        //             }
+        //         } else {
+        //             $mdlpaketdata   = '';
+        //         }
+        //     }
+        // }
+        // $mdldata['paket']   = $paketdata;
+        // $mdldata['mdl']     = $mdlpaketdata;
+        // dd($mdldata);
+
+        // List MDL Paket
+        // $mdls   = [];
 
         // List MDL In Paket
-        $mdls = array();
-        foreach ($pakets as $paket) {
-            $mdls[$paket['id']] = $MdlModel->where('paketid', $paket['id'])->find();
-        }
+        // $mdls = array();
+        // foreach ($pakets as $paket) {
+        //     $mdls[$paket['id']] = $MdlModel->where('paketid', $paket['id'])->find();
+        // }
+
+        // Search Engine
+        // if (isset($input['search']) && !empty($input['search'])) {
+        //     $pakets     = $PaketModel->like('name', $input['search'])->paginate($perpage, 'paket');
+        // } else {
+        //     $pakets     = $PaketModel->paginate($perpage, 'paket');
+        // }
 
         // Parsing Data to View
         $data                   =   $this->data;
         $data['title']          =   "MDL";
         $data['description']    =   "Daftar MDL yang tersedia";
         $data['pakets']         =   $pakets;
+        $data['autoparent']     =   $autoparent;
         $data['mdls']           =   $mdls;
         $data['input']          =   $input;
         $data['pager']          =   $PaketModel->pager;

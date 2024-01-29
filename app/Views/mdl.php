@@ -256,6 +256,29 @@
                             </div>
                         </div>
 
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="parent kategori">Kategori</label>
+                            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
+                                <label><input class="uk-checkbox" type="checkbox" id="kategori" name="parent">Kategori</label>
+                                <label><input class="uk-checkbox" type="checkbox" id="sub kategori">Sub Kategori</label>
+                            </div>
+                        </div>
+
+                        <div class="uk-margin" id="parent" hidden>
+                            <label class="uk-form-label" for="parent">Pilih Kategori</label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" name="parent">
+                                    <option value="" selected disabled>Daftar Kategori</option>
+                                    <?php
+                                    foreach ($parents as $parent) {
+                                        if ($parent['parentid'] === '0') {
+                                            echo '<option value="' . $parent['id'] . '">' . $parent['name'] . '</option>';
+                                        }
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="uk-modal-footer">
                             <div class="uk-flex-right">
                                 <button class="uk-button uk-button-primary" type="submit">Simpan</button>
