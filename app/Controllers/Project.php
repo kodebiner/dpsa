@@ -493,12 +493,16 @@ class Project extends BaseController
             $design     = $DesignModel->where('projectid', $id)->first();
 
             // Deleting Rab
-            foreach ($rabs as $rab) {
-                $RabModel->delete($rab['id']);
+            if (!empty($rab)) {
+                foreach ($rabs as $rab) {
+                    $RabModel->delete($rab['id']);
+                }
             }
 
             // Deleting Design
-            $DesignModel->delete($design['id']);
+            if (!empty($design)) {
+                $DesignModel->delete($design['id']);
+            }
 
             // Delete Project
             $ProjectModel->delete($id);
