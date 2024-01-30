@@ -49,32 +49,53 @@ class Mdl extends BaseController
         $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
 
         // List Parent Auto Complete
-        $autoparent     = $PaketModel->where('parentid', 0)->find();
+        $autoparents    = $PaketModel->where('parentid', 0)->find();
 
-        // LAST UPDATE HERE
         // List Paket
-        // $mdldata        = [];
-        // $paketdata      = [];
-        // $mdlpaketdata   = [];
-        // foreach ($parents as $parent) {
-        //     $paketdata[]    = $PaketModel->where('parentid', $parent['id'])->find();
-            
-        //     foreach ($paketdata as $paket) {
-        //         $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
+        if (!empty($parents)) {
+            $mdldata        = [];
+            foreach ($parents as $parent) {
+                $paketdata      = $PaketModel->where('parentid', $parent['id'])->find();
+                
+                if (!empty($paketdata)) {
+                    foreach ($paketdata as $paket) {
+                        $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['name'] = $paket['name'];
+    
+                        if (!empty($mdlpaket)) {
+                            foreach ($mdlpaket as $mdlp) {
+                                $mdlpaketdata   = $MdlModel->find($mdlp['mdlid']);
+    
+                                if (!empty($mdlpaketdata)) {
+                                    foreach ($mdlpaketdata as $mdl) {
+                                        $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdl['id']] = [
+                                            'id'            => $mdl['id'],
+                                            'name'          => $mdl['name'],
+                                            'length'        => $mdl['length'],
+                                            'width'         => $mdl['width'],
+                                            'height'        => $mdl['height'],
+                                            'volume'        => $mdl['volume'],
+                                            'denomination'  => $mdl['denomination'],
+                                            'keterangan'    => $mdl['keterangan'],
+                                            'price'         => $mdl['price'],
+                                        ];
+                                    }
+                                }
+                            }
+                        } else {
+                            $mdlpaketdata   = '';
+                        }
+                    }
+                } else {
+                    $mdlpaket   = '';
+                    $mdldata[$parent['id']]['paket']    = [];
+                }
+            }
+        } else {
+            $paketdata    = '';
+        }
 
-        //         if (!empty($mdlpaket)) {
-        //             foreach ($mdlpaket as $mdlp) {
-        //                 $mdlpaketdata[] = $MdlModel->find($mdlp['mdlid']);
-        //             }
-        //         } else {
-        //             $mdlpaketdata   = '';
-        //         }
-        //     }
-        // }
-        // $mdldata['paket']   = $paketdata;
-        // $mdldata['mdl']     = $mdlpaketdata;
-        // dd($mdldata);
-
+        // SEARCH ENGINE ON GOING
         // List MDL Paket
         // $mdls   = [];
 
@@ -95,9 +116,9 @@ class Mdl extends BaseController
         $data                   =   $this->data;
         $data['title']          =   "MDL";
         $data['description']    =   "Daftar MDL yang tersedia";
-        $data['pakets']         =   $pakets;
-        $data['autoparent']     =   $autoparent;
-        $data['mdls']           =   $mdls;
+        $data['mdldata']        =   $mdldata;
+        $data['parents']        =   $parents;
+        $data['autoparents']    =   $autoparents;
         $data['input']          =   $input;
         $data['pager']          =   $PaketModel->pager;
 
@@ -132,6 +153,7 @@ class Mdl extends BaseController
         // Save Data
         $paket = [
             'name'          => $input['name'],
+            'parentid'      => $input['parent'],
         ];
 
         // Insert Data Paket
@@ -178,6 +200,7 @@ class Mdl extends BaseController
         $paketup = [
             'id'            => $id,
             'name'          => $input['name'],
+            'parentid'      => $input['parent'],
         ];
 
         // Save Data Paket
