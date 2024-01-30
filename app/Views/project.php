@@ -224,6 +224,193 @@
                                 </div>
                             </div>
                             <!-- End Of Add Client -->
+
+                            <label class="uk-form-label" for="designtype">Dengan Desain</label>
+                            <label class="switch  uk-margin-bottom">
+                            <input id="designtype<?= $project['id'] ?>" name="designtype" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            <script>
+                                $(document).ready(function() {
+                                    $("input[id='designtype<?= $project['id'] ?>']").change(function() {
+                                        if ($(this).is(':checked')) {
+                                            $("input[id='designtype<?= $project['id'] ?>']").val(1);
+                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", false);
+                                        } else {
+                                            $("input[id='designtype<?= $project['id'] ?>']").val(0);
+                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", true);
+                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", false);
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            <div class="uk-margin" id="imgdesigncreate<?= $project['id'] ?>" hidden>
+                                <label class="uk-form-label" for="photocreate">Unggah file DED / Layout</label>
+                                <div class="uk-placeholder" id="placedesign<?= $project['id'] ?>" hidden>
+                                    <div uk-grid>
+                                        <div class="uk-text-left uk-width-3-4">
+                                            <div id="updesign<?= $project['id'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="uk-text-right uk-width-1-4">
+                                            <div id="closeddesign<?= $project['id'] ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
+                                    <input id="designcreated<?= $project['id'] ?>" name="design" hidden required/>
+                                    <div id="js-upload-createdesign-<?= $project['id'] ?>" class="js-upload-createdesign-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                        <span uk-icon="icon: cloud-upload"></span>
+                                        <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                        <div uk-form-custom>
+                                            <input type="file">
+                                            <span class="uk-link uk-preserve-color">pilih satu</span>
+                                        </div>
+                                    </div>
+                                    <progress id="js-progressbar-createdesign-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                var bar = document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>');
+
+                                UIkit.upload('.js-upload-createdesign-<?= $project['id'] ?>', {
+                                    url: 'upload/layout',
+                                    multiple: false,
+                                    name: 'uploads',
+                                    param: {
+                                        lorem: 'ipsum'
+                                    },
+                                    method: 'POST',
+                                    type: 'json',
+
+                                    beforeSend: function() {
+                                        console.log('beforeSend', arguments);
+                                    },
+                                    beforeAll: function() {
+                                        console.log('beforeAll', arguments);
+                                    },
+                                    load: function() {
+                                        console.log('load', arguments);
+                                    },
+                                    error: function() {
+                                        console.log('error', arguments);
+                                        var error = arguments[0].xhr.response.message.uploads;
+                                        alert(error);
+                                    },
+
+                                    complete: function() {
+                                        console.log('complete', arguments);
+
+                                        var filename = arguments[0].response;
+
+                                        if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
+                                            document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                        };
+
+                                        document.getElementById('designcreated<?= $project['id'] ?>').value = filename;
+
+                                        document.getElementById('placedesign<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                        var uprev = document.getElementById('updesign<?= $project['id'] ?>');
+                                        var closed = document.getElementById('closeddesign<?= $project['id'] ?>');
+
+                                        var divuprev = document.createElement('h6');
+                                        divuprev.setAttribute('class', 'uk-margin-remove');
+                                        divuprev.setAttribute('id', 'design<?= $project['id'] ?>');
+
+
+                                        var linkrev = document.createElement('a');
+                                        linkrev.setAttribute('href', 'img/revisi/' + filename);
+                                        linkrev.setAttribute('uk-icon', 'file-text');
+
+                                        var link = document.createElement('a');
+                                        link.setAttribute('href', 'img/revisi/' + filename);
+                                        link.setAttribute('target', '_blank');
+
+                                        var linktext = document.createTextNode(filename);
+
+                                        var divclosed = document.createElement('a');
+                                        divclosed.setAttribute('uk-icon', 'icon: close');
+                                        divclosed.setAttribute('onClick', 'removedesign<?= $project['id'] ?>()');
+                                        divclosed.setAttribute('id', 'closedes<?= $project['id'] ?>');
+
+                                        uprev.appendChild(divuprev);
+                                        divuprev.appendChild(linkrev);
+                                        divuprev.appendChild(link);
+                                        link.appendChild(linktext);
+                                        closed.appendChild(divclosed);
+
+                                        document.getElementById('js-upload-createdesign-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    },
+
+                                    loadStart: function(e) {
+                                        console.log('loadStart', arguments);
+
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+
+                                    },
+
+                                    progress: function(e) {
+                                        console.log('progress', arguments);
+
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+                                    },
+
+                                    loadEnd: function(e) {
+                                        console.log('loadEnd', arguments);
+
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+                                    },
+
+                                    completeAll: function() {
+                                        console.log('completeAll', arguments);
+
+                                        setTimeout(function() {
+                                            document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                            alert('Proses unggah data desain selesai');
+                                        }, 1000);
+                                    }
+
+                                });
+
+                                function removedesign<?= $project['id'] ?>() {
+                                    $.ajax({
+                                        type: 'post',
+                                        url: 'upload/removelayout',
+                                        data: {
+                                            'design': document.getElementById('designcreated<?= $project['id'] ?>').value
+                                        },
+                                        dataType: 'json',
+
+                                        error: function() {
+                                            console.log('error', arguments);
+                                        },
+
+                                        success: function() {
+                                            console.log('success', arguments);
+
+                                            var pesan = arguments[0][1];
+
+                                            document.getElementById('design<?= $project['id'] ?>').remove();
+                                            document.getElementById('closedes<?= $project['id'] ?>').remove();
+                                            document.getElementById('placedesign<?= $project['id'] ?>').setAttribute('hidden', '');
+                                            document.getElementById('designcreated<?= $project['id'] ?>').value = '';
+
+                                            document.getElementById('js-upload-createdesign-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                            alert(pesan);
+                                        }
+                                    });
+                                };
+                            </script>
+
                             <div class="uk-modal-footer uk-text-right">
                                 <button class="uk-button uk-button-primary" type="submit">Save</button>
                             </div>
@@ -688,7 +875,7 @@
                                     <?php if ($project['status_spk'] != 1) { ?>
                                         <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>" target="_blank">Download SPH</a>
                                                 <hr>
                                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                     <table class="uk-table uk-table-middle uk-table-divider">
