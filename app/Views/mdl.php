@@ -139,6 +139,7 @@
                 </tr>
                 <?php foreach ($mdldata[$parent['id']]['paket'] as $paket) { ?>
                     <tr class="togglepaket<?= $parent['id'] ?>" hidden>
+                        <td></td>
                         <td><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
                         <td colspan="7" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                         <td class="uk-text-center">
@@ -305,16 +306,104 @@
 </script>
 <!-- Modal Add Paket End -->
 
-<!-- LAST UPDATE HERE -->
-<!-- Modal Edit Paket -->
 <?php foreach ($parents as $parent) { ?>
-    <?php foreach ($pakets as $paket) { ?>
+    <!-- Modal Edit Paket -->
+    <div class="uk-modal-container" id="modalupdatepaket<?= $parent['id'] ?>" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+            <div class="uk-modal-content">
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">Ubah Kategori <?= $parent['name'] ?></h2>
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                </div>
+
+                <div class="uk-modal-body">
+                    <form class="uk-form-stacked" role="form" action="paket/update/<?= $parent['id'] ?>" method="post">
+                        <?= csrf_field() ?>
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="name">Nama</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="name" name="name" value="<?= $parent['name']; ?>" />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="parent">Tipe Kategori</label>
+                            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
+                                <?php if ($parent['parentid'] != "0") { ?>
+                                    <label><input class="uk-checkbox" type="checkbox" id="edit kategori<?= $parent['id'] ?>" name="parent" value="0"> Kategori</label>
+                                    <label><input class="uk-checkbox" type="checkbox" id="edit subkategori<?= $parent['id'] ?>" checked> Sub Kategori</label>
+                                <?php } else { ?>
+                                    <label><input class="uk-checkbox" type="checkbox" id="edit kategori<?= $parent['id'] ?>" name="parent" value="0" checked> Kategori</label>
+                                    <label><input class="uk-checkbox" type="checkbox" id="edit subkategori<?= $parent['id'] ?>"> Sub Kategori</label>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <div class="uk-margin" id="parent<?= $parent['id'] ?>" hidden>
+                            <label class="uk-form-label" for="parent">Pilih Kategori</label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" name="parent" id="select<?= $parent['id'] ?>">
+                                    <option value="" selected disabled>Daftar Kategori</option>
+                                    <?php
+                                    foreach ($autoparents as $autoparent) {
+                                        if ($autoparent['id'] === $parent['id']) {
+                                            $selected = 'selected';
+                                        } else {
+                                            $selected = "";
+                                        }
+                                        echo '<option value="' . $autoparent['id'] . '" ' . $selected . '>' . $autoparent['name'] . '</option>';
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                if ($("input[id='edit subkategori<?= $parent['id'] ?>']").is(':checked')) {
+                                    $("#parent<?= $parent['id'] ?>").removeAttr("hidden");
+                                    $("#select<?= $parent['id'] ?>").prop("required", true);
+                                }
+
+                                $("input[id='edit subkategori<?= $parent['id'] ?>']").change(function() {
+                                    if ($(this).is(':checked')) {
+                                        $("input[id='edit kategori<?= $parent['id'] ?>']").prop("checked", false);
+                                        $("#parent<?= $parent['id'] ?>").removeAttr("hidden");
+                                        $("#select<?= $parent['id'] ?>").prop("required", true);
+                                    } else {
+                                        $("#editparent<?= $parent['id'] ?>").attr("hidden", true);
+                                        $("#select<?= $parent['id'] ?>").prop("required", false);
+                                        $("#select<?= $parent['id'] ?>").val("0");
+                                    }
+                                });
+
+                                $("input[id='edit kategori<?= $parent['id'] ?>']").click(function() {
+                                    $("input[id='edit subkategori<?= $parent['id'] ?>']").prop("checked", false);
+                                    $("#parent<?= $parent['id'] ?>").attr("hidden", true);
+                                    $("#select<?= $parent['id'] ?>").prop("required", false);
+                                    $("#select<?= $parent['id'] ?>").val("0");
+                                });
+                            });
+                        </script>
+
+                        <div class="uk-modal-footer">
+                            <div class="uk-flex-right">
+                                <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit Paket End -->
+    
+    <?php foreach ($mdldata[$parent['id']]['paket'] as $paket) { ?>
         <!-- Modal Edit Sub Paket -->
         <div class="uk-modal-container" id="modalupdate<?= $paket['id'] ?>" uk-modal>
             <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-content">
                     <div class="uk-modal-header">
-                        <h2 class="uk-modal-title">Ubah Paket <?= $paket['name'] ?></h2>
+                        <h2 class="uk-modal-title">Ubah Sub Kategori <?= $paket['name'] ?></h2>
                         <button class="uk-modal-close-default" type="button" uk-close></button>
                     </div>
 
@@ -322,42 +411,9 @@
                         <form class="uk-form-stacked" role="form" action="paket/update/<?= $paket['id'] ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="name">Nama</label>
+                                <label class="uk-form-label" for="name">Nama Sub Kategori</label>
                                 <div class="uk-form-controls">
                                     <input type="text" class="uk-input" id="name" name="name" value="<?= $paket['name']; ?>" />
-                                </div>
-                            </div>
-
-                            <div class="uk-margin">
-                                <label class="uk-form-label" for="parent">Keterangan</label>
-                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-margin-remove-top">
-                                    <?php if ($comp['parent'] != "0") { ?>
-                                        <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox"> Pusat</label>
-                                        <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox" checked> Cabang</label>
-                                    <?php } else { ?>
-                                        <label><input class="uk-checkbox" name="parent" value="0" id="editroleclient pusat<?= $comp['id'] ?>" type="checkbox" checked> Pusat</label>
-                                        <label><input class="uk-checkbox" id="editroleclient cabang<?= $comp['id'] ?>" type="checkbox"> Cabang</label>
-                                    <?php } ?>
-                                </div>
-                            </div>
-
-                            <div class="uk-margin" id="parent<?= $comp['id'] ?>" hidden>
-                                <label class="uk-form-label" for="parent">Pilih Pusat</label>
-                                <div class="uk-form-controls">
-                                    <select class="uk-select" name="parent" id="select<?= $comp['id'] ?>">
-                                        <option value="" selected disabled>Daftar Pusat</option>
-                                        <?php
-                                        foreach ($roles as $role) {
-                                            if ($role['parentid'] == "0" && $role['id'] != $comp['id']) {
-                                                if ($role['id'] === $comp['parent']) {
-                                                    $selected = 'selected';
-                                                } else {
-                                                    $selected = "";
-                                                }
-                                                echo '<option value="' . $role['id'] . '" ' . $selected . '>' . $role['rsname'] . '</option>';
-                                            }
-                                        } ?>
-                                    </select>
                                 </div>
                             </div>
 
@@ -510,7 +566,157 @@
                             </div>
                         </div>
 
+                        <div class="uk-margin" id="image-container-createmdl-<?= $paket['id'] ?>">
+                            <div id="image-containermdl-<?= $paket['id'] ?>" class="uk-form-controls">
+                                <input id="photocreatemdl<?= $paket['id'] ?>" name="photo" hidden />
+                                <div id="js-upload-createmdl-<?= $paket['id'] ?>" class="js-upload-createmdl-<?= $paket['id'] ?> uk-placeholder uk-text-center">
+                                    <span uk-icon="icon: cloud-upload"></span>
+                                    <span class="uk-text-middle">Tarik dan lepas foto disini atau</span>
+                                    <div uk-form-custom>
+                                        <input type="file">
+                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                    </div>
+                                </div>
+                                <progress id="js-progressbar-createmdl-<?= $paket['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                            </div>
+                        </div>
+
                         <script>
+                            // Upload Photo MDL
+                            var bar = document.getElementById('js-progressbar-createmdl-<?= $paket['id'] ?>');
+
+                            UIkit.upload('.js-upload-createmdl-<?= $paket['id'] ?>', {
+                                url: 'upload/photomdl',
+                                multiple: false,
+                                name: 'uploads',
+                                param: {
+                                    lorem: 'ipsum'
+                                },
+                                method: 'POST',
+                                type: 'json',
+
+                                beforeSend: function() {
+                                    console.log('beforeSend', arguments);
+                                },
+                                beforeAll: function() {
+                                    console.log('beforeAll', arguments);
+                                },
+                                load: function() {
+                                    console.log('load', arguments);
+                                },
+                                error: function() {
+                                    console.log('error', arguments);
+                                    var error = arguments[0].xhr.response.message.uploads;
+                                    alert(error);
+                                },
+
+                                complete: function() {
+                                    console.log('complete', arguments);
+
+                                    var filename = arguments[0].response;
+
+                                    if (document.getElementById('display-container-createmdl-<?= $paket['id'] ?>')) {
+                                        document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
+                                    };
+
+                                    document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = filename;
+
+                                    var imgContainer = document.getElementById('image-container-createmdl-<?= $paket['id'] ?>');
+
+                                    var displayContainer = document.createElement('div');
+                                    displayContainer.setAttribute('id', 'display-container-createmdl-<?= $paket['id'] ?>');
+                                    displayContainer.setAttribute('class', 'uk-inline');
+
+                                    var displayImg = document.createElement('div');
+                                    displayImg.setAttribute('uk-lightbox', 'animation: fade');
+                                    displayImg.setAttribute('class', 'uk-inline');
+
+                                    var link = document.createElement('a');
+                                    link.setAttribute('href', 'img/mdl/' + filename);
+
+                                    var image = document.createElement('img');
+                                    image.setAttribute('src', 'img/mdl/' + filename);
+
+                                    var closeContainer = document.createElement('div');
+                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                    var closeButton = document.createElement('a');
+                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                    closeButton.setAttribute('onClick', 'removeImgCreatemdl<?= $paket['id'] ?>()');
+                                    closeButton.setAttribute('uk-icon', 'close');
+
+                                    closeContainer.appendChild(closeButton);
+                                    displayContainer.appendChild(displayImg);
+                                    displayContainer.appendChild(closeContainer);
+                                    link.appendChild(image);
+                                    displayImg.appendChild(link);
+                                    imgContainer.appendChild(displayContainer);
+
+                                    document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').setAttribute('hidden', '');
+                                },
+
+                                loadStart: function(e) {
+                                    console.log('loadStart', arguments);
+
+                                    bar.removeAttribute('hidden');
+                                    bar.max = e.total;
+                                    bar.value = e.loaded;
+                                },
+
+                                progress: function(e) {
+                                    console.log('progress', arguments);
+
+                                    bar.max = e.total;
+                                    bar.value = e.loaded;
+                                },
+
+                                loadEnd: function(e) {
+                                    console.log('loadEnd', arguments);
+
+                                    bar.max = e.total;
+                                    bar.value = e.loaded;
+                                },
+
+                                completeAll: function() {
+                                    console.log('completeAll', arguments);
+
+                                    setTimeout(function() {
+                                        bar.setAttribute('hidden', 'hidden');
+                                    }, 1000);
+
+                                    alert('Data Berhasil Terunggah');
+                                }
+                            });
+
+                            function removeImgCreatemdl<?= $paket['id'] ?>() {
+                                $.ajax({
+                                    type: 'post',
+                                    url: 'upload/removephotomdl',
+                                    data: {
+                                        'photo': document.getElementById('photocreatemdl<?= $paket['id'] ?>').value
+                                    },
+                                    dataType: 'json',
+
+                                    error: function() {
+                                        console.log('error', arguments);
+                                    },
+
+                                    success: function() {
+                                        console.log('success', arguments);
+
+                                        var pesan = arguments[0][1];
+
+                                        document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
+                                        document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = '';
+
+                                        alert(pesan);
+
+                                        document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').removeAttribute('hidden', '');
+                                    }
+                                });
+                            };
+
+                            // Currency
                             $("input[data-type='currency']").on({
                                 keyup: function() {
                                     formatCurrency($(this));
@@ -683,7 +889,7 @@
         <!-- Modal Import MDL End -->
 
         <!-- Modal Update MDL per Sub Paket -->
-        <?php foreach ($mdls[$paket['id']] as $mdl) { ?>
+        <?php foreach ($paket['mdl'] as $mdl) { ?>
             <div id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <div class="uk-modal-header">
@@ -694,7 +900,6 @@
                     <div class="uk-modal-body">
                         <form class="uk-form-stacked" role="form" action="mdl/update/<?= $mdl['id'] ?>" method="post">
                             <?= csrf_field() ?>
-                            <input hidden type="text" class="uk-input" id="paketid" name="paketid" value="<?= $mdl['paketid']; ?>" />
 
                             <div class="uk-margin-bottom">
                                 <label class="uk-form-label" for="name">Nama</label>

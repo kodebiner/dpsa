@@ -48,51 +48,42 @@ class Mdl extends BaseController
         // List Parent
         $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
 
-        // List Parent Auto Complete
-        $autoparents    = $PaketModel->where('parentid', 0)->find();
-
         // List Paket
+        $mdldata        = [];
         if (!empty($parents)) {
-            $mdldata        = [];
             foreach ($parents as $parent) {
-                $paketdata      = $PaketModel->where('parentid', $parent['id'])->find();
+                $mdldata[$parent['id']]['name']     = $parent['name'];
+                $paketdata                          = $PaketModel->where('parentid', $parent['id'])->find();
                 
                 if (!empty($paketdata)) {
                     foreach ($paketdata as $paket) {
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['id']        = $paket['id'];
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['parentid']  = $paket['parentid'];
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['name']      = $paket['name'];
+
+                        // List MDL Paket
                         $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
-                        $mdldata[$parent['id']]['paket'][$paket['id']]['name'] = $paket['name'];
     
+                        // List MDL
                         if (!empty($mdlpaket)) {
                             foreach ($mdlpaket as $mdlp) {
-                                $mdlpaketdata   = $MdlModel->find($mdlp['mdlid']);
-    
-                                if (!empty($mdlpaketdata)) {
-                                    foreach ($mdlpaketdata as $mdl) {
-                                        $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdl['id']] = [
-                                            'id'            => $mdl['id'],
-                                            'name'          => $mdl['name'],
-                                            'length'        => $mdl['length'],
-                                            'width'         => $mdl['width'],
-                                            'height'        => $mdl['height'],
-                                            'volume'        => $mdl['volume'],
-                                            'denomination'  => $mdl['denomination'],
-                                            'keterangan'    => $mdl['keterangan'],
-                                            'price'         => $mdl['price'],
-                                        ];
-                                    }
-                                }
+                                $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]   = $MdlModel->find($mdlp['mdlid']);
                             }
                         } else {
-                            $mdlpaketdata   = '';
+                            $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                       = [];
                         }
                     }
                 } else {
-                    $mdlpaket   = '';
+                    $mdlpaket   = [];
                     $mdldata[$parent['id']]['paket']    = [];
                 }
+
+                // List Parent Auto Complete
+                $autoparents    = $PaketModel->where('parentid', 0)->where('id !=', $parent['id'])->find();
             }
         } else {
-            $paketdata    = '';
+            $paketdata      = [];
+            $autoparents    = [];
         }
 
         // SEARCH ENGINE ON GOING
@@ -200,8 +191,10 @@ class Mdl extends BaseController
         $paketup = [
             'id'            => $id,
             'name'          => $input['name'],
-            'parentid'      => $input['parent'],
         ];
+        if (isset($input['parent'])) {
+            $paketup['parentid'] = $input['parent'];
+        }
 
         // Save Data Paket
         $PaketModel->save($paketup);
@@ -215,19 +208,20 @@ class Mdl extends BaseController
         // Calling Models
         $PaketModel         = new PaketModel();
         $MdlModel           = new MdlModel();
+        $MdlPaketModel      = new MdlPaketModel();
         $LogModel           = new LogModel();
 
         // Populating Data
         $Paket              = $PaketModel->find($id);
-        $mdls               = $MdlModel->where('paketid', $id)->find();
 
         // Record Log
         $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus paket MDL ' . $Paket['name'] . ' dan seluruh item MDL di dalamnya.']);
 
         // Delete MDL
-        foreach ($mdls as $mdl) {
-            $MdlModel->delete($mdl['id']);
-        }
+        $MdlPaketModel->where('paketid', $id)->delete();
+        // foreach ($mdls as $mdl) {
+        //     $MdlPaketModel->delete($mdl['id']);
+        // }
 
         // Delete Data
         $PaketModel->delete($id);
@@ -239,9 +233,10 @@ class Mdl extends BaseController
     public function createmdl($id)
     {
         // Calling Models
-        $MdlModel = new MdlModel();
-        $PaketModel = new PaketModel();
-        $LogModel = new LogModel();
+        $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
+        $PaketModel     = new PaketModel();
+        $LogModel       = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -283,6 +278,7 @@ class Mdl extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // Save Data MDL
         $mdl = [
             'name'          => $input['name'],
             'length'        => $input['length'],
@@ -291,12 +287,21 @@ class Mdl extends BaseController
             'volume'        => $input['length'],
             'denomination'  => $input['denomination'],
             'keterangan'    => $input['keterangan'],
+            'photo'         => $input['keterangan'],
             'price'         => toInt($str),
-            'paketid'       => $id,
         ];
-
-        // Save Data MDL
+        if (isset($input['photo'])) {
+            $data['photo'] = $input['photo'];
+        }
         $MdlModel->save($mdl);
+
+        // Save Data MDL Paket
+        $mdlid = $MdlModel->getInsertID();
+        $datamdlpaket   = [
+            'mdlid'     => $mdlid,
+            'paketid'   => $id,
+        ];
+        $MdlPaketModel->insert($datamdlpaket);
 
         // Record Log
         $Paket = $PaketModel->find($id);

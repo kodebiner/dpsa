@@ -51,6 +51,8 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('mdl/(:num)', 'Upload::mdl/$1');
     $routes->post('layout', 'Upload::layout');
     $routes->post('removelayout', 'Upload::removelayout');
+    $routes->post('photomdl', 'Upload::photomdl');
+    $routes->post('removephotomdl', 'Upload::removephotomdl');
 });
 
 $routes->group('clientreg', static function ($routes) {

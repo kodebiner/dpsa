@@ -329,4 +329,49 @@ class Upload extends BaseController
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
+
+    public function photomdl()
+    {
+        $image      = \Config\Services::image();
+        $input = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|is_image[uploads]|max_size[uploads,2048]|ext_in[uploads,png,jpg,jpeg]',
+        ];
+
+        // Validating
+        if (! $this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && ! $input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH.'/img/mdl/', $filename);
+            
+            // Removing uploaded if it's not the same filename
+            if ($filename != $truename.'.jpg') {
+                unlink(FCPATH.'/img/mdl/'.$filename);
+            }
+
+            // Getting True Filename
+            $returnFile = $truename.'.jpg';
+
+            // Returning Message
+            die(json_encode($returnFile));
+        }
+    }
+
+    public function removephotomdl()
+    {
+        // Removing File
+        $input = $this->request->getPost('photo');
+        unlink(FCPATH.'img/mdl/'.$input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
 }
