@@ -227,7 +227,7 @@
 
                             <label class="uk-form-label" for="designtype">Dengan Desain</label>
                             <label class="switch  uk-margin-bottom">
-                            <input id="designtype<?= $project['id'] ?>" name="designtype" type="checkbox">
+                                <input id="designtype<?= $project['id'] ?>" name="designtype" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
                             <script>
@@ -260,7 +260,7 @@
                                     </div>
                                 </div>
                                 <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
-                                    <input id="designcreated<?= $project['id'] ?>" name="design" hidden required/>
+                                    <input id="designcreated<?= $project['id'] ?>" name="design" hidden required />
                                     <div id="js-upload-createdesign-<?= $project['id'] ?>" class="js-upload-createdesign-<?= $project['id'] ?> uk-placeholder uk-text-center">
                                         <span uk-icon="icon: cloud-upload"></span>
                                         <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
@@ -1585,6 +1585,190 @@
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        <!-- Serah Terima -->
+                                        <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
+                                            <label class="uk-form-label" for="photocreate">Upload Serah Terima</label>
+                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
+                                                <?php
+                                                foreach ($bastdata[$project['id']]['bast'] as $bast) {
+                                                    if (!empty($bast) && $bast['status'] === "0") { ?>
+                                                        <div>
+                                                            <div class="uk-card uk-card-default uk-card-body">
+                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" onclick="removeCardFile<?= $bast['file'] ?>()" uk-icon="close"></a></div>
+                                                                <!-- <a class="uk-position-top-right uk-margin-right uk-margin-top" onclick="removeCardFile()"></a> -->
+                                                                <?= $bast['file'] ?>
+                                                            </div>
+                                                        </div>
+                                                <?php }
+                                                } ?>
+                                            </div>
+                                            <div class="uk-placeholder" id="placesertrim<?= $project['id'] ?>" hidden>
+                                                <div uk-grid>
+                                                    <div class="uk-text-left uk-width-3-4">
+                                                        <div id="upsertrim<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                    <div class="uk-text-right uk-width-1-4">
+                                                        <div id="closesertrim<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
+                                                <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createsertrim-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        </div>
+
+                                        <script type="text/javascript">
+                                            var barspk = document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>');
+                                            UIkit.upload('.js-upload-createsertrim-<?= $project['id'] ?>', {
+                                                url: 'upload/sertrim',
+                                                multiple: false,
+                                                name: 'uploads',
+                                                param: {
+                                                    lorem: 'ipsum'
+                                                },
+                                                method: 'POST',
+                                                type: 'json',
+
+                                                beforeSend: function() {
+                                                    console.log('beforeSend', arguments);
+                                                },
+                                                beforeAll: function() {
+                                                    console.log('beforeAll', arguments);
+                                                },
+                                                load: function() {
+                                                    console.log('load', arguments);
+                                                },
+                                                error: function() {
+                                                    console.log('error', arguments);
+                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                    alert(error);
+                                                },
+
+                                                complete: function() {
+                                                    console.log('complete', arguments);
+
+
+                                                    var filename = arguments[0].response;
+
+                                                    if (document.getElementById('display-container-createsertrim-<?= $project['id'] ?>')) {
+                                                        document.getElementById('display-container-createsertrim-<?= $project['id'] ?>').remove();
+                                                    };
+
+                                                    document.getElementById('photocreatesertrim<?= $project['id'] ?>').value = filename;
+
+                                                    document.getElementById('placesertrim<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    var uprev = document.getElementById('upsertrim<?= $project['id'] ?>');
+                                                    var closed = document.getElementById('closesertrim<?= $project['id'] ?>');
+
+                                                    var divuprev = document.createElement('h6');
+                                                    divuprev.setAttribute('class', 'uk-margin-remove');
+                                                    divuprev.setAttribute('id', 'sertrim<?= $project['id'] ?>');
+
+                                                    var linkrev = document.createElement('a');
+                                                    linkrev.setAttribute('href', 'img/sertrim/' + filename);
+                                                    linkrev.setAttribute('uk-icon', 'file-text');
+
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/sertrim/' + filename);
+                                                    link.setAttribute('target', '_blank');
+
+                                                    var linktext = document.createTextNode(filename);
+
+                                                    var divclosed = document.createElement('a');
+                                                    divclosed.setAttribute('uk-icon', 'icon: close');
+                                                    divclosed.setAttribute('onClick', 'removeImgCreatesertrim<?= $project['id'] ?>()');
+                                                    divclosed.setAttribute('id', 'closedsertrim<?= $project['id'] ?>');
+
+                                                    uprev.appendChild(divuprev);
+                                                    divuprev.appendChild(linkrev);
+                                                    divuprev.appendChild(link);
+                                                    link.appendChild(linktext);
+                                                    closed.appendChild(divclosed);
+
+                                                    document.getElementById('js-upload-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                },
+
+                                                loadStart: function(e) {
+                                                    console.log('loadStart', arguments);
+
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+
+                                                },
+
+                                                progress: function(e) {
+                                                    console.log('progress', arguments);
+
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                loadEnd: function(e) {
+                                                    console.log('loadEnd', arguments);
+
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                completeAll: function() {
+                                                    console.log('completeAll', arguments);
+
+                                                    setTimeout(function() {
+                                                        document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                        alert('<?= lang('Proses selesai, Silahkan Unggah Data.') ?>');
+                                                    }, 1000);
+                                                }
+
+                                            });
+
+                                            function removeImgCreatesertrim<?= $project['id'] ?>() {
+                                                $.ajax({
+                                                    type: 'post',
+                                                    url: 'upload/removesertrim',
+                                                    data: {
+                                                        'sertrim': document.getElementById('photocreatesertrim<?= $project['id'] ?>').value
+                                                    },
+                                                    dataType: 'json',
+
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+
+                                                    success: function() {
+                                                        console.log('success', arguments);
+
+                                                        var pesan = arguments[0][1];
+
+                                                        document.getElementById('sertrim<?= $project['id'] ?>').remove();
+                                                        document.getElementById('closedsertrim<?= $project['id'] ?>').remove();
+                                                        document.getElementById('placesertrim<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                        document.getElementById('photocreatesertrim<?= $project['id'] ?>').value = '';
+
+                                                        document.getElementById('js-upload-createsertrim-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                        alert(pesan);
+                                                    }
+                                                });
+                                            };
+
+                                            function removeCardFile() {
+                                                alert('halo');
+
+                                            }
+                                        </script>
+                                        <!-- End BAST -->
                                     </div>
                     </div>
 

@@ -663,7 +663,7 @@
                                                 </tbody>
                                             </table>
                                             <p class="uk-text-right uk-width-1-1" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>" target="_blank"><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPH</a>
                                                 <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a> -->
                                             </p>
                                             <hr class="uk-margin">
@@ -785,7 +785,7 @@
                                                             </div>
                                                             <div class="uk-width-1-3@m">
                                                                 <div>
-                                                                    <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download></a> <span uk-icon="file-text"></span> <?= $project['ded'] ?> </a>
+                                                                    <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download><span uk-icon="file-text"></span> <?= $project['ded'] ?> </a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -853,8 +853,8 @@
                                             <div>
                                                 <div class="uk-child-width-1-1 uk-text-right" uk-grid>
                                                     <div>
-                                                        <!-- <div id="containerbtninv<?= $project['id'] ?>"><span uk-icon="icon: file-text; ratio: 2" id="btndowninv<?= $project['id'] ?>"></div>
-                                                        <div id="containerbtnupinv<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv<?= $project['id'] ?>"></div> -->
+                                                        <!-- <div id="containerbtninv</?= $project['id'] ?>"><span uk-icon="icon: file-text; ratio: 2" id="btndowninv</?= $project['id'] ?>"></div>
+                                                        <div id="containerbtnupinv</?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv</?= $project['id'] ?>"></div> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -869,10 +869,10 @@
                                                         echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
                                                         // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
                                                     } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
-                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'>Download SPK</a>";
+                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
                                                         // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
                                                     } else {
-                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'>Download SPK</a>";
+                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
                                                     }
                                                     ?>
                                                 </p>

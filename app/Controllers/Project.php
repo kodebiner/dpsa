@@ -9,6 +9,7 @@ use App\Models\PaketModel;
 use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
+use App\Models\BastModel;
 
 class Project extends BaseController
 {
@@ -31,6 +32,7 @@ class Project extends BaseController
     {
         // Calling Model
         $ProjectModel           = new ProjectModel();
+        $BastModel              = new BastModel();
         $CompanyModel           = new CompanyModel();
         $MdlModel               = new MdlModel();
         $PaketModel             = new PaketModel();
@@ -44,6 +46,7 @@ class Project extends BaseController
         $projects               = $ProjectModel->paginate(10, 'projects');
 
         $projectdata    = [];
+        $bastdata       = [];
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $paketid    = [];
@@ -145,6 +148,8 @@ class Project extends BaseController
                     $mdlprod    = [];
                     $projectdata[$project['id']]['production']   = [];
                 }
+
+                $bastdata[$project['id']]['bast']    = $BastModel->where('projectid', $project['id'])->find();
             }
         } else {
             $rabs           = [];
@@ -158,6 +163,7 @@ class Project extends BaseController
         $data['company']        = $company;
         $data['pakets']         = $pakets;
         $data['rabs']           = $rabs;
+        $data['bastdata']       = $bastdata;
         $data['pager']          = $ProjectModel->pager;
 
         return view('project', $data);
@@ -168,6 +174,7 @@ class Project extends BaseController
         // Calling Model
         $MdlModel       = new MdlModel();
         $PaketModel     = new PaketModel();
+        $BastModel      = new BastModel();
 
         // Initialize
         $input      = $this->request->getPost();
@@ -252,6 +259,7 @@ class Project extends BaseController
         $MdlModel           = new MdlModel();
         $DesignModel        = new DesignModel();
         $ProductionModel    = new ProductionModel();
+        $BastModel          = new BastModel();
 
         // initialize
         $input  = $this->request->getPost();
@@ -454,6 +462,26 @@ class Project extends BaseController
                 ];
                 $ProductionModel->save($productioninput);
             }
+        }
+
+        // Sertrim
+        if (isset($input['sertrim'])) {
+            $sertrim = [
+                'projectid' => $id,
+                'file'      => $input['sertrim'],
+                'status'    => 0,
+            ];
+            $BastModel->save($sertrim);
+        }
+
+        // Bast
+        if (isset($input['bast'])) {
+            $bastdata = [
+                'projectid' => $id,
+                'file'      => $input['bast'],
+                'status'    => 1,
+            ];
+            $BastModel->save($bastdata);
         }
 
         // Project Data
