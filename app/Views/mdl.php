@@ -1,11 +1,13 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('extraScript') ?>
     <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
+    <link rel="stylesheet" href="css/select2.min.css"/>
     <script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
     <script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-3.7.0.js"></script>
     <script src="js/jquery-ui.js"></script>
+    <script src="js/select2.min.js"></script>
 <?= $this->endSection() ?>
 <?= $this->section('main') ?>
 
@@ -458,10 +460,120 @@
                                 <option value="4">Set</option>
                             </select>
                         </div>
+                        
+                        <select class="js-example-data-array" multiple="multiple" style="width: 100%"></select>
 
                         <div id="dimentions<?= $paket['id'] ?>"></div>
 
                         <script>
+                            //for apend flag of country.
+                            // function formatState (state) {
+                            //     console.log(state);
+                            //     if (!state.id) {
+                            //         return state.text;
+                            //     }
+                            //     var $state = $(
+                            //         <?php
+                            //         foreach ($autopakets as $autopaket) {
+                            //             echo '{text:"'.$autopaket['name'].'",id:'.$autopaket['id'].'},';
+                            //             echo '<option><img src="'+baseUrl+ '/' + state.contryflage.toLowerCase() + '.png"  class="img-flag" /> ' +state.text+ '</option>';
+                            //         } ?>
+                            //     );
+                            //     return $state;
+                            // };
+
+                            // $(function(){
+                            //     $("#js-example-data-array").select2({
+                            //         minimumInputLength: 2,
+                            //         templateResult: formatState, //this is for append country flag.
+                            //         ajax: {
+                            //             url: URL,
+                            //             dataType: 'json',
+                            //             type: "POST",
+                            //             data: function (term) {
+                            //                 return {
+                            //                     term: term
+                            //                 };
+                            //             },
+                            //             processResults: function (data) {
+                            //                 return {
+                            //                     results: $.map(data, function (item) {
+                            //                         return {
+                            //                             text: item.name+', '+item.state.name+', '+item.state.coutry.name,
+                            //                             id: item.id,
+                            //                             contryflage:item.state.coutry.sortname
+                            //                         }
+                            //                     })
+                            //                 };
+                            //             }
+
+                            //         }
+                            //     })
+                            // });
+
+                            // LAST UPDATE
+                            var data = [
+                                <?php
+                                foreach ($autopakets as $autopaket) {
+                                    echo '{text:"'.$autopaket['name'].'",id:'.$autopaket['id'].'},';
+                                } ?>
+                            ];
+
+                            $(".js-example-data-array").select2({
+                                tags: true,
+                                multiple: true,
+                                minimumInputLength: 2,
+                                minimumResultsForSearch: 10,
+                                ajax: {
+                                    url: 'mdl/datapeket',
+                                    dataType: 'json',
+                                    type: 'GET',
+                                    data: function (term) {
+                                        return {
+                                            term: term
+                                        };
+                                    },
+                                    processResults: function (data) {
+                                        return {
+                                            results: $.map(data.items, function (item) {
+                                                return {
+                                                    text: item.tag_value,
+                                                    id: item.tag_id
+                                                }
+                                            })
+                                        };
+                                    }
+                                    // results: function (data) {
+                                    //     return {
+                                    //         results: $.map(data, function (item) {
+                                    //             return {
+                                    //                 text: item.tag_value,
+                                    //                 id: item.tag_id
+                                    //             }
+                                    //         })
+                                    //     };
+                                    // }
+                                },
+                                // escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                                // templateResult: formatRepo, // omitted for brevity, see the source of this page
+                                // templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+
+                                // data: data,
+                                // placeholder: "Select a state",
+                                // allowClear: true,
+                                // width: 'resolve', // need to override the changed default
+                            })
+                            
+                            // Set the value, creating a new option if necessary
+                            // if ($('#js-example-data-array').find("option[value='" + data.id + "']").length) {
+                            //     $('#js-example-data-array').val(data.id).trigger('change');
+                            // } else { 
+                            //     // Create a DOM Option and pre-select by default
+                            //     var newOption = new Option(data.id, data.text, true, true);
+                            //     // Append it to the select
+                            //     $('#js-example-data-array').append(newOption).trigger('change');
+                            // } 
+
                             document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
                                 if (this.value == "1" || this.value == "2" || this.value == "3" || this.value == "4") {
                                     var elements = document.getElementById('contdim<?= $paket['id'] ?>');

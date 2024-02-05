@@ -48,6 +48,9 @@ class Mdl extends BaseController
         // List Parent
         $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
 
+        // List Paket Auto Complete
+        $autopakets     = $PaketModel->where('parentid !=', 0)->find();
+
         // List Paket
         $mdldata        = [];
         if (!empty($parents)) {
@@ -110,11 +113,26 @@ class Mdl extends BaseController
         $data['mdldata']        =   $mdldata;
         $data['parents']        =   $parents;
         $data['autoparents']    =   $autoparents;
+        $data['autopakets']     =   $autopakets;
         $data['input']          =   $input;
         $data['pager']          =   $PaketModel->pager;
 
         // Return
         return view('mdl', $data);
+    }
+
+    // LAST UPDATE HERE
+    public function datapaket()
+    {
+        // Calling Model
+        $PaketModel = new PaketModel();
+
+        // initialize
+        $input      = $this->request->getGET();
+
+        $return     = $PaketModel->find($input);
+        
+        die(json_encode($return));
     }
 
     public function create()

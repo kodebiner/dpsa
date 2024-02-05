@@ -146,6 +146,7 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->post('create/(:num)', 'Mdl::createmdl/$1');
     $routes->post('update/(:num)', 'Mdl::updatemdl/$1');
     $routes->get('delete/(:num)', 'Mdl::deletemdl/$1');
+    $routes->post('datapaket', 'Mdl::datapaket');
 });
 
 // Account
