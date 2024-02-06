@@ -341,24 +341,24 @@ class Upload extends BaseController
         ];
 
         // Validating
-        if (! $this->validate($rules)) {
+        if (!$this->validate($rules)) {
             http_response_code(400);
             die(json_encode(array('message' => $this->validator->getErrors())));
         }
 
-        if ($input->isValid() && ! $input->hasMoved()) {
+        if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH.'/img/mdl/', $filename);
-            
+            $input->move(FCPATH . '/img/mdl/', $filename);
+
             // Removing uploaded if it's not the same filename
-            if ($filename != $truename.'.jpg') {
-                unlink(FCPATH.'/img/mdl/'.$filename);
+            if ($filename != $truename . '.jpg') {
+                unlink(FCPATH . '/img/mdl/' . $filename);
             }
 
             // Getting True Filename
-            $returnFile = $truename.'.jpg';
+            $returnFile = $truename . '.jpg';
 
             // Returning Message
             die(json_encode($returnFile));
@@ -369,7 +369,7 @@ class Upload extends BaseController
     {
         // Removing File
         $input = $this->request->getPost('photo');
-        unlink(FCPATH.'img/mdl/'.$input);
+        unlink(FCPATH . 'img/mdl/' . $input);
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
@@ -414,6 +414,50 @@ class Upload extends BaseController
         // Removing File
         $input = $this->request->getPost('sertrim');
         unlink(FCPATH . 'img/sertrim/' . $input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
+
+    public function bast()
+    {
+        $image      = \Config\Services::image();
+        $validation = \Config\Services::validation();
+        $input      = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH . '/img/bast/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            // Returning Message
+            die(json_encode($returnFile));
+        }
+    }
+
+    public function removebast()
+    {
+        // Removing File
+        $input = $this->request->getPost('bast');
+        unlink(FCPATH . 'img/bast/' . $input);
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));

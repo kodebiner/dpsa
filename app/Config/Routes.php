@@ -55,6 +55,8 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('removephotomdl', 'Upload::removephotomdl');
     $routes->post('sertrim', 'Upload::sertrim');
     $routes->post('removesertrim', 'Upload::removesertrim');
+    $routes->post('bast', 'Upload::bast');
+    $routes->post('removebast', 'Upload::removebast');
 });
 
 $routes->group('clientreg', static function ($routes) {

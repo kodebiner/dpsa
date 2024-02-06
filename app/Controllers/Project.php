@@ -663,14 +663,18 @@ class Project extends BaseController
     public function removesertrim($id)
     {
         $BastModel = new BastModel;
-        $input = $this->request->getPost('sertrim');
 
         $bast = $BastModel->find($id);
         $filename = $bast['file'];
 
-        unlink(FCPATH . 'img/sertrim/' . $filename);
+        if($bast['status'] === "0"){
+            unlink(FCPATH . 'img/sertrim/' . $filename);
+        }elseif($bast['status'] === "1"){
+            unlink(FCPATH . 'img/bast/' . $filename);
+        }
         $BastModel->delete($bast);
 
         die(json_encode(array($filename)));
     }
+
 }

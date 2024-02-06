@@ -1588,7 +1588,7 @@
 
                                         <!-- Serah Terima -->
                                         <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
-                                            <label class="uk-form-label" for="photocreate">Upload Serah Terima</label>
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload Serah Terima</label>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
                                                 <?php
                                                 foreach ($bastdata[$project['id']]['bast'] as $bast) {
@@ -1596,14 +1596,14 @@
                                                     if (!empty($bast) && $bast['status'] === "0") {
                                                         $bastid = $bast['id']; ?>
                                                         <div id="sertrim-file-<?= $bast['id']; ?>">
-                                                            <div class="uk-card uk-card-default uk-card-body">
+                                                            <div class="uk-card uk-card-default uk-card-body uk-margin-bottom">
                                                                 <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
                                                                 <?= $bast['file'] ?>
                                                             </div>
                                                         </div>
                                                         <script>
                                                             function removeCardFile<?= $bast['id']; ?>() {
-                                                                let text = "Hapus file serah terima ini?";
+                                                                let text = "Hapus file Serah Terima ini?";
                                                                 if (confirm(text) == true) {
                                                                     $.ajax({
                                                                         url: "project/removesertrim/<?= $bast['id'] ?>",
@@ -1618,7 +1618,7 @@
                                                                         success: function() {
                                                                             console.log('success', arguments);
                                                                             $("#sertrim-file-<?= $bast['id']; ?>").remove();
-                                                                            // alert("file berhasil di hapus");
+                                                                            alert("file Serah Terima berhasil di hapus");
                                                                         },
                                                                     })
                                                                 }
@@ -1639,7 +1639,7 @@
                                             </div>
                                             <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
-                                                <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
                                                     <span uk-icon="icon: cloud-upload"></span>
                                                     <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
                                                     <div uk-form-custom>
@@ -1650,9 +1650,76 @@
                                                 <progress id="js-progressbar-createsertrim-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                             </div>
                                         </div>
+                                        <!-- End Of Serah Terima -->
+
+                                        <!-- BAST -->
+                                        <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
+                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
+                                                <?php
+                                                foreach ($bastdata[$project['id']]['bast'] as $bast) {
+                                                    $bastid = "";
+                                                    if (!empty($bast) && $bast['status'] === "1") {
+                                                        $bastid = $bast['id']; ?>
+                                                        <div id="bast-file-<?= $bast['id']; ?>">
+                                                            <div class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-bast-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
+                                                                <?= $bast['file'] ?>
+                                                            </div>
+                                                        </div>
+                                                        <script>
+                                                            function removeCardFile<?= $bast['id']; ?>() {
+                                                                let text = "Hapus file BAST ini?";
+                                                                if (confirm(text) == true) {
+                                                                    $.ajax({
+                                                                        url: "project/removesertrim/<?= $bast['id'] ?>",
+                                                                        method: "POST",
+                                                                        data: {
+                                                                            bast: <?= $bast['id'] ?>,
+                                                                        },
+                                                                        dataType: "json",
+                                                                        error: function() {
+                                                                            console.log('error', arguments);
+                                                                        },
+                                                                        success: function() {
+                                                                            console.log('success', arguments);
+                                                                            $("#bast-file-<?= $bast['id']; ?>").remove();
+                                                                            alert("file BAST berhasil di hapus");
+                                                                        },
+                                                                    })
+                                                                }
+                                                            }
+                                                        </script>
+                                                <?php }
+                                                } ?>
+                                            </div>
+                                            <div class="uk-placeholder" id="placebast<?= $project['id'] ?>" hidden>
+                                                <div uk-grid>
+                                                    <div class="uk-text-left uk-width-3-4">
+                                                        <div id="upbast<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                    <div class="uk-text-right uk-width-1-4">
+                                                        <div id="closebast<?= $project['id'] ?>"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
+                                                <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createbast-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        </div>
+                                        <!-- End Of BAST -->
 
                                         <script type="text/javascript">
-                                            var barspk = document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>');
+                                            // Serah terima
                                             UIkit.upload('.js-upload-createsertrim-<?= $project['id'] ?>', {
                                                 url: 'upload/sertrim',
                                                 multiple: false,
@@ -1786,8 +1853,144 @@
                                                     }
                                                 });
                                             };
+                                            //   End Of Serah Terima
+
+                                            // Bast
+                                            UIkit.upload('.js-upload-createbast-<?= $project['id'] ?>', {
+                                                url: 'upload/bast',
+                                                multiple: false,
+                                                name: 'uploads',
+                                                param: {
+                                                    lorem: 'ipsum'
+                                                },
+                                                method: 'POST',
+                                                type: 'json',
+
+                                                beforeSend: function() {
+                                                    console.log('beforeSend', arguments);
+                                                },
+                                                beforeAll: function() {
+                                                    console.log('beforeAll', arguments);
+                                                },
+                                                load: function() {
+                                                    console.log('load', arguments);
+                                                },
+                                                error: function() {
+                                                    console.log('error', arguments);
+                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                    alert(error);
+                                                },
+
+                                                complete: function() {
+                                                    console.log('complete', arguments);
+
+
+                                                    var filename = arguments[0].response;
+
+                                                    if (document.getElementById('display-container-createbast-<?= $project['id'] ?>')) {
+                                                        document.getElementById('display-container-createbast-<?= $project['id'] ?>').remove();
+                                                    };
+
+                                                    document.getElementById('photocreatebast<?= $project['id'] ?>').value = filename;
+
+                                                    document.getElementById('placebast<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    var uprev = document.getElementById('upbast<?= $project['id'] ?>');
+                                                    var closed = document.getElementById('closebast<?= $project['id'] ?>');
+
+                                                    var divuprev = document.createElement('h6');
+                                                    divuprev.setAttribute('class', 'uk-margin-remove');
+                                                    divuprev.setAttribute('id', 'bast<?= $project['id'] ?>');
+
+                                                    var linkrev = document.createElement('a');
+                                                    linkrev.setAttribute('href', 'img/bast/' + filename);
+                                                    linkrev.setAttribute('uk-icon', 'file-text');
+
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/bast/' + filename);
+                                                    link.setAttribute('target', '_blank');
+
+                                                    var linktext = document.createTextNode(filename);
+
+                                                    var divclosed = document.createElement('a');
+                                                    divclosed.setAttribute('uk-icon', 'icon: close');
+                                                    divclosed.setAttribute('onClick', 'removeImgCreatebast<?= $project['id'] ?>()');
+                                                    divclosed.setAttribute('id', 'closedbast<?= $project['id'] ?>');
+
+                                                    uprev.appendChild(divuprev);
+                                                    divuprev.appendChild(linkrev);
+                                                    divuprev.appendChild(link);
+                                                    link.appendChild(linktext);
+                                                    closed.appendChild(divclosed);
+
+                                                    document.getElementById('js-upload-createbast-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                },
+
+                                                loadStart: function(e) {
+                                                    console.log('loadStart', arguments);
+
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+
+                                                },
+
+                                                progress: function(e) {
+                                                    console.log('progress', arguments);
+
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                loadEnd: function(e) {
+                                                    console.log('loadEnd', arguments);
+
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                completeAll: function() {
+                                                    console.log('completeAll', arguments);
+
+                                                    setTimeout(function() {
+                                                        document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                        alert('<?= lang('Proses selesai, Silahkan Unggah Data.') ?>');
+                                                    }, 1000);
+                                                }
+
+                                            });
+
+                                            function removeImgCreatebast<?= $project['id'] ?>() {
+                                                $.ajax({
+                                                    type: 'post',
+                                                    url: 'upload/removebast',
+                                                    data: {
+                                                        'bast': document.getElementById('photocreatebast<?= $project['id'] ?>').value
+                                                    },
+                                                    dataType: 'json',
+
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+
+                                                    success: function() {
+                                                        console.log('success', arguments);
+
+                                                        var pesan = arguments[0][1];
+
+                                                        document.getElementById('bast<?= $project['id'] ?>').remove();
+                                                        document.getElementById('closedbast<?= $project['id'] ?>').remove();
+                                                        document.getElementById('placebast<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                        document.getElementById('photocreatebast<?= $project['id'] ?>').value = '';
+
+                                                        document.getElementById('js-upload-createbast-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                        alert(pesan);
+                                                    }
+                                                });
+                                            };
+                                            //   End Of BAST
                                         </script>
-                                        <!-- End BAST -->
                                     </div>
                     </div>
 
