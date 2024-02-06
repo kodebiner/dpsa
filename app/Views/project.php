@@ -1592,14 +1592,38 @@
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
                                                 <?php
                                                 foreach ($bastdata[$project['id']]['bast'] as $bast) {
-                                                    if (!empty($bast) && $bast['status'] === "0") { ?>
-                                                        <div>
+                                                    $bastid = "";
+                                                    if (!empty($bast) && $bast['status'] === "0") {
+                                                        $bastid = $bast['id']; ?>
+                                                        <div id="sertrim-file-<?= $bast['id']; ?>">
                                                             <div class="uk-card uk-card-default uk-card-body">
-                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" onclick="removeCardFile<?= $bast['file'] ?>()" uk-icon="close"></a></div>
-                                                                <!-- <a class="uk-position-top-right uk-margin-right uk-margin-top" onclick="removeCardFile()"></a> -->
+                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
                                                                 <?= $bast['file'] ?>
                                                             </div>
                                                         </div>
+                                                        <script>
+                                                            function removeCardFile<?= $bast['id']; ?>() {
+                                                                let text = "Hapus file serah terima ini?";
+                                                                if (confirm(text) == true) {
+                                                                    $.ajax({
+                                                                        url: "project/removesertrim/<?= $bast['id'] ?>",
+                                                                        method: "POST",
+                                                                        data: {
+                                                                            sertrim: <?= $bast['id'] ?>,
+                                                                        },
+                                                                        dataType: "json",
+                                                                        error: function() {
+                                                                            console.log('error', arguments);
+                                                                        },
+                                                                        success: function() {
+                                                                            console.log('success', arguments);
+                                                                            $("#sertrim-file-<?= $bast['id']; ?>").remove();
+                                                                            // alert("file berhasil di hapus");
+                                                                        },
+                                                                    })
+                                                                }
+                                                            }
+                                                        </script>
                                                 <?php }
                                                 } ?>
                                             </div>
@@ -1762,11 +1786,6 @@
                                                     }
                                                 });
                                             };
-
-                                            function removeCardFile() {
-                                                alert('halo');
-
-                                            }
                                         </script>
                                         <!-- End BAST -->
                                     </div>

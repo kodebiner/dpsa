@@ -465,7 +465,7 @@ class Project extends BaseController
         }
 
         // Sertrim
-        if (isset($input['sertrim'])) {
+        if (!empty($input['sertrim']) && isset($input['sertrim'])) {
             $sertrim = [
                 'projectid' => $id,
                 'file'      => $input['sertrim'],
@@ -475,7 +475,7 @@ class Project extends BaseController
         }
 
         // Bast
-        if (isset($input['bast'])) {
+        if (!empty($input['bast']) && isset($input['bast'])) {
             $bastdata = [
                 'projectid' => $id,
                 'file'      => $input['bast'],
@@ -658,5 +658,19 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
         return view('invoice', $data);
+    }
+
+    public function removesertrim($id)
+    {
+        $BastModel = new BastModel;
+        $input = $this->request->getPost('sertrim');
+
+        $bast = $BastModel->find($id);
+        $filename = $bast['file'];
+
+        unlink(FCPATH . 'img/sertrim/' . $filename);
+        $BastModel->delete($bast);
+
+        die(json_encode(array($filename)));
     }
 }

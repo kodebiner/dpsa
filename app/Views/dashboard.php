@@ -421,43 +421,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Invoice -->
-                                <!-- <div class="uk-width-1-1 uk-margin-remove-bottom">
-                                    <h4 class="uk-width-1-1">File Invoice & SPK</h4>
-                                    <div class="uk-margin" uk-grid>
-                                        <div class="uk-width-1-1">
-                                            <p class="uk-margin-remove-top" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice</a>
-                                            </p>
-
-                                            <p class="uk-margin-remove-top" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" uk-toggle="target: #modal-spk<?= $project['id'] ?>">Upload SPK</a>
-                                            </p>
-
-                                            <p class="uk-margin-remove-top" uk-margin>
-                                                <a class="uk-button uk-button-secondary uk-button-small uk-width-1-1" href="project/spk/<?= $spkpro ?>" target="_blank">Download SPK</a>
-                                            </p>
-                                            <!-- SPK -->
-                                <!-- <p class="uk-margin-remove-top" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-button-small uk-margin-right" href="project/invoice/<?= $project['id'] ?>"><span class="uk-margin-small-right uk-icon" uk-icon="icon:  file-text; ratio: 1"></span>Invoice</a>
-                                                </?php
-                                                if ($projectdata[$project['id']]['project']['status_spk'] === null) {
-                                                    echo "<a class='uk-button uk-button-primary uk-button-small' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                    // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
-                                                } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
-                                                    echo "<button class='uk-button uk-button-primary uk-button-small uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>
-                                                    <a class='uk-button uk-button-secondary uk-button-small' target='_blank' href='img/spk/" . $spkpro . "'>Download SPK</a>";
-                                                    // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                } else {
-                                                    echo "<a class='uk-button uk-button-secondary uk-button-small' href='img/spk/" . $spkpro . " target='_blank'>Download SPK</a>";
-                                                }
-                                                ?>
-                                            </p> -->
-                                <!-- </div>
-                                    </div> -->
-                                <!-- </div> -->
-                                <!-- End Of Invoice -->
-
                             <?php } ?>
                         </div>
                     </div>

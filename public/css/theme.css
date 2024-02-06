@@ -11803,6 +11803,12 @@ li.tm-main-navbar>a>svg {
     color: #fff;
 }
 
+.tm-img-remove2 {
+    background-color: #f0506e;
+    padding: 2px;
+    color: #fff;
+}
+
 .tm-trx-product {
     cursor: pointer;
 }

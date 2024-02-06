@@ -262,18 +262,18 @@ class Home extends BaseController
         die(json_encode(array($input)));
     }
 
-    public function accres($id)
-    {
-        $DesignModel = new DesignModel();
+    // public function accres($id)
+    // {
+    //     $DesignModel = new DesignModel();
 
-        $design = $DesignModel->find($id);
+    //     $design = $DesignModel->find($id);
 
-        $status = [
-            'id'        => $id,
-            'status'    => $design['status'],
-        ];
-        return $this->response->setJSON($status);
-    }
+    //     $status = [
+    //         'id'        => $id,
+    //         'status'    => $design['status'],
+    //     ];
+    //     return $this->response->setJSON($status);
+    // }
 
     public function revisi()
     {

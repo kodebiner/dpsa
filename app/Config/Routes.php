@@ -75,7 +75,7 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
     $routes->post('removerevisi', 'Home::removerevisi');
     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
     $routes->post('acc/(:num)', 'Home::acc/$1');
-    $routes->get('accres/(:num)', 'Home::accres/$1');
+    // $routes->get('accres/(:num)', 'Home::accres/$1');
 });
 
 // SPK
@@ -123,6 +123,8 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('sphview/(:num)', 'Project::sphview/$1');
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
+    $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
+    
 
     // Project Temp Routes
     // $routes->get('', 'ProjectTemp::index');
