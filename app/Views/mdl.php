@@ -141,9 +141,8 @@
                 </tr>
                 <?php foreach ($mdldata[$parent['id']]['paket'] as $paket) { ?>
                     <tr class="togglepaket<?= $parent['id'] ?>" hidden>
-                        <td></td>
-                        <td><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
-                        <td colspan="7" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                        <td class="uk-text-right"><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
+                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                         <td class="uk-text-center">
                             <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                 <div>
@@ -233,6 +232,45 @@
                     </script>
                 <?php }
             } ?>
+            <tr>
+                <td><a class="uk-link-reset" id="toggleuncate" uk-toggle="target: .toggleuncate"><span id="closeuncate" uk-icon="chevron-down" hidden></span><span id="openuncate" uk-icon="chevron-right"></span></a></td>
+                <td class="tm-h3" style="text-transform: uppercase;">Belum Terkategori</td>
+            </tr>
+            <?php foreach ($mdldata['mdluncate'] as $mdluncate) { ?>
+                <tr class="toggleuncate" hidden>
+                    <td></td>
+                    <td><?= $mdluncate['name'] ?></td>
+                    <td><?= $mdluncate['length'] ?></td>
+                    <td><?= $mdluncate['width'] ?></td>
+                    <td><?= $mdluncate['height'] ?></td>
+                    <td><?= $mdluncate['volume'] ?></td>
+                    <td>
+                        <?php
+                        if ($mdluncate['denomination'] === "1") {
+                            echo "Unit";
+                        } elseif ($mdluncate['denomination'] === "2") {
+                            echo "Meter Lari";
+                        } elseif ($mdluncate['denomination'] === "3") {
+                            echo "Meter Persegi";
+                        } elseif ($mdluncate['denomination'] === "4") {
+                            echo "Set";
+                        }
+                        ?>
+                    </td>
+                    <td class=""><?= $mdluncate['keterangan'] ?></td>
+                    <td><?= "Rp. " . number_format((int)$mdluncate['price'], 0, ',', '.');" "; ?></td>
+                    <td class="uk-text-center">
+                        <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
+                            <div>
+                                <a class="uk-icon-button" href="#modalupdateuncate<?= $mdluncate['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                            </div>
+                            <div>
+                                <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdluncate['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
         </tbody>
     </table>
 </div>
