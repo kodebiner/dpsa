@@ -2,10 +2,10 @@
 <?= $this->section('extraScript') ?>
     <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
     <link rel="stylesheet" href="css/select2.min.css"/>
-    <script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
-    <script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
+    <!-- <script src="js/ajax.googleapis.com_ajax_libs_jquery_3.6.4_jquery.min.js"></script>
+    <script src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script> -->
     <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-3.7.0.js"></script>
+    <!-- <script src="js/jquery-3.7.0.js"></script> -->
     <script src="js/jquery-ui.js"></script>
     <script src="js/select2.min.js"></script>
 <?= $this->endSection() ?>
@@ -499,7 +499,7 @@
                             </select>
                         </div>
                         
-                        <select class="js-example-data-array" multiple="multiple" style="width: 100%"></select>
+                        <select id="mdl-search" class="js-example-data-array" multiple="multiple" style="width:100%;"></select>
 
                         <div id="dimentions<?= $paket['id'] ?>"></div>
 
@@ -557,50 +557,58 @@
                                 } ?>
                             ];
 
-                            $(".js-example-data-array").select2({
-                                tags: true,
-                                multiple: true,
-                                minimumInputLength: 2,
-                                minimumResultsForSearch: 10,
+                            $("#mdl-search").select2({
+                                placeholder: 'Cari...',
+                                minimumInputLength: 3,
+                                // allowClear: true,
+                                // minimumResultsForSearch: 10,
                                 ajax: {
-                                    url: 'mdl/datapeket',
+                                    url: 'mdl/datapaket',
                                     dataType: 'json',
                                     type: 'GET',
                                     data: function (term) {
                                         return {
-                                            term: term
+                                            search: term,
+                                            paketid: <?=$paket['id']?>
                                         };
                                     },
                                     processResults: function (data) {
+                                        console.log(data);
                                         return {
-                                            results: $.map(data.items, function (item) {
+                                            results: $.map(data, function (item) {
                                                 return {
-                                                    text: item.tag_value,
-                                                    id: item.tag_id
+                                                    text: item.text,
+                                                    id: item.id
                                                 }
                                             })
                                         };
                                     }
-                                    // results: function (data) {
-                                    //     return {
-                                    //         results: $.map(data, function (item) {
-                                    //             return {
-                                    //                 text: item.tag_value,
-                                    //                 id: item.tag_id
-                                    //             }
-                                    //         })
-                                    //     };
-                                    // }
                                 },
+                                // templateResult: renderOption,
                                 // escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                                 // templateResult: formatRepo, // omitted for brevity, see the source of this page
-                                // templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+                                templateSelection: function(mdldata) {
+                                    $.ajax({
+                                        url: 'mdl/submitcat',
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        data: {
+                                            paketid: <?=$paket['id']?>,
+                                            mdlid: mdldata.id
+                                        },
+                                        success: function(mdl) {
+                                            console.log(mdl);
+                                        }
+                                    });
+                                    $('#mdl-search').select2().val(null).trigger('change');
+                                    location.reload();
+                                },
 
                                 // data: data,
                                 // placeholder: "Select a state",
                                 // allowClear: true,
                                 // width: 'resolve', // need to override the changed default
-                            })
+                            });
                             
                             // Set the value, creating a new option if necessary
                             // if ($('#js-example-data-array').find("option[value='" + data.id + "']").length) {

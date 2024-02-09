@@ -76,6 +76,7 @@ class Mdl extends BaseController
                             }
                         } else {
                             $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                       = [];
+                            $mdlid[]                                                                    = '';
                         }
                     }
                 } else {
@@ -130,14 +131,53 @@ class Mdl extends BaseController
     public function datapaket()
     {
         // Calling Model
-        $PaketModel = new PaketModel();
+        $MDLModel = new MdlModel();
+        $MDLPaketModel = new MdlPaketModel();
 
-        // initialize
+        // Populating Data
         $input      = $this->request->getGET();
+        $MdlPaket = $MDLPaketModel->where('paketid', $input['paketid'])->find();
 
-        $return     = $PaketModel->find($input);
+        $exclude = [];
+
+        foreach ($MdlPaket as $paket) {
+            $exclude[] = $paket['mdlid'];
+        }
+
+        if (!empty($exclude)) {
+            $MDL = $MDLModel->like('name', $input['search']['term'])->whereNotIn('id', $exclude)->find();
+        } else {
+            $MDL = $MDLModel->like('name', $input['search']['term'])->find();
+        }
+
+        $return     = [];
+
+        foreach ($MDL as $mdl) {
+            $return[] = [
+                'id'    => $mdl['id'],
+                'text'  => $mdl['name']
+            ];
+        }
         
         die(json_encode($return));
+    }
+
+    public function submitcat()
+    {
+        // Calling Models
+        $MdlPaketModel = new MdlPaketModel();
+
+        // Populating Data
+        $input = $this->request->getPOST();
+        $submit = [
+            'mdlid'     => $input['mdlid'],
+            'paketid'   => $input['paketid']
+        ];
+
+        //Processing Data
+        $MdlPaketModel->save($submit);
+
+        die('success');
     }
 
     public function create()
