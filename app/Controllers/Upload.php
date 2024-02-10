@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\DesignModel;
 use App\Models\ProjectModel;
 use App\Models\MdlModel;
+use App\Models\MdlPaketModel;
 
 class Upload extends BaseController
 {
@@ -220,9 +221,10 @@ class Upload extends BaseController
 
     public function mdl($id)
     {
-        // Populating Data
-        $MdlModel   = new MdlModel();
-        $input      = $this->request->getFile('uploads');
+        // Calling Models
+        $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
+        $input          = $this->request->getFile('uploads');
 
         // Validation Rules
         $rules = [
@@ -277,10 +279,17 @@ class Upload extends BaseController
                 'denomination'  => $denomination,
                 'keterangan'    => $keterangan,
                 'price'         => $price,
-                'paketid'       => $id,
             ];
 
             $MdlModel->insert($datamdl);
+
+            // Save Data MDL Paket
+            $idmdl = $MdlModel->getInsertID();
+            $datamdlpaket   = [
+                'mdlid'     => $idmdl,
+                'paketid'   => $id,
+            ];
+            $MdlPaketModel->insert($datamdlpaket);
         }
 
         die('Berhasil Import Data MDL');

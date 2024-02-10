@@ -127,16 +127,15 @@ class Mdl extends BaseController
         return view('mdl', $data);
     }
 
-    // LAST UPDATE HERE
     public function datapaket()
     {
         // Calling Model
-        $MDLModel = new MdlModel();
-        $MDLPaketModel = new MdlPaketModel();
+        $MDLModel       = new MdlModel();
+        $MDLPaketModel  = new MdlPaketModel();
 
         // Populating Data
-        $input      = $this->request->getGET();
-        $MdlPaket = $MDLPaketModel->where('paketid', $input['paketid'])->find();
+        $input          = $this->request->getGET();
+        $MdlPaket       = $MDLPaketModel->where('paketid', $input['paketid'])->find();
 
         $exclude = [];
 
@@ -312,6 +311,14 @@ class Mdl extends BaseController
 
         // Validation
         $rules = [
+            'name'      => [
+                'label'     => 'Nama',
+                'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                ],
+            ],
             'length'      => [
                 'label'     => 'Panjang',
                 'rules'     => 'required|decimal',
@@ -376,7 +383,7 @@ class Mdl extends BaseController
     public function updatemdl($id)
     {
         // Populating Data
-        $MdlModel = new MdlModel;
+        $MdlModel = new MdlModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -389,6 +396,14 @@ class Mdl extends BaseController
 
         // Validation
         $rules = [
+            'name'      => [
+                'label'     => 'Nama',
+                'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
+                'errors'    => [
+                    'required'      => '{field} wajib diisi.',
+                    'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                ],
+            ],
             'length'      => [
                 'label'     => 'Panjang',
                 'rules'     => 'required|decimal',
@@ -428,7 +443,6 @@ class Mdl extends BaseController
             'volume'        => $input['length'],
             'keterangan'    => $input['keterangan'],
             'price'         => strupdate($str),
-            'paketid'       => $input['paketid'],
         ];
 
         // Save Data MDL
@@ -440,8 +454,17 @@ class Mdl extends BaseController
 
     public function deletemdl($id)
     {
+        // Calling Models
+        $MdlModel           = new MdlModel();
+        $MdlPaketModel      = new MdlPaketModel();
+
+        // initialize
+        $input              = $this->request->getpost();
+
         // Populating Data
-        $MdlModel = new MdlModel;
+        if (!empty($input['paketid'])) {
+            $mdlpaketdata   = $MdlPaketModel->where('paketid', $input['paketid'])->where('mdlid', $id)->delete();
+        }
 
         // Delete Data MDL
         $MdlModel->delete($id);
@@ -452,10 +475,11 @@ class Mdl extends BaseController
 
 	public function importExcel($id)
     {
-        // Populating Data
-        $MdlModel = new MdlModel();
+        // Calling Models
+        $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
 
-        // Get Data
+        // Populating Data
         $file_excel = $this->request->getFile('fileexcel');
         $ext = $file_excel->getClientExtension();
         if ($ext == 'xls') {
@@ -504,6 +528,15 @@ class Mdl extends BaseController
             ];
 
             $MdlModel->insert($datamdl);
+
+            // Save Data MDL Paket
+            $mdlid = $MdlModel->getInsertID();
+            $datamdlpaket   = [
+                'mdlid'     => $mdlid,
+                'paketid'   => $id,
+            ];
+            $MdlPaketModel->insert($datamdlpaket);
+
         }
         unlink(FCPATH . '/img/spk/' . $file_excel);
         
@@ -513,10 +546,10 @@ class Mdl extends BaseController
     public function deleteallmdl($id)
     {
         // Populating Data
-        $MdlModel   = new MdlModel();
+        $MdlPaketModel   = new MdlPaketModel();
 
         // Delete Data MDL
-        $MdlModel->where('paketid', $id)->delete();
+        $MdlPaketModel->where('paketid', $id)->delete();
 
         // Return
         return redirect()->back()->with('error', 'Data Telah Dihapuskan');

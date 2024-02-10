@@ -199,7 +199,10 @@
                                         <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
                                     </div>
                                     <div>
-                                        <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdl['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                                        <form class="uk-form-stacked" role="form" action="mdl/delete/<?= $mdl['id'] ?>" method="post">
+                                            <input type="hidden" name="paketid" value="<?= $paket['id']; ?>">
+                                            <button type="submit" uk-icon="trash" class="uk-icon-button-delete" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
@@ -265,7 +268,9 @@
                                 <a class="uk-icon-button" href="#modalupdateuncate<?= $mdluncate['id'] ?>" uk-icon="pencil" uk-toggle></a>
                             </div>
                             <div>
-                                <a class="uk-icon-button-delete" href="mdl/delete/<?= $mdluncate['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
+                                <form class="uk-form-stacked" role="form" action="mdl/delete/<?= $mdluncate['id'] ?>" method="post">
+                                    <button type="submit" uk-icon="trash" class="uk-icon-button-delete" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></button>
+                                </form>
                             </div>
                         </div>
                     </td>
@@ -480,84 +485,18 @@
                 <div class="uk-modal-body">
                     <form class="uk-form-stacked" role="form" action="mdl/create/<?= $paket['id'] ?>" method="post">
                         <?= csrf_field() ?>
-
-                        <div class="uk-margin-bottom">
-                            <label class="uk-form-label" for="name">Nama</label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="name" name="name" placeholder="Nama" required />
-                            </div>
-                        </div>
-
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="denomination">Satuan</label>
-                            <select class="uk-select" aria-label="Satuan" id="denomination<?= $paket['id'] ?>" name="denomination" required>
-                                <option value="" selected disabled hidden>Pilih Satuan</option>
-                                <option value="1">Unit</option>
-                                <option value="2">Meter Lari</option>
-                                <option value="3">Meter Persegi</option>
-                                <option value="4">Set</option>
-                            </select>
-                        </div>
                         
-                        <select id="mdl-search" class="js-example-data-array" multiple="multiple" style="width:100%;"></select>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="findmdl">Cari MDL yang sudah tersedia</label>
+                            <select id="mdl-search<?= $paket['id'] ?>" class="js-example-data-array" multiple="multiple" style="width:100%;"></select>
+                        </div>
 
-                        <div id="dimentions<?= $paket['id'] ?>"></div>
+                        <div class="uk-text-right uk-margin">
+                            <button class="uk-button uk-button-secondary" type="button" uk-toggle="target: .togglenewmdl<?= $paket['id'] ?>">Buat MDL Baru</button>
+                        </div>
 
                         <script>
-                            //for apend flag of country.
-                            // function formatState (state) {
-                            //     console.log(state);
-                            //     if (!state.id) {
-                            //         return state.text;
-                            //     }
-                            //     var $state = $(
-                            //         <?php
-                            //         foreach ($autopakets as $autopaket) {
-                            //             echo '{text:"'.$autopaket['name'].'",id:'.$autopaket['id'].'},';
-                            //             echo '<option><img src="'+baseUrl+ '/' + state.contryflage.toLowerCase() + '.png"  class="img-flag" /> ' +state.text+ '</option>';
-                            //         } ?>
-                            //     );
-                            //     return $state;
-                            // };
-
-                            // $(function(){
-                            //     $("#js-example-data-array").select2({
-                            //         minimumInputLength: 2,
-                            //         templateResult: formatState, //this is for append country flag.
-                            //         ajax: {
-                            //             url: URL,
-                            //             dataType: 'json',
-                            //             type: "POST",
-                            //             data: function (term) {
-                            //                 return {
-                            //                     term: term
-                            //                 };
-                            //             },
-                            //             processResults: function (data) {
-                            //                 return {
-                            //                     results: $.map(data, function (item) {
-                            //                         return {
-                            //                             text: item.name+', '+item.state.name+', '+item.state.coutry.name,
-                            //                             id: item.id,
-                            //                             contryflage:item.state.coutry.sortname
-                            //                         }
-                            //                     })
-                            //                 };
-                            //             }
-
-                            //         }
-                            //     })
-                            // });
-
-                            // LAST UPDATE
-                            var data = [
-                                <?php
-                                foreach ($autopakets as $autopaket) {
-                                    echo '{text:"'.$autopaket['name'].'",id:'.$autopaket['id'].'},';
-                                } ?>
-                            ];
-
-                            $("#mdl-search").select2({
+                            $("#mdl-search<?= $paket['id'] ?>").select2({
                                 placeholder: 'Cari...',
                                 minimumInputLength: 3,
                                 // allowClear: true,
@@ -609,335 +548,348 @@
                                 // allowClear: true,
                                 // width: 'resolve', // need to override the changed default
                             });
-                            
-                            // Set the value, creating a new option if necessary
-                            // if ($('#js-example-data-array').find("option[value='" + data.id + "']").length) {
-                            //     $('#js-example-data-array').val(data.id).trigger('change');
-                            // } else { 
-                            //     // Create a DOM Option and pre-select by default
-                            //     var newOption = new Option(data.id, data.text, true, true);
-                            //     // Append it to the select
-                            //     $('#js-example-data-array').append(newOption).trigger('change');
-                            // } 
-
-                            document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
-                                if (this.value == "1" || this.value == "2" || this.value == "3" || this.value == "4") {
-                                    var elements = document.getElementById('contdim<?= $paket['id'] ?>');
-                                    if (elements) {
-                                        elements.remove();
-                                    }
-                                    var dimentions = document.getElementById('dimentions<?= $paket['id'] ?>');
-
-                                    var contdim = document.createElement('div');
-                                    contdim.setAttribute('id', 'contdim<?= $paket['id'] ?>');
-
-                                    var contlength = document.createElement('div');
-                                    contlength.setAttribute('class', 'uk-margin');
-
-                                    var lablength = document.createElement('label');
-                                    lablength.setAttribute('class', 'uk-form-label');
-                                    lablength.setAttribute('for', 'length');
-                                    lablength.innerHTML = "Panjang";
-
-                                    var coninputl = document.createElement('div');
-                                    coninputl.setAttribute('class', 'uk-form-controls');
-
-                                    var inputl = document.createElement('input');
-                                    inputl.setAttribute('class', 'uk-input');
-                                    inputl.setAttribute('type', 'text');
-                                    inputl.setAttribute('id', 'length<?= $paket['id'] ?>');
-                                    inputl.setAttribute('name', 'length');
-                                    inputl.setAttribute('placeholder', 'Panjang');
-                                    inputl.setAttribute('required', '');
-
-                                    var contw = document.createElement('div');
-                                    contw.setAttribute('class', 'uk-margin');
-
-                                    var labw = document.createElement('label');
-                                    labw.setAttribute('class', 'uk-form-label');
-                                    labw.setAttribute('for', 'width');
-                                    labw.innerHTML = "Lebar";
-
-                                    var coninputw = document.createElement('div');
-                                    coninputw.setAttribute('class', 'uk-form-controls');
-
-                                    var inputw = document.createElement('input');
-                                    inputw.setAttribute('class', 'uk-input');
-                                    inputw.setAttribute('type', 'text');
-                                    inputw.setAttribute('id', 'width<?= $paket['id'] ?>');
-                                    inputw.setAttribute('name', 'width');
-                                    inputw.setAttribute('placeholder', 'Lebar');
-                                    inputw.setAttribute('required', '');
-
-                                    var conth = document.createElement('div');
-                                    conth.setAttribute('class', 'uk-margin');
-
-                                    var labh = document.createElement('label');
-                                    labh.setAttribute('class', 'uk-form-label');
-                                    labh.setAttribute('for', 'height');
-                                    labh.innerHTML = "Tinggi";
-
-                                    var coninputh = document.createElement('div');
-                                    coninputh.setAttribute('class', 'uk-form-controls');
-
-                                    var inputh = document.createElement('input');
-                                    inputh.setAttribute('class', 'uk-input');
-                                    inputh.setAttribute('type', 'text');
-                                    inputh.setAttribute('id', 'height<?= $paket['id'] ?>');
-                                    inputh.setAttribute('name', 'height');
-                                    inputh.setAttribute('placeholder', 'Tinggi');
-                                    inputh.setAttribute('required', '');
-
-                                    coninputl.appendChild(inputl);
-                                    contlength.appendChild(lablength);
-                                    contlength.appendChild(coninputl);
-                                    contdim.appendChild(contlength);
-                                    coninputw.appendChild(inputw);
-                                    contw.appendChild(labw);
-                                    contw.appendChild(coninputw);
-                                    contdim.appendChild(contw);
-                                    coninputh.appendChild(inputh);
-                                    conth.appendChild(labh);
-                                    conth.appendChild(coninputh);
-                                    contdim.appendChild(conth);
-                                    dimentions.appendChild(contdim);
-                                } else {
-                                    var dim = document.getElementById('contdim<?= $paket['id'] ?>');
-                                    if (dim) {
-                                        dim.remove();
-                                    }
-                                }
-                            });
                         </script>
 
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="price">Keterangan</label>
-                            <div class="uk-margin">
-                                <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="Keterangan" aria-label="Textarea"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="price">Harga</label>
-                            <div class="uk-form-controls">
-                                <input type="text" class="uk-input" id="price" name="price" placeholder="Harga" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="currency" required />
-                            </div>
-                        </div>
-
-                        <div class="uk-margin" id="image-container-createmdl-<?= $paket['id'] ?>">
-                            <div id="image-containermdl-<?= $paket['id'] ?>" class="uk-form-controls">
-                                <input id="photocreatemdl<?= $paket['id'] ?>" name="photo" hidden />
-                                <div id="js-upload-createmdl-<?= $paket['id'] ?>" class="js-upload-createmdl-<?= $paket['id'] ?> uk-placeholder uk-text-center">
-                                    <span uk-icon="icon: cloud-upload"></span>
-                                    <span class="uk-text-middle">Tarik dan lepas foto disini atau</span>
-                                    <div uk-form-custom>
-                                        <input type="file">
-                                        <span class="uk-link uk-preserve-color">pilih satu</span>
-                                    </div>
+                        <div class="togglenewmdl<?= $paket['id'] ?>" hidden>
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="name">Nama</label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="name" name="name" placeholder="Nama" required />
                                 </div>
-                                <progress id="js-progressbar-createmdl-<?= $paket['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                             </div>
-                        </div>
 
-                        <script>
-                            // Upload Photo MDL
-                            var bar = document.getElementById('js-progressbar-createmdl-<?= $paket['id'] ?>');
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="denomination">Satuan</label>
+                                <select class="uk-select" aria-label="Satuan" id="denomination<?= $paket['id'] ?>" name="denomination" required>
+                                    <option value="" selected disabled hidden>Pilih Satuan</option>
+                                    <option value="1">Unit</option>
+                                    <option value="2">Meter Lari</option>
+                                    <option value="3">Meter Persegi</option>
+                                    <option value="4">Set</option>
+                                </select>
+                            </div>
 
-                            UIkit.upload('.js-upload-createmdl-<?= $paket['id'] ?>', {
-                                url: 'upload/photomdl',
-                                multiple: false,
-                                name: 'uploads',
-                                param: {
-                                    lorem: 'ipsum'
-                                },
-                                method: 'POST',
-                                type: 'json',
+                            <div id="dimentions<?= $paket['id'] ?>"></div>
 
-                                beforeSend: function() {
-                                    console.log('beforeSend', arguments);
-                                },
-                                beforeAll: function() {
-                                    console.log('beforeAll', arguments);
-                                },
-                                load: function() {
-                                    console.log('load', arguments);
-                                },
-                                error: function() {
-                                    console.log('error', arguments);
-                                    var error = arguments[0].xhr.response.message.uploads;
-                                    alert(error);
-                                },
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="price">Keterangan</label>
+                                <div class="uk-margin">
+                                    <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="Keterangan" aria-label="Textarea"></textarea>
+                                </div>
+                            </div>
 
-                                complete: function() {
-                                    console.log('complete', arguments);
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="price">Harga</label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="price" name="price" placeholder="Harga" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="currency" required />
+                                </div>
+                            </div>
 
-                                    var filename = arguments[0].response;
+                            <div class="uk-margin" id="image-container-createmdl-<?= $paket['id'] ?>">
+                                <div id="image-containermdl-<?= $paket['id'] ?>" class="uk-form-controls">
+                                    <input id="photocreatemdl<?= $paket['id'] ?>" name="photo" hidden />
+                                    <div id="js-upload-createmdl-<?= $paket['id'] ?>" class="js-upload-createmdl-<?= $paket['id'] ?> uk-placeholder uk-text-center">
+                                        <span uk-icon="icon: cloud-upload"></span>
+                                        <span class="uk-text-middle">Tarik dan lepas foto disini atau</span>
+                                        <div uk-form-custom>
+                                            <input type="file">
+                                            <span class="uk-link uk-preserve-color">pilih satu</span>
+                                        </div>
+                                    </div>
+                                    <progress id="js-progressbar-createmdl-<?= $paket['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                </div>
+                            </div>
 
-                                    if (document.getElementById('display-container-createmdl-<?= $paket['id'] ?>')) {
-                                        document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
-                                    };
+                            <script>
+                                // Denomination
+                                document.getElementById('denomination<?= $paket['id'] ?>').addEventListener('change', function() {
+                                    if (this.value == "1" || this.value == "2" || this.value == "3" || this.value == "4") {
+                                        var elements = document.getElementById('contdim<?= $paket['id'] ?>');
+                                        if (elements) {
+                                            elements.remove();
+                                        }
+                                        var dimentions = document.getElementById('dimentions<?= $paket['id'] ?>');
 
-                                    document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = filename;
+                                        var contdim = document.createElement('div');
+                                        contdim.setAttribute('id', 'contdim<?= $paket['id'] ?>');
 
-                                    var imgContainer = document.getElementById('image-container-createmdl-<?= $paket['id'] ?>');
+                                        var contlength = document.createElement('div');
+                                        contlength.setAttribute('class', 'uk-margin');
 
-                                    var displayContainer = document.createElement('div');
-                                    displayContainer.setAttribute('id', 'display-container-createmdl-<?= $paket['id'] ?>');
-                                    displayContainer.setAttribute('class', 'uk-inline');
+                                        var lablength = document.createElement('label');
+                                        lablength.setAttribute('class', 'uk-form-label');
+                                        lablength.setAttribute('for', 'length');
+                                        lablength.innerHTML = "Panjang";
 
-                                    var displayImg = document.createElement('div');
-                                    displayImg.setAttribute('uk-lightbox', 'animation: fade');
-                                    displayImg.setAttribute('class', 'uk-inline');
+                                        var coninputl = document.createElement('div');
+                                        coninputl.setAttribute('class', 'uk-form-controls');
 
-                                    var link = document.createElement('a');
-                                    link.setAttribute('href', 'img/mdl/' + filename);
+                                        var inputl = document.createElement('input');
+                                        inputl.setAttribute('class', 'uk-input');
+                                        inputl.setAttribute('type', 'text');
+                                        inputl.setAttribute('id', 'length<?= $paket['id'] ?>');
+                                        inputl.setAttribute('name', 'length');
+                                        inputl.setAttribute('placeholder', 'Panjang');
+                                        inputl.setAttribute('required', '');
 
-                                    var image = document.createElement('img');
-                                    image.setAttribute('src', 'img/mdl/' + filename);
+                                        var contw = document.createElement('div');
+                                        contw.setAttribute('class', 'uk-margin');
 
-                                    var closeContainer = document.createElement('div');
-                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+                                        var labw = document.createElement('label');
+                                        labw.setAttribute('class', 'uk-form-label');
+                                        labw.setAttribute('for', 'width');
+                                        labw.innerHTML = "Lebar";
 
-                                    var closeButton = document.createElement('a');
-                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                    closeButton.setAttribute('onClick', 'removeImgCreatemdl<?= $paket['id'] ?>()');
-                                    closeButton.setAttribute('uk-icon', 'close');
+                                        var coninputw = document.createElement('div');
+                                        coninputw.setAttribute('class', 'uk-form-controls');
 
-                                    closeContainer.appendChild(closeButton);
-                                    displayContainer.appendChild(displayImg);
-                                    displayContainer.appendChild(closeContainer);
-                                    link.appendChild(image);
-                                    displayImg.appendChild(link);
-                                    imgContainer.appendChild(displayContainer);
+                                        var inputw = document.createElement('input');
+                                        inputw.setAttribute('class', 'uk-input');
+                                        inputw.setAttribute('type', 'text');
+                                        inputw.setAttribute('id', 'width<?= $paket['id'] ?>');
+                                        inputw.setAttribute('name', 'width');
+                                        inputw.setAttribute('placeholder', 'Lebar');
+                                        inputw.setAttribute('required', '');
 
-                                    document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').setAttribute('hidden', '');
-                                },
+                                        var conth = document.createElement('div');
+                                        conth.setAttribute('class', 'uk-margin');
 
-                                loadStart: function(e) {
-                                    console.log('loadStart', arguments);
+                                        var labh = document.createElement('label');
+                                        labh.setAttribute('class', 'uk-form-label');
+                                        labh.setAttribute('for', 'height');
+                                        labh.innerHTML = "Tinggi";
 
-                                    bar.removeAttribute('hidden');
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
+                                        var coninputh = document.createElement('div');
+                                        coninputh.setAttribute('class', 'uk-form-controls');
 
-                                progress: function(e) {
-                                    console.log('progress', arguments);
+                                        var inputh = document.createElement('input');
+                                        inputh.setAttribute('class', 'uk-input');
+                                        inputh.setAttribute('type', 'text');
+                                        inputh.setAttribute('id', 'height<?= $paket['id'] ?>');
+                                        inputh.setAttribute('name', 'height');
+                                        inputh.setAttribute('placeholder', 'Tinggi');
+                                        inputh.setAttribute('required', '');
 
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
-
-                                loadEnd: function(e) {
-                                    console.log('loadEnd', arguments);
-
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
-
-                                completeAll: function() {
-                                    console.log('completeAll', arguments);
-
-                                    setTimeout(function() {
-                                        bar.setAttribute('hidden', 'hidden');
-                                    }, 1000);
-
-                                    alert('Data Berhasil Terunggah');
-                                }
-                            });
-
-                            function removeImgCreatemdl<?= $paket['id'] ?>() {
-                                $.ajax({
-                                    type: 'post',
-                                    url: 'upload/removephotomdl',
-                                    data: {
-                                        'photo': document.getElementById('photocreatemdl<?= $paket['id'] ?>').value
-                                    },
-                                    dataType: 'json',
-
-                                    error: function() {
-                                        console.log('error', arguments);
-                                    },
-
-                                    success: function() {
-                                        console.log('success', arguments);
-
-                                        var pesan = arguments[0][1];
-
-                                        document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
-                                        document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = '';
-
-                                        alert(pesan);
-
-                                        document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').removeAttribute('hidden', '');
+                                        coninputl.appendChild(inputl);
+                                        contlength.appendChild(lablength);
+                                        contlength.appendChild(coninputl);
+                                        contdim.appendChild(contlength);
+                                        coninputw.appendChild(inputw);
+                                        contw.appendChild(labw);
+                                        contw.appendChild(coninputw);
+                                        contdim.appendChild(contw);
+                                        coninputh.appendChild(inputh);
+                                        conth.appendChild(labh);
+                                        conth.appendChild(coninputh);
+                                        contdim.appendChild(conth);
+                                        dimentions.appendChild(contdim);
+                                    } else {
+                                        var dim = document.getElementById('contdim<?= $paket['id'] ?>');
+                                        if (dim) {
+                                            dim.remove();
+                                        }
                                     }
                                 });
-                            };
 
-                            // Currency
-                            $("input[data-type='currency']").on({
-                                keyup: function() {
-                                    formatCurrency($(this));
-                                },
-                                blur: function() {
-                                    formatCurrency($(this), "blur");
+                                // Upload Photo MDL
+                                var bar = document.getElementById('js-progressbar-createmdl-<?= $paket['id'] ?>');
+
+                                UIkit.upload('.js-upload-createmdl-<?= $paket['id'] ?>', {
+                                    url: 'upload/photomdl',
+                                    multiple: false,
+                                    name: 'uploads',
+                                    param: {
+                                        lorem: 'ipsum'
+                                    },
+                                    method: 'POST',
+                                    type: 'json',
+
+                                    beforeSend: function() {
+                                        console.log('beforeSend', arguments);
+                                    },
+                                    beforeAll: function() {
+                                        console.log('beforeAll', arguments);
+                                    },
+                                    load: function() {
+                                        console.log('load', arguments);
+                                    },
+                                    error: function() {
+                                        console.log('error', arguments);
+                                        var error = arguments[0].xhr.response.message.uploads;
+                                        alert(error);
+                                    },
+
+                                    complete: function() {
+                                        console.log('complete', arguments);
+
+                                        var filename = arguments[0].response;
+
+                                        if (document.getElementById('display-container-createmdl-<?= $paket['id'] ?>')) {
+                                            document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
+                                        };
+
+                                        document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = filename;
+
+                                        var imgContainer = document.getElementById('image-container-createmdl-<?= $paket['id'] ?>');
+
+                                        var displayContainer = document.createElement('div');
+                                        displayContainer.setAttribute('id', 'display-container-createmdl-<?= $paket['id'] ?>');
+                                        displayContainer.setAttribute('class', 'uk-inline');
+
+                                        var displayImg = document.createElement('div');
+                                        displayImg.setAttribute('uk-lightbox', 'animation: fade');
+                                        displayImg.setAttribute('class', 'uk-inline');
+
+                                        var link = document.createElement('a');
+                                        link.setAttribute('href', 'img/mdl/' + filename);
+
+                                        var image = document.createElement('img');
+                                        image.setAttribute('src', 'img/mdl/' + filename);
+
+                                        var closeContainer = document.createElement('div');
+                                        closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                        var closeButton = document.createElement('a');
+                                        closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                        closeButton.setAttribute('onClick', 'removeImgCreatemdl<?= $paket['id'] ?>()');
+                                        closeButton.setAttribute('uk-icon', 'close');
+
+                                        closeContainer.appendChild(closeButton);
+                                        displayContainer.appendChild(displayImg);
+                                        displayContainer.appendChild(closeContainer);
+                                        link.appendChild(image);
+                                        displayImg.appendChild(link);
+                                        imgContainer.appendChild(displayContainer);
+
+                                        document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').setAttribute('hidden', '');
+                                    },
+
+                                    loadStart: function(e) {
+                                        console.log('loadStart', arguments);
+
+                                        bar.removeAttribute('hidden');
+                                        bar.max = e.total;
+                                        bar.value = e.loaded;
+                                    },
+
+                                    progress: function(e) {
+                                        console.log('progress', arguments);
+
+                                        bar.max = e.total;
+                                        bar.value = e.loaded;
+                                    },
+
+                                    loadEnd: function(e) {
+                                        console.log('loadEnd', arguments);
+
+                                        bar.max = e.total;
+                                        bar.value = e.loaded;
+                                    },
+
+                                    completeAll: function() {
+                                        console.log('completeAll', arguments);
+
+                                        setTimeout(function() {
+                                            bar.setAttribute('hidden', 'hidden');
+                                        }, 1000);
+
+                                        alert('Data Berhasil Terunggah');
+                                    }
+                                });
+
+                                function removeImgCreatemdl<?= $paket['id'] ?>() {
+                                    $.ajax({
+                                        type: 'post',
+                                        url: 'upload/removephotomdl',
+                                        data: {
+                                            'photo': document.getElementById('photocreatemdl<?= $paket['id'] ?>').value
+                                        },
+                                        dataType: 'json',
+
+                                        error: function() {
+                                            console.log('error', arguments);
+                                        },
+
+                                        success: function() {
+                                            console.log('success', arguments);
+
+                                            var pesan = arguments[0][1];
+
+                                            document.getElementById('display-container-createmdl-<?= $paket['id'] ?>').remove();
+                                            document.getElementById('photocreatemdl<?= $paket['id'] ?>').value = '';
+
+                                            alert(pesan);
+
+                                            document.getElementById('js-upload-createmdl-<?= $paket['id'] ?>').removeAttribute('hidden', '');
+                                        }
+                                    });
+                                };
+
+                                // Currency
+                                $("input[data-type='currency']").on({
+                                    keyup: function() {
+                                        formatCurrency($(this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency($(this), "blur");
+                                    }
+                                });
+
+                                function formatNumber(n) {
+                                    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                 }
-                            });
 
-                            function formatNumber(n) {
-                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
+                                function formatCurrency(input, blur) {
 
-                            function formatCurrency(input, blur) {
-
-                                var input_val = input.val();
-                                if (input_val === "") {
-                                    return;
-                                }
-
-                                var original_len = input_val.length;
-
-                                var caret_pos = input.prop("selectionStart");
-
-                                if (input_val.indexOf(".") >= 0) {
-
-                                    var decimal_pos = input_val.indexOf(".");
-
-                                    var left_side = input_val.substring(0, decimal_pos);
-                                    var right_side = input_val.substring(decimal_pos);
-
-                                    left_side = formatNumber(left_side);
-
-                                    right_side = formatNumber(right_side);
-
-                                    if (blur === "blur") {
-                                        right_side += "00";
+                                    var input_val = input.val();
+                                    if (input_val === "") {
+                                        return;
                                     }
 
-                                    right_side = right_side.substring(0, 2);
+                                    var original_len = input_val.length;
 
-                                    input_val = "Rp" + left_side + "." + right_side;
+                                    var caret_pos = input.prop("selectionStart");
 
-                                } else {
-                                    input_val = formatNumber(input_val);
-                                    input_val = "Rp" + input_val;
+                                    if (input_val.indexOf(".") >= 0) {
 
-                                    if (blur === "blur") {
-                                        input_val += ".00";
+                                        var decimal_pos = input_val.indexOf(".");
+
+                                        var left_side = input_val.substring(0, decimal_pos);
+                                        var right_side = input_val.substring(decimal_pos);
+
+                                        left_side = formatNumber(left_side);
+
+                                        right_side = formatNumber(right_side);
+
+                                        if (blur === "blur") {
+                                            right_side += "00";
+                                        }
+
+                                        right_side = right_side.substring(0, 2);
+
+                                        input_val = "Rp" + left_side + "." + right_side;
+
+                                    } else {
+                                        input_val = formatNumber(input_val);
+                                        input_val = "Rp" + input_val;
+
+                                        if (blur === "blur") {
+                                            input_val += ".00";
+                                        }
                                     }
+
+                                    input.val(input_val);
+
+                                    var updated_len = input_val.length;
+                                    caret_pos = updated_len - original_len + caret_pos;
+                                    input[0].setSelectionRange(caret_pos, caret_pos);
                                 }
+                            </script>
 
-                                input.val(input_val);
-
-                                var updated_len = input_val.length;
-                                caret_pos = updated_len - original_len + caret_pos;
-                                input[0].setSelectionRange(caret_pos, caret_pos);
-                            }
-                        </script>
-
-                        <div class="uk-modal-footer">
-                            <div class="uk-text-right">
-                                <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                            <div class="uk-modal-footer">
+                                <div class="uk-text-right">
+                                    <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -1048,7 +1000,7 @@
 
         <!-- Modal Update MDL per Sub Paket -->
         <?php foreach ($paket['mdl'] as $mdl) { ?>
-            <div id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
+            <div class="uk-modal-container" id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <div class="uk-modal-header">
                         <h2 class="uk-modal-title">Ubah MDL <?= $mdl['name'] ?></h2>
@@ -1215,4 +1167,172 @@
         <!-- Modal Update MDL per Sub Paket End -->
     <?php } ?>
 <?php } ?>
+
+<!-- Modal Update MDL Uncategories -->
+<?php foreach ($mdldata['mdluncate'] as $mdluncate) { ?>
+    <div class="uk-modal-container" id="modalupdateuncate<?= $mdluncate['id'] ?>" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Ubah MDL <?= $mdluncate['name'] ?></h2>
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+            </div>
+
+            <div class="uk-modal-body">
+                <form class="uk-form-stacked" role="form" action="mdl/update/<?= $mdluncate['id'] ?>" method="post">
+                    <?= csrf_field() ?>
+
+                    <div class="uk-margin-bottom">
+                        <label class="uk-form-label" for="name">Nama</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" id="name" name="name" value="<?= $mdluncate['name'] ?>" />
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="denomination"> Satuan</label>
+                        <select class="uk-select" aria-label="Satuan" id="denominations<?= $mdluncate['id'] ?>" name="denomination" required>
+                            <option value="1" <?php if ($mdluncate['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                            <option value="2" <?php if ($mdluncate['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                            <option value="3" <?php if ($mdluncate['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                            <option value="4" <?php if ($mdluncate['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
+                        </select>
+                    </div>
+
+                    <script>
+                        $(document).ready(function() {
+                            if ($("#denominations<?= $mdluncate['id'] ?>").val() == "1") {
+                                $("#contupmdl<?= $mdluncate['id'] ?>").attr("hidden", false);
+                            }
+
+                            $("select[id='denominations<?= $mdluncate['id'] ?>']").change(function() {
+                                if ((this.value) === "1") {
+                                    $('#contupmdl<?= $mdluncate['id'] ?>').attr("hidden", true);
+                                } else {
+                                    $('#contupmdl<?= $mdluncate['id'] ?>').removeAttr("hidden");
+                                }
+                            });
+                        });
+                    </script>
+
+                    <div id="contupmdl<?= $mdluncate['id'] ?>">
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="length">Panjang</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="length" name="length" value="<?= $mdluncate['length'] ?>" required />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="width">Lebar</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="width" name="width" value="<?= $mdluncate['width'] ?>" required />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="height">Tinggi</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="height" name="height" value="<?= $mdluncate['height'] ?>" required />
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-bottom">
+                            <label class="uk-form-label" for="volume">Volume</label>
+                            <div class="uk-form-controls">
+                                <input type="text" class="uk-input" id="volume" name="volume" value="<?= $mdluncate['volume'] ?>" required />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="price">Harga</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" id="price" name="price" placeholder="<?php echo 'Rp. ' . number_format((int)$mdluncate['price'], 0, ',', '.'); ' '; ?>" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="<?= $mdluncate['price'] ?>" data-type="curencyupdate" />
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="price">Keterangan</label>
+                        <div class="uk-margin">
+                            <textarea class="uk-textarea" type="text" name="keterangan" rows="5" placeholder="<?= $mdluncate['keterangan'] ?>" value="<?= $mdluncate['keterangan'] ?>" aria-label="Textarea"><?= $mdluncate['keterangan'] ?></textarea>
+                        </div>
+                    </div>
+
+                    <script>
+                        $("input[data-type='curencyupdate']").on({
+                            keyup: function() {
+                                formatCurrency($(this));
+                            },
+                            blur: function() {
+                                formatCurrency($(this), "blur");
+                            }
+                        });
+
+
+                        function formatNumber(n) {
+                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+
+                        function formatCurrency(input, blur) {
+
+                            var input_val = input.val();
+
+                            if (input_val === "") {
+                                return;
+                            }
+
+                            var original_len = input_val.length;
+
+                            var caret_pos = input.prop("selectionStart");
+
+                            if (input_val.indexOf(".") >= 0) {
+
+                                var decimal_pos = input_val.indexOf(".");
+
+                                var left_side = input_val.substring(0, decimal_pos);
+                                var right_side = input_val.substring(decimal_pos);
+
+                                left_side = formatNumber(left_side);
+
+                                right_side = formatNumber(right_side);
+
+                                if (blur === "blur") {
+                                    right_side += "00";
+                                }
+
+                                right_side = right_side.substring(0, 2);
+
+                                input_val = "Rp" + left_side + "." + right_side;
+
+                            } else {
+
+                                input_val = formatNumber(input_val);
+                                input_val = "Rp" + input_val;
+
+                                if (blur === "blur") {
+                                    input_val += ".00";
+                                }
+                            }
+
+                            input.val(input_val);
+
+                            var updated_len = input_val.length;
+                            caret_pos = updated_len - original_len + caret_pos;
+                            input[0].setSelectionRange(caret_pos, caret_pos);
+                        }
+                    </script>
+
+                    <div class="uk-modal-footer">
+                        <div class="uk-text-right">
+                            <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<!-- Modal Update MDL per Sub Paket End -->
 <?= $this->endSection() ?>
