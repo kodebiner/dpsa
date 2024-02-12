@@ -225,43 +225,46 @@
                             </div>
                             <!-- End Of Add Client -->
 
-                            <label class="uk-form-label" for="designtype">Dengan Desain</label>
+                            <!-- Design Section -->
+                            <!-- Select With Design Or Without Design Section -->
+                            <label class="uk-form-label" for="designtype">Dengan Desain atau Tanpa Desain</label>
                             <label class="switch  uk-margin-bottom">
-                                <input id="designtype<?= $project['id'] ?>" name="designtype" type="checkbox">
+                                <input id="designtype" name="designtype" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
                             <script>
                                 $(document).ready(function() {
-                                    $("input[id='designtype<?= $project['id'] ?>']").change(function() {
+                                    $("input[id='designtype']").change(function() {
                                         if ($(this).is(':checked')) {
-                                            $("input[id='designtype<?= $project['id'] ?>']").val(1);
-                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", false);
+                                            $("input[id='designtype']").val(1);
+                                            $("div[id='imgdesigncreate']").attr("hidden", false);
                                         } else {
-                                            $("input[id='designtype<?= $project['id'] ?>']").val(0);
-                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", true);
-                                            $("div[id='imgdesigncreate<?= $project['id'] ?>']").attr("hidden", false);
+                                            $("input[id='designtype']").val(0);
+                                            $("div[id='imgdesigncreate']").attr("hidden", true);
                                         }
                                     });
                                 });
                             </script>
+                            <!-- Select With Design Or Without Design Section End -->
 
-                            <div class="uk-margin" id="imgdesigncreate<?= $project['id'] ?>" hidden>
+                            <!-- Upload Design Section -->
+                            <div class="uk-margin" id="imgdesigncreate" hidden>
                                 <label class="uk-form-label" for="photocreate">Unggah file DED / Layout</label>
-                                <div class="uk-placeholder" id="placedesign<?= $project['id'] ?>" hidden>
+                                <div class="uk-placeholder" id="placedesign" hidden>
                                     <div uk-grid>
                                         <div class="uk-text-left uk-width-3-4">
-                                            <div id="updesign<?= $project['id'] ?>">
+                                            <div id="updesign">
                                             </div>
                                         </div>
                                         <div class="uk-text-right uk-width-1-4">
-                                            <div id="closeddesign<?= $project['id'] ?>">
+                                            <div id="closeddesign">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
-                                    <input id="designcreated<?= $project['id'] ?>" name="design" hidden required />
-                                    <div id="js-upload-createdesign-<?= $project['id'] ?>" class="js-upload-createdesign-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                <div id="image-container-" class="uk-form-controls">
+                                    <input id="designcreated" name="design" hidden required />
+                                    <div id="js-upload-createdesign-" class="js-upload-createdesign- uk-placeholder uk-text-center">
                                         <span uk-icon="icon: cloud-upload"></span>
                                         <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
                                         <div uk-form-custom>
@@ -269,14 +272,14 @@
                                             <span class="uk-link uk-preserve-color">pilih satu</span>
                                         </div>
                                     </div>
-                                    <progress id="js-progressbar-createdesign-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                    <progress id="js-progressbar-createdesign-" class="uk-progress" value="0" max="100" hidden></progress>
                                 </div>
                             </div>
 
                             <script type="text/javascript">
-                                var bar = document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>');
+                                var bar = document.getElementById('js-progressbar-createdesign-');
 
-                                UIkit.upload('.js-upload-createdesign-<?= $project['id'] ?>', {
+                                UIkit.upload('.js-upload-createdesign-', {
                                     url: 'upload/layout',
                                     multiple: false,
                                     name: 'uploads',
@@ -306,20 +309,20 @@
 
                                         var filename = arguments[0].response;
 
-                                        if (document.getElementById('display-container-create-<?= $project['id'] ?>')) {
-                                            document.getElementById('display-container-create-<?= $project['id'] ?>').remove();
+                                        if (document.getElementById('display-container-create-')) {
+                                            document.getElementById('display-container-create-').remove();
                                         };
 
-                                        document.getElementById('designcreated<?= $project['id'] ?>').value = filename;
+                                        document.getElementById('designcreated').value = filename;
 
-                                        document.getElementById('placedesign<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('placedesign').removeAttribute('hidden');
 
-                                        var uprev = document.getElementById('updesign<?= $project['id'] ?>');
-                                        var closed = document.getElementById('closeddesign<?= $project['id'] ?>');
+                                        var uprev = document.getElementById('updesign');
+                                        var closed = document.getElementById('closeddesign');
 
                                         var divuprev = document.createElement('h6');
                                         divuprev.setAttribute('class', 'uk-margin-remove');
-                                        divuprev.setAttribute('id', 'design<?= $project['id'] ?>');
+                                        divuprev.setAttribute('id', 'design');
 
 
                                         var linkrev = document.createElement('a');
@@ -334,8 +337,8 @@
 
                                         var divclosed = document.createElement('a');
                                         divclosed.setAttribute('uk-icon', 'icon: close');
-                                        divclosed.setAttribute('onClick', 'removedesign<?= $project['id'] ?>()');
-                                        divclosed.setAttribute('id', 'closedes<?= $project['id'] ?>');
+                                        divclosed.setAttribute('onClick', 'removedesign()');
+                                        divclosed.setAttribute('id', 'closedes');
 
                                         uprev.appendChild(divuprev);
                                         divuprev.appendChild(linkrev);
@@ -343,50 +346,50 @@
                                         link.appendChild(linktext);
                                         closed.appendChild(divclosed);
 
-                                        document.getElementById('js-upload-createdesign-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        document.getElementById('js-upload-createdesign-').setAttribute('hidden', '');
                                     },
 
                                     loadStart: function(e) {
                                         console.log('loadStart', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('js-progressbar-createdesign-').removeAttribute('hidden');
 
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
 
                                     },
 
                                     progress: function(e) {
                                         console.log('progress', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
                                     },
 
                                     loadEnd: function(e) {
                                         console.log('loadEnd', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
                                     },
 
                                     completeAll: function() {
                                         console.log('completeAll', arguments);
 
                                         setTimeout(function() {
-                                            document.getElementById('js-progressbar-createdesign-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                            document.getElementById('js-progressbar-createdesign-').setAttribute('hidden', 'hidden');
                                             alert('Proses unggah data desain selesai');
                                         }, 1000);
                                     }
 
                                 });
 
-                                function removedesign<?= $project['id'] ?>() {
+                                function removedesign() {
                                     $.ajax({
                                         type: 'post',
                                         url: 'upload/removelayout',
                                         data: {
-                                            'design': document.getElementById('designcreated<?= $project['id'] ?>').value
+                                            'design': document.getElementById('designcreated').value
                                         },
                                         dataType: 'json',
 
@@ -399,17 +402,18 @@
 
                                             var pesan = arguments[0][1];
 
-                                            document.getElementById('design<?= $project['id'] ?>').remove();
-                                            document.getElementById('closedes<?= $project['id'] ?>').remove();
-                                            document.getElementById('placedesign<?= $project['id'] ?>').setAttribute('hidden', '');
-                                            document.getElementById('designcreated<?= $project['id'] ?>').value = '';
+                                            document.getElementById('design').remove();
+                                            document.getElementById('closedes').remove();
+                                            document.getElementById('placedesign').setAttribute('hidden', '');
+                                            document.getElementById('designcreated').value = '';
 
-                                            document.getElementById('js-upload-createdesign-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                            document.getElementById('js-upload-createdesign-').removeAttribute('hidden', '');
                                             alert(pesan);
                                         }
                                     });
                                 };
                             </script>
+                            <!-- Upload Design End -->
 
                             <div class="uk-modal-footer uk-text-right">
                                 <button class="uk-button uk-button-primary" type="submit">Save</button>
@@ -1591,7 +1595,7 @@
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload Serah Terima</label>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
                                                 <?php
-                                                foreach ($bastdata[$project['id']]['bast'] as $bast) {
+                                                foreach ($projectdata[$project['id']]['bast'] as $bast) {
                                                     $bastid = "";
                                                     if (!empty($bast) && $bast['status'] === "0") {
                                                         $bastid = $bast['id']; ?>
@@ -1657,7 +1661,7 @@
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
                                                 <?php
-                                                foreach ($bastdata[$project['id']]['bast'] as $bast) {
+                                                foreach ($projectdata[$project['id']]['bast'] as $bast) {
                                                     $bastid = "";
                                                     if (!empty($bast) && $bast['status'] === "1") {
                                                         $bastid = $bast['id']; ?>
