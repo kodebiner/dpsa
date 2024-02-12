@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\BastModel;
 use App\Models\DesignModel;
 use App\Models\ProjectModel;
 use App\Models\MdlModel;
@@ -384,11 +385,13 @@ class Upload extends BaseController
         die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 
-    public function sertrim()
+    public function sertrim($id)
     {
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
+        $BastModel  = new BastModel();
         $input      = $this->request->getFile('uploads');
+        // $id         = $this->request->getPost('id');
 
         // Validation Rules
         $rules = [
@@ -407,25 +410,45 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
-            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            // $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+
+            if (!empty($input)) {
+                function random_string($filename)
+                {
+                    $key = '';
+                    $keys = array_merge(range(0, 9), range('a', 'z'));
+    
+                    for ($i = 0; $i < $filename; $i++) {
+                        $key .= $keys[array_rand($keys)];
+                    }
+    
+                    return $key;
+                }
+                $truename = random_string(20);
+            }
+
             $input->move(FCPATH . '/img/sertrim/', $truename . '.' . $ext);
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
+
+            $sertrim = [
+                'projectid' => $id,
+                'file'      => $returnFile,
+                'status'    => 0,
+            ];
+            $BastModel->save($sertrim);
 
             // Returning Message
             die(json_encode($returnFile));
         }
     }
 
-    public function removesertrim()
+    public function fileser($id)
     {
-        // Removing File
-        $input = $this->request->getPost('sertrim');
-        unlink(FCPATH . 'img/sertrim/' . $input);
-
-        // Return Message
-        die(json_encode(array('errors', 'Data berhasil di hapus')));
+        $BastModel = new BastModel();
+        $bast = $BastModel->where('projectid', $id)->find();
+        return $this->response->setJSON($bast);
     }
 
     public function bast()
@@ -451,7 +474,19 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
-            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            // $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
             $input->move(FCPATH . '/img/bast/', $truename . '.' . $ext);
 
             // Getting True Filename

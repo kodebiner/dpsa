@@ -5,10 +5,13 @@ use CodeIgniter\Model;
 class BastModel extends Model
 {
     protected $allowedFields = [
-        'projectid', 'file', 'status', 
+        'projectid', 'file', 'status', 'created_at', 'updated_at',
     ];
     protected $table            = 'bast';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
+    protected $useTimestamps    = true;
     protected $returnType       = 'array';
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
 }

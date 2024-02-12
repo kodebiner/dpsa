@@ -1593,16 +1593,16 @@
                                         <!-- Serah Terima -->
                                         <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload Serah Terima</label>
-                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
+                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
                                                     $bastid = "";
                                                     if (!empty($bast) && $bast['status'] === "0") {
                                                         $bastid = $bast['id']; ?>
                                                         <div id="sertrim-file-<?= $bast['id']; ?>">
-                                                            <div class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                            <div id="sertrim-card<?=$bast['id']?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
                                                                 <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
-                                                                <?= $bast['file'] ?>
+                                                                <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
                                                         <script>
@@ -1622,7 +1622,6 @@
                                                                         success: function() {
                                                                             console.log('success', arguments);
                                                                             $("#sertrim-file-<?= $bast['id']; ?>").remove();
-                                                                            alert("file Serah Terima berhasil di hapus");
                                                                         },
                                                                     })
                                                                 }
@@ -1659,7 +1658,7 @@
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
-                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center  uk-margin-top" uk-grid>
+                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" uk-grid>
                                                 <?php
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
                                                     $bastid = "";
@@ -1668,7 +1667,7 @@
                                                         <div id="bast-file-<?= $bast['id']; ?>">
                                                             <div class="uk-card uk-card-default uk-card-body uk-margin-bottom">
                                                                 <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-bast-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
-                                                                <?= $bast['file'] ?>
+                                                                <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
                                                         <script>
@@ -1688,7 +1687,6 @@
                                                                         success: function() {
                                                                             console.log('success', arguments);
                                                                             $("#bast-file-<?= $bast['id']; ?>").remove();
-                                                                            alert("file BAST berhasil di hapus");
                                                                         },
                                                                     })
                                                                 }
@@ -1724,12 +1722,12 @@
 
                                         <script type="text/javascript">
                                             // Serah terima
-                                            UIkit.upload('.js-upload-createsertrim-<?= $project['id'] ?>', {
-                                                url: 'upload/sertrim',
+                                            UIkit.upload('#js-upload-createsertrim-<?= $project['id'] ?>', {
+                                                url: 'upload/sertrim/<?= $project['id'] ?>',
                                                 multiple: false,
                                                 name: 'uploads',
-                                                param: {
-                                                    lorem: 'ipsum'
+                                                data: {
+                                                    'id': <?= $project['id'] ?>,
                                                 },
                                                 method: 'POST',
                                                 type: 'json',
@@ -1751,47 +1749,43 @@
 
                                                 complete: function() {
                                                     console.log('complete', arguments);
-
-
                                                     var filename = arguments[0].response;
 
-                                                    if (document.getElementById('display-container-createsertrim-<?= $project['id'] ?>')) {
-                                                        document.getElementById('display-container-createsertrim-<?= $project['id'] ?>').remove();
-                                                    };
+                                                    // location.reload(true);
 
-                                                    document.getElementById('photocreatesertrim<?= $project['id'] ?>').value = filename;
+                                                    var contsertrim = document.getElementById('containersertrim-<?= $project['id'] ?>');
 
-                                                    document.getElementById('placesertrim<?= $project['id'] ?>').removeAttribute('hidden');
+                                                    var container = document.createElement('div');
+                                                    container.setAttribute('id','sertrim-file-<?= $bast['id']; ?>');
 
-                                                    var uprev = document.getElementById('upsertrim<?= $project['id'] ?>');
-                                                    var closed = document.getElementById('closesertrim<?= $project['id'] ?>');
+                                                    var cardsertrim = document.createElement('div');
+                                                    cardsertrim.setAttribute('class','uk-card uk-card-default uk-card-body uk-margin-bottom');
 
-                                                    var divuprev = document.createElement('h6');
-                                                    divuprev.setAttribute('class', 'uk-margin-remove');
-                                                    divuprev.setAttribute('id', 'sertrim<?= $project['id'] ?>');
+                                                    var divclosed = document.createElement('div');
+                                                    divclosed.setAttribute('class','uk-position-small uk-position-right');
 
-                                                    var linkrev = document.createElement('a');
-                                                    linkrev.setAttribute('href', 'img/sertrim/' + filename);
-                                                    linkrev.setAttribute('uk-icon', 'file-text');
+                                                    var close = document.createElement('a');
+                                                    close.setAttribute('id','remove-sertrim-<?= $bastid ?>');
+                                                    close.setAttribute('class','tm-img-remove2 uk-border-circle uk-icon');
+                                                    close.setAttribute('onClick','removeCardFile<?= $bast['id'] ?>()');
+                                                    close.setAttribute('uk-icon','close');
 
                                                     var link = document.createElement('a');
-                                                    link.setAttribute('href', 'img/sertrim/' + filename);
-                                                    link.setAttribute('target', '_blank');
+                                                    link.setAttribute('href','img/sertrim/'+filename);
+                                                    link.setAttribute('target','_blank');
 
-                                                    var linktext = document.createTextNode(filename);
+                                                    var file = document.createTextNode(filename);
 
-                                                    var divclosed = document.createElement('a');
-                                                    divclosed.setAttribute('uk-icon', 'icon: close');
-                                                    divclosed.setAttribute('onClick', 'removeImgCreatesertrim<?= $project['id'] ?>()');
-                                                    divclosed.setAttribute('id', 'closedsertrim<?= $project['id'] ?>');
+                                                    var icon = document.createElement('span');
+                                                    icon.setAttribute('uk-icon','file-text');
 
-                                                    uprev.appendChild(divuprev);
-                                                    divuprev.appendChild(linkrev);
-                                                    divuprev.appendChild(link);
-                                                    link.appendChild(linktext);
-                                                    closed.appendChild(divclosed);
-
-                                                    document.getElementById('js-upload-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                    contsertrim.appendChild(container);
+                                                    container.appendChild(cardsertrim);
+                                                    cardsertrim.appendChild(divclosed);
+                                                    divclosed.appendChild(close);
+                                                    cardsertrim.appendChild(link);
+                                                    link.appendChild(icon);
+                                                    link.appendChild(file);
                                                 },
 
                                                 loadStart: function(e) {
@@ -1823,7 +1817,7 @@
 
                                                     setTimeout(function() {
                                                         document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                        alert('<?= lang('Proses selesai, Silahkan Unggah Data.') ?>');
+                                                        alert('<?= lang('Proses selesai, Data berhasil di unggah.') ?>');
                                                     }, 1000);
                                                 }
 

@@ -470,14 +470,14 @@ class Project extends BaseController
         }
 
         // Sertrim
-        if (!empty($input['sertrim']) && isset($input['sertrim'])) {
-            $sertrim = [
-                'projectid' => $id,
-                'file'      => $input['sertrim'],
-                'status'    => 0,
-            ];
-            $BastModel->save($sertrim);
-        }
+        // if (!empty($input['sertrim']) && isset($input['sertrim'])) {
+        //     $sertrim = [
+        //         'projectid' => $id,
+        //         'file'      => $input['sertrim'],
+        //         'status'    => 0,
+        //     ];
+        //     $BastModel->save($sertrim);
+        // }
 
         // Bast
         if (!empty($input['bast']) && isset($input['bast'])) {
@@ -672,10 +672,12 @@ class Project extends BaseController
         $bast = $BastModel->find($id);
         $filename = $bast['file'];
 
-        if($bast['status'] === "0"){
-            unlink(FCPATH . 'img/sertrim/' . $filename);
-        }elseif($bast['status'] === "1"){
-            unlink(FCPATH . 'img/bast/' . $filename);
+        if(!empty($filename)){
+            if($bast['status'] === "0"){
+                unlink(FCPATH . 'img/sertrim/' . $filename);
+            }elseif($bast['status'] === "1"){
+                unlink(FCPATH . 'img/bast/' . $filename);
+            }
         }
         $BastModel->delete($bast);
 
