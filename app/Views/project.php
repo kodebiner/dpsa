@@ -12,7 +12,7 @@
 
 use App\Controllers\Project;
 
- if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) { ?>
+if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) { ?>
     <?php if ($ismobile === true) { ?>
         <h3 class="tm-h1 uk-text-center uk-margin-remove">Daftar Proyek</h3>
         <div class="uk-text-center uk-margin">
@@ -1936,60 +1936,6 @@ use App\Controllers\Project;
                                                     })
                                                 }
                                             }
-                                            // $("button").click(function() {
-                                            //     $.ajax({
-                                            //         url: "project/getsertrim",
-                                            //         method: "GET",
-                                            //         dataType: "json",
-                                            //         error: function() {
-                                            //             console.log('error', arguments);
-                                            //         },
-                                            //         success: function() {
-                                            //             console.log('success', arguments);
-
-                                            //             var bast = arguments[0];
-
-                                            //             jQuery.each(bast, function(id,val) {
-
-                                            //                 console.log(id,val.id);
-                                            //                 return (val.id);
-
-                                            //             });
-                                            //             // console.log(val.id);
-                                            //             // console.log(result.insertId);
-                                            //         },
-                                            //     })
-                                            // });
-
-
-                                            // function removeImgCreatesertrim</?= $project['id'] ?>() {
-                                            //     $.ajax({
-                                            //         type: 'post',
-                                            //         url: 'upload/removesertrim',
-                                            //         data: {
-                                            //             'sertrim': document.getElementById('photocreatesertrim</?= $project['id'] ?>').value
-                                            //         },
-                                            //         dataType: 'json',
-
-                                            //         error: function() {
-                                            //             console.log('error', arguments);
-                                            //         },
-
-                                            //         success: function() {
-                                            //             console.log('success', arguments);
-
-                                            //             var pesan = arguments[0][1];
-
-                                            //             document.getElementById('sertrim</?= $project['id'] ?>').remove();
-                                            //             document.getElementById('closedsertrim</?= $project['id'] ?>').remove();
-                                            //             document.getElementById('placesertrim</?= $project['id'] ?>').setAttribute('hidden', '');
-                                            //             document.getElementById('photocreatesertrim</?= $project['id'] ?>').value = '';
-
-                                            //             document.getElementById('js-upload-createsertrim-</?= $project['id'] ?>').removeAttribute('hidden', '');
-                                            //             alert(pesan);
-                                            //         }
-                                            //     });
-                                            // };
                                             //   End Of Serah Terima
 
                                             // Bast
@@ -2025,81 +1971,43 @@ use App\Controllers\Project;
                                                     var filename = arguments[0].response.file;
                                                     var proid = arguments[0].response.proid;
 
-                                                    if (document.getElementById('bast-file-<?= $project['id']?>')) {
-                                                        document.getElementById('bast-file-<?= $project['id']?>').remove();
+                                                    if (document.getElementById('bast-file-<?= $project['id'] ?>')) {
+                                                        document.getElementById('bast-file-<?= $project['id'] ?>').remove();
                                                     };
 
                                                     var contbast = document.getElementById('containerbast-<?= $project['id'] ?>');
 
-                                                        var container = document.createElement('div');
-                                                        container.setAttribute('id', 'bast-file-<?= $project['id']?>');
+                                                    var container = document.createElement('div');
+                                                    container.setAttribute('id', 'bast-file-<?= $project['id'] ?>');
 
-                                                        var cardbast = document.createElement('div');
-                                                        cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
+                                                    var cardbast = document.createElement('div');
+                                                    cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
 
-                                                        var divclosed = document.createElement('div');
-                                                        divclosed.setAttribute('class', 'uk-position-small uk-position-right');
+                                                    var divclosed = document.createElement('div');
+                                                    divclosed.setAttribute('class', 'uk-position-small uk-position-right');
 
-                                                        var close = document.createElement('a');
-                                                        close.setAttribute('id', 'remove-bast-'+id);
-                                                        close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
-                                                        close.setAttribute('onClick', 'removeCardFilebast('+id+')');
-                                                        close.setAttribute('uk-icon', 'close');
+                                                    var close = document.createElement('a');
+                                                    close.setAttribute('id', 'remove-bast-' + id);
+                                                    close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                    close.setAttribute('onClick', 'removeCardFilebast(' + id + ',' + proid + ')');
+                                                    close.setAttribute('uk-icon', 'close');
 
-                                                        var link = document.createElement('a');
-                                                        link.setAttribute('href', 'img/bast/' + filename);
-                                                        link.setAttribute('target', '_blank');
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/bast/' + filename);
+                                                    link.setAttribute('target', '_blank');
 
-                                                        var file = document.createTextNode(filename);
+                                                    var file = document.createTextNode(filename);
 
-                                                        var icon = document.createElement('span');
-                                                        icon.setAttribute('uk-icon', 'file-text');
+                                                    var icon = document.createElement('span');
+                                                    icon.setAttribute('uk-icon', 'file-text');
 
-                                                        contbast.appendChild(container);
-                                                        container.appendChild(cardbast);
-                                                        cardbast.appendChild(divclosed);
-                                                        divclosed.appendChild(close);
-                                                        cardbast.appendChild(link);
-                                                        link.appendChild(icon);
-                                                        link.appendChild(file);
-
-                                                    // if (document.getElementById('display-container-createbast-</?= $project['id'] ?>')) {
-                                                    //     document.getElementById('display-container-createbast-</?= $project['id'] ?>').remove();
-                                                    // };
-
-                                                    // document.getElementById('photocreatebast</?= $project['id'] ?>').value = filename;
-
-                                                    // document.getElementById('placebast</?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                    // var uprev = document.getElementById('upbast</?= $project['id'] ?>');
-                                                    // var closed = document.getElementById('closebast</?= $project['id'] ?>');
-
-                                                    // var divuprev = document.createElement('h6');
-                                                    // divuprev.setAttribute('class', 'uk-margin-remove');
-                                                    // divuprev.setAttribute('id', 'bast</?= $project['id'] ?>');
-
-                                                    // var linkrev = document.createElement('a');
-                                                    // linkrev.setAttribute('href', 'img/bast/' + filename);
-                                                    // linkrev.setAttribute('uk-icon', 'file-text');
-
-                                                    // var link = document.createElement('a');
-                                                    // link.setAttribute('href', 'img/bast/' + filename);
-                                                    // link.setAttribute('target', '_blank');
-
-                                                    // var linktext = document.createTextNode(filename);
-
-                                                    // var divclosed = document.createElement('a');
-                                                    // divclosed.setAttribute('uk-icon', 'icon: close');
-                                                    // divclosed.setAttribute('onClick', 'removeImgCreatebast</?= $project['id'] ?>()');
-                                                    // divclosed.setAttribute('id', 'closedbast</?= $project['id'] ?>');
-
-                                                    // uprev.appendChild(divuprev);
-                                                    // divuprev.appendChild(linkrev);
-                                                    // divuprev.appendChild(link);
-                                                    // link.appendChild(linktext);
-                                                    // closed.appendChild(divclosed);
-
-                                                    // document.getElementById('js-upload-createbast-</?= $project['id'] ?>').setAttribute('hidden', '');
+                                                    contbast.appendChild(container);
+                                                    container.appendChild(cardbast);
+                                                    cardbast.appendChild(divclosed);
+                                                    divclosed.appendChild(close);
+                                                    cardbast.appendChild(link);
+                                                    link.appendChild(icon);
+                                                    link.appendChild(file);
                                                 },
 
                                                 loadStart: function(e) {
@@ -2152,41 +2060,11 @@ use App\Controllers\Project;
                                                         },
                                                         success: function() {
                                                             console.log('success', arguments);
-                                                            $("#bast-file-<?php $project['id']?>").remove();
+                                                            $("#bast-file-" + proid).remove();
                                                         },
                                                     })
                                                 }
                                             }
-
-                                            // function removeImgCreatebast</?= $project['id'] ?>() {
-                                            //     $.ajax({
-                                            //         type: 'post',
-                                            //         url: 'upload/removebast',
-                                            //         data: {
-                                            //             'bast': document.getElementById('photocreatebast</?= $project['id'] ?>').value
-                                            //         },
-                                            //         dataType: 'json',
-
-                                            //         error: function() {
-                                            //             console.log('error', arguments);
-                                            //         },
-
-                                            //         success: function() {
-                                            //             console.log('success', arguments);
-
-                                            //             var pesan = arguments[0][1];
-
-                                            //             document.getElementById('bast</?= $project['id'] ?>').remove();
-                                            //             document.getElementById('closedbast</?= $project['id'] ?>').remove();
-                                            //             document.getElementById('placebast</?= $project['id'] ?>').setAttribute('hidden', '');
-                                            //             document.getElementById('photocreatebast</?= $project['id'] ?>').value = '';
-
-                                            //             document.getElementById('js-upload-createbast-</?= $project['id'] ?>').removeAttribute('hidden', '');
-                                            //             alert(pesan);
-                                            //         }
-                                            //     });
-                                            // };
-                                            //   End Of BAST
                                         </script>
                                     </div>
                     </div>

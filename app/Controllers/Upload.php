@@ -503,16 +503,18 @@ class Upload extends BaseController
 
             if (!empty($returnFile)) {
                 $bast = $BastModel->where('projectid',$id)->first();
+                $bastId="";
                 if (empty($bast)) {
-                    unlink(FCPATH . '/img/bast/' . $returnFile);
+                    // unlink(FCPATH . '/img/bast/' . $returnFile);
                     $databast = [
                         'projectid'     => $id,
                         'file'          => $returnFile,
-                        'status_spk'    => 1,
+                        'status'    => 1,
                     ];
                     $BastModel->save($databast);
+                    $bastId = $BastModel->getInsertID();
                 } else {
-                    // unlink(FCPATH . '/img/bast/' . $returnFile);
+                    unlink(FCPATH . '/img/bast/' . $bast['file']);
                     $databast = [
                         'id'            => $bast['id'],
                         'projectid'     => $id,
@@ -520,9 +522,10 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $BastModel->save($databast);
+                    $bastId = $bast['id'];
                 }
             }
-            $bastId = $BastModel->getInsertID();
+           
 
             $returnBast = [
                 'id'    => $bastId,
@@ -533,15 +536,5 @@ class Upload extends BaseController
             // Returning Message
             die(json_encode($returnBast));
         }
-    }
-
-    public function removebast()
-    {
-        // Removing File
-        $input = $this->request->getPost('bast');
-        unlink(FCPATH . 'img/bast/' . $input);
-
-        // Return Message
-        die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 }
