@@ -8,7 +8,11 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
-<?php if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) { ?>
+<?php
+
+use App\Controllers\Project;
+
+ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) { ?>
     <?php if ($ismobile === true) { ?>
         <h3 class="tm-h1 uk-text-center uk-margin-remove">Daftar Proyek</h3>
         <div class="uk-text-center uk-margin">
@@ -29,6 +33,8 @@
 
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
+
+
             if ($ismobile === true) { ?>
                 <div class="uk-card uk-card-default uk-width-1-1 uk-margin">
                     <div class="uk-card-header">
@@ -1596,16 +1602,113 @@
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
-                                                    $bastid = "";
-                                                    if (!empty($bast) && $bast['status'] === "0") {
-                                                        $bastid = $bast['id']; ?>
+                                                    if (!empty($bast) && $bast['status'] === "0") { ?>
                                                         <div id="sertrim-file-<?= $bast['id']; ?>">
-                                                            <div id="sertrim-card<?=$bast['id']?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
+                                                            <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
                                                                 <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
                                                         <script>
+                                                            // UIkit.upload('#js-upload-createsertrim-</?= $project['id'] ?>', {
+                                                            //     url: 'upload/sertrim/</?= $project['id'] ?>',
+                                                            //     multiple: false,
+                                                            //     name: 'uploads',
+                                                            //     data: {
+                                                            //         'id': </?= $project['id'] ?>,
+                                                            //     },
+                                                            //     method: 'POST',
+                                                            //     type: 'json',
+
+                                                            //     beforeSend: function() {
+                                                            //         console.log('beforeSend', arguments);
+                                                            //     },
+                                                            //     beforeAll: function() {
+                                                            //         console.log('beforeAll', arguments);
+                                                            //     },
+                                                            //     load: function() {
+                                                            //         console.log('load', arguments);
+                                                            //     },
+                                                            //     error: function() {
+                                                            //         console.log('error', arguments);
+                                                            //         var error = arguments[0].xhr.response.message.uploads;
+                                                            //         alert(error);
+                                                            //     },
+
+                                                            //     complete: function() {
+                                                            //         console.log('complete', arguments);
+                                                            //         var filename = arguments[0].response;
+
+                                                            //         var contsertrim = document.getElementById('containersertrim-</?= $project['id'] ?>');
+
+                                                            //         var container = document.createElement('div');
+                                                            //         container.setAttribute('id', 'sertrim-file-<?= $bast['id']; ?>');
+
+                                                            //         var cardsertrim = document.createElement('div');
+                                                            //         cardsertrim.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
+
+                                                            //         var divclosed = document.createElement('div');
+                                                            //         divclosed.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                            //         var close = document.createElement('a');
+                                                            //         close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                            //         close.setAttribute('onClick', 'removeCardFile<?= $bast['id'] ?>()');
+                                                            //         close.setAttribute('uk-icon', 'close');
+
+                                                            //         var link = document.createElement('a');
+                                                            //         link.setAttribute('href', 'img/sertrim/' + filename);
+                                                            //         link.setAttribute('target', '_blank');
+
+                                                            //         var file = document.createTextNode(filename);
+
+                                                            //         var icon = document.createElement('span');
+                                                            //         icon.setAttribute('uk-icon', 'file-text');
+
+                                                            //         contsertrim.appendChild(container);
+                                                            //         container.appendChild(cardsertrim);
+                                                            //         cardsertrim.appendChild(divclosed);
+                                                            //         divclosed.appendChild(close);
+                                                            //         cardsertrim.appendChild(link);
+                                                            //         link.appendChild(icon);
+                                                            //         link.appendChild(file);
+
+                                                            //     },
+
+                                                            //     loadStart: function(e) {
+                                                            //         console.log('loadStart', arguments);
+
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
+
+                                                            //     },
+
+                                                            //     progress: function(e) {
+                                                            //         console.log('progress', arguments);
+
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
+                                                            //     },
+
+                                                            //     loadEnd: function(e) {
+                                                            //         console.log('loadEnd', arguments);
+
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
+                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
+                                                            //     },
+
+                                                            //     completeAll: function() {
+                                                            //         console.log('completeAll', arguments);
+
+                                                            //         setTimeout(function() {
+                                                            //             document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                            //             alert('</?= lang('Proses selesai, File Serah Terima berhasil di unggah.') ?>');
+                                                            //         }, 1000);
+                                                            //     }
+
+                                                            // });
+
                                                             function removeCardFile<?= $bast['id']; ?>() {
                                                                 let text = "Hapus file Serah Terima ini?";
                                                                 if (confirm(text) == true) {
@@ -1630,16 +1733,16 @@
                                                 <?php }
                                                 } ?>
                                             </div>
-                                            <div class="uk-placeholder" id="placesertrim<?= $project['id'] ?>" hidden>
+                                            <!-- <div class="uk-placeholder" id="placesertrim</?= $project['id'] ?>" hidden>
                                                 <div uk-grid>
                                                     <div class="uk-text-left uk-width-3-4">
-                                                        <div id="upsertrim<?= $project['id'] ?>"></div>
+                                                        <div id="upsertrim</?= $project['id'] ?>"></div>
                                                     </div>
                                                     <div class="uk-text-right uk-width-1-4">
-                                                        <div id="closesertrim<?= $project['id'] ?>"></div>
+                                                        <div id="closesertrim</?= $project['id'] ?>"></div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
                                                 <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
@@ -1658,20 +1761,20 @@
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
-                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" uk-grid>
+                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
                                                     $bastid = "";
                                                     if (!empty($bast) && $bast['status'] === "1") {
                                                         $bastid = $bast['id']; ?>
-                                                        <div id="bast-file-<?= $bast['id']; ?>">
-                                                            <div class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-bast-<?= $bastid ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
+                                                        <div id="bast-file-<?= $bast['id'] ?>">
+                                                            <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a></div>
                                                                 <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
                                                         <script>
-                                                            function removeCardFile<?= $bast['id']; ?>() {
+                                                            function removeCardFilebast<?= $bast['id']; ?>() {
                                                                 let text = "Hapus file BAST ini?";
                                                                 if (confirm(text) == true) {
                                                                     $.ajax({
@@ -1686,7 +1789,7 @@
                                                                         },
                                                                         success: function() {
                                                                             console.log('success', arguments);
-                                                                            $("#bast-file-<?= $bast['id']; ?>").remove();
+                                                                            $("#bast-file-<?= $bast['id'] ?>").remove();
                                                                         },
                                                                     })
                                                                 }
@@ -1694,16 +1797,6 @@
                                                         </script>
                                                 <?php }
                                                 } ?>
-                                            </div>
-                                            <div class="uk-placeholder" id="placebast<?= $project['id'] ?>" hidden>
-                                                <div uk-grid>
-                                                    <div class="uk-text-left uk-width-3-4">
-                                                        <div id="upbast<?= $project['id'] ?>"></div>
-                                                    </div>
-                                                    <div class="uk-text-right uk-width-1-4">
-                                                        <div id="closebast<?= $project['id'] ?>"></div>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
@@ -1749,35 +1842,33 @@
 
                                                 complete: function() {
                                                     console.log('complete', arguments);
-                                                    var filename = arguments[0].response;
-
-                                                    // location.reload(true);
+                                                    var sertrimid = arguments[0].response.id;
+                                                    var filename = arguments[0].response.file;
+                                                    var proid = arguments[0].response.proid;
 
                                                     var contsertrim = document.getElementById('containersertrim-<?= $project['id'] ?>');
-
                                                     var container = document.createElement('div');
-                                                    container.setAttribute('id','sertrim-file-<?= $bast['id']; ?>');
+                                                    container.setAttribute('id', 'sertrim-file-' + sertrimid);
 
                                                     var cardsertrim = document.createElement('div');
-                                                    cardsertrim.setAttribute('class','uk-card uk-card-default uk-card-body uk-margin-bottom');
+                                                    cardsertrim.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
 
                                                     var divclosed = document.createElement('div');
-                                                    divclosed.setAttribute('class','uk-position-small uk-position-right');
+                                                    divclosed.setAttribute('class', 'uk-position-small uk-position-right');
 
                                                     var close = document.createElement('a');
-                                                    close.setAttribute('id','remove-sertrim-<?= $bastid ?>');
-                                                    close.setAttribute('class','tm-img-remove2 uk-border-circle uk-icon');
-                                                    close.setAttribute('onClick','removeCardFile<?= $bast['id'] ?>()');
-                                                    close.setAttribute('uk-icon','close');
+                                                    close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                    close.setAttribute('onClick', 'removeCardFile(' + sertrimid + ',' + proid + ')');
+                                                    close.setAttribute('uk-icon', 'close');
 
                                                     var link = document.createElement('a');
-                                                    link.setAttribute('href','img/sertrim/'+filename);
-                                                    link.setAttribute('target','_blank');
+                                                    link.setAttribute('href', 'img/sertrim/' + filename);
+                                                    link.setAttribute('target', '_blank');
 
                                                     var file = document.createTextNode(filename);
 
                                                     var icon = document.createElement('span');
-                                                    icon.setAttribute('uk-icon','file-text');
+                                                    icon.setAttribute('uk-icon', 'file-text');
 
                                                     contsertrim.appendChild(container);
                                                     container.appendChild(cardsertrim);
@@ -1786,6 +1877,8 @@
                                                     cardsertrim.appendChild(link);
                                                     link.appendChild(icon);
                                                     link.appendChild(file);
+
+                                                    return sertrimid;
                                                 },
 
                                                 loadStart: function(e) {
@@ -1817,45 +1910,91 @@
 
                                                     setTimeout(function() {
                                                         document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                        alert('<?= lang('Proses selesai, Data berhasil di unggah.') ?>');
+                                                        alert('<?= lang('Proses selesai, File Serah Terima berhasil di unggah.') ?>');
                                                     }, 1000);
                                                 }
 
                                             });
 
-                                            function removeImgCreatesertrim<?= $project['id'] ?>() {
-                                                $.ajax({
-                                                    type: 'post',
-                                                    url: 'upload/removesertrim',
-                                                    data: {
-                                                        'sertrim': document.getElementById('photocreatesertrim<?= $project['id'] ?>').value
-                                                    },
-                                                    dataType: 'json',
+                                            function removeCardFile(id, proid) {
+                                                let text = "Hapus file Serah Terima ini?";
+                                                if (confirm(text) == true) {
+                                                    $.ajax({
+                                                        url: "project/removesertrim/" + id,
+                                                        method: "POST",
+                                                        data: {
+                                                            bast: id,
+                                                        },
+                                                        dataType: "json",
+                                                        error: function() {
+                                                            console.log('error', arguments);
+                                                        },
+                                                        success: function() {
+                                                            console.log('success', arguments);
+                                                            $("#sertrim-file-" + id).remove();
+                                                        },
+                                                    })
+                                                }
+                                            }
+                                            // $("button").click(function() {
+                                            //     $.ajax({
+                                            //         url: "project/getsertrim",
+                                            //         method: "GET",
+                                            //         dataType: "json",
+                                            //         error: function() {
+                                            //             console.log('error', arguments);
+                                            //         },
+                                            //         success: function() {
+                                            //             console.log('success', arguments);
 
-                                                    error: function() {
-                                                        console.log('error', arguments);
-                                                    },
+                                            //             var bast = arguments[0];
 
-                                                    success: function() {
-                                                        console.log('success', arguments);
+                                            //             jQuery.each(bast, function(id,val) {
 
-                                                        var pesan = arguments[0][1];
+                                            //                 console.log(id,val.id);
+                                            //                 return (val.id);
 
-                                                        document.getElementById('sertrim<?= $project['id'] ?>').remove();
-                                                        document.getElementById('closedsertrim<?= $project['id'] ?>').remove();
-                                                        document.getElementById('placesertrim<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                        document.getElementById('photocreatesertrim<?= $project['id'] ?>').value = '';
+                                            //             });
+                                            //             // console.log(val.id);
+                                            //             // console.log(result.insertId);
+                                            //         },
+                                            //     })
+                                            // });
 
-                                                        document.getElementById('js-upload-createsertrim-<?= $project['id'] ?>').removeAttribute('hidden', '');
-                                                        alert(pesan);
-                                                    }
-                                                });
-                                            };
+
+                                            // function removeImgCreatesertrim</?= $project['id'] ?>() {
+                                            //     $.ajax({
+                                            //         type: 'post',
+                                            //         url: 'upload/removesertrim',
+                                            //         data: {
+                                            //             'sertrim': document.getElementById('photocreatesertrim</?= $project['id'] ?>').value
+                                            //         },
+                                            //         dataType: 'json',
+
+                                            //         error: function() {
+                                            //             console.log('error', arguments);
+                                            //         },
+
+                                            //         success: function() {
+                                            //             console.log('success', arguments);
+
+                                            //             var pesan = arguments[0][1];
+
+                                            //             document.getElementById('sertrim</?= $project['id'] ?>').remove();
+                                            //             document.getElementById('closedsertrim</?= $project['id'] ?>').remove();
+                                            //             document.getElementById('placesertrim</?= $project['id'] ?>').setAttribute('hidden', '');
+                                            //             document.getElementById('photocreatesertrim</?= $project['id'] ?>').value = '';
+
+                                            //             document.getElementById('js-upload-createsertrim-</?= $project['id'] ?>').removeAttribute('hidden', '');
+                                            //             alert(pesan);
+                                            //         }
+                                            //     });
+                                            // };
                                             //   End Of Serah Terima
 
                                             // Bast
                                             UIkit.upload('.js-upload-createbast-<?= $project['id'] ?>', {
-                                                url: 'upload/bast',
+                                                url: 'upload/bast/<?= $project['id'] ?>',
                                                 multiple: false,
                                                 name: 'uploads',
                                                 param: {
@@ -1882,46 +2021,85 @@
                                                 complete: function() {
                                                     console.log('complete', arguments);
 
+                                                    var id = arguments[0].response.id;
+                                                    var filename = arguments[0].response.file;
+                                                    var proid = arguments[0].response.proid;
 
-                                                    var filename = arguments[0].response;
-
-                                                    if (document.getElementById('display-container-createbast-<?= $project['id'] ?>')) {
-                                                        document.getElementById('display-container-createbast-<?= $project['id'] ?>').remove();
+                                                    if (document.getElementById('bast-file-<?= $project['id']?>')) {
+                                                        document.getElementById('bast-file-<?= $project['id']?>').remove();
                                                     };
 
-                                                    document.getElementById('photocreatebast<?= $project['id'] ?>').value = filename;
+                                                    var contbast = document.getElementById('containerbast-<?= $project['id'] ?>');
 
-                                                    document.getElementById('placebast<?= $project['id'] ?>').removeAttribute('hidden');
+                                                        var container = document.createElement('div');
+                                                        container.setAttribute('id', 'bast-file-<?= $project['id']?>');
 
-                                                    var uprev = document.getElementById('upbast<?= $project['id'] ?>');
-                                                    var closed = document.getElementById('closebast<?= $project['id'] ?>');
+                                                        var cardbast = document.createElement('div');
+                                                        cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
 
-                                                    var divuprev = document.createElement('h6');
-                                                    divuprev.setAttribute('class', 'uk-margin-remove');
-                                                    divuprev.setAttribute('id', 'bast<?= $project['id'] ?>');
+                                                        var divclosed = document.createElement('div');
+                                                        divclosed.setAttribute('class', 'uk-position-small uk-position-right');
 
-                                                    var linkrev = document.createElement('a');
-                                                    linkrev.setAttribute('href', 'img/bast/' + filename);
-                                                    linkrev.setAttribute('uk-icon', 'file-text');
+                                                        var close = document.createElement('a');
+                                                        close.setAttribute('id', 'remove-bast-'+id);
+                                                        close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                        close.setAttribute('onClick', 'removeCardFilebast('+id+')');
+                                                        close.setAttribute('uk-icon', 'close');
 
-                                                    var link = document.createElement('a');
-                                                    link.setAttribute('href', 'img/bast/' + filename);
-                                                    link.setAttribute('target', '_blank');
+                                                        var link = document.createElement('a');
+                                                        link.setAttribute('href', 'img/bast/' + filename);
+                                                        link.setAttribute('target', '_blank');
 
-                                                    var linktext = document.createTextNode(filename);
+                                                        var file = document.createTextNode(filename);
 
-                                                    var divclosed = document.createElement('a');
-                                                    divclosed.setAttribute('uk-icon', 'icon: close');
-                                                    divclosed.setAttribute('onClick', 'removeImgCreatebast<?= $project['id'] ?>()');
-                                                    divclosed.setAttribute('id', 'closedbast<?= $project['id'] ?>');
+                                                        var icon = document.createElement('span');
+                                                        icon.setAttribute('uk-icon', 'file-text');
 
-                                                    uprev.appendChild(divuprev);
-                                                    divuprev.appendChild(linkrev);
-                                                    divuprev.appendChild(link);
-                                                    link.appendChild(linktext);
-                                                    closed.appendChild(divclosed);
+                                                        contbast.appendChild(container);
+                                                        container.appendChild(cardbast);
+                                                        cardbast.appendChild(divclosed);
+                                                        divclosed.appendChild(close);
+                                                        cardbast.appendChild(link);
+                                                        link.appendChild(icon);
+                                                        link.appendChild(file);
 
-                                                    document.getElementById('js-upload-createbast-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                    // if (document.getElementById('display-container-createbast-</?= $project['id'] ?>')) {
+                                                    //     document.getElementById('display-container-createbast-</?= $project['id'] ?>').remove();
+                                                    // };
+
+                                                    // document.getElementById('photocreatebast</?= $project['id'] ?>').value = filename;
+
+                                                    // document.getElementById('placebast</?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    // var uprev = document.getElementById('upbast</?= $project['id'] ?>');
+                                                    // var closed = document.getElementById('closebast</?= $project['id'] ?>');
+
+                                                    // var divuprev = document.createElement('h6');
+                                                    // divuprev.setAttribute('class', 'uk-margin-remove');
+                                                    // divuprev.setAttribute('id', 'bast</?= $project['id'] ?>');
+
+                                                    // var linkrev = document.createElement('a');
+                                                    // linkrev.setAttribute('href', 'img/bast/' + filename);
+                                                    // linkrev.setAttribute('uk-icon', 'file-text');
+
+                                                    // var link = document.createElement('a');
+                                                    // link.setAttribute('href', 'img/bast/' + filename);
+                                                    // link.setAttribute('target', '_blank');
+
+                                                    // var linktext = document.createTextNode(filename);
+
+                                                    // var divclosed = document.createElement('a');
+                                                    // divclosed.setAttribute('uk-icon', 'icon: close');
+                                                    // divclosed.setAttribute('onClick', 'removeImgCreatebast</?= $project['id'] ?>()');
+                                                    // divclosed.setAttribute('id', 'closedbast</?= $project['id'] ?>');
+
+                                                    // uprev.appendChild(divuprev);
+                                                    // divuprev.appendChild(linkrev);
+                                                    // divuprev.appendChild(link);
+                                                    // link.appendChild(linktext);
+                                                    // closed.appendChild(divclosed);
+
+                                                    // document.getElementById('js-upload-createbast-</?= $project['id'] ?>').setAttribute('hidden', '');
                                                 },
 
                                                 loadStart: function(e) {
@@ -1953,40 +2131,61 @@
 
                                                     setTimeout(function() {
                                                         document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                        alert('<?= lang('Proses selesai, Silahkan Unggah Data.') ?>');
+                                                        alert('<?= lang('Proses selesai, File BAST berhasil di unggah.') ?>');
                                                     }, 1000);
                                                 }
 
                                             });
 
-                                            function removeImgCreatebast<?= $project['id'] ?>() {
-                                                $.ajax({
-                                                    type: 'post',
-                                                    url: 'upload/removebast',
-                                                    data: {
-                                                        'bast': document.getElementById('photocreatebast<?= $project['id'] ?>').value
-                                                    },
-                                                    dataType: 'json',
+                                            function removeCardFilebast(id, proid) {
+                                                let text = "Hapus BAST Terima ini?";
+                                                if (confirm(text) == true) {
+                                                    $.ajax({
+                                                        url: "project/removesertrim/" + id,
+                                                        method: "POST",
+                                                        data: {
+                                                            bast: id,
+                                                        },
+                                                        dataType: "json",
+                                                        error: function() {
+                                                            console.log('error', arguments);
+                                                        },
+                                                        success: function() {
+                                                            console.log('success', arguments);
+                                                            $("#bast-file-<?php $project['id']?>").remove();
+                                                        },
+                                                    })
+                                                }
+                                            }
 
-                                                    error: function() {
-                                                        console.log('error', arguments);
-                                                    },
+                                            // function removeImgCreatebast</?= $project['id'] ?>() {
+                                            //     $.ajax({
+                                            //         type: 'post',
+                                            //         url: 'upload/removebast',
+                                            //         data: {
+                                            //             'bast': document.getElementById('photocreatebast</?= $project['id'] ?>').value
+                                            //         },
+                                            //         dataType: 'json',
 
-                                                    success: function() {
-                                                        console.log('success', arguments);
+                                            //         error: function() {
+                                            //             console.log('error', arguments);
+                                            //         },
 
-                                                        var pesan = arguments[0][1];
+                                            //         success: function() {
+                                            //             console.log('success', arguments);
 
-                                                        document.getElementById('bast<?= $project['id'] ?>').remove();
-                                                        document.getElementById('closedbast<?= $project['id'] ?>').remove();
-                                                        document.getElementById('placebast<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                        document.getElementById('photocreatebast<?= $project['id'] ?>').value = '';
+                                            //             var pesan = arguments[0][1];
 
-                                                        document.getElementById('js-upload-createbast-<?= $project['id'] ?>').removeAttribute('hidden', '');
-                                                        alert(pesan);
-                                                    }
-                                                });
-                                            };
+                                            //             document.getElementById('bast</?= $project['id'] ?>').remove();
+                                            //             document.getElementById('closedbast</?= $project['id'] ?>').remove();
+                                            //             document.getElementById('placebast</?= $project['id'] ?>').setAttribute('hidden', '');
+                                            //             document.getElementById('photocreatebast</?= $project['id'] ?>').value = '';
+
+                                            //             document.getElementById('js-upload-createbast-</?= $project['id'] ?>').removeAttribute('hidden', '');
+                                            //             alert(pesan);
+                                            //         }
+                                            //     });
+                                            // };
                                             //   End Of BAST
                                         </script>
                                     </div>

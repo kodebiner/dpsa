@@ -59,7 +59,7 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-        // die(json_encode($this->request->getPost()));
+
         // Validation Rules
         $rules = [
             'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
@@ -417,11 +417,11 @@ class Upload extends BaseController
                 {
                     $key = '';
                     $keys = array_merge(range(0, 9), range('a', 'z'));
-    
+
                     for ($i = 0; $i < $filename; $i++) {
                         $key .= $keys[array_rand($keys)];
                     }
-    
+
                     return $key;
                 }
                 $truename = random_string(20);
@@ -439,23 +439,32 @@ class Upload extends BaseController
             ];
             $BastModel->save($sertrim);
 
+            $idBast = $BastModel->getInsertID();
+
+            $retunarr = [
+                'id'    => $idBast,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
             // Returning Message
-            die(json_encode($returnFile));
+            die(json_encode($retunarr));
         }
     }
 
-    public function fileser($id)
-    {
-        $BastModel = new BastModel();
-        $bast = $BastModel->where('projectid', $id)->find();
-        return $this->response->setJSON($bast);
-    }
+    // public function fileser($id)
+    // {
+    //     $BastModel = new BastModel();
+    //     $bast = $BastModel->where('projectid', $id)->find();
+    //     return $this->response->setJSON($bast);
+    // }
 
-    public function bast()
+    public function bast($id)
     {
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
+        $BastModel  = new BastModel();
 
         // Validation Rules
         $rules = [
@@ -474,7 +483,7 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
-            // $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+
             function random_string($filename)
             {
                 $key = '';
@@ -492,8 +501,37 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
+            if (!empty($returnFile)) {
+                $bast = $BastModel->where('projectid',$id)->first();
+                if (empty($bast)) {
+                    unlink(FCPATH . '/img/bast/' . $returnFile);
+                    $databast = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status_spk'    => 1,
+                    ];
+                    $BastModel->save($databast);
+                } else {
+                    // unlink(FCPATH . '/img/bast/' . $returnFile);
+                    $databast = [
+                        'id'            => $bast['id'],
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 1,
+                    ];
+                    $BastModel->save($databast);
+                }
+            }
+            $bastId = $BastModel->getInsertID();
+
+            $returnBast = [
+                'id'    => $bastId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
             // Returning Message
-            die(json_encode($returnFile));
+            die(json_encode($returnBast));
         }
     }
 

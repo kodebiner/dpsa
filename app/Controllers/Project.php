@@ -154,7 +154,7 @@ class Project extends BaseController
                     $mdlprod    = [];
                     $projectdata[$project['id']]['production']   = [];
                 }
-
+                
                 $projectdata[$project['id']]['bast']    = $BastModel->where('projectid', $project['id'])->find();
             }
         } else {
@@ -169,6 +169,7 @@ class Project extends BaseController
         $data['company']        = $company;
         $data['pakets']         = $pakets;
         $data['rabs']           = $rabs;
+        // $data['bastdata']       = $bastdata;
         $data['pager']          = $ProjectModel->pager;
 
         return view('project', $data);
@@ -683,5 +684,6 @@ class Project extends BaseController
 
         die(json_encode(array($filename)));
     }
+
 
 }

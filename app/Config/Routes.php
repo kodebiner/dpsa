@@ -54,12 +54,9 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('photomdl', 'Upload::photomdl');
     $routes->post('removephotomdl', 'Upload::removephotomdl');
     $routes->post('sertrim/(:num)', 'Upload::sertrim/$1');
-    $routes->get('sertrim/(:num)', 'Upload::sertrimreturn/$1');
-    // $routes->get('sertrim', 'Upload::sertrim');
-    $routes->post('removesertrim', 'Upload::removesertrim');
     $routes->post('removesertrim/(:num)', 'Upload::removesertrim/$1');
-    $routes->post('bast', 'Upload::bast');
-    $routes->post('removebast', 'Upload::removebast');
+    $routes->post('bast/(:num)', 'Upload::bast/$1');
+    $routes->post('removebast/(:num)', 'Upload::removebast/$1');
 });
 
 $routes->group('clientreg', static function ($routes) {
@@ -129,7 +126,6 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
-    $routes->get('fileser/(:num)', 'Project::fileser/$1');
     
 
     // Project Temp Routes
