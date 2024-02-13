@@ -256,7 +256,6 @@ class Home extends BaseController
         ];
         $DesignModel->save($status);
 
-
         $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi']);
         $data = $this->data;
         die(json_encode(array($input)));

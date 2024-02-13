@@ -324,50 +324,6 @@
 
                                         </div>
 
-
-                                        <!-- <div class="uk-text-left" uk-grid>
-                                            <div class="uk-width-1-2">
-                                                <div class="">
-                                                    </?php
-                                                    if ($designStatus === "0") {
-                                                        echo "Tanggal Upload Desain";
-                                                    } elseif ($designStatus === "1") {
-                                                        echo "Tanggal Revisi Desain";
-                                                    } else {
-                                                        echo "Tanggal Disetujui";
-                                                    }
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="uk-width-1-2">
-                                                <div class="">
-                                                    </?= $tanggaldesign ?>
-                                                </div>
-                                            </div>
-
-                                            <div class="uk-width-1-2">
-                                                <div class="">
-                                                    File Design
-                                                </div>
-                                            </div>
-                                            <div class="uk-width-1-2">
-                                                <div class="uk-overflow-auto">
-                                                    <a href="img/design/</?= $desainpro ?>" target="_blank" download><span uk-icon="file-text"></span> </?= $desainpro ?> </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="uk-width-1-2">
-                                                <div class="">
-                                                    File Revisi
-                                                </div>
-                                            </div>
-                                            <div class="uk-width-1-2">
-                                                <div class="uk-overflow-auto">
-                                                    <a href="img/revisi/</?= $desainpro ?>" target="_blank" download><span uk-icon="file-text"></span> </?= $desainpro ?> </a>
-                                                </div>
-                                            </div>
-                                        </div> -->
-
                                         <?php if ($designStatus != "2") { ?>
                                             <div class="uk-text-left uk-margin-top" id="btndesain<?= $designId ?>" uk-margin>
                                                 <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
