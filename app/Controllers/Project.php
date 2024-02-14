@@ -62,6 +62,7 @@ class Project extends BaseController
                     foreach ($rabmdl as $mdlr) {
                         $projectdata[$project['id']]['rab'][$rab['id']]  = [
                             'id'            => $mdlr['id'],
+                            'proid'         => $project['id'],
                             'name'          => $mdlr['name'],
                             'length'        => $mdlr['length'],
                             'width'         => $mdlr['width'],
@@ -71,6 +72,7 @@ class Project extends BaseController
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
                             'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
                 }
@@ -101,7 +103,7 @@ class Project extends BaseController
                                     'keterangan'    => $mdl['keterangan'],
                                     'price'         => $mdl['price'],
                                 ];
-    
+
                                 // Checklist RAB
                                 $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
                                 if (!empty($rabpack)) {
@@ -139,6 +141,7 @@ class Project extends BaseController
                         foreach ($mdlprod as $mdlp) {
                             $projectdata[$project['id']]['production'][$production['id']]  = [
                                 'id'                => $production['id'],
+                                'mdlid'             => $production['mdlid'],
                                 'name'              => $mdlp['name'],
                                 'gambar_kerja'      => $production['gambar_kerja'],
                                 'mesin_awal'        => $production['mesin_awal'],
@@ -154,8 +157,69 @@ class Project extends BaseController
                     $mdlprod    = [];
                     $projectdata[$project['id']]['production']   = [];
                 }
-                
-                $projectdata[$project['id']]['bast']    = $BastModel->where('projectid', $project['id'])->find();
+
+                // bast
+                $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->find();
+
+                // production value
+                if (!empty($projectdata[$project['id']]['rab'])) {
+                    $price = [];
+                    foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                        $price[] = [
+                            'id'        => $mdldata['id'],
+                            'proid'     => $mdldata['proid'],
+                            'price'     => $mdldata['oriprice'],
+                            'sumprice'  => $mdldata['price'],
+                            'qty'       => $mdldata['qty']
+                        ];
+                    }
+
+                    $total = array_sum(array_column($price, 'price'));
+
+                    $progresdata = [];
+                    $datamdlid = [];
+                    foreach ($price as $progresval) {
+                        $progresdata[] = [
+                            'id'    => $progresval['id'], // mdlid
+                            'proid' => $progresval['proid'],
+                            'val'   => round((($progresval['price'] / $total) * 100) / 7),
+                        ];
+                        $datamdlid[] = $progresval['id'];
+                    }
+
+                    $productval = $ProductionModel->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+
+                    $progress = [];
+                    foreach ($productval as $proses) {
+                        foreach ($progresdata as $value) {
+                            if ($proses['mdlid'] === $value['id']) {
+                                if ($proses['gambar_kerja'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['mesin_awal'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['tukang'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['mesin_lanjutan'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['finishing'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['packing'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                                if ($proses['setting'] === "1") {
+                                    array_push($progress, (int)$value['val']);
+                                }
+                            }
+                        }
+                    }
+
+                    $projectdata[$project['id']]['progress'][]   = array_sum($progress);
+                }
             }
         } else {
             $rabs           = [];
@@ -169,7 +233,6 @@ class Project extends BaseController
         $data['company']        = $company;
         $data['pakets']         = $pakets;
         $data['rabs']           = $rabs;
-        // $data['bastdata']       = $bastdata;
         $data['pager']          = $ProjectModel->pager;
 
         return view('project', $data);
@@ -673,10 +736,10 @@ class Project extends BaseController
         $bast = $BastModel->find($id);
         $filename = $bast['file'];
 
-        if(!empty($filename)){
-            if($bast['status'] === "0"){
+        if (!empty($filename)) {
+            if ($bast['status'] === "0") {
                 unlink(FCPATH . 'img/sertrim/' . $filename);
-            }elseif($bast['status'] === "1"){
+            } elseif ($bast['status'] === "1") {
                 unlink(FCPATH . 'img/bast/' . $filename);
             }
         }
@@ -684,6 +747,4 @@ class Project extends BaseController
 
         die(json_encode(array($filename)));
     }
-
-
 }

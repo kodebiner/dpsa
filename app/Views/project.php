@@ -38,13 +38,13 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                 $progress = "10";
                 $status = "Menunggu Approval desain";
             }
-            
-            if($projectdata[$project['id']]['design']['status'] === '2') {
+
+            if ($projectdata[$project['id']]['design']['status'] === '2') {
                 $progress = "20";
                 $status = "Desain Disetujui";
             }
 
-            if($project['status_spk'] === "1"){
+            if ($project['status_spk'] === "1") {
                 $progress = "30";
                 $status = "SPK DiSetujui";
             }
@@ -187,7 +187,16 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <div class="uk-text-center">
                                 <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Proyek</h3>
                                 <p>
-                                    <?= $progress."%"
+                                    <?php
+                                    // dd($projectdata[$project['id']]);
+                                    $progrespro = $progress;
+                                    if(!empty($projectdata[$project['id']]['progress'])){
+                                        foreach ($projectdata[$project['id']]['progress'] as $progresprod) {
+                                            $progrespro = $progress + $progresprod;
+                                        }
+                                    }
+                                    ?>
+                                    <?= $progrespro . "%"
                                     // if ($project['status'] === "1") {
                                     //     echo "5 %";
                                     // } elseif ($project['status'] === "2") {
@@ -205,12 +214,12 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                     // } elseif ($project['status'] === "5") {
                                     //     echo "100%";
                                     // }
-                                    // ?>
+                                    // 
+                                    ?>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
                 </div>
         <?php }
         } ?>
@@ -694,8 +703,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         </div>
                                     <?php } ?>
 
-                                    <?php if ($projectdata[$project['id']]['design']['status'] === '2') { 
-                                        $progress = "20";?>
+                                    <?php if ($projectdata[$project['id']]['design']['status'] === '2') {
+                                        $progress = "20"; ?>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="uk-child-width-auto uk-flex-middle" uk-grid>
