@@ -142,7 +142,7 @@
                 <?php foreach ($mdldata[$parent['id']]['paket'] as $paket) { ?>
                     <tr class="togglepaket<?= $parent['id'] ?>" hidden>
                         <td class="uk-text-right"><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
-                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                        <td colspan="8" class="tm-h4" style="text-transform: uppercase; font-weight: 400;"><?= $paket['name'] ?></td>
                         <td class="uk-text-center">
                             <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                 <div>

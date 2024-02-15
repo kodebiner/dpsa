@@ -43,7 +43,7 @@ class Project extends BaseController
         $ProductionModel        = new ProductionModel();
 
         // Populating Data
-        $pakets                 = $PaketModel->findAll();
+        $pakets                 = $PaketModel->where('parentid !=', 0)->find();
         $company                = $CompanyModel->where('status !=', "0")->find();
         $projects               = $ProjectModel->paginate(10, 'projects');
 
@@ -123,7 +123,7 @@ class Project extends BaseController
 
                 // Autocomplete Paket
                 if (!empty($paketdata)) {
-                    $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->find();
+                    $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->where('parentid !=', 0)->find();
                 } else {
                     $projectdata[$project['id']]['autopaket']   = [];
                 }
@@ -242,33 +242,36 @@ class Project extends BaseController
     {
         // Calling Model
         $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
         $PaketModel     = new PaketModel();
-        $BastModel      = new BastModel();
 
         // Initialize
         $input      = $this->request->getPost();
 
         // Populating Data
         $pakets     = $PaketModel->find($input['id']);
-        $mdls       = $MdlModel->where('paketid', $input['id'])->find();
-
-        $mdlid = array();
-        foreach ($mdls as $mdl) {
-            $mdlid[]    = $mdl['id'];
-        }
-
-        $return = array();
-        foreach ($mdls as $mdl) {
-            $return[] = [
-                'id'            => $mdl['id'],
-                'name'          => $mdl['name'],
-                'length'        => $mdl['length'],
-                'width'         => $mdl['width'],
-                'height'        => $mdl['height'],
-                'volume'        => $mdl['volume'],
-                'denomination'  => $mdl['denomination'],
-                'price'         => $mdl['price'],
-            ];
+        $mdlpaket   = $MdlPaketModel->where('paketid', $input['id'])->find();
+        $return     = array();
+        $mdlid      = array();
+        foreach ($mdlpaket as $mdlpak) {
+            $mdls       = $MdlModel->where('id', $mdlpak['mdlid'])->find();
+    
+            foreach ($mdls as $mdl) {
+                $mdlid[]    = $mdl['id'];
+            }
+    
+            foreach ($mdls as $mdl) {
+                $return[] = [
+                    'id'            => $mdl['id'],
+                    'name'          => $mdl['name'],
+                    'length'        => $mdl['length'],
+                    'width'         => $mdl['width'],
+                    'height'        => $mdl['height'],
+                    'volume'        => $mdl['volume'],
+                    'denomination'  => $mdl['denomination'],
+                    'price'         => $mdl['price'],
+                ];
+            }
         }
 
         die(json_encode($return));
@@ -326,6 +329,7 @@ class Project extends BaseController
         $ProjectModel       = new ProjectModel();
         $RabModel           = new RabModel();
         $MdlModel           = new MdlModel();
+        $MdlPaketModel      = new MdlPaketModel();
         $DesignModel        = new DesignModel();
         $ProductionModel    = new ProductionModel();
         $BastModel          = new BastModel();
@@ -396,36 +400,39 @@ class Project extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        dd($input);
+
         // RAB Data
         if (isset($input['checked' . $id])) {
-            foreach ($input['eqty' . $id] as $mdlid => $qty) {
-                if (isset($input['checked' . $id][$mdlid])) {
-                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                    if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
-                        if ($input['eqty' . $id][$mdlid] != 0) {
-                            $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
-                        } else {
-                            $RabModel->delete($rab);
+            // foreach ($input['epaketid' . $id] as $paketid => $pakid) {
+                foreach ($input['eqty' . $id] as $mdlid => $qty) {
+                    if (isset($input['checked' . $id][$mdlid])) {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
+                        if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
+                            if ($input['eqty' . $id][$mdlid] != 0) {
+                                $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                            } else {
+                                $RabModel->delete($rab);
+                            }
+                        } elseif (empty($rab)) {
+                            if ($input['eqty' . $id][$mdlid] != 0) {
+                                $datarab = [
+                                    'mdlid'     => $mdlid,
+                                    'projectid' => $id,
+                                    'paketid'   => $pakid,
+                                    'qty'       => $qty
+                                ];
+                                $RabModel->save($datarab);
+                            }
                         }
-                    } elseif (empty($rab)) {
-                        $mdl = $MdlModel->find($mdlid);
-                        if ($input['eqty' . $id][$mdlid] != 0) {
-                            $datarab = [
-                                'mdlid'     => $mdlid,
-                                'projectid' => $id,
-                                'paketid'   => $mdl['paketid'],
-                                'qty'       => $qty
-                            ];
-                            $RabModel->save($datarab);
+                    } else {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
+                        if (!empty($rab)) {
+                            $RabModel->delete($rab['id']);
                         }
-                    }
-                } else {
-                    $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                    if (!empty($rab)) {
-                        $RabModel->delete($rab['id']);
                     }
                 }
-            }
+            // }
         }
 
         // Design Data
