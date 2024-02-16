@@ -284,6 +284,7 @@ class Project extends BaseController
         $ProjectModel   = new ProjectModel();
         $MdlModel       = new MdlModel();
         $RabModel       = new RabModel();
+        $DesignModel    = new DesignModel();
 
         // initialize
         $input  = $this->request->getPost();
@@ -315,11 +316,25 @@ class Project extends BaseController
         $project = [
             'name'          => $input['name'],
             'clientid'      => $input['company'],
-            'status'        => 1,
-            'type_design'   => $input['designtype'],
-            'ded'           => $input['design'],
+            'status'        => 1
         ];
+
+        if (isset($input['designtype'])) {
+            $project['type_design'] = 1;
+            $project['ded'] = $input['design'];
+        } else {
+            $project['type_design'] = 0;
+        }
+        
         $ProjectModel->insert($project);
+
+        $projectid = $ProjectModel->getInsertID();
+
+        // if ($input['designtype'] === 1) {
+        //     $design = [
+
+        //     ];
+        // }
 
         return redirect()->back()->with('message', "Data berhasil di simpan.");
     }
@@ -405,7 +420,7 @@ class Project extends BaseController
 
         // RAB Data
         if (isset($input['checked' . $id])) {
-            // foreach ($input['epaketid' . $id] as $paketid => $pakid) {
+            foreach ($input['epaketid' . $id] as $paketid => $pakid) {
                 foreach ($input['eqty' . $id] as $mdlid => $qty) {
                     if (isset($input['checked' . $id][$mdlid])) {
                         $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
@@ -433,7 +448,7 @@ class Project extends BaseController
                         }
                     }
                 }
-            // }
+            }
         }
 
         // Design Data

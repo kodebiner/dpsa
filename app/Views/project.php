@@ -34,14 +34,18 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
             $progress = "0";
-            if ($projectdata[$project['id']]['design']['status'] === '0') {
-                $progress = "10";
-                $status = "Menunggu Approval desain";
-            }
-
-            if ($projectdata[$project['id']]['design']['status'] === '2') {
-                $progress = "20";
-                $status = "Desain Disetujui";
+            if ($project['type_design'] === 1) {
+                if ($projectdata[$project['id']]['design']['status'] === '0') {
+                    $progress = "10";
+                    $status = "Menunggu Approval desain";
+                }
+    
+                if ($projectdata[$project['id']]['design']['status'] === '2') {
+                    $progress = "20";
+                    $status = "Desain Disetujui";
+                }
+            } else {
+                $status = "Tidak memerlukan design";
             }
 
             if ($project['status_spk'] === "1") {
@@ -260,18 +264,21 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- Select With Design Or Without Design Section -->
                             <label class="uk-form-label" for="designtype">Dengan Desain atau Tanpa Desain</label>
                             <label class="switch  uk-margin-bottom">
-                                <input id="designtype" name="designtype" type="checkbox">
+                                <input id="designtype" name="designtype" type="checkbox" value="0">
                                 <span class="slider round"></span>
                             </label>
                             <script>
                                 $(document).ready(function() {
+                                    $("input[id='designtype']").val(0);
                                     $("input[id='designtype']").change(function() {
                                         if ($(this).is(':checked')) {
                                             $("input[id='designtype']").val(1);
                                             $("div[id='imgdesigncreate']").attr("hidden", false);
+                                            $("div[id='imgdesigncreate']").attr("required", false);
                                         } else {
                                             $("input[id='designtype']").val(0);
                                             $("div[id='imgdesigncreate']").attr("hidden", true);
+                                            $("div[id='imgdesigncreate']").attr("required", true);
                                         }
                                     });
                                 });
@@ -294,7 +301,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                     </div>
                                 </div>
                                 <div id="image-container-" class="uk-form-controls">
-                                    <input id="designcreated" name="design" hidden required />
+                                    <input id="designcreated" name="design" hidden />
                                     <div id="js-upload-createdesign-" class="js-upload-createdesign- uk-placeholder uk-text-center">
                                         <span uk-icon="icon: cloud-upload"></span>
                                         <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
@@ -548,7 +555,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- End Of Add Client -->
 
                             <!-- Desain Section -->
-                            <?php if ($this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) { ?>
+                            <?php if ($this->data['authorize']->hasPermission('design.project.edit', $this->data['uid']) && ($project['type_design'] === '1')) { ?>
                                 <?php if (empty($projectdata[$project['id']]['design'])) { ?>
                                     <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                         <div>
@@ -899,8 +906,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- Desain Section End -->
 
                             <!-- Detail Pemesanan Seciton -->
-                            <?php if (!empty($projectdata[$project['id']]['design'])) {
-                                if ($projectdata[$project['id']]['design']['status'] === '2') { ?>
+                            <?php if ((!empty($projectdata[$project['id']]['design'])) || ($project['type_design'] === '0')) {
+                                if (((!empty($projectdata[$project['id']]['design'])) && ($projectdata[$project['id']]['design']['status'] === '2')) || ($project['type_design'] === '0')) { ?>
                                     <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                         <div>
                                             <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Detail Pemesanan</div>
@@ -1110,9 +1117,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 var thchecklist = document.createElement('th');
                                                                 thchecklist.innerHTML = 'Checklist';
 
-                                                                // var thpaketid = document.createElement('th');
-                                                                // thpaketid.setAttribute('hidden', '');
-                                                                // thpaketid.innerHTML = 'Paketid';
+                                                                var thpaketid = document.createElement('th');
+                                                                thpaketid.setAttribute('hidden', '');
+                                                                thpaketid.innerHTML = 'Paketid';
 
                                                                 var thname = document.createElement('th');
                                                                 thname.innerHTML = 'Nama';
@@ -1153,15 +1160,15 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
                                                                     inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + i.item.idx + '][' + emdlarray[t]['id'] + ']');
 
-                                                                    // var tdpaketid = document.createElement('td');
+                                                                    var tdpaketid = document.createElement('td');
 
-                                                                    // var inputpaketid = document.createElement('input');
-                                                                    // inputpaketid.setAttribute('type', 'number');
-                                                                    // inputpaketid.setAttribute('hidden', '');
-                                                                    // inputpaketid.setAttribute('class', 'uk-input');
-                                                                    // inputpaketid.setAttribute('id', 'epaketid[<?= $project['id'] ?>' + i.item.idx + ']');
-                                                                    // inputpaketid.setAttribute('name', 'epaketid<?= $project['id'] ?>[' + i.item.idx + ']');
-                                                                    // inputpaketid.setAttribute('value', i.item.idx);
+                                                                    var inputpaketid = document.createElement('input');
+                                                                    inputpaketid.setAttribute('type', 'number');
+                                                                    inputpaketid.setAttribute('hidden', '');
+                                                                    inputpaketid.setAttribute('class', 'uk-input');
+                                                                    inputpaketid.setAttribute('id', 'epaketid[<?= $project['id'] ?>' + i.item.idx + ']');
+                                                                    inputpaketid.setAttribute('name', 'epaketid<?= $project['id'] ?>[' + i.item.idx + ']');
+                                                                    inputpaketid.setAttribute('value', i.item.idx);
 
                                                                     var tdname = document.createElement('td');
                                                                     tdname.innerHTML = emdlarray[t]['name']
@@ -1207,7 +1214,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     hiddenprice.setAttribute('hidden', '');
                                                                     hiddenprice.innerHTML = emdlarray[t]['price'];
 
-                                                                    // tdpaketid.appendChild(inputpaketid);
+                                                                    tdpaketid.appendChild(inputpaketid);
                                                                     tdqty.appendChild(inputqty);
                                                                     tdchecklist.appendChild(inputchecklist);
                                                                     trbody.appendChild(tdchecklist);
@@ -1219,7 +1226,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     trbody.appendChild(tdden);
                                                                     trbody.appendChild(tdqty);
                                                                     trbody.appendChild(tdprice);
-                                                                    // trbody.appendChild(tdpaketid);
+                                                                    trbody.appendChild(tdpaketid);
                                                                     trbody.appendChild(hiddenprice);
                                                                     tbody.appendChild(trbody);
                                                                 }
@@ -1232,7 +1239,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 trhead.appendChild(thden);
                                                                 trhead.appendChild(thqty);
                                                                 trhead.appendChild(thprice);
-                                                                // trhead.appendChild(thpaketid);
+                                                                trhead.appendChild(thpaketid);
                                                                 thead.appendChild(trhead);
                                                                 tables.appendChild(thead);
                                                                 tables.appendChild(tbody);

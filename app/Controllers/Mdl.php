@@ -172,11 +172,14 @@ class Mdl extends BaseController
             'mdlid'     => $input['mdlid'],
             'paketid'   => $input['paketid']
         ];
+        $exist = $MdlPaketModel->where('mdlid', $input['mdlid'])->where('paketid', $input['paketid'])->find();
 
         //Processing Data
-        $MdlPaketModel->save($submit);
+        if (empty($exist)) {
+            $MdlPaketModel->save($submit);
+        }
 
-        die('success');
+        die(json_encode($submit));
     }
 
     public function create()

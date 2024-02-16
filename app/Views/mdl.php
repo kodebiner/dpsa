@@ -523,9 +523,6 @@
                                         };
                                     }
                                 },
-                                // templateResult: renderOption,
-                                // escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                                // templateResult: formatRepo, // omitted for brevity, see the source of this page
                                 templateSelection: function(mdldata) {
                                     $.ajax({
                                         url: 'mdl/submitcat',
@@ -537,10 +534,10 @@
                                         },
                                         success: function(mdl) {
                                             console.log(mdl);
+                                            $('#mdl-search').select2().val(null).trigger('change');
+                                            location.reload();
                                         }
                                     });
-                                    $('#mdl-search').select2().val(null).trigger('change');
-                                    location.reload();
                                 },
 
                                 // data: data,
