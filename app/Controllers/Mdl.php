@@ -72,24 +72,28 @@ class Mdl extends BaseController
                         if (!empty($mdlpaket)) {
                             foreach ($mdlpaket as $mdlp) {
                                 $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]   = $MdlModel->find($mdlp['mdlid']);
-                                $mdlid[]                                                                = $mdlp['mdlid'];
+
+                                // List MDL Uncategories
+                                $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
                             }
                         } else {
                             $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                       = [];
-                            $mdlid[]                                                                    = '';
+
+                            // List MDL Uncategories
+                            $mdldata['mdluncate']                                                       = $MdlModel->findAll();
                         }
                     }
                 } else {
-                    $mdlpaket   = [];
+                    $mdlpaket                           = [];
                     $mdldata[$parent['id']]['paket']    = [];
+
+                    // List MDL Uncategories
+                    $mdldata['mdluncate']               = $MdlModel->findAll();
                 }
 
                 // List Parent Auto Complete
                 $autoparents    = $PaketModel->where('parentid', 0)->where('id !=', $parent['id'])->find();
             }
-
-            // List MDL Uncategories
-            $mdldata['mdluncate']  = $MdlModel->whereNotIn('id', $mdlid)->find();
         } else {
             $paketdata      = [];
             $autoparents    = [];

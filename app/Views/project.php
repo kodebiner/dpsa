@@ -39,13 +39,13 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                     $progress = "10";
                     $status = "Menunggu Approval desain";
                 }
-    
+
                 if ($projectdata[$project['id']]['design']['status'] === '2') {
                     $progress = "20";
                     $status = "Desain Disetujui";
                 }
             } else {
-                $status = "Tidak memerlukan design";
+                $status = "Menunggu SPH";
             }
 
             if ($project['status_spk'] === "1") {
@@ -79,43 +79,13 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center match-height">Status</h3>
                                         <div class="uk-text-center">
-                                            <?php
-                                            if ($project['status'] === "1") {
-                                                echo "Proses Desain";
-                                            } elseif ($project['status'] === "2") {
-                                                echo "Menunggu Approval Desain";
-                                            } elseif ($project['status'] === "3") {
-                                                echo "Pengajuan RAB";
-                                            } elseif ($project['status'] === "4") {
-                                                echo "Dalam Proses Produksi";
-                                            } elseif ($project['status'] === "5") {
-                                                echo "Setting";
-                                            }
-                                            ?>
+                                            <?= $status ?>
                                         </div>
                                 </div>
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center match-height">Progress Proyek</h3>
                                         <div class="uk-text-center">
-                                            <?php
-                                            if ($project['status'] === "1") {
-                                                echo "5 %";
-                                            } elseif ($project['status'] === "2") {
-                                                echo "10 %";
-                                            } elseif ($project['status'] === "3") {
-                                                echo "20 %";
-                                            } elseif ($project['status'] === "4") {
-                                                if ($project['production'] === "0") {
-                                                    $persentasi = "30";
-                                                } else {
-                                                    $qty = round($project['production'] / 100 * 65, 2);
-                                                    $persentasi = 30 + $qty;
-                                                }
-                                                echo "$persentasi %";
-                                            } elseif ($project['status'] === "5") {
-                                                echo "100%";
-                                            }
-                                            ?>
+                                            <?= $progress ?>
                                         </div>
                                 </div>
                             </div>
@@ -173,17 +143,6 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <h3 class="tm-h4"><span uk-icon="icon: list; ratio: 1"></span> Status</h3>
                                 <p>
                                     <?= $status ?>
-                                    <!-- </?php if ($project['status'] === "1") {
-                                        echo "Proses Desain";
-                                    } elseif ($project['status'] === "2") {
-                                        echo "Menunggu Approval Desain";
-                                    } elseif ($project['status'] === "3") {
-                                        echo "Pengajuan RAB";
-                                    } elseif ($project['status'] === "4") {
-                                        echo "Dalam Proses Produksi";
-                                    } elseif ($project['status'] === "5") {
-                                        echo "Setting";
-                                    } ?> -->
                                 </p>
                             </div>
                         </div>
@@ -192,35 +151,13 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Proyek</h3>
                                 <p>
                                     <?php
-                                    // dd($projectdata[$project['id']]);
                                     $progrespro = $progress;
                                     if (!empty($projectdata[$project['id']]['progress'])) {
-                                        // foreach ($projectdata[$project['id']]['progress'] as $progresprod) {
-                                        //     $progrespro = $progress + $progresprod;
-                                        // }
-                                        $progrespro = $progress + (int)$projectdata[$project['id']]['progress'];
+                                        $produksi = round((int)$projectdata[$project['id']]['progress']);
+                                        $progrespro = round($projectdata[$project['id']]['progress'] + $progrespro);
                                     }
                                     ?>
-                                    <?= $progrespro . "%"
-                                    // if ($project['status'] === "1") {
-                                    //     echo "5 %";
-                                    // } elseif ($project['status'] === "2") {
-                                    //     echo "10 %";
-                                    // } elseif ($project['status'] === "3") {
-                                    //     echo "20 %";
-                                    // } elseif ($project['status'] === "4") {
-                                    //     if ($project['production'] === "0") {
-                                    //         $persentasi = "30";
-                                    //     } else {
-                                    //         $qty = round($project['production'] / 100 * 65, 2);
-                                    //         $persentasi = 30 + $qty;
-                                    //     }
-                                    //     echo "$persentasi %";
-                                    // } elseif ($project['status'] === "5") {
-                                    //     echo "100%";
-                                    // }
-                                    // 
-                                    ?>
+                                    <?= $progrespro . "%" ?>
                                 </p>
                             </div>
                         </div>
@@ -276,7 +213,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             $("div[id='imgdesigncreate']").attr("hidden", false);
                                             $("div[id='imgdesigncreate']").attr("required", false);
                                         } else {
-                                            $("input[id='designtype']").val(0);
+                                            $(this).val();
+                                            // $("input[id='designtype']").val(0);
+                                            // $("#designtype").val(0);
                                             $("div[id='imgdesigncreate']").attr("hidden", true);
                                             $("div[id='imgdesigncreate']").attr("required", true);
                                         }
@@ -979,7 +918,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         </td>
                                                                         <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
                                                                         <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]">
-                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?>
+                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
+                                                                            " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -1298,34 +1238,37 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
-                                                            <tr>
-                                                                <td><?= $mdlrab['name'] ?></td>
-                                                                <td><?= $mdlrab['length'] ?></td>
-                                                                <td><?= $mdlrab['width'] ?></td>
-                                                                <td><?= $mdlrab['height'] ?></td>
-                                                                <td><?= $mdlrab['volume'] ?></td>
-                                                                <td>
-                                                                    <?php
-                                                                    if ($mdlrab['denomination'] === "1") {
-                                                                        echo "Unit";
-                                                                    } elseif ($mdlrab['denomination'] === "2") {
-                                                                        echo "Meter Lari";
-                                                                    } elseif ($mdlrab['denomination'] === "3") {
-                                                                        echo "Meter Persegi";
-                                                                    }
-                                                                    ?>
-                                                                </td>
-                                                                <td><?= $mdlrab['keterangan'] ?></td>
-                                                                <td><?= $mdlrab['qty'] ?></td>
-                                                                <td><?= $mdlrab['price'] ?></td>
-                                                            </tr>
-                                                        <?php } ?>
+                                                        <?php
+                                                        if (!empty($projectdata[$project['id']]['rab'])) {
+                                                            foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
+                                                                <tr>
+                                                                    <td><?= $mdlrab['name'] ?></td>
+                                                                    <td><?= $mdlrab['length'] ?></td>
+                                                                    <td><?= $mdlrab['width'] ?></td>
+                                                                    <td><?= $mdlrab['height'] ?></td>
+                                                                    <td><?= $mdlrab['volume'] ?></td>
+                                                                    <td>
+                                                                        <?php
+                                                                        if ($mdlrab['denomination'] === "1") {
+                                                                            echo "Unit";
+                                                                        } elseif ($mdlrab['denomination'] === "2") {
+                                                                            echo "Meter Lari";
+                                                                        } elseif ($mdlrab['denomination'] === "3") {
+                                                                            echo "Meter Persegi";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td><?= $mdlrab['keterangan'] ?></td>
+                                                                    <td><?= $mdlrab['qty'] ?></td>
+                                                                    <td><?= $mdlrab['price'] ?></td>
+                                                                </tr>
+                                                        <?php }
+                                                        } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                                    <?php }
+                            <?php }
                                 }
                             } ?>
                             <!-- Detail Pemesanan Seciton End -->

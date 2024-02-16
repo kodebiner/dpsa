@@ -97,10 +97,38 @@
         <?php } ?>
         <?php if (!empty($projects)) { ?>
             <?php
-            $progress = "";
-            $status = "";
-            foreach ($projects as $project) { ?>
-                <?php if ($project['status'] === "1") {
+            // $progress = "";
+            // $status = "";
+
+            foreach ($projects as $project) {
+                $progress = "0";
+                if ($project['type_design'] === 1) {
+                    if ($projectdata[$project['id']]['design']['status'] === '0') {
+                        $progress = "10";
+                        $status = "Menunggu Approval desain";
+                    }
+
+                    if ($projectdata[$project['id']]['design']['status'] === '2') {
+                        $progress = "20";
+                        $status = "Desain Disetujui";
+                    }
+                } else {
+                    $progress = "20";
+                    $status = "Menunggu SPH";
+                }
+
+                if ($project['status_spk'] === "1") {
+                    $progress = "30";
+                    $status = "SPK DiSetujui";
+                }
+
+                if (!empty($projectdata[$project['id']]['progress'])) {
+                    $produksi = round((int)$projectdata[$project['id']]['progress']);
+                    $progress = round($projectdata[$project['id']]['progress'] + $progress);
+                }
+            ?>
+
+                <!-- </?php if ($project['status'] === "1") {
                     $status = "Proses Desain";
                     $progress = '5';
                 } elseif ($project['status'] === "2") {
@@ -120,7 +148,7 @@
                 } elseif ($project['status'] === "5") {
                     $status = "Setting";
                     $progress = '95';
-                } ?>
+                } ?> -->
 
                 <?php
                 // Data project initialize
@@ -171,7 +199,6 @@
                 $tanggaldesign = ucwords($dateFormatted);
                 ?>
                 <?php if ($ismobile) { ?>
-
                     <div class="uk-margin uk-card uk-card-default">
                         <div class="uk-card-header">
                             <div class="uk-grid-small uk-flex-middle" uk-grid>
@@ -475,22 +502,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <progress class="uk-progress" value="<?= $progress ?>" max="100"></progress>
+                            <progress class="uk-progress" value="<?= $progress ?>" max="100" style="margin:10px"></progress>
+                            <div class="uk-child-width-1-2" uk-grid>
+                                <div>
+                                    <div class="uk-width-auto uk-text-small uk-text-capitalize uk-margin-small-left">Status Proyek : <?= $status ?></div>
+                                </div>
+                                <div>
+                                    <div class="uk-width-auto uk-text-default uk-text-capitalize uk-text-right"> <?= $progress . "%" ?></div>
+                                </div>
+                            </div>
                         </div>
 
                         <div id="content<?= $project['id'] ?>" hidden>
                             <div class="uk-card-body">
                                 <div class="uk-grid" uk-grid>
-                                    <div class="uk-width-1-2">
+                                    <!-- <div class="uk-width-1-2">
                                         <h4 class="">Status Proyek</h4>
-                                        <div class=""><?= $status ?></div>
+                                        <div class=""></?= $status ?></div>
                                     </div>
-                                    <?php if ($project['status'] === '4') { ?>
+                                    </?php if ($project['status'] === '4') { ?>
                                         <div class="uk-width-1-2">
                                             <h4 class="uk-text-center">Progress Produksi</h4>
-                                            <div class="uk-text-center"><?= $project['production'] ?>%</div>
+                                            <div class="uk-text-center"></?= $project['production'] ?>%</div>
                                         </div>
-                                    <?php } ?>
+                                    </?php } ?> -->
 
                                     <div class="uk-width-1-1 uk-margin-bottom-remove">
                                         <div class="uk-child-width-1-2" uk-grid>
@@ -782,7 +817,6 @@
                                             <div class="uk-width-1-1">
                                                 <!-- SPK -->
                                                 <p class="uk-margin-remove-top" uk-margin>
-                                                    <a class="uk-button uk-button-primary uk-margin-right" href="project/invoice/<?= $project['id'] ?>"><span class="uk-margin-small-right uk-icon" uk-icon="icon:  file-text; ratio: 1.2"></span>Invoice</a>
                                                     <?php
                                                     if ($projectdata[$project['id']]['project']['status_spk'] === null) {
                                                         echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
@@ -790,6 +824,8 @@
                                                     } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
                                                         echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
                                                         // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "1") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice</a>";
                                                     } else {
                                                         echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
                                                     }

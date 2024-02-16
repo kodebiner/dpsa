@@ -174,7 +174,7 @@ class Project extends BaseController
                         ];
                     }
 
-                    $total = array_sum(array_column($price, 'price'));
+                    $total = array_sum(array_column($price, 'sumprice'));
 
                     $progresdata = [];
                     $datamdlid = [];
@@ -182,7 +182,7 @@ class Project extends BaseController
                         $progresdata[] = [
                             'id'    => $progresval['id'], // mdlid
                             'proid' => $progresval['proid'],
-                            'val'   => round((($progresval['price'] / $total) * 100) / 7),
+                            'val'   => (($progresval['price'] / $total) * 65) / 7,
                         ];
                         $datamdlid[] = $progresval['id'];
                     }
@@ -194,25 +194,25 @@ class Project extends BaseController
                         foreach ($progresdata as $value) {
                             if ($proses['mdlid'] === $value['id']) {
                                 if ($proses['gambar_kerja'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['mesin_awal'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['tukang'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['mesin_lanjutan'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['finishing'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['packing'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                                 if ($proses['setting'] === "1") {
-                                    array_push($progress, (int)$value['val']);
+                                    array_push($progress, $value['val']);
                                 }
                             }
                         }
@@ -330,12 +330,6 @@ class Project extends BaseController
 
         $projectid = $ProjectModel->getInsertID();
 
-        // if ($input['designtype'] === 1) {
-        //     $design = [
-
-        //     ];
-        // }
-
         return redirect()->back()->with('message', "Data berhasil di simpan.");
     }
 
@@ -416,8 +410,6 @@ class Project extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        dd($input);
-
         // RAB Data
         if (isset($input['checked' . $id])) {
             foreach ($input['epaketid' . $id] as $paketid => $pakid) {
@@ -435,7 +427,7 @@ class Project extends BaseController
                                 $datarab = [
                                     'mdlid'     => $mdlid,
                                     'projectid' => $id,
-                                    'paketid'   => $pakid,
+                                    // 'paketid'   => $pakid,
                                     'qty'       => $qty
                                 ];
                                 $RabModel->save($datarab);

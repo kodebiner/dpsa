@@ -11,6 +11,7 @@ use App\Models\PaketModel;
 use App\Models\MdlModel;
 use App\Models\DesignModel;
 use App\Models\LogModel;
+use App\Models\ProductionModel;
 
 class Home extends BaseController
 {
@@ -182,12 +183,13 @@ class Home extends BaseController
             // Calling Services
             $pager = \Config\Services::pager();
             // Calling models
-            $ProjectModel   = new ProjectModel;
-            $CompanyModel   = new CompanyModel();
-            $RabModel       = new RabModel();
-            $PaketModel     = new PaketModel();
-            $MdlModel       = new MdlModel();
-            $DesignModel    = new DesignModel();
+            $ProjectModel       = new ProjectModel;
+            $CompanyModel       = new CompanyModel();
+            $RabModel           = new RabModel();
+            $PaketModel         = new PaketModel();
+            $MdlModel           = new MdlModel();
+            $DesignModel        = new DesignModel();
+            $ProductionModel    = new ProductionModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -211,7 +213,121 @@ class Home extends BaseController
             foreach ($projects as $project) {
                 $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
                 $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[]  = $rab['paketid'];
+
+                    // MDL RAB
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                            'id'            => $mdlr['id'],
+                            'proid'         => $project['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
+                        ];
+                    }
+                }
+
+                // Production
+                $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
+                if (!empty($productions)) {
+                    foreach ($productions as $production) {
+
+                        // MDL Production
+                        $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                        foreach ($mdlprod as $mdlp) {
+                            $projectdata[$project['id']]['production'][$production['id']]  = [
+                                'id'                => $production['id'],
+                                'mdlid'             => $production['mdlid'],
+                                'name'              => $mdlp['name'],
+                                'gambar_kerja'      => $production['gambar_kerja'],
+                                'mesin_awal'        => $production['mesin_awal'],
+                                'tukang'            => $production['tukang'],
+                                'mesin_lanjutan'    => $production['mesin_lanjutan'],
+                                'finishing'         => $production['finishing'],
+                                'packing'           => $production['packing'],
+                                'setting'           => $production['setting'],
+                            ];
+                        }
+                    }
+                } else {
+                    $mdlprod    = [];
+                    $projectdata[$project['id']]['production']   = [];
+                }
+
+                // Production Proggres
+                if (!empty($projectdata[$project['id']]['rab'])) {
+                    $price = [];
+                    foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                        $price[] = [
+                            'id'        => $mdldata['id'],
+                            'proid'     => $mdldata['proid'],
+                            'price'     => $mdldata['oriprice'],
+                            'sumprice'  => $mdldata['price'],
+                            'qty'       => $mdldata['qty']
+                        ];
+                    }
+
+                    $total = array_sum(array_column($price, 'sumprice'));
+
+                    $progresdata = [];
+                    $datamdlid = [];
+                    foreach ($price as $progresval) {
+                        $progresdata[] = [
+                            'id'    => $progresval['id'], // mdlid
+                            'proid' => $progresval['proid'],
+                            'val'   => (($progresval['price'] / $total) * 65) / 7,
+                        ];
+                        $datamdlid[] = $progresval['id'];
+                    }
+
+                    $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+
+                    $progress = [];
+                    foreach ($productval as $proses) {
+                        foreach ($progresdata as $value) {
+                            if ($proses['mdlid'] === $value['id']) {
+                                if ($proses['gambar_kerja'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['mesin_awal'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['tukang'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['mesin_lanjutan'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['finishing'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['packing'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                                if ($proses['setting'] === "1") {
+                                    array_push($progress, $value['val']);
+                                }
+                            }
+                        }
+                    }
+
+                    // $projectdata[$project['id']]['progress'][]   = array_sum($progress);
+                    $projectdata[$project['id']]['progress']   = array_sum($progress);
+                }
             }
+
 
             // Parsing Data to View
             $data                   = $this->data;
