@@ -190,10 +190,11 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                     <?php
                                     // dd($projectdata[$project['id']]);
                                     $progrespro = $progress;
-                                    if(!empty($projectdata[$project['id']]['progress'])){
-                                        foreach ($projectdata[$project['id']]['progress'] as $progresprod) {
-                                            $progrespro = $progress + $progresprod;
-                                        }
+                                    if (!empty($projectdata[$project['id']]['progress'])) {
+                                        // foreach ($projectdata[$project['id']]['progress'] as $progresprod) {
+                                        //     $progrespro = $progress + $progresprod;
+                                        // }
+                                        $progrespro = $progress + (int)$projectdata[$project['id']]['progress'];
                                     }
                                     ?>
                                     <?= $progrespro . "%"

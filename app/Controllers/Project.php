@@ -187,7 +187,7 @@ class Project extends BaseController
                         $datamdlid[] = $progresval['id'];
                     }
 
-                    $productval = $ProductionModel->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+                    $productval = $ProductionModel->where('projectid',$project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
 
                     $progress = [];
                     foreach ($productval as $proses) {
@@ -218,7 +218,8 @@ class Project extends BaseController
                         }
                     }
 
-                    $projectdata[$project['id']]['progress'][]   = array_sum($progress);
+                    // $projectdata[$project['id']]['progress'][]   = array_sum($progress);
+                    $projectdata[$project['id']]['progress']   = array_sum($progress);
                 }
             }
         } else {
