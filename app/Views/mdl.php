@@ -275,6 +275,19 @@
                         </div>
                     </td>
                 </tr>
+                <script>
+                    // Dropdown MDL Uncategories
+                    document.getElementById('toggleuncate').addEventListener('click', function() {
+                        if (document.getElementById('closeuncate').hasAttribute('hidden')) {
+                            document.getElementById('closeuncate').removeAttribute('hidden');
+                            document.getElementById('openuncate').setAttribute('hidden', '');
+                        } else {
+                            document.getElementById('openuncate').removeAttribute('hidden');
+                            document.getElementById('closeuncate').setAttribute('hidden', '');
+
+                        }
+                    });
+                </script>
             <?php } ?>
         </tbody>
     </table>
