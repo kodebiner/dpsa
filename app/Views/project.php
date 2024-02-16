@@ -953,7 +953,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                                 $checked = '';
                                                                             }
                                                                             ?>
-                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
+                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
                                                                         </td>
                                                                         <td><?= $mdl['name'] ?></td>
                                                                         <td><?= $mdl['length'] ?></td>
@@ -975,10 +975,10 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         </td>
                                                                         <td><?= $mdl['keterangan'] ?></td>
                                                                         <td class="uk-form-controls">
-                                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $mdl['id'] ?>)" />
+                                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
                                                                         </td>
-                                                                        <div id="eprice[<?= $project['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $mdl['id'] ?>]">
+                                                                        <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]">
                                                                             <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?>
                                                                         </td>
                                                                     </tr>
@@ -1117,9 +1117,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 var thchecklist = document.createElement('th');
                                                                 thchecklist.innerHTML = 'Checklist';
 
-                                                                var thpaketid = document.createElement('th');
-                                                                thpaketid.setAttribute('hidden', '');
-                                                                thpaketid.innerHTML = 'Paketid';
+                                                                // var thpaketid = document.createElement('th');
+                                                                // thpaketid.setAttribute('hidden', '');
+                                                                // thpaketid.innerHTML = 'Paketid';
 
                                                                 var thname = document.createElement('th');
                                                                 thname.innerHTML = 'Nama';
@@ -1157,18 +1157,18 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     var inputchecklist = document.createElement('input');
                                                                     inputchecklist.setAttribute('type', 'checkbox');
                                                                     inputchecklist.setAttribute('class', 'uk-checkbox');
-                                                                    inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + i.item.idx + '][' + emdlarray[t]['id'] + ']');
+                                                                    inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>['+ emdlarray[t]['id'] + ']');
 
-                                                                    var tdpaketid = document.createElement('td');
+                                                                    // var tdpaketid = document.createElement('td');
 
-                                                                    var inputpaketid = document.createElement('input');
-                                                                    inputpaketid.setAttribute('type', 'number');
-                                                                    inputpaketid.setAttribute('hidden', '');
-                                                                    inputpaketid.setAttribute('class', 'uk-input');
-                                                                    inputpaketid.setAttribute('id', 'epaketid[<?= $project['id'] ?>' + i.item.idx + ']');
-                                                                    inputpaketid.setAttribute('name', 'epaketid<?= $project['id'] ?>[' + i.item.idx + ']');
-                                                                    inputpaketid.setAttribute('value', i.item.idx);
+                                                                    // var inputpaketid = document.createElement('input');
+                                                                    // inputpaketid.setAttribute('type', 'number');
+                                                                    // inputpaketid.setAttribute('hidden', '');
+                                                                    // inputpaketid.setAttribute('class', 'uk-input');
+                                                                    // inputpaketid.setAttribute('id', 'epaketid[<?= $project['id'] ?>' + i.item.idx + ']');
+                                                                    // inputpaketid.setAttribute('name', 'epaketid<?= $project['id'] ?>[' + i.item.idx + ']');
+                                                                    // inputpaketid.setAttribute('value', i.item.idx);
 
                                                                     var tdname = document.createElement('td');
                                                                     tdname.innerHTML = emdlarray[t]['name']
@@ -1200,21 +1200,21 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     var inputqty = document.createElement('input');
                                                                     inputqty.setAttribute('class', 'uk-input uk-form-width-small');
                                                                     inputqty.setAttribute('type', 'number');
-                                                                    inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
-                                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
+                                                                    inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>['+ i.item.idx +'][' + emdlarray[t]['id'] + ']');
                                                                     inputqty.setAttribute('value', '0');
-                                                                    inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + emdlarray[t]['id'] + ')');
+                                                                    inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + i.item.idx + emdlarray[t]['id'] + ')');
 
                                                                     var tdprice = document.createElement('td');
-                                                                    tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                                    tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
                                                                     tdprice.innerHTML = 0;
 
                                                                     var hiddenprice = document.createElement('div');
-                                                                    hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + emdlarray[t]['id'] + ']');
+                                                                    hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
                                                                     hiddenprice.setAttribute('hidden', '');
                                                                     hiddenprice.innerHTML = emdlarray[t]['price'];
 
-                                                                    tdpaketid.appendChild(inputpaketid);
+                                                                    // tdpaketid.appendChild(inputpaketid);
                                                                     tdqty.appendChild(inputqty);
                                                                     tdchecklist.appendChild(inputchecklist);
                                                                     trbody.appendChild(tdchecklist);
@@ -1226,7 +1226,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     trbody.appendChild(tdden);
                                                                     trbody.appendChild(tdqty);
                                                                     trbody.appendChild(tdprice);
-                                                                    trbody.appendChild(tdpaketid);
+                                                                    // trbody.appendChild(tdpaketid);
                                                                     trbody.appendChild(hiddenprice);
                                                                     tbody.appendChild(trbody);
                                                                 }
@@ -1239,7 +1239,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 trhead.appendChild(thden);
                                                                 trhead.appendChild(thqty);
                                                                 trhead.appendChild(thprice);
-                                                                trhead.appendChild(thpaketid);
+                                                                // trhead.appendChild(thpaketid);
                                                                 thead.appendChild(trhead);
                                                                 tables.appendChild(thead);
                                                                 tables.appendChild(tbody);

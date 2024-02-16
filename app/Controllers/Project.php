@@ -83,7 +83,8 @@ class Project extends BaseController
                     $paketproject   = $PaketModel->find($paketid);
                     foreach ($paketproject as $pack) {
                         $paketdata[]    = $pack['id'];
-                        $projectdata[$project['id']]['paket'][$pack['id']]['name'] = $pack['name'];
+                        $projectdata[$project['id']]['paket'][$pack['id']]['id']    = $pack['id'];
+                        $projectdata[$project['id']]['paket'][$pack['id']]['name']  = $pack['name'];
 
                         // MDL Paket
                         $mdlpaket       = $MdlPaketModel->where('paketid', $pack['id'])->find();
@@ -416,39 +417,37 @@ class Project extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        dd($input);
-
         // RAB Data
         if (isset($input['checked' . $id])) {
-            foreach ($input['epaketid' . $id] as $paketid => $pakid) {
-                foreach ($input['eqty' . $id] as $mdlid => $qty) {
-                    if (isset($input['checked' . $id][$mdlid])) {
-                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                        if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$mdlid])) {
-                            if ($input['eqty' . $id][$mdlid] != 0) {
-                                $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
-                            } else {
-                                $RabModel->delete($rab);
+                foreach ($input['eqty' . $id] as $paketid => $mdls) {
+                    foreach ($mdls as $mdlid => $qty) {
+                        if (isset($input['checked' . $id][$mdlid])) {
+                            $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                            if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid])) {
+                                if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
+                                    $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                                } else {
+                                    $RabModel->delete($rab);
+                                }
+                            } elseif (empty($rab)) {
+                                if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
+                                    $datarab = [
+                                        'mdlid'     => $mdlid,
+                                        'projectid' => $id,
+                                        'paketid'   => $paketid,
+                                        'qty'       => $qty
+                                    ];
+                                    $RabModel->save($datarab);
+                                }
                             }
-                        } elseif (empty($rab)) {
-                            if ($input['eqty' . $id][$mdlid] != 0) {
-                                $datarab = [
-                                    'mdlid'     => $mdlid,
-                                    'projectid' => $id,
-                                    'paketid'   => $pakid,
-                                    'qty'       => $qty
-                                ];
-                                $RabModel->save($datarab);
+                        } else {
+                            $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                            if (!empty($rab)) {
+                                $RabModel->delete($rab['id']);
                             }
-                        }
-                    } else {
-                        $rab = $RabModel->where('mdlid', $mdlid)->where('projectid', $id)->first();
-                        if (!empty($rab)) {
-                            $RabModel->delete($rab['id']);
                         }
                     }
                 }
-            }
         }
 
         // Design Data
