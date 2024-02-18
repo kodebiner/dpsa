@@ -46,7 +46,14 @@ class Mdl extends BaseController
 
         // Populating Data
         // List Parent
-        $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+        // $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+
+        // Search Engine
+        if (isset($input['search']) && !empty($input['search'])) {
+            $parents     = $PaketModel->like('name', $input['search'])->find();
+        } else {
+            $parents     = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+        }
 
         // List Paket Auto Complete
         $autopakets     = $PaketModel->where('parentid !=', 0)->find();
@@ -72,23 +79,26 @@ class Mdl extends BaseController
                         if (!empty($mdlpaket)) {
                             foreach ($mdlpaket as $mdlp) {
                                 $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]   = $MdlModel->find($mdlp['mdlid']);
+                                $mdlid[]                                                                = $mdlp['mdlid'];
 
                                 // List MDL Uncategories
-                                $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
+                                // $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
                             }
                         } else {
                             $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                       = [];
+                            $mdlid[]                                                                    = '';
 
                             // List MDL Uncategories
-                            $mdldata['mdluncate']                                                       = $MdlModel->findAll();
+                            // $mdldata['mdluncate']                                                       = $MdlModel->findAll();
                         }
                     }
                 } else {
                     $mdlpaket                           = [];
                     $mdldata[$parent['id']]['paket']    = [];
+                    $mdlid[]                            = '';
 
                     // List MDL Uncategories
-                    $mdldata['mdluncate']               = $MdlModel->findAll();
+                    // $mdldata['mdluncate']               = $MdlModel->findAll();
                 }
 
                 // List Parent Auto Complete
@@ -99,22 +109,8 @@ class Mdl extends BaseController
             $autoparents    = [];
         }
 
-        // SEARCH ENGINE ON GOING
-        // List MDL Paket
-        // $mdls   = [];
-
-        // List MDL In Paket
-        // $mdls = array();
-        // foreach ($pakets as $paket) {
-        //     $mdls[$paket['id']] = $MdlModel->where('paketid', $paket['id'])->find();
-        // }
-
-        // Search Engine
-        // if (isset($input['search']) && !empty($input['search'])) {
-        //     $pakets     = $PaketModel->like('name', $input['search'])->paginate($perpage, 'paket');
-        // } else {
-        //     $pakets     = $PaketModel->paginate($perpage, 'paket');
-        // }
+        // List MDL Uncategories
+        $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
 
         // Parsing Data to View
         $data                   =   $this->data;
