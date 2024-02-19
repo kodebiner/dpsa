@@ -527,7 +527,6 @@ class Mdl extends BaseController
                 'denomination'  => $denomination,
                 'keterangan'    => $keterangan,
                 'price'         => $price,
-                'paketid'       => $id,
             ];
 
             $MdlModel->insert($datamdl);
