@@ -97,11 +97,11 @@
         <?php } ?>
         <?php if (!empty($projects)) { ?>
             <?php
-            // $progress = "";
-            // $status = "";
-
             foreach ($projects as $project) {
-                $progress = "0";
+                $progress   = "0";
+                $today      = '';
+                $dateline   = '';
+                $inv4       = '';
                 if ($project['type_design'] === 1) {
                     if ($projectdata[$project['id']]['design']['status'] === '0') {
                         $progress = "10";
@@ -125,6 +125,7 @@
                 if (!empty($projectdata[$project['id']]['progress'])) {
                     $produksi = round((int)$projectdata[$project['id']]['progress']);
                     $progress = round($projectdata[$project['id']]['progress'] + $progress);
+                    $status   = "Rentensi";
                 }
             ?>
 
@@ -801,33 +802,48 @@
                                         <div class="uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="">
-                                                    <h4 class="uk-width-1-1">FILE INVOICE & SPK</h4>
+                                                    <h4 class="uk-width-1-1">File Invoice</h4>
                                                 </div>
                                             </div>
                                             <div>
                                                 <div class="uk-child-width-1-1 uk-text-right" uk-grid>
                                                     <div>
-                                                        <!-- <div id="containerbtninv</?= $project['id'] ?>"><span uk-icon="icon: file-text; ratio: 2" id="btndowninv</?= $project['id'] ?>"></div>
-                                                        <div id="containerbtnupinv</?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupinv</?= $project['id'] ?>"></div> -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="uk-margin" uk-grid>
+                                        <div class="uk-margin uk-margin-remove-top" uk-grid>
                                             <div class="uk-width-1-1">
-                                                <!-- SPK -->
+                                                <!-- Invoice -->
                                                 <p class="uk-margin-remove-top" uk-margin>
                                                     <?php
-                                                    if ($projectdata[$project['id']]['project']['status_spk'] === null) {
-                                                        echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                        // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
-                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
-                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
-                                                        // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "1") {
-                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice</a>";
-                                                    } else {
-                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . " target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                    // Invoice I
+                                                    if ($projectdata[$project['id']]['project']['status_spk'] === "1") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
+                                                    }
+
+                                                    // Invoice II
+                                                    if ($progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                    }
+
+                                                    // Invoice III
+                                                    if ($progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                        $status = "Retensi";
+                                                    }
+
+                                                    // Invoice IV
+                                                    if (!empty($projectdata[$project['id']]['bast']['updated_at'])) {
+                                                        if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
+                                                        // if ($projectdata[$project['id']]['bast']['status'] == "1" && strtotime($projectdata[$project['id']]['now']) >= strtotime("2024-2-15")) {
+                                                            echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                            $progress   = "100";
+                                                            // var_dump($projectdata[$project['id']]['dateline']);
+                                                            // $today      = $projectdata[$project['id']]['now'];
+                                                            // $dateline   = $projectdata[$project['id']]['dateline'];
+                                                            // $inv4       = $projectdata[$project['id']]['project']['inv4'];
+                                                        }
                                                     }
                                                     ?>
                                                 </p>
@@ -835,7 +851,81 @@
                                         </div>
                                         <hr class="uk-margin">
                                     </div>
+                                    <script>
+                                        $(document).ready(function() {
+
+                                            var proid       = <?= $project['id'] ?>;
+                                            var today       = new Date();
+                                            var dateline    = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
+                                            var inv4        = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
+                                            var progress    = "<?= (int)$progress ?>"
+                                            
+                                            // var dateline    = new Date("2024-1-15");
+                                            // console.log(today);
+                                            // console.log(dateline);
+                                            // console.log(proid);
+                                            // console.log("</?= $projectdata[$project['id']]['dateline'] ?>");
+
+                                            if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
+                                                $.ajax({
+                                                    url: "project/inv4/" + proid,
+                                                    method: "POST",
+                                                    data: {
+                                                        id: proid,
+                                                        dateline:"<?= $projectdata[$project['id']]['dateline'] ?>",
+                                                    },
+                                                    dataType: "json",
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+                                                    success: function(data) {
+                                                        console.log('success', arguments);
+                                                        console.log(data);
+                                                    }
+                                                });
+                                            } else {
+                                                console.log("nothing");
+                                            }
+                                        });
+                                    </script>
                                     <!-- End Of Invoice -->
+
+                                    <!-- SPK -->
+                                    <div class="uk-width-1-1">
+                                        <div class="uk-child-width-1-2 uk-margin-remove-bottom" uk-grid>
+                                            <div>
+                                                <div class="uk-margin-remove-bottom">
+                                                    <h4 class="uk-width-1-1">File SPK</h4>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                    <div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="uk-margin-remove-top" uk-grid>
+                                            <div class="uk-width-1-1">
+                                                <!-- SPK -->
+                                                <p class="" uk-margin>
+                                                    <?php
+                                                    if ($projectdata[$project['id']]['project']['status_spk'] === null) {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-remove-top' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                        // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
+                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                        // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                    } else {
+                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . "' target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                    }
+                                                    ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr class="uk-margin">
+                                    </div>
+                                    <!-- End Of SPK -->
                                 </div>
                             </div>
                         </div>

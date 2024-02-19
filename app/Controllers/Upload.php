@@ -194,6 +194,7 @@ class Upload extends BaseController
                     'projectid'     => $id,
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
+                    'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->insert($dataspk);
             } else {
@@ -202,6 +203,7 @@ class Upload extends BaseController
                     'projectid'     => $id,
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
+                    'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
             }
@@ -390,6 +392,7 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $BastModel  = new BastModel();
+        $ProjectModel = new ProjectModel();
         $input      = $this->request->getFile('uploads');
         // $id         = $this->request->getPost('id');
 
@@ -438,8 +441,13 @@ class Upload extends BaseController
                 'status'    => 0,
             ];
             $BastModel->save($sertrim);
-
             $idBast = $BastModel->getInsertID();
+
+            $inv2date = [
+                'id'    => $id,
+                'inv2'  => date("Y-m-d H:i:s"),
+            ];
+            $ProjectModel->save($inv2date);
 
             $retunarr = [
                 'id'    => $idBast,
@@ -465,6 +473,7 @@ class Upload extends BaseController
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
         $BastModel  = new BastModel();
+        $ProjectModel = new ProjectModel();
 
         // Validation Rules
         $rules = [
@@ -501,9 +510,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
+            $bastId="";
             if (!empty($returnFile)) {
-                $bast = $BastModel->where('projectid',$id)->first();
-                $bastId="";
+                $bast = $BastModel->where('projectid',$id)->where('status','1')->first();
                 if (empty($bast)) {
                     // unlink(FCPATH . '/img/bast/' . $returnFile);
                     $databast = [
@@ -525,8 +534,13 @@ class Upload extends BaseController
                     $bastId = $bast['id'];
                 }
             }
-           
 
+            $inv3date = [
+                'id'    => $id,
+                'inv3'  => date("Y-m-d H:i:s"),
+            ];
+            $ProjectModel->save($inv3date);
+           
             $returnBast = [
                 'id'    => $bastId,
                 'file'  => $returnFile,

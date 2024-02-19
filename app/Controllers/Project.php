@@ -188,7 +188,7 @@ class Project extends BaseController
                         $datamdlid[] = $progresval['id'];
                     }
 
-                    $productval = $ProductionModel->where('projectid',$project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+                    $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
 
                     $progress = [];
                     foreach ($productval as $proses) {
@@ -257,11 +257,11 @@ class Project extends BaseController
         $mdlid      = array();
         foreach ($mdlpaket as $mdlpak) {
             $mdls       = $MdlModel->where('id', $mdlpak['mdlid'])->find();
-    
+
             foreach ($mdls as $mdl) {
                 $mdlid[]    = $mdl['id'];
             }
-    
+
             foreach ($mdls as $mdl) {
                 $return[] = [
                     'id'            => $mdl['id'],
@@ -326,7 +326,7 @@ class Project extends BaseController
         } else {
             $project['type_design'] = 0;
         }
-        
+
         $ProjectModel->insert($project);
 
         $projectid = $ProjectModel->getInsertID();
@@ -413,35 +413,35 @@ class Project extends BaseController
 
         // RAB Data
         if (isset($input['checked' . $id])) {
-                foreach ($input['eqty' . $id] as $paketid => $mdls) {
-                    foreach ($mdls as $mdlid => $qty) {
-                        if (isset($input['checked' . $id][$mdlid])) {
-                            $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid])) {
-                                if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
-                                    $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
-                                } else {
-                                    $RabModel->delete($rab);
-                                }
-                            } elseif (empty($rab)) {
-                                if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
-                                    $datarab = [
-                                        'mdlid'     => $mdlid,
-                                        'projectid' => $id,
-                                        'paketid'   => $paketid,
-                                        'qty'       => $qty
-                                    ];
-                                    $RabModel->save($datarab);
-                                }
+            foreach ($input['eqty' . $id] as $paketid => $mdls) {
+                foreach ($mdls as $mdlid => $qty) {
+                    if (isset($input['checked' . $id][$mdlid])) {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                        if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid])) {
+                            if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
+                                $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                            } else {
+                                $RabModel->delete($rab);
                             }
-                        } else {
-                            $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            if (!empty($rab)) {
-                                $RabModel->delete($rab['id']);
+                        } elseif (empty($rab)) {
+                            if ($input['eqty' . $id][$paketid][$mdlid] != 0) {
+                                $datarab = [
+                                    'mdlid'     => $mdlid,
+                                    'projectid' => $id,
+                                    'paketid'   => $paketid,
+                                    'qty'       => $qty
+                                ];
+                                $RabModel->save($datarab);
                             }
+                        }
+                    } else {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                        if (!empty($rab)) {
+                            $RabModel->delete($rab['id']);
                         }
                     }
                 }
+            }
         }
 
         // Design Data
@@ -560,14 +560,14 @@ class Project extends BaseController
         // }
 
         // Bast
-        if (!empty($input['bast']) && isset($input['bast'])) {
-            $bastdata = [
-                'projectid' => $id,
-                'file'      => $input['bast'],
-                'status'    => 1,
-            ];
-            $BastModel->save($bastdata);
-        }
+        // if (!empty($input['bast']) && isset($input['bast'])) {
+        //     $bastdata = [
+        //         'projectid' => $id,
+        //         'file'      => $input['bast'],
+        //         'status'    => 1,
+        //     ];
+        //     $BastModel->save($bastdata);
+        // }
 
         // Project Data
         $project = [
@@ -726,12 +726,152 @@ class Project extends BaseController
         // Calling models
         $ProjectModel   = new ProjectModel;
         $CompanyModel   = new CompanyModel();
+        $BastModel      = new BastModel();
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
 
+        // PROJECT DATA
         $projects = $ProjectModel->find($id);
-        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+
+        // CLIENT DATA
+        $client   = $CompanyModel->find($projects['clientid']);
+
+        // BAST DATA
+        $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+        $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+
+        // RAB
+        $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+        $rabdata    = [];
+        foreach ($rabs as $rab) {
+            $paketid[]  = $rab['paketid'];
+
+            // MDL RAB
+            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+            foreach ($rabmdl as $mdlr) {
+                $rabdata[]  = [
+                    'id'            => $mdlr['id'],
+                    'proid'         => $projects['id'],
+                    'name'          => $mdlr['name'],
+                    'length'        => $mdlr['length'],
+                    'width'         => $mdlr['width'],
+                    'height'        => $mdlr['height'],
+                    'volume'        => $mdlr['volume'],
+                    'denomination'  => $mdlr['denomination'],
+                    'keterangan'    => $mdlr['keterangan'],
+                    'qty'           => $rab['qty'],
+                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                    'oriprice'      => (int)$mdlr['price'],
+                ];
+            }
+        }
+
+        $total = array_sum(array_column($rabdata, 'price'));
+
+        if (!empty($bast)) {
+            if (!empty($bast['updated_at'])) {
+                $day =  $bast['updated_at'];
+                $date = date_create($day);
+                $key = date_format($date, "Y-m-d");
+                $hari = date_create($key);
+                date_add($hari, date_interval_create_from_date_string('3 month'));
+                $datecreateinv4 = date_format($hari, 'Y-m-d');
+
+                $now = strtotime("now");
+                $nowtime = date("Y-m-d", $now);
+
+                $lastday = $datecreateinv4 . " 00:00:00";
+                $today = $nowtime;
+            }
+        }
+
+        // $tempopayment = '';
+        // $termin = '';
+        // $progressproyek = '';
+        // $dateinvoice = '';
+        // $nilaispk = '';
+
+        $invoicedata = [];
+        // INVOICE I
+        if ($projects['status_spk'] === "1") {
+
+            // $potongan = (70/100) * $total;
+            // $termin = "30%";
+            // $progressproyek = "30%";
+            // $nilaispk = $total - ((70/100) * $total);
+
+            $inv1 = "";
+            if (!empty($project['inv1'])) {
+                $inv1 = $projects['inv1'];
+            }
+
+            $invoicedata = [
+                'termin'    => "30",
+                'progres'   => "30",
+                'nilai_spk' => $total - ((70 / 100) * $total),
+                'dateinv'   => $inv1,
+            ];
+        }
+
+
+        // INVOICE II
+        if (!empty($sertrim)) {
+            // $termin = "30%";
+            // $progressproyek = "60%";
+            // $nilaispk = $total - ((70/100) * $total);
+            // $dateinvoice = $sertrim['created_at'];
+
+            $inv2 = "";
+            if (!empty($project['inv2'])) {
+                $inv2 = $projects['inv2'];
+            }
+
+            $invoicedata = [
+                'termin'    => "30",
+                'progres'   => "60",
+                'nilai_spk' => $total - ((70 / 100) * $total),
+                'dateinv'   => $inv2,
+            ];
+        }
+
+
+        // INVOICE III
+        if (!empty($bast)) {
+            // $termin = "35%";
+            // $progressproyek = "95%";
+            // $nilaispk = $total - ((65/100) * $total);
+            // $dateinvoice = $sertrim['created_at'];
+
+            $inv3 = "";
+            if (!empty($project['inv3'])) {
+                $inv3 = $projects['inv3'];
+            }
+
+            $invoicedata = [
+                'termin'    => "30",
+                'progres'   => "95",
+                'nilai_spk' => $total - ((65 / 100) * $total),
+                'dateinv'   => $inv3,
+            ];
+        }
+
+        // INVOICE IV
+        $today = '';
+        $lastday = '';
+        if (!empty($bast)) {
+            $inv4 = "";
+            if (!empty($project['inv4'])) {
+                $inv4 = $projects['inv4'];
+            }
+
+            $invoicedata = [
+                'termin'    => "30",
+                'progres'   => "100",
+                'nilai_spk' => $total - ((95 / 100) * $total),
+                'dateinv'   => $inv4,
+            ];
+        }
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -762,5 +902,22 @@ class Project extends BaseController
         $BastModel->delete($bast);
 
         die(json_encode(array($filename)));
+    }
+
+    public function inv4($id)
+    {
+        $ProjectModel = new ProjectModel();
+        $input = $this->request->getPost();
+
+        $date = date_create($input['dateline']);
+        $day = date_format($date, "Y-m-d H:i:s");
+
+        $invoice = [
+            'id'    => $id,
+            'inv4'  => $day,
+        ];
+        $ProjectModel->save($invoice);
+
+        die(json_encode($invoice));
     }
 }

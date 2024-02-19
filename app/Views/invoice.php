@@ -66,19 +66,19 @@
             <th>Kode Customer : XXXX</th>
         </tr>
         <tr>
-            <td></td>
+            <td><?=$client['rsname']?></td>
             <td></td>
         </tr>
         <tr>
-            <th>PT.XXXX</th>
+            <th>PT.<?=$client['rsname']?></th>
             <th>Pengirim</th>
         </tr>
         <tr>
-            <td>Alamat :</td>
+            <td>Alamat : <?= $client['address']?></td>
             <td>Alamat :</td>
         </tr>
         <tr style="height: 80px; vertical-align: bottom;">
-            <td>NPWP :</td>
+            <td>NPWP : <?= $client['npwp']?></td>
             <td>NPWP :</td>
         </tr>
         <tr>
@@ -226,7 +226,7 @@
             <td style="text-align: center;">PT DHARMA PUTRA SEJAHTERA ABADI (PT. DPSA)</td>
         </tr>
         <tr>
-            <td style="height: 80px;"></td>
+            <td style="height: 60px;"></td>
         </tr>
         <tr>
             <td style="text-align: center; text-decoration: underline;">Mr.XXXX</td>

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Entities\User;
+use App\Models\BastModel;
 use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\ProjectModel;
@@ -189,6 +190,7 @@ class Home extends BaseController
             $PaketModel         = new PaketModel();
             $MdlModel           = new MdlModel();
             $DesignModel        = new DesignModel();
+            $BastModel          = new BastModel();
             $ProductionModel    = new ProductionModel();
 
             // Populating Data
@@ -238,6 +240,10 @@ class Home extends BaseController
                         ];
                     }
                 }
+
+                // bast
+                $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
 
                 // Production
                 $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
@@ -292,7 +298,7 @@ class Home extends BaseController
                         $datamdlid[] = $progresval['id'];
                     }
 
-                    $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+                    $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
 
                     $progress = [];
                     foreach ($productval as $proses) {
@@ -322,9 +328,24 @@ class Home extends BaseController
                             }
                         }
                     }
+                    $projectdata[$project['id']]['progress']    = array_sum($progress);
 
-                    // $projectdata[$project['id']]['progress'][]   = array_sum($progress);
-                    $projectdata[$project['id']]['progress']   = array_sum($progress);
+                    if (!empty($projectdata[$project['id']]['bast'])) {
+                        $day =  $projectdata[$project['id']]['bast']['updated_at'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdata[$project['id']]['dateline'] = $dateline;
+                        $projectdata[$project['id']]['now'] = $nowtime;
+                    }
+                } else {
+                    $projectdata[$project['id']]['dateline'] = '';
+                    $projectdata[$project['id']]['now'] = '';
                 }
             }
 
@@ -376,19 +397,6 @@ class Home extends BaseController
         $data = $this->data;
         die(json_encode(array($input)));
     }
-
-    // public function accres($id)
-    // {
-    //     $DesignModel = new DesignModel();
-
-    //     $design = $DesignModel->find($id);
-
-    //     $status = [
-    //         'id'        => $id,
-    //         'status'    => $design['status'],
-    //     ];
-    //     return $this->response->setJSON($status);
-    // }
 
     public function revisi()
     {

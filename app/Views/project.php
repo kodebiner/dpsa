@@ -918,7 +918,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         </td>
                                                                         <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
                                                                         <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]">
-                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?>
+                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
+                                                                            " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -1097,7 +1098,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     inputchecklist.setAttribute('type', 'checkbox');
                                                                     inputchecklist.setAttribute('class', 'uk-checkbox');
                                                                     inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>['+ emdlarray[t]['id'] + ']');
+                                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
 
                                                                     // var tdpaketid = document.createElement('td');
 
@@ -1140,7 +1141,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     inputqty.setAttribute('class', 'uk-input uk-form-width-small');
                                                                     inputqty.setAttribute('type', 'number');
                                                                     inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>['+ i.item.idx +'][' + emdlarray[t]['id'] + ']');
+                                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + i.item.idx + '][' + emdlarray[t]['id'] + ']');
                                                                     inputqty.setAttribute('value', '0');
                                                                     inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + i.item.idx + emdlarray[t]['id'] + ')');
 
@@ -1596,148 +1597,41 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload Serah Terima</label>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
                                                 <?php
-                                                foreach ($projectdata[$project['id']]['bast'] as $bast) {
-                                                    if (!empty($bast) && $bast['status'] === "0") { ?>
-                                                        <div id="sertrim-file-<?= $bast['id']; ?>">
-                                                            <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
-                                                                <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
+                                                if (!empty($projectdata[$project['id']]['bast'])) {
+                                                    foreach ($projectdata[$project['id']]['bast'] as $bast) {
+                                                        if (!empty($bast) && $bast['status'] === "0") { ?>
+                                                            <div id="sertrim-file-<?= $bast['id']; ?>">
+                                                                <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                    <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a></div>
+                                                                    <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <script>
-                                                            // UIkit.upload('#js-upload-createsertrim-</?= $project['id'] ?>', {
-                                                            //     url: 'upload/sertrim/</?= $project['id'] ?>',
-                                                            //     multiple: false,
-                                                            //     name: 'uploads',
-                                                            //     data: {
-                                                            //         'id': </?= $project['id'] ?>,
-                                                            //     },
-                                                            //     method: 'POST',
-                                                            //     type: 'json',
-
-                                                            //     beforeSend: function() {
-                                                            //         console.log('beforeSend', arguments);
-                                                            //     },
-                                                            //     beforeAll: function() {
-                                                            //         console.log('beforeAll', arguments);
-                                                            //     },
-                                                            //     load: function() {
-                                                            //         console.log('load', arguments);
-                                                            //     },
-                                                            //     error: function() {
-                                                            //         console.log('error', arguments);
-                                                            //         var error = arguments[0].xhr.response.message.uploads;
-                                                            //         alert(error);
-                                                            //     },
-
-                                                            //     complete: function() {
-                                                            //         console.log('complete', arguments);
-                                                            //         var filename = arguments[0].response;
-
-                                                            //         var contsertrim = document.getElementById('containersertrim-</?= $project['id'] ?>');
-
-                                                            //         var container = document.createElement('div');
-                                                            //         container.setAttribute('id', 'sertrim-file-<?= $bast['id']; ?>');
-
-                                                            //         var cardsertrim = document.createElement('div');
-                                                            //         cardsertrim.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
-
-                                                            //         var divclosed = document.createElement('div');
-                                                            //         divclosed.setAttribute('class', 'uk-position-small uk-position-right');
-
-                                                            //         var close = document.createElement('a');
-                                                            //         close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
-                                                            //         close.setAttribute('onClick', 'removeCardFile<?= $bast['id'] ?>()');
-                                                            //         close.setAttribute('uk-icon', 'close');
-
-                                                            //         var link = document.createElement('a');
-                                                            //         link.setAttribute('href', 'img/sertrim/' + filename);
-                                                            //         link.setAttribute('target', '_blank');
-
-                                                            //         var file = document.createTextNode(filename);
-
-                                                            //         var icon = document.createElement('span');
-                                                            //         icon.setAttribute('uk-icon', 'file-text');
-
-                                                            //         contsertrim.appendChild(container);
-                                                            //         container.appendChild(cardsertrim);
-                                                            //         cardsertrim.appendChild(divclosed);
-                                                            //         divclosed.appendChild(close);
-                                                            //         cardsertrim.appendChild(link);
-                                                            //         link.appendChild(icon);
-                                                            //         link.appendChild(file);
-
-                                                            //     },
-
-                                                            //     loadStart: function(e) {
-                                                            //         console.log('loadStart', arguments);
-
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
-
-                                                            //     },
-
-                                                            //     progress: function(e) {
-                                                            //         console.log('progress', arguments);
-
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
-                                                            //     },
-
-                                                            //     loadEnd: function(e) {
-                                                            //         console.log('loadEnd', arguments);
-
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').max = e.total;
-                                                            //         document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').value = e.loaded;
-                                                            //     },
-
-                                                            //     completeAll: function() {
-                                                            //         console.log('completeAll', arguments);
-
-                                                            //         setTimeout(function() {
-                                                            //             document.getElementById('js-progressbar-createsertrim-</?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                            //             alert('</?= lang('Proses selesai, File Serah Terima berhasil di unggah.') ?>');
-                                                            //         }, 1000);
-                                                            //     }
-
-                                                            // });
-
-                                                            function removeCardFile<?= $bast['id']; ?>() {
-                                                                let text = "Hapus file Serah Terima ini?";
-                                                                if (confirm(text) == true) {
-                                                                    $.ajax({
-                                                                        url: "project/removesertrim/<?= $bast['id'] ?>",
-                                                                        method: "POST",
-                                                                        data: {
-                                                                            sertrim: <?= $bast['id'] ?>,
-                                                                        },
-                                                                        dataType: "json",
-                                                                        error: function() {
-                                                                            console.log('error', arguments);
-                                                                        },
-                                                                        success: function() {
-                                                                            console.log('success', arguments);
-                                                                            $("#sertrim-file-<?= $bast['id']; ?>").remove();
-                                                                        },
-                                                                    })
+                                                            <script>
+                                                                function removeCardFile<?= $bast['id']; ?>() {
+                                                                    let text = "Hapus file Serah Terima ini?";
+                                                                    if (confirm(text) == true) {
+                                                                        $.ajax({
+                                                                            url: "project/removesertrim/<?= $bast['id'] ?>",
+                                                                            method: "POST",
+                                                                            data: {
+                                                                                sertrim: <?= $bast['id'] ?>,
+                                                                            },
+                                                                            dataType: "json",
+                                                                            error: function() {
+                                                                                console.log('error', arguments);
+                                                                            },
+                                                                            success: function() {
+                                                                                console.log('success', arguments);
+                                                                                $("#sertrim-file-<?= $bast['id']; ?>").remove();
+                                                                            },
+                                                                        })
+                                                                    }
                                                                 }
-                                                            }
-                                                        </script>
+                                                            </script>
                                                 <?php }
+                                                    }
                                                 } ?>
                                             </div>
-                                            <!-- <div class="uk-placeholder" id="placesertrim</?= $project['id'] ?>" hidden>
-                                                <div uk-grid>
-                                                    <div class="uk-text-left uk-width-3-4">
-                                                        <div id="upsertrim</?= $project['id'] ?>"></div>
-                                                    </div>
-                                                    <div class="uk-text-right uk-width-1-4">
-                                                        <div id="closesertrim</?= $project['id'] ?>"></div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
                                                 <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
@@ -1762,7 +1656,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     $bastid = "";
                                                     if (!empty($bast) && $bast['status'] === "1") {
                                                         $bastid = $bast['id']; ?>
-                                                        <div id="bast-file-<?= $bast['id'] ?>">
+                                                        <div id="bast-file-<?= $project['id'] ?>">
                                                             <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
                                                                 <div class="uk-position-small uk-position-right"><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a></div>
                                                                 <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
@@ -1784,7 +1678,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         },
                                                                         success: function() {
                                                                             console.log('success', arguments);
-                                                                            $("#bast-file-<?= $bast['id'] ?>").remove();
+                                                                            $("#bast-file-<?= $project['id'] ?>").remove();
                                                                         },
                                                                     })
                                                                 }
@@ -1973,7 +1867,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     var contbast = document.getElementById('containerbast-<?= $project['id'] ?>');
 
                                                     var container = document.createElement('div');
-                                                    container.setAttribute('id', 'bast-file-<?= $project['id'] ?>');
+                                                    container.setAttribute('id', 'bast-file-' + proid);
 
                                                     var cardbast = document.createElement('div');
                                                     cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
@@ -2063,20 +1957,20 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         </script>
                                     </div>
                     </div>
-
-                    <script type="text/javascript">
-                        // Dropdown Production
-                        document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
-                            if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
-                                document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                                document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
-                            } else {
-                                document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                                document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
-                            }
-                        });
-                    </script>
                 <?php } ?>
+
+                <script type="text/javascript">
+                    // Dropdown Production
+                    document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
+                        if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
+                            document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                            document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                        } else {
+                            document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                            document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                        }
+                    });
+                </script>
             <?php } ?>
             <!-- Production Section End -->
 
@@ -2092,8 +1986,11 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                 </div>
             </div>
             </div>
+            </div>
+
         <?php } ?>
     <?php } ?>
+
     <!-- Modal Update Proyek End -->
 <?php } ?>
 
