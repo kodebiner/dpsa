@@ -126,36 +126,13 @@
                     $status   = "Retensi";
                 }
 
-                if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) { 
-                    if($projectdata[$project['id']]['now'] > $projectdata[$project['id']]['dateline'] ){
+                if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) {
+                    if ($projectdata[$project['id']]['now'] > $projectdata[$project['id']]['dateline']) {
                         $progress = "100";
                         $status   = "Proyek Selesai";
-
                     }
                 }
             ?>
-
-                <!-- </?php if ($project['status'] === "1") {
-                    $status = "Proses Desain";
-                    $progress = '5';
-                } elseif ($project['status'] === "2") {
-                    $status = "Menunggu Approval Desain";
-                    $progress = '10';
-                } elseif ($project['status'] === "3") {
-                    $status = "Pengajuan RAB";
-                    $progress = '20';
-                } elseif ($project['status'] === "4") {
-                    $status = "Dalam Proses Produksi";
-                    if ($project['production'] === "0") {
-                        $progress = '30';
-                    } else {
-                        $qty = round($project['production'] / 100 * 65, 2);
-                        $progress = $qty;
-                    }
-                } elseif ($project['status'] === "5") {
-                    $status = "Setting";
-                    $progress = '95';
-                } ?> -->
 
                 <?php
                 // Data project initialize

@@ -5,6 +5,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-3.7.0.js"></script>
 <script src="js/jquery-ui.js"></script>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
@@ -1651,6 +1652,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
+                                            <div class="uk-margin">
+                                                <input class="uk-input uk-width-1-6" name="bastdate" id="datepicker<?= $project['id'] ?>" type="text" placeholder="Tanggal Jatuh Tempo" onfocus="(this.type='date')" aria-label="Input">
+                                            </div>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
@@ -1957,6 +1961,72 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             }
                                         </script>
                                     </div>
+
+                                    <!-- Section Finance -->
+                                    <?php if ((!empty($projectdata[$project['id']]['design'])) || ($project['type_design'] === '0')) {
+                                        if (((!empty($projectdata[$project['id']]['design'])) && ($projectdata[$project['id']]['design']['status'] === '2')) || ($project['type_design'] === '0')) { ?>
+                                            <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                                <div>
+                                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Finance</div>
+                                                </div>
+                                                <div class="uk-text-right">
+                                                    <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-section uk-section-default uk-margin-remove uk-padding-remove">
+                                                <div class="uk-container uk-margin-remove uk-padding-remove-right">
+                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice I</div>
+                                                        </div>
+                                                        <div class="uk-text-right">
+                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open</?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <form class="uk-grid-small" uk-grid>
+                                                            <div class="uk-width-1-4">
+                                                                <label class="uk-form-label" for="form-horizontal-text">Text</label>
+                                                            </div>
+                                                            <div class="uk-form-controls">
+                                                                <input class="uk-input uk-width-1-3" id="form-horizontal-text" type="text" placeholder="Some text...">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice II</div>
+                                                        </div>
+                                                        <div class="uk-text-right">
+                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice III</div>
+                                                        </div>
+                                                        <div class="uk-text-right">
+                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice IV</div>
+                                                        </div>
+                                                        <div class="uk-text-right">
+                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php }
+                                    } ?>
+                                    <!-- Section Finance -->
                     </div>
                 <?php } ?>
 
