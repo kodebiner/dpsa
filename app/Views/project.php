@@ -46,6 +46,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                 }
             } else {
                 $status = "Menunggu SPH";
+                $progress = "30";
             }
 
             if ($project['status_spk'] === "1") {

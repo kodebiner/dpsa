@@ -113,7 +113,7 @@
                         $status = "Desain Disetujui";
                     }
                 } else {
-                    $progress = "20";
+                    $progress = "30";
                     $status = "Menunggu SPH";
                 }
 
@@ -851,6 +851,7 @@
                                         </div>
                                         <hr class="uk-margin">
                                     </div>
+                                    <?php if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['inv4'] )) {?>
                                     <script>
                                         $(document).ready(function() {
 
@@ -888,6 +889,7 @@
                                             }
                                         });
                                     </script>
+                                    <?php } ?>
                                     <!-- End Of Invoice -->
 
                                     <!-- SPK -->
