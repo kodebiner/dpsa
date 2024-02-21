@@ -132,4 +132,6 @@ nb-configuration.xml
 public/img/design/*
 public/img/revisi/*
 public/img/spk/*
+public/img/bast/*
+public/img/sertrim/*
 .env

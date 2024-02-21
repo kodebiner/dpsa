@@ -322,7 +322,7 @@ class Upload extends BaseController
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/design/', $truename . '.' . $ext);
+            $input->move(FCPATH . 'img/design/', $truename . '.' . $ext);
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;

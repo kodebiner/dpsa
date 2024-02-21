@@ -304,11 +304,11 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
 
                                         var linkrev = document.createElement('a');
-                                        linkrev.setAttribute('href', 'img/revisi/' + filename);
+                                        linkrev.setAttribute('href', 'img/design/' + filename);
                                         linkrev.setAttribute('uk-icon', 'file-text');
 
                                         var link = document.createElement('a');
-                                        link.setAttribute('href', 'img/revisi/' + filename);
+                                        link.setAttribute('href', 'img/design/' + filename);
                                         link.setAttribute('target', '_blank');
 
                                         var linktext = document.createTextNode(filename);
