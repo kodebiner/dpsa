@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class CompanyModel extends Model
 {
     protected $allowedFields = [
-        'rsname', 'ptname', 'address', 'npwp', 'phone', 'parentid', 'status', 'created_at', 'updated_at', 'deleted_at',
+        'rsname', 'rscode', 'ptname', 'address', 'npwp', 'phone', 'bank', 'no_rek', 'pic', 'parentid', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
     
     protected $useAutoIncrement = true;

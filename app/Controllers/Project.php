@@ -586,13 +586,17 @@ class Project extends BaseController
     public function delete($id)
     {
         // Calling Model
-        $ProjectModel   = new ProjectModel();
-        $RabModel       = new RabModel();
-        $DesignModel    = new DesignModel();
+        $ProjectModel       = new ProjectModel();
+        $RabModel           = new RabModel();
+        $DesignModel        = new DesignModel();
+        $BastModel          = new BastModel();
+        $ProductionModel    = new ProductionModel();
 
         // Populating Data
-        $rabs       = $RabModel->where('projectid', $id)->find();
-        $design     = $DesignModel->where('projectid', $id)->first();
+        $rabs               = $RabModel->where('projectid', $id)->find();
+        $design             = $DesignModel->where('projectid', $id)->first();
+        $productions        = $ProductionModel->where('projectid', $id)->find();
+        $basts              = $BastModel->where('projectid', $id)->find();
 
         // Deleting Rab
         if (!empty($rab)) {
@@ -604,6 +608,20 @@ class Project extends BaseController
         // Deleting Design
         if (!empty($design)) {
             $DesignModel->delete($design['id']);
+        }
+
+        // Deleting Production
+        if (!empty($productions)) {
+            foreach ($productions as $production) {
+                $ProductionModel->delete($production['id']);
+            }
+        }
+
+        // Deleting Bast & Sertrim
+        if (!empty($basts)) {
+            foreach ($basts as $bast) {
+                $BastModel->delete($bast['id']);
+            }
         }
 
         // Delete Project

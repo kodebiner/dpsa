@@ -2,13 +2,12 @@
 
 use CodeIgniter\Model;
 
-class ProjectModel extends Model
+class InvoiceModel extends Model
 {
     protected $allowedFields = [
-        'clientid', 'name', 'status', 'spk', 'no_spk', 'status_spk', 'type_design', 'ded','inv1','inv2','inv3','inv4', 'created_at', 'updated_at', 'deleted_at',
+        'projectid', 'jatuhtempo', 'referensi', 'pph23', 'email', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
-    
-    protected $table            = 'project';
+    protected $table            = 'invoice';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

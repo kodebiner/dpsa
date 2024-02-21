@@ -20,10 +20,10 @@ class UpdateProjectInvoice extends Migration
     public function down()
     {
         $fields = [
-            'inv1'        => ['type' => 'datetime', 'null' => true],
-            'inv2'        => ['type' => 'datetime', 'null' => true],
-            'inv3'        => ['type' => 'datetime', 'null' => true],
-            'inv4'        => ['type' => 'datetime', 'null' => true],
+            'inv1',
+            'inv2',
+            'inv3',
+            'inv4',
         ];
         $this->forge->dropColumn('project', $fields);
     }
