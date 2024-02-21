@@ -319,6 +319,11 @@ class Upload extends BaseController
         }
 
         if ($input->isValid() && !$input->hasMoved()) {
+            // Check Directory
+            if(!file_exists('/var/www/html/dpsa/public/design')){
+                mkdir('/var/www/html/dpsa/public/design', 0777, true);
+            }
+            
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
