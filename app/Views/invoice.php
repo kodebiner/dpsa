@@ -59,6 +59,26 @@
     </style>
 </head>
 
+<?php
+$dateTimeObj = new DateTime($invoice['dateinv'], new DateTimeZone('Asia/Jakarta'));
+$dateFormatted =
+    IntlDateFormatter::formatObject(
+        $dateTimeObj,
+        'd MMMM y',
+        'id'
+    );
+$tanggalspk = ucwords($dateFormatted);
+
+$dateline = new DateTime($invoice['dateline'], new DateTimeZone('Asia/Jakarta'));
+$dateFormatted =
+    IntlDateFormatter::formatObject(
+        $dateline,
+        'd MMMM y',
+        'id'
+    );
+$tanggaldateline = ucwords($dateFormatted);
+?>
+
 <body>
     <table style="height: 70px;">
         <tr>
@@ -66,19 +86,19 @@
             <th>Kode Customer : XXXX</th>
         </tr>
         <tr>
-            <td><?=$client['rsname']?></td>
+            <td><?= $client['rsname'] ?></td>
             <td></td>
         </tr>
         <tr>
-            <th>PT.<?=$client['rsname']?></th>
+            <th>PT. <?= $client['rsname'] ?></th>
             <th>Pengirim</th>
         </tr>
         <tr>
-            <td>Alamat : <?= $client['address']?></td>
-            <td>Alamat :</td>
+            <td>Alamat : <?= $client['address'] ?></td>
+            <td>Alamat : Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta</td>
         </tr>
         <tr style="height: 80px; vertical-align: bottom;">
-            <td>NPWP : <?= $client['npwp']?></td>
+            <td>NPWP : <?= $client['npwp'] ?></td>
             <td>NPWP :</td>
         </tr>
         <tr>
@@ -105,8 +125,8 @@
                 </tr>
                 <tr>
                     <td>No. XXXX/DPSA/Kode Rs/Bulan/Tahun</td>
-                    <td>13 Januari</td>
-                    <td>Hal 1 dari 3</td>
+                    <td><?= $tanggalspk ?></td>
+                    <td>Hal <?= $invoice['hal'] ?> dari 4</td>
                 </tr>
             </table>
         </div>
@@ -117,8 +137,8 @@
                     <th>Refrensi PT.DPSA</th>
                 </tr>
                 <tr>
-                    <td>Email : XXXX</td>
-                    <td>MR.XXXXX</td>
+                    <td>Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com</td>
+                    <td>MR.Ghozali</td>
                 </tr>
             </table>
         </div>
@@ -139,12 +159,19 @@
             <th></th>
             <th></th>
         </tr>
-        <tr style="border: 1pt solid; height:200px;">
-            <td style="width: 30%; border: 1pt solid;">XXXX/JANGUM/RSHJTN/II/2023 15 Februari 2023</td>
-            <td style="width: 40%; border: 1pt solid;">Nilai SPK</td>
-            <td style="text-align: center; width: 10%; border: 1pt solid;">30%</td>
+        <tr style="border: 1pt solid; border-bottom: none;">
+            <td style="width: 30%; border: 1pt solid;"></td>
+            <td style="width: 40%; border: 1pt solid; font-weight:bold; text-align:center;">Nilai SPK : <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
+            <td style="text-align: center; width: 10%; border: 1pt solid;"></td>
+            <td style="text-align: right; width: 10%; border: 1pt solid;"></td>
+            <td style="text-align: right; width: 10%; border: 1pt solid;"></td>
+        </tr>
+        <tr style="border: 1pt solid;">
+            <td style="width: 30%; border: 1pt solid;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
+            <td style="width: 40%; border: 1pt solid;">Progress</td>
+            <td style="text-align: center; width: 10%; border: 1pt solid;"><?= $invoice['termin'] ?>%</td>
             <td style="text-align: right; width: 10%; border: 1pt solid;">200.000.000</td>
-            <td style="text-align: right; width: 10%; border: 1pt solid;">60.000.000</td>
+            <td style="text-align: right; width: 10%; border: 1pt solid;"> <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
         </tr>
     </table>
 
@@ -155,7 +182,7 @@
                     <th>TANGGAL JATUH TEMPO</th>
                 </tr>
                 <tr>
-                    <td>2 Maret 2023</td>
+                    <td><?= $tanggaldateline ?></td>
                 </tr>
             </table>
         </div>
