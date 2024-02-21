@@ -828,7 +828,7 @@
                                                     }
 
                                                     // Invoice III
-                                                    if ($progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
+                                                    if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
                                                         echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
                                                         $status = "Retensi";
                                                     }
