@@ -102,19 +102,17 @@
                 $today      = '';
                 $dateline   = '';
                 $inv4       = '';
-                if ($project['type_design'] === 1) {
-                    if ($projectdata[$project['id']]['design']['status'] === '0') {
+                if ($project['type_design'] === "1") {
+                    if ($projectdesign[$project['id']]['design']['status'] === '0') {
                         $progress = "10";
                         $status = "Menunggu Approval desain";
-                    }
-
-                    if ($projectdata[$project['id']]['design']['status'] === '2') {
+                    } elseif ($projectdesign[$project['id']]['design']['status'] === '2') {
                         $progress = "20";
-                        $status = "Desain Disetujui";
+                        $status = "Desain Disetujui, Menunggu SPH DPSA";
                     }
                 } else {
                     $progress = "30";
-                    $status = "Menunggu SPH";
+                    $status = "Menunggu Approval SPK DPSA";
                 }
 
                 if ($project['status_spk'] === "1") {
@@ -125,7 +123,15 @@
                 if (!empty($projectdata[$project['id']]['progress'])) {
                     $produksi = round((int)$projectdata[$project['id']]['progress']);
                     $progress = round($projectdata[$project['id']]['progress'] + $progress);
-                    $status   = "Rentensi";
+                    $status   = "Retensi";
+                }
+
+                if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) { 
+                    if($projectdata[$project['id']]['now'] > $projectdata[$project['id']]['dateline'] ){
+                        $progress = "100";
+                        $status   = "Proyek Selesai";
+
+                    }
                 }
             ?>
 
@@ -836,7 +842,7 @@
                                                     // Invoice IV
                                                     if (!empty($projectdata[$project['id']]['bast']['updated_at'])) {
                                                         if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
-                                                        // if ($projectdata[$project['id']]['bast']['status'] == "1" && strtotime($projectdata[$project['id']]['now']) >= strtotime("2024-2-15")) {
+                                                            // if ($projectdata[$project['id']]['bast']['status'] == "1" && strtotime($projectdata[$project['id']]['now']) >= strtotime("2024-2-15")) {
                                                             echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                             $progress   = "100";
                                                             // var_dump($projectdata[$project['id']]['dateline']);
@@ -851,44 +857,44 @@
                                         </div>
                                         <hr class="uk-margin">
                                     </div>
-                                    <?php if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['inv4'] )) {?>
-                                    <script>
-                                        $(document).ready(function() {
+                                    <?php if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['inv4'])) { ?>
+                                        <script>
+                                            $(document).ready(function() {
 
-                                            var proid       = <?= $project['id'] ?>;
-                                            var today       = new Date();
-                                            var dateline    = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
-                                            var inv4        = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
-                                            var progress    = "<?= (int)$progress ?>"
-                                            
-                                            // var dateline    = new Date("2024-1-15");
-                                            // console.log(today);
-                                            // console.log(dateline);
-                                            // console.log(proid);
-                                            // console.log("</?= $projectdata[$project['id']]['dateline'] ?>");
+                                                var proid = <?= $project['id'] ?>;
+                                                var today = new Date();
+                                                var dateline = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
+                                                var inv4 = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
+                                                var progress = "<?= (int)$progress ?>"
 
-                                            if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
-                                                $.ajax({
-                                                    url: "project/inv4/" + proid,
-                                                    method: "POST",
-                                                    data: {
-                                                        id: proid,
-                                                        dateline:"<?= $projectdata[$project['id']]['dateline'] ?>",
-                                                    },
-                                                    dataType: "json",
-                                                    error: function() {
-                                                        console.log('error', arguments);
-                                                    },
-                                                    success: function(data) {
-                                                        console.log('success', arguments);
-                                                        console.log(data);
-                                                    }
-                                                });
-                                            } else {
-                                                console.log("nothing");
-                                            }
-                                        });
-                                    </script>
+                                                // var dateline    = new Date("2024-1-15");
+                                                // console.log(today);
+                                                // console.log(dateline);
+                                                // console.log(proid);
+                                                // console.log("</?= $projectdata[$project['id']]['dateline'] ?>");
+
+                                                if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
+                                                    $.ajax({
+                                                        url: "project/inv4/" + proid,
+                                                        method: "POST",
+                                                        data: {
+                                                            id: proid,
+                                                            dateline: "<?= $projectdata[$project['id']]['dateline'] ?>",
+                                                        },
+                                                        dataType: "json",
+                                                        error: function() {
+                                                            console.log('error', arguments);
+                                                        },
+                                                        success: function(data) {
+                                                            console.log('success', arguments);
+                                                            console.log(data);
+                                                        }
+                                                    });
+                                                } else {
+                                                    console.log("nothing");
+                                                }
+                                            });
+                                        </script>
                                     <?php } ?>
                                     <!-- End Of Invoice -->
 
