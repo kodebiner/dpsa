@@ -165,7 +165,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                         </div>
                     </div>
                 </div>
-        <?php }
+            <?php }
         } ?>
         <?= $pager->links('projects', 'uikit_full') ?>
     </div>
@@ -498,7 +498,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- Desain Section -->
                             <?php if ($this->data['authorize']->hasPermission('design.project.edit', $this->data['uid']) && ($project['type_design'] === '1')) { ?>
                                 <?php if (empty($projectdata[$project['id']]['design'])) { ?>
-                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
                                         <div>
                                             <div class="uk-child-width-auto uk-flex-middle" uk-grid>
                                                 <div>
@@ -547,7 +547,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             </div>
                                         </div>
                                     </div>
-                                    <?php } else {
+                                <?php } else {
                                     if ($projectdata[$project['id']]['design']['status'] === '0') {
                                         $progress = "10"; ?>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -689,7 +689,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 </div>
                                             </div>
                                         </div>
-                                <?php }
+                                    <?php }
                                 } ?>
 
                                 <script type="text/javascript">
@@ -846,10 +846,10 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <?php } ?>
                             <!-- Desain Section End -->
 
-                            <!-- Detail Pemesanan Seciton -->
+                            <!-- Detail Pemesanan Section -->
                             <?php if ((!empty($projectdata[$project['id']]['design'])) || ($project['type_design'] === '0')) {
                                 if (((!empty($projectdata[$project['id']]['design'])) && ($projectdata[$project['id']]['design']['status'] === '2')) || ($project['type_design'] === '0')) { ?>
-                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
                                         <div>
                                             <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Detail Pemesanan</div>
                                         </div>
@@ -957,270 +957,6 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                             <div id="listmdl<?= $project['id'] ?>"></div>
                                         </div>
-
-                                        <script>
-                                            // Dropdown SPH
-                                            document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
-                                                if (document.getElementById('close<?= $project['id'] ?>').hasAttribute('hidden')) {
-                                                    document.getElementById('close<?= $project['id'] ?>').removeAttribute('hidden');
-                                                    document.getElementById('open<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                } else {
-                                                    document.getElementById('open<?= $project['id'] ?>').removeAttribute('hidden');
-                                                    document.getElementById('close<?= $project['id'] ?>').setAttribute('hidden', '');
-                                                }
-                                            });
-
-                                            $(document).ready(function() {
-                                                if ($("#status<?= $project['id'] ?>").val() == "1") {
-                                                    $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
-                                                }
-                                                $("select[id='status<?= $project['id'] ?>']").change(function() {
-                                                    if ((this.value) == 1) {
-                                                        $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
-                                                    } else {
-                                                        $("#image-container-create-<?= $project['id'] ?>").attr("hidden", true);
-                                                    }
-                                                });
-                                            });
-
-                                            autopaket<?= $project['id'] ?> = [
-                                                <?php if (!empty($projectdata[$project['id']]['paket'])) {
-                                                    foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
-                                                        echo '{label:"' . $autopaket['name'] . '",idx:' . $autopaket['id'] . '},';
-                                                    }
-                                                } else {
-                                                    foreach ($pakets as $paket) {
-                                                        echo '{label:"' . $paket['name'] . '",idx:' . $paket['id'] . '},';
-                                                    }
-                                                } ?>
-                                            ];
-                                            $(function() {
-                                                $("#paketname<?= $project['id'] ?>").autocomplete({
-                                                    source: autopaket<?= $project['id'] ?>,
-                                                    select: function(e, i) {
-                                                        var data = {
-                                                            'id': i.item.idx
-                                                        };
-                                                        $.ajax({
-                                                            url: "project/mdl",
-                                                            method: "POST",
-                                                            data: data,
-                                                            dataType: "json",
-                                                            error: function() {
-                                                                console.log('error', arguments);
-                                                            },
-                                                            success: function() {
-                                                                console.log('success', arguments);
-                                                                document.getElementById('listmdl<?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                                var pakets = document.getElementById('listmdl<?= $project['id'] ?>');
-
-                                                                var elements = document.getElementById('mdldraft<?= $project['id'] ?>' + i.item.idx);
-                                                                if (elements) {
-                                                                    elements.remove();
-                                                                }
-
-                                                                var containerlist = document.createElement('div');
-                                                                containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>' + i.item.idx)
-
-                                                                var divider = document.createElement('hr');
-                                                                divider.setAttribute('style', 'border-bottom: 2px solid #000;');
-
-                                                                var paketnamegrid = document.createElement('div');
-                                                                paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
-                                                                paketnamegrid.setAttribute('uk-grid', '');
-
-                                                                var paketnamecon = document.createElement('div');
-                                                                paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
-
-                                                                var paketname = document.createElement('div');
-                                                                paketname.setAttribute('class', 'uk-h3');
-                                                                paketname.setAttribute('style', 'text-transform: uppercase;');
-                                                                paketname.innerHTML = i.item.label;
-
-                                                                var closecontainer = document.createElement('div');
-                                                                closecontainer.setAttribute('class', 'uk-width-1-6');
-
-                                                                var closebutton = document.createElement('a');
-                                                                closebutton.setAttribute('class', 'uk-icon-button-delete');
-                                                                closebutton.setAttribute('uk-icon', 'close');
-                                                                closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>(' + i.item.idx + ')');
-
-                                                                var tablecon = document.createElement('div');
-                                                                tablecon.setAttribute('class', 'uk-overflow-auto');
-
-                                                                var tables = document.createElement('table');
-                                                                tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
-
-                                                                var thead = document.createElement('thead');
-
-                                                                var trhead = document.createElement('tr');
-
-                                                                var thchecklist = document.createElement('th');
-                                                                thchecklist.innerHTML = 'Checklist';
-
-                                                                // var thpaketid = document.createElement('th');
-                                                                // thpaketid.setAttribute('hidden', '');
-                                                                // thpaketid.innerHTML = 'Paketid';
-
-                                                                var thname = document.createElement('th');
-                                                                thname.innerHTML = 'Nama';
-
-                                                                var thlength = document.createElement('th');
-                                                                thlength.innerHTML = 'Panjang';
-
-                                                                var thwidth = document.createElement('th');
-                                                                thwidth.innerHTML = 'Lebar';
-
-                                                                var thheigth = document.createElement('th');
-                                                                thheigth.innerHTML = 'Tinggi';
-
-                                                                var thvol = document.createElement('th');
-                                                                thvol.innerHTML = 'Volume';
-
-                                                                var thden = document.createElement('th');
-                                                                thden.innerHTML = 'Satuan';
-
-                                                                var thqty = document.createElement('th');
-                                                                thqty.innerHTML = 'Jumlah Item';
-
-                                                                var thprice = document.createElement('th');
-                                                                thprice.innerHTML = 'Harga';
-
-                                                                var tbody = document.createElement('tbody');
-
-                                                                emdlarray = arguments[0];
-
-                                                                for (t in emdlarray) {
-                                                                    var trbody = document.createElement('tr');
-
-                                                                    var tdchecklist = document.createElement('td');
-
-                                                                    var inputchecklist = document.createElement('input');
-                                                                    inputchecklist.setAttribute('type', 'checkbox');
-                                                                    inputchecklist.setAttribute('class', 'uk-checkbox');
-                                                                    inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
-
-                                                                    // var tdpaketid = document.createElement('td');
-
-                                                                    // var inputpaketid = document.createElement('input');
-                                                                    // inputpaketid.setAttribute('type', 'number');
-                                                                    // inputpaketid.setAttribute('hidden', '');
-                                                                    // inputpaketid.setAttribute('class', 'uk-input');
-                                                                    // inputpaketid.setAttribute('id', 'epaketid[<?= $project['id'] ?>' + i.item.idx + ']');
-                                                                    // inputpaketid.setAttribute('name', 'epaketid<?= $project['id'] ?>[' + i.item.idx + ']');
-                                                                    // inputpaketid.setAttribute('value', i.item.idx);
-
-                                                                    var tdname = document.createElement('td');
-                                                                    tdname.innerHTML = emdlarray[t]['name']
-
-                                                                    var tdlength = document.createElement('td');
-                                                                    tdlength.innerHTML = emdlarray[t]['length']
-
-                                                                    var tdwidth = document.createElement('td');
-                                                                    tdwidth.innerHTML = emdlarray[t]['width']
-
-                                                                    var tdheight = document.createElement('td');
-                                                                    tdheight.innerHTML = emdlarray[t]['height']
-
-                                                                    var tdvol = document.createElement('td');
-                                                                    tdvol.innerHTML = emdlarray[t]['volume']
-
-                                                                    var tdden = document.createElement('td');
-                                                                    if (emdlarray[t]['denomination'] === '1') {
-                                                                        tdden.innerHTML = 'Unit'
-                                                                    } else if (emdlarray[t]['denomination'] === '2') {
-                                                                        tdden.innerHTML = 'Meter'
-                                                                    } else if (emdlarray[t]['denomination'] === '3') {
-                                                                        tdden.innerHTML = 'Meter Persegi'
-                                                                    }
-
-                                                                    var tdqty = document.createElement('td');
-                                                                    tdqty.setAttribute('class', 'uk-form-controls');
-
-                                                                    var inputqty = document.createElement('input');
-                                                                    inputqty.setAttribute('class', 'uk-input uk-form-width-small');
-                                                                    inputqty.setAttribute('type', 'number');
-                                                                    inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + i.item.idx + '][' + emdlarray[t]['id'] + ']');
-                                                                    inputqty.setAttribute('value', '0');
-                                                                    inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + i.item.idx + emdlarray[t]['id'] + ')');
-
-                                                                    var tdprice = document.createElement('td');
-                                                                    tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    tdprice.innerHTML = 0;
-
-                                                                    var hiddenprice = document.createElement('div');
-                                                                    hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
-                                                                    hiddenprice.setAttribute('hidden', '');
-                                                                    hiddenprice.innerHTML = emdlarray[t]['price'];
-
-                                                                    // tdpaketid.appendChild(inputpaketid);
-                                                                    tdqty.appendChild(inputqty);
-                                                                    tdchecklist.appendChild(inputchecklist);
-                                                                    trbody.appendChild(tdchecklist);
-                                                                    trbody.appendChild(tdname);
-                                                                    trbody.appendChild(tdlength);
-                                                                    trbody.appendChild(tdwidth);
-                                                                    trbody.appendChild(tdheight);
-                                                                    trbody.appendChild(tdvol);
-                                                                    trbody.appendChild(tdden);
-                                                                    trbody.appendChild(tdqty);
-                                                                    trbody.appendChild(tdprice);
-                                                                    // trbody.appendChild(tdpaketid);
-                                                                    trbody.appendChild(hiddenprice);
-                                                                    tbody.appendChild(trbody);
-                                                                }
-                                                                trhead.appendChild(thchecklist);
-                                                                trhead.appendChild(thname);
-                                                                trhead.appendChild(thlength);
-                                                                trhead.appendChild(thwidth);
-                                                                trhead.appendChild(thheigth);
-                                                                trhead.appendChild(thvol);
-                                                                trhead.appendChild(thden);
-                                                                trhead.appendChild(thqty);
-                                                                trhead.appendChild(thprice);
-                                                                // trhead.appendChild(thpaketid);
-                                                                thead.appendChild(trhead);
-                                                                tables.appendChild(thead);
-                                                                tables.appendChild(tbody);
-                                                                tablecon.appendChild(tables);
-                                                                paketnamegrid.appendChild(paketnamecon);
-                                                                paketnamecon.appendChild(paketname);
-                                                                paketnamegrid.appendChild(closecontainer);
-                                                                closecontainer.appendChild(closebutton);
-                                                                containerlist.appendChild(paketnamegrid);
-                                                                containerlist.appendChild(tablecon);
-                                                                containerlist.appendChild(divider);
-                                                                pakets.appendChild(containerlist);
-                                                            },
-                                                        })
-                                                    },
-                                                    minLength: 2
-                                                })
-                                            })
-
-                                            function price<?= $project['id'] ?>(l) {
-                                                var ebaseprice = document.getElementById('eprice[<?= $project['id'] ?>' + l + ']').innerHTML;
-                                                var ebaseqty = document.getElementById('eqty[<?= $project['id'] ?>' + l + ']').value;
-                                                var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
-                                                var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
-                                                var eprojprice = ebaseprice * ebaseqty;
-                                                epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
-
-                                                if (ebaseqty > 0) {
-                                                    echeckbox.checked = true;
-                                                } else {
-                                                    echeckbox.checked = false;
-                                                }
-                                            };
-
-                                            function removeList<?= $project['id'] ?>(d) {
-                                                const removeList = document.getElementById('mdldraft<?= $project['id'] ?>' + d);
-                                                removeList.remove();
-                                            };
-                                        </script>
                                     <?php } else { ?>
                                         <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
                                             <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
@@ -1264,21 +1000,267 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     <td><?= $mdlrab['qty'] ?></td>
                                                                     <td><?= $mdlrab['price'] ?></td>
                                                                 </tr>
-                                                        <?php }
+                                                            <?php }
                                                         } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                            <?php }
-                                }
+                                    <?php } ?>
+                                    <script>
+                                        // Dropdown SPH
+                                        document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
+                                            if (document.getElementById('close<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                                document.getElementById('close<?= $project['id'] ?>').removeAttribute('hidden');
+                                                document.getElementById('open<?= $project['id'] ?>').setAttribute('hidden', '');
+                                            } else {
+                                                document.getElementById('open<?= $project['id'] ?>').removeAttribute('hidden');
+                                                document.getElementById('close<?= $project['id'] ?>').setAttribute('hidden', '');
+                                            }
+                                        });
+
+                                        $(document).ready(function() {
+                                            if ($("#status<?= $project['id'] ?>").val() == "1") {
+                                                $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
+                                            }
+                                            $("select[id='status<?= $project['id'] ?>']").change(function() {
+                                                if ((this.value) == 1) {
+                                                    $("#image-container-create-<?= $project['id'] ?>").removeAttr("hidden");
+                                                } else {
+                                                    $("#image-container-create-<?= $project['id'] ?>").attr("hidden", true);
+                                                }
+                                            });
+                                        });
+
+                                        autopaket<?= $project['id'] ?> = [
+                                            <?php if (!empty($projectdata[$project['id']]['paket'])) {
+                                                foreach ($projectdata[$project['id']]['autopaket'] as $autopaket) {
+                                                    echo '{label:"' . $autopaket['name'] . '",idx:' . $autopaket['id'] . '},';
+                                                }
+                                            } else {
+                                                foreach ($pakets as $paket) {
+                                                    echo '{label:"' . $paket['name'] . '",idx:' . $paket['id'] . '},';
+                                                }
+                                            } ?>
+                                        ];
+                                        $(function() {
+                                            $("#paketname<?= $project['id'] ?>").autocomplete({
+                                                source: autopaket<?= $project['id'] ?>,
+                                                select: function(e, i) {
+                                                    var data = {
+                                                        'id': i.item.idx
+                                                    };
+                                                    $.ajax({
+                                                        url: "project/mdl",
+                                                        method: "POST",
+                                                        data: data,
+                                                        dataType: "json",
+                                                        error: function() {
+                                                            console.log('error', arguments);
+                                                        },
+                                                        success: function() {
+                                                            console.log('success', arguments);
+                                                            document.getElementById('listmdl<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                            var pakets = document.getElementById('listmdl<?= $project['id'] ?>');
+
+                                                            var elements = document.getElementById('mdldraft<?= $project['id'] ?>' + i.item.idx);
+                                                            if (elements) {
+                                                                elements.remove();
+                                                            }
+
+                                                            var containerlist = document.createElement('div');
+                                                            containerlist.setAttribute('id', 'mdldraft<?= $project['id'] ?>' + i.item.idx)
+
+                                                            var divider = document.createElement('hr');
+                                                            divider.setAttribute('style', 'border-bottom: 2px solid #000;');
+
+                                                            var paketnamegrid = document.createElement('div');
+                                                            paketnamegrid.setAttribute('class', 'uk-flex-middle uk-flex-center');
+                                                            paketnamegrid.setAttribute('uk-grid', '');
+
+                                                            var paketnamecon = document.createElement('div');
+                                                            paketnamecon.setAttribute('class', 'uk-width-5-6 uk-text-center');
+
+                                                            var paketname = document.createElement('div');
+                                                            paketname.setAttribute('class', 'uk-h3');
+                                                            paketname.setAttribute('style', 'text-transform: uppercase;');
+                                                            paketname.innerHTML = i.item.label;
+
+                                                            var closecontainer = document.createElement('div');
+                                                            closecontainer.setAttribute('class', 'uk-width-1-6');
+
+                                                            var closebutton = document.createElement('a');
+                                                            closebutton.setAttribute('class', 'uk-icon-button-delete');
+                                                            closebutton.setAttribute('uk-icon', 'close');
+                                                            closebutton.setAttribute('onclick', 'removeList<?= $project['id'] ?>(' + i.item.idx + ')');
+
+                                                            var tablecon = document.createElement('div');
+                                                            tablecon.setAttribute('class', 'uk-overflow-auto');
+
+                                                            var tables = document.createElement('table');
+                                                            tables.setAttribute('class', 'uk-table uk-table-middle uk-table-divider');
+
+                                                            var thead = document.createElement('thead');
+
+                                                            var trhead = document.createElement('tr');
+
+                                                            var thchecklist = document.createElement('th');
+                                                            thchecklist.innerHTML = 'Checklist';
+
+                                                            var thname = document.createElement('th');
+                                                            thname.innerHTML = 'Nama';
+
+                                                            var thlength = document.createElement('th');
+                                                            thlength.innerHTML = 'Panjang';
+
+                                                            var thwidth = document.createElement('th');
+                                                            thwidth.innerHTML = 'Lebar';
+
+                                                            var thheigth = document.createElement('th');
+                                                            thheigth.innerHTML = 'Tinggi';
+
+                                                            var thvol = document.createElement('th');
+                                                            thvol.innerHTML = 'Volume';
+
+                                                            var thden = document.createElement('th');
+                                                            thden.innerHTML = 'Satuan';
+
+                                                            var thqty = document.createElement('th');
+                                                            thqty.innerHTML = 'Jumlah Item';
+
+                                                            var thprice = document.createElement('th');
+                                                            thprice.innerHTML = 'Harga';
+
+                                                            var tbody = document.createElement('tbody');
+
+                                                            emdlarray = arguments[0];
+
+                                                            for (t in emdlarray) {
+                                                                var trbody = document.createElement('tr');
+
+                                                                var tdchecklist = document.createElement('td');
+
+                                                                var inputchecklist = document.createElement('input');
+                                                                inputchecklist.setAttribute('type', 'checkbox');
+                                                                inputchecklist.setAttribute('class', 'uk-checkbox');
+                                                                inputchecklist.setAttribute('id', 'checked[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                inputchecklist.setAttribute('name', 'checked<?= $project['id'] ?>[' + emdlarray[t]['id'] + ']');
+
+                                                                var tdname = document.createElement('td');
+                                                                tdname.innerHTML = emdlarray[t]['name']
+
+                                                                var tdlength = document.createElement('td');
+                                                                tdlength.innerHTML = emdlarray[t]['length']
+
+                                                                var tdwidth = document.createElement('td');
+                                                                tdwidth.innerHTML = emdlarray[t]['width']
+
+                                                                var tdheight = document.createElement('td');
+                                                                tdheight.innerHTML = emdlarray[t]['height']
+
+                                                                var tdvol = document.createElement('td');
+                                                                tdvol.innerHTML = emdlarray[t]['volume']
+
+                                                                var tdden = document.createElement('td');
+                                                                if (emdlarray[t]['denomination'] === '1') {
+                                                                    tdden.innerHTML = 'Unit'
+                                                                } else if (emdlarray[t]['denomination'] === '2') {
+                                                                    tdden.innerHTML = 'Meter'
+                                                                } else if (emdlarray[t]['denomination'] === '3') {
+                                                                    tdden.innerHTML = 'Meter Persegi'
+                                                                }
+
+                                                                var tdqty = document.createElement('td');
+                                                                tdqty.setAttribute('class', 'uk-form-controls');
+
+                                                                var inputqty = document.createElement('input');
+                                                                inputqty.setAttribute('class', 'uk-input uk-form-width-small');
+                                                                inputqty.setAttribute('type', 'number');
+                                                                inputqty.setAttribute('id', 'eqty[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                inputqty.setAttribute('name', 'eqty<?= $project['id'] ?>[' + i.item.idx + '][' + emdlarray[t]['id'] + ']');
+                                                                inputqty.setAttribute('value', '0');
+                                                                inputqty.setAttribute('onchange', 'price<?= $project['id'] ?>(' + i.item.idx + emdlarray[t]['id'] + ')');
+
+                                                                var tdprice = document.createElement('td');
+                                                                tdprice.setAttribute('id', 'eshowprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                tdprice.innerHTML = 0;
+
+                                                                var hiddenprice = document.createElement('div');
+                                                                hiddenprice.setAttribute('id', 'eprice[<?= $project['id'] ?>' + i.item.idx + emdlarray[t]['id'] + ']');
+                                                                hiddenprice.setAttribute('hidden', '');
+                                                                hiddenprice.innerHTML = emdlarray[t]['price'];
+
+                                                                tdqty.appendChild(inputqty);
+                                                                tdchecklist.appendChild(inputchecklist);
+                                                                trbody.appendChild(tdchecklist);
+                                                                trbody.appendChild(tdname);
+                                                                trbody.appendChild(tdlength);
+                                                                trbody.appendChild(tdwidth);
+                                                                trbody.appendChild(tdheight);
+                                                                trbody.appendChild(tdvol);
+                                                                trbody.appendChild(tdden);
+                                                                trbody.appendChild(tdqty);
+                                                                trbody.appendChild(tdprice);
+                                                                trbody.appendChild(hiddenprice);
+                                                                tbody.appendChild(trbody);
+                                                            }
+                                                            trhead.appendChild(thchecklist);
+                                                            trhead.appendChild(thname);
+                                                            trhead.appendChild(thlength);
+                                                            trhead.appendChild(thwidth);
+                                                            trhead.appendChild(thheigth);
+                                                            trhead.appendChild(thvol);
+                                                            trhead.appendChild(thden);
+                                                            trhead.appendChild(thqty);
+                                                            trhead.appendChild(thprice);Z
+                                                            thead.appendChild(trhead);
+                                                            tables.appendChild(thead);
+                                                            tables.appendChild(tbody);
+                                                            tablecon.appendChild(tables);
+                                                            paketnamegrid.appendChild(paketnamecon);
+                                                            paketnamecon.appendChild(paketname);
+                                                            paketnamegrid.appendChild(closecontainer);
+                                                            closecontainer.appendChild(closebutton);
+                                                            containerlist.appendChild(paketnamegrid);
+                                                            containerlist.appendChild(tablecon);
+                                                            containerlist.appendChild(divider);
+                                                            pakets.appendChild(containerlist);
+                                                        },
+                                                    })
+                                                },
+                                                minLength: 2
+                                            })
+                                        })
+
+                                        function price<?= $project['id'] ?>(l) {
+                                            var ebaseprice = document.getElementById('eprice[<?= $project['id'] ?>' + l + ']').innerHTML;
+                                            var ebaseqty = document.getElementById('eqty[<?= $project['id'] ?>' + l + ']').value;
+                                            var epricetd = document.getElementById('eshowprice[<?= $project['id'] ?>' + l + ']');
+                                            var echeckbox = document.getElementById('checked[<?= $project['id'] ?>' + l + ']');
+                                            var eprojprice = ebaseprice * ebaseqty;
+                                            epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
+
+                                            if (ebaseqty > 0) {
+                                                echeckbox.checked = true;
+                                            } else {
+                                                echeckbox.checked = false;
+                                            }
+                                        };
+
+                                        function removeList<?= $project['id'] ?>(d) {
+                                            const removeList = document.getElementById('mdldraft<?= $project['id'] ?>' + d);
+                                            removeList.remove();
+                                        };
+                                    </script>
+                                <?php }
                             } ?>
-                            <!-- Detail Pemesanan Seciton End -->
+                            <!-- Detail Pemesanan Section End -->
 
                             <!-- SPK Section -->
                             <?php if ($project['spk'] != null) {
                                 if ($project['status_spk'] === '0') { ?>
-                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    <div class="uk-margin uk-child-width-1-2" uk-grid>
                                         <div>
                                             <div class="uk-child-width-auto uk-flex-middle" uk-grid>
                                                 <div>
@@ -1511,7 +1493,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- Production Section -->
                             <?php if ($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])) { ?>
                                 <?php if ($project['status_spk'] == 1) { ?>
-                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
                                         <div>
                                             <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
                                         </div>
@@ -1630,7 +1612,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     }
                                                                 }
                                                             </script>
-                                                <?php }
+                                                        <?php }
                                                     }
                                                 } ?>
                                             </div>
@@ -1689,7 +1671,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 }
                                                             }
                                                         </script>
-                                                <?php }
+                                                    <?php }
                                                 } ?>
                                             </div>
                                             <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
@@ -1961,107 +1943,352 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             }
                                         </script>
                                     </div>
+                                <?php } ?>
+                                <script type="text/javascript">
+                                    // Dropdown Production
+                                    document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
+                                        if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                            document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        } else {
+                                            document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        }
+                                    });
+                                </script>
+                            <?php } ?>
+                            <!-- Production Section End -->
 
-                                    <!-- Section Finance -->
-                                    <?php if ((!empty($projectdata[$project['id']]['design'])) || ($project['type_design'] === '0')) {
-                                        if (((!empty($projectdata[$project['id']]['design'])) && ($projectdata[$project['id']]['design']['status'] === '2')) || ($project['type_design'] === '0')) { ?>
-                                            <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                                <div>
-                                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Finance</div>
+                            <!-- Finance Section -->
+                            <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
+                                <div>
+                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Finance</div>
+                                </div>
+                                <div class="uk-text-right">
+                                    <a class="uk-link-reset uk-icon-button" id="togglefinance<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice<?= $project['id'] ?>"><span class="uk-light" id="closefinance<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openfinance<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                </div>
+                            </div>
+
+                            <div class="toggleinvoice<?= $project['id'] ?>" hidden>
+                                <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    <!-- Invoice I -->
+                                    <div>
+                                        <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="uk-h6 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-decoration: underline;">Invoice I</div>
+                                            </div>
+                                            <div class="uk-text-right">
+                                                <a class="uk-link-reset" id="toggleinvoice1<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice1<?= $project['id'] ?>"><span id="closeinvoice1<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span id="openinvoice1<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="toggleinvoice1<?= $project['id'] ?>" hidden>
+                                            <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Jatuh Tempo</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <div class="uk-inline">
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="uk-text-right">
-                                                    <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Referensi</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PPH 23</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice1<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Email</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice1<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <!-- Invoice I End -->
 
-                                            <div class="uk-section uk-section-default uk-margin-remove uk-padding-remove">
-                                                <div class="uk-container uk-margin-remove uk-padding-remove-right">
-                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice I</div>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open</?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
-                                                        </div>
-                                                    </div>
+                                    <!-- Invoice II -->
+                                    <div>
+                                        <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="uk-h6 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-decoration: underline;">Invoice II</div>
+                                            </div>
+                                            <div class="uk-text-right">
+                                                <a class="uk-link-reset" id="toggleinvoice2<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice2<?= $project['id'] ?>"><span id="closeinvoice2<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span id="openinvoice2<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            </div>
+                                        </div>
 
-                                                    <div>
-                                                        <form class="uk-grid-small" uk-grid>
-                                                            <div class="uk-width-1-4">
-                                                                <label class="uk-form-label" for="form-horizontal-text">Text</label>
-                                                            </div>
-                                                            <div class="uk-form-controls">
-                                                                <input class="uk-input uk-width-1-3" id="form-horizontal-text" type="text" placeholder="Some text...">
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
-                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice II</div>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice III</div>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Invoice IV</div>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a class="uk-link-reset uk-icon-button" id="toggle<?= $project['id'] ?>" uk-toggle="target: .togglesph<?= $project['id'] ?>"><span class="uk-light" id="close<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="open<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                        <div class="toggleinvoice2<?= $project['id'] ?>" hidden>
+                                            <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Jatuh Tempo</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <div class="uk-inline">
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Referensi</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PPH 23</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice2<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Email</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice2<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
-                                    <?php }
-                                    } ?>
-                                    <!-- Section Finance -->
+                                        </div>
+                                    </div>
+                                    <!-- Invoice II End -->
+
+                                    <!-- Invoice III -->
+                                    <div>
+                                        <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="uk-h6 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-decoration: underline;">Invoice III</div>
+                                            </div>
+                                            <div class="uk-text-right">
+                                                <a class="uk-link-reset" id="toggleinvoice3<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice3<?= $project['id'] ?>"><span id="closeinvoice3<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span id="openinvoice3<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="toggleinvoice3<?= $project['id'] ?>" hidden>
+                                            <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Jatuh Tempo</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <div class="uk-inline">
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Referensi</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PPH 23</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice3<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Email</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice3<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Invoice III End -->
+
+                                    <!-- Invoice IV -->
+                                    <div>
+                                        <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                            <div>
+                                                <div class="uk-h6 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-decoration: underline;">Invoice IV</div>
+                                            </div>
+                                            <div class="uk-text-right">
+                                                <a class="uk-link-reset" id="toggleinvoice4<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice4<?= $project['id'] ?>"><span id="closeinvoice4<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span id="openinvoice4<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="toggleinvoice4<?= $project['id'] ?>" hidden>
+                                            <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Jatuh Tempo</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <div class="uk-inline">
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Referensi</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PPH 23</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice4<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Email</label>
+                                                    <div class="uk-form-controls">: 
+                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice4<?= $project['id'] ?>">
+                                                            <option>Option 01</option>
+                                                            <option>Option 02</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Invoice IV End -->
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                // Dropdown Finance
+                                document.getElementById('togglefinance<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closefinance<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closefinance<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openfinance<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openfinance<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closefinance<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                
+                                // Invoice 1
+                                // Dropdown
+                                document.getElementById('toggleinvoice1<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closeinvoice1<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closeinvoice1<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openinvoice1<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openinvoice1<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closeinvoice1<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                // Date Picker Invoice
+                                $(function() {
+                                    $("#dateinvoice1<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+
+                                // Invoice 2
+                                // Dropdown
+                                document.getElementById('toggleinvoice2<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closeinvoice2<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closeinvoice2<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openinvoice2<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openinvoice2<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closeinvoice2<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                // Date Picker Invoice
+                                $(function() {
+                                    $("#dateinvoice2<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+
+                                // Invoice 3
+                                // Dropdown
+                                document.getElementById('toggleinvoice3<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closeinvoice3<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closeinvoice3<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openinvoice3<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openinvoice3<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closeinvoice3<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                // Date Picker Invoice
+                                $(function() {
+                                    $("#dateinvoice3<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+
+                                // Invoice 4
+                                // Dropdown
+                                document.getElementById('toggleinvoice4<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closeinvoice4<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closeinvoice4<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openinvoice4<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openinvoice4<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closeinvoice4<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                                // Date Picker Invoice
+                                $(function() {
+                                    $("#dateinvoice4<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+                            </script>
+                            <!-- Finance Section End -->
+
+                            <div class="uk-modal-footer uk-text-right">
+                                <?php if ($this->data['authorize']->hasPermission('admin.project.delete', $this->data['uid'])) { ?>
+                                    <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
+                                <?php } ?>
+                                <?php if ($this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid'])) { ?>
+                                    <button class="uk-button uk-button-primary" type="submit">Simpan</button>
+                                <?php } ?>
+                            </div>
+                        </form>
+                        </div>
                     </div>
-                <?php } ?>
-
-                <script type="text/javascript">
-                    // Dropdown Production
-                    document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
-                        if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
-                            document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                            document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
-                        } else {
-                            document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                            document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
-                        }
-                    });
-                </script>
-            <?php } ?>
-            <!-- Production Section End -->
-
-            <div class="uk-modal-footer uk-text-right">
-                <?php if ($this->data['authorize']->hasPermission('admin.project.delete', $this->data['uid'])) { ?>
-                    <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
-                <?php } ?>
-                <?php if ($this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid'])) { ?>
-                    <button class="uk-button uk-button-primary" type="submit">Simpan</button>
-                <?php } ?>
-            </div>
-            </form>
                 </div>
             </div>
-            </div>
-            </div>
-
         <?php } ?>
     <?php } ?>
-
     <!-- Modal Update Proyek End -->
 <?php } ?>
 
