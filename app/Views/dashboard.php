@@ -823,7 +823,7 @@
                                                     }
 
                                                     // Invoice II
-                                                    if ($progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0" && $projectdata[$project['id']]['sertrim'] != null) {
+                                                    if ($progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0" && $projectdata[$project['id']]['sertrim']['status'] != null) {
                                                         echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
                                                     }
 
