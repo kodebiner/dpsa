@@ -159,19 +159,39 @@ $tanggaldateline = ucwords($dateFormatted);
             <th></th>
             <th></th>
         </tr>
-        <tr style="border: 1pt solid; border-bottom: none;">
-            <td style="width: 30%; border: 1pt solid;"></td>
-            <td style="width: 40%; border: 1pt solid; font-weight:bold; text-align:center;">Nilai SPK : <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
-            <td style="text-align: center; width: 10%; border: 1pt solid;"></td>
-            <td style="text-align: right; width: 10%; border: 1pt solid;"></td>
-            <td style="text-align: right; width: 10%; border: 1pt solid;"></td>
+        <tr style="border:1pt solid #900; border-bottom-style: none">
+            <td style="width: 30%;"></td>
+            <td style="width: 40%; font-weight:bold;text-align:center;">Nilai SPK <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
+            <td style="text-align: center; width: 10%;"></td>
+            <td style="text-align: right; width: 10%;"></td>
+            <td style="text-align: right; width: 10%;"></td>
         </tr>
-        <tr style="border: 1pt solid;">
-            <td style="width: 30%; border: 1pt solid;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
-            <td style="width: 40%; border: 1pt solid;">Progress</td>
-            <td style="text-align: center; width: 10%; border: 1pt solid;"><?= $invoice['termin'] ?>%</td>
-            <td style="text-align: right; width: 10%; border: 1pt solid;">200.000.000</td>
-            <td style="text-align: right; width: 10%; border: 1pt solid;"> <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
+        <tr style="border:1pt solid #900; border-top-style: none">
+            <td style="width: 30%;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
+            <td style="width: 40%;">Progress</td>
+            <td style="text-align: center; width: 10%;"><?= $invoice['termin'] ?>%</td>
+            <td style="text-align: right; width: 10%;">
+                <table>
+                    <?php foreach ($rabs as $rab) { ?>
+                    <tr>
+                        <td>
+                           <?= "Rp. " . number_format($rab['oriprice'], 0, ',', '.');" "; ?></td>
+                        </td>
+                    </tr>
+                    <?php } ?> 
+                </table>
+            </td>
+            <td style="text-align: right; width: 10%; border: 1pt solid;">
+            <table>
+                    <?php foreach ($rabs as $rab) { ?>
+                    <tr>
+                        <td>
+                           <?= "Rp. " . number_format($rab['price'], 0, ',', '.');" "; ?></td>
+                        </td>
+                    </tr>
+                    <?php } ?> 
+                </table>
+            </td>
         </tr>
     </table>
 

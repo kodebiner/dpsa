@@ -11,6 +11,7 @@ use App\Models\RabModel;
 use App\Models\DesignModel;
 use App\Models\ProductionModel;
 use App\Models\BastModel;
+use App\Models\InvoiceModel;
 
 class Project extends BaseController
 {
@@ -896,6 +897,7 @@ class Project extends BaseController
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
+        $invoiceModel   = new InvoiceModel();
 
         // PROJECT DATA
         $projects = $ProjectModel->find($id);
@@ -906,6 +908,12 @@ class Project extends BaseController
         // BAST DATA
         $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
         $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+
+        // INVOICE DATA 
+        $invoiceI   = $invoiceModel->where('projectid', $id)->where('status', "1")->first();
+        $invoiceII  = $invoiceModel->where('projectid', $id)->where('status', "2")->first();
+        $invoiceIII = $invoiceModel->where('projectid', $id)->where('status', "3")->first();
+        $invoiceIV  = $invoiceModel->where('projectid', $id)->where('status', "4")->first();
 
         // RAB
         $rabs       = $RabModel->where('projectid', $projects['id'])->find();
@@ -934,6 +942,113 @@ class Project extends BaseController
         }
 
         $total = array_sum(array_column($rabdata, 'price'));
+
+        // New Database Invoice Configuration
+
+        // New Data Invoice Array
+        $newdatainv = [];
+
+        // VARIABLE DECLARATION
+        $termin     = "";
+        $progress   = "";
+        $spkval     = "";
+        $hal        = "";
+        $dateinv    = "";
+
+        // INV I
+        if ($projects['status_spk'] === "1" && empty($sertrim) && empty($bast) && !empty($projects['inv1']) && empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
+
+            // VARIABLE DATA I
+            $termin     = "30";
+            $progress   = "30";
+            $spkval     = $total - ((70 / 100) * $total);
+            $hal        = "1";
+            $total      = $total;
+            $dateinv    = $projects['inv1'];
+
+
+            // Dateline Invoice 1 Interval
+            $dateinvoice =  $dateinv;
+            $date = date_create($dateinvoice);
+            $dateformat = date_format($date, "Y-m-d");
+            $hari = date_create($dateformat);
+            date_add($hari, date_interval_create_from_date_string('14 days'));
+            $datelineinvoice = date_format($hari, 'Y-m-d');
+        }
+
+        // INV II
+        if ($projects['status_spk'] === "1" && !empty($sertrim) && empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
+
+            // VARIABLE DATA II
+            $termin     = "30";
+            $progress   = "60";
+            $spkval     = $total - ((70 / 100) * $total);
+            $hal        = "2";
+            $total      = $total;
+            $dateinv    = $projects['inv2'];
+
+            // Dateline Invoice 2 Interval
+            $dateinvoice =  $dateinv;
+            $date = date_create($dateinvoice);
+            $dateformat = date_format($date, "Y-m-d");
+            $hari = date_create($dateformat);
+            date_add($hari, date_interval_create_from_date_string('14 days'));
+            $datelineinvoice = date_format($hari, 'Y-m-d');
+        }
+
+        // INV III
+        if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && empty($projects['inv4'])) {
+
+            // VARIABLE DATA II
+            $termin     = "35";
+            $progress   = "95";
+            $spkval     = $total - ((65 / 100) * $total);
+            $hal        = "3";
+            $total      = $total;
+            $dateinv    = $projects['inv3'];
+
+            // Dateline Invoice 1 Interval
+            $dateinvoice =  $dateinv;
+            $date = date_create($dateinvoice);
+            $dateformat = date_format($date, "Y-m-d");
+            $hari = date_create($dateformat);
+            date_add($hari, date_interval_create_from_date_string('14 days'));
+            $datelineinvoice = date_format($hari, 'Y-m-d');
+        }
+
+        // INV IV
+        if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && !empty($projects['inv4'])) {
+
+            // VARIABLE DATA II
+            $termin     = "35";
+            $progress   = "95";
+            $spkval     = $total - ((95 / 100) * $total);
+            $hal        = "4";
+            $total      = $total;
+            $dateinv    = $projects['inv4'];
+
+            // Dateline Invoice 1 Interval
+            $dateinvoice =  $dateinv;
+            $date = date_create($dateinvoice);
+            $dateformat = date_format($date, "Y-m-d");
+            $hari = date_create($dateformat);
+            date_add($hari, date_interval_create_from_date_string('14 days'));
+            $datelineinvoice = date_format($hari, 'Y-m-d');
+        }
+
+        $newdatainv = [
+            'termin'    => $termin,
+            'progress'  => $progress,
+            'nilai_spk' => $spkval,
+            'dateinv'   => $dateformat,
+            'dateline'  => $datelineinvoice,
+            'hal'       => $hal,
+            'total'     => $total,
+        ];
+
+
+
+        // End New Database Invoice Configuration
 
         // Invoice Data Array
         $invoicedata = [];
@@ -1024,9 +1139,7 @@ class Project extends BaseController
 
             // Date Invoice
             $inv4 = $projects['inv4'];
-
-
-
+            
             // Dateline Invoice 2 Interval
             $dateinv4       = $inv4;
             $date           = date_create($dateinv4);
@@ -1053,7 +1166,7 @@ class Project extends BaseController
         $data['title']          = lang('Global.titleDashboard');
         $data['description']    = lang('Global.dashboardDescription');
         $data['projects']       = $projects;
-        $data['rabs']           = $RabModel->findAll();
+        $data['rabs']           = $rabdata;
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
