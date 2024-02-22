@@ -70,6 +70,7 @@ abstract class BaseController extends Controller
         $this->GroupModel = new GroupModel();
         $this->GroupUserModel = new GroupUserModel();
         $this->CompanyModel = new CompanyModel();
+        $this->GconfigModel = new GconfigModel();
 
         // Login Check
         $auth = service('authentication');
@@ -122,16 +123,28 @@ abstract class BaseController extends Controller
             }
         }
 
+        // Load Config
+        $this->gconfig = $this->GconfigModel->first();
+
+        if (!empty($this->gconfig)) {
+            $gconfig = $this->gconfig;
+        } else {
+            $gconfig = [
+                'ppn'               => null,
+            ];
+        }
+
         // Parsing View Data
         $this->data = [
-            'ismobile'        => $this->agent->isMobile(),
+            'ismobile'      => $this->agent->isMobile(),
             'lang'          => $lang,
-            'uri'            => $this->uri,
+            'uri'           => $this->uri,
             'uid'           => $this->userId,
             'authorize'     => service('authorization'),
             'account'       => $this->user,
             'fullname'      => $fullname,
             'parentid'      => $compid,
+            'gconfig'       => $gconfig,
         ];
 
 

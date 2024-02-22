@@ -147,6 +147,14 @@ $routes->group('rab',['filter' => 'login'], function ($routes) {
     $routes->get('delete/(:num)', 'Rab::delete/$1');
 });
 
+// Paket
+$routes->group('paket',['filter' => 'login'], function ($routes) {
+    $routes->post('create', 'Mdl::create');
+    $routes->post('update/(:num)', 'Mdl::update/$1');
+    $routes->get('delete/(:num)', 'Mdl::delete/$1');
+    $routes->get('deleteallmdl/(:num)', 'Mdl::deleteallmdl/$1');
+});
+
 // MDL
 $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Mdl::index');
@@ -163,13 +171,15 @@ $routes->group('account',['filter' => 'login'], function ($routes) {
     $routes->post('update', 'Account::updateaccount');
 });
 
-// Paket
-$routes->group('paket',['filter' => 'login'], function ($routes) {
-    $routes->post('create', 'Mdl::create');
-    $routes->post('update/(:num)', 'Mdl::update/$1');
-    $routes->get('delete/(:num)', 'Mdl::delete/$1');
-    $routes->get('deleteallmdl/(:num)', 'Mdl::deleteallmdl/$1');
+// General Setting
+$routes->group('setting',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Setting::index');
+    $routes->post('gconfig', 'Setting::gconfig');
+    $routes->post('createreferensi', 'Setting::createreferensi');
+    $routes->post('updatereferensi/(:num)', 'Setting::updatereferensi/$1');
+    $routes->get('deletereferensi/(:num)', 'Setting::deletereferensi/$1');
 });
+
 
 // Bar
 $routes->group('bar',['filter' => 'login'], function ($routes) {

@@ -2,12 +2,13 @@
 
 use CodeIgniter\Model;
 
-class GconfigModel extends Model
+class ReferensiModel extends Model
 {
     protected $allowedFields = [
-        'ppn',
+        'name', 'bank', 'no_rek',
     ];
-    protected $table            = 'gconfig';
+    
+    protected $table            = 'referensi';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

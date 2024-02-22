@@ -121,6 +121,19 @@
                                 </a>
                             </li>
                         <?php } ?>
+
+                        <!-- Kurang Access Control jangan lupa dihapus notenya kalo dah ada akses kontrolnya -->
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="setting">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/settings.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Pengaturan Umum</div>
+                                    </div>
+                                </a>
+                            </li>
+
                         <!-- <li class="tm-main-navbar">
                             <a class="tm-h4" href="produksi">
                                 <div class="uk-width-1-1 uk-margin-left">
@@ -240,6 +253,19 @@
                         </a>
                     </li>
                 <?php } ?>
+
+                <!-- Kurang Access Control jangan lupa dihapus notenya kalo dah ada akses kontrolnya -->
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="setting">
+                            <div class="uk-width-1-1 uk-margin-right">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/settings.svg" uk-svg>
+                                </div>
+                                <div class="uk-text-center">Pengaturan Umum</div>
+                            </div>
+                        </a>
+                    </li>
+                    
                 <!-- <li class="tm-main-navbar">
                         <a class="tm-h4" href="produksi">
                             <div class="uk-width-1-1 uk-margin-right">
