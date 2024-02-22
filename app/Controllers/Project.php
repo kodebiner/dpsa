@@ -345,6 +345,7 @@ class Project extends BaseController
         $DesignModel        = new DesignModel();
         $ProductionModel    = new ProductionModel();
         $BastModel          = new BastModel();
+        $InvoiceModel       = new InvoiceModel();
 
         // initialize
         $input  = $this->request->getPost();
@@ -550,25 +551,66 @@ class Project extends BaseController
             }
         }
 
-        // Sertrim
-        // if (!empty($input['sertrim']) && isset($input['sertrim'])) {
-        //     $sertrim = [
-        //         'projectid' => $id,
-        //         'file'      => $input['sertrim'],
-        //         'status'    => 0,
-        //     ];
-        //     $BastModel->save($sertrim);
-        // }
+        // JATUH TEMPO BAST
+        $tgltempobast = "";
+        if(!empty($input['jatuhtempobast'.$id])){
+            $tgltempobast = $input['jatuhtempobast'.$id]." 00:00:00";
+        }
 
-        // Bast
-        // if (!empty($input['bast']) && isset($input['bast'])) {
-        //     $bastdata = [
-        //         'projectid' => $id,
-        //         'file'      => $input['bast'],
-        //         'status'    => 1,
-        //     ];
-        //     $BastModel->save($bastdata);
-        // }
+        // FINANCE /////////////////////////////
+
+        // INVOICE 1 SAVE
+        if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id])) {
+            $invoice1 = [
+                'projectid' => $id,
+                'jatuhtempo'=> $input['dateinvoice1' . $id] . " 00:00:00",
+                'refrensi'  => $input['referensiinvoice1' . $id],
+                'pph23'     => $input['pphinvoice1' . $id],
+                'email'     => $input['emailinvoice1' . $id],
+                'status'    => "1",
+            ];
+            $InvoiceModel->save($invoice1);
+        }
+
+        // INVOICE 2 SAVE
+        if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id])) {
+            $invoice2 = [
+                'projectid' => $id,
+                'jatuhtempo'=> $input['dateinvoice2' . $id] . " 00:00:00",
+                'refrensi'  => $input['referensiinvoice2' . $id],
+                'pph23'     => $input['pphinvoice2' . $id],
+                'email'     => $input['emailinvoice2' . $id],
+                'status'    => "2",
+            ];
+            $InvoiceModel->save($invoice2);
+        }
+
+        // INVOICE 3 SAVE
+        if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id])) {
+            $invoice3 = [
+                'projectid' => $id,
+                'jatuhtempo'=> $input['dateinvoice3' . $id] . " 00:00:00",
+                'refrensi'  => $input['referensiinvoice3' . $id],
+                'pph23'     => $input['pphinvoice3' . $id],
+                'email'     => $input['emailinvoice3' . $id],
+                'status'    => "3",
+            ];
+            $InvoiceModel->save($invoice3);
+        }
+
+        // INVOICE 4 SAVE
+        if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id])) {
+            $invoice4 = [
+                'projectid' => $id,
+                'jatuhtempo'=> $input['dateinvoice4' . $id] . " 00:00:00",
+                'refrensi'  => $input['referensiinvoice4' . $id],
+                'pph23'     => $input['pphinvoice4' . $id],
+                'email'     => $input['emailinvoice4' . $id],
+                'status'    => "4",
+            ];
+            $InvoiceModel->save($invoice4);
+        }
+
 
         // Project Data
         $project = [
@@ -578,6 +620,7 @@ class Project extends BaseController
             'spk'           => $spk,
             'status_spk'    => $statusspk,
             'status'        => $status,
+            'inv4'          => $tgltempobast,
         ];
         $ProjectModel->save($project);
 
@@ -653,14 +696,7 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
 
-        // require_once(APPPATH . "ThirdParty/mpdf_v8.0.3-master/vendor/autoload.php");
-        // include(APPPATH . "ThirdParty/mpdf-8.1.0/src/mpdf.php");
-        // include('C:\xampp\htdocs\dpsa\public/css/theme.css');
         $mpdf = new \Mpdf\Mpdf([]);
-        // $stylesheet = file_get_contents('pdf.css');
-        // $stylesheet = file_get_contents('C:\xampp\htdocs\dpsa\public/css/theme.css');
-        // $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
-        // $mpdf->Image('./img/logo.png', 0, 0, 210, 297, 'png', '', true, false);
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4-L");
@@ -668,15 +704,7 @@ class Project extends BaseController
         $date = date_create($projects['created_at']);
         $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
         $html = view('Views/sphprint', $data);
-        // $mpdf->WriteHTML($stylesheet, 1);
-        // $mpdf->WriteHTML($html, 2);
-        // $mpdf->Output('css/theme.css');
-        // $stylesheet = file_get_contents('C:\xampp\htdocs\dpsa\public/css/theme.css');
-        // $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
-        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
         $mpdf->WriteHTML($html);
-        // $mpdf->Output('js/uikit.min.js');
-        // $mpdf->Output('js/uikit-icons.min.js');
         $mpdf->Output($filename, 'D');
     }
 
@@ -868,7 +896,7 @@ class Project extends BaseController
         $data['title']          = lang('Global.titleDashboard');
         $data['description']    = lang('Global.dashboardDescription');
         $data['projects']       = $projects;
-        $data['rabs']           = $RabModel->findAll();
+        $data['rabs']           = $rabdata;
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
@@ -1139,7 +1167,7 @@ class Project extends BaseController
 
             // Date Invoice
             $inv4 = $projects['inv4'];
-            
+
             // Dateline Invoice 2 Interval
             $dateinv4       = $inv4;
             $date           = date_create($dateinv4);

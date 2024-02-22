@@ -165,7 +165,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                         </div>
                     </div>
                 </div>
-            <?php }
+        <?php }
         } ?>
         <?= $pager->links('projects', 'uikit_full') ?>
     </div>
@@ -547,7 +547,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             </div>
                                         </div>
                                     </div>
-                                <?php } else {
+                                    <?php } else {
                                     if ($projectdata[$project['id']]['design']['status'] === '0') {
                                         $progress = "10"; ?>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -689,7 +689,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php }
+                                <?php }
                                 } ?>
 
                                 <script type="text/javascript">
@@ -1000,7 +1000,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     <td><?= $mdlrab['qty'] ?></td>
                                                                     <td><?= $mdlrab['price'] ?></td>
                                                                 </tr>
-                                                            <?php }
+                                                        <?php }
                                                         } ?>
                                                     </tbody>
                                                 </table>
@@ -1213,7 +1213,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                             trhead.appendChild(thvol);
                                                             trhead.appendChild(thden);
                                                             trhead.appendChild(thqty);
-                                                            trhead.appendChild(thprice);Z
+                                                            trhead.appendChild(thprice);
                                                             thead.appendChild(trhead);
                                                             tables.appendChild(thead);
                                                             tables.appendChild(tbody);
@@ -1253,7 +1253,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             removeList.remove();
                                         };
                                     </script>
-                                <?php }
+                            <?php }
                             } ?>
                             <!-- Detail Pemesanan Section End -->
 
@@ -1286,6 +1286,11 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">File SPK</label>
                                                 <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
+                                            </div>
+
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
+                                                <div class="uk-form-controls">: </a></div>
                                             </div>
                                         </div>
 
@@ -1331,6 +1336,11 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">File SPK</label>
                                                 <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
+                                            </div>
+
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
+                                                <div class="uk-form-controls">: </a></div>
                                             </div>
                                         </div>
                                     </div>
@@ -1612,7 +1622,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     }
                                                                 }
                                                             </script>
-                                                        <?php }
+                                                <?php }
                                                     }
                                                 } ?>
                                             </div>
@@ -1634,8 +1644,16 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
-                                            <div class="uk-margin">
-                                                <input class="uk-input uk-width-1-6" name="bastdate" id="datepicker<?= $project['id'] ?>" type="text" placeholder="Tanggal Jatuh Tempo" onfocus="(this.type='date')" aria-label="Input">
+                                            <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Jatuh Tempo</label>
+                                                    <div class="uk-form-controls">:
+                                                        <div class="uk-inline">
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
                                                 <?php
@@ -1671,7 +1689,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                 }
                                                             }
                                                         </script>
-                                                    <?php }
+                                                <?php }
                                                 } ?>
                                             </div>
                                             <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
@@ -1986,17 +2004,17 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Referensi</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>">
                                                             <option>Option 01</option>
                                                             <option>Option 02</option>
@@ -2006,18 +2024,15 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice1<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
-                                                    <div class="uk-form-controls">: 
-                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice1<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
-                                                        </select>
+                                                    <div class="uk-form-controls">:
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice1<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -2040,17 +2055,17 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Referensi</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
                                                             <option>Option 01</option>
                                                             <option>Option 02</option>
@@ -2060,18 +2075,15 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice2<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
-                                                    <div class="uk-form-controls">: 
-                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice2<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
-                                                        </select>
+                                                    <div class="uk-form-controls">:
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice2<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -2094,17 +2106,17 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Referensi</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>">
                                                             <option>Option 01</option>
                                                             <option>Option 02</option>
@@ -2114,18 +2126,15 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice3<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
-                                                    <div class="uk-form-controls">: 
-                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice3<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
-                                                        </select>
+                                                    <div class="uk-form-controls">:
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice3<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -2148,17 +2157,17 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>"/>
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Referensi</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
                                                             <option>Option 01</option>
                                                             <option>Option 02</option>
@@ -2168,18 +2177,15 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
-                                                    <div class="uk-form-controls">: 
+                                                    <div class="uk-form-controls">:
                                                         <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice4<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
-                                                    <div class="uk-form-controls">: 
-                                                        <select class="uk-select uk-form-width-medium" name="emailinvoice4<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
-                                                        </select>
+                                                    <div class="uk-form-controls">:
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice4<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -2199,7 +2205,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         document.getElementById('closefinance<?= $project['id'] ?>').setAttribute('hidden', '');
                                     }
                                 });
-                                
+
                                 // Invoice 1
                                 // Dropdown
                                 document.getElementById('toggleinvoice1<?= $project['id'] ?>').addEventListener('click', function() {
@@ -2271,6 +2277,13 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         dateFormat: "yy-mm-dd",
                                     });
                                 });
+
+                                // Date Picker Jatuh Tempo Bast
+                                $(function() {
+                                    $("#jatuhtempobast<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
                             </script>
                             <!-- Finance Section End -->
 
@@ -2283,9 +2296,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <?php } ?>
                             </div>
                         </form>
-                        </div>
                     </div>
                 </div>
+            </div>
             </div>
         <?php } ?>
     <?php } ?>

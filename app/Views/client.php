@@ -76,16 +76,37 @@
                             </div>
 
                             <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="lastname">NPWP</label>
+                                <label class="uk-form-label" for="npwp">NPWP</label>
                                 <div class="uk-form-controls">
                                     <input type="text" class="uk-input" id="npwp" name="npwp" placeholder="NPWP" autofocus required />
                                 </div>
                             </div>
 
                             <div class="uk-margin-bottom">
-                                <label class="uk-form-label" for="lastname">No Telphone</label>
+                                <label class="uk-form-label" for="notelp">No Telphone</label>
                                 <div class="uk-form-controls">
                                     <input type="text" class="uk-input" id="notelp" name="notelp" placeholder="No Telphone" autofocus required />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="norek">Bank</label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="bank" name="bank" placeholder="bank" autofocus required />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="norek">No.Rek</label>
+                                <div class="uk-form-controls">
+                                    <input type="text" class="uk-input" id="norek" name="norek" placeholder="No Rekening" autofocus required />
+                                </div>
+                            </div>
+
+                            <div class="uk-margin-bottom">
+                                <label class="uk-form-label" for="koders">Kode RS</label>
+                                <div class="uk-form-controls">
+                                    <input type="koders" class="uk-input" id="koders" name="koders" placeholder="Kode RS" autofocus required />
                                 </div>
                             </div>
 
@@ -328,7 +349,7 @@
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="lastname">NPWP</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="npwp" name="npwp" value="<?= $comp['npwp'] ?>" placeholder="<?= $comp['npwp'] ?>" />
+                                        <input type="text" class="uk-input" id="npwp" name="npwp" value="<?= $comp['npwp'] ?>" placeholder="<?= $comp['npwp'] ?>" required/>
                                     </div>
                                 </div>
 
@@ -336,6 +357,27 @@
                                     <label class="uk-form-label" for="lastname">No Telphone</label>
                                     <div class="uk-form-controls">
                                         <input type="text" class="uk-input" id="notelp" name="notelp" value="<?= $comp['phone'] ?>" placeholder="<?= $comp['phone'] ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="norek">Bank</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="bank" name="bank" value="<?= $comp['bank'] ?>" placeholder="<?= $comp['bank'] ?>" autofocus required />
+                                    </div>
+                                </div>
+
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="norek">No.Rek</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="norek" name="norek" value="<?= $comp['no_rek'] ?>" placeholder="<?= $comp['no_rek'] ?>" autofocus required />
+                                    </div>
+                                </div>
+
+                                <div class="uk-margin-bottom">
+                                    <label class="uk-form-label" for="koders">Kode RS</label>
+                                    <div class="uk-form-controls">
+                                        <input type="koders" class="uk-input" id="koders" name="koders" value="<?= $comp['rscode'] ?>" placeholder="<?= $comp['rscode'] ?>" autofocus required />
                                     </div>
                                 </div>
 

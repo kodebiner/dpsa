@@ -108,7 +108,7 @@
                         $status = "Menunggu Approval desain";
                     } elseif ($projectdesign[$project['id']]['design']['status'] === '2') {
                         $progress = "20";
-                        $status = "Desain Disetujui, Menunggu SPH DPSA";
+                        $status = "Desain disetujui klien, Menunggu Upload SPK klien / Aprroval SPK dari DPSA";
                     }
                 } else {
                     $progress = "30";

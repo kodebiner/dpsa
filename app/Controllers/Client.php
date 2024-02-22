@@ -37,6 +37,7 @@ class Client extends BaseController
 
             // Calling Model
             $CompanyModel              = new CompanyModel();
+            $UserModel                 = new UserModel();
 
             // Populating data
             $companys = $CompanyModel->findAll();
@@ -66,7 +67,7 @@ class Client extends BaseController
                     $this->builder->where('company.parentid !=', "0");
                 }
             }
-            $this->builder->select('company.id as id, company.rsname as rs, company.ptname as pt, company.npwp as npwp, company.address as address, company.phone as phone, company.parentid as parent, company.status as status');
+            $this->builder->select('company.id as id, company.rsname as rs, company.ptname as pt, company.npwp as npwp, company.address as address, company.phone as phone, company.parentid as parent, company.status as status, company.bank as bank, company.no_rek as no_rek, company.rscode as rscode');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
 
             $total = $this->builder->countAllResults();
@@ -140,14 +141,14 @@ class Client extends BaseController
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
-                // 'npwp' => [
-                //     'label'  => 'NPWP',
-                //     'rules'  => 'is_unique[company.npwp]',
-                //     'errors' => [
-                //         // 'required'      => '{field} wajib diisi',
-                //         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
-                //     ],
-                // ],
+                'npwp' => [
+                    'label'  => 'NPWP',
+                    'rules'  => 'required|is_unique[company.npwp]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
             ];
 
             if (!$this->validate($rules)) {
@@ -155,13 +156,16 @@ class Client extends BaseController
             }
 
             $data = [
-                'rsname'    => $input['rsname'],
-                'ptname'    => $input['ptname'],
-                'address'   => $input['address'],
-                'npwp'      => $input['npwp'],
-                'phone'     => $input['notelp'],
-                'status'    => '1',
-                'parentid'  => $input['parent'],
+                'rsname'        => $input['rsname'],
+                'ptname'        => $input['ptname'],
+                'address'       => $input['address'],
+                'npwp'          => $input['npwp'],
+                'phone'         => $input['notelp'],
+                'bank'          => $input['bank'],
+                'no_rek'        => $input['norek'],
+                'rscode'        => $input['koders'],
+                'status'        => '1',
+                'parentid'      => $input['parent'],
                 'created_at'    => date('Y-m-d h:i:s'),
             ];
             $CompanyModel->save($data);
@@ -247,9 +251,9 @@ class Client extends BaseController
                 ],
                 'npwp' => [
                     'label'  => 'NPWP',
-                    'rules'  => 'is_unique[company.npwp]',
+                    'rules'  => 'required'.$npwpis_unique,
                     'errors' => [
-                        // 'required'      => '{field} wajib diisi',
+                        'required'      => '{field} wajib diisi',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
@@ -260,14 +264,17 @@ class Client extends BaseController
             }
 
             $data = [
-                'id'        => $id,
-                'rsname'    => $input['rsname'],
-                'ptname'    => $input['ptname'],
-                'address'   => $input['address'],
-                'npwp'      => $input['npwp'],
-                'phone'     => $input['notelp'],
-                'status'    => $input['status'],
-                'parentid'  => $input['parent'],
+                'id'            => $id,
+                'rsname'        => $input['rsname'],
+                'ptname'        => $input['ptname'],
+                'address'       => $input['address'],
+                'npwp'          => $input['npwp'],
+                'phone'         => $input['notelp'],
+                'bank'          => $input['bank'],
+                'no_rek'        => $input['norek'],
+                'rscode'        => $input['koders'],
+                'status'        => $input['status'],
+                'parentid'      => $input['parent'],
                 'updated_at'    => date('Y-m-d h:i:s'),
             ];
             $CompanyModel->save($data);
