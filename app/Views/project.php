@@ -1989,6 +1989,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                             <div class="toggleinvoice<?= $project['id'] ?>" hidden>
                                 <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                    
                                     <!-- Invoice I -->
                                     <div>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -2007,7 +2008,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <!-- <input class="uk-input uk-form-width-medium" id="dateinvoice1</?= $project['id'] ?>" name="dateinvoice1</?= $project['id'] ?>" </?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo=date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='".$projectdata[$project['id']]['invoice1']['jatuhtempo']."' placeholder='".date_format($tempo,'m/d/Y')."'"; } ?> placeholder="<?= date('m/d/Y') ?>" /> -->
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo=date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2016,8 +2018,26 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice1'])){
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']){
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                            } ?>
+                                                            <?php
+                                                            foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                
+                                                                if ($referensi['id'] === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
+                                                            } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -2025,16 +2045,43 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice1<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['pph23']."'"; } ?> name="pphinvoice1<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice1<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['email']."'"; } ?> name="emailinvoice1<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PIC</label>
+                                                    <div class="uk-form-controls">:
+                                                        <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>">
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice1'])){
+                                                                    foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                        if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                            } 
+                                                            foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                if ($pic->id === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                            } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -2058,7 +2105,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo=date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2067,8 +2114,24 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice2'])){
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']){
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                } 
+                                                                foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                if ($referensi['id'] === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
+                                                            } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -2076,14 +2139,40 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice2<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['pph23']."'"; } ?> name="pphinvoice2<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice2<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['email']."'"; } ?> name="emailinvoice2<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PIC</label>
+                                                    <div class="uk-form-controls">:
+                                                        <select class="uk-select uk-form-width-medium" name="picinvoice2<?= $project['id'] ?>">
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice2'])){
+                                                                    foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                        if($projectdata[$project['id']]['invoice2']['pic'] === $pic->id){
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                                } 
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                if ($pic->id === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                            } ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2109,7 +2198,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { $tempo=date_create($projectdata[$project['id']]['invoice3']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2118,8 +2207,24 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice3'])){
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']){
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                            } 
+                                                            foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                if ($referensi['id'] === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
+                                                            } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -2127,14 +2232,40 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice3<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['pph23']."'"; } ?> name="pphinvoice3<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice3<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['email']."'"; } ?> name="emailinvoice3<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PIC</label>
+                                                    <div class="uk-form-controls">:
+                                                        <select class="uk-select uk-form-width-medium" name="picinvoice3<?= $project['id'] ?>">
+                                                            <?php
+                                                              if(!empty($projectdata[$project['id']]['invoice3'])){
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                    if($projectdata[$project['id']]['invoice3']['pic'] === $pic->id){
+                                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                    }
+                                                                }
+                                                            }else{
+                                                                echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                            } 
+                                                            foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                if ($pic->id === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                            } ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2160,7 +2291,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo=date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2169,8 +2300,24 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
-                                                            <option>Option 01</option>
-                                                            <option>Option 02</option>
+                                                            <?php 
+                                                                if(!empty($projectdata[$project['id']]['invoice4'])){
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                            } 
+                                                            foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                if ($referensi['id'] === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
+                                                            } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -2178,14 +2325,40 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" name="pphinvoice4<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['pph23']."'"; } ?> name="pphinvoice4<?= $project['id'] ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
-                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" name="emailinvoice4<?= $project['id'] ?>">
+                                                        <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['email']."'"; } ?> name="emailinvoice4<?= $project['id'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">PIC</label>
+                                                    <div class="uk-form-controls">:
+                                                        <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>">
+                                                            <?php
+                                                              if(!empty($projectdata[$project['id']]['invoice4'])){
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                    if($projectdata[$project['id']]['invoice4']['pic'] === $pic->id){
+                                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                    }
+                                                                }
+                                                            }else{
+                                                                echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                            } 
+                                                            foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                if ($pic->id === "0") {
+                                                                    $selected = 'selected';
+                                                                } else {
+                                                                    $selected = "";
+                                                                }
+                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                            } ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>

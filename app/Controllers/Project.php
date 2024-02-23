@@ -12,6 +12,8 @@ use App\Models\DesignModel;
 use App\Models\ProductionModel;
 use App\Models\BastModel;
 use App\Models\InvoiceModel;
+use App\Models\ReferensiModel;
+use App\Models\UserModel;
 
 class Project extends BaseController
 {
@@ -42,6 +44,9 @@ class Project extends BaseController
         $RabModel               = new RabModel();
         $DesignModel            = new DesignModel();
         $ProductionModel        = new ProductionModel();
+        $InvoiceModel           = new InvoiceModel();
+        $ReferensiModel         = new ReferensiModel();
+        $UserModel              = new UserModel();
 
         // Populating Data
         $pakets                 = $PaketModel->where('parentid !=', 0)->find();
@@ -160,10 +165,10 @@ class Project extends BaseController
                     $projectdata[$project['id']]['production']   = [];
                 }
 
-                // bast
+                // BAST
                 $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->find();
 
-                // production value
+                // PRODUCTION VALUE
                 if (!empty($projectdata[$project['id']]['rab'])) {
                     $price = [];
                     foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
@@ -220,13 +225,25 @@ class Project extends BaseController
                         }
                     }
 
-                    // $projectdata[$project['id']]['progress'][]   = array_sum($progress);
                     $projectdata[$project['id']]['progress']   = array_sum($progress);
                 }
+
+                // INVOICE
+                $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid',$project['id'])->where('status','1')->first();
+                $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid',$project['id'])->where('status','2')->first();
+                $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid',$project['id'])->where('status','3')->first();
+                $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid',$project['id'])->where('status','4')->first();
+
+                // REFERENSI
+                $projectdata[$project['id']]['referensi']   = $ReferensiModel->findAll();
+
+                // PIC
+                $projectdata[$project['id']]['pic']         = $UserModel->where('parentid', null)->find();
             }
         } else {
             $rabs           = [];
         }
+
 
         $data                   = $this->data;
         $data['title']          = "Proyek";
@@ -553,64 +570,139 @@ class Project extends BaseController
 
         // JATUH TEMPO BAST
         $tgltempobast = "";
-        if(!empty($input['jatuhtempobast'.$id])){
-            $tgltempobast = $input['jatuhtempobast'.$id]." 00:00:00";
+        if (!empty($input['jatuhtempobast' . $id])) {
+            $tgltempobast = $input['jatuhtempobast' . $id] . " 00:00:00";
         }
 
         // FINANCE /////////////////////////////
+        $invoiceproject = $InvoiceModel->where('projectid', $id)->first();
+      
 
-        // INVOICE 1 SAVE
-        if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id])) {
-            $invoice1 = [
-                'projectid' => $id,
-                'jatuhtempo'=> $input['dateinvoice1' . $id] . " 00:00:00",
-                'refrensi'  => $input['referensiinvoice1' . $id],
-                'pph23'     => $input['pphinvoice1' . $id],
-                'email'     => $input['emailinvoice1' . $id],
-                'status'    => "1",
-            ];
-            $InvoiceModel->save($invoice1);
+        if (empty($invoiceproject)) {
+
+            // INVOICE 1 SAVE
+            if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id])) {
+                $invoice1 = [
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice1' . $id] . " 00:00:00",
+                    'refrensi'  => $input['referensiinvoice1' . $id],
+                    'pph23'     => $input['pphinvoice1' . $id],
+                    'email'     => $input['emailinvoice1' . $id],
+                    'status'    => "1",
+                    'pic'       => $input['picinvoice1' . $id],
+                ];
+                $InvoiceModel->save($invoice1);
+            }
+
+            // INVOICE 2 SAVE
+            if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id])) {
+                $invoice2 = [
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice2' . $id] . " 00:00:00",
+                    'refrensi'  => $input['referensiinvoice2' . $id],
+                    'pph23'     => $input['pphinvoice2' . $id],
+                    'email'     => $input['emailinvoice2' . $id],
+                    'status'    => "2",
+                    'pic'       => $input['picinvoice1' . $id],
+                ];
+                $InvoiceModel->save($invoice2);
+            }
+
+            // INVOICE 3 SAVE
+            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id])) {
+                $invoice3 = [
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice3' . $id] . " 00:00:00",
+                    'refrensi'  => $input['referensiinvoice3' . $id],
+                    'pph23'     => $input['pphinvoice3' . $id],
+                    'email'     => $input['emailinvoice3' . $id],
+                    'status'    => "3",
+                    'pic'       => $input['picinvoice1' . $id],
+                ];
+                $InvoiceModel->save($invoice3);
+            }
+
+            // INVOICE 4 SAVE
+            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id])) {
+                $invoice4 = [
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice4' . $id] . " 00:00:00",
+                    'refrensi'  => $input['referensiinvoice4' . $id],
+                    'pph23'     => $input['pphinvoice4' . $id],
+                    'email'     => $input['emailinvoice4' . $id],
+                    'status'    => "4",
+                    'pic'       => $input['picinvoice1' . $id],
+                ];
+                $InvoiceModel->save($invoice4);
+            }
+        } else {
+
+            $idinv1 = $InvoiceModel->where('projectid', $id)->where('status','1')->first();
+            $idinv2 = $InvoiceModel->where('projectid', $id)->where('status','2')->first();
+            $idinv3 = $InvoiceModel->where('projectid', $id)->where('status','3')->first();
+            $idinv4 = $InvoiceModel->where('projectid', $id)->where('status','4')->first();
+
+            // INVOICE 1 UPDATE
+            if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1)) {
+                $invoice1 = [
+                    'id'        => $idinv1['id'],
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice1' . $id] . " 00:00:00",
+                    'referensi'  => $input['referensiinvoice1' . $id],
+                    'pph23'     => $input['pphinvoice1' . $id],
+                    'email'     => $input['emailinvoice1' . $id],
+                    'status'    => "1",
+                    'pic'       => $input['picinvoice1' . $id],
+                ];
+                $InvoiceModel->save($invoice1);
+            }
+
+            // INVOICE 2 UPDATE
+            if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2)) {
+                $invoice2 = [
+                    'id'        => $idinv2['id'],
+                    'projectid' => $id,
+                    'jatuhtempo' => $input['dateinvoice2' . $id] . " 00:00:00",
+                    'referensi'  => $input['referensiinvoice2' . $id],
+                    'pph23'     => $input['pphinvoice2' . $id],
+                    'email'     => $input['emailinvoice2' . $id],
+                    'status'    => "2",
+                    'pic'       => $input['picinvoice2' . $id],
+                ];
+                $InvoiceModel->save($invoice2);
+            }
+
+            // INVOICE 3 UPDATE
+            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3)) {
+                // dd($input);
+                $invoice3 = [
+                    'id'        => $idinv3['id'],
+                    'projectid' => $id,
+                    'jatuhtempo'=> $input['dateinvoice3' . $id] . " 00:00:00",
+                    'referensi'  => $input['referensiinvoice3' . $id],
+                    'pph23'     => $input['pphinvoice3' . $id],
+                    'email'     => $input['emailinvoice3' . $id],
+                    'status'    => "3",
+                    'pic'       => $input['picinvoice3' . $id],
+                ];
+                $InvoiceModel->save($invoice3);
+            }
+
+            // INVOICE 4 UPDATE
+            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4)) {
+                $invoice4 = [
+                    'id'        => $idinv4['id'],
+                    'projectid' => $id,
+                    'jatuhtempo'=> $input['dateinvoice4' . $id] . " 00:00:00",
+                    'referensi'  => $input['referensiinvoice4' . $id],
+                    'pph23'     => $input['pphinvoice4' . $id],
+                    'email'     => $input['emailinvoice4' . $id],
+                    'status'    => "4",
+                    'pic'       => $input['picinvoice4' . $id],
+                ];
+                $InvoiceModel->save($invoice4);
+            }
         }
-
-        // INVOICE 2 SAVE
-        if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id])) {
-            $invoice2 = [
-                'projectid' => $id,
-                'jatuhtempo'=> $input['dateinvoice2' . $id] . " 00:00:00",
-                'refrensi'  => $input['referensiinvoice2' . $id],
-                'pph23'     => $input['pphinvoice2' . $id],
-                'email'     => $input['emailinvoice2' . $id],
-                'status'    => "2",
-            ];
-            $InvoiceModel->save($invoice2);
-        }
-
-        // INVOICE 3 SAVE
-        if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id])) {
-            $invoice3 = [
-                'projectid' => $id,
-                'jatuhtempo'=> $input['dateinvoice3' . $id] . " 00:00:00",
-                'refrensi'  => $input['referensiinvoice3' . $id],
-                'pph23'     => $input['pphinvoice3' . $id],
-                'email'     => $input['emailinvoice3' . $id],
-                'status'    => "3",
-            ];
-            $InvoiceModel->save($invoice3);
-        }
-
-        // INVOICE 4 SAVE
-        if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id])) {
-            $invoice4 = [
-                'projectid' => $id,
-                'jatuhtempo'=> $input['dateinvoice4' . $id] . " 00:00:00",
-                'refrensi'  => $input['referensiinvoice4' . $id],
-                'pph23'     => $input['pphinvoice4' . $id],
-                'email'     => $input['emailinvoice4' . $id],
-                'status'    => "4",
-            ];
-            $InvoiceModel->save($invoice4);
-        }
-
 
         // Project Data
         $project = [

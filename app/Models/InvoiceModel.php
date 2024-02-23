@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class InvoiceModel extends Model
 {
     protected $allowedFields = [
-        'projectid', 'jatuhtempo', 'referensi', 'pph23', 'email', 'status', 'created_at', 'updated_at', 'deleted_at',
+        'projectid', 'jatuhtempo', 'referensi', 'pph23', 'email', 'status', 'pic', 'created_at', 'updated_at', 'deleted_at',
     ];
     protected $table            = 'invoice';
     protected $primaryKey       = 'id';
