@@ -2301,14 +2301,14 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice4'])){
-                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                        if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
-                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                        }
+                                                            if(!empty($projectdata[$project['id']]['invoice4'])){
+                                                                foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                    if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
+                                                                        echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                     }
-                                                                }else{
-                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                }
+                                                            }else{
+                                                                echo '<option value="" selected disabled>Pilih Referensi</option>';
                                                             } 
                                                             foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                 if ($referensi['id'] === "0") {
