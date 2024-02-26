@@ -14,6 +14,7 @@ use App\Models\BastModel;
 use App\Models\InvoiceModel;
 use App\Models\ReferensiModel;
 use App\Models\UserModel;
+use App\Models\CustomRabModel;
 use Mpdf\Tag\Em;
 
 class Project extends BaseController
@@ -48,6 +49,7 @@ class Project extends BaseController
         $InvoiceModel           = new InvoiceModel();
         $ReferensiModel         = new ReferensiModel();
         $UserModel              = new UserModel();
+        $CustomRabModel         = new CustomRabModel();
 
         // Populating Data
         $pakets                 = $PaketModel->where('parentid !=', 0)->find();
@@ -83,6 +85,9 @@ class Project extends BaseController
                         ];
                     }
                 }
+
+                // Custom RAB
+                $projectdata[$project['id']]['customrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
 
                 if (!empty($rabs)) {
                     // Paket
@@ -369,7 +374,6 @@ class Project extends BaseController
         // initialize
         $input  = $this->request->getPost();
         $pro    = $ProjectModel->find($id);
-        // dd($input);
 
         if ($input['name'] != $pro['name']) {
             $name = $input['name'];
@@ -465,6 +469,12 @@ class Project extends BaseController
                 }
             }
         }
+
+        // LAST UPDATE HERE
+        // Custom RAB Data
+        // foreach ($input['customprice'] as $customid => $cusprice) {
+
+        // }
 
         // Design Data
         if (!empty($input['submitted'])) {
