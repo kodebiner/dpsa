@@ -42,7 +42,7 @@
     <table style="width:100%; margin-top:0;">
         <tr>
             <th style="width:30%; text-align:right;" rowspan="2"><img style="margin: 5px;" src="./img/logo.png" width="100"></img></th>
-            <td style="font-weight:bold">PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
+            <td style="font-weight:bold; padding:0px;">PT. DHARMA PUTRA SEJAHTERA ABADI <br> Interior & Furniture Manufaktur </td>
         </tr>
         <tr>
             <td>Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta. <br> Telepon : (0274) 2800089 Fax : (0274) 4332246<br> Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com<br> Website : www.dharmaputrainterior.com</td>

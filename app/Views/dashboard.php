@@ -103,12 +103,17 @@
                 $dateline   = '';
                 $inv4       = '';
                 if ($project['type_design'] === "1") {
-                    if ($projectdesign[$project['id']]['design']['status'] === '0') {
-                        $progress = "10";
-                        $status = "Menunggu Approval desain";
-                    } elseif ($projectdesign[$project['id']]['design']['status'] === '2') {
-                        $progress = "20";
-                        $status = "Desain disetujui klien, Menunggu Upload SPK klien / Aprroval SPK dari DPSA";
+                    if(!empty($projectdesign[$project['id']]['design']['status'])){
+                        if ($projectdesign[$project['id']]['design']['status'] === '0') {
+                            $progress = "10";
+                            $status = "Menunggu Approval desain";
+                        } elseif ($projectdesign[$project['id']]['design']['status'] === '2') {
+                            $progress = "20";
+                            $status = "Desain disetujui klien, Menunggu Upload SPK klien / Aprroval SPK dari DPSA";
+                        }
+                    }else{
+                        $progress = "30";
+                        $status = "Menunggu SPH DPSA";
                     }
                 } else {
                     $progress = "30";

@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dokumen Invoice</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    </link>
     <style>
         @page {
             /* size: 7in 9.25in; */
@@ -29,10 +32,10 @@
             padding: 8px;
         }
 
-        tr:nth-child(even) {
+        /* tr:nth-child(even) {
             /* background-color: #dddddd; */
-            background-color: white;
-        }
+        /* background-color: white; */
+        /* } */
 
         * {
             box-sizing: border-box;
@@ -69,6 +72,10 @@
         #coverblack {
             background-color: rgba(255, 255, 255, 0.5);
         }
+
+        .kop tr {
+            line-height: 0px;
+        }
     </style>
 </head>
 
@@ -94,11 +101,64 @@ $tanggaldateline = ucwords($dateFormatted);
 
 <body id="watermark">
 
-    <table>
+    <!-- <div class="uk-section uk-section-default uk-padding-small">
+        <div class="uk-container">
+            <div class="uk-panel uk-flex uk-flex-center">
+                <div>
+                    <img class="uk-align-left uk-margin-remove-adjacent" src="img/logo.png" width="100px"></img>
+                </div>
+                <div class="uk-text-middle">
+                    <div class="uk-text-large uk-text-bold uk-margin-remove">PT. DHARMA PUTRA SEJAHTERA ABADI</div>
+                    <div class="uk-text-small uk-text-bold uk-margin-remove">Interior & Furniture Manufaktur</div>
+                    <div class="uk-margin-remove" style="font-size: 10pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</div>
+
+                    <div class="uk-child-width-1-2 uk-margin-remove uk-grid-small" style="font-size: 10pt" uk-grid>
+                        <div class="uk-width-1-6 uk-padding-remove">
+                            <div>Telepon</div>
+                        </div>
+                        <div class="uk-width-3-4 uk-padding-remove">
+                            <div>: (0274) 2800089 Fax : (0274) 4332246</div>
+                        </div>
+                        <div class="uk-margin-remove uk-padding-remove uk-width-1-6">
+                            <div>Email</div>
+                        </div>
+                        <div class="uk-margin-remove uk-padding-remove uk-width-3-4">
+                            <div>: dpsa@gmail.com</div>
+                        </div>
+                        <div class="uk-margin-remove uk-padding-remove uk-width-1-6">
+                            <div>Website</div>
+                        </div>
+                        <div class="uk-margin-remove uk-padding-remove uk-width-3-4">
+                            <div>: dpsa.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr style="border-top: 3pt solid #000;">
+    </div> -->
+
+    <!-- <table class="kop" style="width:100%">
+        <tr>
+            <th rowspan="4">Phone</th>
+            <td>555-1234</td>
+        </tr>
+        <tr>
+            <td>555-8745</td>
+        </tr>
+        <tr>
+            <td>555-8745</td>
+        </tr>
+        <tr>
+            <td>555-8745</td>
+        </tr>
+    </table> -->
+
+    <!-- <table>
         <tr>
             <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
             <td>
-                <table>
+                <table class="kop">
                     <tr style="display: block; height: 10px;">
                         <td style="font-weight:bold; font-size: 8px;">
                             PT. DHARMA PUTRA SEJAHTERA ABADI
@@ -125,6 +185,47 @@ $tanggaldateline = ucwords($dateFormatted);
                         </td>
                     </tr>
                     <tr style="display: block; height: 10px;">
+                        <td>
+                            Website : dharmaputra04.com
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+    </table> -->
+
+    <table>
+        <tr>
+            <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
+            <td>
+                <table>
+                    <tr style="display: block; height:2px;">
+                        <td style="font-weight:bold; font-size: 8px;">
+                            PT. DHARMA PUTRA SEJAHTERA ABADI
+                        </td>
+                    </tr>
+                    <tr style="display: block; height:2px;">
+                        <td style="font-weight:bold;">
+                            Interior & Furniture Manufaktur
+                        </td>
+                    </tr>
+                    <tr style="display: block; height:2px;">
+                        <td style="font-weight:bold;">
+                            Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.
+                        </td>
+                    </tr>
+                    <tr style="display: block; height:2px;">
+                        <td>
+                            Telephone : (0274) 2800089 Fax : (0274) 4332246
+                        </td>
+                    </tr>
+                    <tr style="display: block; height:2px;">
+                        <td>
+                            Email : dpsa@gmail.com
+                        </td>
+                    </tr>
+                    <tr style="display: block; height:2px;">
                         <td>
                             Website : dharmaputra04.com
                         </td>
@@ -227,121 +328,123 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="width: 30%; border:1pt solid; border-top-style: none;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
             <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress</td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= $invoice['termin'] ?>%</td>
-            <td style="text-align: right; border:1pt solid; border-top-style: none; width: 10%;">
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.');
+                                                                                                    " "; ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');
+                                                                                                    " "; ?></td>
+            <!-- <td style="text-align: right; border:1pt solid; border-top-style: none; width: 10%;">
                 <table>
-                    <?php foreach ($rabs as $rab) { ?>
+                    </?php foreach ($rabs as $rab) { ?>
                         <tr>
                             <td>
-                                <?= "Rp. " . number_format($rab['oriprice'], 0, ',', '.');
-                                " "; ?></td>
-            </td>
+                                </?= "Rp. " . number_format($rab['oriprice'], 0, ',', '.');" "; ?></td>
+                            </td>
+                        </tr>
+                    </?php } ?>
+                </table>
+            </td> -->
+            <!-- <td style="text-align: right; width: 10%;">
+                <table>
+                    </?php foreach ($rabs as $rab) { ?>
+                        <tr>
+                            <td>
+                                / "Rp. " . number_format($rab['price'], 0, ',', '.');" "; ?></td>
+                            </td>
+                        </tr>
+                    </?php } ?>
+                </table>
+            </td> -->
         </tr>
-    <?php } ?>
     </table>
-    </td>
-    <td style="text-align: right; width: 10%;">
-        <table>
-            <?php foreach ($rabs as $rab) { ?>
+
+    <div class="row">
+        <div class="column" style="width: 52%;  margin-right:40px">
+            <table style="border: 1pt solid black;">
                 <tr>
-                    <td>
-                        <?= "Rp. " . number_format($rab['price'], 0, ',', '.');
-                        " "; ?></td>
-    </td>
-    </tr>
-<?php } ?>
-</table>
-</td>
-</tr>
-</table>
-
-<div class="row">
-    <div class="column" style="width: 52%;  margin-right:40px">
-        <table style="border: 1pt solid black;">
-            <tr>
-                <th>TANGGAL JATUH TEMPO</th>
-            </tr>
-            <tr>
-                <td><?= $tanggaldateline ?></td>
-            </tr>
-        </table>
+                    <th>TANGGAL JATUH TEMPO</th>
+                </tr>
+                <tr>
+                    <td><?= $tanggaldateline ?></td>
+                </tr>
+            </table>
+        </div>
+        <div class="column" style="width: 46%;">
+            <table style="border: 1pt solid black;">
+                <tr>
+                    <th style="border: 1pt solid black; width:50%;">Total Harga</th>
+                    <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');
+                                                                                                    " "; ?></td>
+                </tr>
+                <tr>
+                    <th style="border: 1pt solid black; width:50%;">Diskon 0%</th>
+                    <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
+                </tr>
+                <tr>
+                    <th style="border: 1pt solid black; width:50%;">Total Harga Dikurangi</th>
+                    <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
+                </tr>
+                <tr>
+                    <th style="border: 1pt solid black; width:50%;">BIAYA KIRIM / SETTING</th>
+                    <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div class="column" style="width: 46%;">
-        <table style="border: 1pt solid black;">
-            <tr>
-                <th style="border: 1pt solid black; width:50%;">Total Harga</th>
-                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');
-                                                                                                " "; ?></td>
-            </tr>
-            <tr>
-                <th style="border: 1pt solid black; width:50%;">Diskon 0%</th>
-                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
-            </tr>
-            <tr>
-                <th style="border: 1pt solid black; width:50%;">Total Harga Dikurangi</th>
-                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
-            </tr>
-            <tr>
-                <th style="border: 1pt solid black; width:50%;">BIAYA KIRIM / SETTING</th>
-                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
-            </tr>
-        </table>
-    </div>
-</div>
 
-<table style="border: 1pt solid black; background-color: #dddddd;">
-    <tr>
-        <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-        <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">Jumlah Ditagihkan (DPP)</th>
-        <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-        <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
-    </tr>
-</table>
+    <table style="border: 1pt solid black; background-color: #dddddd;">
+        <tr>
+            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">Jumlah Ditagihkan (DPP)</th>
+            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
+        </tr>
+    </table>
 
-<table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
-    <tr>
-        <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-        <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN 11%</th>
-        <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-        <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
-    </tr>
-</table>
+    <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
+        <tr>
+            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN 11%</th>
+            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
+        </tr>
+    </table>
 
-<table style="border: 1pt solid black; margin-top:5px;">
-    <tr>
-        <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-        <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 2% Rp. -</th>
-        <td style="border: 1pt solid black; border-right-style:none;"></td>
-        <td style="border: 1pt solid black; border-left-style:none; text-align:right"></td>
-    </tr>
-</table>
+    <table style="border: 1pt solid black; margin-top:5px;">
+        <tr>
+            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 2% Rp. -</th>
+            <td style="border: 1pt solid black; border-right-style:none;"></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"></td>
+        </tr>
+    </table>
 
-<table style="border: 1pt solid black; margin-top:5px;">
-    <tr>
-        <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-        <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
-        <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-        <td style="border: 1pt solid black; border-left-style:none; text-align:right">66,600,000</td>
-    </tr>
-</table>
+    <table style="border: 1pt solid black; margin-top:5px;">
+        <tr>
+            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
+            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right">66,600,000</td>
+        </tr>
+    </table>
 
-<table style="width: 50%;">
-    <tr>
-        <td style="text-align: center;">PT DHARMA PUTRA SEJAHTERA ABADI (PT. DPSA)</td>
-    </tr>
-    <tr>
-        <td style="height: 60px;"></td>
-    </tr>
-    <tr>
-        <td style="text-align: center; text-decoration: underline;">Mr.XXXX</td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">Direktur</td>
-    </tr>
-</table>
+    <table style="width: 50%;">
+        <tr>
+            <td style="text-align: center;">PT DHARMA PUTRA SEJAHTERA ABADI (PT. DPSA)</td>
+        </tr>
+        <tr>
+            <td style="height: 60px;"></td>
+        </tr>
+        <tr>
+            <td style="text-align: center; text-decoration: underline;">Mr.XXXX</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">Direktur</td>
+        </tr>
+    </table>
 
 </body>
 

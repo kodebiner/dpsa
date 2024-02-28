@@ -598,7 +598,7 @@ class Project extends BaseController
         // if (!empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty( $input['emailinvoice1' . $id]) && !empty($idinv1)){
         if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1)) {
             $date1 = $input['dateinvoice1' . $id];
-            $newDate1 = date('Y-m-d H:i:s',strtotime($date1));
+            $newDate1 = date('Y-m-d H:i:s', strtotime($date1));
             $invoice1 = [
                 'id'            => $idinv1['id'],
                 'projectid'     => $id,
@@ -628,7 +628,7 @@ class Project extends BaseController
         if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2)) {
             // if (!empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty( $input['emailinvoice2' . $id]) && !empty($idinv2)){
             $date2 = $input['dateinvoice2' . $id];
-            $newDate2 = date('Y-m-d H:i:s',strtotime($date2));
+            $newDate2 = date('Y-m-d H:i:s', strtotime($date2));
 
             $invoice2 = [
                 'id'        => $idinv2['id'],
@@ -660,11 +660,11 @@ class Project extends BaseController
         if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3)) {
             // if (!empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty( $input['emailinvoice3' . $id]) && !empty($idinv3)){
             $date3 = $input['dateinvoice3' . $id];
-            $newDate3 = date('Y-m-d H:i:s',strtotime($date3));
+            $newDate3 = date('Y-m-d H:i:s', strtotime($date3));
             $invoice3 = [
                 'id'        => $idinv3['id'],
                 'projectid' => $id,
-                'jatuhtempo' => $newDate3." 00:00:00", //date_format($date, 'm-d-Y H:i:s'),
+                'jatuhtempo' => $newDate3 . " 00:00:00", //date_format($date, 'm-d-Y H:i:s'),
                 'referensi' => $input['referensiinvoice3' . $id],
                 'pph23'     => $input['pphinvoice3' . $id],
                 'email'     => $input['emailinvoice3' . $id],
@@ -690,11 +690,11 @@ class Project extends BaseController
         if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4)) {
             // if (!empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty( $input['emailinvoice4' . $id]) && !empty($idinv4)){
             $date4 = $input['dateinvoice3' . $id];
-            $newDate4 = date('Y-m-d H:i:s',strtotime($date4));
+            $newDate4 = date('Y-m-d H:i:s', strtotime($date4));
             $invoice4 = [
                 'id'        => $idinv4['id'],
                 'projectid' => $id,
-                'jatuhtempo' =>$newDate4." 00:00:00", //date_format($date, 'm-d-Y H:i:s'),
+                'jatuhtempo' => $newDate4 . " 00:00:00", //date_format($date, 'm-d-Y H:i:s'),
                 'referensi' => $input['referensiinvoice4' . $id],
                 'pph23'     => $input['pphinvoice4' . $id],
                 'email'     => $input['emailinvoice4' . $id],
@@ -715,7 +715,6 @@ class Project extends BaseController
             ];
             $InvoiceModel->save($invoice1);
         }
-
         // END NEW INVOICE FUNCTION
 
         // Project Data
@@ -802,7 +801,9 @@ class Project extends BaseController
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
 
-        $mpdf = new \Mpdf\Mpdf([]);
+        $mpdf = new \Mpdf\Mpdf([
+            'default_font_size' => 5,
+        ]);
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4-L");
@@ -1014,6 +1015,15 @@ class Project extends BaseController
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
+
+        $mpdf->SetWatermarkImage(
+        './img/logo.png',
+         0.3,
+        '',
+        // [50,50,50],
+        [50,50],
+        );
+        $mpdf->showWatermarkImage = true;
 
         $date = date_create($projects['created_at']);
         $filename = "invoice" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
