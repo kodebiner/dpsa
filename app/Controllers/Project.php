@@ -15,6 +15,7 @@ use App\Models\InvoiceModel;
 use App\Models\ReferensiModel;
 use App\Models\UserModel;
 use App\Models\CustomRabModel;
+use App\Models\GconfigModel;
 use Mpdf\Tag\Em;
 
 class Project extends BaseController
@@ -848,9 +849,21 @@ class Project extends BaseController
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
         $BastModel      = new BastModel();
+        $GconfigModel   = new GconfigModel();
+        $InvoiceModel   = new InvoiceModel();
+        $ReferensiModel = new ReferensiModel();
+        $UserModel      = new UserModel();
 
+        // PROJECT DATA
         $projects = $ProjectModel->find($id);
         $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+        $gconf    = $GconfigModel->first();
+
+        // INVOICE 
+        $invoice1  = $InvoiceModel->where('projectid',$projects['id'])->where('status','1')->first();
+        $invoice2  = $InvoiceModel->where('projectid',$projects['id'])->where('status','2')->first();
+        $invoice3  = $InvoiceModel->where('projectid',$projects['id'])->where('status','3')->first();
+        $invoice4  = $InvoiceModel->where('projectid',$projects['id'])->where('status','4')->first();
 
         // CLIENT DATA
         $client   = $CompanyModel->find($projects['clientid']);
@@ -885,118 +898,133 @@ class Project extends BaseController
             }
         }
 
+        // TOTAL RAB PRICE
         $total = array_sum(array_column($rabdata, 'price'));
+        // PPN
+        $ppn        = $gconf['ppn'];
 
         // Invoice Data Array
-        $invoicedata = [];
+        $termin     = "";
+        $progress   = "";
+        $nilaispk   = "";
+        $dateinv    = "";
+        $dateline   = "";
+        $priceppn   = "";
+        $pph        = "";
+        $referensi  = "";
+        $email      = "";
+        $status     = "";
+        $pic        = "";
 
         // INVOICE I
-        if ($projects['status_spk'] === "1" && !empty($projects['inv1'])) {
-
-            if (!empty($projects['inv1'])) {
-                // Date Invoice
-                $inv1 = $projects['inv1'];
-
-                // Dateline Invoice 1 Interval
-                $dateinv1 =  $inv1;
-                $date = date_create($dateinv1);
-                $dateformat = date_format($date, "Y-m-d");
-                $hari = date_create($dateformat);
-                date_add($hari, date_interval_create_from_date_string('14 days'));
-                $datelineinv1 = date_format($hari, 'Y-m-d');
-                $dateline = $datelineinv1;
-            }
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "30",
-                'nilai_spk' => $total - ((70 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "1",
-                'total'     => $total,
-            ];
+        if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+            $termin     = "30";
+            $progress   = "30";
+            $nilaispk   = $total - ((70 / 100) * $total);
+            $dateinv    = $projects['inv1'];
+            $dateline   = $invoice1['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice1['pph23'];
+            $referensi  = $invoice1['referensi'];
+            $email      = $invoice1['email'];
+            $status     = $invoice1['status'];
+            $pic        = $invoice1['pic'];
         }
 
         // INVOICE II
-        if (!empty($sertrim) && !empty($projects['inv2'])) {
-
-            // Date Invoice
-            $inv2 = $projects['inv2'];
-
-            // Dateline Invoice 2 Interval
-            $dateinv2       = $inv2;
-            $date           = date_create($dateinv2);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv2 = date_format($hari, 'Y-m-d');
-
-            $dateline = $datelineinv2;
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "60",
-                'nilai_spk' => $total - ((70 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "2",
-                'total'     => $total,
-            ];
+        if (!empty($sertrim) && !empty($projects['inv2']) && !empty($invoice3)) {
+            $termin     = "30";
+            $progress   = "60";
+            $nilaispk   = $total - ((70 / 100) * $total);
+            $dateinv    = $projects['inv2'];
+            $dateline   = $invoice2['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice2['pph23'];
+            $referensi  = $invoice2['referensi'];
+            $email      = $invoice2['email'];
+            $status     = $invoice2['status'];
+            $pic        = $invoice2['pic'];
         }
 
         // INVOICE III
-        if (!empty($bast) && !empty($projects['inv3'])) {
-
-            // Date Invoice
-            $inv3 = $projects['inv3'];
-
-            // Dateline Invoice 2 Interval
-            $dateinv3       = $inv3;
-            $date           = date_create($dateinv3);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv3 = date_format($hari, 'Y-m-d');
-            $dateline = $datelineinv3;
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "95",
-                'nilai_spk' => $total - ((65 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "3",
-                'total'     => $total,
-            ];
+        if (!empty($bast) && !empty($projects['inv3']) && !empty($invoice3)) {
+            $termin     = "35";
+            $progress   = "95";
+            $nilaispk   = $total - ((65 / 100) * $total);
+            $dateinv    = $projects['inv3'];
+            $dateline   = $invoice3['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice3['pph23'];
+            $referensi  = $invoice3['referensi'];
+            $email      = $invoice3['email'];
+            $status     = $invoice3['status'];
+            $pic        = $invoice3['pic'];
         }
 
         // INVOICE IV
-        if (!empty($bast) && !empty($projects['inv4'])) {
+        if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4)) {
 
-            // Date Invoice
-            $inv4 = $projects['inv4'];
+            $termin     = "5";
+            $progress   = "100";
+            $nilaispk   = $total - ((95 / 100) * $total);
+            $dateinv    = $projects['inv4'];
+            $dateline   = $invoice4['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice4['pph23'];
+            $referensi  = $invoice4['referensi'];
+            $email      = $invoice4['email'];
+            $status     = $invoice4['status'];
+            $pic        = $invoice4['pic'];
+
 
             // Dateline Invoice 2 Interval
-            $dateinv4       = $inv4;
-            $date           = date_create($dateinv4);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv4 = date_format($hari, 'Y-m-d');
+            // $dateinv4       = $inv4;
+            // $date           = date_create($dateinv4);
+            // $dateformat     = date_format($date, "Y-m-d");
+            // $hari           = date_create($dateformat);
+            // date_add($hari, date_interval_create_from_date_string('14 days'));
+            // $datelineinv4 = date_format($hari, 'Y-m-d');
 
-            $dateline = $datelineinv4;
-
-            $invoicedata = [
-                'termin'    => "5",
-                'progress'  => "100",
-                'nilai_spk' => $total - ((95 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "4",
-                'total'     => $total,
-            ];
+            // $dateline = $datelineinv4;
         }
+
+        // DATA REFERENSI
+        $refdata    = "";
+        $refname    = "";
+        $refacc     = "";
+        $refbank    = "";
+        if(!empty($referensi)){
+            $refdata = $ReferensiModel->where('id',$referensi)->first();
+            $refname    = $refdata['name'];
+            $refacc     = $refdata['no_rek'];
+            $refbank    = $refdata['bank'];
+        }
+
+        // DATA PIC
+        $picdata = "";
+        $picname = "";
+        if(!empty($pic)){
+            $picdata    = $UserModel->where('id',$pic)->first();
+            $picname    = $picdata->name;
+        }
+
+
+        $invoicedata = [
+            'termin'    => $termin,
+            'progress'  => $progress,
+            'nilai_spk' => $nilaispk,
+            'dateinv'   => $dateinv,
+            'dateline'  => $dateline,
+            'total'     => $total,
+            'ppn'       => $gconf['ppn'],
+            'priceppn'  => $total + (($gconf['ppn'] / 100) * $total),
+            'pph'       => $pph,
+            'referensi' => $refname,
+            'refacc'    => $refacc,
+            'refbank'   => $refbank,
+            'email'     => $email,
+            'pic'       => $picname,
+        ];
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -1021,12 +1049,13 @@ class Project extends BaseController
          0.3,
         '',
         // [50,50,50],
-        [50,50],
+        // [50,50],
+        [70,40],
         );
         $mpdf->showWatermarkImage = true;
-
+        $mpdf->setFooter('{PAGENO} / {nb}');
         $date = date_create($projects['created_at']);
-        $filename = "invoice" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
+        $filename = "invoice" .$status."-".$projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
         $html = view('Views/invoice', $data);
         $mpdf->WriteHTML($html);
         $mpdf->Output($filename, 'D');
@@ -1034,17 +1063,300 @@ class Project extends BaseController
 
     public function invoiceview($id)
     {
+        // // Calling models
+        // $ProjectModel   = new ProjectModel;
+        // $CompanyModel   = new CompanyModel();
+        // $BastModel      = new BastModel();
+        // $RabModel       = new RabModel();
+        // $PaketModel     = new PaketModel();
+        // $MdlModel       = new MdlModel();
+        // $invoiceModel   = new InvoiceModel();
+
+        // // PROJECT DATA
+        // $projects = $ProjectModel->find($id);
+
+        // // CLIENT DATA
+        // $client   = $CompanyModel->find($projects['clientid']);
+
+        // // BAST DATA
+        // $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+        // $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+
+        // // INVOICE DATA 
+        // $invoiceI   = $invoiceModel->where('projectid', $id)->where('status', "1")->first();
+        // $invoiceII  = $invoiceModel->where('projectid', $id)->where('status', "2")->first();
+        // $invoiceIII = $invoiceModel->where('projectid', $id)->where('status', "3")->first();
+        // $invoiceIV  = $invoiceModel->where('projectid', $id)->where('status', "4")->first();
+
+        // // RAB
+        // $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+        // $rabdata    = [];
+        // foreach ($rabs as $rab) {
+        //     $paketid[]  = $rab['paketid'];
+
+        //     // MDL RAB
+        //     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+        //     foreach ($rabmdl as $mdlr) {
+        //         $rabdata[]  = [
+        //             'id'            => $mdlr['id'],
+        //             'proid'         => $projects['id'],
+        //             'name'          => $mdlr['name'],
+        //             'length'        => $mdlr['length'],
+        //             'width'         => $mdlr['width'],
+        //             'height'        => $mdlr['height'],
+        //             'volume'        => $mdlr['volume'],
+        //             'denomination'  => $mdlr['denomination'],
+        //             'keterangan'    => $mdlr['keterangan'],
+        //             'qty'           => $rab['qty'],
+        //             'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+        //             'oriprice'      => (int)$mdlr['price'],
+        //         ];
+        //     }
+        // }
+
+        // $total = array_sum(array_column($rabdata, 'price'));
+
+        // // New Database Invoice Configuration
+
+        // // New Data Invoice Array
+        // $newdatainv = [];
+
+        // // VARIABLE DECLARATION
+        // $termin     = "";
+        // $progress   = "";
+        // $spkval     = "";
+        // $hal        = "";
+        // $dateinv    = "";
+
+        // // INV I
+        // if ($projects['status_spk'] === "1" && empty($sertrim) && empty($bast) && !empty($projects['inv1']) && empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
+
+        //     // VARIABLE DATA I
+        //     $termin     = "30";
+        //     $progress   = "30";
+        //     $spkval     = $total - ((70 / 100) * $total);
+        //     $hal        = "1";
+        //     $total      = $total;
+        //     $dateinv    = $projects['inv1'];
+
+
+        //     // Dateline Invoice 1 Interval
+        //     $dateinvoice =  $dateinv;
+        //     $date = date_create($dateinvoice);
+        //     $dateformat = date_format($date, "Y-m-d");
+        //     $hari = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinvoice = date_format($hari, 'Y-m-d');
+        // }
+
+        // // INV II
+        // if ($projects['status_spk'] === "1" && !empty($sertrim) && empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
+
+        //     // VARIABLE DATA II
+        //     $termin     = "30";
+        //     $progress   = "60";
+        //     $spkval     = $total - ((70 / 100) * $total);
+        //     $hal        = "2";
+        //     $total      = $total;
+        //     $dateinv    = $projects['inv2'];
+
+        //     // Dateline Invoice 2 Interval
+        //     $dateinvoice =  $dateinv;
+        //     $date = date_create($dateinvoice);
+        //     $dateformat = date_format($date, "Y-m-d");
+        //     $hari = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinvoice = date_format($hari, 'Y-m-d');
+        // }
+
+        // // INV III
+        // if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && empty($projects['inv4'])) {
+
+        //     // VARIABLE DATA II
+        //     $termin     = "35";
+        //     $progress   = "95";
+        //     $spkval     = $total - ((65 / 100) * $total);
+        //     $hal        = "3";
+        //     $total      = $total;
+        //     $dateinv    = $projects['inv3'];
+
+        //     // Dateline Invoice 1 Interval
+        //     $dateinvoice =  $dateinv;
+        //     $date = date_create($dateinvoice);
+        //     $dateformat = date_format($date, "Y-m-d");
+        //     $hari = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinvoice = date_format($hari, 'Y-m-d');
+        // }
+
+        // // INV IV
+        // if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && !empty($projects['inv4'])) {
+
+        //     // VARIABLE DATA II
+        //     $termin     = "35";
+        //     $progress   = "95";
+        //     $spkval     = $total - ((95 / 100) * $total);
+        //     $hal        = "4";
+        //     $total      = $total;
+        //     $dateinv    = $projects['inv4'];
+
+        //     // Dateline Invoice 1 Interval
+        //     $dateinvoice =  $dateinv;
+        //     $date = date_create($dateinvoice);
+        //     $dateformat = date_format($date, "Y-m-d");
+        //     $hari = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinvoice = date_format($hari, 'Y-m-d');
+        // }
+
+        // $newdatainv = [
+        //     'termin'    => $termin,
+        //     'progress'  => $progress,
+        //     'nilai_spk' => $spkval,
+        //     'dateinv'   => $dateformat,
+        //     'dateline'  => $datelineinvoice,
+        //     'hal'       => $hal,
+        //     'total'     => $total,
+        // ];
+
+
+
+        // // End New Database Invoice Configuration
+
+        // // Invoice Data Array
+        // $invoicedata = [];
+
+        // // INVOICE I
+        // if ($projects['status_spk'] === "1" && !empty($projects['inv1'])) {
+
+        //     if (!empty($projects['inv1'])) {
+        //         // Date Invoice
+        //         $inv1 = $projects['inv1'];
+
+        //         // Dateline Invoice 1 Interval
+        //         $dateinv1 =  $inv1;
+        //         $date = date_create($dateinv1);
+        //         $dateformat = date_format($date, "Y-m-d");
+        //         $hari = date_create($dateformat);
+        //         date_add($hari, date_interval_create_from_date_string('14 days'));
+        //         $datelineinv1 = date_format($hari, 'Y-m-d');
+        //         $dateline = $datelineinv1;
+        //     }
+
+        //     $invoicedata = [
+        //         'termin'    => "30",
+        //         'progress'  => "30",
+        //         'nilai_spk' => $total - ((70 / 100) * $total),
+        //         'dateinv'   => $dateformat,
+        //         'dateline'  => $dateline,
+        //         'hal'       => "1",
+        //         'total'     => $total,
+        //     ];
+        // }
+
+        // // INVOICE II
+        // if (!empty($sertrim) && !empty($projects['inv2'])) {
+
+        //     // Date Invoice
+        //     $inv2 = $projects['inv2'];
+
+        //     // Dateline Invoice 2 Interval
+        //     $dateinv2       = $inv2;
+        //     $date           = date_create($dateinv2);
+        //     $dateformat     = date_format($date, "Y-m-d");
+        //     $hari           = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinv2 = date_format($hari, 'Y-m-d');
+
+        //     $dateline = $datelineinv2;
+
+        //     $invoicedata = [
+        //         'termin'    => "30",
+        //         'progress'  => "60",
+        //         'nilai_spk' => $total - ((70 / 100) * $total),
+        //         'dateinv'   => $dateformat,
+        //         'dateline'  => $dateline,
+        //         'hal'       => "2",
+        //         'total'     => $total,
+        //     ];
+        // }
+
+        // // INVOICE III
+        // if (!empty($bast) && !empty($projects['inv3'])) {
+
+        //     // Date Invoice
+        //     $inv3 = $projects['inv3'];
+
+        //     // Dateline Invoice 2 Interval
+        //     $dateinv3       = $inv3;
+        //     $date           = date_create($dateinv3);
+        //     $dateformat     = date_format($date, "Y-m-d");
+        //     $hari           = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinv3 = date_format($hari, 'Y-m-d');
+        //     $dateline = $datelineinv3;
+
+        //     $invoicedata = [
+        //         'termin'    => "30",
+        //         'progress'  => "95",
+        //         'nilai_spk' => $total - ((65 / 100) * $total),
+        //         'dateinv'   => $dateformat,
+        //         'dateline'  => $dateline,
+        //         'hal'       => "3",
+        //         'total'     => $total,
+        //     ];
+        // }
+
+        // // INVOICE IV
+        // if (!empty($bast) && !empty($projects['inv4'])) {
+
+        //     // Date Invoice
+        //     $inv4 = $projects['inv4'];
+
+        //     // Dateline Invoice 2 Interval
+        //     $dateinv4       = $inv4;
+        //     $date           = date_create($dateinv4);
+        //     $dateformat     = date_format($date, "Y-m-d");
+        //     $hari           = date_create($dateformat);
+        //     date_add($hari, date_interval_create_from_date_string('14 days'));
+        //     $datelineinv4 = date_format($hari, 'Y-m-d');
+
+        //     $dateline = $datelineinv4;
+
+        //     $invoicedata = [
+        //         'termin'    => "5",
+        //         'progress'  => "100",
+        //         'nilai_spk' => $total - ((95 / 100) * $total),
+        //         'dateinv'   => $dateformat,
+        //         'dateline'  => $dateline,
+        //         'hal'       => "4",
+        //         'total'     => $total,
+        //     ];
+        // }
+
+        // NEW FUNCTION INVOICE
         // Calling models
         $ProjectModel   = new ProjectModel;
         $CompanyModel   = new CompanyModel();
-        $BastModel      = new BastModel();
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
-        $invoiceModel   = new InvoiceModel();
+        $BastModel      = new BastModel();
+        $GconfigModel   = new GconfigModel();
+        $InvoiceModel   = new InvoiceModel();
+        $ReferensiModel = new ReferensiModel();
+        $UserModel      = new UserModel();
 
         // PROJECT DATA
         $projects = $ProjectModel->find($id);
+        $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+        $gconf    = $GconfigModel->first();
+
+        // INVOICE 
+        $invoice1  = $InvoiceModel->where('projectid',$projects['id'])->where('status','1')->first();
+        $invoice2  = $InvoiceModel->where('projectid',$projects['id'])->where('status','2')->first();
+        $invoice3  = $InvoiceModel->where('projectid',$projects['id'])->where('status','3')->first();
+        $invoice4  = $InvoiceModel->where('projectid',$projects['id'])->where('status','4')->first();
 
         // CLIENT DATA
         $client   = $CompanyModel->find($projects['clientid']);
@@ -1052,12 +1364,6 @@ class Project extends BaseController
         // BAST DATA
         $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
         $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
-
-        // INVOICE DATA 
-        $invoiceI   = $invoiceModel->where('projectid', $id)->where('status', "1")->first();
-        $invoiceII  = $invoiceModel->where('projectid', $id)->where('status', "2")->first();
-        $invoiceIII = $invoiceModel->where('projectid', $id)->where('status', "3")->first();
-        $invoiceIV  = $invoiceModel->where('projectid', $id)->where('status', "4")->first();
 
         // RAB
         $rabs       = $RabModel->where('projectid', $projects['id'])->find();
@@ -1085,225 +1391,134 @@ class Project extends BaseController
             }
         }
 
+        // TOTAL RAB PRICE
         $total = array_sum(array_column($rabdata, 'price'));
-
-        // New Database Invoice Configuration
-
-        // New Data Invoice Array
-        $newdatainv = [];
-
-        // VARIABLE DECLARATION
-        $termin     = "";
-        $progress   = "";
-        $spkval     = "";
-        $hal        = "";
-        $dateinv    = "";
-
-        // INV I
-        if ($projects['status_spk'] === "1" && empty($sertrim) && empty($bast) && !empty($projects['inv1']) && empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
-
-            // VARIABLE DATA I
-            $termin     = "30";
-            $progress   = "30";
-            $spkval     = $total - ((70 / 100) * $total);
-            $hal        = "1";
-            $total      = $total;
-            $dateinv    = $projects['inv1'];
-
-
-            // Dateline Invoice 1 Interval
-            $dateinvoice =  $dateinv;
-            $date = date_create($dateinvoice);
-            $dateformat = date_format($date, "Y-m-d");
-            $hari = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinvoice = date_format($hari, 'Y-m-d');
-        }
-
-        // INV II
-        if ($projects['status_spk'] === "1" && !empty($sertrim) && empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && empty($projects['inv3']) && empty($projects['inv4'])) {
-
-            // VARIABLE DATA II
-            $termin     = "30";
-            $progress   = "60";
-            $spkval     = $total - ((70 / 100) * $total);
-            $hal        = "2";
-            $total      = $total;
-            $dateinv    = $projects['inv2'];
-
-            // Dateline Invoice 2 Interval
-            $dateinvoice =  $dateinv;
-            $date = date_create($dateinvoice);
-            $dateformat = date_format($date, "Y-m-d");
-            $hari = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinvoice = date_format($hari, 'Y-m-d');
-        }
-
-        // INV III
-        if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && empty($projects['inv4'])) {
-
-            // VARIABLE DATA II
-            $termin     = "35";
-            $progress   = "95";
-            $spkval     = $total - ((65 / 100) * $total);
-            $hal        = "3";
-            $total      = $total;
-            $dateinv    = $projects['inv3'];
-
-            // Dateline Invoice 1 Interval
-            $dateinvoice =  $dateinv;
-            $date = date_create($dateinvoice);
-            $dateformat = date_format($date, "Y-m-d");
-            $hari = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinvoice = date_format($hari, 'Y-m-d');
-        }
-
-        // INV IV
-        if ($projects['status_spk'] === "1" && !empty($sertrim) && !empty($bast) && !empty($projects['inv1']) && !empty($projects['inv2']) && !empty($projects['inv3']) && !empty($projects['inv4'])) {
-
-            // VARIABLE DATA II
-            $termin     = "35";
-            $progress   = "95";
-            $spkval     = $total - ((95 / 100) * $total);
-            $hal        = "4";
-            $total      = $total;
-            $dateinv    = $projects['inv4'];
-
-            // Dateline Invoice 1 Interval
-            $dateinvoice =  $dateinv;
-            $date = date_create($dateinvoice);
-            $dateformat = date_format($date, "Y-m-d");
-            $hari = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinvoice = date_format($hari, 'Y-m-d');
-        }
-
-        $newdatainv = [
-            'termin'    => $termin,
-            'progress'  => $progress,
-            'nilai_spk' => $spkval,
-            'dateinv'   => $dateformat,
-            'dateline'  => $datelineinvoice,
-            'hal'       => $hal,
-            'total'     => $total,
-        ];
-
-
-
-        // End New Database Invoice Configuration
+        // PPN
+        $ppn        = $gconf['ppn'];
 
         // Invoice Data Array
-        $invoicedata = [];
+        $termin     = "";
+        $progress   = "";
+        $nilaispk   = "";
+        $dateinv    = "";
+        $dateline   = "";
+        $priceppn   = "";
+        $pph        = "";
+        $referensi  = "";
+        $email      = "";
+        $status     = "";
+        $pic        = "";
 
         // INVOICE I
-        if ($projects['status_spk'] === "1" && !empty($projects['inv1'])) {
-
-            if (!empty($projects['inv1'])) {
-                // Date Invoice
-                $inv1 = $projects['inv1'];
-
-                // Dateline Invoice 1 Interval
-                $dateinv1 =  $inv1;
-                $date = date_create($dateinv1);
-                $dateformat = date_format($date, "Y-m-d");
-                $hari = date_create($dateformat);
-                date_add($hari, date_interval_create_from_date_string('14 days'));
-                $datelineinv1 = date_format($hari, 'Y-m-d');
-                $dateline = $datelineinv1;
-            }
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "30",
-                'nilai_spk' => $total - ((70 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "1",
-                'total'     => $total,
-            ];
+        if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+            $termin     = "30";
+            $progress   = "30";
+            $nilaispk   = $total - ((70 / 100) * $total);
+            $dateinv    = $projects['inv1'];
+            $dateline   = $invoice1['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice1['pph23'];
+            $referensi  = $invoice1['referensi'];
+            $email      = $invoice1['email'];
+            $status     = $invoice1['status'];
+            $pic        = $invoice1['pic'];
         }
 
         // INVOICE II
-        if (!empty($sertrim) && !empty($projects['inv2'])) {
-
-            // Date Invoice
-            $inv2 = $projects['inv2'];
-
-            // Dateline Invoice 2 Interval
-            $dateinv2       = $inv2;
-            $date           = date_create($dateinv2);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv2 = date_format($hari, 'Y-m-d');
-
-            $dateline = $datelineinv2;
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "60",
-                'nilai_spk' => $total - ((70 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "2",
-                'total'     => $total,
-            ];
+        if (!empty($sertrim) && !empty($projects['inv2']) && !empty($invoice3)) {
+            $termin     = "30";
+            $progress   = "60";
+            $nilaispk   = $total - ((70 / 100) * $total);
+            $dateinv    = $projects['inv2'];
+            $dateline   = $invoice2['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice2['pph23'];
+            $referensi  = $invoice2['referensi'];
+            $email      = $invoice2['email'];
+            $status     = $invoice2['status'];
+            $pic        = $invoice2['pic'];
         }
 
         // INVOICE III
-        if (!empty($bast) && !empty($projects['inv3'])) {
-
-            // Date Invoice
-            $inv3 = $projects['inv3'];
-
-            // Dateline Invoice 2 Interval
-            $dateinv3       = $inv3;
-            $date           = date_create($dateinv3);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv3 = date_format($hari, 'Y-m-d');
-            $dateline = $datelineinv3;
-
-            $invoicedata = [
-                'termin'    => "30",
-                'progress'  => "95",
-                'nilai_spk' => $total - ((65 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "3",
-                'total'     => $total,
-            ];
+        if (!empty($bast) && !empty($projects['inv3']) && !empty($invoice3)) {
+            $termin     = "35";
+            $progress   = "95";
+            $nilaispk   = $total - ((65 / 100) * $total);
+            $dateinv    = $projects['inv3'];
+            $dateline   = $invoice3['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice3['pph23'];
+            $referensi  = $invoice3['referensi'];
+            $email      = $invoice3['email'];
+            $status     = $invoice3['status'];
+            $pic        = $invoice3['pic'];
         }
 
         // INVOICE IV
-        if (!empty($bast) && !empty($projects['inv4'])) {
+        if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4)) {
 
-            // Date Invoice
-            $inv4 = $projects['inv4'];
+            $termin     = "5";
+            $progress   = "100";
+            $nilaispk   = $total - ((95 / 100) * $total);
+            $dateinv    = $projects['inv4'];
+            $dateline   = $invoice4['jatuhtempo'];
+            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $pph        = $invoice4['pph23'];
+            $referensi  = $invoice4['referensi'];
+            $email      = $invoice4['email'];
+            $status     = $invoice4['status'];
+            $pic        = $invoice4['pic'];
+
 
             // Dateline Invoice 2 Interval
-            $dateinv4       = $inv4;
-            $date           = date_create($dateinv4);
-            $dateformat     = date_format($date, "Y-m-d");
-            $hari           = date_create($dateformat);
-            date_add($hari, date_interval_create_from_date_string('14 days'));
-            $datelineinv4 = date_format($hari, 'Y-m-d');
+            // $dateinv4       = $inv4;
+            // $date           = date_create($dateinv4);
+            // $dateformat     = date_format($date, "Y-m-d");
+            // $hari           = date_create($dateformat);
+            // date_add($hari, date_interval_create_from_date_string('14 days'));
+            // $datelineinv4 = date_format($hari, 'Y-m-d');
 
-            $dateline = $datelineinv4;
-
-            $invoicedata = [
-                'termin'    => "5",
-                'progress'  => "100",
-                'nilai_spk' => $total - ((95 / 100) * $total),
-                'dateinv'   => $dateformat,
-                'dateline'  => $dateline,
-                'hal'       => "4",
-                'total'     => $total,
-            ];
+            // $dateline = $datelineinv4;
         }
+
+        // DATA REFERENSI
+        $refdata    = "";
+        $refname    = "";
+        $refacc     = "";
+        $refbank    = "";
+        if(!empty($referensi)){
+            $refdata = $ReferensiModel->where('id',$referensi)->first();
+            $refname    = $refdata['name'];
+            $refacc     = $refdata['no_rek'];
+            $refbank    = $refdata['bank'];
+        }
+
+        // DATA PIC
+        $picdata = "";
+        $picname = "";
+        if(!empty($pic)){
+            $picdata    = $UserModel->where('id',$pic)->first();
+            $picname    = $picdata->name;
+        }
+
+
+        $invoicedata = [
+            'termin'    => $termin,
+            'progress'  => $progress,
+            'nilai_spk' => $nilaispk,
+            'dateinv'   => $dateinv,
+            'dateline'  => $dateline,
+            'total'     => $total,
+            'ppn'       => $gconf['ppn'],
+            'priceppn'  => $total + (($gconf['ppn'] / 100) * $total),
+            'pph'       => $pph,
+            'referensi' => $refname,
+            'refacc'    => $refacc,
+            'refbank'   => $refbank,
+            'email'     => $email,
+            'pic'       => $picname,
+        ];
+        // END NEW FUCTION 
 
         // Parsing Data to View
         $data                   = $this->data;

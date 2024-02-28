@@ -67,6 +67,7 @@ class Autoload extends AutoloadConfig
         'voku\helper'                   => APPPATH . 'ThirdParty/anti-xss-master/src/voku/helper',
         // 'mockery/mockery'               => APPPATH . 'ThirdParty/mockery-1.6.7/library',
     ];
+    
 
     /**
      * -------------------------------------------------------------------

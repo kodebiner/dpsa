@@ -28,7 +28,7 @@ use Psr\Log\NullLogger;
  */
 class Mpdf implements \Psr\Log\LoggerAwareInterface
 {
-
+	
 	use Strict;
 	use FpdiTrait;
 
@@ -27466,8 +27466,14 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 		// Date replace
 		$html = preg_replace_callback('/\{DATE\s+(.*?)\}/', [$this, 'date_callback'], $html); // mPDF 5.7
+		$html = str_replace('{PAGECNT}', $this->getPageCount(), $html);
+
 
 		return $html;
+	}
+
+	function getPageCount() {
+		return count($this->pages);
 	}
 
 }

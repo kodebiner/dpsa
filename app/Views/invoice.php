@@ -64,7 +64,7 @@
             background-blend-mode: lighten;
             background-image: url('/img/logo.png');
             background-repeat: no-repeat;
-            background-size: 500px;
+            background-size: 600px;
             background-position: center;
             background-color: rgba(255, 255, 255, 0.5);
         }
@@ -101,140 +101,20 @@ $tanggaldateline = ucwords($dateFormatted);
 
 <body id="watermark">
 
-    <!-- <div class="uk-section uk-section-default uk-padding-small">
-        <div class="uk-container">
-            <div class="uk-panel uk-flex uk-flex-center">
-                <div>
-                    <img class="uk-align-left uk-margin-remove-adjacent" src="img/logo.png" width="100px"></img>
-                </div>
-                <div class="uk-text-middle">
-                    <div class="uk-text-large uk-text-bold uk-margin-remove">PT. DHARMA PUTRA SEJAHTERA ABADI</div>
-                    <div class="uk-text-small uk-text-bold uk-margin-remove">Interior & Furniture Manufaktur</div>
-                    <div class="uk-margin-remove" style="font-size: 10pt">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</div>
-
-                    <div class="uk-child-width-1-2 uk-margin-remove uk-grid-small" style="font-size: 10pt" uk-grid>
-                        <div class="uk-width-1-6 uk-padding-remove">
-                            <div>Telepon</div>
-                        </div>
-                        <div class="uk-width-3-4 uk-padding-remove">
-                            <div>: (0274) 2800089 Fax : (0274) 4332246</div>
-                        </div>
-                        <div class="uk-margin-remove uk-padding-remove uk-width-1-6">
-                            <div>Email</div>
-                        </div>
-                        <div class="uk-margin-remove uk-padding-remove uk-width-3-4">
-                            <div>: dpsa@gmail.com</div>
-                        </div>
-                        <div class="uk-margin-remove uk-padding-remove uk-width-1-6">
-                            <div>Website</div>
-                        </div>
-                        <div class="uk-margin-remove uk-padding-remove uk-width-3-4">
-                            <div>: dpsa.com</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr style="border-top: 3pt solid #000;">
-    </div> -->
-
-    <!-- <table class="kop" style="width:100%">
-        <tr>
-            <th rowspan="4">Phone</th>
-            <td>555-1234</td>
-        </tr>
-        <tr>
-            <td>555-8745</td>
-        </tr>
-        <tr>
-            <td>555-8745</td>
-        </tr>
-        <tr>
-            <td>555-8745</td>
-        </tr>
-    </table> -->
-
-    <!-- <table>
+    <table style="width:100%">
         <tr>
             <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
             <td>
-                <table class="kop">
-                    <tr style="display: block; height: 10px;">
-                        <td style="font-weight:bold; font-size: 8px;">
-                            PT. DHARMA PUTRA SEJAHTERA ABADI
-                        </td>
-                    </tr>
-                    <tr style="display: block; height: 10px;">
-                        <td style="font-weight:bold;">
-                            Interior & Furniture Manufaktur
-                        </td>
-                    </tr>
-                    <tr style="display: block; height: 10px;">
-                        <td style="font-weight:bold;">
-                            Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.
-                        </td>
-                    </tr>
-                    <tr style="display: block; height: 10px;">
-                        <td>
-                            Telephone : (0274) 2800089 Fax : (0274) 4332246
-                        </td>
-                    </tr>
-                    <tr style="display: block; height: 10px;">
-                        <td>
-                            Email : dpsa@gmail.com
-                        </td>
-                    </tr>
-                    <tr style="display: block; height: 10px;">
-                        <td>
-                            Website : dharmaputra04.com
-                        </td>
-                    </tr>
-                </table>
+                <font style="font-weight:bold; font-size: 8px;"> PT. DHARMA PUTRA SEJAHTERA ABADI</font><br>
+                <font style="font-weight:bold; font-size: 8px;"> Interior & Furniture Manufaktur</font><br>
+                <font style="font-size: 5px;">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</font><br>
+                <font style="font-size: 5px;">Telephone : (0274) 2800089 Fax : (0274) 4332246</font><br>
+                <font style="font-size: 5px;">Email : dpsa@gmail.com</font><br>
+                <font style="font-size: 5px;">Website : dharmaputra04.com</font><br>
             </td>
-            <td></td>
-        </tr>
-    </table> -->
-
-    <table>
-        <tr>
-            <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
-            <td>
-                <table>
-                    <tr style="display: block; height:2px;">
-                        <td style="font-weight:bold; font-size: 8px;">
-                            PT. DHARMA PUTRA SEJAHTERA ABADI
-                        </td>
-                    </tr>
-                    <tr style="display: block; height:2px;">
-                        <td style="font-weight:bold;">
-                            Interior & Furniture Manufaktur
-                        </td>
-                    </tr>
-                    <tr style="display: block; height:2px;">
-                        <td style="font-weight:bold;">
-                            Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.
-                        </td>
-                    </tr>
-                    <tr style="display: block; height:2px;">
-                        <td>
-                            Telephone : (0274) 2800089 Fax : (0274) 4332246
-                        </td>
-                    </tr>
-                    <tr style="display: block; height:2px;">
-                        <td>
-                            Email : dpsa@gmail.com
-                        </td>
-                    </tr>
-                    <tr style="display: block; height:2px;">
-                        <td>
-                            Website : dharmaputra04.com
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td></td>
         </tr>
     </table>
+
     <hr>
 
     <table style="height: 70px;">
@@ -256,19 +136,19 @@ $tanggaldateline = ucwords($dateFormatted);
         </tr>
         <tr style="height: 80px; vertical-align: bottom;">
             <td>NPWP : <?= $client['npwp'] ?></td>
-            <td>NPWP :</td>
+            <td>NPWP : 3425349534</td>
         </tr>
         <tr>
-            <td>PIC Customer :</td>
-            <th>Bank Detail :</th>
+            <td>PIC Customer : <?= $invoice['pic'] ?></td>
+            <th>Bank Detail</th>
         </tr>
         <tr>
-            <td>Bank Detail</td>
-            <td>Bank Detail</td>
+            <td>Bank Detail : <?= $client['bank'] ?></td>
+            <td>Bank Detail : <?= $invoice['refbank'] ?></td>
         </tr>
         <tr>
-            <td>AC NO.</td>
-            <td>AC NO.</td>
+            <td>AC NO. <?= $client['no_rek'] ?></td>
+            <td>AC NO. <?= $invoice['refacc'] ?></td>
         </tr>
     </table>
 
@@ -283,7 +163,7 @@ $tanggaldateline = ucwords($dateFormatted);
                 <tr>
                     <td>No. XXXX/DPSA/Kode Rs/Bulan/Tahun</td>
                     <td><?= $tanggalspk ?></td>
-                    <td>Hal <?= $invoice['hal'] ?> dari 4</td>
+                    <td>Hal </?= $invoice['hal'] ?> dari 4</td>
                 </tr>
             </table>
         </div>
@@ -294,8 +174,8 @@ $tanggaldateline = ucwords($dateFormatted);
                     <th>Refrensi PT.DPSA</th>
                 </tr>
                 <tr>
-                    <td>Email : dharmaputra888@yahoo.com, dharmaputra04@yahoo.com</td>
-                    <td>MR.Ghozali</td>
+                    <td>Email : <?= $invoice['email'] ?></td>
+                    <td><?= $invoice['referensi'] ?></td>
                 </tr>
             </table>
         </div>
@@ -318,20 +198,17 @@ $tanggaldateline = ucwords($dateFormatted);
         </tr>
         <tr style="border:1pt solid #900; border-bottom-style: none">
             <td style="width: 30%; border:1pt solid; border-bottom-style: none;"></td>
-            <td style="width: 40%; font-weight:bold;text-align:center;">Nilai SPK <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');
-                                                                                    " "; ?></td>
+            <td style="width: 40%; font-weight:bold;text-align:center;">Nilai SPK <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
             <td style="text-align: center; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
         </tr>
         <tr style="border:1pt solid; border-top-style: none;">
             <td style="width: 30%; border:1pt solid; border-top-style: none;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
-            <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress</td>
+            <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress <?= $invoice['progress'] ?>% <?= $projects['name'] ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= $invoice['termin'] ?>%</td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.');
-                                                                                                    " "; ?></td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');
-                                                                                                    " "; ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.'); " "; ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" "; ?></td>
             <!-- <td style="text-align: right; border:1pt solid; border-top-style: none; width: 10%;">
                 <table>
                     </?php foreach ($rabs as $rab) { ?>
@@ -373,8 +250,7 @@ $tanggaldateline = ucwords($dateFormatted);
                 <tr>
                     <th style="border: 1pt solid black; width:50%;">Total Harga</th>
                     <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                    <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');
-                                                                                                    " "; ?></td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');" "; ?></td>
                 </tr>
                 <tr>
                     <th style="border: 1pt solid black; width:50%;">Diskon 0%</th>
@@ -407,7 +283,7 @@ $tanggaldateline = ucwords($dateFormatted);
     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN 11%</th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN <?= $invoice['ppn'] ?> %</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
             <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
         </tr>
@@ -416,7 +292,7 @@ $tanggaldateline = ucwords($dateFormatted);
     <table style="border: 1pt solid black; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 2% Rp. -</th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 <?= $invoice['pph'] ?>% Rp. -</th>
             <td style="border: 1pt solid black; border-right-style:none;"></td>
             <td style="border: 1pt solid black; border-left-style:none; text-align:right"></td>
         </tr>
@@ -424,7 +300,7 @@ $tanggaldateline = ucwords($dateFormatted);
 
     <table style="border: 1pt solid black; margin-top:5px;">
         <tr>
-            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; width:55%;"></th>
             <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
             <td style="border: 1pt solid black; border-left-style:none; text-align:right">66,600,000</td>
