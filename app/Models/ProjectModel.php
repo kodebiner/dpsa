@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class ProjectModel extends Model
 {
     protected $allowedFields = [
-        'clientid', 'name', 'status', 'spk', 'no_spk', 'status_spk', 'type_design', 'ded','inv1','inv2','inv3','inv4', 'created_at', 'updated_at', 'deleted_at',
+        'clientid', 'name', 'status', 'spk', 'no_spk', 'status_spk', 'type_design', 'ded', 'tahun', 'inv1', 'inv2', 'inv3', 'inv4', 'created_at', 'updated_at', 'deleted_at',
     ];
     
     protected $table            = 'project';

@@ -338,11 +338,79 @@ class Project extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        //--- SPH NUM ---//
+
+        // DATA PROYEK 
+        $proyek = $ProjectModel->findAll();
+
+        $number = date('n');
+        function numberToRomanRepresentation($number)
+        {
+            $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+            $returnValue = '';
+            while ($number > 0) {
+                foreach ($map as $roman => $int) {
+                    if ($number >= $int) {
+                        $number -= $int;
+                        $returnValue .= $roman;
+                        break;
+                    }
+                }
+            }
+            return $returnValue;
+        }
+        $roman = numberToRomanRepresentation($number);
+
+        // VARIABEL ROW PROJECT
+        $amount = "";
+
+        // PROYEK TAHUN INI
+        $yearEnd = date('Y-m-d', strtotime('Dec 31')). " 00:00:00";
+        $thisyear = $ProjectModel->where('tahun <=', $yearEnd)->find();
+        
+        // PROYEK TERAKHIR
+        $lastproyek = $ProjectModel->orderBy('id', 'DESC')->first();
+        $lastpro = $lastproyek['tahun'];
+
+        // DATE DATA
+        $Year = date('Y');
+        $tahunini = date('Y-m-d H:i:s');
+
+        if(!empty($lastpro)){
+            if($lastpro > $tahunini){
+                if (!empty($lastproyek)) {
+                    $amount = count($lastproyek) + 1;
+                } else {
+                    $amount = 1;
+                }
+            }elseif($lastpro = $tahunini){
+                if (!empty($proyek)) {
+                    $amount = count($thisyear) + 1;
+                } else {
+                    $amount = 1;
+                }
+            }
+        }else{
+            if (!empty($proyek)) {
+                $amount = count($proyek) + 1;
+            } else {
+                $amount = 1;
+            }
+        }
+
+        $sphnum = str_pad($amount, 3, '0', STR_PAD_LEFT);
+
+        $numsph = $sphnum . "/DPSA/HRMN/" . $roman . "/" . $Year;
+
+        //--- END SPH NUM ---//
+
         // Project Data
         $project = [
             'name'          => $input['name'],
             'clientid'      => $input['company'],
-            'status'        => 1
+            'status'        => 1,
+            'no_sph'        => $numsph,
+            'tahun'         => $tahunini,
         ];
 
         if (isset($input['designtype'])) {
@@ -916,10 +984,10 @@ class Project extends BaseController
         $gconf    = $GconfigModel->first();
 
         // INVOICE 
-        $invoice1  = $InvoiceModel->where('projectid',$projects['id'])->where('status','1')->first();
-        $invoice2  = $InvoiceModel->where('projectid',$projects['id'])->where('status','2')->first();
-        $invoice3  = $InvoiceModel->where('projectid',$projects['id'])->where('status','3')->first();
-        $invoice4  = $InvoiceModel->where('projectid',$projects['id'])->where('status','4')->first();
+        $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+        $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+        $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+        $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
 
         // CLIENT DATA
         $client   = $CompanyModel->find($projects['clientid']);
@@ -1049,8 +1117,8 @@ class Project extends BaseController
         $refname    = "";
         $refacc     = "";
         $refbank    = "";
-        if(!empty($referensi)){
-            $refdata = $ReferensiModel->where('id',$referensi)->first();
+        if (!empty($referensi)) {
+            $refdata = $ReferensiModel->where('id', $referensi)->first();
             $refname    = $refdata['name'];
             $refacc     = $refdata['no_rek'];
             $refbank    = $refdata['bank'];
@@ -1059,8 +1127,8 @@ class Project extends BaseController
         // DATA PIC
         $picdata = "";
         $picname = "";
-        if(!empty($pic)){
-            $picdata    = $UserModel->where('id',$pic)->first();
+        if (!empty($pic)) {
+            $picdata    = $UserModel->where('id', $pic)->first();
             $picname    = $picdata->name;
         }
 
@@ -1101,17 +1169,17 @@ class Project extends BaseController
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
 
         $mpdf->SetWatermarkImage(
-        './img/logo.png',
-         0.3,
-        '',
-        // [50,50,50],
-        // [50,50],
-        [70,40],
+            './img/logo.png',
+            0.3,
+            '',
+            // [50,50,50],
+            // [50,50],
+            [70, 40],
         );
         $mpdf->showWatermarkImage = true;
         $mpdf->setFooter('{PAGENO} / {nb}');
         $date = date_create($projects['created_at']);
-        $filename = "invoice" .$status."-".$projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
+        $filename = "invoice" . $status . "-" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
         $html = view('Views/invoice', $data);
         $mpdf->WriteHTML($html);
         $mpdf->Output($filename, 'D');
@@ -1409,10 +1477,10 @@ class Project extends BaseController
         $gconf    = $GconfigModel->first();
 
         // INVOICE 
-        $invoice1  = $InvoiceModel->where('projectid',$projects['id'])->where('status','1')->first();
-        $invoice2  = $InvoiceModel->where('projectid',$projects['id'])->where('status','2')->first();
-        $invoice3  = $InvoiceModel->where('projectid',$projects['id'])->where('status','3')->first();
-        $invoice4  = $InvoiceModel->where('projectid',$projects['id'])->where('status','4')->first();
+        $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+        $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+        $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+        $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
 
         // CLIENT DATA
         $client   = $CompanyModel->find($projects['clientid']);
@@ -1542,8 +1610,8 @@ class Project extends BaseController
         $refname    = "";
         $refacc     = "";
         $refbank    = "";
-        if(!empty($referensi)){
-            $refdata = $ReferensiModel->where('id',$referensi)->first();
+        if (!empty($referensi)) {
+            $refdata = $ReferensiModel->where('id', $referensi)->first();
             $refname    = $refdata['name'];
             $refacc     = $refdata['no_rek'];
             $refbank    = $refdata['bank'];
@@ -1552,8 +1620,8 @@ class Project extends BaseController
         // DATA PIC
         $picdata = "";
         $picname = "";
-        if(!empty($pic)){
-            $picdata    = $UserModel->where('id',$pic)->first();
+        if (!empty($pic)) {
+            $picdata    = $UserModel->where('id', $pic)->first();
             $picname    = $picdata->name;
         }
 
