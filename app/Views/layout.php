@@ -50,7 +50,7 @@
                                         <div class="uk-width-1-1 uk-flex uk-flex-center">
                                             <img class="uk-width-1-6" src="img/layout/dashboard.svg" uk-svg>
                                         </div>
-                                        <div class="uk-text-center"><?= lang('Global.dashboard'); ?></div>
+                                        <div class="uk-text-center">Dashboard</div>
                                     </div>
                                 </a>
                             </li>
@@ -182,7 +182,7 @@
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/dashboard.svg" uk-svg>
                                 </div>
-                                <div class="uk-text-center"><?= lang('Global.dashboard'); ?></div>
+                                <div class="uk-text-center">Dashboard</div>
                             </div>
                         </a>
                     </li>
@@ -236,7 +236,7 @@
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
                                     <img class="uk-width-1-2" src="img/layout/project.svg" uk-svg>
                                 </div>
-                                <div class="uk-text-center"><?= lang('Global.manageProject') ?></div>
+                                <div class="uk-text-center">Pengelolaan Proyek</div>
                             </div>
                         </a>
                     </li>

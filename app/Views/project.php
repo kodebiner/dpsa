@@ -950,7 +950,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     <tr>
                                                                         <td></td>
                                                                         <td>
-                                                                            <input type="text" id="customname[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="customname<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
+                                                                            <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
                                                                         </td>
                                                                         <td></td>
                                                                         <td></td>
@@ -959,9 +959,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         <td></td>
                                                                         <td></td>
                                                                         <td></td>
-                                                                        <td></td>
                                                                         <td>
-                                                                            <input type="number" id="customprice[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="customprice<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['price'] ?>" />
+                                                                            <input type="number" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['price'] ?>" />
                                                                         </td>
                                                                     </tr>
                                                                 <?php }
@@ -991,8 +990,12 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     </div>
                                                 </div>
                                                 <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
-                                                    <div id="createName<?= $project['id'] ?>0"><input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" /></div>
-                                                    <div id="createPrice<?= $project['id'] ?>0"><input type="number" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" /></div>
+                                                    <div id="createName<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
+                                                    </div>
+                                                    <div id="createPrice<?= $project['id'] ?>0">
+                                                        <input type="number" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <script type="text/javascript">
@@ -1001,39 +1004,39 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                 function createNewCustomRab(x) {
                                                     createCount++;
 
-                                                    const createCustomRab = document.getElementById("createCustomRab<?= $project['id'] ?>");
+                                                    const createCustomRab = document.getElementById('createCustomRab' + x +'');
 
                                                     const newCreateCustomRab = document.createElement('div');
-                                                    newCreateCustomRab.setAttribute('id', 'create<?= $project['id'] ?>' + createCount);
+                                                    newCreateCustomRab.setAttribute('id', 'create' + x + '' + createCount);
                                                     newCreateCustomRab.setAttribute('class', 'uk-margin uk-child-width-auto');
                                                     newCreateCustomRab.setAttribute('uk-grid', '');
 
                                                     const createName = document.createElement('div');
-                                                    createName.setAttribute('id', 'createName<?= $project['id'] ?>' + createCount);
+                                                    createName.setAttribute('id', 'createName' + x + '' + createCount);
 
                                                     const createNameInput = document.createElement('input');
                                                     createNameInput.setAttribute('type', 'text');
                                                     createNameInput.setAttribute('class', 'uk-input');
                                                     createNameInput.setAttribute('placeholder', 'Nama');
-                                                    createNameInput.setAttribute('id', 'customname<?= $project['id'] ?>[' + createCount + ']');
-                                                    createNameInput.setAttribute('name', 'customname<?= $project['id'] ?>[' + createCount + ']');
+                                                    createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
+                                                    createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
 
                                                     const createPrice = document.createElement('div');
-                                                    createPrice.setAttribute('id', 'createPrice<?= $project['id'] ?>' + createCount);
+                                                    createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
 
                                                     const createPriceInput = document.createElement('input');
                                                     createPriceInput.setAttribute('type', 'number');
                                                     createPriceInput.setAttribute('class', 'uk-input');
                                                     createPriceInput.setAttribute('placeholder', 'Harga');
-                                                    createPriceInput.setAttribute('id', 'customprice<?= $project['id'] ?>[' + createCount + ']');
-                                                    createPriceInput.setAttribute('name', 'customprice<?= $project['id'] ?>[' + createCount + ']');
+                                                    createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
+                                                    createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
 
                                                     const createRemove = document.createElement('div');
-                                                    createRemove.setAttribute('id', 'remove<?= $project['id'] ?>' + createCount);
+                                                    createRemove.setAttribute('id', 'remove' + x + '' + createCount);
                                                     createRemove.setAttribute('class', 'uk-text-center uk-text-bold uk-text-danger uk-flex uk-flex-middle');
 
                                                     const createRemoveButton = document.createElement('a');
-                                                    createRemoveButton.setAttribute('onclick', 'createRemove<?= $project['id'] ?>(' + createCount + ')');
+                                                    createRemoveButton.setAttribute('onclick', 'createRemove' + x + '(' + createCount + ')');
                                                     createRemoveButton.setAttribute('class', 'uk-link-reset');
                                                     createRemoveButton.innerHTML = 'X';
 
@@ -1087,6 +1090,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                             echo "Meter Lari";
                                                                         } elseif ($mdlrab['denomination'] === "3") {
                                                                             echo "Meter Persegi";
+                                                                        } elseif ($mdlrab['denomination'] === "4") {
+                                                                            echo "Set";
                                                                         }
                                                                         ?>
                                                                     </td>
@@ -1281,6 +1286,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     tdden.innerHTML = 'Meter'
                                                                 } else if (emdlarray[t]['denomination'] === '3') {
                                                                     tdden.innerHTML = 'Meter Persegi'
+                                                                } else if (emdlarray[t]['denomination'] === '4') {
+                                                                    tdden.innerHTML = 'Set'
                                                                 }
 
                                                                 var tdqty = document.createElement('td');
@@ -1368,21 +1375,6 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <?php }
                             } ?>
                             <!-- Detail Pemesanan Section End -->
-
-                            <!-- Custom Pemesanan Section -->
-                            <?php if ((!empty($projectdata[$project['id']]['design'])) || ($project['type_design'] === '0')) {
-                                if (((!empty($projectdata[$project['id']]['design'])) && ($projectdata[$project['id']]['design']['status'] === '2')) || ($project['type_design'] === '0')) { ?>
-                                    <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
-                                        <div>
-                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Custom Pemesanan</div>
-                                        </div>
-                                        <div class="uk-text-right">
-                                            <a class="uk-link-reset uk-icon-button" id="togglecustomsph<?= $project['id'] ?>" uk-toggle="target: .customsph<?= $project['id'] ?>"><span class="uk-light" id="closecustomsph<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="opencustomsph<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
-                                        </div>
-                                    </div>
-                                <?php }
-                            } ?>
-                            <!-- Custom Pemesanan Section End -->
 
                             <!-- SPK Section -->
                             <?php if ($project['spk'] != null) {

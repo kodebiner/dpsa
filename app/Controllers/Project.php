@@ -370,6 +370,7 @@ class Project extends BaseController
         $ProductionModel    = new ProductionModel();
         $BastModel          = new BastModel();
         $InvoiceModel       = new InvoiceModel();
+        $CustomRabModel     = new CustomRabModel();
 
 
         // initialize
@@ -471,11 +472,66 @@ class Project extends BaseController
             }
         }
 
-        // LAST UPDATE HERE
         // Custom RAB Data
-        // foreach ($input['customprice'] as $customid => $cusprice) {
+        foreach ($input['customprice' . $id] as $priceKey => $cusprice) {
+            if (!empty($cusprice)) {
+                $custrab['price']       = $cusprice;
+                $custrab['projectid']   = $id;
 
-        // }
+                foreach ($input['customname' . $id] as $nameKey => $cusname) {
+                    if ($nameKey === $priceKey) {
+                        $custrab['name']    = $cusname;
+                    }
+                }
+
+                $CustomRabModel->insert($custrab);
+            }
+        }
+
+        // Update Custom RAB
+        if (!empty($input['pricecustrab' . $id])) {
+            foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
+                $customrabdata  = $CustomRabModel->find($custrabid);
+
+                if ($pricecustrab != $customrabdata['price']) {
+                    if (!empty($pricecustrab)) {
+                        if ($pricecustrab != 0) {
+                            $datacustomrab  = [
+                                'id'    => $custrabid,
+                                'price' => $pricecustrab,
+                            ];
+                            $CustomRabModel->save($datacustomrab);
+                        } else {
+                            $CustomRabModel->delete($customrabdata);
+                        }
+                    }
+                    else {
+                        $CustomRabModel->delete($customrabdata);
+                    }
+                }
+            }
+        }
+        if (!empty($input['namecustrab' . $id])) {
+            foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
+                $custrabdata  = $CustomRabModel->find($idcustrab);
+
+                if (!empty($custrabdata)) {
+                    if ($namecustrab != $custrabdata['name']) {
+                        if (!empty($namecustrab)) {
+                            $updatecustrab  = [
+                                'id'    => $idcustrab,
+                                'name'  => $namecustrab,
+                            ];
+                            
+                            $CustomRabModel->save($updatecustrab);
+                        } else {
+                            $CustomRabModel->delete($customrabdata);
+                        }
+                    }
+                }
+            }
+        }
+        
 
         // Design Data
         if (!empty($input['submitted'])) {
