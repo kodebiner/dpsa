@@ -120,7 +120,7 @@ $tanggaldateline = ucwords($dateFormatted);
     <table style="height: 70px;">
         <tr>
             <th style="width: 55%;">Ditagihkan Kepada</th>
-            <th>Kode Customer : XXXX</th>
+            <th>Kode Customer : <?= $client['rscode'] ?></th>
         </tr>
         <tr>
             <td><?= $client['rsname'] ?></td>
@@ -252,7 +252,7 @@ $tanggaldateline = ucwords($dateFormatted);
                     <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
                     <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');" "; ?></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th style="border: 1pt solid black; width:50%;">Diskon 0%</th>
                     <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
                     <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
@@ -266,7 +266,7 @@ $tanggaldateline = ucwords($dateFormatted);
                     <th style="border: 1pt solid black; width:50%;">BIAYA KIRIM / SETTING</th>
                     <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
                     <td style="border: 1pt solid black; border-left-style:none; text-align:right">-</td>
-                </tr>
+                </tr> -->
             </table>
         </div>
     </div>

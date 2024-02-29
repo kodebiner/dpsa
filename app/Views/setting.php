@@ -148,6 +148,20 @@
                     </div>
                 </div>
 
+                <div class="uk-margin uk-flex-middle">
+                    <label class="uk-form-label" for="ppn">Direktur</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?=$gconfig['ppn']?>" required> %
+                    </div>
+                </div>
+
+                <div class="uk-margin uk-flex-middle">
+                    <label class="uk-form-label" for="ppn">Alamat</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?=$gconfig['ppn']?>" required> %
+                    </div>
+                </div>
+
                 <!-- Button Save -->
                 <div class="uk-card-footer uk-text-right uk-padding-remove-right">
                     <button class="uk-button uk-button-success" type="submit">Simpan PPN</button>

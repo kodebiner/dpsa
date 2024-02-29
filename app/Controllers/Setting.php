@@ -69,6 +69,8 @@ class Setting extends BaseController
         $gConfig = [
             'id'                => '1',
             'ppn'               => $input['ppn'],
+            'direktur'          => $input['direktur'],
+            'alamat'            => $input['alamat'],
         ];
         $GconfigModel->save($gConfig);
 

@@ -395,6 +395,34 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <!-- Upload Design End -->
                             <!-- Design Section End -->
 
+                            <!-- Marketing (PIC) -->
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label">PIC Marketing</label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select uk-form-width-medium" name="marketing>" required>
+                                        <?php 
+                                            if(!empty($projectdata[$project['id']]['invoice1'])){
+                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                    if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
+                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                    }
+                                                }
+                                            }else{
+                                                echo '<option value="" selected disabled>Pilih Marketing</option>';
+                                        } 
+                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                            if ($pic->id === "0") {
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                        } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- End Markerting (PIC) -->
+
                             <div class="uk-modal-footer uk-text-right">
                                 <button class="uk-button uk-button-primary" type="submit">Save</button>
                             </div>
