@@ -274,6 +274,7 @@
                                                     ?>
                                                 </tbody>
                                             </table>
+                                            
                                         </div>
                                         <p class="uk-text-left uk-width-1-1" uk-margin>
                                             <a class="uk-button uk-button-primary uk-button-small" href="project/sphprint/<?= $project['id'] ?>" target="_blank">Download SPH</a>
@@ -536,7 +537,7 @@
                                     </div>
                                     <?php if (!empty($project['id'])) { ?>
                                         <div class="uk-width-1-1 uk-margin-remove" id="contentsph<?= $project['id'] ?>" hidden>
-                                            <table class="uk-table uk-table-responsive uk-table-divider">
+                                            <table class="uk-table uk-table-responsive  uk-table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th class="">Nama</th>
@@ -546,7 +547,7 @@
                                                         <th class="uk-text-center">Volume</th>
                                                         <th class="uk-text-center">Satuan</th>
                                                         <th class="uk-text-center">Jumlah Pesanan</th>
-                                                        <th class="uk-text-center">Harga</th>
+                                                        <th class="uk-text-left">Harga</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -591,8 +592,7 @@
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }
                                                                                     ?>
-                                                                                    <td class="uk-text-center"><?= "Rp. " . number_format($price, 0, ',', '.');
-                                                                                                                " "; ?></td>
+                                                                                    <td class="uk-text-left"><?= "Rp. " . number_format($price, 0, ',', '.');" "; ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -603,6 +603,31 @@
                                                         }
                                                     }
                                                     ?>
+                                                    <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
+                                                    <tr>
+                                                        <td class="uk-text-bold">CUSTOM RAB</td>
+                                                        <td class="-text-bold"></td>
+                                                        <td class="uk-text-center"></td>
+                                                        <td class="uk-text-center"></td>
+                                                        <td class="uk-text-center"></td>
+                                                        <td class="uk-text-center"></td>
+                                                        <td class="uk-text-center"></td>
+                                                        <td class="uk-text-center"></td>
+                                                    </tr>
+                                                    <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                        <tr>
+                                                            <td class=""><?= strtoupper($custrab['name']) ?></td>
+                                                            <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php } ?>
+
                                                 </tbody>
                                             </table>
                                             <p class="uk-text-right uk-width-1-1" uk-margin>

@@ -41,6 +41,10 @@ class Setting extends BaseController
         if (!$checkConfig) {
             $newConfig = [
                 'ppn'               => '0',
+                'alamat'            => '',
+                'direktur'          => '',
+                'npwp'              => '',
+                
             ];
             $GconfigModel->insert($newConfig);
         }
@@ -71,6 +75,7 @@ class Setting extends BaseController
             'ppn'               => $input['ppn'],
             'direktur'          => $input['direktur'],
             'alamat'            => $input['alamat'],
+            'npwp'              => $input['npwp']
         ];
         $GconfigModel->save($gConfig);
 

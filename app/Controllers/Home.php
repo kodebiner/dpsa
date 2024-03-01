@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Entities\User;
 use App\Models\BastModel;
 use App\Models\CompanyModel;
+use App\Models\CustomRabModel;
 use App\Models\UserModel;
 use App\Models\ProjectModel;
 use App\Models\RabModel;
@@ -192,6 +193,7 @@ class Home extends BaseController
             $DesignModel        = new DesignModel();
             $BastModel          = new BastModel();
             $ProductionModel    = new ProductionModel();
+            $CustomRabModel     = new CustomRabModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -240,6 +242,9 @@ class Home extends BaseController
                         ];
                     }
                 }
+
+                // Custom RAB MODEL
+                $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
 
                 // bast
                 $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();

@@ -1,11 +1,13 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
 class GconfigModel extends Model
 {
     protected $allowedFields = [
-        'ppn',
+        'ppn', 'direktur', 'alamat', 'npwp',
     ];
     protected $table            = 'gconfig';
     protected $primaryKey       = 'id';

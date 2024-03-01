@@ -1,10 +1,10 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('extraScript') ?>
-    <link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
-    <link rel="stylesheet" href="css/select2.min.css"/>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-ui.js"></script>
-    <script src="js/select2.min.js"></script>
+<link rel="stylesheet" href="css/code.jquery.com_ui_1.13.2_themes_base_jquery-ui.css">
+<link rel="stylesheet" href="css/select2.min.css" />
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/select2.min.js"></script>
 <?= $this->endSection() ?>
 <?= $this->section('main') ?>
 
@@ -141,24 +141,32 @@
     <div class="uk-width-1-3">
         <div class="uk-card uk-card-default uk-card-body">
             <form class="uk-form-horizontal" role="form" method="post" action="setting/gconfig">
+
+                <div class="uk-margin uk-flex-middle">
+                    <label class="uk-form-label" for="direktur">Direktur</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="direktur" name="direktur" type="text" value="<?=$gconfig['direktur']?>" required>
+                    </div>
+                </div>
+
+                <div class="uk-margin uk-flex-middle">
+                    <label class="uk-form-label" for="alamat">Alamat</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="alamat" name="alamat" type="text" value="<?=$gconfig['alamat']?>" required>
+                    </div>
+                </div>
+
+                <div class="uk-margin uk-flex-middle">
+                    <label class="uk-form-label" for="npwp">NPWP</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="npwp" name="npwp" type="number" value="<?= $gconfig['npwp'] ?>" required> 
+                    </div>
+                </div>
+
                 <div class="uk-margin uk-flex-middle">
                     <label class="uk-form-label" for="ppn">PPN</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?=$gconfig['ppn']?>" required> %
-                    </div>
-                </div>
-
-                <div class="uk-margin uk-flex-middle">
-                    <label class="uk-form-label" for="ppn">Direktur</label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?=$gconfig['ppn']?>" required> %
-                    </div>
-                </div>
-
-                <div class="uk-margin uk-flex-middle">
-                    <label class="uk-form-label" for="ppn">Alamat</label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?=$gconfig['ppn']?>" required> %
+                        <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?= $gconfig['ppn'] ?>" required> %
                     </div>
                 </div>
 

@@ -9,10 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
     </link>
     <style>
+        /* @page { */
+        /* size: 7in 9.25in; */
+        /* size: landscape; */
+        /* margin: 27mm 16mm 27mm 16mm; */
+        /* } */
+
         @page {
-            /* size: 7in 9.25in; */
             size: landscape;
-            margin: 27mm 16mm 27mm 16mm;
+            margin-top: 2.54cm;
+            margin-bottom: 2.54cm;
+            margin-left: 3.175cm;
+            margin-right: 3.175cm;
         }
 
         html {
@@ -161,9 +169,9 @@ $tanggaldateline = ucwords($dateFormatted);
                     <th>Halaman</th>
                 </tr>
                 <tr>
-                    <td>No. XXXX/DPSA/Kode Rs/Bulan/Tahun</td>
+                    <td>No. <?= $invoice['noinv'] ?></td>
                     <td><?= $tanggalspk ?></td>
-                    <td>Hal </?= $invoice['hal'] ?> dari 4</td>
+                    <td>Hal {PAGENO} dari {nbpg}</td>
                 </tr>
             </table>
         </div>
@@ -207,7 +215,7 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="width: 30%; border:1pt solid; border-top-style: none;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
             <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress <?= $invoice['progress'] ?>% <?= $projects['name'] ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= $invoice['termin'] ?>%</td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.'); " "; ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" "; ?></td>
             <!-- <td style="text-align: right; border:1pt solid; border-top-style: none; width: 10%;">
                 <table>
@@ -271,30 +279,41 @@ $tanggaldateline = ucwords($dateFormatted);
         </div>
     </div>
 
-    <table style="border: 1pt solid black; background-color: #dddddd;">
+
+    <!-- <table style="border: 1pt solid black; background-color: #dddddd;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
             <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">Jumlah Ditagihkan (DPP)</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
             <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
         </tr>
-    </table>
+    </table> -->
+    <?php foreach ($rabcustom as $cusrab) { ?>
+        <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
+            <tr>
+                <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+                <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?= $cusrab['name'] ?></th>
+                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($cusrab['price'], 0, ',', '.'); " "; ?></td>
+            </tr>
+        </table>
+    <?php } ?>
 
     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
             <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN <?= $invoice['ppn'] ?> %</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['ppnval'], 0, ',', '.');" "; ?></td>
         </tr>
     </table>
 
     <table style="border: 1pt solid black; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 <?= $invoice['pph'] ?>% Rp. -</th>
-            <td style="border: 1pt solid black; border-right-style:none;"></td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right"></td>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 <?= $invoice['pph'] ?>% </th>
+            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['pphval'], 0, ',', '.'); " "; ?></td>
         </tr>
     </table>
 
@@ -303,11 +322,11 @@ $tanggaldateline = ucwords($dateFormatted);
             <th style="border: 1pt solid black; border-right-style:none; width:55%;"></th>
             <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right">66,600,000</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['pphval'] + $invoice['ppnval'] + array_sum(array_column($rabcustom,'price')) + ((30 / 100) * $invoice['total']), 0, ',', '.'); " "; ?></td>
         </tr>
     </table>
 
-    <table style="width: 50%;">
+    <table style="width: 50%; margin-top:50px">
         <tr>
             <td style="text-align: center;">PT DHARMA PUTRA SEJAHTERA ABADI (PT. DPSA)</td>
         </tr>
@@ -315,7 +334,7 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="height: 60px;"></td>
         </tr>
         <tr>
-            <td style="text-align: center; text-decoration: underline;">Mr.XXXX</td>
+            <td style="text-align: center; text-decoration: underline;">Mr.<?= ucwords($invoice['direktur']) ?></td>
         </tr>
         <tr>
             <td style="text-align: center;">Direktur</td>

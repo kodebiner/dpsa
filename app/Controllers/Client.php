@@ -41,6 +41,7 @@ class Client extends BaseController
 
             // Populating data
             $companys = $CompanyModel->findAll();
+            $users    = $UserModel->where('parentid !=', null)->find();
 
             // Initialize
             $input = $this->request->getGet();
@@ -67,7 +68,7 @@ class Client extends BaseController
                     $this->builder->where('company.parentid !=', "0");
                 }
             }
-            $this->builder->select('company.id as id, company.rsname as rs, company.ptname as pt, company.npwp as npwp, company.address as address, company.phone as phone, company.parentid as parent, company.status as status, company.bank as bank, company.no_rek as no_rek, company.rscode as rscode');
+            $this->builder->select('company.id as id, company.rsname as rs, company.ptname as pt, company.npwp as npwp, company.address as address, company.phone as phone, company.pic as pic, company.parentid as parent, company.status as status, company.bank as bank, company.no_rek as no_rek, company.rscode as rscode');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
 
             $total = $this->builder->countAllResults();
@@ -89,6 +90,7 @@ class Client extends BaseController
             $data['parent']         = $parentid;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
             $data['input']          = $input;
+            $data['users']          = $users;
 
             return view('client', $data);
         } else {
@@ -269,6 +271,7 @@ class Client extends BaseController
                 'ptname'        => $input['ptname'],
                 'address'       => $input['address'],
                 'npwp'          => $input['npwp'],
+                'pic'           => $input['picklien'],
                 'phone'         => $input['notelp'],
                 'bank'          => $input['bank'],
                 'no_rek'        => $input['norek'],

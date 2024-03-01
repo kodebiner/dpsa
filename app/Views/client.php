@@ -377,7 +377,34 @@
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="koders">Kode RS</label>
                                     <div class="uk-form-controls">
-                                        <input type="koders" class="uk-input" id="koders" name="koders" value="<?= $comp['rscode'] ?>" placeholder="<?= $comp['rscode'] ?>" autofocus required />
+                                        <input type="text" class="uk-input" id="koders" name="koders" value="<?= $comp['rscode'] ?>" placeholder="<?= $comp['rscode'] ?>" autofocus required />
+                                    </div>
+                                </div>
+
+                                <div class="uk-margin-small">
+                                    <label class="uk-form-label">PIC Klien</label>
+                                    <div class="uk-form-controls">
+                                        <select class="uk-select uk-form-width-medium" name="picklien" required>
+                                            <?php 
+                                            if(!empty($comp['pic'])){
+                                                foreach ($users as $user) {
+                                                    if($user->id === $comp['pic']){
+                                                        echo '<option value="' . $user->id . '" selected >' . $user->name . '</option>';
+                                                    }
+                                                }
+                                            }else{
+                                                echo '<option value="" selected disabled>Pilih PIC Klien</option>';
+                                            } 
+                                            foreach ($users as $user) {
+                                                if ($user->id === $comp['pic']) {
+                                                    $selected = 'selected';
+                                                } else {
+                                                    $selected = "";
+                                                }
+                                                echo '<option value="' . $user->id . '" ' . $selected . '>' . $user->name . '</option>';
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
 

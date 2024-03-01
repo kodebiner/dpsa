@@ -341,25 +341,25 @@ class Project extends BaseController
         //--- SPH NUM ---//
 
         // DATA PROYEK 
-        $proyek = $ProjectModel->findAll();
+        // $proyek = $ProjectModel->findAll();
 
-        $number = date('n');
-        function numberToRomanRepresentation($number)
-        {
-            $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-            $returnValue = '';
-            while ($number > 0) {
-                foreach ($map as $roman => $int) {
-                    if ($number >= $int) {
-                        $number -= $int;
-                        $returnValue .= $roman;
-                        break;
-                    }
-                }
-            }
-            return $returnValue;
-        }
-        $roman = numberToRomanRepresentation($number);
+        // $number = date('n');
+        // function numberToRomanRepresentation($number)
+        // {
+        //     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        //     $returnValue = '';
+        //     while ($number > 0) {
+        //         foreach ($map as $roman => $int) {
+        //             if ($number >= $int) {
+        //                 $number -= $int;
+        //                 $returnValue .= $roman;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     return $returnValue;
+        // }
+        // $roman = numberToRomanRepresentation($number);
 
         // VARIABEL ROW PROJECT
         $amount = "";
@@ -397,16 +397,12 @@ class Project extends BaseController
                 // }
             }
         } else {
-            if (!empty($proyek)) {
-                $amount = count($proyek) + 1;
-            } else {
-                $amount = 1;
-            }
+            $amount = 1;
         }
 
-        $sphnum = str_pad($amount, 3, '0', STR_PAD_LEFT);
+        // $sphnum = str_pad($amount, 3, '0', STR_PAD_LEFT);
 
-        $numsph = $sphnum . "/DPSA/" . $roman . "/" . $Year;
+        // $numsph = $sphnum . "/DPSA/" . $roman . "/" . $Year;
 
         //--- END SPH NUM ---//
 
@@ -734,26 +730,6 @@ class Project extends BaseController
         // DATA PROYEK 
         $invoice    = $InvoiceModel->findAll();
         $client     = $CompanyModel->where('id', $pro['clientid'])->first();
-
-        $number = date('n');
-        function numberinvoiceroman($number)
-        {
-            $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-            $returnValue = '';
-            while ($number > 0) {
-                foreach ($map as $roman => $int) {
-                    if ($number >= $int) {
-                        $number -= $int;
-                        $returnValue .= $roman;
-                        break;
-                    }
-                }
-            }
-            return $returnValue;
-        }
-        $roman = numberinvoiceroman($number);
-
-        // VARIABEL ROW pro
         $amount = "";
 
         // PROYEK TAHUN INI
@@ -762,36 +738,28 @@ class Project extends BaseController
 
         // PROYEK TERAKHIR
         $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
-        $lastinv = $lastinvoice['tahun'];
 
+        $lastinv = "";
+        if (!empty($lastinvoice)) {
+            $lastinv = $lastinvoice['tahun'];
+        }
+
+        // $testyear = "2023-12-30 00:00:00";
         // DATE DATA
         $Year = date('Y');
         $tahunini = date('Y-m-d H:i:s');
 
-        if (!empty($lastinv)) {
-            if ($lastinv < $tahunini) {
-                if (!empty($invoice)) {
-                    $amount = count($thisyear) + 1;
-                } else {
-                    $amount = 1;
-                }
-            } elseif ($tahunini > $lastinv) {
-                if (!empty($lastinvyek)) {
-                    $amount = count($thisyear) + 1;
-                } else {
-                    $amount = 1;
-                }
-            }
-        } else {
-            if (!empty($invoice)) {
-                $amount = count($invoice) + 1;
+        if (!empty($lastinvoice)) {
+            if ($lastinv < $yearEnd) {
+                $amount = $lastinvoice['no_inv'] + 1;
+            } elseif ($yearEnd > $lastinv ) {
+                $amount = 1;
             } else {
                 $amount = 1;
             }
+        } else {
+            $amount = 1;
         }
-
-        $invnum = str_pad($amount, 3, '0', STR_PAD_LEFT);
-
 
         //--- END INV NUM ---//
 
@@ -814,7 +782,7 @@ class Project extends BaseController
             // } else {
 
             $tahunini = date('Y-m-d H:i:s');
-            $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
+            // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
 
             $invoice1 = [
                 'projectid'     => $id,
@@ -824,7 +792,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice1' . $id],
                 'status'        => "1",
                 'pic'           => $input['picinvoice1' . $id],
-                'no_inv'        => $numinv,
+                'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice1);
@@ -851,7 +819,7 @@ class Project extends BaseController
         } elseif (isset($input['referensiinvoice2' . $id], $input['picinvoice2' . $id]) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id]) && !empty($input['pphinvoice2' . $id])) {
             // } else {
             $tahunini = date('Y-m-d H:i:s');
-            $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
+            // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
             $invoice2 = [
                 'projectid'     => $id,
                 'jatuhtempo'    => $input['dateinvoice2' . $id] . " 00:00:00",
@@ -860,7 +828,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice2' . $id],
                 'status'        => "2",
                 'pic'           => $input['picinvoice2' . $id],
-                'no_inv'        => $numinv,
+                'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice2);
@@ -885,7 +853,7 @@ class Project extends BaseController
         } elseif (isset($input['referensiinvoice3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) && !empty($input['pphinvoice3' . $id])) {
             // } else {
             $tahunini = date('Y-m-d H:i:s');
-            $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
+            // $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
             $invoice3 = [
                 'projectid'     => $id,
                 'jatuhtempo'    => $input['dateinvoice3' . $id] . " 00:00:00",
@@ -894,7 +862,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice3' . $id],
                 'status'        => "3",
                 'pic'           => $input['picinvoice3' . $id],
-                'no_inv'        => $numinv,
+                'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice3);
@@ -919,7 +887,7 @@ class Project extends BaseController
         } elseif (isset($input['referensiinvoice4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id]) && !empty($input['pphinvoice4' . $id])) {
             // } else {
             $tahunini = date('Y-m-d H:i:s');
-            $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
+            // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
             $invoice4 = [
                 'projectid'     => $id,
                 'jatuhtempo'    => $input['dateinvoice4' . $id] . " 00:00:00",
@@ -928,7 +896,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice4' . $id],
                 'status'        => "4",
                 'pic'           => $input['picinvoice4' . $id],
-                'no_inv'        => $numinv,
+                'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice4);
@@ -939,10 +907,11 @@ class Project extends BaseController
         $project = [
             'id'            => $id,
             'name'          => $name,
-            'clientid'      => $client,
+            'clientid'      => $client['id'],
             'spk'           => $spk,
             'status_spk'    => $statusspk,
             'status'        => $status,
+            'no_spk'         => $input['nospk'],
             'inv4'          => $tgltempobast,
         ];
         $ProjectModel->save($project);
@@ -958,17 +927,26 @@ class Project extends BaseController
         $DesignModel        = new DesignModel();
         $BastModel          = new BastModel();
         $ProductionModel    = new ProductionModel();
+        $CustomRabModel     = new CustomRabModel();
 
         // Populating Data
         $rabs               = $RabModel->where('projectid', $id)->find();
         $design             = $DesignModel->where('projectid', $id)->first();
         $productions        = $ProductionModel->where('projectid', $id)->find();
         $basts              = $BastModel->where('projectid', $id)->find();
+        $customrab          = $CustomRabModel->where('projectid', $id)->find();
 
         // Deleting Rab
         if (!empty($rab)) {
             foreach ($rabs as $rab) {
                 $RabModel->delete($rab['id']);
+            }
+        }
+
+        // Deleting Custom Rab
+        if (!empty($customrab)) {
+            foreach ($customrab as $custom) {
+                $CustomRabModel->delete($custom['id']);
             }
         }
 
@@ -1000,14 +978,160 @@ class Project extends BaseController
     public function sphprint($id)
     {
         // Calling models
+        $UserModel      = new UserModel();
         $ProjectModel   = new ProjectModel;
         $CompanyModel   = new CompanyModel();
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
+        $GconfigModel   = new GconfigModel();
+        $CustomRabModel = new CustomRabModel();
 
         $projects = $ProjectModel->find($id);
         $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+        $rabs     = $RabModel->findAll();
+        $mdls     = $MdlModel->findAll();
+        $pakets   = $PaketModel->findAll();
+        $gconf    = $GconfigModel->first();
+        $custrab  = $CustomRabModel->where('projectid', $projects['id'])->find();
+        if (!empty($projects['marketing'])) {
+            $mark     = $UserModel->find($projects['marketing']);
+        } else {
+            $mark     = $UserModel->where('parentid', $client['id'])->first();
+        }
+        if (!empty($client['pic'])) {
+            $picklien = $UserModel->find($client['pic']);
+        } else {
+            $picklien =  $UserModel->where('parentid', $client['id'])->first();
+        }
+
+        // RAB
+        if (!empty($projects['id'])) {
+            foreach ($rabs as $rab) {
+                if ($rab['projectid'] === $projects['id']) {
+                    foreach ($pakets as $paket) {
+                        if ($paket['id'] === $rab['paketid']) {
+                            foreach ($mdls as $mdl) {
+                                if ($mdl['id'] === $rab['mdlid']) {
+                                    $denom = "";
+                                    $price = "";
+                                    // $total = [];
+                                    if ($mdl['denomination'] === "1") {
+                                        $price  = $rab['qty'] * $mdl['price'];
+                                        $denom  = "Unit";
+                                    } elseif ($mdl['denomination'] === "2") {
+                                        $price  = $mdl['length'] * $mdl['price'];
+                                        $denom  = "M";
+                                    } elseif ($mdl['denomination'] === "3") {
+                                        $luas   =   $mdl['height'] * $mdl['length'];
+                                        $price  =   $mdl['price'] * $luas;
+                                        $denom  = "M2";
+                                    } elseif ($mdl['denomination'] === "4") {
+                                        $price  = $rab['qty'] * $mdl['price'];
+                                        $denom  = "Set";
+                                    }
+                                    $total[] = $price;
+                                    $mdldata[] = [
+                                        'name'          => $mdl['name'],
+                                        'length'        => $mdl['length'],
+                                        'width'         => $mdl['width'],
+                                        'height'        => $mdl['height'],
+                                        'volume'        => $mdl['volume'],
+                                        'denom'         => $denom,
+                                        'qty'           => $rab['qty'],
+                                        'mdlprice'      => $mdl['price'],
+                                        'price'         => $price,
+                                        'keterangan'    => $mdl['keterangan'],
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // CUSTOM RAB
+        $customrab = [];
+        foreach ($custrab as $cusrab) {
+            if (!empty($cusrab)) {
+                $customrab[] = [
+                    'name'  => $cusrab['name'],
+                    'price' => $cusrab['price'],
+                ];
+            }
+        }
+
+        $totalrab = array_sum($total);
+        $totalcustom = array_sum(array_column($customrab, 'price'));
+
+        // END RAB DATA
+        $ppnval   = ($gconf['ppn'] / 100) * $totalrab;
+        $totalsph = $totalcustom + $totalrab + (int)$ppnval;
+
+        // Terbilang
+        function tersebut($nilai)
+        {
+            $nilai = abs($nilai);
+            $huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+            $temp = "";
+            if ($nilai < 12) {
+                $temp = " " . $huruf[$nilai];
+            } else if ($nilai < 20) {
+                $temp = tersebut($nilai - 10) . " belas";
+            } else if ($nilai < 100) {
+                $temp = tersebut($nilai / 10) . " puluh" . tersebut($nilai % 10);
+            } else if ($nilai < 200) {
+                $temp = " seratus" . tersebut($nilai - 100);
+            } else if ($nilai < 1000) {
+                $temp = tersebut($nilai / 100) . " ratus" . tersebut($nilai % 100);
+            } else if ($nilai < 2000) {
+                $temp = " seribu" . tersebut($nilai - 1000);
+            } else if ($nilai < 1000000) {
+                $temp = tersebut($nilai / 1000) . " ribu" . tersebut($nilai % 1000);
+            } else if ($nilai < 1000000000) {
+                $temp = tersebut($nilai / 1000000) . " juta" . tersebut($nilai % 1000000);
+            } else if ($nilai < 1000000000000) {
+                $temp = tersebut($nilai / 1000000000) . " milyar" . tersebut(fmod($nilai, 1000000000));
+            } else if ($nilai < 1000000000000000) {
+                $temp = tersebut($nilai / 1000000000000) . " trilyun" . tersebut(fmod($nilai, 1000000000000));
+            }
+            return $temp;
+        }
+
+        function terbilang($nilai)
+        {
+            if ($nilai < 0) {
+                $hasil = "minus " . trim(tersebut($nilai));
+            } else {
+                $hasil = trim(tersebut($nilai));
+            }
+            return $hasil;
+        }
+
+        $angka =  $totalsph;
+        // End Terbilang 
+
+        // MARKETING INITIAL
+        $markname = $mark->name;
+        $vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " ");
+        $markname = str_replace($vowels, "", $markname);
+        // END MARKETING INITIAL
+
+        $datasph = [
+            'nosph'     => "1",
+            'proyek'    => $projects['name'],
+            'lokasi'    => $client['rsname'],
+            'tanggal'   => $projects['tahun'],
+            'clientpic' => $picklien->name,
+            'ppn'       => $gconf['ppn'],
+            'ppnval'    => (int)$ppnval,
+            'totalsph'  => $totalsph,
+            'terbilang' => terbilang($angka) . " rupiah",
+            'marketing' => strtoupper($markname),
+            'direktur'  => $gconf['direktur'],
+        ];
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -1018,6 +1142,8 @@ class Project extends BaseController
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
+        $data['custom']         = $customrab;
+        $data['sphdata']        = $datasph;
 
         $mpdf = new \Mpdf\Mpdf([
             'default_font_size' => 5,
@@ -1028,7 +1154,7 @@ class Project extends BaseController
 
         $date = date_create($projects['created_at']);
         $filename = "LaporanSph" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
-        $html = view('Views/sphprint', $data);
+        $html = view('Views/sphview', $data);
         $mpdf->WriteHTML($html);
         $mpdf->Output($filename, 'D');
     }
@@ -1036,14 +1162,153 @@ class Project extends BaseController
     public function sphview($id)
     {
         // Calling models
+        $UserModel      = new UserModel();
         $ProjectModel   = new ProjectModel;
         $CompanyModel   = new CompanyModel();
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
+        $GconfigModel   = new GconfigModel();
+        $CustomRabModel = new CustomRabModel();
 
         $projects = $ProjectModel->find($id);
+        $mark     = $UserModel->find($projects['marketing']);
         $client   = $CompanyModel->where('id', $projects['clientid'])->first();
+        $picklien = $UserModel->find($client['pic']);
+        $rabs     = $RabModel->where('projectid', $projects['id'])->find();
+        $mdls     = $MdlModel->findAll();
+        $pakets   = $PaketModel->findAll();
+        $gconf    = $GconfigModel->first();
+        $custrab  = $CustomRabModel->where('projectid', $projects['id'])->find();
+
+        // RAB
+        if (!empty($projects['id'])) {
+            foreach ($rabs as $rab) {
+                if ($rab['projectid'] === $projects['id']) {
+                    foreach ($pakets as $paket) {
+                        if ($paket['id'] === $rab['paketid']) {
+                            foreach ($mdls as $mdl) {
+                                if ($mdl['id'] === $rab['mdlid']) {
+                                    $denom = "";
+                                    $price = "";
+                                    // $total = [];
+                                    if ($mdl['denomination'] === "1") {
+                                        $price  = $rab['qty'] * $mdl['price'];
+                                        $denom  = "Unit";
+                                    } elseif ($mdl['denomination'] === "2") {
+                                        $price  = $mdl['length'] * $mdl['price'];
+                                        $denom  = "M";
+                                    } elseif ($mdl['denomination'] === "3") {
+                                        $luas   =   $mdl['height'] * $mdl['length'];
+                                        $price  =   $mdl['price'] * $luas;
+                                        $denom  = "M2";
+                                    } elseif ($mdl['denomination'] === "4") {
+                                        $price  = $rab['qty'] * $mdl['price'];
+                                        $denom  = "Set";
+                                    }
+                                    $total[] = $price;
+                                    $mdldata[] = [
+                                        'paket'         => $paket['name'],
+                                        'name'          => $mdl['name'],
+                                        'length'        => $mdl['length'],
+                                        'width'         => $mdl['width'],
+                                        'height'        => $mdl['height'],
+                                        'volume'        => $mdl['volume'],
+                                        'denom'         => $denom,
+                                        'qty'           => $rab['qty'],
+                                        'mdlprice'      => $mdl['price'],
+                                        'price'         => $price,
+                                        'keterangan'    => $mdl['keterangan'],
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // CUSTOM RAB
+        $customrab = [];
+        foreach ($custrab as $cusrab) {
+            if (!empty($cusrab)) {
+                $customrab[] = [
+                    'name'  => $cusrab['name'],
+                    'price' => $cusrab['price'],
+                ];
+            }
+        }
+
+        $totalrab = array_sum($total);
+        $totalcustom = array_sum(array_column($customrab, 'price'));
+
+        // END RAB DATA
+        $ppnval   = ($gconf['ppn'] / 100) * $totalrab;
+        $totalsph = $totalcustom + $totalrab + (int)$ppnval;
+
+        // Terbilang
+        function penyebut($nilai)
+        {
+            $nilai = abs($nilai);
+            $huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+            $temp = "";
+            if ($nilai < 12) {
+                $temp = " " . $huruf[$nilai];
+            } else if ($nilai < 20) {
+                $temp = penyebut($nilai - 10) . " belas";
+            } else if ($nilai < 100) {
+                $temp = penyebut($nilai / 10) . " puluh" . penyebut($nilai % 10);
+            } else if ($nilai < 200) {
+                $temp = " seratus" . penyebut($nilai - 100);
+            } else if ($nilai < 1000) {
+                $temp = penyebut($nilai / 100) . " ratus" . penyebut($nilai % 100);
+            } else if ($nilai < 2000) {
+                $temp = " seribu" . penyebut($nilai - 1000);
+            } else if ($nilai < 1000000) {
+                $temp = penyebut($nilai / 1000) . " ribu" . penyebut($nilai % 1000);
+            } else if ($nilai < 1000000000) {
+                $temp = penyebut($nilai / 1000000) . " juta" . penyebut($nilai % 1000000);
+            } else if ($nilai < 1000000000000) {
+                $temp = penyebut($nilai / 1000000000) . " milyar" . penyebut(fmod($nilai, 1000000000));
+            } else if ($nilai < 1000000000000000) {
+                $temp = penyebut($nilai / 1000000000000) . " trilyun" . penyebut(fmod($nilai, 1000000000000));
+            }
+            return $temp;
+        }
+
+        function pembilang($nilai)
+        {
+            if ($nilai < 0) {
+                $hasil = "minus " . trim(penyebut($nilai));
+            } else {
+                $hasil = trim(penyebut($nilai));
+            }
+            return $hasil;
+        }
+
+        $angka =  $totalsph;
+        // End Terbilang 
+
+        // MARKETING INITIAL
+        $markname = $mark->name;
+        $vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " ");
+        $markname = str_replace($vowels, "", $markname);
+        // END MARKETING INITIAL
+
+        $datasph = [
+            'nosph'     => "1",
+            'proyek'    => $projects['name'],
+            'lokasi'    => $client['rsname'],
+            'tanggal'   => $projects['tahun'],
+            'clientpic' => $picklien->name,
+            'ppn'       => $gconf['ppn'],
+            'ppnval'    => (int)$ppnval,
+            'totalsph'  => $totalsph,
+            'terbilang' => pembilang($angka) . " rupiah",
+            'marketing' => strtoupper($markname),
+            'direktur'  => $gconf['direktur'],
+        ];
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -1054,7 +1319,9 @@ class Project extends BaseController
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
-        return view('sphprint', $data);
+        $data['custom']         = $customrab;
+        $data['sphdata']        = $datasph;
+        return view('sphview', $data);
     }
 
     public function invoice($id)
@@ -1132,6 +1399,7 @@ class Project extends BaseController
         $email      = "";
         $status     = "";
         $pic        = "";
+        $noinv      = "";
 
         // INVOICE I
         if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
@@ -1146,6 +1414,7 @@ class Project extends BaseController
             $email      = $invoice1['email'];
             $status     = $invoice1['status'];
             $pic        = $invoice1['pic'];
+            $noinv      = $invoice1['no_inv'];
         }
 
         // INVOICE II
@@ -1161,6 +1430,7 @@ class Project extends BaseController
             $email      = $invoice2['email'];
             $status     = $invoice2['status'];
             $pic        = $invoice2['pic'];
+            $noinv      = $invoice2['no_inv'];
         }
 
         // INVOICE III
@@ -1176,6 +1446,7 @@ class Project extends BaseController
             $email      = $invoice3['email'];
             $status     = $invoice3['status'];
             $pic        = $invoice3['pic'];
+            $noinv      = $invoice3['no_inv'];
         }
 
         // INVOICE IV
@@ -1192,6 +1463,7 @@ class Project extends BaseController
             $email      = $invoice4['email'];
             $status     = $invoice4['status'];
             $pic        = $invoice4['pic'];
+            $noinv      = $invoice4['no_inv'];
 
 
             // Dateline Invoice 2 Interval
@@ -1225,6 +1497,31 @@ class Project extends BaseController
             $picname    = $picdata->name;
         }
 
+        // INVOICE FORMAT NUMBER
+        $date = date_create($dateinv);
+        $Year   = date_format($date, 'Y');
+        $number = date_format($date, 'n');
+        function invnum($number)
+        {
+            $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+            $returnValue = '';
+            while ($number > 0) {
+                foreach ($map as $roman => $int) {
+                    if ($number >= $int) {
+                        $number -= $int;
+                        $returnValue .= $roman;
+                        break;
+                    }
+                }
+            }
+            return $returnValue;
+        }
+        $roman = invnum($number);
+
+        $invnum = str_pad($noinv, 3, '0', STR_PAD_LEFT);
+
+        $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
+        // END OF INVOICE FORMAT NUMBER
 
         $invoicedata = [
             'termin'    => $termin,
@@ -1233,7 +1530,7 @@ class Project extends BaseController
             'dateinv'   => $dateinv,
             'dateline'  => $dateline,
             'total'     => $total,
-            'ppn'       => $gconf['ppn'],
+            'ppn'       => $ppn,
             'priceppn'  => $total + (($gconf['ppn'] / 100) * $total),
             'pph'       => $pph,
             'referensi' => $refname,
@@ -1241,6 +1538,8 @@ class Project extends BaseController
             'refbank'   => $refbank,
             'email'     => $email,
             'pic'       => $picname,
+            'noinv'     => $numinv,
+            'direktur'  => $gconf['direktur'],
         ];
 
         // Parsing Data to View
@@ -1260,7 +1559,7 @@ class Project extends BaseController
         $mpdf->Image('./img/logo.png', 80, 0, 210, 297, 'png', '', true, false);
         $mpdf->showImageErrors = true;
         $mpdf->AddPage("L", "", "", "", "", "15", "15", "2", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
-
+        // $mpdf->AddPageByArray("L", "", "", "", "", "15", "15", "25", "15", "", "", "", "", "", "", "", "", "", "", "", "A4");
         $mpdf->SetWatermarkImage(
             './img/logo.png',
             0.1,
@@ -1270,11 +1569,12 @@ class Project extends BaseController
             [70, 40],
         );
         $mpdf->showWatermarkImage = true;
-        $mpdf->setFooter('{PAGENO} / {nb}');
+        // $mpdf->setFooter('{PAGENO} / {nb}');
         $date = date_create($projects['created_at']);
         $filename = "invoice" . $status . "-" . $projects['name'] . " " . date_format($date, 'd-m-Y') . ".pdf";
         $html = view('Views/invoice', $data);
         $mpdf->WriteHTML($html);
+
         $mpdf->Output($filename, 'D');
     }
 
@@ -1297,7 +1597,11 @@ class Project extends BaseController
         // PROJECT DATA
         $projects   = $ProjectModel->find($id);
         $gconf      = $GconfigModel->first();
-        $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
+        if (!empty($rabcustom)) {
+            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
+        } else {
+            $rabcustom  = [];
+        }
 
         // INVOICE 
         $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
@@ -1349,9 +1653,14 @@ class Project extends BaseController
 
         // PPN
         $ppn = "";
+        $ppnval = "";
         if (!empty($gconf)) {
-            $ppn        = $gconf['ppn'];
+            $ppn        = (int)$gconf['ppn'];
+            $ppnval     = ($gconf['ppn'] / 100) * $total;
         }
+
+        // total value
+        $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
 
         // Invoice Data Array
         $termin     = "";
@@ -1359,13 +1668,15 @@ class Project extends BaseController
         $nilaispk   = "";
         $dateinv    = "";
         $dateline   = "";
-        $priceppn   = "";
+        // $priceppn   = "";
         $pph        = "";
         $referensi  = "";
         $email      = "";
         $status     = "";
         $pic        = "";
         $noinv      = "";
+        $ppnvalue   = "";
+        $pphvalue   = "";
 
         // INVOICE I
         if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
@@ -1374,8 +1685,10 @@ class Project extends BaseController
             $nilaispk   = ($total - ((int)(70 / 100) * $total)) + (int)$rabcustotal;
             $dateinv    = $projects['inv1'];
             $dateline   = $invoice1['jatuhtempo'];
-            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            // $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
             $pph        = $invoice1['pph23'];
+            $pphvalue   = ($invoice1['pph23'] / 100) * $nilaispk;
+            $ppnvalue   = ($ppn / 100) * $nilaispk;
             $referensi  = $invoice1['referensi'];
             $email      = $invoice1['email'];
             $status     = $invoice1['status'];
@@ -1390,8 +1703,10 @@ class Project extends BaseController
             $nilaispk   = $total - ((int)(70 / 100) * $total) + (int)$rabcustotal;
             $dateinv    = $projects['inv2'];
             $dateline   = $invoice2['jatuhtempo'];
-            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            // $priceppn   = (int)(($gconf['ppn'] / 100) * $nilaispk);
             $pph        = $invoice2['pph23'];
+            $pphvalue   = ((int)($invoice2['pph23'] / 100) * $nilaispk);
+            $ppnvalue   = ($ppn / 100) * $nilaispk;
             $referensi  = $invoice2['referensi'];
             $email      = $invoice2['email'];
             $status     = $invoice2['status'];
@@ -1406,8 +1721,10 @@ class Project extends BaseController
             $nilaispk   = $total - ((int)(65 / 100) * $total) + (int)$rabcustotal;
             $dateinv    = $projects['inv3'];
             $dateline   = $invoice3['jatuhtempo'];
-            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            // $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
             $pph        = $invoice3['pph23'];
+            $pphvalue   = ((int)($invoice3['pph23'] / 100) * $nilaispk);
+            $ppnvalue   = ($ppn / 100) * $nilaispk;
             $referensi  = $invoice3['referensi'];
             $email      = $invoice3['email'];
             $status     = $invoice3['status'];
@@ -1415,32 +1732,23 @@ class Project extends BaseController
             $noinv      = $invoice3['no_inv'];
         }
 
+
         // INVOICE IV
         if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4)) {
-
             $termin     = "5";
             $progress   = "100";
             $nilaispk   = $total - ((int)(95 / 100) * $total) + (int)$rabcustotal;
             $dateinv    = $projects['inv4'];
             $dateline   = $invoice4['jatuhtempo'];
-            $priceppn   = $total + (($gconf['ppn'] / 100) * $total);
+            $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
             $pph        = $invoice4['pph23'];
+            $pphvalue   = ($invoice4['pph23'] / 100) * $nilaispk;
+            $ppnvalue   = ($ppn / 100) * $nilaispk;
             $referensi  = $invoice4['referensi'];
             $email      = $invoice4['email'];
             $status     = $invoice4['status'];
             $pic        = $invoice4['pic'];
             $noinv      = $invoice3['no_inv'];
-
-
-            // Dateline Invoice 2 Interval
-            // $dateinv4       = $inv4;
-            // $date           = date_create($dateinv4);
-            // $dateformat     = date_format($date, "Y-m-d");
-            // $hari           = date_create($dateformat);
-            // date_add($hari, date_interval_create_from_date_string('14 days'));
-            // $datelineinv4 = date_format($hari, 'Y-m-d');
-
-            // $dateline = $datelineinv4;
         }
 
         // DATA REFERENSI
@@ -1488,6 +1796,7 @@ class Project extends BaseController
 
         $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
         // END OF INVOICE FORMAT NUMBER
+        // dd($priceppn);
 
         $invoicedata = [
             'termin'    => $termin,
@@ -1497,19 +1806,20 @@ class Project extends BaseController
             'dateline'  => $dateline,
             'total'     => $total,
             'ppn'       => $ppn,
-            'priceppn'  => $total + (($gconf['ppn'] / 100) * $total),
             'pph'       => $pph,
+            'pphval'    => (int)$pphvalue,
             'referensi' => $refname,
             'refacc'    => $refacc,
             'refbank'   => $refbank,
             'email'     => $email,
             'pic'       => $picname,
             'noinv'     => $numinv,
+            'direktur'  => $gconf['direktur'],
+            'ppnval'    => (int)$ppnvalue,
         ];
 
-        // dd($invoicedata);
         // END NEW FUCTION 
-       
+
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -1517,6 +1827,7 @@ class Project extends BaseController
         $data['description']    = lang('Global.dashboardDescription');
         $data['projects']       = $projects;
         $data['rabs']           = $rabdata;
+        $data['rabcustom']      = $rabcustom;
         $data['pakets']         = $PaketModel->findAll();
         $data['mdls']           = $MdlModel->findAll();
         $data['client']         = $client;
