@@ -282,12 +282,12 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;" class="uk-text-left" colspan="9">PPN</td>
                     <td style="border: 1pt solid black; text-align:right" class="uk-text-center"><?= $sphdata['ppn'] ?> %</td>
-                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"> <?= "Rp." . number_format($sphdata['ppnval'], 0, ',', '.'); ?></td>
+                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= number_format($sphdata['ppnval'], 0, ',', '.'); ?></td>
                 </tr>
                 <tr style="border: 1pt solid black;">
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;" class="uk-text-left" colspan="10">Grand Total</td>
-                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= "Rp." . number_format($sphdata['totalsph'], 0, ',', '.'); ?></td>
+                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= number_format($sphdata['totalsph'], 0, ',', '.'); ?></td>
                 </tr>
                 <tr style="border: 1pt solid black;">
                     <td style="border: 1pt solid black;"></td>

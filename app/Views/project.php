@@ -1490,7 +1490,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
 
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
-                                                <div class="uk-form-controls">: </a></div>
+                                                <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?> </a></div>
                                             </div>
                                         </div>
                                     </div>
