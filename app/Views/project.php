@@ -399,7 +399,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <div class="uk-margin-small">
                                 <label class="uk-form-label">PIC Marketing</label>
                                 <div class="uk-form-controls">
-                                    <select class="uk-select uk-form-width-medium" name="marketing>" required>
+                                    <select class="uk-select uk-form-width-medium" name="marketing" required>
                                         <?php 
                                             if(!empty($projectdata[$project['id']]['invoice1'])){
                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -2169,7 +2169,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice1'])){
+                                                                if(!empty($projectdata[$project['id']]['invoice1']['referensi'])){
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                         if($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']){
                                                                             echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
@@ -2210,7 +2210,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice1'])){
+                                                                if(!empty($projectdata[$project['id']]['invoice1']['pic'])){
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                         if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
@@ -2264,7 +2264,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice2'])){
+                                                                if(!empty($projectdata[$project['id']]['invoice2']['referensi'])){
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                         if($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']){
                                                                             echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
@@ -2304,7 +2304,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="picinvoice2<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice2'])){
+                                                                if(!empty($projectdata[$project['id']]['invoice2']['pic'])){
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                         if($projectdata[$project['id']]['invoice2']['pic'] === $pic->id){
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
@@ -2357,7 +2357,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>">
                                                             <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice3'])){
+                                                                if(!empty($projectdata[$project['id']]['invoice3']['referensi'])){
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                         if($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']){
                                                                             echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
@@ -2450,7 +2450,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
                                                             <?php 
-                                                            if(!empty($projectdata[$project['id']]['invoice4'])){
+                                                            if(!empty($projectdata[$project['id']]['invoice4']['referensi'])){
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
                                                                         echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
@@ -2490,7 +2490,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                     <div class="uk-form-controls">:
                                                         <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>">
                                                             <?php
-                                                              if(!empty($projectdata[$project['id']]['invoice4'])){
+                                                              if(!empty($projectdata[$project['id']]['invoice4']['pic'])){
                                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if($projectdata[$project['id']]['invoice4']['pic'] === $pic->id){
                                                                         echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';

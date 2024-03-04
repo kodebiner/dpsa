@@ -311,6 +311,7 @@ class Project extends BaseController
         $MdlModel       = new MdlModel();
         $RabModel       = new RabModel();
         $DesignModel    = new DesignModel();
+        $InvoiceModel   = new InvoiceModel();
 
         // initialize
         $input  = $this->request->getPost();
@@ -338,31 +339,10 @@ class Project extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        //--- SPH NUM ---//
-
-        // DATA PROYEK 
-        // $proyek = $ProjectModel->findAll();
-
-        // $number = date('n');
-        // function numberToRomanRepresentation($number)
-        // {
-        //     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-        //     $returnValue = '';
-        //     while ($number > 0) {
-        //         foreach ($map as $roman => $int) {
-        //             if ($number >= $int) {
-        //                 $number -= $int;
-        //                 $returnValue .= $roman;
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     return $returnValue;
-        // }
-        // $roman = numberToRomanRepresentation($number);
-
         // VARIABEL ROW PROJECT
-        $amount = "";
+
+        // DATA SPH
+        $amountsph = "";
 
         // PROYEK TAHUN INI
         $yearEnd = date('Y-m-d', strtotime('Dec 31')) . " 00:00:00";
@@ -375,43 +355,26 @@ class Project extends BaseController
         // DATE DATA
         $Year = date('Y');
         $tahunini = date('Y-m-d H:i:s');
-
-        if (!empty($lastpro)) {
-            if ($lastpro < $tahunini) {
-                if (!empty($proyek)) {
-                    $amount = count($thisyear) + 1;
-                } else {
-                    $amount = 1;
-                }
-                // if (!empty($lastproyek)) {
-                //     $amount = count($lastproyek) + 1;
-                // } else {
-                //     $amount = 1;
-                // }
-            } elseif ($tahunini > $lastpro) {
-                $amount = 1;
-                // if (!empty($proyek)) {
-                //     $amount = count($thisyear) + 1;
-                // } else {
-                //     $amount = 1;
-                // }
+        if (!empty($lastproyek)) {
+            if ($lastpro < $yearEnd) {
+                $amountsph = $lastproyek['no_sph'] + 1;
+            } elseif ($yearEnd > $lastpro) {
+                $amountsph = 1;
+            } else {
+                $amountsph = 1;
             }
         } else {
-            $amount = 1;
+            $amountsph = 1;
         }
 
-        // $sphnum = str_pad($amount, 3, '0', STR_PAD_LEFT);
-
-        // $numsph = $sphnum . "/DPSA/" . $roman . "/" . $Year;
-
-        //--- END SPH NUM ---//
+        // --- END SPH NUM ---//
 
         // Project Data
         $project = [
             'name'          => $input['name'],
             'clientid'      => $input['company'],
             'status'        => 1,
-            'no_sph'        => $amount,
+            'no_sph'        => $amountsph,
             'tahun'         => $tahunini,
             'marketing'     => $input['marketing'],
         ];
@@ -426,6 +389,46 @@ class Project extends BaseController
         $ProjectModel->insert($project);
 
         $projectid = $ProjectModel->getInsertID();
+
+        // CREATE INVOICE DATA
+        $amount = "";
+
+        // PROYEK TAHUN INI
+        $yearEnd = date('Y-m-d', strtotime('Dec 31')) . " 00:00:00";
+        $thisyear = $InvoiceModel->where('tahun <=', $yearEnd)->find();
+
+        // PROYEK TERAKHIR
+        $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
+
+        $lastinv = "";
+        if (!empty($lastinvoice)) {
+            $lastinv = $lastinvoice['tahun'];
+        }
+
+        // DATE DATA
+        $tahunini = date('Y-m-d H:i:s');
+
+        if (!empty($lastinvoice)) {
+            if ($lastinv < $yearEnd) {
+                $amount = $lastinvoice['no_inv'] + 1;
+            } elseif ($yearEnd > $lastinv) {
+                $amount = 1;
+            } else {
+                $amount = 1;
+            }
+        } else {
+            $amount = 1;
+        }
+        
+        $statusinv = [1, 2, 3, 4];
+        foreach ($statusinv as $inv) {
+            $datainv = [
+                'projectid' => $projectid,
+                'status'    => $inv,
+                'no_inv'    => $amount++,
+            ];
+            $InvoiceModel->save($datainv);
+        }
 
         return redirect()->back()->with('message', "Data berhasil di simpan.");
     }
@@ -730,36 +733,36 @@ class Project extends BaseController
         // DATA PROYEK 
         $invoice    = $InvoiceModel->findAll();
         $client     = $CompanyModel->where('id', $pro['clientid'])->first();
-        $amount = "";
+        // $amount = "";
 
-        // PROYEK TAHUN INI
-        $yearEnd = date('Y-m-d', strtotime('Dec 31')) . " 00:00:00";
-        $thisyear = $InvoiceModel->where('tahun <=', $yearEnd)->find();
+        // // PROYEK TAHUN INI
+        // $yearEnd = date('Y-m-d', strtotime('Dec 31')) . " 00:00:00";
+        // $thisyear = $InvoiceModel->where('tahun <=', $yearEnd)->find();
 
-        // PROYEK TERAKHIR
-        $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
+        // // PROYEK TERAKHIR
+        // $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
 
-        $lastinv = "";
-        if (!empty($lastinvoice)) {
-            $lastinv = $lastinvoice['tahun'];
-        }
+        // $lastinv = "";
+        // if (!empty($lastinvoice)) {
+        //     $lastinv = $lastinvoice['tahun'];
+        // }
 
-        // $testyear = "2023-12-30 00:00:00";
-        // DATE DATA
-        $Year = date('Y');
-        $tahunini = date('Y-m-d H:i:s');
+        // // $testyear = "2023-12-30 00:00:00";
+        // // DATE DATA
+        // $Year = date('Y');
+        // $tahunini = date('Y-m-d H:i:s');
 
-        if (!empty($lastinvoice)) {
-            if ($lastinv < $yearEnd) {
-                $amount = $lastinvoice['no_inv'] + 1;
-            } elseif ($yearEnd > $lastinv ) {
-                $amount = 1;
-            } else {
-                $amount = 1;
-            }
-        } else {
-            $amount = 1;
-        }
+        // if (!empty($lastinvoice)) {
+        //     if ($lastinv < $yearEnd) {
+        //         $amount = $lastinvoice['no_inv'] + 1;
+        //     } elseif ($yearEnd > $lastinv) {
+        //         $amount = 1;
+        //     } else {
+        //         $amount = 1;
+        //     }
+        // } else {
+        //     $amount = 1;
+        // }
 
         //--- END INV NUM ---//
 
@@ -790,9 +793,9 @@ class Project extends BaseController
                 'referensi'     => $input['referensiinvoice1' . $id],
                 'pph23'         => $input['pphinvoice1' . $id],
                 'email'         => $input['emailinvoice1' . $id],
-                'status'        => "1",
+                // 'status'        => "1",
                 'pic'           => $input['picinvoice1' . $id],
-                'no_inv'        => $amount,
+                // 'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice1);
@@ -828,7 +831,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice2' . $id],
                 'status'        => "2",
                 'pic'           => $input['picinvoice2' . $id],
-                'no_inv'        => $amount,
+                // 'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice2);
@@ -862,7 +865,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice3' . $id],
                 'status'        => "3",
                 'pic'           => $input['picinvoice3' . $id],
-                'no_inv'        => $amount,
+                // 'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice3);
@@ -896,7 +899,7 @@ class Project extends BaseController
                 'email'         => $input['emailinvoice4' . $id],
                 'status'        => "4",
                 'pic'           => $input['picinvoice4' . $id],
-                'no_inv'        => $amount,
+                // 'no_inv'        => $amount,
                 'tahun'         => $tahunini,
             ];
             $InvoiceModel->save($invoice4);
@@ -911,7 +914,7 @@ class Project extends BaseController
             'spk'           => $spk,
             'status_spk'    => $statusspk,
             'status'        => $status,
-            'no_spk'         => $input['nospk'],
+            'no_spk'        => $input['nospk'],
             'inv4'          => $tgltempobast,
         ];
         $ProjectModel->save($project);
