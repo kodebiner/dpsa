@@ -103,17 +103,30 @@
                 $dateline   = '';
                 $inv4       = '';
                 if ($project['type_design'] === "1") {
-                    if(!empty($projectdesign[$project['id']]['design']['status'])){
-                        if ($projectdesign[$project['id']]['design']['status'] === '0') {
-                            $progress = "10";
-                            $status = "Menunggu Approval desain";
-                        } elseif ($projectdesign[$project['id']]['design']['status'] === '2') {
+                    if(!empty($projectdesign[$project['id']]['design'])){
+                        if(!empty($projectdesign[$project['id']]['design']['status'])){
+                            
+                            if ($projectdesign[$project['id']]['design']['status'] === '0') {
+                                $progress = "10";
+                                $status = "Menunggu Desain Dari DPSA";
+                            }
+
+                            if ($projectdesign[$project['id']]['design']['status'] === '1') {
+                                $progress = "10";
+                                $status = "Menunggu Approval desain";
+                            }
+
+                            if ($projectdesign[$project['id']]['design']['status'] === '2') {
+                                $progress = "20";
+                                $status = "Desain Disetujui";
+                            }
+                        }else{
                             $progress = "20";
-                            $status = "Desain disetujui klien, Menunggu Upload SPK klien / Aprroval SPK dari DPSA";
+                            $status = "Menunggu SPH DPSA";
                         }
                     }else{
-                        $progress = "30";
-                        $status = "Menunggu SPH DPSA";
+                        $progress = "20";
+                        $status = "Menunggu Desain Dari DPSA";
                     }
                 } else {
                     $progress = "30";
@@ -165,7 +178,6 @@
 
                 // Data design initialize
                 if (!empty($projectdesign[$project['id']]['design']['submitted'])) {
-                    // dd($projectdesign);
                     $desainpro          = $projectdesign[$project['id']]['design']['submitted'];
                     $revisi             = $projectdesign[$project['id']]['design']['revision'];
                     $designId           = $projectdesign[$project['id']]['design']['id'];
@@ -277,7 +289,7 @@
                                             
                                         </div>
                                         <p class="uk-text-left uk-width-1-1" uk-margin>
-                                            <a class="uk-button uk-button-primary uk-button-small" href="project/sphprint/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                            <a class="uk-button uk-button-primary uk-button-small" href="project/sphprint/<?= $project['id'] ?>" target="_blank"> Download SPH</a>
                                         </p>
                                     </div>
                                 </div>
@@ -331,14 +343,16 @@
                                             <div>
                                                 <a href="img/design/<?= $desainpro ?>" target="_blank" download><?= $desainpro ?> </a>
                                             </div>
-
-                                            <div class="uk-margin-top">
-                                                <span uk-icon="file-text"></span>File Revisi
-                                            </div>
-                                            <div>
-                                                <a href="img/revisi/<?= $desainpro ?>" target="_blank" download><?= $desainpro ?> </a>
-                                            </div>
-
+                                            
+                                            <?php if(!empty($revisi)){?>
+                                                <div class="uk-margin-top">
+                                                    <span uk-icon="file-text"></span>File Revisi
+                                                </div>
+                                                <div>
+                                                    <a href="img/revisi/<?= $revisi ?>" target="_blank" download><?= $revisi ?> </a>
+                                                </div>
+                                            <?php } ?>
+                                            
                                         </div>
 
                                         <?php if ($designStatus != "2") { ?>
@@ -604,28 +618,28 @@
                                                     }
                                                     ?>
                                                     <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
-                                                    <tr>
-                                                        <td class="uk-text-bold">CUSTOM RAB</td>
-                                                        <td class="-text-bold"></td>
-                                                        <td class="uk-text-center"></td>
-                                                        <td class="uk-text-center"></td>
-                                                        <td class="uk-text-center"></td>
-                                                        <td class="uk-text-center"></td>
-                                                        <td class="uk-text-center"></td>
-                                                        <td class="uk-text-center"></td>
-                                                    </tr>
-                                                    <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
                                                         <tr>
-                                                            <td class=""><?= strtoupper($custrab['name']) ?></td>
-                                                            <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                            <td class="uk-text-bold"></td>
+                                                            <td class="-text-bold"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
-                                                            <td class="uk-text-center"></td>
-                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
+                                                            <td class="uk-text-bold"></td>
                                                         </tr>
-                                                    <?php } ?>
+                                                        <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                            <tr>
+                                                                <td class=""></td>
+                                                                <td class="uk-text-left"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-left uk-width-1-6"><?= strtoupper($custrab['name']) ?></td>
+                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
                                                     <?php } ?>
 
                                                 </tbody>
@@ -1244,8 +1258,8 @@
                                             complete: function() {
                                                 console.log('complete', arguments);
 
-
                                                 var filename = arguments[0].response;
+                                                console.log(filename);
 
                                                 if (document.getElementById('display-container-createspk-<?= $project['id'] ?>')) {
                                                     document.getElementById('display-container-createspk-<?= $project['id'] ?>').remove();

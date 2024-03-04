@@ -140,7 +140,7 @@ $tanggaldateline = ucwords($dateFormatted);
         </tr>
         <tr>
             <td>Alamat : <?= $client['address'] ?></td>
-            <td>Alamat : Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta</td>
+            <td>Alamat : <?= $invoice['alamat'] ?></td>
         </tr>
         <tr style="height: 80px; vertical-align: bottom;">
             <td>NPWP : <?= $client['npwp'] ?></td>
@@ -212,7 +212,7 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="text-align: right; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
         </tr>
         <tr style="border:1pt solid; border-top-style: none;">
-            <td style="width: 30%; border:1pt solid; border-top-style: none;">XXXX/JANGUM/RSHJTN/II/2023 <?= $tanggalspk ?></td>
+            <td style="width: 30%; border:1pt solid; border-top-style: none;"><?= $invoice['no_spk'] ?></td>
             <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress <?= $invoice['progress'] ?>% <?= $projects['name'] ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= $invoice['termin'] ?>%</td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
@@ -288,16 +288,20 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="border: 1pt solid black; border-left-style:none; text-align:right">60.000</td>
         </tr>
     </table> -->
-    <?php foreach ($rabcustom as $cusrab) { ?>
-        <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
-            <tr>
-                <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-                <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?= $cusrab['name'] ?></th>
-                <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($cusrab['price'], 0, ',', '.'); " "; ?></td>
-            </tr>
-        </table>
-    <?php } ?>
+    <?php
+        if(!empty($rabcustom)){
+            foreach ($rabcustom as $cusrab) { ?>
+                    <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
+                        <tr>
+                            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+                            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?= $cusrab['name'] ?></th>
+                            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+                            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($cusrab['price'], 0, ',', '.'); " "; ?></td>
+                        </tr>
+                    </table>
+            <?php }
+        } 
+    ?>
 
     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
         <tr>

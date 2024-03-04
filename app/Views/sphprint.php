@@ -132,8 +132,7 @@
                                                 $price  = $rab['qty'] * $mdl['price'];
                                                 $denom  = "Set";
                                             }
-                                            $total[] = $price;
-                ?>
+                                            $total[] = $price; ?>
                                             <tr class="uk-text-center">
                                                 <td style="border: 1pt solid black;">1.</td>
                                                 <td style="border: 1pt solid black;"><?= $projects['name'] ?></td>

@@ -122,10 +122,9 @@ class Client extends BaseController
                 ],
                 'ptname' => [
                     'label'  => 'Nama PT',
-                    'rules'  => 'required|is_unique[company.ptname]',
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
                 'address' => [

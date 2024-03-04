@@ -155,7 +155,7 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                             foreach ($pakets as $paket) {
                                 if ($paket['id'] === $rab['paketid']) {
                                     foreach ($mdls as $mdl) {
-                                       
+                                        foreach ($paketdata as $datapaket){
                                         if ($mdl['id'] === $rab['mdlid']) {
                                             $denom = "";
                                             $price = "";
@@ -177,7 +177,7 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                                             $total[] = $price;?>
                                             <tr class="uk-text-center">
                                                 <td style="border: 1pt solid black; text-align:center;"><?php echo $x++; ?></td>
-                                                <td style="border: 1pt solid black;"><?= $paket['name'] ?></td>
+                                                <td style="border: 1pt solid black;"><?= $datapaket['name'] ?></td>
                                                 <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
                                                 <td style="border: 1pt solid black; text-align:center;"><?= $mdl['length'] ?></td>
                                                 <td style="border: 1pt solid black; text-align:center;"><?= $mdl['width'] ?></td>
@@ -190,6 +190,7 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                                                 <td style="border: 1pt solid black;"><?= $mdl['keterangan'] ?></td>
                                             </tr>
                                     <?php   }
+                                        }
                                     }
                                 }
                             }

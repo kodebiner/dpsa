@@ -35,15 +35,27 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
             $progress = "0";
-            if ($project['type_design'] === 1) {
-                if ($projectdata[$project['id']]['design']['status'] === '0') {
-                    $progress = "10";
-                    $status = "Menunggu Approval desain";
-                }
+            if ($project['type_design'] === "1") {
+                if(!empty($projectdata[$project['id']]['design'])){
+                    
+                    if ($projectdata[$project['id']]['design']['status'] === '0') {
+                        $progress = "10";
+                        $status = "Menunggu Desain Dari DPSA";
+                    }
 
-                if ($projectdata[$project['id']]['design']['status'] === '2') {
-                    $progress = "20";
-                    $status = "Desain Disetujui";
+                    if ($projectdata[$project['id']]['design']['status'] === '1') {
+                        $progress = "10";
+                        $status = "Menunggu Approval desain";
+                    }
+
+                    if ($projectdata[$project['id']]['design']['status'] === '2') {
+                        $progress = "20";
+                        $status = "Desain Disetujui";
+                    }
+
+                }else{
+                    $progress = "10";
+                    $status = "Menunggu Desain Dari DPSA";
                 }
             } else {
                 $status = "Menunggu SPH";
@@ -241,9 +253,9 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         </div>
                                     </div>
                                 </div>
-                                <div id="image-container-" class="uk-form-controls">
+                                <div id="image-container" class="uk-form-controls">
                                     <input id="designcreated" name="design" hidden />
-                                    <div id="js-upload-createdesign-" class="js-upload-createdesign- uk-placeholder uk-text-center">
+                                    <div id="js-upload-createdesign" class="js-upload-createdesign uk-placeholder uk-text-center">
                                         <span uk-icon="icon: cloud-upload"></span>
                                         <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
                                         <div uk-form-custom>
@@ -251,14 +263,14 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <span class="uk-link uk-preserve-color">pilih satu</span>
                                         </div>
                                     </div>
-                                    <progress id="js-progressbar-createdesign-" class="uk-progress" value="0" max="100" hidden></progress>
+                                    <progress id="js-progressbar-createdesign" class="uk-progress" value="0" max="100" hidden></progress>
                                 </div>
                             </div>
 
                             <script type="text/javascript">
-                                var bar = document.getElementById('js-progressbar-createdesign-');
+                                var bar = document.getElementById('js-progressbar-createdesign');
 
-                                UIkit.upload('.js-upload-createdesign-', {
+                                UIkit.upload('.js-upload-createdesign', {
                                     url: 'upload/layout',
                                     multiple: false,
                                     name: 'uploads',
@@ -287,9 +299,10 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         console.log('complete', arguments);
 
                                         var filename = arguments[0].response;
+                                        console.log(filename);
 
-                                        if (document.getElementById('display-container-create-')) {
-                                            document.getElementById('display-container-create-').remove();
+                                        if (document.getElementById('display-container-create')) {
+                                            document.getElementById('display-container-create').remove();
                                         };
 
                                         document.getElementById('designcreated').value = filename;
@@ -302,6 +315,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         var divuprev = document.createElement('h6');
                                         divuprev.setAttribute('class', 'uk-margin-remove');
                                         divuprev.setAttribute('id', 'design');
+                                        divuprev.setAttribute('value', filename);
 
 
                                         var linkrev = document.createElement('a');
@@ -325,38 +339,38 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         link.appendChild(linktext);
                                         closed.appendChild(divclosed);
 
-                                        document.getElementById('js-upload-createdesign-').setAttribute('hidden', '');
+                                        document.getElementById('js-upload-createdesign').setAttribute('hidden', '');
                                     },
 
                                     loadStart: function(e) {
                                         console.log('loadStart', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-').removeAttribute('hidden');
+                                        document.getElementById('js-progressbar-createdesign').removeAttribute('hidden');
 
-                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign').value = e.loaded;
 
                                     },
 
                                     progress: function(e) {
                                         console.log('progress', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign').value = e.loaded;
                                     },
 
                                     loadEnd: function(e) {
                                         console.log('loadEnd', arguments);
 
-                                        document.getElementById('js-progressbar-createdesign-').max = e.total;
-                                        document.getElementById('js-progressbar-createdesign-').value = e.loaded;
+                                        document.getElementById('js-progressbar-createdesign').max = e.total;
+                                        document.getElementById('js-progressbar-createdesign').value = e.loaded;
                                     },
 
                                     completeAll: function() {
                                         console.log('completeAll', arguments);
 
                                         setTimeout(function() {
-                                            document.getElementById('js-progressbar-createdesign-').setAttribute('hidden', 'hidden');
+                                            document.getElementById('js-progressbar-createdesign').setAttribute('hidden', 'hidden');
                                             alert('Proses unggah data desain selesai');
                                         }, 1000);
                                     }
@@ -368,11 +382,12 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                         type: 'post',
                                         url: 'upload/removelayout',
                                         data: {
-                                            'design': document.getElementById('designcreated').value
+                                            'design': document.getElementById('designcreated').value,
                                         },
                                         dataType: 'json',
 
                                         error: function() {
+                                            console.log(document.getElementById('design').value);
                                             console.log('error', arguments);
                                         },
 
@@ -386,7 +401,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             document.getElementById('placedesign').setAttribute('hidden', '');
                                             document.getElementById('designcreated').value = '';
 
-                                            document.getElementById('js-upload-createdesign-').removeAttribute('hidden', '');
+                                            document.getElementById('js-upload-createdesign').removeAttribute('hidden', '');
                                             alert(pesan);
                                         }
                                     });
@@ -400,24 +415,17 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                 <label class="uk-form-label">PIC Marketing</label>
                                 <div class="uk-form-controls">
                                     <select class="uk-select uk-form-width-medium" name="marketing" required>
+                                    <option value="" selected disabled>Pilih Marketing</option>
                                         <?php 
-                                            if(!empty($projectdata[$project['id']]['invoice1'])){
-                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                    if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
-                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                    }
+                                            foreach ($users as $pic) {
+                                                if ($pic->id === "0") {
+                                                    $selected = 'selected';
+                                                } else {
+                                                    $selected = "";
                                                 }
-                                            }else{
-                                                echo '<option value="" selected disabled>Pilih Marketing</option>';
-                                        } 
-                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                            if ($pic->id === "0") {
-                                                $selected = 'selected';
-                                            } else {
-                                                $selected = "";
-                                            }
-                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                        } ?>
+                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                            } 
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -2104,7 +2112,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                         },
                                                         success: function() {
                                                             console.log('success', arguments);
-                                                            $("#bast-file-" + proid).remove();
+                                                            $("#bast-file-" + id).remove();
                                                         },
                                                     })
                                                 }

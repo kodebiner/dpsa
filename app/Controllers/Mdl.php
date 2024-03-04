@@ -104,13 +104,15 @@ class Mdl extends BaseController
                 // List Parent Auto Complete
                 $autoparents    = $PaketModel->where('parentid', 0)->where('id !=', $parent['id'])->find();
             }
-        } else {
-            $paketdata      = [];
-            $autoparents    = [];
-        }
 
-        // List MDL Uncategories
-        $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
+            // List MDL Uncategories
+            $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
+            
+        } else {
+            $paketdata              = [];
+            $autoparents            = [];
+            $mdldata['mdluncate']   = [];
+        }       
 
         // Parsing Data to View
         $data                   =   $this->data;

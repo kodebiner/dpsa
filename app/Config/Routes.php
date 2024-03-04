@@ -81,12 +81,12 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
 });
 
 // SPK
-$routes->group('home', ['filter' => 'login'], function($routes) {
-    $routes->post('revisi', 'Home::revisi');
-    $routes->post('removerevisi', 'Home::removerevisi');
-    $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
-    $routes->post('acc/(:num)', 'Home::acc/$1');
-});
+// $routes->group('home', ['filter' => 'login'], function($routes) {
+//     $routes->post('revisi', 'Home::revisi');
+//     $routes->post('removerevisi', 'Home::removerevisi');
+//     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
+//     $routes->post('acc/(:num)', 'Home::acc/$1');
+// });
 
 // Users
 $routes->group('users',['filter' => 'login'], function ($routes){
