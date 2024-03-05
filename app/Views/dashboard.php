@@ -104,16 +104,16 @@
                 $inv4       = '';
                 if ($project['type_design'] === "1") {
                     if(!empty($projectdesign[$project['id']]['design'])){
-                        if(!empty($projectdesign[$project['id']]['design']['status'])){
+                        if($projectdesign[$project['id']]['design']['status'] != null){
                             
                             if ($projectdesign[$project['id']]['design']['status'] === '0') {
                                 $progress = "10";
-                                $status = "Menunggu Desain Dari DPSA";
+                                $status = "Menunggu Approval Desain";
                             }
 
                             if ($projectdesign[$project['id']]['design']['status'] === '1') {
                                 $progress = "10";
-                                $status = "Menunggu Approval desain";
+                                $status = "Proses Revisi";
                             }
 
                             if ($projectdesign[$project['id']]['design']['status'] === '2') {
@@ -121,16 +121,16 @@
                                 $status = "Desain Disetujui";
                             }
                         }else{
-                            $progress = "20";
+                            $progress = "10";
                             $status = "Menunggu SPH DPSA";
                         }
                     }else{
-                        $progress = "20";
+                        $progress = "10";
                         $status = "Menunggu Desain Dari DPSA";
                     }
                 } else {
                     $progress = "30";
-                    $status = "Menunggu Approval SPK DPSA";
+                    $status = "Menunggu SPH";
                 }
 
                 if ($project['status_spk'] === "1") {
@@ -273,7 +273,7 @@
                                                                                     <td class="uk-text-center"><?= $mdl['volume'] ?></td>
                                                                                     <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                                                                    <td class="uk-text-center"><?= $mdl['price'] ?></td>
+                                                                                    <td class="uk-text-center"><?= $mdl['price'] * $mdl['qty'] ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -598,10 +598,10 @@
                                                                                     if ($mdl['denomination'] === "1") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "2") {
-                                                                                        $price  = $mdl['length'] * $mdl['price'];
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         $luas   =   $mdl['height'] * $mdl['length'];
-                                                                                        $price  =   $mdl['price'] * $luas;
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }

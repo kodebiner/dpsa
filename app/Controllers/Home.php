@@ -286,7 +286,7 @@ class Home extends BaseController
                             'proid'     => $mdldata['proid'],
                             'price'     => $mdldata['oriprice'],
                             'sumprice'  => $mdldata['price'],
-                            'qty'       => $mdldata['qty']
+                            'qty'       => $mdldata['qty'],
                         ];
                     }
 

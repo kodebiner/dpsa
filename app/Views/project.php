@@ -66,6 +66,20 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                 $progress = "30";
                 $status = "SPK DiSetujui";
             }
+
+            if (!empty($projectdata[$project['id']]['progress'])) {
+                $produksi = round((int)$projectdata[$project['id']]['progress']);
+                $progress = round($projectdata[$project['id']]['progress'] + $progress);
+                $status   = "Retensi";
+            }
+
+            if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) {
+                if ($projectdata[$project['id']]['now'] > $projectdata[$project['id']]['dateline']) {
+                    $progress = "100";
+                    $status   = "Proyek Selesai";
+                }
+            }
+
             if ($ismobile === true) { ?>
                 <div class="uk-card uk-card-default uk-width-1-1 uk-margin">
                     <div class="uk-card-header">
@@ -164,14 +178,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                             <div class="uk-text-center">
                                 <h3 class="tm-h4"><span uk-icon="icon: future; ratio: 1"></span> Progress Proyek</h3>
                                 <p>
-                                    <?php
-                                    $progrespro = $progress;
-                                    if (!empty($projectdata[$project['id']]['progress'])) {
-                                        $produksi = round((int)$projectdata[$project['id']]['progress']);
-                                        $progrespro = round($projectdata[$project['id']]['progress'] + $progrespro);
-                                    }
-                                    ?>
-                                    <?= $progrespro . "%" ?>
+                                    <?= $progress . "%" ?>
                                 </p>
                             </div>
                         </div>
@@ -1132,8 +1139,8 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                         ?>
                                                                     </td>
                                                                     <td><?= $mdlrab['keterangan'] ?></td>
-                                                                    <td><?= $mdlrab['qty'] ?></td>
-                                                                    <td><?= $mdlrab['price'] ?></td>
+                                                                    <td class="uk-text-center"><?= $mdlrab['qty'] ?></td>
+                                                                    <td><?= "Rp. " . number_format($mdlrab['price'], 0, ',', '.');" "; ?></td>
                                                                 </tr>
                                                             <?php }
                                                         } ?>
@@ -1151,7 +1158,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
-                                                                    <td><?= $customsph['price'] ?></td>
+                                                                    <td><?= "Rp. " . number_format($customsph['price'], 0, ',', '.');" "; ?></td>
                                                                 </tr>
                                                             <?php }
                                                         } ?>
@@ -1446,7 +1453,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label">NO SPK</label>
                                                 <div class="uk-form-controls">:
-                                                    <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" <?php if (!empty($project['no_spk'])) { echo "value='".$project['no_spk']."'"; } ?> placeholder="NO SPK" />
+                                                    <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>" placeholder="NO SPK" />
                                                 </div>
                                             </div>
 
@@ -1499,6 +1506,7 @@ if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['u
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
                                                 <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?> </a></div>
+                                                <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>"/>
                                             </div>
                                         </div>
                                     </div>

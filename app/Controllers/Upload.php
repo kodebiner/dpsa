@@ -218,9 +218,8 @@ class Upload extends BaseController
         $input = $this->request->getPost('spk');
         unlink(FCPATH . 'img/spk/' . $input);
 
-        die(json_encode($input));
         // Return Message
-        // die(json_encode(array('errors', 'Data berhasil di hapus')));
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 
     public function mdl($id)

@@ -88,23 +88,29 @@
 </head>
 
 <?php
-$dateTimeObj = new DateTime($invoice['dateinv'], new DateTimeZone('Asia/Jakarta'));
-$dateFormatted =
-    IntlDateFormatter::formatObject(
-        $dateTimeObj,
-        'd MMMM y',
-        'id'
-    );
-$tanggalspk = ucwords($dateFormatted);
+if(!empty($invoice)){
+    $dateTimeObj = new DateTime($invoice['dateinv'], new DateTimeZone('Asia/Jakarta'));
+    $dateFormatted =
+        IntlDateFormatter::formatObject(
+            $dateTimeObj,
+            'd MMMM y',
+            'id'
+        );
+    $tanggalspk = ucwords($dateFormatted);
 
-$dateline = new DateTime($invoice['dateline'], new DateTimeZone('Asia/Jakarta'));
-$dateFormatted =
-    IntlDateFormatter::formatObject(
-        $dateline,
-        'd MMMM y',
-        'id'
-    );
-$tanggaldateline = ucwords($dateFormatted);
+    $dateline = new DateTime($invoice['dateline'], new DateTimeZone('Asia/Jakarta'));
+    $dateFormatted =
+        IntlDateFormatter::formatObject(
+            $dateline,
+            'd MMMM y',
+            'id'
+        );
+    $tanggaldateline = ucwords($dateFormatted);
+}else{
+    $tanggalspk         = "";
+    $tanggaldateline    = "";
+}
+
 ?>
 
 <body id="watermark">
@@ -128,35 +134,35 @@ $tanggaldateline = ucwords($dateFormatted);
     <table style="height: 70px;">
         <tr>
             <th style="width: 55%;">Ditagihkan Kepada</th>
-            <th>Kode Customer : <?= $client['rscode'] ?></th>
+            <th>Kode Customer : <?php if(!empty($client)){ echo $client['rscode'] ;} ?></th>
         </tr>
         <tr>
-            <td><?= $client['rsname'] ?></td>
+            <td><?php if(!empty($client)){ echo $client['rsname'] ;} ?></td>
             <td></td>
         </tr>
         <tr>
-            <th>PT. <?= $client['rsname'] ?></th>
+            <th>PT. <?php if(!empty($client)){ echo $client['rsname'] ;} ?></th>
             <th>Pengirim</th>
         </tr>
         <tr>
-            <td>Alamat : <?= $client['address'] ?></td>
-            <td>Alamat : <?= $invoice['alamat'] ?></td>
+            <td>Alamat :<?php if(!empty($client)){ echo $client['address'] ;} ?></td>
+            <td>Alamat : <?php if(!empty($invoice)){ echo $invoice['alamat'] ;} ?></td>
         </tr>
         <tr style="height: 80px; vertical-align: bottom;">
-            <td>NPWP : <?= $client['npwp'] ?></td>
+            <td>NPWP : <?php if(!empty($client)){ echo $client['npwp'] ;} ?></td>
             <td>NPWP : 3425349534</td>
         </tr>
         <tr>
-            <td>PIC Customer : <?= $invoice['pic'] ?></td>
+            <td>PIC Customer : <?php if(!empty($invoice)){ echo $invoice['pic'] ;} ?></td>
             <th>Bank Detail</th>
         </tr>
         <tr>
-            <td>Bank Detail : <?= $client['bank'] ?></td>
-            <td>Bank Detail : <?= $invoice['refbank'] ?></td>
+            <td>Bank Detail : <?php if(!empty($client)){ echo $client['bank'] ;} ?></td>
+            <td>Bank Detail :<?php if(!empty($invoice)){ echo $invoice['refbank'] ;} ?></td>
         </tr>
         <tr>
-            <td>AC NO. <?= $client['no_rek'] ?></td>
-            <td>AC NO. <?= $invoice['refacc'] ?></td>
+            <td>AC NO. <?php if(!empty($client)){ echo $client['no_rek'] ;} ?></td>
+            <td>AC NO. <?php if(!empty($invoice)){ echo $invoice['refacc'] ;} ?></td>
         </tr>
     </table>
 
@@ -169,7 +175,7 @@ $tanggaldateline = ucwords($dateFormatted);
                     <th>Halaman</th>
                 </tr>
                 <tr>
-                    <td>No. <?= $invoice['noinv'] ?></td>
+                    <td>No. <?php if(!empty($invoice)){ echo $invoice['noinv'] ;} ?></td>
                     <td><?= $tanggalspk ?></td>
                     <td>Hal {PAGENO} dari {nbpg}</td>
                 </tr>
@@ -182,8 +188,8 @@ $tanggaldateline = ucwords($dateFormatted);
                     <th>Refrensi PT.DPSA</th>
                 </tr>
                 <tr>
-                    <td>Email : <?= $invoice['email'] ?></td>
-                    <td><?= $invoice['referensi'] ?></td>
+                    <td>Email : <?php if(!empty($invoice)){ echo $invoice['email'] ;} ?></td>
+                    <td><?php if(!empty($invoice)){ echo $invoice['referensi'] ;} ?></td>
                 </tr>
             </table>
         </div>
@@ -206,17 +212,17 @@ $tanggaldateline = ucwords($dateFormatted);
         </tr>
         <tr style="border:1pt solid #900; border-bottom-style: none">
             <td style="width: 30%; border:1pt solid; border-bottom-style: none;"></td>
-            <td style="width: 40%; font-weight:bold;text-align:center;">Nilai SPK <?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
+            <td style="width: 40%; font-weight:bold;text-align:center;">Nilai SPK <?php if(!empty($invoice)){ echo "Rp. " . number_format($invoice['total'], 0, ',', '.');" ";}  ?></td>
             <td style="text-align: center; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-bottom-style: none; width: 10%;"></td>
         </tr>
         <tr style="border:1pt solid; border-top-style: none;">
-            <td style="width: 30%; border:1pt solid; border-top-style: none;"><?= $invoice['no_spk'] ?></td>
-            <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress <?= $invoice['progress'] ?>% <?= $projects['name'] ?></td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= $invoice['termin'] ?>%</td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format($invoice['total'], 0, ',', '.');" "; ?></td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?= "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" "; ?></td>
+            <td style="width: 30%; border:1pt solid; border-top-style: none;"><?php if(!empty($invoice)){ echo $invoice['no_spk'] ;} ?></td>
+            <td style="width: 40%; border:1pt solid; border-top-style: none;">Progress <?php if(!empty($invoice)){ echo $invoice['progress']."%" ;} ?> <?php if(!empty($projects)){ echo $projects['name'] ;} ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?php if(!empty($invoice)){ echo $invoice['termin']."%" ;} ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format($invoice['total'], 0, ',', '.');" ";}  ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
             <!-- <td style="text-align: right; border:1pt solid; border-top-style: none; width: 10%;">
                 <table>
                     </?php foreach ($rabs as $rab) { ?>
@@ -258,7 +264,7 @@ $tanggaldateline = ucwords($dateFormatted);
                 <tr>
                     <th style="border: 1pt solid black; width:50%;">Total Harga</th>
                     <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                    <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['total'], 0, ',', '.');" "; ?></td>
+                    <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo "Rp. " . number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
                 </tr>
                 <!-- <tr>
                     <th style="border: 1pt solid black; width:50%;">Diskon 0%</th>
@@ -294,9 +300,9 @@ $tanggaldateline = ucwords($dateFormatted);
                     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
                         <tr>
                             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-                            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?= $cusrab['name'] ?></th>
+                            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?php if(!empty($cusrab)){ echo $cusrab['name'];}  ?></th>
                             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-                            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($cusrab['price'], 0, ',', '.'); " "; ?></td>
+                            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($cusrab)){ echo number_format($cusrab['price'], 0, ',', '.');" ";}  ?></td>
                         </tr>
                     </table>
             <?php }
@@ -306,27 +312,36 @@ $tanggaldateline = ucwords($dateFormatted);
     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN <?= $invoice['ppn'] ?> %</th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">JUMLAH DITAGIHKAN (DPP)</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['ppnval'], 0, ',', '.');" "; ?></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo number_format(((30 / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
+        </tr>
+    </table>
+
+    <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
+        <tr>
+            <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPN <?php if(!empty($invoice)){ echo $invoice['ppn'];}  ?> %</th>
+            <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo number_format($invoice['totalterm'], 0, ',', '.');" ";}  ?></td>
         </tr>
     </table>
 
     <table style="border: 1pt solid black; margin-top:5px;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 <?= $invoice['pph'] ?>% </th>
+            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">PPH 23 <?php if(!empty($invoice)){ echo $invoice['pph'];}  ?>% </th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['pphval'], 0, ',', '.'); " "; ?></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo number_format($invoice['pphtermin'], 0, ',', '.');" ";}  ?></td>
         </tr>
     </table>
 
-    <table style="border: 1pt solid black; margin-top:5px;">
+    <table style="border: 1pt solid black; margin-top:5px; background-color: #dddddd;">
         <tr>
             <th style="border: 1pt solid black; border-right-style:none; width:55%;"></th>
-            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
+            <th style="border: 1pt solid black; border-right-style:none; font-weight:bold; border-left-style:none;  width:22.2%;">TOTAL / JUMLAH HARGA DI BAYAR</th>
             <td style="border: 1pt solid black; border-right-style:none;">Rp.</td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?= number_format($invoice['pphval'] + $invoice['ppnval'] + array_sum(array_column($rabcustom,'price')) + ((30 / 100) * $invoice['total']), 0, ',', '.'); " "; ?></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo number_format($invoice['totalterm'] + $invoice['pphtermin'] + array_sum(array_column($rabcustom,'price')) + ((30 / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
         </tr>
     </table>
 
@@ -338,7 +353,7 @@ $tanggaldateline = ucwords($dateFormatted);
             <td style="height: 60px;"></td>
         </tr>
         <tr>
-            <td style="text-align: center; text-decoration: underline;">Mr.<?= ucwords($invoice['direktur']) ?></td>
+            <td style="text-align: center; text-decoration: underline;">Mr.<?php if(!empty($invoice)){ echo $invoice['direktur'];}  ?></td>
         </tr>
         <tr>
             <td style="text-align: center;">Direktur</td>

@@ -70,7 +70,7 @@ $roman = sphnum($number);
 
 $sphnum = str_pad($projects['no_sph'], 3, '0', STR_PAD_LEFT);
 
-$numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/". $roman . "/" . $Year;
+$numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode'] . "/" . $roman . "/" . $Year;
 ?>
 
 <body>
@@ -105,12 +105,12 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
         <tr>
             <td></td>
             <td>Pekerjaan</td>
-            <td> : <?=$projects['name']?></td>
+            <td> : <?= $projects['name'] ?></td>
         </tr>
         <tr>
             <td></td>
             <td>Lokasi</td>
-            <td> : <?=$client['rsname']?></td>
+            <td> : <?= $client['rsname'] ?></td>
         <tr>
             <td></td>
             <td>Tanggal</td>
@@ -122,7 +122,7 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
         <div>
             <div>
                 <div>
-                    <font style="font-weight: bold; text-decoration: underline;"><?=$sphdata['clientpic']?></font> <br><br>Dengan hormat,
+                    <font style="font-weight: bold; text-decoration: underline;"><?= $sphdata['clientpic'] ?></font> <br><br>Dengan hormat,
                 </div>
                 <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
             </div>
@@ -149,55 +149,43 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
 
                 <?php
                 $x = 1;
-                if (!empty($projects['id'])) {
-                    foreach ($rabs as $rab) {
-                        if ($rab['projectid'] === $projects['id']) {
-                            foreach ($pakets as $paket) {
-                                if ($paket['id'] === $rab['paketid']) {
-                                    foreach ($mdls as $mdl) {
-                                        foreach ($paketdata as $datapaket){
-                                        if ($mdl['id'] === $rab['mdlid']) {
-                                            $denom = "";
-                                            $price = "";
-                                            // $total = [];
-                                            if ($mdl['denomination'] === "1") {
-                                                $price  = $rab['qty'] * $mdl['price'];
-                                                $denom  = "Unit";
-                                            } elseif ($mdl['denomination'] === "2") {
-                                                $price  = $mdl['length'] * $mdl['price'];
-                                                $denom  = "M";
-                                            } elseif ($mdl['denomination'] === "3") {
-                                                $luas   =   $mdl['height'] * $mdl['length'];
-                                                $price  =   $mdl['price'] * $luas;
-                                                $denom  = "M2";
-                                            } elseif ($mdl['denomination'] === "4") {
-                                                $price  = $rab['qty'] * $mdl['price'];
-                                                $denom  = "Set";
-                                            }
-                                            $total[] = $price;?>
-                                            <tr class="uk-text-center">
-                                                <td style="border: 1pt solid black; text-align:center;"><?php echo $x++; ?></td>
-                                                <td style="border: 1pt solid black;"><?= $datapaket['name'] ?></td>
-                                                <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $mdl['length'] ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $mdl['width'] ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $mdl['height'] ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $mdl['volume'] ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $denom ?></td>
-                                                <td style="border: 1pt solid black; text-align:center;"><?= $rab['qty'] ?></td>
-                                                <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['price'], 0, ',', '.')  ?></td>
-                                                <td style="border: 1pt solid black;"><?= "Rp." . number_format($price, 0, ',', '.')  ?></td>
-                                                <td style="border: 1pt solid black;"><?= $mdl['keterangan'] ?></td>
-                                            </tr>
-                                    <?php   }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                ?>
+                if(!empty($sphrabs)){
+                    foreach ($sphrabs as $mdl){ 
+                        $denom = "";
+                        $price = "";
+                        // $total = [];
+                        if ($mdl['denom'] === "1") {
+                            // $price  = $mdl['qty'] * $mdl['price'];
+                            $denom  = "Unit";
+                        } elseif ($mdl['denom'] === "2") {
+                            // $price  = $mdl['length'] * $mdl['price'];
+                            $denom  = "M";
+                        } elseif ($mdl['denom'] === "3") {
+                            // $luas   =   $mdl['height'] * $mdl['length'];
+                            $price  =   $mdl['price'] * $luas;
+                            $denom  = "M2";
+                        } elseif ($mdl['denom'] === "4") {
+                            // $price  = $mdl['qty'] * $mdl['price'];
+                            $denom  = "Set";
+                        }?>
+                    
+                        <tr class="uk-text-center">
+                        <td style="border: 1pt solid black; text-align:center;"><?php echo $x++; ?></td>
+                        <td style="border: 1pt solid black;"><?= $mdl['kategori'] ?></td>
+                        <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['length'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['width'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['height'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['volume'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['denom'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $mdl['qty'] ?></td>
+                        <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['price'], 0, ',', '.')  ?></td>
+                        <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['qty'] * $mdl['price'], 0, ',', '.')  ?></td>
+                        <td style="border: 1pt solid black;"><?= $mdl['keterangan'] ?></td>
+                        </tr>
+                    <?php }
+                } ?>
+                
 
                 <tr class="uk-text-center">
                     <td style="border: 1pt solid black;">&nbsp;</td>
@@ -214,26 +202,27 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                     <td style="border: 1pt solid black;"></td>
                 </tr>
 
-                <?php foreach ($custom as $cusrab){ ?>
+                <?php
+                 foreach ($custom as $cusrab) { ?>
                     <tr style="border: 1pt solid black;">
-                    <td style="border: 1pt solid black;"></td>
-                    <td class="uk-text-left"><?= $cusrab['name'] ?></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;">
-                        <?php if (!empty($cusrab['price'])) {
-                            echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
-                        } ?>
-                    </td>
-                    <td style="border: 1pt solid black;"></td>
-                </tr>
-                <?php }?>
+                        <td style="border: 1pt solid black;"></td>
+                        <td class="uk-text-left"><?= $cusrab['name'] ?></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black; text-align:right;">
+                            <?php if (!empty($cusrab['price'])) {
+                                echo number_format($cusrab['price'], 0, ',', '.');
+                            } ?>
+                        </td>
+                    </tr>
+                <?php } ?>
                 <tr style="border: 1pt solid black;">
                     <td style="border: 1pt solid black;"></td>
                     <td class="uk-text-left">Total</td>
@@ -245,9 +234,10 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
-                    <td style="border: 1pt solid black;">
-                        <?php if (!empty($total)) {
-                            echo "Rp." . number_format(array_sum($total), 0, ',', '.');
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black; text-align:right;">
+                        <?php if (!empty($sphdata)) {
+                            echo number_format($sphdata['total'], 0, ',', '.');
                         } ?>
                     </td>
                 </tr>
@@ -326,7 +316,9 @@ $numsph = $sphnum . "/DPSA/".$sphdata['marketing'] ."/SPH/".$client['rscode']."/
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="text-align: center;"><font style="text-decoration: underline;"> <?= $sphdata['direktur'] ?> </font> <br> Direktur</td>
+                    <td style="text-align: center;">
+                        <font style="text-decoration: underline;"> <?= $sphdata['direktur'] ?> </font> <br> Direktur
+                    </td>
                 </tr>
             </table>
 
