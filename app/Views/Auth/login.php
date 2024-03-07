@@ -32,12 +32,28 @@
                 <div class="uk-margin">
                     <div class="uk-inline uk-width-1-1">
                         <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                        <input type="password" name="password" class="uk-input  <?php if (session('errors.password')) : ?>tm-form-invalid<?php endif ?>" placeholder="<?=lang('Auth.password')?>" required>	
+                        <input id="password" type="password" name="password" class="uk-input  <?php if (session('errors.password')) : ?>tm-form-invalid<?php endif ?>" placeholder="<?=lang('Auth.password')?>" required>	
                     </div>
                     <div class="uk-text-small uk-text-italic uk-text-danger">
                         <?= session('errors.password') ?>
                     </div>
                 </div>
+                <div class="uk-margin">
+                    <label class="form-check-label">
+                        <input type="checkbox" id="showpassword"> Tampilkan Password
+                    </label>
+                </div>
+                <script>
+                    var showpass = document.getElementById('showpassword');
+                    var password = document.getElementById('password');
+                    showpass.addEventListener("click", function() {
+                        if (showpass.checked) {
+                            password.type = 'text';
+                        } else {
+                            password.type = 'password';
+                        }
+                    });
+                </script>
                 <?php if ($config->allowRemembering): ?>
                     <div class="uk-margin">
                         <label class="form-check-label">
