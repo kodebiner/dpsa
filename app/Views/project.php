@@ -34,18 +34,19 @@
 
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
-            $progress = "0";
+           $progress   = "0";
+           $status     = "Sedang Dalam Proses Persiapan";
             if ($project['type_design'] === "1") {
                 if(!empty($projectdata[$project['id']]['design'])){
                     
                     if ($projectdata[$project['id']]['design']['status'] === '0') {
                         $progress = "10";
-                        $status = "Menunggu Desain Dari DPSA";
+                        $status = "Menunggu Aprroval Desain";
                     }
 
                     if ($projectdata[$project['id']]['design']['status'] === '1') {
                         $progress = "10";
-                        $status = "Menunggu Approval desain";
+                        $status = "Menunggu Proses Revisi Desain";
                     }
 
                     if ($projectdata[$project['id']]['design']['status'] === '2') {
@@ -54,8 +55,8 @@
                     }
 
                 }else{
-                    $progress = "10";
-                    $status = "Menunggu Desain Dari DPSA";
+                    $progress = "30";
+                    $status = "Menunggu SPH";
                 }
             } else {
                 $status = "Menunggu SPH";
@@ -498,7 +499,8 @@
                                 <div class="uk-margin">
                                     <label class="uk-form-label" for="company">Nama Proyek</label>
                                     <div class="uk-uk-form-controls">
-                                        <input class="uk-input" type="text" placeholder="<?= $project['name'] ?>" aria-label="disabled" value="<?= $project['name'] ?>" disabled>
+                                        <input class="uk-input" type="text" name="name" placeholder="<?= $project['name'] ?>" aria-label="disabled" value="<?= $project['name'] ?>" disabled>
+                                        <input class="uk-input" name="name" value="<?= $project['name'] ?>" placeholder="Nama Proyek" type="text" hidden>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -516,14 +518,16 @@
                                 <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
-                                        <input class="uk-input" id="companyupdated" name="company" value="<?= $klien ?>" placeholder="<?= $klien ?>" required>
+                                        <input class="uk-input" id="companyupdated<?= $project['id'] ?>" name="company" value="<?= $klien ?>" placeholder="<?= $klien ?>" required>
                                         <input id="compid" name="company" value="<?= $project['clientid'] ?>" hidden>
                                     </div>
                                 <?php } else { ?>
-                                    <!-- <label class="uk-form-label" for="company">Perusahaan</label>
+                                    <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
                                         <input class="uk-input" type="text" placeholder="<?= $klien ?>" aria-label="disabled" value="<?= $klien ?>" disabled>
-                                    </div> -->
+                                        <input class="uk-input" type="text" name="company" placeholder="<?= $klien ?>" aria-label="disabled" value="<?= $klien ?>" hidden>
+                                        <input id="compid" name="company" value="<?= $project['clientid'] ?>" hidden>
+                                    </div>
                                 <?php } ?>
                                 <script type="text/javascript">
                                     $(function() {
@@ -541,7 +545,7 @@
                                             } ?>
                                         ];
                                         console.log(company);
-                                        $("#companyupdated").autocomplete({
+                                        $("#companyupdated<?= $project['id'] ?>").autocomplete({
                                             source: company,
                                             select: function(e, i) {
                                                 $("input[id='compid']").val(i.item.idx); // save selected id to hidden input

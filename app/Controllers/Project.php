@@ -54,23 +54,29 @@ class Project extends BaseController
             $ProductionModel        = new ProductionModel();
             $InvoiceModel           = new InvoiceModel();
             $ReferensiModel         = new ReferensiModel();
-            $UserModel              = new UserModel();
             $CustomRabModel         = new CustomRabModel();
-            $GroupModel             = new GroupModel();
-            $PermissionModel        = new PermissionModel();
 
             // Populating Data
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
-            $users                  = $UserModel->where('parentid', null)->find();
+            // $users                  = $UserModel->where('parentid', null)->find();
+
+            // Users
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('users.id !=', $this->data['uid']);
+            $this->builder->where('auth_groups.name !=', 'superuser');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $users = $this->builder->get()->getResult();
 
             // Marketing
             $this->builder = $this->db->table('users');
             $this->builder->where('deleted_at', null);
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-            $this->builder->where('users.id !=', $this->data['uid']);
             $this->builder->where('auth_groups.name =', 'marketing');
             $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $marketings = $this->builder->get()->getResult();
@@ -281,7 +287,7 @@ class Project extends BaseController
                     $projectdata[$project['id']]['referensi']   = $ReferensiModel->findAll();
 
                     // PIC
-                    $projectdata[$project['id']]['pic']         = $UserModel->where('parentid', null)->find();
+                    $projectdata[$project['id']]['pic']         = $users;
                 }
             } else {
                 $rabs           = [];
@@ -515,6 +521,7 @@ class Project extends BaseController
             } else {
                 $client = $pro['clientid'];
             }
+
 
             if (!empty($input['spk'])) {
                 if ($input['spk'] != $pro['spk']) {
@@ -791,7 +798,7 @@ class Project extends BaseController
 
             // DATA PROYEK 
             // $invoice    = $InvoiceModel->findAll();
-            $client     = $CompanyModel->where('id', $pro['clientid'])->first();
+            // $client     = $CompanyModel->where('id', $pro['clientid'])->first();
 
             //--- END INV NUM ---//
 
@@ -957,7 +964,7 @@ class Project extends BaseController
             $project = [
                 'id'            => $id,
                 'name'          => $name,
-                'clientid'      => $client['id'],
+                'clientid'      => $client,
                 'spk'           => $spk,
                 'status_spk'    => $statusspk,
                 'status'        => $status,

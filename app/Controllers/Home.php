@@ -135,6 +135,15 @@ class Home extends BaseController
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client cabang') {
                 // Client Cabang function
+                $ProjectModel       = new ProjectModel;
+                $CompanyModel       = new CompanyModel();
+                $RabModel           = new RabModel();
+                $PaketModel         = new PaketModel();
+                $MdlModel           = new MdlModel();
+                $DesignModel        = new DesignModel();
+                $BastModel          = new BastModel();
+                $ProductionModel    = new ProductionModel();
+                $CustomRabModel     = new CustomRabModel();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
@@ -142,9 +151,152 @@ class Home extends BaseController
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->paginate($perpage, 'projects');
                 }
 
+
                 $projectdata = [];
-                foreach ($projects as $project) {
-                    $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
+                $projectdesign = [];
+                $client = "";
+                if (!empty($projects)) {
+                    foreach ($projects as $project) {
+                        $client = $CompanyModel->find($project['clientid']);
+                        $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
+                        $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
+                        $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
+
+                        // RAB
+                        $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                        foreach ($rabs as $rab) {
+                            $paketid[]  = $rab['paketid'];
+
+                            // MDL RAB
+                            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                            foreach ($rabmdl as $mdlr) {
+                                $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                    'id'            => $mdlr['id'],
+                                    'proid'         => $project['id'],
+                                    'name'          => $mdlr['name'],
+                                    'length'        => $mdlr['length'],
+                                    'width'         => $mdlr['width'],
+                                    'height'        => $mdlr['height'],
+                                    'volume'        => $mdlr['volume'],
+                                    'denomination'  => $mdlr['denomination'],
+                                    'keterangan'    => $mdlr['keterangan'],
+                                    'qty'           => $rab['qty'],
+                                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                    'oriprice'      => (int)$mdlr['price'],
+                                ];
+                            }
+                        }
+
+                        // Custom RAB MODEL
+                        $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
+
+                        // bast
+                        $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                        $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                        // Production
+                        $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
+                        if (!empty($productions)) {
+                            foreach ($productions as $production) {
+
+                                // MDL Production
+                                $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                                foreach ($mdlprod as $mdlp) {
+                                    $projectdata[$project['id']]['production'][$production['id']]  = [
+                                        'id'                => $production['id'],
+                                        'mdlid'             => $production['mdlid'],
+                                        'name'              => $mdlp['name'],
+                                        'gambar_kerja'      => $production['gambar_kerja'],
+                                        'mesin_awal'        => $production['mesin_awal'],
+                                        'tukang'            => $production['tukang'],
+                                        'mesin_lanjutan'    => $production['mesin_lanjutan'],
+                                        'finishing'         => $production['finishing'],
+                                        'packing'           => $production['packing'],
+                                        'setting'           => $production['setting'],
+                                    ];
+                                }
+                            }
+                        } else {
+                            $mdlprod    = [];
+                            $projectdata[$project['id']]['production']   = [];
+                        }
+
+                        // Production Proggres
+                        if (!empty($projectdata[$project['id']]['rab'])) {
+                            $price = [];
+                            foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                                $price[] = [
+                                    'id'        => $mdldata['id'],
+                                    'proid'     => $mdldata['proid'],
+                                    'price'     => $mdldata['oriprice'],
+                                    'sumprice'  => $mdldata['price'],
+                                    'qty'       => $mdldata['qty'],
+                                ];
+                            }
+
+                            $total = array_sum(array_column($price, 'sumprice'));
+
+                            $progresdata = [];
+                            $datamdlid = [];
+                            foreach ($price as $progresval) {
+                                $progresdata[] = [
+                                    'id'    => $progresval['id'], // mdlid
+                                    'proid' => $progresval['proid'],
+                                    'val'   => (($progresval['price'] / $total) * 65) / 7,
+                                ];
+                                $datamdlid[] = $progresval['id'];
+                            }
+
+                            $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
+
+                            $progress = [];
+                            foreach ($productval as $proses) {
+                                foreach ($progresdata as $value) {
+                                    if ($proses['mdlid'] === $value['id']) {
+                                        if ($proses['gambar_kerja'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['mesin_awal'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['tukang'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['mesin_lanjutan'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['finishing'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['packing'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['setting'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                    }
+                                }
+                            }
+                            $projectdata[$project['id']]['progress']    = array_sum($progress);
+
+                            if (!empty($projectdata[$project['id']]['bast'])) {
+                                $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
+                                $date = date_create($day);
+                                $key = date_format($date, "Y-m-d");
+                                $hari = date_create($key);
+                                date_add($hari, date_interval_create_from_date_string('3 month'));
+                                $dateline = date_format($hari, 'Y-m-d');
+
+                                $now = strtotime("now");
+                                $nowtime = date("Y-m-d", $now);
+                                $projectdata[$project['id']]['dateline'] = $dateline;
+                                $projectdata[$project['id']]['now'] = $nowtime;
+                            }
+                        } else {
+                            $projectdata[$project['id']]['dateline'] = '';
+                            $projectdata[$project['id']]['now'] = '';
+                        }
+                    }
                 }
 
                 $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
@@ -162,14 +314,15 @@ class Home extends BaseController
                 // Parsing Data to View
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
-                $data['client']         = $clients;
+                $data['client']         = $client;
                 $data['projects']       = $projects;
                 $data['design']         = $DesignModel->findAll();
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
-                $data['projectdata']    = $projectdata;
                 $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->links('projects', 'uikit_full');
+                $data['projectdata']    = $projectdata;
+                $data['projectdesign']  = $projectdesign;
 
                 return view('dashboard', $data);
             }
@@ -214,143 +367,145 @@ class Home extends BaseController
 
             $projectdata        = [];
             $projectdesign      = [];
-            foreach ($projects as $project) {
-                $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
-                $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
+            if (!empty($projects)) {
+                foreach ($projects as $project) {
+                    $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
+                    $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
 
-                // RAB
-                $rabs       = $RabModel->where('projectid', $project['id'])->find();
-                foreach ($rabs as $rab) {
-                    $paketid[]  = $rab['paketid'];
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    foreach ($rabs as $rab) {
+                        $paketid[]  = $rab['paketid'];
 
-                    // MDL RAB
-                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
-                    foreach ($rabmdl as $mdlr) {
-                        $projectdata[$project['id']]['rab'][$rab['id']]  = [
-                            'id'            => $mdlr['id'],
-                            'proid'         => $project['id'],
-                            'name'          => $mdlr['name'],
-                            'length'        => $mdlr['length'],
-                            'width'         => $mdlr['width'],
-                            'height'        => $mdlr['height'],
-                            'volume'        => $mdlr['volume'],
-                            'denomination'  => $mdlr['denomination'],
-                            'keterangan'    => $mdlr['keterangan'],
-                            'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
-                            'oriprice'      => (int)$mdlr['price'],
-                        ];
-                    }
-                }
-
-                // Custom RAB MODEL
-                $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
-
-                // bast
-                $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
-                $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
-
-                // Production
-                $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
-                if (!empty($productions)) {
-                    foreach ($productions as $production) {
-
-                        // MDL Production
-                        $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
-                        foreach ($mdlprod as $mdlp) {
-                            $projectdata[$project['id']]['production'][$production['id']]  = [
-                                'id'                => $production['id'],
-                                'mdlid'             => $production['mdlid'],
-                                'name'              => $mdlp['name'],
-                                'gambar_kerja'      => $production['gambar_kerja'],
-                                'mesin_awal'        => $production['mesin_awal'],
-                                'tukang'            => $production['tukang'],
-                                'mesin_lanjutan'    => $production['mesin_lanjutan'],
-                                'finishing'         => $production['finishing'],
-                                'packing'           => $production['packing'],
-                                'setting'           => $production['setting'],
+                        // MDL RAB
+                        $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                        foreach ($rabmdl as $mdlr) {
+                            $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                'id'            => $mdlr['id'],
+                                'proid'         => $project['id'],
+                                'name'          => $mdlr['name'],
+                                'length'        => $mdlr['length'],
+                                'width'         => $mdlr['width'],
+                                'height'        => $mdlr['height'],
+                                'volume'        => $mdlr['volume'],
+                                'denomination'  => $mdlr['denomination'],
+                                'keterangan'    => $mdlr['keterangan'],
+                                'qty'           => $rab['qty'],
+                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                'oriprice'      => (int)$mdlr['price'],
                             ];
                         }
                     }
-                } else {
-                    $mdlprod    = [];
-                    $projectdata[$project['id']]['production']   = [];
-                }
 
-                // Production Proggres
-                if (!empty($projectdata[$project['id']]['rab'])) {
-                    $price = [];
-                    foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
-                        $price[] = [
-                            'id'        => $mdldata['id'],
-                            'proid'     => $mdldata['proid'],
-                            'price'     => $mdldata['oriprice'],
-                            'sumprice'  => $mdldata['price'],
-                            'qty'       => $mdldata['qty'],
-                        ];
+                    // Custom RAB MODEL
+                    $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
+
+                    // bast
+                    $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                    $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    // Production
+                    $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
+                    if (!empty($productions)) {
+                        foreach ($productions as $production) {
+
+                            // MDL Production
+                            $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                            foreach ($mdlprod as $mdlp) {
+                                $projectdata[$project['id']]['production'][$production['id']]  = [
+                                    'id'                => $production['id'],
+                                    'mdlid'             => $production['mdlid'],
+                                    'name'              => $mdlp['name'],
+                                    'gambar_kerja'      => $production['gambar_kerja'],
+                                    'mesin_awal'        => $production['mesin_awal'],
+                                    'tukang'            => $production['tukang'],
+                                    'mesin_lanjutan'    => $production['mesin_lanjutan'],
+                                    'finishing'         => $production['finishing'],
+                                    'packing'           => $production['packing'],
+                                    'setting'           => $production['setting'],
+                                ];
+                            }
+                        }
+                    } else {
+                        $mdlprod    = [];
+                        $projectdata[$project['id']]['production']   = [];
                     }
 
-                    $total = array_sum(array_column($price, 'sumprice'));
+                    // Production Proggres
+                    if (!empty($projectdata[$project['id']]['rab'])) {
+                        $price = [];
+                        foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty'],
+                            ];
+                        }
 
-                    $progresdata = [];
-                    $datamdlid = [];
-                    foreach ($price as $progresval) {
-                        $progresdata[] = [
-                            'id'    => $progresval['id'], // mdlid
-                            'proid' => $progresval['proid'],
-                            'val'   => (($progresval['price'] / $total) * 65) / 7,
-                        ];
-                        $datamdlid[] = $progresval['id'];
-                    }
+                        $total = array_sum(array_column($price, 'sumprice'));
 
-                    $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
+                        $progresdata = [];
+                        $datamdlid = [];
+                        foreach ($price as $progresval) {
+                            $progresdata[] = [
+                                'id'    => $progresval['id'], // mdlid
+                                'proid' => $progresval['proid'],
+                                'val'   => (($progresval['price'] / $total) * 65) / 7,
+                            ];
+                            $datamdlid[] = $progresval['id'];
+                        }
 
-                    $progress = [];
-                    foreach ($productval as $proses) {
-                        foreach ($progresdata as $value) {
-                            if ($proses['mdlid'] === $value['id']) {
-                                if ($proses['gambar_kerja'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['mesin_awal'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['tukang'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['mesin_lanjutan'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['finishing'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['packing'] === "1") {
-                                    array_push($progress, $value['val']);
-                                }
-                                if ($proses['setting'] === "1") {
-                                    array_push($progress, $value['val']);
+                        $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
+
+                        $progress = [];
+                        foreach ($productval as $proses) {
+                            foreach ($progresdata as $value) {
+                                if ($proses['mdlid'] === $value['id']) {
+                                    if ($proses['gambar_kerja'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['mesin_awal'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['tukang'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['mesin_lanjutan'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['finishing'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['packing'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['setting'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
                                 }
                             }
                         }
-                    }
-                    $projectdata[$project['id']]['progress']    = array_sum($progress);
+                        $projectdata[$project['id']]['progress']    = array_sum($progress);
 
-                    if (!empty($projectdata[$project['id']]['bast'])) {
-                        $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
-                        $date = date_create($day);
-                        $key = date_format($date, "Y-m-d");
-                        $hari = date_create($key);
-                        date_add($hari, date_interval_create_from_date_string('3 month'));
-                        $dateline = date_format($hari, 'Y-m-d');
+                        if (!empty($projectdata[$project['id']]['bast'])) {
+                            $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
+                            $date = date_create($day);
+                            $key = date_format($date, "Y-m-d");
+                            $hari = date_create($key);
+                            date_add($hari, date_interval_create_from_date_string('3 month'));
+                            $dateline = date_format($hari, 'Y-m-d');
 
-                        $now = strtotime("now");
-                        $nowtime = date("Y-m-d", $now);
-                        $projectdata[$project['id']]['dateline'] = $dateline;
-                        $projectdata[$project['id']]['now'] = $nowtime;
+                            $now = strtotime("now");
+                            $nowtime = date("Y-m-d", $now);
+                            $projectdata[$project['id']]['dateline'] = $dateline;
+                            $projectdata[$project['id']]['now'] = $nowtime;
+                        }
+                    } else {
+                        $projectdata[$project['id']]['dateline'] = '';
+                        $projectdata[$project['id']]['now'] = '';
                     }
-                } else {
-                    $projectdata[$project['id']]['dateline'] = '';
-                    $projectdata[$project['id']]['now'] = '';
                 }
             }
 
@@ -484,8 +639,8 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
             }
         }
-        // die(json_encode(array('message' => 'terkirim')));
         $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi']);
+
         return redirect()->back()->with('message', 'Revisi telah tekirim');
     }
 

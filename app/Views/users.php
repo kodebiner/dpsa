@@ -429,7 +429,7 @@
                                 <input type="hidden" name="id<?= $user->id ?>" value="<?= $user->id; ?>">
                                 <input type="hidden" name="group_id" value="<?= $user->group_id; ?>">
                                 <input type="hidden" name="status" id="statusval" value="<?= $user->status ?>">
-                                <input id="compid" name="compid" value="<?= $user->parent ?>" hidden />
+                                <input id="compid<?= $user->id ?>" name="compid" value="<?= $user->parent ?>" hidden />
 
                                 <div class="uk-margin-bottom">
                                     <label class="uk-form-label" for="username">Nama Pengguna</label>
@@ -523,28 +523,29 @@
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                                 $("#company<?= $user->id; ?>").val("");
                                                 $("#company<?= $user->id; ?>").attr("required", false);
-                                                $("#compid").val(null);
+                                                $("#compid<?= $user->id ?>").val(null);
                                                 $("#pusat<?= $user->id; ?>").attr("required", false);
                                                 $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
                                             }
                                         });
 
-                                        if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
-                                            $("#pusat<?= $user->id; ?>").removeAttr("hidden");
-                                            $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
-                                            $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
-                                        } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
-                                            $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
-                                            $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                            $("#pusat<?= $user->id; ?>").attr("required", false);
-                                            $("input[id='company<?= $user->id; ?>']").attr("required", false);
-                                        } else {
-                                            $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                            $("#pusat<?= $user->id; ?>").attr("required", false);
-                                            $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
-                                            $("input[id='company<?= $user->id; ?>']").attr("required", false);
-                                            $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
-                                        }
+                                        // if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
+                                        //     $("#pusat<?= $user->id; ?>").removeAttr("hidden");
+                                        //     $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                        //     $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
+                                        // } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
+                                        //     $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
+                                        //     $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                        //     $("#pusat<?= $user->id; ?>").attr("required", false);
+                                        //     $("input[id='company<?= $user->id; ?>']").attr("required", false);
+                                        // } else {
+                                        //     $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                        //     $("#pusat<?= $user->id; ?>").attr("required", false);
+                                        //     $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                        //     $("#compid").val(null);
+                                        //     $("input[id='company<?= $user->id; ?>']").attr("required", false);
+                                        //     $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
+                                        // }
                                     });
                                 </script>
 
