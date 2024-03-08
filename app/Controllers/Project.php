@@ -486,7 +486,7 @@ class Project extends BaseController
 
     public function update($id)
     {
-        if ($this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) {
             // Calling Model
             $ProjectModel       = new ProjectModel();
             $RabModel           = new RabModel();
@@ -2141,11 +2141,15 @@ class Project extends BaseController
             }
         }
         // $BastModel->delete($bast);
-        $newbast = [
-            'id'    => $bast['id'],
-            'file'  => "",
-        ];
-        $BastModel->save($newbast);
+        if($bast['status'] === "1"){
+            $newbast = [
+                'id'    => $bast['id'],
+                'file'  => "",
+            ];
+            $BastModel->save($newbast);
+        }else{
+            $BastModel->delete($bast);
+        }
 
         die(json_encode(array($filename)));
     }

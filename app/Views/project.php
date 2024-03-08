@@ -516,14 +516,14 @@
                                 <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
-                                        <input class="uk-input" id="company" name="company" value="<?= $klien ?>" placeholder="<?= $klien ?>" required>
+                                        <input class="uk-input" id="companyupdated" name="company" value="<?= $klien ?>" placeholder="<?= $klien ?>" required>
                                         <input id="compid" name="company" value="<?= $project['clientid'] ?>" hidden>
                                     </div>
                                 <?php } else { ?>
-                                    <label class="uk-form-label" for="company">Perusahaan</label>
+                                    <!-- <label class="uk-form-label" for="company">Perusahaan</label>
                                     <div class="uk-form-controls">
                                         <input class="uk-input" type="text" placeholder="<?= $klien ?>" aria-label="disabled" value="<?= $klien ?>" disabled>
-                                    </div>
+                                    </div> -->
                                 <?php } ?>
                                 <script type="text/javascript">
                                     $(function() {
@@ -541,7 +541,7 @@
                                             } ?>
                                         ];
                                         console.log(company);
-                                        $("#company").autocomplete({
+                                        $("#companyupdated").autocomplete({
                                             source: company,
                                             select: function(e, i) {
                                                 $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
@@ -1819,7 +1819,7 @@
 
                                         <!-- Serah Terima -->
                                         <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload Serah Terima</label>
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA</label>
                                             <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 if (!empty($projectdata[$project['id']]['bast'])) {
@@ -1876,14 +1876,18 @@
 
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">Upload BAST</label>
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Tanggal BAST</label>
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
-                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo=date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                                <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo=date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php }else{ ?>
+                                                                <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo=date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo date_format($tempo,'m/d/Y'); }else{ echo date('m/d/Y'); } ?></span>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
