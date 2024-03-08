@@ -2192,7 +2192,7 @@
                                                         },
                                                         success: function() {
                                                             console.log('success', arguments);
-                                                            $("#bast-file-" + proid).remove();
+                                                            $("#bast-file-" + id).remove();
                                                         },
                                                     })
                                                 }

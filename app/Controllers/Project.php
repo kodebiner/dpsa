@@ -2140,7 +2140,12 @@ class Project extends BaseController
                 unlink(FCPATH . 'img/bast/' . $filename);
             }
         }
-        $BastModel->delete($bast);
+        // $BastModel->delete($bast);
+        $newbast = [
+            'id'    => $bast['id'],
+            'file'  => "",
+        ];
+        $BastModel->save($newbast);
 
         die(json_encode(array($filename)));
     }
