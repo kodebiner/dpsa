@@ -219,12 +219,10 @@
                                     <h4 class="uk-text-center">Status Proyek</h4>
                                     <div class="uk-text-center"><?= $status ?></div>
                                 </div>
-                                <?php if ($project['status'] === '4') { ?>
-                                    <div class="uk-width-1-2">
-                                        <h4 class="uk-text-center">Progress Produksi</h4>
-                                        <div class="uk-text-center"><?= $project['production'] ?>%</div>
-                                    </div>
-                                <?php } ?>
+                                <div class="uk-width-1-2">
+                                    <h4 class="uk-text-center">Progress Produksi</h4>
+                                    <div class="uk-text-center"><?= $progress ?>%</div>
+                                </div>
                             </div>
 
                             <div class="uk-text-center" uk-grid>
@@ -243,8 +241,8 @@
                                 <div id="contentsph<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
                                     <div class="uk-container uk-container-small">
                                         <div class="uk-overflow-auto">
-                                            <table class="uk-table uk-table-small uk-table-divider">
-                                                <thead>
+                                            <table class="uk-table uk-table-divider">
+                                            <thead>
                                                     <tr>
                                                         <th class="">Nama</th>
                                                         <th class="uk-text-center">Panjang</th>
@@ -253,7 +251,7 @@
                                                         <th class="uk-text-center">Volume</th>
                                                         <th class="uk-text-center">Satuan</th>
                                                         <th class="uk-text-center">Jumlah Pesanan</th>
-                                                        <th class="uk-text-center">Harga</th>
+                                                        <th class="uk-text-left">Harga</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -271,9 +269,34 @@
                                                                                     <td class="uk-text-center"><?= $mdl['width'] ?></td>
                                                                                     <td class="uk-text-center"><?= $mdl['height'] ?></td>
                                                                                     <td class="uk-text-center"><?= $mdl['volume'] ?></td>
-                                                                                    <td class="uk-text-center"><?= $mdl['denomination'] ?></td>
+                                                                                    <td class="uk-text-center">
+                                                                                        <?php
+                                                                                        if ($mdl['denomination'] === "1") {
+                                                                                            echo "Unit";
+                                                                                        } elseif ($mdl['denomination'] === "2") {
+                                                                                            echo "Meter Lari";
+                                                                                        } elseif ($mdl['denomination'] === "3") {
+                                                                                            echo "Meter Persegi";
+                                                                                        } elseif ($mdl['denomination'] === "4") {
+                                                                                            echo "Set";
+                                                                                        }
+                                                                                        ?>
+                                                                                    </td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
-                                                                                    <td class="uk-text-center"><?= $mdl['price'] * $mdl['qty'] ?></td>
+                                                                                    <?php
+                                                                                    $price = "";
+                                                                                    if ($mdl['denomination'] === "1") {
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    } elseif ($mdl['denomination'] === "2") {
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    } elseif ($mdl['denomination'] === "3") {
+                                                                                        $luas   =   $mdl['height'] * $mdl['length'];
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    } elseif ($mdl['denomination'] === "4") {
+                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                    }
+                                                                                    ?>
+                                                                                    <td class="uk-text-left"><?= number_format($price, 0, ',', '.');" "; ?></td>
                                                                                 </tr>
                                                     <?php
                                                                             }
@@ -284,6 +307,31 @@
                                                         }
                                                     }
                                                     ?>
+                                                    <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
+                                                        <tr>
+                                                            <td class="uk-text-bold"></td>
+                                                            <td class="-text-bold"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-center"></td>
+                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
+                                                            <td class="uk-text-bold"></td>
+                                                        </tr>
+                                                        <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                            <tr>
+                                                                <td class=""></td>
+                                                                <td class="uk-text-left"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-center"></td>
+                                                                <td class="uk-text-left"><?= strtoupper($custrab['name']) ?></td>
+                                                                <td class="uk-text-left"><?= number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
                                                 </tbody>
                                             </table>
                                             
@@ -296,13 +344,15 @@
 
                                 <hr class="uk-margin-remove-top">
 
+                                <!-- Mobile Design -->
+                                <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
                                 <div class="uk-text-center" uk-grid>
                                     <div class="uk-width-1-4">
                                         <div class="uk-text-left">
                                             <h4>Desain</h4>
                                         </div>
                                     </div>
-                                    <div class="uk-width-expand">
+                                    <div class="uk-width-expand" id="stt<?=$designId?>">
                                         <?php
                                         if ($designStatus === "0") {
                                             echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000; font-weight: bold; width:100%;"> Menuggu Konfirmasi </div>';
@@ -322,6 +372,7 @@
                                 <div id="contentdsn<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
                                     <div class="uk-container uk-container-small">
                                         <div class="uk-width-1-1 uk-margin-bottom">
+                                            
                                             <div class="">
                                                 <?php
                                                 if ($designStatus === "0") {
@@ -338,33 +389,61 @@
                                             </div>
 
                                             <div class="uk-margin-top">
-                                                <span uk-icon="file-text"></span> File Design
+                                                <span uk-icon="file-text"></span> <a href="img/design/<?= $desainpro ?>" target="_blank" download>File Design</a>
                                             </div>
-                                            <div>
-                                                <a href="img/design/<?= $desainpro ?>" target="_blank" download><?= $desainpro ?> </a>
+
+                                            <?php if (!empty($project['ded'])) { ?>
+                                            <div class="uk-margin-top">
+                                                <span uk-icon="file-text"></span> <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download>File Layout / DED</a>
                                             </div>
-                                            
-                                            <?php if(!empty($revisi)){?>
-                                                <div class="uk-margin-top">
-                                                    <span uk-icon="file-text"></span>File Revisi
-                                                </div>
-                                                <div>
-                                                    <a href="img/revisi/<?= $revisi ?>" target="_blank" download><?= $revisi ?> </a>
-                                                </div>
+                                            <?php } ?>
+
+                                            <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                            <div class="uk-margin-top">
+                                                <span uk-icon="file-text"></span> <a href="img/revisi/<?= $revisi ?>" target="_blank" download>File Revisi</a>
+                                            </div>
                                             <?php } ?>
                                             
                                         </div>
 
                                         <?php if ($designStatus != "2") { ?>
                                             <div class="uk-text-left uk-margin-top" id="btndesain<?= $designId ?>" uk-margin>
-                                                <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" onclick="myFunction()">Konfirmasi</button>
+                                                <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" >Konfirmasi</button>
                                                 <button class="uk-button uk-button-secondary uk-button-small" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
                                             </div>
+                                            <script>
+                                                $(document).ready(function(){
+                                                $("#acc<?= $designId ?>").click(function(){
+                                                    let text = "Anda sudah yakin dengan desain ini?";
+                                                        if (confirm(text) == true) {
+                                                            $.ajax({
+                                                                url: "home/acc/<?= $designId ?>",
+                                                                method: "POST",
+                                                                data: {
+                                                                    status: $('#acc<?= $designId ?>').val(),
+                                                                },
+                                                                dataType: "json",
+                                                                error: function() {
+                                                                    console.log('error', arguments);
+                                                                },
+                                                                success: function() {
+                                                                    console.log('success', arguments);
+                                                                    $("#status<?= $designId ?>").remove();
+                                                                    $("#btndesain<?= $designId ?>").remove();
+                                                                    $("#stt<?=$designId?>").append("<div class='uk-text-light uk-text-center' id='status' . $designId . '' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'> Terkonfirmasi </div>");
+                                                                },
+                                                            })
+                                                        }
+                                                    });
+                                                });
+                                            </script>
                                         <?php } ?>
                                     </div>
                                 </div>
 
                                 <hr class="uk-margin-remove-top">
+                                <?php } ?>
+                                <!-- End Of Mobile Design -->
 
                                 <div class="uk-text-center" uk-grid>
                                     <div class="uk-width-expand">
@@ -378,21 +457,50 @@
                                     </div>
                                 </div>
 
+                                <!-- Invoice & SPK Mobile  -->
                                 <div id="contentspk<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
                                     <div class="uk-container uk-container-small">
                                         <div class="uk-width-1-1">
-                                            <p class="uk-margin-remove-top" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice</a>
-                                            </p>
+
+                                            <!-- Invoice I -->
+                                            <?php if ($projectdata[$project['id']]['project']['status_spk'] === "1") {?>
+                                                <p class="uk-margin-remove-top" uk-margin>
+                                                    <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice I</a>
+                                                </p>
+                                            <?php } ?>
+
+                                            <!-- Invoice II -->
+                                            <?php if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") { ?>
+                                                <p class="uk-margin-remove-top" uk-margin>
+                                                    <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice II</a>
+                                                </p>
+                                            <?php } ?>
+
+                                            <!-- Invoice III -->
+                                            <?php if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") { ?>
+                                                <p class="uk-margin-remove-top" uk-margin>
+                                                    <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice III</a>
+                                                </p>
+                                            <?php }?>
+
+                                            <!-- Invoice IV -->
+                                            <?php if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) { 
+                                                if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") { ?>
+                                                    <p class="uk-margin-remove-top" uk-margin>
+                                                        <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="project/invoice/<?= $project['id'] ?>" target="_blank">Download Invoice IV</a>
+                                                    </p>
+                                            <?php }
+                                            }?>
 
                                             <hr>
-
+                                            <!-- Upload SPK -->
                                             <?php if ($projectdata[$project['id']]['project']['status_spk'] === null) { ?>
                                                 <p class="uk-margin-remove-top" uk-margin>
                                                     <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" uk-toggle="target: #modal-spk<?= $project['id'] ?>">Upload SPK</a>
                                                 </p>
                                             <?php } ?>
 
+                                            <!-- Download & Upload SPK -->
                                             <?php if ($projectdata[$project['id']]['project']['status_spk'] === "0") { ?>
                                                 <p class="uk-margin-remove-top" uk-margin>
                                                     <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" uk-toggle="target: #modal-spk<?= $project['id'] ?>">Upload SPK</a>
@@ -400,6 +508,7 @@
                                                 </p>
                                             <?php } ?>
 
+                                            <!-- Download SPK -->
                                             <?php if ($projectdata[$project['id']]['project']['status_spk'] === "1") { ?>
                                                 <a class="uk-button uk-button-secondary uk-button-small uk-width-1-1" href="project/spk/<?= $spkpro ?>" target="_blank">Download SPK</a>
                                             <?php } ?>
@@ -407,7 +516,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- End Invoice & SPK Mobile -->
                             <?php } ?>
                         </div>
                     </div>
@@ -425,6 +534,11 @@
                             }
                         }
 
+                        $(document).on('vclick', '#button', function(){ 
+                            console.log("click");
+                        });
+
+                        
                         $(document).ready(function() {
                             $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
                                 $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
@@ -462,30 +576,6 @@
                                 $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
                             });
 
-                            function myFunction() {
-                                let text = "Anda sudah yakin dengan desain ini?";
-                                if (confirm(text) == true) {
-                                    $.ajax({
-                                        url: "home/acc/<?= $designId ?>",
-                                        method: "POST",
-                                        data: {
-                                            status: $('#acc<?= $designId ?>').val(),
-                                        },
-                                        dataType: "json",
-                                        error: function() {
-                                            console.log('error', arguments);
-                                        },
-                                        success: function() {
-                                            console.log('success', arguments);
-                                            $("#status<?= $designId ?>").remove();
-                                            $("#btndesain<?= $designId ?>").remove();
-                                            $("#st<?= $designId ?>").append("<div class='uk-text-light uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
-                                        },
-                                    })
-                                }
-
-                            }
-
                         });
                     </script>
                 <?php } else { ?>
@@ -520,16 +610,6 @@
                         <div id="content<?= $project['id'] ?>" hidden>
                             <div class="uk-card-body">
                                 <div class="uk-grid" uk-grid>
-                                    <!-- <div class="uk-width-1-2">
-                                        <h4 class="">Status Proyek</h4>
-                                        <div class=""></?= $status ?></div>
-                                    </div>
-                                    </?php if ($project['status'] === '4') { ?>
-                                        <div class="uk-width-1-2">
-                                            <h4 class="uk-text-center">Progress Produksi</h4>
-                                            <div class="uk-text-center"></?= $project['production'] ?>%</div>
-                                        </div>
-                                    </?php } ?> -->
 
                                     <div class="uk-width-1-1 uk-margin-bottom-remove">
                                         <div class="uk-child-width-1-2" uk-grid>
@@ -549,6 +629,7 @@
                                         </div>
                                         <hr class="uk-margin-bottom">
                                     </div>
+
                                     <?php if (!empty($project['id'])) { ?>
                                         <div class="uk-width-1-1 uk-margin-remove" id="contentsph<?= $project['id'] ?>" hidden>
                                             <table class="uk-table uk-table-responsive  uk-table-striped">
@@ -641,7 +722,6 @@
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } ?>
-
                                                 </tbody>
                                             </table>
                                             <p class="uk-text-right uk-width-1-1" uk-margin>
@@ -861,15 +941,10 @@
                                                     }
 
                                                     // Invoice IV
-                                                    if (!empty($projectdata[$project['id']]['bast']['updated_at'])) {
-                                                        if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
-                                                            // if ($projectdata[$project['id']]['bast']['status'] == "1" && strtotime($projectdata[$project['id']]['now']) >= strtotime("2024-2-15")) {
+                                                    if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) {
+                                                        if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
                                                             echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                             $progress   = "100";
-                                                            // var_dump($projectdata[$project['id']]['dateline']);
-                                                            // $today      = $projectdata[$project['id']]['now'];
-                                                            // $dateline   = $projectdata[$project['id']]['dateline'];
-                                                            // $inv4       = $projectdata[$project['id']]['project']['inv4'];
                                                         }
                                                     }
                                                     ?>
@@ -887,12 +962,6 @@
                                                 var dateline = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
                                                 var inv4 = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
                                                 var progress = "<?= (int)$progress ?>"
-
-                                                // var dateline    = new Date("2024-1-15");
-                                                // console.log(today);
-                                                // console.log(dateline);
-                                                // console.log(proid);
-                                                // console.log("</?= $projectdata[$project['id']]['dateline'] ?>");
 
                                                 if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
                                                     $.ajax({

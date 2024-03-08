@@ -8,7 +8,7 @@
 
 
 <!-- Page Heading -->
-<?php if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) { ?>
+<?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
     <?php if ($ismobile === false) { ?>
         <div class="tm-card-header uk-light uk-margin-remove-left">
             <div uk-grid class="uk-flex-middle">
@@ -17,7 +17,7 @@
                 </div>
 
                 <!-- Button Trigger Modal Add -->
-                <?php if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) { ?>
+                <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
                     <div class="uk-width-1-2@m uk-text-right@m">
                         <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #tambahdata">Tambah Klien</button>
                     </div>
@@ -43,7 +43,7 @@
     <?= view('Views/Auth/_message_block') ?>
 
     <!-- Modal Add -->
-    <?php if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) { ?>
+    <?php if ($authorize->hasPermission('admin.user.create', $uid)) { ?>
         <div uk-modal class="uk-flex-top" id="tambahdata">
             <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                 <div class="uk-modal-content">
@@ -250,7 +250,7 @@
                     <th class="uk-text-center uk-width-medium">Alamat</th>
                     <th class="uk-text-center uk-width-medium">Keterangan</th>
                     <th class="uk-text-center uk-width-medium">Status</th>
-                    <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
+                    <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
                         <th class="uk-text-center uk-width-large">Ubah</th>
                     <?php } ?>
                 </tr>
@@ -283,7 +283,7 @@
                             }
                             ?>
                         </td>
-                        <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
+                        <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
                             <td class="uk-child-width-auto uk-flex-center uk-grid-row-small uk-grid-column-small" uk-grid>
                                 <!-- Button Trigger Modal Edit -->
                                 <div>
@@ -292,7 +292,7 @@
                                 <!-- End Of Button Trigger Modal Edit -->
 
                                 <!-- Button Delete -->
-                                <?php if ($this->data['authorize']->hasPermission('admin.user.delete', $this->data['uid'])) { ?>
+                                <?php if ($authorize->hasPermission('admin.user.delete', $uid)) { ?>
                                     <div>
                                         <a uk-icon="trash" class="uk-icon-button-delete" href="client/delete/<?= $comp['id'] ?>" onclick="return confirm('<?= lang('Global.deleteConfirm') ?>')"></a>
                                     </div>
@@ -309,7 +309,7 @@
     <!-- End Of Table Content -->
 
     <!-- Modal Edit -->
-    <?php if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) { ?>
+    <?php if ($authorize->hasPermission('admin.user.edit', $uid)) { ?>
         <?php foreach ($company as $comp) { ?>
             <div uk-modal class="uk-flex-top" id="editdata<?= $comp['id'] ?>">
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>

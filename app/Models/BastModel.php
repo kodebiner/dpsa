@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class BastModel extends Model
 {
     protected $allowedFields = [
-        'projectid', 'file', 'status', 'created_at', 'updated_at',
+        'projectid', 'file', 'status','tanggal_bast', 'created_at', 'updated_at',
     ];
     protected $table            = 'bast';
     protected $primaryKey       = 'id';

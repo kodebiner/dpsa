@@ -126,7 +126,7 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
-    $routes->post('inv4/(:num)', 'Project::inv4/$1');
+    // $routes->post('inv4/(:num)', 'Project::inv4/$1');
     
 
     // Project Temp Routes

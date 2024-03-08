@@ -343,8 +343,6 @@ class Upload extends BaseController
         $input = $this->request->getPost('design');
         unlink(FCPATH . 'img/design/' . $input);
 
-        // die($input);
-        // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 
@@ -400,7 +398,6 @@ class Upload extends BaseController
         $BastModel  = new BastModel();
         $ProjectModel = new ProjectModel();
         $input      = $this->request->getFile('uploads');
-        // $id         = $this->request->getPost('id');
 
         // Validation Rules
         $rules = [
@@ -466,13 +463,6 @@ class Upload extends BaseController
         }
     }
 
-    // public function fileser($id)
-    // {
-    //     $BastModel = new BastModel();
-    //     $bast = $BastModel->where('projectid', $id)->find();
-    //     return $this->response->setJSON($bast);
-    // }
-
     public function bast($id)
     {
         $image      = \Config\Services::image();
@@ -524,12 +514,19 @@ class Upload extends BaseController
                     $databast = [
                         'projectid'     => $id,
                         'file'          => $returnFile,
-                        'status'    => 1,
+                        'status'        => 1,
                     ];
                     $BastModel->save($databast);
                     $bastId = $BastModel->getInsertID();
                 } else {
-                    unlink(FCPATH . '/img/bast/' . $bast['file']);
+                    // $filebast = FCPATH . '/img/bast/' . $bast['file'];
+                    // if (file_exists(FCPATH . '/img/bast/' . $bast['file'])) { 
+                    //     unlink(FCPATH . '/img/bast/' . $bast['file']);
+                    // }
+                    if (!empty($bast['file'])) { 
+                        unlink(FCPATH . '/img/bast/' . $bast['file']);
+                    }
+                    // unlink(FCPATH . '/img/bast/' . $bast['file']);
                     $databast = [
                         'id'            => $bast['id'],
                         'projectid'     => $id,

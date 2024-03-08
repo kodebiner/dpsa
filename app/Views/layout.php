@@ -77,7 +77,7 @@
                                 </a>
                             </li>
                         <?php } ?>
-                        <!-- <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
                             <a class="tm-h4" href="users/access-control">
                                 <div class="uk-width-1-1 uk-margin-left">
                                     <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -87,16 +87,6 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="tm-main-navbar">
-                            <a class="tm-h4" href="rab">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/marketing.svg" uk-svg>
-                                    </div>
-                                    <div class="uk-text-center">Marketing</div>
-                                </div>
-                            </a>
-                        </li> -->
                         <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="project">
@@ -122,7 +112,7 @@
                             </li>
                         <?php } ?>
 
-                        <!-- Kurang Access Control jangan lupa dihapus notenya kalo dah ada akses kontrolnya -->
+                        <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="setting">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -133,37 +123,7 @@
                                     </div>
                                 </a>
                             </li>
-
-                        <!-- <li class="tm-main-navbar">
-                            <a class="tm-h4" href="produksi">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
-                                    </div>
-                                    <div class="uk-text-center">Produksi</div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="tm-main-navbar">
-                            <a class="tm-h4" href="">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/finance.svg" uk-svg>
-                                    </div>
-                                    <div class="uk-text-center">Finance</div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="tm-main-navbar">
-                            <a class="tm-h4" href="">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/design.svg" uk-svg>
-                                    </div>
-                                    <div class="uk-text-center">Design</div>
-                                </div>
-                            </a>
-                        </li> -->
+                        <?php } ?>
                     </ul>
                 </nav>
             </div>
@@ -209,7 +169,8 @@
                         </a>
                     </li>
                 <?php } ?>
-                <!-- <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="users/access-control">
                             <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
@@ -219,16 +180,7 @@
                             </div>
                         </a>
                     </li>
-                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'rab') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="rab">
-                            <div class="uk-width-1-1 uk-margin-right">
-                                <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                    <img class="uk-width-1-2" src="img/layout/marketing.svg" uk-svg>
-                                </div>
-                                <div class="uk-text-center">Marketing</div>
-                            </div>
-                        </a>
-                    </li> -->
+                <?php } ?>
                 <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="project">
@@ -254,7 +206,7 @@
                     </li>
                 <?php } ?>
 
-                <!-- Kurang Access Control jangan lupa dihapus notenya kalo dah ada akses kontrolnya -->
+                <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="setting">
                             <div class="uk-width-1-1 uk-margin-right">
@@ -265,7 +217,8 @@
                             </div>
                         </a>
                     </li>
-                    
+                <?php } ?>
+
                 <!-- <li class="tm-main-navbar">
                         <a class="tm-h4" href="produksi">
                             <div class="uk-width-1-1 uk-margin-right">
@@ -296,38 +249,38 @@
                             </div>
                         </a>
                     </li> -->
-                <!-- <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'project') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="<?= base_url('project') ?>">
+                <!-- <li class="tm-main-navbar </?= ($uri->getSegment(1) === 'project') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="</?= base_url('project') ?>">
                             <div class="uk-margin-right">
-                                <img src="img/layout/laporan.svg" uk-svg><?= lang('Global.project'); ?>
+                                <img src="img/layout/laporan.svg" uk-svg></?= lang('Global.project'); ?>
                             </div>
                         </a>
                     </li>
-                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'design') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="<?= base_url('design') ?>">
+                    <li class="tm-main-navbar </?= ($uri->getSegment(1) === 'design') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="</?= base_url('design') ?>">
                             <div class="uk-margin-right">
-                                <img src="img/layout/laporan.svg" uk-svg><?= lang('Global.design'); ?>
+                                <img src="img/layout/laporan.svg" uk-svg></?= lang('Global.design'); ?>
                             </div>
                         </a>
                     </li>
-                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'rab') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="<?= base_url('rab') ?>">
+                    <li class="tm-main-navbar </?= ($uri->getSegment(1) === 'rab') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="</?= base_url('rab') ?>">
                             <div class="uk-margin-right">
-                                <img src="img/layout/laporan.svg" uk-svg><?= lang('Global.rab'); ?>
+                                <img src="img/layout/laporan.svg" uk-svg></?= lang('Global.rab'); ?>
                             </div>
                         </a>
                     </li>
-                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'mdl') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="<?= base_url('mdl') ?>">
+                    <li class="tm-main-navbar </?= ($uri->getSegment(1) === 'mdl') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="</?= base_url('mdl') ?>">
                             <div class="uk-margin-right">
-                                <img src="img/layout/laporan.svg" uk-svg><?= lang('Global.mdl'); ?>
+                                <img src="img/layout/laporan.svg" uk-svg></?= lang('Global.mdl'); ?>
                             </div>
                         </a>
                     </li>
-                    <li class="tm-main-navbar <?= ($uri->getSegment(1) === 'users') ? 'uk-active' : '' ?>">
-                        <a class="tm-h4" href="<?= base_url('users') ?>">
+                    <li class="tm-main-navbar </?= ($uri->getSegment(1) === 'users') ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="</?= base_url('users') ?>">
                             <div class="uk-margin-right">
-                                <img src="img/layout/pelanggan.svg" uk-svg><?= lang('Global.user'); ?>
+                                <img src="img/layout/pelanggan.svg" uk-svg></?= lang('Global.user'); ?>
                             </div>
                         </a>
                     </li> -->
@@ -441,12 +394,12 @@
                     <?php if ($ismobile === true) { ?>
                         <div>
                             <div class="uk-margin-small uk-text-center">
-                                Copyright &copy; <?php auto_copyright("2023"); ?><br/>PT Dharma Putra Sejahtera Abadi
+                                Copyright &copy; <?php auto_copyright("2023"); ?><br />PT Dharma Putra Sejahtera Abadi
                             </div>
                         </div>
                     <?php } else { ?>
                         <div class="uk-margin-left">
-                            Copyright &copy; <?php auto_copyright("2023"); ?><br/>PT Dharma Putra Sejahtera Abadi
+                            Copyright &copy; <?php auto_copyright("2023"); ?><br />PT Dharma Putra Sejahtera Abadi
                         </div>
                     <?php } ?>
                 </div>

@@ -14,6 +14,7 @@ class Setting extends BaseController
     
     public function index()
     {
+        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) {
         // Calling Models
         $GconfigModel       = new GconfigModel();
         $ReferensiModel     = new ReferensiModel();
@@ -60,6 +61,9 @@ class Setting extends BaseController
 
         // Rendering view
         return view('Views/setting', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 
     public function gconfig()

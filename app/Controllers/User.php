@@ -454,80 +454,87 @@ class User extends BaseController
 
     public function updateaccess($id)
     {
+        if ($this->data['authorize']->hasPermission('admin.user.edit', $this->data['uid'])) {
 
-        // Caling Libraries
-        $authorize = $auth = service('authorization');
+            // Caling Libraries
+            $authorize = $auth = service('authorization');
 
-        // Populating Data
-        $groups = $authorize->groups();
-        $GroupModel = new GroupModel;
-        $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
+            // Populating Data
+            $groups = $authorize->groups();
+            $GroupModel = new GroupModel;
+            $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
 
-        // Initialize
-        $input = $this->request->getPost();
-        $group = $authorize->group($id);
+            // Initialize
+            $input = $this->request->getPost();
+            $group = $authorize->group($id);
 
-        // Update Group
-        $datagroup = [
-            'name'        => $input['name'],
-            'description' => $input['description'],
-        ];
-        // dd($datagroup);
+            // Update Group
+            $datagroup = [
+                'name'        => $input['name'],
+                'description' => $input['description'],
+            ];
+            // dd($datagroup);
 
-        $cek = $authorize->updateGroup($id, $datagroup['name'], $datagroup['description']);
+            $cek = $authorize->updateGroup($id, $datagroup['name'], $datagroup['description']);
 
-        // Get Group Permissions
-        $permissiongroup = [];
-        foreach ($Grouppermissions as $Grouppermission) {
-            $permissiongroup[] = $Grouppermission->id;
-        }
-
-        if (!empty($Grouppermissions)) {
-            // Remove Permission From Group
-            foreach ($permissiongroup as $permit => $permissionid) {
-                $authorize->removePermissionFromGroup($permissionid, $id);
-            }
-        }
-
-        if (!empty($input['permission'])) {
-            // Add New Permissions
-            $permission = [];
-            foreach ($input['permission'] as $key => $permit) {
-                $permission[] = $permit;
+            // Get Group Permissions
+            $permissiongroup = [];
+            foreach ($Grouppermissions as $Grouppermission) {
+                $permissiongroup[] = $Grouppermission->id;
             }
 
-            foreach ($permission as $permissionid) {
-                $authorize->addPermissionToGroup($permissionid, $id);
+            if (!empty($Grouppermissions)) {
+                // Remove Permission From Group
+                foreach ($permissiongroup as $permit => $permissionid) {
+                    $authorize->removePermissionFromGroup($permissionid, $id);
+                }
             }
-        }
 
-        return redirect()->to('users/access-control')->with('message', "Akses berhasil di perbaharui");
+            if (!empty($input['permission'])) {
+                // Add New Permissions
+                $permission = [];
+                foreach ($input['permission'] as $key => $permit) {
+                    $permission[] = $permit;
+                }
+
+                foreach ($permission as $permissionid) {
+                    $authorize->addPermissionToGroup($permissionid, $id);
+                }
+            }
+
+            return redirect()->to('users/access-control')->with('message', "Akses berhasil di perbaharui");
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 
     public function deleteaccess($id)
     {
-        // Caling Libraries
-        $authorize = $auth = service('authorization');
-        // Populating Data
-        $groups = $authorize->groups();
-        $GroupModel = new GroupModel;
-        $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
+        if ($this->data['authorize']->hasPermission('admin.user.delete', $this->data['uid'])) {
+            // Caling Libraries
+            $authorize = $auth = service('authorization');
+            // Populating Data
+            $groups = $authorize->groups();
+            $GroupModel = new GroupModel;
+            $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
 
-        // Get Group Permissions
-        $permissiongroup = [];
-        foreach ($Grouppermissions as $Grouppermission) {
-            $permissiongroup[] = $Grouppermission->id;
+            // Get Group Permissions
+            $permissiongroup = [];
+            foreach ($Grouppermissions as $Grouppermission) {
+                $permissiongroup[] = $Grouppermission->id;
+            }
+
+            // Remove Permissions 
+            foreach ($permissiongroup as $permit => $permissionid) {
+                $authorize->removePermissionFromGroup($permissionid, $id);
+            }
+
+            // Delete Group
+            $authorize->deleteGroup($id);
+
+            return redirect()->to('users/access-control')->with('message', "Akses berhasil di delete.");
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
-
-        // Remove Permissions 
-        foreach ($permissiongroup as $permit => $permissionid) {
-            $authorize->removePermissionFromGroup($permissionid, $id);
-        }
-
-        // Delete Group
-        $authorize->deleteGroup($id);
-
-        return redirect()->to('users/access-control')->with('message', "Akses berhasil di delete.");
     }
 }
