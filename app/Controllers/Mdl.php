@@ -66,7 +66,7 @@ class Mdl extends BaseController
                 foreach ($parents as $parent) {
                     $mdldata[$parent['id']]['name']     = $parent['name'];
                     $paketdata                          = $PaketModel->where('parentid', $parent['id'])->find();
-                    
+
                     if (!empty($paketdata)) {
                         foreach ($paketdata as $paket) {
                             $mdldata[$parent['id']]['paket'][$paket['id']]['id']        = $paket['id'];
@@ -75,7 +75,7 @@ class Mdl extends BaseController
 
                             // List MDL Paket
                             $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
-        
+
                             // List MDL
                             if (!empty($mdlpaket)) {
                                 foreach ($mdlpaket as $mdlp) {
@@ -108,12 +108,11 @@ class Mdl extends BaseController
 
                 // List MDL Uncategories
                 $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
-                
             } else {
                 $paketdata              = [];
                 $autoparents            = [];
                 $mdldata['mdluncate']   = [];
-            }       
+            }
 
             // Parsing Data to View
             $data                   =   $this->data;
@@ -136,36 +135,36 @@ class Mdl extends BaseController
     public function datapaket()
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.read', $this->data['uid'])) {
-        // Calling Model
-        $MDLModel       = new MdlModel();
-        $MDLPaketModel  = new MdlPaketModel();
+            // Calling Model
+            $MDLModel       = new MdlModel();
+            $MDLPaketModel  = new MdlPaketModel();
 
-        // Populating Data
-        $input          = $this->request->getGET();
-        $MdlPaket       = $MDLPaketModel->where('paketid', $input['paketid'])->find();
+            // Populating Data
+            $input          = $this->request->getGET();
+            $MdlPaket       = $MDLPaketModel->where('paketid', $input['paketid'])->find();
 
-        $exclude = [];
+            $exclude = [];
 
-        foreach ($MdlPaket as $paket) {
-            $exclude[] = $paket['mdlid'];
-        }
+            foreach ($MdlPaket as $paket) {
+                $exclude[] = $paket['mdlid'];
+            }
 
-        if (!empty($exclude)) {
-            $MDL = $MDLModel->like('name', $input['search']['term'])->whereNotIn('id', $exclude)->find();
-        } else {
-            $MDL = $MDLModel->like('name', $input['search']['term'])->find();
-        }
+            if (!empty($exclude)) {
+                $MDL = $MDLModel->like('name', $input['search']['term'])->whereNotIn('id', $exclude)->find();
+            } else {
+                $MDL = $MDLModel->like('name', $input['search']['term'])->find();
+            }
 
-        $return     = [];
+            $return     = [];
 
-        foreach ($MDL as $mdl) {
-            $return[] = [
-                'id'    => $mdl['id'],
-                'text'  => $mdl['name']
-            ];
-        }
-        
-        die(json_encode($return));
+            foreach ($MDL as $mdl) {
+                $return[] = [
+                    'id'    => $mdl['id'],
+                    'text'  => $mdl['name']
+                ];
+            }
+
+            die(json_encode($return));
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -383,7 +382,7 @@ class Mdl extends BaseController
                 'volume'        => $input['length'],
                 'denomination'  => $input['denomination'],
                 'keterangan'    => $input['keterangan'],
-                'photo'         => $input['keterangan'],
+                'photo'         => $input['photo'],
                 'price'         => toInt($str),
             ];
             if (isset($input['photo'])) {
@@ -413,10 +412,12 @@ class Mdl extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.edit', $this->data['uid'])) {
             // Populating Data
-            $MdlModel = new MdlModel();
+            $MdlModel   = new MdlModel();
+            $LogModel   = new LogModel();
 
             // Get Data
             $input = $this->request->getPost();
+            $mdls  = $MdlModel->find($id);
             $str = $input['price'];
 
             function strupdate($str)
@@ -425,10 +426,16 @@ class Mdl extends BaseController
             }
 
             // Validation
+            if ($input['name'] === $mdls['name']) {
+                $is_unique =  '';
+            } else {
+                $is_unique =  'is_unique[mdl.name]';
+            }
+
             $rules = [
                 'name'      => [
                     'label'     => 'Nama',
-                    'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
+                    'rules'     => 'required|'.$is_unique,
                     'errors'    => [
                         'required'      => '{field} wajib diisi.',
                         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
@@ -472,10 +479,12 @@ class Mdl extends BaseController
                 'height'        => $input['height'],
                 'volume'        => $input['length'],
                 'keterangan'    => $input['keterangan'],
+                'photo'         => $input['photo'],
                 'price'         => strupdate($str),
             ];
 
             // Save Data MDL
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah MDL ' . $input['name']]);
             $MdlModel->save($mdlup);
 
             // Return
@@ -491,9 +500,11 @@ class Mdl extends BaseController
             // Calling Models
             $MdlModel           = new MdlModel();
             $MdlPaketModel      = new MdlPaketModel();
+            $LogModel           = new LogModel();
 
             // initialize
             $input              = $this->request->getpost();
+            $mdl                = $MdlModel->find($id);
 
             // Populating Data
             if (!empty($input['paketid'])) {
@@ -501,6 +512,7 @@ class Mdl extends BaseController
             }
 
             // Delete Data MDL
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus MDL ' . $mdl['name']]);
             $MdlModel->delete($id);
 
             // Return
@@ -510,74 +522,73 @@ class Mdl extends BaseController
         }
     }
 
-	public function importExcel($id)
+    public function importExcel($id)
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.create', $this->data['uid'])) {
-        // Calling Models
-        $MdlModel       = new MdlModel();
-        $MdlPaketModel  = new MdlPaketModel();
+            // Calling Models
+            $LogModel       = new LogModel();
+            $MdlModel       = new MdlModel();
+            $MdlPaketModel  = new MdlPaketModel();
 
-        // Populating Data
-        $file_excel = $this->request->getFile('fileexcel');
-        $ext = $file_excel->getClientExtension();
-        if ($ext == 'xls') {
-            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-        } else {
-            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-        }
-        $spreadsheet = $render->load($file_excel);
-
-        $data = $spreadsheet->getActiveSheet()->toArray();
-        foreach($data as $x => $row) {
-            if ($x == 0) {
-                continue;
+            // Populating Data
+            $file_excel = $this->request->getFile('fileexcel');
+            $ext = $file_excel->getClientExtension();
+            if ($ext == 'xls') {
+                $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+            } else {
+                $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
             }
+            $spreadsheet = $render->load($file_excel);
 
-            // Define Row
-            $mdlid          = $row[0];
-            $mdlname        = $row[1];
-            $length         = $row[2];
-            $width          = $row[3];
-            $height         = $row[4];
-            $volume         = $row[5];
-            if ($row[6] == 'Unit') {
-                $denomination     = 1;
-            } elseif ($row[6] == 'Meter Lari') {
-                $denomination     = 2;
-            } elseif ($row[6] == 'Meter Persegi') {
-                $denomination     = 3;
-            } elseif ($row[6] == 'Set') {
-                $denomination     = 4;
+            $data = $spreadsheet->getActiveSheet()->toArray();
+            foreach ($data as $x => $row) {
+                if ($x == 0) {
+                    continue;
+                }
+
+                // Define Row
+                $mdlid          = $row[0];
+                $mdlname        = $row[1];
+                $length         = $row[2];
+                $width          = $row[3];
+                $height         = $row[4];
+                $volume         = $row[5];
+                if ($row[6] == 'Unit') {
+                    $denomination     = 1;
+                } elseif ($row[6] == 'Meter Lari') {
+                    $denomination     = 2;
+                } elseif ($row[6] == 'Meter Persegi') {
+                    $denomination     = 3;
+                } elseif ($row[6] == 'Set') {
+                    $denomination     = 4;
+                }
+                $keterangan     = $row[7];
+                $price          = $row[8];
+
+                $datamdl = [
+                    'name'          => $mdlname,
+                    'length'        => $length,
+                    'width'         => $width,
+                    'height'        => $height,
+                    'volume'        => $volume,
+                    'denomination'  => $denomination,
+                    'keterangan'    => $keterangan,
+                    'price'         => $price,
+                ];
+
+                $MdlModel->insert($datamdl);
+
+                // Save Data MDL Paket
+                $mdlid = $MdlModel->getInsertID();
+                $datamdlpaket   = [
+                    'mdlid'     => $mdlid,
+                    'paketid'   => $id,
+                ];
+                $MdlPaketModel->insert($datamdlpaket);
             }
-            $keterangan     = $row[7];
-            $price          = $row[8];
-
-            $datamdl = [
-                'name'          => $mdlname,
-                'length'        => $length,
-                'width'         => $width,
-                'height'        => $height,
-                'volume'        => $volume,
-                'denomination'  => $denomination,
-                'keterangan'    => $keterangan,
-                'price'         => $price,
-            ];
-
-            $MdlModel->insert($datamdl);
-
-            // Save Data MDL Paket
-            $mdlid = $MdlModel->getInsertID();
-            $datamdlpaket   = [
-                'mdlid'     => $mdlid,
-                'paketid'   => $id,
-            ];
-            $MdlPaketModel->insert($datamdlpaket);
-
-        }
-        unlink(FCPATH . '/img/spk/' . $file_excel);
-        
-        return redirect()->back()->with('message', 'Berhasil Import Data');
-
+            unlink(FCPATH . '/img/spk/' . $file_excel);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Import MDL']);
+            return redirect()->back()->with('message', 'Berhasil Import Data');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -587,14 +598,17 @@ class Mdl extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.delete', $this->data['uid'])) {
             // Populating Data
-            $MdlPaketModel   = new MdlPaketModel();
+            $PaketModel     = new PaketModel();
+            $MdlPaketModel  = new MdlPaketModel();
+            $LogModel       = new LogModel();
+            $paket          = $PaketModel->find($id);
 
             // Delete Data MDL
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus Mdl paket '.$paket['name']]);
             $MdlPaketModel->where('paketid', $id)->delete();
 
             // Return
             return redirect()->back()->with('error', 'Data Telah Dihapuskan');
-
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

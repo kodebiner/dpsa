@@ -171,7 +171,7 @@ class Client extends BaseController
             ];
             $CompanyModel->save($data);
 
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan client '.$input['ptname']]);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan client '.$input['rsname']]);
 
             return redirect()->to('client')->with('message', 'Data berhasil di simpan');
         } else {
@@ -282,7 +282,7 @@ class Client extends BaseController
             $CompanyModel->save($data);
 
             // Recording Logs
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Merubah data '.$input['ptname']]);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data '.$input['rsname']]);
 
             return redirect()->to('client')->with('message', 'Data berhasil di perbaharui');
         } else {
@@ -329,7 +329,7 @@ class Client extends BaseController
 
             // Recording Logs
             $currentcompany = $CompanyModel->find($id);
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus client '.$currentcompany['ptname'].' dan seluruh client di bawahnya beserta semua proyek yang bersangkutan.']);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus client '.$currentcompany['rsname'].' dan seluruh client di bawahnya beserta semua proyek yang bersangkutan.']);
 
             // Remove Current Company
             $CompanyModel->delete($id);

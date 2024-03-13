@@ -7,9 +7,13 @@ use App\Models\DesignModel;
 use App\Models\ProjectModel;
 use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
+use App\Models\LogModel;
 
 class Upload extends BaseController
 {
+
+    protected $data;
+
     public function designcreate()
     {
         $image      = \Config\Services::image();
@@ -92,20 +96,24 @@ class Upload extends BaseController
 
     public function saverevisi($id)
     {
-        $DesignModel = new DesignModel();
+        $DesignModel    = new DesignModel();
+        $LogModel       = new LogModel();
+        $ProjectModel   = new ProjectModel();
 
         $input = $this->request->getPost();
         // Design Data
         if (isset($input['revisi'])) {
+            $project = $ProjectModel->find($id);
             $design = $DesignModel->where('projectid', $id)->first();
             if (empty($design)) {
                 unlink(FCPATH . '/img/revisi/' . $design['revision']);
                 $datadesign = [
                     'projectid'     => $id,
-                    'revision'     => $input['revisi'],
+                    'revision'      => $input['revisi'],
                     'status'        => 1,
                 ];
                 $DesignModel->insert($datadesign);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi'.$project['name']]);
             } else {
                 $datadesign = [
                     'id'            => $design['id'],
@@ -114,8 +122,10 @@ class Upload extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi'.$project['name']]);
             }
         }
+
         return redirect()->back()->with('message', 'Revisi terkirim');
     }
 
@@ -128,7 +138,6 @@ class Upload extends BaseController
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
-
 
     public function spk()
     {
@@ -166,9 +175,11 @@ class Upload extends BaseController
 
     public function savespk($id)
     {
-        $ProjectModel = new ProjectModel();
-
-        $input = $this->request->getPost();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getPost();
+        $project        = $ProjectModel->find($id);
+        // dd($input);
 
         // Validation Rules
         $rules = [
@@ -189,23 +200,23 @@ class Upload extends BaseController
         if (isset($input['spk'])) {
             $spk = $ProjectModel->find($id);
             if (empty($spk)) {
-                unlink(FCPATH . '/img/spk/' . $spk['spk']);
                 $dataspk = [
-                    'projectid'     => $id,
-                    'spk'           => $input['spk'],
-                    'status_spk'    => 0,
-                    'inv1'          => date("Y-m-d H:i:s"),
-                ];
-                $ProjectModel->insert($dataspk);
-            } else {
-                $dataspk = [
-                    'id'            => $spk['id'],
-                    'projectid'     => $id,
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
                     'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK '.$project['name']]);
+            } else {
+                unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                $dataspk = [
+                    'id'            => $spk['id'],
+                    'spk'           => $input['spk'],
+                    'status_spk'    => 0,
+                    'inv1'          => date("Y-m-d H:i:s"),
+                ];
+                $ProjectModel->save($dataspk);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Malakukan SPK '.$project['name']]);
             }
         }
 
@@ -225,6 +236,7 @@ class Upload extends BaseController
     public function mdl($id)
     {
         // Calling Models
+        $LogModel       = new LogModel();
         $MdlModel       = new MdlModel();
         $MdlPaketModel  = new MdlPaketModel();
         $input          = $this->request->getFile('uploads');
@@ -292,6 +304,7 @@ class Upload extends BaseController
                 'mdlid'     => $idmdl,
                 'paketid'   => $id,
             ];
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan Mdl']);
             $MdlPaketModel->insert($datamdlpaket);
         }
 
@@ -349,11 +362,12 @@ class Upload extends BaseController
     public function photomdl()
     {
         $image      = \Config\Services::image();
-        $input = $this->request->getFile('uploads');
+        $input      = $this->request->getFile('uploads');
+        $ext        = $input->getClientExtension();
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|is_image[uploads]|max_size[uploads,2048]|ext_in[uploads,png,jpg,jpeg]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,image/png,image/jpeg,image/pjpeg]',
         ];
 
         // Validating
@@ -369,12 +383,12 @@ class Upload extends BaseController
             $input->move(FCPATH . '/img/mdl/', $filename);
 
             // Removing uploaded if it's not the same filename
-            if ($filename != $truename . '.jpg') {
+            if ($filename != $truename.'.'. $ext) {
                 unlink(FCPATH . '/img/mdl/' . $filename);
             }
 
             // Getting True Filename
-            $returnFile = $truename . '.jpg';
+            $returnFile = $truename.'.'. $ext;
 
             // Returning Message
             die(json_encode($returnFile));
@@ -393,11 +407,13 @@ class Upload extends BaseController
 
     public function sertrim($id)
     {
-        $image      = \Config\Services::image();
-        $validation = \Config\Services::validation();
-        $BastModel  = new BastModel();
-        $ProjectModel = new ProjectModel();
-        $input      = $this->request->getFile('uploads');
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $BastModel      = new BastModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
 
         // Validation Rules
         $rules = [
@@ -444,6 +460,7 @@ class Upload extends BaseController
                 'status'    => 0,
             ];
             $BastModel->save($sertrim);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Sertrim '.$project['name']]);
             $idBast = $BastModel->getInsertID();
 
             $inv2date = [
@@ -465,11 +482,14 @@ class Upload extends BaseController
 
     public function bast($id)
     {
-        $image      = \Config\Services::image();
-        $validation = \Config\Services::validation();
-        $input      = $this->request->getFile('uploads');
-        $BastModel  = new BastModel();
-        $ProjectModel = new ProjectModel();
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $BastModel      = new BastModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
 
         // Validation Rules
         $rules = [
@@ -518,6 +538,7 @@ class Upload extends BaseController
                     ];
                     $BastModel->save($databast);
                     $bastId = $BastModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast '.$project['name']]);
                 } else {
                     // $filebast = FCPATH . '/img/bast/' . $bast['file'];
                     // if (file_exists(FCPATH . '/img/bast/' . $bast['file'])) { 
@@ -534,6 +555,7 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $BastModel->save($databast);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast '.$project['name']]);
                     $bastId = $bast['id'];
                 }
             }

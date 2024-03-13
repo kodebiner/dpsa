@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\CompanyModel;
 use App\Models\UserModel;
+use App\Models\LogModel;
 
 class ClientRegister extends BaseController
 {
@@ -43,9 +44,9 @@ class ClientRegister extends BaseController
         $authorize = service('authorization');
 
         // Calling Models & Entities
-        $UserModel = new UserModel();
-        $CompanyModel = new CompanyModel();
-        $NewUser = new \App\Entities\User();
+        $UserModel      = new UserModel();
+        $CompanyModel   = new CompanyModel();
+        $NewUser        = new \App\Entities\User();
 
         // Populating Data
         $input = $this->request->getPost();
@@ -226,7 +227,6 @@ class ClientRegister extends BaseController
             $userId = $UserModel->getInsertID();
 
             $authorize->addUserToGroup($userId, 'Client Pusat');
-
             return redirect()->to('login')->with('message', 'Pendaftaran berhasil dilakukan. Admin kami akan melakukan verifikasi dan aktivasi akun anda.');
         } else {
             $company = [

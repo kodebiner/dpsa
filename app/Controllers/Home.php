@@ -158,7 +158,6 @@ class Home extends BaseController
                 if (!empty($projects)) {
                     foreach ($projects as $project) {
                         $client = $CompanyModel->find($project['clientid']);
-                        $projectdata[$project['id']]['design']      = $DesignModel->where('projectid', $project['id'])->find();
                         $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
                         $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
 
@@ -539,7 +538,6 @@ class Home extends BaseController
             $input = $this->request->getPost('status');
 
             $design = $DesignModel->find($id);
-
             $project = $ProjectModel->find($design['projectid']);
 
             $project = [
@@ -554,7 +552,7 @@ class Home extends BaseController
             ];
             $DesignModel->save($status);
 
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi']);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi Desain '.$project['name']]);
             $data = $this->data;
             die(json_encode(array($input)));
         } else {
@@ -598,10 +596,12 @@ class Home extends BaseController
 
     public function saverevisi($id)
     {
-        $DesignModel = new DesignModel();
-        $LogModel    = new LogModel();
+        $ProjectModel   = new ProjectModel();
+        $DesignModel    = new DesignModel();
+        $LogModel       = new LogModel();
 
         $input = $this->request->getPost();
+        $project = $ProjectModel->find($id);
 
         // Validation Rules
         $rules = [
@@ -621,15 +621,16 @@ class Home extends BaseController
         // Design Data
         if (isset($input['revisi'])) {
             $design = $DesignModel->where('projectid', $id)->first();
-            if (empty($design)) {
-                unlink(FCPATH . '/img/revisi/' . $design['revision']);
+            if (empty($design['revision'])) {
                 $datadesign = [
                     'projectid'     => $id,
-                    'revision'     => $input['revisi'],
+                    'revision'      => $input['revisi'],
                     'status'        => 1,
                 ];
                 $DesignModel->insert($datadesign);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi' .$project['name']]);
             } else {
+                unlink(FCPATH . '/img/revisi/' . $design['revision']);
                 $datadesign = [
                     'id'            => $design['id'],
                     'projectid'     => $id,
@@ -637,9 +638,9 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Revisi' .$project['name']]);
             }
         }
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi']);
 
         return redirect()->back()->with('message', 'Revisi telah tekirim');
     }

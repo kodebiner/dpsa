@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\CompanyModel;
 use App\Models\UserModel;
 use App\Models\GroupUserModel;
+use App\Models\LogModel;
 use App\Models\PermissionModel;
 use Myth\Auth\Models\GroupModel;
 
@@ -109,7 +110,8 @@ class User extends BaseController
             $newUser                = new \App\Entities\User();
 
             // Calling Model
-            $UserModel = new UserModel();
+            $UserModel      = new UserModel();
+            $LogModel       = new LogModel();
 
             // Defining input
             $input = $this->request->getPost();
@@ -193,6 +195,7 @@ class User extends BaseController
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan' . $input['username'] .'sebagai pengguna baru']);
             return redirect()->back()->with('message', 'Data pengguna berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -210,6 +213,7 @@ class User extends BaseController
             // Calling Model
             $UserModel      = new UserModel();
             $GroupUserModel = new GroupUserModel();
+            $LogModel       = new LogModel();
             $groups = $authorize->groups();
 
             foreach ($groups as $gr) {
@@ -363,6 +367,7 @@ class User extends BaseController
             }
 
             // Redirect to user management
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data' . $input['username']]);
             return redirect()->back()->with('message', 'Data berhasil diperbaharui.');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -372,11 +377,15 @@ class User extends BaseController
     public function delete($id)
     {
         if ($this->data['authorize']->hasPermission('admin.user.delete', $this->data['uid'])) {
-            $authorize = service('authorization');
-            $usersModel = new UserModel();
+            $authorize      = service('authorization');
+            $usersModel     = new UserModel();
+            $LogModel       = new LogModel();
             $GroupUserModel = new GroupUserModel();
 
+
+            $user   = $usersModel->find($id);
             $groups = $GroupUserModel->where('user_id', $id)->find();
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus' . $user->username]);
 
             $groupid = "";
             foreach ($groups as $group) {
@@ -434,7 +443,8 @@ class User extends BaseController
             // Calling Libraries and Services
             $authorize = $auth = service('authorization');
             // Populating Data
-            $groups = $authorize->groups();
+            $groups     = $authorize->groups();
+            $LogModel   = new LogModel();
             // Initialize
             $input = $this->request->getPost();
             // Create Group
@@ -445,6 +455,7 @@ class User extends BaseController
             }
             foreach ($permission as $permissionid) {
                 $authorize->addPermissionToGroup($permissionid, $id);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan akses baru']);
             }
             return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
         } else {
@@ -460,7 +471,8 @@ class User extends BaseController
             $authorize = $auth = service('authorization');
 
             // Populating Data
-            $groups = $authorize->groups();
+            $groups     = $authorize->groups();
+            $LogModel   = new LogModel();
             $GroupModel = new GroupModel;
             $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
 
@@ -473,7 +485,6 @@ class User extends BaseController
                 'name'        => $input['name'],
                 'description' => $input['description'],
             ];
-            // dd($datagroup);
 
             $cek = $authorize->updateGroup($id, $datagroup['name'], $datagroup['description']);
 
@@ -498,6 +509,7 @@ class User extends BaseController
                 }
 
                 foreach ($permission as $permissionid) {
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data akses']);
                     $authorize->addPermissionToGroup($permissionid, $id);
                 }
             }
@@ -514,7 +526,8 @@ class User extends BaseController
             // Caling Libraries
             $authorize = $auth = service('authorization');
             // Populating Data
-            $groups = $authorize->groups();
+            $groups     = $authorize->groups();
+            $LogModel   = new LogModel();
             $GroupModel = new GroupModel;
             $Grouppermissions = $GroupModel->getPermissionsForGroup($id);
 
@@ -527,6 +540,7 @@ class User extends BaseController
             // Remove Permissions 
             foreach ($permissiongroup as $permit => $permissionid) {
                 $authorize->removePermissionFromGroup($permissionid, $id);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus data akses']);
             }
 
             // Delete Group

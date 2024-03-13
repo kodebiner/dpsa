@@ -152,7 +152,7 @@
                     }?>
 
                     <!-- // Data project initialize -->
-                    <?php if (!empty($projectdesign[$project['id']]['design']['updated_at'])) {
+                    <?php if (!empty($projectdata[$project['id']])) {
                         $projectId          = $projectdata[$project['id']]['project']['id'];
                         $projectStatus      = $projectdata[$project['id']]['project']['status'];
                         $datepro            = $projectdata[$project['id']]['project']['updated_at'];
@@ -1284,8 +1284,8 @@
                                                 'id'
                                             );
                                         ?>
-                                        <?php if (!empty($spkpro)) { ?>
-                                            <a href="img/spk/<?= $spkpro ?>" target="_blank" class="uk-link-reset">
+                                        <?php if (!empty($projectdata[$project['id']]['project']['spk'])) { ?>
+                                            <a href="img/spk/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank" class="uk-link-reset">
                                                 <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
                                                     <div class="uk-card-header">
                                                         <div class="uk-grid-small uk-flex-middle" uk-grid>
@@ -1296,8 +1296,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="uk-card-body">
-                                                        <a href="img/spk/<?= $spkpro ?>" target="_blank" class="uk-link-reset">
-                                                            <h6><a href="img/spk/<?= $spkpro ?>" uk-icon="file-text"></a> <a href="img/spk/<?= $spkpro ?>" target="_blank"><?= $spkpro ?></a></h6>
+                                                        <a href="img/spk/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank" class="uk-link-reset">
+                                                            <h6><a href="img/spk/<?= $projectdata[$project['id']]['project']['spk'] ?>" uk-icon="file-text"></a> <a href="img/spk/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank"><?= $projectdata[$project['id']]['project']['spk'] ?></a></h6>
                                                         </a>
                                                     </div>
                                                 </div>

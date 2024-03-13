@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\GconfigModel;
 use App\Models\ReferensiModel;
+use App\Models\LogModel;
 
 class Setting extends BaseController
 {
@@ -70,6 +71,7 @@ class Setting extends BaseController
     {
         // Calling Models
         $GconfigModel       = new GconfigModel();
+        $LogModel           = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -82,6 +84,7 @@ class Setting extends BaseController
             'npwp'              => $input['npwp']
         ];
         $GconfigModel->save($gConfig);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data Gconfig']);
 
         return redirect()->back()->with('message', "Data Tersimpan");
     }
@@ -90,6 +93,7 @@ class Setting extends BaseController
     {
         // Calling Models
         $ReferensiModel       = new ReferensiModel();
+        $LogModel             = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -115,6 +119,7 @@ class Setting extends BaseController
             'no_rek'            => $input['no_rek'],
         ];
         $ReferensiModel->insert($data);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambah '.$input['name'].' sebagai referensi baru']);
         
         return redirect()->back()->with('message', "Data Tersimpan");
     }
@@ -123,6 +128,7 @@ class Setting extends BaseController
     {
         // Calling Models
         $ReferensiModel       = new ReferensiModel();
+        $LogModel             = new LogModel();
 
         // Get Data
         $input = $this->request->getPost();
@@ -149,6 +155,7 @@ class Setting extends BaseController
             'no_rek'            => $input['no_rek'],
         ];
         $ReferensiModel->save($data);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data referensi '.$input['name']]);
         
         return redirect()->back()->with('message', 'Data Behasil Diperbaharui');
     }
@@ -157,8 +164,11 @@ class Setting extends BaseController
     {
         // Calling Models
         $ReferensiModel         = new ReferensiModel();
-
+        $LogModel               = new LogModel();
+        $referensi  = $ReferensiModel->find($id);
+        
         // Deleting Referensi Data
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data referensi '.$referensi['name']]);
         $ReferensiModel->delete($id);
         
         return redirect()->back()->with('error', 'Data Telah Dihapuskan');

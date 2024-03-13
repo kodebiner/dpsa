@@ -16,11 +16,8 @@ use App\Models\ReferensiModel;
 use App\Models\UserModel;
 use App\Models\CustomRabModel;
 use App\Models\GconfigModel;
-use App\Models\GroupUserModel;
-use App\Models\PermissionModel;
-use Myth\Auth\Models\GroupModel;
-use Myth\Auth\Entities\Group;
-use Mpdf\Tag\Em;
+use App\Models\LogModel;
+// use Mpdf\Tag\Em;
 
 class Project extends BaseController
 {
@@ -55,6 +52,7 @@ class Project extends BaseController
             $InvoiceModel           = new InvoiceModel();
             $ReferensiModel         = new ReferensiModel();
             $CustomRabModel         = new CustomRabModel();
+            $LogModel               = new LogModel();
 
             // Populating Data
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
@@ -354,11 +352,12 @@ class Project extends BaseController
         if ($this->data['authorize']->hasPermission('admin.project.create', $this->data['uid'])) {
             // Calling Model
             $ProjectModel   = new ProjectModel();
-            $MdlModel       = new MdlModel();
-            $RabModel       = new RabModel();
-            $DesignModel    = new DesignModel();
             $InvoiceModel   = new InvoiceModel();
             $BastModel      = new BastModel();
+            $LogModel       = new LogModel();
+            // $MdlModel       = new MdlModel();
+            // $RabModel       = new RabModel();
+            // $DesignModel    = new DesignModel();
 
             // initialize
             $input  = $this->request->getPost();
@@ -483,7 +482,7 @@ class Project extends BaseController
                 ];
                 $BastModel->save($bastcreate);
             }
-
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Membuat Proyek ' . $input['name']]);
             return redirect()->back()->with('message', "Data berhasil di simpan.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -496,16 +495,13 @@ class Project extends BaseController
             // Calling Model
             $ProjectModel       = new ProjectModel();
             $RabModel           = new RabModel();
-            $MdlModel           = new MdlModel();
-            $MdlPaketModel      = new MdlPaketModel();
             $DesignModel        = new DesignModel();
             $ProductionModel    = new ProductionModel();
             $BastModel          = new BastModel();
             $InvoiceModel       = new InvoiceModel();
             $CustomRabModel     = new CustomRabModel();
-            $CompanyModel       = new CompanyModel();
-
-
+            $LogModel           = new LogModel();
+            
             // initialize
             $input  = $this->request->getPost();
             $pro    = $ProjectModel->find($id);
@@ -973,6 +969,7 @@ class Project extends BaseController
             ];
             $ProjectModel->save($project);
 
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data Proyek ' . $name]);
             return redirect()->back()->with('message', "Data berhasil di perbaharui.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -989,6 +986,7 @@ class Project extends BaseController
             $BastModel          = new BastModel();
             $ProductionModel    = new ProductionModel();
             $CustomRabModel     = new CustomRabModel();
+            $LogModel           = new LogModel();
 
             // Populating Data
             $rabs               = $RabModel->where('projectid', $id)->find();
@@ -996,6 +994,7 @@ class Project extends BaseController
             $productions        = $ProductionModel->where('projectid', $id)->find();
             $basts              = $BastModel->where('projectid', $id)->find();
             $customrab          = $CustomRabModel->where('projectid', $id)->find();
+            $project            = $ProjectModel->find($id);
 
             // Deleting Rab
             if (!empty($rab)) {
@@ -1031,8 +1030,8 @@ class Project extends BaseController
             }
 
             // Delete Project
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus data Proyek ' . $project['name']]);
             $ProjectModel->delete($id);
-
             return redirect()->back()->with('error', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -1049,9 +1048,10 @@ class Project extends BaseController
         $RabModel       = new RabModel();
         $PaketModel     = new PaketModel();
         $MdlModel       = new MdlModel();
-        $MdlPaketModel  = new MdlPaketModel();
         $GconfigModel   = new GconfigModel();
         $CustomRabModel = new CustomRabModel();
+        $LogModel       = new LogModel();
+        $MdlPaketModel  = new MdlPaketModel();
 
         $projects = $ProjectModel->find($id);
         $mark     = $UserModel->find($projects['marketing']);
@@ -1228,6 +1228,8 @@ class Project extends BaseController
             'direktur'  => $gconf['direktur'],
             'totcustom' => $totalcustom,
         ];
+
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Print SPH ' . $projects['name']]);
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -1475,6 +1477,7 @@ class Project extends BaseController
         $UserModel      = new UserModel();
         $CustomRabModel = new CustomRabModel();
         $BastModel      = new BastModel();
+        $LogModel       = new LogModel();
 
         // PROJECT DATA
         $projects   = $ProjectModel->find($id);
@@ -1663,7 +1666,6 @@ class Project extends BaseController
             $nilaispk   = (int)$total - ((95 / 100) * (int)$total) + (int)$rabcustotal;
             $dateinv    = $projects['inv4'];
             $dateline   = $invoice4['jatuhtempo'];
-            $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
             $pph        = (int)$invoice4['pph23'];
             $pphvalue   = ($pph / 100) * $nilaispk;
             $ppnvalue   = ($ppn / 100) * $nilaispk;
@@ -1766,6 +1768,7 @@ class Project extends BaseController
         }
 
         //--- END NEW FUCTION ---//
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Print Invoice ' . $projects['name']]);
 
         // Parsing Data to View
         $data                   = $this->data;
@@ -2135,10 +2138,13 @@ class Project extends BaseController
 
     public function removesertrim($id)
     {
-        $BastModel = new BastModel;
+        $BastModel      = new BastModel;
+        $LogModel       = new LogModel;
+        $ProjectModel   = new ProjectModel;
 
-        $bast = $BastModel->find($id);
-        $filename = $bast['file'];
+        $bast       = $BastModel->find($id);
+        $project    = $ProjectModel->find($bast['projectid']);
+        $filename   = $bast['file'];
 
         if (!empty($filename)) {
             if ($bast['status'] === "0") {
@@ -2154,8 +2160,10 @@ class Project extends BaseController
                 'file'  => "",
             ];
             $BastModel->save($newbast);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus File Bast ' . $project['name']]);
         }else{
             $BastModel->delete($bast);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus File Sertrim ' . $project['name']]);
         }
 
         die(json_encode(array($filename)));
