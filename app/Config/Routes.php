@@ -80,14 +80,6 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
     // $routes->get('accres/(:num)', 'Home::accres/$1');
 });
 
-// SPK
-// $routes->group('home', ['filter' => 'login'], function($routes) {
-//     $routes->post('revisi', 'Home::revisi');
-//     $routes->post('removerevisi', 'Home::removerevisi');
-//     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
-//     $routes->post('acc/(:num)', 'Home::acc/$1');
-// });
-
 // Users
 $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('','User::index');
@@ -101,6 +93,9 @@ $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->post('create/access-control','User::createaccess');
     $routes->post('update/access/(:num)','User::updateaccess/$1');
     $routes->get('delete/access-control/(:num)','User::deleteaccess/$1');
+    // Log
+    $routes->get('log','User::log');
+
     // Client
     // $routes->get('client','User::client');
     // $routes->get('deleteclient/(:num)','User::deleteclient/$1');
@@ -181,10 +176,10 @@ $routes->group('setting',['filter' => 'login'], function ($routes) {
 });
 
 
-// Bar
-$routes->group('bar',['filter' => 'login'], function ($routes) {
-    $routes->get('', 'Bar::index');
-    $routes->post('create', 'Bar::create');
-    $routes->get('update/(:num)', 'Bar::index');
-    $routes->post('update/(:num)', 'Bar::update/$1');
-});
+// Log
+// $routes->group('log',['filter' => 'login'], function ($routes) {
+//     $routes->get('', 'Log::index');
+    // $routes->post('create', 'Bar::create');
+    // $routes->get('update/(:num)', 'Bar::index');
+    // $routes->post('update/(:num)', 'Bar::update/$1');
+// });

@@ -40,7 +40,7 @@ class User extends BaseController
 
             // Populating data
             $users = $UserModel->findAll();
-            $company = $CompanyModel->where('status !=', "0")->where('deleted_at',null)->find();
+            $company = $CompanyModel->where('status !=', "0")->where('deleted_at', null)->find();
 
             // Initilize
             $input = $this->request->getGet();
@@ -195,7 +195,7 @@ class User extends BaseController
                 $authorize->addUserToGroup($userId, $input['role']);
             }
 
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan' . $input['username'] .'sebagai pengguna baru']);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan' . $input['username'] . 'sebagai pengguna baru']);
             return redirect()->back()->with('message', 'Data pengguna berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -435,7 +435,7 @@ class User extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
-    
+
     public function createaccess()
     {
         if ($this->data['authorize']->hasPermission('admin.user.create', $this->data['uid'])) {
@@ -547,6 +547,61 @@ class User extends BaseController
             $authorize->deleteGroup($id);
 
             return redirect()->to('users/access-control')->with('message', "Akses berhasil di delete.");
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+    }
+
+    public function log()
+    {
+        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) {
+            // Calling Services
+            $pager = \Config\Services::pager();
+
+            // Initilize
+            $input = $this->request->getGet();
+
+            if (isset($input['perpage'])) {
+                $perpage = $input['perpage'];
+            } else {
+                $perpage = 10;
+            }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
+            $this->db       = \Config\Database::connect();
+            $validation     = \Config\Services::validation();
+            $this->builder  = $this->db->table('logrecords');
+            $this->builder->orderBy('id', 'DESC');
+            $this->builder->join('users', 'users.id = logrecords.uid');
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('users.username', $input['search']);
+                $this->builder->orLike('logrecords.record', $input['search']);
+            }
+            if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
+                $this->builder->where('auth_groups.id', $input['rolesearch']);
+            }
+            $this->builder->select('logrecords.id as id, users.username as username, logrecords.record as record, logrecords.created_at as created, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $query =   $this->builder->get($perpage, $offset)->getResult();
+
+            $total = $this->builder
+                ->join('users', 'users.id = logrecords.uid')
+                ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                ->countAllResults();
+
+            // Parsing data to view
+            $data                   = $this->data;
+            $data['title']          = "Daftar Aktivitas Pengguna";
+            $data['description']    = "Daftar Aktivitas Pengguna Aplikasi";
+            $data['users']          = $query;
+            $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+            $data['input']          = $input;
+
+            return view('log', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
