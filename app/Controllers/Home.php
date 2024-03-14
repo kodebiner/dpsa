@@ -552,7 +552,7 @@ class Home extends BaseController
             ];
             $DesignModel->save($status);
 
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi Desain '.$project['name']]);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi Desain ' . $project['name']]);
             $data = $this->data;
             die(json_encode(array($input)));
         } else {
@@ -628,7 +628,7 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->insert($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi' .$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi' . $project['name']]);
             } else {
                 unlink(FCPATH . '/img/revisi/' . $design['revision']);
                 $datadesign = [
@@ -638,7 +638,7 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Revisi' .$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Revisi' . $project['name']]);
             }
         }
 
@@ -844,6 +844,27 @@ class Home extends BaseController
 
         // Redirect to Login
         return redirect()->to('login')->with('message', 'Aplikasi berhasil terpasang. Silahkan melakukan Login');
+    }
+
+    public function addfinance()
+    {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        // Creating Permissions
+        $authorize->createPermission('finance.project.edit', 'Merubah data finance.');
+
+        // Creating Prebuild Groups
+        $authorize->createGroup('finance', 'Divisi finance.');
+
+        // Prebuild permissions
+        $authorize->addPermissionToGroup('admin.project.read', 'finance');
+        $authorize->addPermissionToGroup('finance.project.edit', 'finance');
+        $authorize->addPermissionToGroup('client.read', 'finance');
+        $authorize->addPermissionToGroup('finance.project.edit', 'superuser');
+
+        // Redirect to Login
+        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
     }
 
     public function logedin()

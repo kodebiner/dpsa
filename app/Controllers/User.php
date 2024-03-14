@@ -421,7 +421,7 @@ class User extends BaseController
             $groups = $authorize->groups();
             $permission = $authorize->permissions();
             // permanent groups
-            $grouparr = ['superuser', 'admin', 'owner', 'marketing', 'design', 'production', 'client pusat', 'client cabang'];
+            $grouparr = ['superuser', 'admin', 'owner', 'marketing', 'design', 'production', 'client pusat', 'client cabang', 'finance'];
             // Parsing data to view
             $data                   = $this->data;
             $data['title']          = lang('Global.employeeList');

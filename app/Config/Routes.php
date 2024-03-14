@@ -17,6 +17,7 @@ $routes->group('/', static function ($routes) {
     $routes->get('info', 'Home::information');
     $routes->get('installation', 'Home::installation');
     $routes->post('installation', 'Home::attempinstallation');
+    $routes->get('update-finance', 'Home::addfinance');
 
     // Developer Access Only
     $routes->get('trial', 'Home::trial');
