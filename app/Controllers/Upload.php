@@ -94,40 +94,42 @@ class Upload extends BaseController
         }
     }
 
-    public function saverevisi($id)
-    {
-        $DesignModel    = new DesignModel();
-        $LogModel       = new LogModel();
-        $ProjectModel   = new ProjectModel();
+    // public function saverevisi($id)
+    // {
+    //     $DesignModel    = new DesignModel();
+    //     $LogModel       = new LogModel();
+    //     $ProjectModel   = new ProjectModel();
 
-        $input = $this->request->getPost();
-        // Design Data
-        if (isset($input['revisi'])) {
-            $project = $ProjectModel->find($id);
-            $design = $DesignModel->where('projectid', $id)->first();
-            if (empty($design)) {
-                unlink(FCPATH . '/img/revisi/' . $design['revision']);
-                $datadesign = [
-                    'projectid'     => $id,
-                    'revision'      => $input['revisi'],
-                    'status'        => 1,
-                ];
-                $DesignModel->insert($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi'.$project['name']]);
-            } else {
-                $datadesign = [
-                    'id'            => $design['id'],
-                    'projectid'     => $id,
-                    'revision'      => $input['revisi'],
-                    'status'        => 1,
-                ];
-                $DesignModel->save($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi'.$project['name']]);
-            }
-        }
+    //     $input = $this->request->getPost();
+    //     // Design Data
+    //     if (isset($input['revisi'])) {
+    //         $project = $ProjectModel->find($id);
+    //         $design = $DesignModel->where('projectid', $id)->first();
+    //         if (!empty($design)) {
+    //             if(!empty($design['revision'])){
+    //                 unlink(FCPATH . '/img/revisi/' . $design['revision']);
+    //             }
+    //             $datadesign = [
+    //                 'id'            => $design['id'],
+    //                 'projectid'     => $id,
+    //                 'revision'      => $input['revisi'],
+    //                 'status'        => 1,
+    //             ];
+    //             $DesignModel->insert($datadesign);
+    //             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi'.$project['name']]);
+    //         } else {
+    //             $datadesign = [
+    //                 'projectid'     => $id,
+    //                 'revision'      => $input['revisi'],
+    //                 'status'        => 1,
+    //             ];
+    //             $DesignModel->save($datadesign);
+    //             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi'.$project['name']]);
+    //         }
+    //     }
 
-        return redirect()->back()->with('message', 'Revisi terkirim');
-    }
+    //     return redirect()->back()->with('message', 'Revisi terkirim');
+    // }
 
     public function removerevisi()
     {
@@ -208,7 +210,9 @@ class Upload extends BaseController
                 $ProjectModel->save($dataspk);
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK '.$project['name']]);
             } else {
-                unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                if(!empty($spk['spk'])){
+                    unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                }
                 $dataspk = [
                     'id'            => $spk['id'],
                     'spk'           => $input['spk'],
@@ -216,7 +220,7 @@ class Upload extends BaseController
                     'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Malakukan SPK '.$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Malakukan upload SPK '.$project['name']]);
             }
         }
 

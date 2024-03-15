@@ -538,13 +538,6 @@ class Home extends BaseController
             $input = $this->request->getPost('status');
 
             $design = $DesignModel->find($id);
-            $project = $ProjectModel->find($design['projectid']);
-
-            $project = [
-                'id' => $project['id'],
-                'status' => '3',
-            ];
-            $ProjectModel->save($project);
 
             $status = [
                 'id'        => $id,
@@ -552,9 +545,10 @@ class Home extends BaseController
             ];
             $DesignModel->save($status);
 
+            $project = $ProjectModel->find($design['projectid']);
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menyetujui Revisi Desain ' . $project['name']]);
             $data = $this->data;
-            die(json_encode(array($input)));
+            die(json_encode(array($project['name'])));
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -618,19 +612,13 @@ class Home extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Design Data
         if (isset($input['revisi'])) {
+            $project = $ProjectModel->find($id);
             $design = $DesignModel->where('projectid', $id)->first();
-            if (empty($design['revision'])) {
-                $datadesign = [
-                    'projectid'     => $id,
-                    'revision'      => $input['revisi'],
-                    'status'        => 1,
-                ];
-                $DesignModel->insert($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengirim Revisi' . $project['name']]);
-            } else {
-                unlink(FCPATH . '/img/revisi/' . $design['revision']);
+            if (!empty($design)) {
+                if(!empty($design['revision'])){
+                    unlink(FCPATH . '/img/revisi/' . $design['revision']);
+                }
                 $datadesign = [
                     'id'            => $design['id'],
                     'projectid'     => $id,
@@ -638,7 +626,15 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Revisi' . $project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi '.$project['name']]);
+            } else {
+                $datadesign = [
+                    'projectid'     => $id,
+                    'revision'      => $input['revisi'],
+                    'status'        => 1,
+                ];
+                $DesignModel->save($datadesign);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi '.$project['name']]);
             }
         }
 
