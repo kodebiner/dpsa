@@ -1383,7 +1383,6 @@
 
     <!-- Modal Update MDL Uncategories -->
     <?php foreach ($mdldata['mdluncate'] as $mdluncate) { ?>
-        <?php if ($authorize->hasPermission('admin.mdl.update', $uid)) { ?>
             <div class="uk-modal-container" id="modalupdateuncate<?= $mdluncate['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <div class="uk-modal-header">
@@ -1547,7 +1546,6 @@
                     </div>
                 </div>
             </div>
-        <?php } ?>
     <?php } ?>
 <?php } ?>
 <!-- Modal Update MDL per Sub Paket End -->
