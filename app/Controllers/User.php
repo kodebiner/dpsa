@@ -63,6 +63,7 @@ class User extends BaseController
                 $this->builder->like('users.username', $input['search']);
                 $this->builder->orLike('users.firstname', $input['search']);
                 $this->builder->orLike('users.lastname', $input['search']);
+                $this->builder->orLike('users.email', $input['search']);
             }
             if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
                 $this->builder->where('auth_groups.id', $input['rolesearch']);

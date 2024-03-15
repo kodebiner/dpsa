@@ -98,7 +98,7 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
             <th style="width:30%; text-align:left; font-weight:normal;"> : <?= $numsph ?></th>
         </tr>
         <tr>
-            <td>Direktur RS Hermina Manado</td>
+            <td>Direktur RS <?= $client['rsname'] ?></td>
             <td>Perihal</td>
             <td> : Surat Penawaran Harga</td>
         </tr>
