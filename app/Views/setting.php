@@ -174,7 +174,7 @@
                         <div class="uk-margin uk-flex-middle">
                             <label class="uk-form-label" for="ppn">PPN</label>
                             <div class="uk-form-controls">
-                                <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?= $gconfig['ppn'] ?>" required> %
+                                <input class="uk-input uk-form-width-medium" id="ppn" name="ppn" min="0" max="100" type="number" value="<?= $gconfig['ppn'] ?>" placeholder="<?= $gconfig['ppn'] ?>%" required> 
                             </div>
                         </div>
 

@@ -590,7 +590,7 @@
                                             $("#company<?= $user->id; ?>").autocomplete({
                                                 source: company,
                                                 select: function(e, i) {
-                                                    $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
+                                                    $("input[id='compid<?= $user->id ?>']").val(i.item.idx); // save selected id to hidden input
                                                 },
                                                 minLength: 2
                                             });
