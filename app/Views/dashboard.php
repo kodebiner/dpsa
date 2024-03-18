@@ -343,6 +343,95 @@
 
                                     <hr class="uk-margin-remove-top">
 
+                                    <div class="uk-text-center" uk-grid>
+                                        <div class="uk-width-expand">
+                                            <div class="uk-text-left">
+                                                <h4>Produksi</h4>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-1-4 uk-text-right">
+                                            <div id="containerbtnproduksi<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 1.5" id="btndownproduksi<?= $project['id'] ?>"></div>
+                                            <div id="containerbtnupproduksi<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 1.5" id="btnupproduksi<?= $project['id'] ?>"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="contentproduksi<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
+                                        <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                            <table class="uk-table uk-table-middle uk-table-divider">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <th class="uk-text-center">Gambar Kerja</th>
+                                                        <th class="uk-text-center">Mesin Awal</th>
+                                                        <th class="uk-text-center">Tukang</th>
+                                                        <th class="uk-text-center">Mesin Lanjutan</th>
+                                                        <th class="uk-text-center">Finishing</th>
+                                                        <th class="uk-text-center">Packing</th>
+                                                        <th class="uk-text-center">Setting</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
+                                                        <tr>
+                                                            <td><?= $production['name'] ?></td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['tukang']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['finishing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['packing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['setting']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <hr class="uk-margin-remove-top">
+
                                     <!-- Mobile Design -->
                                     <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
                                     <div class="uk-text-center" uk-grid>
@@ -557,6 +646,18 @@
                                     $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
                                 });
 
+                                $("span[id='btndownproduksi<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                });
+
+                                $("span[id='btnupproduksi<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
                                 $("span[id='btndownspk<?= $project['id'] ?>']").click(function() {
                                     $("div[id='containerbtnupspk<?= $project['id'] ?>']").attr("hidden", false);
                                     $("div[id='containerbtnspk<?= $project['id'] ?>']").attr("hidden", true);
@@ -633,6 +734,25 @@
                                                 </div>
                                             </div>
                                             <hr class="uk-margin-bottom">
+                                        </div>
+
+                                        <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                            <div class="uk-child-width-1-2" uk-grid>
+                                                <div>
+                                                    <div class="">
+                                                        <h4 class="uk-width-1-1">Produksi</h4>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                        <div>
+                                                            <div id="containerbtnproduksi<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndownproduksi<?= $project['id'] ?>"></div>
+                                                            <div id="containerbtnupproduksi<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupproduksi<?= $project['id'] ?>"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
                                         </div>
 
                                         <?php if (!empty($project['id'])) { ?>
@@ -734,6 +854,81 @@
                                                 </p>
                                                 <hr class="uk-margin">
                                             </div>
+                                    
+                                            <div id="contentproduksi<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
+                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <table class="uk-table uk-table-middle uk-table-divider">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nama</th>
+                                                                <th class="uk-text-center">Gambar Kerja</th>
+                                                                <th class="uk-text-center">Mesin Awal</th>
+                                                                <th class="uk-text-center">Tukang</th>
+                                                                <th class="uk-text-center">Mesin Lanjutan</th>
+                                                                <th class="uk-text-center">Finishing</th>
+                                                                <th class="uk-text-center">Packing</th>
+                                                                <th class="uk-text-center">Setting</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
+                                                                <tr>
+                                                                    <td><?= $production['name'] ?></td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['tukang']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['finishing']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['packing']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($production['setting']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php } else { ?>
+                                                                            <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
 
                                             <script>
                                                 $(document).ready(function() {
@@ -747,6 +942,18 @@
                                                         $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
                                                         $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
                                                         $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btndownproduksi<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                    });
+
+                                                    $("span[id='btnupproduksi<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
                                                     });
 
                                                     $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {

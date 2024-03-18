@@ -157,8 +157,13 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->post('create/(:num)', 'Mdl::createmdl/$1');
     $routes->post('update/(:num)', 'Mdl::updatemdl/$1');
     $routes->post('delete/(:num)', 'Mdl::deletemdl/$1');
+    $routes->get('deleteuncate/(:num)', 'Mdl::deletemdluncategories/$1');
     $routes->get('datapaket', 'Mdl::datapaket');
     $routes->post('submitcat', 'Mdl::submitcat');
+    $routes->get('orderingpaket', 'Mdl::orderingpaket');
+    $routes->post('reorderingparent', 'Mdl::reorderingparent');
+    $routes->post('reorderingpaket', 'Mdl::reorderingpaket');
+    $routes->post('reorderingmdl', 'Mdl::reorderingmdl');
 });
 
 // Account

@@ -51,9 +51,9 @@ class Mdl extends BaseController
 
             // Search Engine
             if (isset($input['search']) && !empty($input['search'])) {
-                $parents     = $PaketModel->like('name', $input['search'])->find();
+                $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
             } else {
-                $parents     = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+                $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
             }
 
             // List Paket Auto Complete
@@ -65,29 +65,31 @@ class Mdl extends BaseController
             if (!empty($parents)) {
                 foreach ($parents as $parent) {
                     $mdldata[$parent['id']]['name']     = $parent['name'];
-                    $paketdata                          = $PaketModel->where('parentid', $parent['id'])->find();
+                    $paketdata                          = $PaketModel->where('parentid', $parent['id'])->orderBy('ordering', 'ASC')->find();
 
                     if (!empty($paketdata)) {
                         foreach ($paketdata as $paket) {
                             $mdldata[$parent['id']]['paket'][$paket['id']]['id']        = $paket['id'];
                             $mdldata[$parent['id']]['paket'][$paket['id']]['parentid']  = $paket['parentid'];
                             $mdldata[$parent['id']]['paket'][$paket['id']]['name']      = $paket['name'];
+                            $mdldata[$parent['id']]['paket'][$paket['id']]['ordering']  = $paket['ordering'];
 
                             // List MDL Paket
-                            $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->find();
+                            $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->orderBy('ordering', 'ASC')->find();
 
                             // List MDL
                             if (!empty($mdlpaket)) {
                                 foreach ($mdlpaket as $mdlp) {
-                                    $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]   = $MdlModel->find($mdlp['mdlid']);
-                                    $mdlid[]                                                                = $mdlp['mdlid'];
+                                    $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]                   = $MdlModel->find($mdlp['mdlid']);
+                                    $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]['ordering']       = $mdlp['ordering'];
+                                    $mdlid[]                                                                                = $mdlp['mdlid'];
 
                                     // List MDL Uncategories
                                     // $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
                                 }
                             } else {
-                                $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                       = [];
-                                $mdlid[]                                                                    = '';
+                                $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                                       = [];
+                                $mdlid[]                                                                                    = '';
 
                                 // List MDL Uncategories
                                 // $mdldata['mdluncate']                                                       = $MdlModel->findAll();
@@ -120,6 +122,7 @@ class Mdl extends BaseController
             $data['description']    =   "Daftar MDL yang tersedia";
             $data['mdldata']        =   $mdldata;
             $data['parents']        =   $parents;
+            $data['countparents']   =   count($parents);
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;
@@ -173,13 +176,21 @@ class Mdl extends BaseController
     public function submitcat()
     {
         // Calling Models
-        $MdlPaketModel = new MdlPaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
 
         // Populating Data
-        $input = $this->request->getPOST();
+        $input          = $this->request->getPOST();
+        $lastOrder      = $MdlPaketModel->where('paketid', $input['paketid'])->orderBy('ordering', 'DESC')->first();
+        if (!empty($lastOrder)) {
+            $order = $lastOrder['ordering'] + 1;
+        } else {
+            $order = '1';
+        }
+
         $submit = [
             'mdlid'     => $input['mdlid'],
-            'paketid'   => $input['paketid']
+            'paketid'   => $input['paketid'],
+            'ordering'  => $order
         ];
         $exist = $MdlPaketModel->where('mdlid', $input['mdlid'])->where('paketid', $input['paketid'])->find();
 
@@ -202,32 +213,40 @@ class Mdl extends BaseController
             $input = $this->request->getPost();
 
             // Validation
-            $rules = [
-                'name'      => [
-                    'label'     => 'Nama Paket/Kategori',
-                    'rules'     => 'required|is_unique[paket.name]',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
+            // $rules = [
+            //     'name'      => [
+            //         'label'     => 'Nama Paket/Kategori',
+            //         'rules'     => 'required|is_unique[paket.name]',
+            //         'errors'    => [
+            //             'required'      => '{field} wajib diisi.',
+            //             'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+            //         ],
+            //     ],
+            // ];
+            // if (!$this->validate($rules)) {
+            //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            // }
 
             // Save Data
+            $lastOrder      = $PaketModel->where('parentid', $input['parent'])->orderBy('ordering', 'DESC')->first();
+            if (!empty($lastOrder)) {
+                $order = $lastOrder['ordering'] + 1;
+            } else {
+                $order = '1';
+            }
+
             $paket = [
                 'name'          => $input['name'],
                 'parentid'      => $input['parent'],
+                'ordering'      => $order
             ];
 
             // Insert Data Paket
             $PaketModel->insert($paket);
 
             // Recording Log
-            $paketid = $PaketModel->getInsertID();
-            $Paket = $PaketModel->find($paketid);
+            $paketid    = $PaketModel->getInsertID();
+            $Paket      = $PaketModel->find($paketid);
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan paket MDL ' . $Paket['name']]);
 
             // Return
@@ -248,19 +267,19 @@ class Mdl extends BaseController
             $input = $this->request->getPost();
 
             // Validation
-            $rules = [
-                'name'      => [
-                    'label'     => 'Nama Paket/Kategori',
-                    'rules'     => 'required|is_unique[paket.name,paket.id,' . $id . ']',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-                    ],
-                ],
-            ];
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
+            // $rules = [
+            //     'name'      => [
+            //         'label'     => 'Nama Paket/Kategori',
+            //         'rules'     => 'required|is_unique[paket.name,paket.id,' . $id . ']',
+            //         'errors'    => [
+            //             'required'      => '{field} wajib diisi.',
+            //             'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+            //         ],
+            //     ],
+            // ];
+            // if (!$this->validate($rules)) {
+            //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            // }
 
             // Recording Log
             $Paket = $PaketModel->find($id);
@@ -336,14 +355,14 @@ class Mdl extends BaseController
 
             // Validation
             $rules = [
-                'name'      => [
-                    'label'     => 'Nama',
-                    'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-                    ],
-                ],
+                // 'name'      => [
+                //     'label'     => 'Nama',
+                //     'rules'     => 'required|is_unique[mdl.name,mdl.id,' . $id . ']',
+                //     'errors'    => [
+                //         'required'      => '{field} wajib diisi.',
+                //         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                //     ],
+                // ],
                 'length'      => [
                     'label'     => 'Panjang',
                     'rules'     => 'required|decimal',
@@ -391,10 +410,17 @@ class Mdl extends BaseController
             $MdlModel->save($mdl);
 
             // Save Data MDL Paket
-            $mdlid = $MdlModel->getInsertID();
+            $mdlid      = $MdlModel->getInsertID();
+            $lastOrder  = $MdlPaketModel->where('paketid', $id)->orderBy('ordering', 'DESC')->first();
+            if (!empty($lastOrder)) {
+                $order  = $lastOrder['ordering'] + 1;
+            } else {
+                $order  = '1';
+            }
             $datamdlpaket   = [
                 'mdlid'     => $mdlid,
                 'paketid'   => $id,
+                'ordering'  => $order,
             ];
             $MdlPaketModel->insert($datamdlpaket);
 
@@ -426,21 +452,21 @@ class Mdl extends BaseController
             }
 
             // Validation
-            if ($input['name'] === $mdls['name']) {
-                $is_unique =  '';
-            } else {
-                $is_unique =  'is_unique[mdl.name]';
-            }
+            // if ($input['name'] === $mdls['name']) {
+            //     $is_unique =  '';
+            // } else {
+            //     $is_unique =  'is_unique[mdl.name]';
+            // }
 
             $rules = [
-                'name'      => [
-                    'label'     => 'Nama',
-                    'rules'     => 'required|'.$is_unique,
-                    'errors'    => [
-                        'required'      => '{field} wajib diisi.',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-                    ],
-                ],
+                // 'name'      => [
+                //     'label'     => 'Nama',
+                //     'rules'     => 'required|'.$is_unique,
+                //     'errors'    => [
+                //         'required'      => '{field} wajib diisi.',
+                //         'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
+                //     ],
+                // ],
                 'length'      => [
                     'label'     => 'Panjang',
                     'rules'     => 'required|decimal',
@@ -506,20 +532,32 @@ class Mdl extends BaseController
             $input              = $this->request->getpost();
             $mdl                = $MdlModel->find($id);
 
-            // Populating Data
-            if (!empty($input['paketid'])) {
-                $mdlpaketdata   = $MdlPaketModel->where('paketid', $input['paketid'])->where('mdlid', $id)->delete();
-            }
-
             // Delete Data MDL
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus MDL ' . $mdl['name']]);
-            $MdlModel->delete($id);
+            $MdlPaketModel->where('paketid', $input['paketid'])->where('mdlid', $id)->delete();
 
             // Return
             return redirect()->back()->with('error', 'Data Telah Dihapuskan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function deletemdluncategories($id)
+    {
+        // Calling Models
+        $MdlModel           = new MdlModel();
+        $LogModel           = new LogModel();
+
+        // initialize
+        $mdl                = $MdlModel->find($id);
+
+        // Delete Data MDL
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus MDL ' . $mdl['name']]);
+        $MdlModel->delete($id);
+
+        // Return
+        return redirect()->back()->with('error', 'Data Telah Dihapuskan');
     }
 
     public function importExcel($id)
@@ -579,10 +617,17 @@ class Mdl extends BaseController
                 $MdlModel->insert($datamdl);
 
                 // Save Data MDL Paket
-                $mdlid = $MdlModel->getInsertID();
+                $mdlid      = $MdlModel->getInsertID();
+                $lastOrder  = $MdlPaketModel->where('paketid', $id)->orderBy('ordering', 'DESC')->first();
+                if (!empty($lastOrder)) {
+                    $order  = $lastOrder['ordering'] + 1;
+                } else {
+                    $order  = '1';
+                }
                 $datamdlpaket   = [
                     'mdlid'     => $mdlid,
                     'paketid'   => $id,
+                    'ordering'  => $order
                 ];
                 $MdlPaketModel->insert($datamdlpaket);
             }
@@ -612,5 +657,184 @@ class Mdl extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function orderingpaket()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Populating Data
+        $parents        = $PaketModel->where('parentid', 0)->find();
+
+        $count = 1;
+        foreach ($parents as $parent) {
+            $orderingparent = [
+                'id'        => $parent['id'],
+                'ordering'  => $count++,
+            ];
+
+            $PaketModel->save($orderingparent);
+
+            $pakets     = $PaketModel->where('parentid', $parent['id'])->find();
+
+            $order = 1;
+            foreach ($pakets as $paket) {
+                $orderingpaket = [
+                    'id'        => $paket['id'],
+                    'ordering'  => $order++,
+                ];
+    
+                $PaketModel->save($orderingpaket);
+
+                $mdlpakets  = $MdlPaketModel->where('paketid', $paket['id'])->find();
+
+                $mdl = 1;
+                foreach ($mdlpakets as $mdlpak) {
+                    $orderingmdl = [
+                        'mdlid'     => $mdlpak['mdlid'],
+                        'paketid'   => $mdlpak['paketid'],
+                        'ordering'  => $mdl++,
+                    ];
+        
+                    $MdlPaketModel->save($orderingmdl);
+                }
+            }
+        }
+
+        $MdlPaketModel->where('ordering', null)->delete();
+
+        // Return
+        return redirect()->back()->with('message', 'Data Telah Diurutkan');
+    }
+
+    public function reorderingparent()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Populating Data
+        $input          = $this->request->getPOST();
+
+        $parent         = $PaketModel->find($input['id']);
+
+        //Processing Data
+        if ($parent['ordering'] < $input['order']) {
+            $upperParent = $PaketModel->where('parentid', '0')->where('ordering <=', $input['order'])->where('ordering >', $parent['ordering'])->find();
+            foreach ($upperParent as $upper) {
+                $upperSubmit = [
+                    'id'        => $upper['id'],
+                    'ordering'  => $upper['ordering'] - 1
+                ];
+                $PaketModel->save($upperSubmit);
+            }
+        } else {
+            $lowerParent = $PaketModel->where('parentid', '0')->where('ordering >=', $input['order'])->where('ordering <', $parent['ordering'])->find();
+            foreach ($lowerParent as $lower) {
+                $lowerSubmit = [
+                    'id'        => $lower['id'],
+                    'ordering'  => $lower['ordering'] + 1
+                ];
+                $PaketModel->save($lowerSubmit);
+            }
+        }
+        $currentSubmit = [
+            'id'        => $input['id'],
+            'ordering'  => $input['order']
+        ];
+        $PaketModel->save($currentSubmit);
+
+        die(json_encode($currentSubmit));
+    }
+
+    public function reorderingpaket()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Populating Data
+        $input          = $this->request->getPOST();
+
+        $paket          = $PaketModel->find($input['id']);
+        // $mdl            = $MdlPaketModel->where('id', $input['id'])->where('mdlid', $input['mdlid'])->first();
+
+        //Processing Data
+        if ($paket['ordering'] < $input['order']) {
+            $upperPaket = $PaketModel->where('parentid', $input['parent'])->where('ordering <=', $input['order'])->where('ordering >', $paket['ordering'])->find();
+            foreach ($upperPaket as $upper) {
+                $upperSubmit = [
+                    'id'        => $upper['id'],
+                    'ordering'  => $upper['ordering'] - 1
+                ];
+                $PaketModel->save($upperSubmit);
+            }
+        } else {
+            $lowerPaket = $PaketModel->where('parentid', $input['parent'])->where('ordering >=', $input['order'])->where('ordering <', $paket['ordering'])->find();
+            foreach ($lowerPaket as $lower) {
+                $lowerSubmit = [
+                    'id'        => $lower['id'],
+                    'ordering'  => $lower['ordering'] + 1
+                ];
+                $PaketModel->save($lowerSubmit);
+            }
+        }
+        $currentSubmit = [
+            'id'        => $input['id'],
+            'parentid'  => $input['parent'],
+            'ordering'  => $input['order']
+        ];
+        $PaketModel->save($currentSubmit);
+
+        die(json_encode($currentSubmit));
+    }
+
+    public function reorderingmdl()
+    {
+        // Calling Models
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Populating Data
+        $input          = $this->request->getPOST();
+
+        $mdl            = $MdlPaketModel->where('mdlid', $input['id'])->where('paketid', $input['paket'])->first();
+
+        //Processing Data
+        if ($mdl['ordering'] < $input['order']) {
+            $upperMdl = $MdlPaketModel->where('paketid', $input['paket'])->where('ordering <=', $input['order'])->where('ordering >', $mdl['ordering'])->find();
+            foreach ($upperMdl as $upper) {
+                $upperOrder = $upper['ordering'] - 1;
+                $MdlPaketModel->where('paketid', $input['paket'])->where('mdlid', $upper['mdlid'])->delete();
+                $upperSubmit = [
+                    'mdlid'     => $upper['mdlid'],
+                    'paketid'   => $input['paket'],
+                    'ordering'  => $upperOrder
+                ];
+                $MdlPaketModel->save($upperSubmit);
+            }
+        } else {
+            $lowerMdl = $MdlPaketModel->where('paketid', $input['paket'])->where('ordering >=', $input['order'])->where('ordering <', $mdl['ordering'])->find();
+            foreach ($lowerMdl as $lower) {
+                $lowerOrder = $lower['ordering'] + 1;
+                $MdlPaketModel->where('paketid', $input['paket'])->where('mdlid', $lower['mdlid'])->delete();
+                $lowerSubmit = [
+                    'mdlid'     => $lower['mdlid'],
+                    'paketid'   => $input['paket'],
+                    'ordering'  => $lowerOrder
+                ];
+                $MdlPaketModel->save($lowerSubmit);
+            }
+        }
+        $MdlPaketModel->where('paketid', $input['paket'])->where('mdlid', $input['id'])->delete();
+        $currentSubmit = [
+            'mdlid'     => $input['id'],
+            'paketid'   => $input['paket'],
+            'ordering'  => $input['order']
+        ];
+        $MdlPaketModel->save($currentSubmit);
+
+        die(json_encode($currentSubmit));
     }
 }

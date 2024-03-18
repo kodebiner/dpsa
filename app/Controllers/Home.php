@@ -197,7 +197,7 @@ class Home extends BaseController
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
                         if (!empty($productions)) {
                             foreach ($productions as $production) {
-
+    
                                 // MDL Production
                                 $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
                                 foreach ($mdlprod as $mdlp) {

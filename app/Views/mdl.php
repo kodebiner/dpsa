@@ -117,6 +117,7 @@
         <table class="uk-table uk-table-middle uk-table-large uk-table-hover uk-table-divider">
             <thead>
                 <tr>
+                    <th>No. Urut</th>
                     <th>Detail</th>
                     <th>Nama</th>
                     <th>Panjang</th>
@@ -134,8 +135,22 @@
                 <?php $i = 1; ?>
                 <?php foreach ($parents as $parent) { ?>
                     <tr>
+                        <td>
+                            <select class="uk-select uk-form-width-xsmall" aria-label="Parent" id="parentList<?= $parent['id'] ?>" >
+                                <?php
+                                for ($x = 1; $x <= $countparents; $x++) {
+                                    if ($x == $parent['ordering']) {
+                                        $selected = 'selected';
+                                    } else {
+                                        $selected = '';
+                                    }
+                                    echo '<option value="'.$x.'" '.$selected.'>'.$x.'</option>';
+                                }
+                                ?>
+                            </select>
+                        </td>
                         <td><a class="uk-link-reset" id="togglepaket<?= $parent['id'] ?>" uk-toggle="target: .togglepaket<?= $parent['id'] ?>"><span id="closepaket<?= $parent['id'] ?>" uk-icon="chevron-down" hidden></span><span id="openpaket<?= $parent['id'] ?>" uk-icon="chevron-right"></span></a></td>
-                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $parent['name'] ?></td>
+                        <td colspan="9" class="tm-h3" style="text-transform: uppercase;"><?= $parent['name'] ?></td>
                         <td class="uk-text-center">
                             <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                 <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
@@ -151,10 +166,27 @@
                             </div>
                         </td>
                     </tr>
-                    <?php foreach ($mdldata[$parent['id']]['paket'] as $paket) { ?>
+                    <?php
+                    $paketCount = count($mdldata[$parent['id']]['paket']);
+                    foreach ($mdldata[$parent['id']]['paket'] as $paket) {
+                    ?>
                         <tr class="togglepaket<?= $parent['id'] ?>" hidden>
+                            <td>
+                                <select class="uk-select uk-form-width-xsmall uk-margin-left" aria-label="Paket" id="paketList<?= $paket['id'] ?>" >
+                                    <?php
+                                    for ($x = 1; $x <= $paketCount; $x++) {
+                                        if ($x == $paket['ordering']) {
+                                            $selected = 'selected';
+                                        } else {
+                                            $selected = '';
+                                        }
+                                        echo '<option value="'.$x.'" '.$selected.'>'.$x.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </td>
                             <td class="uk-text-right"><a class="uk-link-reset" id="toggle<?= $paket['id'] ?>" uk-toggle="target: .togglemdl<?= $paket['id'] ?>"><span id="close<?= $paket['id'] ?>" uk-icon="chevron-down" hidden></span><span id="open<?= $paket['id'] ?>" uk-icon="chevron-right"></span></a></td>
-                            <td colspan="8" class="tm-h4" style="text-transform: uppercase; font-weight: 400;"><?= $paket['name'] ?></td>
+                            <td colspan="9" class="tm-h4" style="text-transform: uppercase; font-weight: 400;"><?= $paket['name'] ?></td>
                             <td class="uk-text-center">
                                 <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                     <?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
@@ -192,8 +224,24 @@
                                 </div>
                             </td>
                         </tr>
-                        <?php foreach ($paket['mdl'] as $mdl) { ?>
+                        <?php
+                        $mdlCount = count($paket['mdl']);
+                        foreach ($paket['mdl'] as $mdl) { ?>
                             <tr class="togglemdl<?= $paket['id'] ?>" hidden>
+                                <td>
+                                    <select class="uk-select uk-form-width-xsmall uk-margin-large-left" aria-label="Mdl" id="mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>" >
+                                        <?php
+                                        for ($x = 1; $x <= $mdlCount; $x++) {
+                                            if ($x == $mdl['ordering']) {
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = '';
+                                            }
+                                            echo '<option value="'.$x.'" '.$selected.'>'.$x.'</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
                                 <td></td>
                                 <td><?= $mdl['name'] ?></td>
                                 <td><?= $mdl['length'] ?></td>
@@ -214,6 +262,7 @@
                                     ?>
                                 </td>
                                 <td class=""><?= $mdl['keterangan'] ?></td>
+                                <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?></td>
                                 <td class="">
                                     <div uk-lightbox="">
                                         <a class="uk-inline" href="img/mdl/<?=$mdl['photo']?>" role="button">
@@ -221,7 +270,6 @@
                                         </a>
                                     </div>
                                 </td>
-                                <td><?= "Rp. " . number_format((int)$mdl['price'], 0, ',', '.');" "; ?></td>
                                 <td class="uk-text-center">
                                     <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                         <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
@@ -240,20 +288,32 @@
                                     </div>
                                 </td>
                             </tr>
-                        <?php } ?>
+                            <script>
+                                // Reposiition MDL List
+                                $('#mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>').change(function() {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "mdl/reorderingmdl",
+                                        data: {
+                                            id: <?= $mdl['id'] ?>,
+                                            paket: <?= $paket['id'] ?>,
+                                            order: $("#mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>").val()
+                                        },
+                                        dataType: "json",
+                                        error: function(mdlOrder) {
+                                            console.log('error', arguments);
+                                        },
+                                        success: function(mdlOrder) {
+                                            console.log(mdlOrder);
+                                            location.reload();
+                                        }
+                                    });
+                                });
+                            </script>
+                        <?php
+                        }
+                        ?>
                         <script>
-                            // Dropdown Paket
-                            document.getElementById('togglepaket<?= $parent['id'] ?>').addEventListener('click', function() {
-                                if (document.getElementById('closepaket<?= $parent['id'] ?>').hasAttribute('hidden')) {
-                                    document.getElementById('closepaket<?= $parent['id'] ?>').removeAttribute('hidden');
-                                    document.getElementById('openpaket<?= $parent['id'] ?>').setAttribute('hidden', '');
-                                } else {
-                                    document.getElementById('openpaket<?= $parent['id'] ?>').removeAttribute('hidden');
-                                    document.getElementById('closepaket<?= $parent['id'] ?>').setAttribute('hidden', '');
-
-                                }
-                            });
-
                             // Dropdown MDL
                             document.getElementById('toggle<?= $paket['id'] ?>').addEventListener('click', function() {
                                 if (document.getElementById('close<?= $paket['id'] ?>').hasAttribute('hidden')) {
@@ -262,18 +322,76 @@
                                 } else {
                                     document.getElementById('open<?= $paket['id'] ?>').removeAttribute('hidden');
                                     document.getElementById('close<?= $paket['id'] ?>').setAttribute('hidden', '');
-
                                 }
                             });
+                            
+                            // Reposiition Paket List
+                            $('#paketList<?= $paket['id'] ?>').change(function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "mdl/reorderingpaket",
+                                    data: {
+                                        id: <?= $paket['id'] ?>,
+                                        parent: <?= $parent['id'] ?>,
+                                        order: $("#paketList<?= $paket['id'] ?>").val()
+                                    },
+                                    dataType: "json",
+                                    error: function(paketOrder) {
+                                        console.log('error', arguments);
+                                    },
+                                    success: function(paketOrder) {
+                                        console.log(paketOrder);
+                                        location.reload();
+                                    }
+                                });
+                            });
                         </script>
-                    <?php }
-                } ?>
+                    <?php } ?>
+                    
+                    <script>
+                        // Dropdown Paket
+                        document.getElementById('togglepaket<?= $parent['id'] ?>').addEventListener('click', function() {
+                            if (document.getElementById('closepaket<?= $parent['id'] ?>').hasAttribute('hidden')) {
+                                document.getElementById('closepaket<?= $parent['id'] ?>').removeAttribute('hidden');
+                                document.getElementById('openpaket<?= $parent['id'] ?>').setAttribute('hidden', '');
+                            } else {
+                                document.getElementById('openpaket<?= $parent['id'] ?>').removeAttribute('hidden');
+                                document.getElementById('closepaket<?= $parent['id'] ?>').setAttribute('hidden', '');
+
+                            }
+                        });
+
+                        // Reposiition Parent List
+                        $('#parentList<?= $parent['id'] ?>').change(function() {
+                            $.ajax({
+                                type: 'POST',
+                                url: "mdl/reorderingparent",
+                                data: {
+                                    id: <?= $parent['id'] ?>,
+                                    order: $("#parentList<?= $parent['id'] ?>").val()
+                                },
+                                dataType: "json",
+                                error: function(parentOrder) {
+                                    console.log('error', arguments);
+                                },
+                                success: function(parentOrder) {
+                                    console.log(parentOrder);
+                                    location.reload();
+                                }
+                            });
+                        });
+                    </script>
+                <?php
+                }
+                ?>
                 <tr>
+                    <td></td>
                     <td><a class="uk-link-reset" id="toggleuncate" uk-toggle="target: .toggleuncate"><span id="closeuncate" uk-icon="chevron-down" hidden></span><span id="openuncate" uk-icon="chevron-right"></span></a></td>
-                    <td class="tm-h3" style="text-transform: uppercase;">Belum Terkategori</td>
+                    <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Belum Terkategori</td>
                 </tr>
                 <?php foreach ($mdldata['mdluncate'] as $mdluncate) { ?>
                     <tr class="toggleuncate" hidden>
+                        <td></td>
                         <td></td>
                         <td><?= $mdluncate['name'] ?></td>
                         <td><?= $mdluncate['length'] ?></td>
@@ -295,6 +413,13 @@
                         </td>
                         <td class=""><?= $mdluncate['keterangan'] ?></td>
                         <td><?= "Rp. " . number_format((int)$mdluncate['price'], 0, ',', '.');" "; ?></td>
+                        <td class="">
+                            <div uk-lightbox="">
+                                <a class="uk-inline" href="img/mdl/<?=$mdluncate['photo']?>" role="button">
+                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$mdluncate['photo']?>" width="40" height="40" alt="<?=$mdluncate['photo']?>">
+                                </a>
+                            </div>
+                        </td>
                         <td class="uk-text-center">
                             <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                 <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
@@ -304,31 +429,29 @@
                                 <?php } ?>
                                 <?php if ($authorize->hasPermission('admin.mdl.delete', $uid)) { ?>
                                     <div>
-                                        <form class="uk-form-stacked" role="form" action="mdl/delete/<?= $mdluncate['id'] ?>" method="post">
-                                            <button type="submit" uk-icon="trash" class="uk-icon-button-delete" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></button>
-                                        </form>
+                                        <a class="uk-icon-button-delete" href="mdl/deleteuncate/<?= $mdluncate['id'] ?>" uk-icon="trash" onclick="return confirm('Anda yakin ingin menghapus data ini?')"></a>
                                     </div>
                                 <?php } ?>
                             </div>
                         </td>
                     </tr>
-                    <script>
-                        // Dropdown MDL Uncategories
-                        document.getElementById('toggleuncate').addEventListener('click', function() {
-                            if (document.getElementById('closeuncate').hasAttribute('hidden')) {
-                                document.getElementById('closeuncate').removeAttribute('hidden');
-                                document.getElementById('openuncate').setAttribute('hidden', '');
-                            } else {
-                                document.getElementById('openuncate').removeAttribute('hidden');
-                                document.getElementById('closeuncate').setAttribute('hidden', '');
-
-                            }
-                        });
-                    </script>
                 <?php } ?>
             </tbody>
         </table>
     </div>
+    <script>
+        // Dropdown MDL Uncategories
+        document.getElementById('toggleuncate').addEventListener('click', function() {
+            if (document.getElementById('closeuncate').hasAttribute('hidden')) {
+                document.getElementById('closeuncate').removeAttribute('hidden');
+                document.getElementById('openuncate').setAttribute('hidden', '');
+            } else {
+                document.getElementById('openuncate').removeAttribute('hidden');
+                document.getElementById('closeuncate').setAttribute('hidden', '');
+
+            }
+        });
+    </script>
     <!-- End Table Of Content -->
 
     <!-- Modal Add Paket -->
@@ -1383,6 +1506,7 @@
 
     <!-- Modal Update MDL Uncategories -->
     <?php foreach ($mdldata['mdluncate'] as $mdluncate) { ?>
+        <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
             <div class="uk-modal-container" id="modalupdateuncate<?= $mdluncate['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <div class="uk-modal-header">
@@ -1546,7 +1670,8 @@
                     </div>
                 </div>
             </div>
-    <?php } ?>
-<?php } ?>
+        <?php }
+    }
+} ?>
 <!-- Modal Update MDL per Sub Paket End -->
 <?= $this->endSection() ?>

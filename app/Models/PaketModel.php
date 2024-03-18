@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class PaketModel extends Model
 {
     protected $allowedFields = [
-        'parentid', 'name', 'created_at', 'updated_at', 'deleted_at',
+        'parentid', 'name', 'created_at', 'updated_at', 'deleted_at', 'ordering',
     ];
     
     protected $table            = 'paket';
