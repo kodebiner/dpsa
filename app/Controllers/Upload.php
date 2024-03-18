@@ -149,7 +149,7 @@ class Upload extends BaseController
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
         ];
 
         // Get Extention
@@ -181,7 +181,6 @@ class Upload extends BaseController
         $LogModel       = new LogModel();
         $input          = $this->request->getPost();
         $project        = $ProjectModel->find($id);
-        // dd($input);
 
         // Validation Rules
         $rules = [

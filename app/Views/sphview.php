@@ -74,8 +74,11 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
 ?>
 
 <body>
-
-    <table style="width:100%">
+    <?php
+	header("Content-type: application/vnd-ms-excel");
+	header("Content-Disposition: attachment; filename=Sphfile'.$numsph.'.xls");
+	?>
+    <!-- <table style="width:100%">
         <tr>
             <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
             <td>
@@ -87,31 +90,37 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
                 <font style="font-size: 5px;">Website : dharmaputra04.com</font><br>
             </td>
         </tr>
-    </table>
+    </table> -->
 
-    <hr style="border: 1pt solid black;">
+    <!-- <hr style="border: 1pt solid black;"> -->
 
     <table style="width:100%; margin-top:10px">
         <tr>
             <th style="width:60%; text-align:left; font-weight:normal;">Kepada Yth.</th>
+            <th></th>
             <th style="width:10%; text-align:left; font-weight:normal;">Nomor</th>
             <th style="width:30%; text-align:left; font-weight:normal;"> : <?= $numsph ?></th>
         </tr>
         <tr>
             <td>Direktur RS <?= $client['rsname'] ?></td>
+            <td></td>
             <td>Perihal</td>
             <td> : Surat Penawaran Harga</td>
         </tr>
         <tr>
+            <td></td>
             <td></td>
             <td>Pekerjaan</td>
             <td> : <?= $projects['name'] ?></td>
         </tr>
         <tr>
             <td></td>
+            <td></td>
             <td>Lokasi</td>
             <td> : <?= $client['rsname'] ?></td>
+        </tr>
         <tr>
+            <td></td>
             <td></td>
             <td>Tanggal</td>
             <td> : <?= $tanggalsph ?></td>
@@ -124,12 +133,12 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
                 <div>
                     <font style="font-weight: bold; text-decoration: underline;"><?= $sphdata['clientpic'] ?></font> <br><br>Dengan hormat,
                 </div>
-                <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit Hermina Manado <br> dengan perincian sebagai berikut :</p>
+                <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit <?= $client['rsname'] ?> <br> dengan perincian sebagai berikut :</p>
             </div>
 
             <table style="width:100%; border: 1pt solid black;">
                 <tr style="border: 1pt solid black;">
-                    <th style="border: 1pt solid black;" rowspan="2">No</th>
+                    <th style="border: 1pt solid black; column-width: 50px;" rowspan="2">No</th>
                     <th style="border: 1pt solid black;" rowspan="2">Ruang</th>
                     <th style="border: 1pt solid black;" rowspan="2">Jenis Furniture</th>
                     <td colspan="6" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Dimensi & Qty</td>
@@ -170,7 +179,7 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
                         }?>
                     
                         <tr class="uk-text-center">
-                        <td style="border: 1pt solid black; text-align:center;"><?php echo $x++; ?></td>
+                        <td style="border: 1pt solid black; column-width: 50px; text-align:center;"><?php echo $x++; ?></td>
                         <td style="border: 1pt solid black;"><?= $mdl['kategori'] ?></td>
                         <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $mdl['length'] ?></td>

@@ -120,10 +120,10 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('sphprint/(:num)', 'Project::sphprint/$1');
     $routes->get('sphview/(:num)', 'Project::sphview/$1');
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
+    $routes->get('invoiceexcel/(:num)', 'Project::invoiceexcel/$1');
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
     // $routes->post('inv4/(:num)', 'Project::inv4/$1');
-    
 
     // Project Temp Routes
     // $routes->get('', 'ProjectTemp::index');

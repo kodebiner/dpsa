@@ -929,7 +929,8 @@
                                         <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                             <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
                                                 <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                        <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
+                                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
                                                     <hr>              
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                         <table class="uk-table uk-table-middle uk-table-divider">
@@ -1127,7 +1128,7 @@
                                         <?php } ?>
                                     <?php } else { ?>
                                         <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                                            <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>">Download SPH</a>
+                                            <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a>
                                             <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                 <table class="uk-table uk-table-middle uk-table-divider">
                                                     <thead>
