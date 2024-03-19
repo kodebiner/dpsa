@@ -552,26 +552,38 @@ class Project extends BaseController
                 $spknum = $input['nospk'];
             }
 
-            // Crating Rows In Production
-            // $sphs = $RabModel->where('projectid', $id)->where('qty !=', '0')->find();
-            $sphs = $RabModel->where('projectid', $id)->find();
-            foreach ($sphs as $sph) {
-                $prod = $ProductionModel->where('projectid',$id)->where('mdlid',$sph['mdlid'])->find();
-                if(!empty($prod)){
-                    $proid = [];
-                    foreach($prod as $product){
-                        $proid [] = $product['id'];
-                    }
-                    $ProductionModel->whereIn('id', $proid)->delete();
+            // Removing old data production
+            $prod = $ProductionModel->where('projectid',$id)->find();
+            if(!empty($prod)){
+                $proid = [];
+                foreach($prod as $product){
+                    $proid [] = $product['id'];
                 }
-                for ($i = 1; $i <= $sph['qty']; $i++) {
-                    $productiondata = [
-                        'mdlid'     => $sph['mdlid'],
-                        'projectid' => $sph['projectid'],
-                    ];
-                    $ProductionModel->insert($productiondata);
-                }
+                $ProductionModel->whereIn('id', $proid)->delete();
             }
+
+            // $sphs = $RabModel->where('projectid', $id)->where('qty !=', '0')->find();
+            // $sphs = $RabModel->where('projectid', $id)->find();
+            // // dd($sphs);
+            // foreach ($sphs as $sph) {
+            //     // $prod = $ProductionModel->where('projectid',$id)->where('mdlid',$sph['mdlid'])->find();
+            //     // $prod = $ProductionModel->where('projectid',$id)->find();
+            //     // if(!empty($prod)){
+            //     //     $proid = [];
+            //     //     foreach($prod as $product){
+            //     //         $proid [] = $product['id'];
+            //     //     }
+            //     //     $ProductionModel->whereIn('id', $proid)->delete();
+            //     // }
+                
+            //     for ($i = 1; $i <= $sph['qty']; $i++) {
+            //         $productiondata = [
+            //             'mdlid'     => $sph['mdlid'],
+            //             'projectid' => $sph['projectid'],
+            //         ];
+            //         $ProductionModel->insert($productiondata);
+            //     }
+            // }
 
             // Validation Rules
             $rules = [
@@ -630,6 +642,18 @@ class Project extends BaseController
                             }
                         }
                     }
+                }
+            }
+
+            // Create New Data Production
+            $sphs = $RabModel->where('projectid', $id)->find();
+            foreach ($sphs as $sph) {
+                for ($i = 1; $i <= $sph['qty']; $i++) {
+                    $productiondata = [
+                        'mdlid'     => $sph['mdlid'],
+                        'projectid' => $sph['projectid'],
+                    ];
+                    $ProductionModel->insert($productiondata);
                 }
             }
 
