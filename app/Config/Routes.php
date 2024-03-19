@@ -59,6 +59,10 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('removesertrim/(:num)', 'Upload::removesertrim/$1');
     $routes->post('bast/(:num)', 'Upload::bast/$1');
     $routes->post('removebast/(:num)', 'Upload::removebast/$1');
+    $routes->post('buktipembayaran', 'Upload::buktipembayaran');
+    $routes->post('removebuktipembayaran', 'Upload::removebuktipembayaran');
+    $routes->post('buktipengiriman', 'Upload::buktipengiriman');
+    $routes->post('removebuktipengiriman', 'Upload::removebuktipengiriman');
 });
 
 $routes->group('clientreg', static function ($routes) {
@@ -80,6 +84,7 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
     $routes->post('acc/(:num)', 'Home::acc/$1');
     // $routes->get('accres/(:num)', 'Home::accres/$1');
+    $routes->post('buktipembayaran/(:num)', 'Home::buktipembayaran/$1');
 });
 
 // Users

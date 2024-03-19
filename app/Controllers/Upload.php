@@ -579,4 +579,92 @@ class Upload extends BaseController
             die(json_encode($returnBast));
         }
     }
+
+    public function buktipembayaran()
+    {
+        $image      = \Config\Services::image();
+        $validation = \Config\Services::validation();
+        $input      = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/macbinary,application/mac-binary,application/octet-stream,application/x-binary,application/x-macbinary,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH . '/img/bukti/pembayaran/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            // Returning Message
+            die(json_encode($returnFile));
+        }
+    }
+
+    public function removebuktipembayaran()
+    {
+        // Removing File
+        $input = $this->request->getPost('buktipembayaran');
+        unlink(FCPATH . 'img/bukti/pembayaran/' . $input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
+
+    public function buktipengiriman()
+    {
+        $image      = \Config\Services::image();
+        $validation = \Config\Services::validation();
+        $input      = $this->request->getFile('uploads');
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/macbinary,application/mac-binary,application/octet-stream,application/x-binary,application/x-macbinary,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH . '/img/bukti/pengiriman/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            // Returning Message
+            die(json_encode($returnFile));
+        }
+    }
+
+    public function removebuktipengiriman()
+    {
+        // Removing File
+        $input = $this->request->getPost('buktipengiriman');
+        unlink(FCPATH . 'img/bukti/pengiriman/' . $input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
 }

@@ -343,6 +343,109 @@
 
                                     <hr class="uk-margin-remove-top">
 
+                                    <!-- Mobile Design -->
+                                    <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
+                                        <div class="uk-text-center" uk-grid>
+                                            <div class="uk-width-1-4">
+                                                <div class="uk-text-left">
+                                                    <h4>Desain</h4>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-expand" id="stt<?=$designId?>">
+                                                <?php
+                                                if ($designStatus === "0") {
+                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000; font-weight: bold; width:100%;"> Menuggu Konfirmasi </div>';
+                                                } elseif ($designStatus === "1") {
+                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
+                                                } else {
+                                                    echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="uk-width-1-4 uk-text-right">
+                                                <div id="containerbtndsn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 1.5" id="btndowndsn<?= $project['id'] ?>"></div>
+                                                <div id="containerbtnupdsn<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 1.5" id="btnupdsn<?= $project['id'] ?>"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="contentdsn<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
+                                            <div class="uk-container uk-container-small">
+                                                <div class="uk-width-1-1 uk-margin-bottom">
+                                                    
+                                                    <div class="">
+                                                        <?php
+                                                        if ($designStatus === "0") {
+                                                            echo "Tanggal Upload Desain";
+                                                        } elseif ($designStatus === "1") {
+                                                            echo "Tanggal Revisi Desain";
+                                                        } else {
+                                                            echo "Tanggal Disetujui";
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <div class="">
+                                                        <?= $tanggaldesign ?>
+                                                    </div>
+
+                                                    <div class="uk-margin-top">
+                                                        <span uk-icon="file-text"></span> <a href="img/design/<?= $desainpro ?>" target="_blank" download>File Design</a>
+                                                    </div>
+
+                                                    <?php if (!empty($project['ded'])) { ?>
+                                                    <div class="uk-margin-top">
+                                                        <span uk-icon="file-text"></span> <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download>File Layout / DED</a>
+                                                    </div>
+                                                    <?php } ?>
+
+                                                    <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                                    <div class="uk-margin-top">
+                                                        <span uk-icon="file-text"></span> <a href="img/revisi/<?= $revisi ?>" target="_blank" download>File Revisi</a>
+                                                    </div>
+                                                    <?php } ?>
+                                                    
+                                                </div>
+
+                                                <?php if ($designStatus != "2") { ?>
+                                                    <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                        <div class="uk-text-left uk-margin-top" id="btndesain<?= $designId ?>" uk-margin>
+                                                            <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" >Konfirmasi</button>
+                                                            <button class="uk-button uk-button-secondary uk-button-small" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                            $("#acc<?= $designId ?>").click(function(){
+                                                                let text = "Anda sudah yakin dengan desain ini?";
+                                                                if (confirm(text) == true) {
+                                                                    $.ajax({
+                                                                        url: "home/acc/<?= $designId ?>",
+                                                                        method: "POST",
+                                                                        data: {
+                                                                            status: $('#acc<?= $designId ?>').val(),
+                                                                        },
+                                                                        dataType: "json",
+                                                                        error: function() {
+                                                                            console.log('error', arguments);
+                                                                        },
+                                                                        success: function() {
+                                                                            console.log('success', arguments);
+                                                                            $("#status<?= $designId ?>").remove();
+                                                                            $("#btndesain<?= $designId ?>").remove();
+                                                                            $("#stt<?=$designId?>").append("<div class='uk-text-light uk-text-center' id='status' . $designId . '' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'> Terkonfirmasi </div>");
+                                                                        },
+                                                                    })
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+
+                                        <hr class="uk-margin-remove-top">
+                                    <?php } ?>
+                                    <!-- End Of Mobile Design -->
+
                                     <div class="uk-text-center" uk-grid>
                                         <div class="uk-width-expand">
                                             <div class="uk-text-left">
@@ -367,7 +470,9 @@
                                                         <th class="uk-text-center">Mesin Lanjutan</th>
                                                         <th class="uk-text-center">Finishing</th>
                                                         <th class="uk-text-center">Packing</th>
+                                                        <th class="uk-text-center">Pengiriman</th>
                                                         <th class="uk-text-center">Setting</th>
+                                                        <th class="uk-text-center">Persentase</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -417,123 +522,88 @@
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['pengiriman']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['setting']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
                                                                     <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" disabled>
                                                                 <?php } ?>
                                                             </td>
+                                                            <td class="uk-text-center">
+                                                                <div><?= $production['percentages'] ?> %</div>
+                                                            </td>
                                                         </tr>
                                                     <?php } ?>
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
 
-                                    <hr class="uk-margin-remove-top">
+                                        <!-- Bukti Pengiriman -->
+                                        <div class="uk-margin">Bukti Pengiriman</div>
+                                        <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                            <?php foreach($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
+                                                <div>
+                                                    <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
+                                                        <img src="img/bukti/pengiriman/<?= $sendproof['file'] ?>" alt="<?= $sendproof['file'] ?>" class="uk-transition-opaque">
+                                                        <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                        <div class="uk-position-center uk-transition-fade">
+                                                            <div class="uk-overlay">
+                                                                <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="pengiriman<?= $sendproof['id'] ?>"></div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
 
-                                    <!-- Mobile Design -->
-                                    <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
-                                    <div class="uk-text-center" uk-grid>
-                                        <div class="uk-width-1-4">
-                                            <div class="uk-text-left">
-                                                <h4>Desain</h4>
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-expand" id="stt<?=$designId?>">
-                                            <?php
-                                            if ($designStatus === "0") {
-                                                echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000; font-weight: bold; width:100%;"> Menuggu Konfirmasi </div>';
-                                            } elseif ($designStatus === "1") {
-                                                echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
-                                            } else {
-                                                echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
-                                            }
-                                            ?>
-                                        </div>
-                                        <div class="uk-width-1-4 uk-text-right">
-                                            <div id="containerbtndsn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 1.5" id="btndowndsn<?= $project['id'] ?>"></div>
-                                            <div id="containerbtnupdsn<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 1.5" id="btnupdsn<?= $project['id'] ?>"></div>
-                                        </div>
-                                    </div>
+                                                    <script>
+                                                        // Date In Indonesia
+                                                        var publishupdate   = "<?= $sendproof['created_at'] ?>";
+                                                        var thatdate        = publishupdate.split( /[- :]/ );
+                                                        thatdate[1]--;
+                                                        var publishthatdate = new Date( ...thatdate );
+                                                        var publishyear     = publishthatdate.getFullYear();
+                                                        var publishmonth    = publishthatdate.getMonth();
+                                                        var publishdate     = publishthatdate.getDate();
+                                                        var publishday      = publishthatdate.getDay();
 
-                                    <div id="contentdsn<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
-                                        <div class="uk-container uk-container-small">
-                                            <div class="uk-width-1-1 uk-margin-bottom">
-                                                
-                                                <div class="">
-                                                    <?php
-                                                    if ($designStatus === "0") {
-                                                        echo "Tanggal Upload Desain";
-                                                    } elseif ($designStatus === "1") {
-                                                        echo "Tanggal Revisi Desain";
-                                                    } else {
-                                                        echo "Tanggal Disetujui";
-                                                    }
-                                                    ?>
+                                                        switch(publishday) {
+                                                            case 0: publishday     = "Minggu"; break;
+                                                            case 1: publishday     = "Senin"; break;
+                                                            case 2: publishday     = "Selasa"; break;
+                                                            case 3: publishday     = "Rabu"; break;
+                                                            case 4: publishday     = "Kamis"; break;
+                                                            case 5: publishday     = "Jum'at"; break;
+                                                            case 6: publishday     = "Sabtu"; break;
+                                                        }
+                                                        switch(publishmonth) {
+                                                            case 0: publishmonth   = "Januari"; break;
+                                                            case 1: publishmonth   = "Februari"; break;
+                                                            case 2: publishmonth   = "Maret"; break;
+                                                            case 3: publishmonth   = "April"; break;
+                                                            case 4: publishmonth   = "Mei"; break;
+                                                            case 5: publishmonth   = "Juni"; break;
+                                                            case 6: publishmonth   = "Juli"; break;
+                                                            case 7: publishmonth   = "Agustus"; break;
+                                                            case 8: publishmonth   = "September"; break;
+                                                            case 9: publishmonth   = "Oktober"; break;
+                                                            case 10: publishmonth  = "November"; break;
+                                                            case 11: publishmonth  = "Desember"; break;
+                                                        }
+
+                                                        var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                        document.getElementById("pengiriman<?= $sendproof['id'] ?>").innerHTML = publishfulldate;
+                                                    </script>
                                                 </div>
-                                                <div class="">
-                                                    <?= $tanggaldesign ?>
-                                                </div>
-
-                                                <div class="uk-margin-top">
-                                                    <span uk-icon="file-text"></span> <a href="img/design/<?= $desainpro ?>" target="_blank" download>File Design</a>
-                                                </div>
-
-                                                <?php if (!empty($project['ded'])) { ?>
-                                                <div class="uk-margin-top">
-                                                    <span uk-icon="file-text"></span> <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download>File Layout / DED</a>
-                                                </div>
-                                                <?php } ?>
-
-                                                <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
-                                                <div class="uk-margin-top">
-                                                    <span uk-icon="file-text"></span> <a href="img/revisi/<?= $revisi ?>" target="_blank" download>File Revisi</a>
-                                                </div>
-                                                <?php } ?>
-                                                
-                                            </div>
-
-                                            <?php if ($designStatus != "2") { ?>
-                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
-                                                    <div class="uk-text-left uk-margin-top" id="btndesain<?= $designId ?>" uk-margin>
-                                                        <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" >Konfirmasi</button>
-                                                        <button class="uk-button uk-button-secondary uk-button-small" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
-                                                    </div>
-                                                <?php } ?>
-                                                <script>
-                                                    $(document).ready(function(){
-                                                        $("#acc<?= $designId ?>").click(function(){
-                                                            let text = "Anda sudah yakin dengan desain ini?";
-                                                            if (confirm(text) == true) {
-                                                                $.ajax({
-                                                                    url: "home/acc/<?= $designId ?>",
-                                                                    method: "POST",
-                                                                    data: {
-                                                                        status: $('#acc<?= $designId ?>').val(),
-                                                                    },
-                                                                    dataType: "json",
-                                                                    error: function() {
-                                                                        console.log('error', arguments);
-                                                                    },
-                                                                    success: function() {
-                                                                        console.log('success', arguments);
-                                                                        $("#status<?= $designId ?>").remove();
-                                                                        $("#btndesain<?= $designId ?>").remove();
-                                                                        $("#stt<?=$designId?>").append("<div class='uk-text-light uk-text-center' id='status' . $designId . '' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'> Terkonfirmasi </div>");
-                                                                    },
-                                                                })
-                                                            }
-                                                        });
-                                                    });
-                                                </script>
                                             <?php } ?>
                                         </div>
+                                        <!-- Bukti Pengiriman End -->
                                     </div>
 
                                     <hr class="uk-margin-remove-top">
-                                    <?php } ?>
-                                    <!-- End Of Mobile Design -->
 
                                     <div class="uk-text-center" uk-grid>
                                         <div class="uk-width-expand">
@@ -616,6 +686,83 @@
                                         <?php } ?>
                                     </div>
                                     <!-- End Invoice & SPK Mobile -->
+
+                                    <hr class="uk-margin-remove-top">
+
+                                    <!-- Bukti Pembayaran Section -->
+                                    <div class="uk-text-center" uk-grid>
+                                        <div class="uk-width-expand">
+                                            <div class="uk-text-left">
+                                                <h4>Bukti Pembayaran</h4>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-1-4 uk-text-right">
+                                            <div id="containerbtnbuktipembayaran<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 1.5" id="btndownbuktipembayaran<?= $project['id'] ?>"></div>
+                                            <div id="containerbtnupbuktipembayaran<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 1.5" id="btnupbuktipembayaran<?= $project['id'] ?>"></div>
+                                        </div>
+                                    </div>
+
+                                    <div id="contentbuktipembayaran<?= $project['id'] ?>" hidden>
+                                        <div class="uk-margin">
+                                            <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" uk-toggle="target: #modal-bukti-pembayaran<?= $project['id'] ?>">Upload Bukti Pembayaran</a>
+                                        </div>
+                                        <hr>
+                                        <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                            <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
+                                                <div>
+                                                    <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
+                                                        <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
+                                                        <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                        <div class="uk-position-center uk-transition-fade">
+                                                            <div class="uk-overlay">
+                                                                <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+
+                                                    <script>
+                                                        // Date In Indonesia
+                                                        var publishupdate   = "<?= $payproof['created_at'] ?>";
+                                                        var thatdate        = publishupdate.split( /[- :]/ );
+                                                        thatdate[1]--;
+                                                        var publishthatdate = new Date( ...thatdate );
+                                                        var publishyear     = publishthatdate.getFullYear();
+                                                        var publishmonth    = publishthatdate.getMonth();
+                                                        var publishdate     = publishthatdate.getDate();
+                                                        var publishday      = publishthatdate.getDay();
+
+                                                        switch(publishday) {
+                                                            case 0: publishday     = "Minggu"; break;
+                                                            case 1: publishday     = "Senin"; break;
+                                                            case 2: publishday     = "Selasa"; break;
+                                                            case 3: publishday     = "Rabu"; break;
+                                                            case 4: publishday     = "Kamis"; break;
+                                                            case 5: publishday     = "Jum'at"; break;
+                                                            case 6: publishday     = "Sabtu"; break;
+                                                        }
+                                                        switch(publishmonth) {
+                                                            case 0: publishmonth   = "Januari"; break;
+                                                            case 1: publishmonth   = "Februari"; break;
+                                                            case 2: publishmonth   = "Maret"; break;
+                                                            case 3: publishmonth   = "April"; break;
+                                                            case 4: publishmonth   = "Mei"; break;
+                                                            case 5: publishmonth   = "Juni"; break;
+                                                            case 6: publishmonth   = "Juli"; break;
+                                                            case 7: publishmonth   = "Agustus"; break;
+                                                            case 8: publishmonth   = "September"; break;
+                                                            case 9: publishmonth   = "Oktober"; break;
+                                                            case 10: publishmonth  = "November"; break;
+                                                            case 11: publishmonth  = "Desember"; break;
+                                                        }
+
+                                                        var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                        document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
+                                                    </script>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <!-- Bukti Pembayaran Section End -->
                                 <?php } ?>
                             </div>
                         </div>
@@ -656,6 +803,18 @@
                                     $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
                                     $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
                                     $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                });
+
+                                $("span[id='btndownbuktipembayaran<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnupbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='containerbtnbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='contentbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                });
+
+                                $("span[id='btnupbuktipembayaran<?= $project['id'] ?>']").click(function() {
+                                    $("div[id='containerbtnbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                    $("div[id='contentbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
+                                    $("div[id='containerbtnupbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
                                 });
 
                                 $("span[id='btndownspk<?= $project['id'] ?>']").click(function() {
@@ -734,25 +893,6 @@
                                                 </div>
                                             </div>
                                             <hr class="uk-margin-bottom">
-                                        </div>
-
-                                        <div class="uk-width-1-1 uk-margin-bottom-remove">
-                                            <div class="uk-child-width-1-2" uk-grid>
-                                                <div>
-                                                    <div class="">
-                                                        <h4 class="uk-width-1-1">Produksi</h4>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div class="uk-child-width-1-1 uk-text-right" uk-grid>
-                                                        <div>
-                                                            <div id="containerbtnproduksi<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndownproduksi<?= $project['id'] ?>"></div>
-                                                            <div id="containerbtnupproduksi<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupproduksi<?= $project['id'] ?>"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
                                         </div>
 
                                         <?php if (!empty($project['id'])) { ?>
@@ -854,8 +994,162 @@
                                                 </p>
                                                 <hr class="uk-margin">
                                             </div>
+
+                                            <!-- Desain -->
+                                            <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
+                                                <div class="uk-width-1-1">
+                                                    <div>
+                                                        <div class="uk-child-width-1-2" uk-grid>
+                                                            <div>
+                                                                <div class="uk-child-width-1-2" uk-grid>
+                                                                    <div class="uk-width-1-6">
+                                                                        <div>
+                                                                            <h4>Desain</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="uk-child-width-expand" id="st<?= $designId ?>">
+                                                                        <?php
+                                                                        if ($designStatus === "0") {
+                                                                            echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
+                                                                        } elseif ($designStatus === "1") {
+                                                                            echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
+                                                                        } else {
+                                                                            echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
+                                                                        }
+                                                                        ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                                    <div>
+                                                                        <div id="containerbtndsn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndowndsn<?= $project['id'] ?>"></div>
+                                                                        <div id="containerbtnupdsn<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupdsn<?= $project['id'] ?>"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="contentdsn<?= $project['id'] ?>" hidden>
+                                                            <div class="uk-margin" uk-grid>
+                                                                <div class="uk-width-small@m">
+                                                                    <div class="">
+                                                                        <?php
+                                                                        if ($designStatus === "0") {
+                                                                            echo "Tanggal Upload Desain";
+                                                                        } elseif ($designStatus === "1") {
+                                                                            echo "Tanggal Revisi Desain";
+                                                                        } else {
+                                                                            echo "Tanggal Disetujui";
+                                                                        }
+                                                                        ?>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="uk-width-1-3@m">
+                                                                    <div>
+                                                                        <?= $tanggaldesign ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="uk-margin" uk-grid>
+                                                                <div class="uk-width-small@m">
+                                                                    <div class="">File Design</div>
+                                                                </div>
+                                                                <div class="uk-width-1-3@m">
+                                                                    <div>
+                                                                        <a href="img/design/<?= $desainpro ?>" target="_blank" download><span uk-icon="file-text"></span> <?= $desainpro ?> </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <?php if (!empty($project['ded'])) { ?>
+                                                                <div class="uk-margin" uk-grid>
+                                                                    <div class="uk-width-small@m">
+                                                                        <div class="">File Layout/DED</div>
+                                                                    </div>
+                                                                    <div class="uk-width-1-3@m">
+                                                                        <div>
+                                                                            <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download><span uk-icon="file-text"></span> <?= $project['ded'] ?> </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <?php } ?>
+
+                                                            <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                                                <div class="uk-margin" uk-grid>
+                                                                    <div class="uk-width-small@m">
+                                                                        <div class="">File Revisi</div>
+                                                                    </div>
+                                                                    <div class="uk-width-1-3@m">
+                                                                        <div>
+                                                                            <a href="img/revisi/<?= $revisi ?>" target="_blank" download><span uk-icon="file-text"></span><?= $revisi ?></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <?php } ?>
+
+                                                            <?php if ($designStatus != "2") { ?>
+                                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                                    <div class="uk-text-right" id="btndesain<?= $designId ?>" uk-margin>
+                                                                        <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>">Konfirmasi</button>
+                                                                        <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            <?php } ?>
+                                                            <script>
+                                                                $(document).ready(function(){
+                                                                    $("#acc<?= $designId ?>").click(function(){
+                                                                        let text = "Anda sudah yakin dengan desain ini?";
+                                                                        if (confirm(text) == true) {
+                                                                            $.ajax({
+                                                                                url: "home/acc/<?= $designId ?>",
+                                                                                method: "POST",
+                                                                                data: {
+                                                                                    status: $('#acc<?= $designId ?>').val(),
+                                                                                },
+                                                                                dataType: "json",
+                                                                                error: function() {
+                                                                                    console.log('error', arguments);
+                                                                                },
+                                                                                success: function() {
+                                                                                    console.log('success', arguments);
+                                                                                    $("#status<?= $designId ?>").remove();
+                                                                                $("#btndesain<?= $designId ?>").remove();
+                                                                                $("#st<?= $designId ?>").append("<div class='uk-text-light uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
+                                                                                },
+                                                                            })
+                                                                        }
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="uk-margin">
+                                                </div>
+                                            <?php } ?>
+                                            <!-- end of desain -->
+
+                                            <!-- Production Section -->
+                                            <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                                <div class="uk-child-width-1-2" uk-grid>
+                                                    <div>
+                                                        <div class="">
+                                                            <h4 class="uk-width-1-1">Produksi</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                            <div>
+                                                                <div id="containerbtnproduksi<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndownproduksi<?= $project['id'] ?>"></div>
+                                                                <div id="containerbtnupproduksi<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupproduksi<?= $project['id'] ?>"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
                                     
-                                            <div id="contentproduksi<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
+                                            <div id="contentproduksi<?= $project['id'] ?>" class="uk-width-1-1 uk-margin-remove" hidden>
                                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                     <table class="uk-table uk-table-middle uk-table-divider">
                                                         <thead>
@@ -939,290 +1233,162 @@
                                                             <?php } ?>
                                                         </tbody>
                                                     </table>
+                                                    <hr>
                                                 </div>
+
+                                                <!-- Bukti Pengiriman -->
+                                                <div class="uk-margin">Bukti Pengiriman</div>
+                                                <div class="uk-child-width-1-6 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                                    <?php foreach($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
+                                                        <div>
+                                                            <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
+                                                                <img src="img/bukti/pengiriman/<?= $sendproof['file'] ?>" alt="<?= $sendproof['file'] ?>" class="uk-transition-opaque">
+                                                                <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                                <div class="uk-position-center uk-transition-fade">
+                                                                    <div class="uk-overlay">
+                                                                        <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="pengiriman<?= $sendproof['id'] ?>"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+
+                                                            <script>
+                                                                // Date In Indonesia
+                                                                var publishupdate   = "<?= $sendproof['created_at'] ?>";
+                                                                var thatdate        = publishupdate.split( /[- :]/ );
+                                                                thatdate[1]--;
+                                                                var publishthatdate = new Date( ...thatdate );
+                                                                var publishyear     = publishthatdate.getFullYear();
+                                                                var publishmonth    = publishthatdate.getMonth();
+                                                                var publishdate     = publishthatdate.getDate();
+                                                                var publishday      = publishthatdate.getDay();
+
+                                                                switch(publishday) {
+                                                                    case 0: publishday     = "Minggu"; break;
+                                                                    case 1: publishday     = "Senin"; break;
+                                                                    case 2: publishday     = "Selasa"; break;
+                                                                    case 3: publishday     = "Rabu"; break;
+                                                                    case 4: publishday     = "Kamis"; break;
+                                                                    case 5: publishday     = "Jum'at"; break;
+                                                                    case 6: publishday     = "Sabtu"; break;
+                                                                }
+                                                                switch(publishmonth) {
+                                                                    case 0: publishmonth   = "Januari"; break;
+                                                                    case 1: publishmonth   = "Februari"; break;
+                                                                    case 2: publishmonth   = "Maret"; break;
+                                                                    case 3: publishmonth   = "April"; break;
+                                                                    case 4: publishmonth   = "Mei"; break;
+                                                                    case 5: publishmonth   = "Juni"; break;
+                                                                    case 6: publishmonth   = "Juli"; break;
+                                                                    case 7: publishmonth   = "Agustus"; break;
+                                                                    case 8: publishmonth   = "September"; break;
+                                                                    case 9: publishmonth   = "Oktober"; break;
+                                                                    case 10: publishmonth  = "November"; break;
+                                                                    case 11: publishmonth  = "Desember"; break;
+                                                                }
+
+                                                                var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                                document.getElementById("pengiriman<?= $sendproof['id'] ?>").innerHTML = publishfulldate;
+                                                            </script>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                                <!-- Bukti Pengiriman End -->
                                             </div>
+                                            <!-- Production Section End -->
 
-                                            <script>
-                                                $(document).ready(function() {
-                                                    $("span[id='btndown<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='content<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btnup<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
-                                                        $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btndownproduksi<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", true);
-                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", false);
-                                                    });
-
-                                                    $("span[id='btnupproduksi<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
-                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btnupsph<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", true);
-                                                        $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btndowndsn<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                    $("span[id='btnupdsn<?= $project['id'] ?>']").click(function() {
-                                                        $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", false);
-                                                        $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", true);
-                                                        $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
-                                                    });
-
-                                                });
-                                            </script>
-                                        <?php } ?>
-
-                                        <!-- Desain -->
-                                        <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) { ?>
-                                            <div class="uk-width-1-1">
-                                                <div>
-                                                    <div class="uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <div class="uk-child-width-1-2" uk-grid>
-                                                                <div class="uk-width-1-6">
-                                                                    <div>
-                                                                        <h4>Desain</h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="uk-child-width-expand" id="st<?= $designId ?>">
-                                                                    <?php
-                                                                    if ($designStatus === "0") {
-                                                                        echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; border-color: #ff0000; color:#ff0000;  font-weight: bold;"> Menuggu Konfirmasi </div>';
-                                                                    } elseif ($designStatus === "1") {
-                                                                        echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #FFEA00; border-color:#FFEA00;  font-weight: bold;"> Proses Revisi </div>';
-                                                                    } else {
-                                                                        echo '<div class="uk-text-light uk-text-center" id="status' . $designId . '" style="border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;"> Terkonfirmasi </div>';
-                                                                    }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
+                                            <!-- Invoice -->
+                                            <div class="uk-width-1-1 uk-margin-remove-bottom">
+                                                <div class="uk-child-width-1-2" uk-grid>
+                                                    <div>
+                                                        <div class="">
+                                                            <h4 class="uk-width-1-1">File Invoice</h4>
                                                         </div>
-                                                        <div>
-                                                            <div class="uk-child-width-1-1 uk-text-right" uk-grid>
-                                                                <div>
-                                                                    <div id="containerbtndsn<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndowndsn<?= $project['id'] ?>"></div>
-                                                                    <div id="containerbtnupdsn<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupdsn<?= $project['id'] ?>"></div>
-                                                                </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                            <div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="contentdsn<?= $project['id'] ?>" hidden>
-                                                        <div class="uk-margin" uk-grid>
-                                                            <div class="uk-width-small@m">
-                                                                <div class="">
-                                                                    <?php
-                                                                    if ($designStatus === "0") {
-                                                                        echo "Tanggal Upload Desain";
-                                                                    } elseif ($designStatus === "1") {
-                                                                        echo "Tanggal Revisi Desain";
-                                                                    } else {
-                                                                        echo "Tanggal Disetujui";
+                                                </div>
+                                                <div class="uk-margin uk-margin-remove-top" uk-grid>
+                                                    <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                        <div class="uk-width-1-1">
+                                                            <!-- Invoice -->
+                                                            <p class="uk-margin-remove-top" uk-margin>
+                                                                <?php
+                                                                // Invoice I
+                                                                if(!empty($projectdata[$project['id']]['project'])){
+                                                                    if ($projectdata[$project['id']]['project']['status_spk'] === "1") {
+                                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
                                                                     }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="uk-width-1-3@m">
-                                                                <div>
-                                                                    <?= $tanggaldesign ?>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                                }
 
-                                                        <div class="uk-margin" uk-grid>
-                                                            <div class="uk-width-small@m">
-                                                                <div class="">File Design</div>
-                                                            </div>
-                                                            <div class="uk-width-1-3@m">
-                                                                <div>
-                                                                    <a href="img/design/<?= $desainpro ?>" target="_blank" download><span uk-icon="file-text"></span> <?= $desainpro ?> </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <?php if (!empty($project['ded'])) { ?>
-                                                            <div class="uk-margin" uk-grid>
-                                                                <div class="uk-width-small@m">
-                                                                    <div class="">File Layout/DED</div>
-                                                                </div>
-                                                                <div class="uk-width-1-3@m">
-                                                                    <div>
-                                                                        <a href="img/revisi/<?= $project['ded'] ?>" target="_blank" download><span uk-icon="file-text"></span> <?= $project['ded'] ?> </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        <?php } ?>
-
-                                                        <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
-                                                            <div class="uk-margin" uk-grid>
-                                                                <div class="uk-width-small@m">
-                                                                    <div class="">File Revisi</div>
-                                                                </div>
-                                                                <div class="uk-width-1-3@m">
-                                                                    <div>
-                                                                        <a href="img/revisi/<?= $revisi ?>" target="_blank" download><span uk-icon="file-text"></span><?= $revisi ?></a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        <?php } ?>
-
-                                                        <?php if ($designStatus != "2") { ?>
-                                                            <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
-                                                                <div class="uk-text-right" id="btndesain<?= $designId ?>" uk-margin>
-                                                                    <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>">Konfirmasi</button>
-                                                                    <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
-                                                                </div>
-                                                            <?php } ?>
-                                                        <?php } ?>
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                                $("#acc<?= $designId ?>").click(function(){
-                                                                    let text = "Anda sudah yakin dengan desain ini?";
-                                                                    if (confirm(text) == true) {
-                                                                        $.ajax({
-                                                                            url: "home/acc/<?= $designId ?>",
-                                                                            method: "POST",
-                                                                            data: {
-                                                                                status: $('#acc<?= $designId ?>').val(),
-                                                                            },
-                                                                            dataType: "json",
-                                                                            error: function() {
-                                                                                console.log('error', arguments);
-                                                                            },
-                                                                            success: function() {
-                                                                                console.log('success', arguments);
-                                                                                $("#status<?= $designId ?>").remove();
-                                                                            $("#btndesain<?= $designId ?>").remove();
-                                                                            $("#st<?= $designId ?>").append("<div class='uk-text-light uk-text-center' style='border-style: solid; color: #32CD32; border-color:#32CD32;  font-weight: bold;'>Terkonfirmasi</div>");
-                                                                            },
-                                                                        })
+                                                                // Invoice II
+                                                                if(!empty($projectdata[$project['id']]['sertrim'])){
+                                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
                                                                     }
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </div>
+                                                                }
+
+                                                                // Invoice III
+                                                                if(!empty($projectdata[$project['id']]['bast'])){
+                                                                    if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
+                                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                                        $status = "Retensi";
+                                                                    }
+                                                                }
+
+                                                                // Invoice IV
+                                                                if(!empty($projectdata[$project['id']]['bast'])){
+                                                                if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) {
+                                                                        if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
+                                                                            echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                                            $progress   = "100";
+                                                                        }
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                                 <hr class="uk-margin">
                                             </div>
-                                        <?php } ?>
-                                        <!-- end of desain -->
+                                            <?php if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['inv4'])) { ?>
+                                                <script>
+                                                    $(document).ready(function() {
 
-                                        <!-- Invoice -->
-                                        <div class="uk-width-1-1 uk-margin-remove-bottom">
-                                            <div class="uk-child-width-1-2" uk-grid>
-                                                <div>
-                                                    <div class="">
-                                                        <h4 class="uk-width-1-1">File Invoice</h4>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div class="uk-child-width-1-1 uk-text-right" uk-grid>
-                                                        <div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="uk-margin uk-margin-remove-top" uk-grid>
-                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
-                                                    <div class="uk-width-1-1">
-                                                        <!-- Invoice -->
-                                                        <p class="uk-margin-remove-top" uk-margin>
-                                                            <?php
-                                                            // Invoice I
-                                                            if(!empty($projectdata[$project['id']]['project'])){
-                                                                if ($projectdata[$project['id']]['project']['status_spk'] === "1") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
+                                                        var proid = <?= $project['id'] ?>;
+                                                        var today = new Date();
+                                                        var dateline = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
+                                                        var inv4 = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
+                                                        var progress = "<?= (int)$progress ?>"
+
+                                                        if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
+                                                            $.ajax({
+                                                                url: "project/inv4/" + proid,
+                                                                method: "POST",
+                                                                data: {
+                                                                    id: proid,
+                                                                    dateline: "<?= $projectdata[$project['id']]['dateline'] ?>",
+                                                                },
+                                                                dataType: "json",
+                                                                error: function() {
+                                                                    console.log('error', arguments);
+                                                                },
+                                                                success: function(data) {
+                                                                    console.log('success', arguments);
+                                                                    console.log(data);
                                                                 }
-                                                            }
-
-                                                            // Invoice II
-                                                            if(!empty($projectdata[$project['id']]['sertrim'])){
-                                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
-                                                                }
-                                                            }
-
-                                                            // Invoice III
-                                                            if(!empty($projectdata[$project['id']]['bast'])){
-                                                                if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
-                                                                    $status = "Retensi";
-                                                                }
-                                                            }
-
-                                                            // Invoice IV
-                                                            if(!empty($projectdata[$project['id']]['bast'])){
-                                                            if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) {
-                                                                    if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
-                                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
-                                                                        $progress   = "100";
-                                                                    }
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </p>
-                                                    </div>
-                                                <?php } ?>
-                                            </div>
-                                            <hr class="uk-margin">
-                                        </div>
-                                        <?php if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['inv4'])) { ?>
-                                            <script>
-                                                $(document).ready(function() {
-
-                                                    var proid = <?= $project['id'] ?>;
-                                                    var today = new Date();
-                                                    var dateline = new Date("<?= $projectdata[$project['id']]['dateline'] ?>");
-                                                    var inv4 = "<?= $projectdata[$project['id']]['project']['inv4']; ?>";
-                                                    var progress = "<?= (int)$progress ?>"
-
-                                                    if (inv4 == '' && today != '' && dateline != '' && progress >= 95 && today > dateline) {
-                                                        $.ajax({
-                                                            url: "project/inv4/" + proid,
-                                                            method: "POST",
-                                                            data: {
-                                                                id: proid,
-                                                                dateline: "<?= $projectdata[$project['id']]['dateline'] ?>",
-                                                            },
-                                                            dataType: "json",
-                                                            error: function() {
-                                                                console.log('error', arguments);
-                                                            },
-                                                            success: function(data) {
-                                                                console.log('success', arguments);
-                                                                console.log(data);
-                                                            }
-                                                        });
-                                                    } else {
-                                                        console.log("nothing");
-                                                    }
-                                                });
-                                            </script>
-                                        <?php } ?>
-                                        <!-- End Of Invoice -->
+                                                            });
+                                                        } else {
+                                                            console.log("nothing");
+                                                        }
+                                                    });
+                                                </script>
+                                            <?php } ?>
+                                            <!-- End Of Invoice -->
 
                                         <!-- SPK -->
                                         <div class="uk-width-1-1">
@@ -1273,8 +1439,194 @@
                                     </div>
                                 </div>
                             </div>
+                                            <!-- SPK -->
+                                            <div class="uk-width-1-1">
+                                                <div class="uk-child-width-1-2 uk-margin-remove-bottom" uk-grid>
+                                                    <div>
+                                                        <div class="uk-margin-remove-bottom">
+                                                            <h4 class="uk-width-1-1">File SPK</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                            <div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-margin-remove-top" uk-grid>
+                                                    <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                        <div class="uk-width-1-1">
+                                                            <!-- SPK -->
+                                                            <p class="" uk-margin>
+                                                                <?php
+                                                                if(!empty($projectdata[$project['id']]['project'])){
+                                                                    if ($projectdata[$project['id']]['project']['status_spk'] === null) {
+                                                                        echo "<a class='uk-button uk-button-primary uk-margin-remove-top' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                                        // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
+                                                                    } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                                                        echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                                        // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                                    } else {
+                                                                        echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . "' target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                                <hr class="uk-margin">
+                                            </div>
+                                            <!-- End Of SPK -->
+
+                                            <!-- Bukti Pembayaran -->
+                                            <div class="uk-width-1-1 uk-margin-bottom-remove">
+                                                <div class="uk-child-width-1-2" uk-grid>
+                                                    <div>
+                                                        <h4 class="uk-width-1-1">Bukti Pembayaran</h4>
+                                                        <button class="uk-button uk-button-primary" uk-toggle="target: #modal-bukti-pembayaran<?= $project['id'] ?>">Upload Bukti Pembayaran</button>
+                                                    </div>
+                                                    <div>
+                                                        <div class="uk-child-width-1-1 uk-text-right" uk-grid>
+                                                            <div>
+                                                                <div id="containerbtnbuktipembayaran<?= $project['id'] ?>"><span uk-icon="icon: chevron-down; ratio: 2" id="btndownbuktipembayaran<?= $project['id'] ?>"></div>
+                                                                <div id="containerbtnupbuktipembayaran<?= $project['id'] ?>" hidden><span uk-icon="icon: chevron-up; ratio: 2" id="btnupbuktipembayaran<?= $project['id'] ?>"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+
+                                            <div id="contentbuktipembayaran<?= $project['id'] ?>" hidden>
+                                                <div class="uk-child-width-1-6 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                                    <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
+                                                        <div>
+                                                            <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
+                                                                <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
+                                                                <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                                <div class="uk-position-center uk-transition-fade">
+                                                                    <div class="uk-overlay">
+                                                                        <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+
+                                                            <script>
+                                                                // Date In Indonesia
+                                                                var publishupdate   = "<?= $payproof['created_at'] ?>";
+                                                                var thatdate        = publishupdate.split( /[- :]/ );
+                                                                thatdate[1]--;
+                                                                var publishthatdate = new Date( ...thatdate );
+                                                                var publishyear     = publishthatdate.getFullYear();
+                                                                var publishmonth    = publishthatdate.getMonth();
+                                                                var publishdate     = publishthatdate.getDate();
+                                                                var publishday      = publishthatdate.getDay();
+
+                                                                switch(publishday) {
+                                                                    case 0: publishday     = "Minggu"; break;
+                                                                    case 1: publishday     = "Senin"; break;
+                                                                    case 2: publishday     = "Selasa"; break;
+                                                                    case 3: publishday     = "Rabu"; break;
+                                                                    case 4: publishday     = "Kamis"; break;
+                                                                    case 5: publishday     = "Jum'at"; break;
+                                                                    case 6: publishday     = "Sabtu"; break;
+                                                                }
+                                                                switch(publishmonth) {
+                                                                    case 0: publishmonth   = "Januari"; break;
+                                                                    case 1: publishmonth   = "Februari"; break;
+                                                                    case 2: publishmonth   = "Maret"; break;
+                                                                    case 3: publishmonth   = "April"; break;
+                                                                    case 4: publishmonth   = "Mei"; break;
+                                                                    case 5: publishmonth   = "Juni"; break;
+                                                                    case 6: publishmonth   = "Juli"; break;
+                                                                    case 7: publishmonth   = "Agustus"; break;
+                                                                    case 8: publishmonth   = "September"; break;
+                                                                    case 9: publishmonth   = "Oktober"; break;
+                                                                    case 10: publishmonth  = "November"; break;
+                                                                    case 11: publishmonth  = "Desember"; break;
+                                                                }
+
+                                                                var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                                document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
+                                                            </script>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <!-- Bukti Pembayaran End -->
+
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $("span[id='btndown<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='content<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btnup<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtn<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='content<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnup<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btndownproduksi<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                    });
+
+                                                    $("span[id='btnupproduksi<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btndownbuktipembayaran<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnupbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtnbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='contentbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                                    });
+
+                                                    $("span[id='btnupbuktipembayaran<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnupbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btndownsph<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btnupsph<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnsph<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnupsph<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btndowndsn<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                    $("span[id='btnupdsn<?= $project['id'] ?>']").click(function() {
+                                                        $("div[id='containerbtndsn<?= $project['id'] ?>']").attr("hidden", false);
+                                                        $("div[id='contentdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                        $("div[id='containerbtnupdsn<?= $project['id'] ?>']").attr("hidden", true);
+                                                    });
+
+                                                });
+                                            </script>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                <?php } ?>
+                    <?php } ?>
                 <?php } ?>
             <?php } else { ?>
                 <div class="uk-text-center uk-text-italic">Data tidak Ditemukan.</div>
@@ -1697,6 +2049,175 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Modal Bukti Pembayaran -->
+                        <div id="modal-bukti-pembayaran<?= $project['id'] ?>" uk-modal>
+                            <div class="uk-modal-dialog">
+                                <button class="uk-modal-close-default" type="button" uk-close></button>
+                                <div class="uk-modal-header">
+                                    <h2 class="uk-modal-title">Unggah File Bukti Pembayaran</h2>
+                                </div>
+                                <div class="uk-modal-body">
+                                    <form class="uk-form-stacked" action="home/buktipembayaran/<?= $project['id'] ?>" method="post">
+                                        <div class="uk-margin" id="image-container-createbuktipembayaran-<?= $project['id'] ?>">
+                                            <label class="uk-form-label" for="photocreate">Kirim File Bukti Pembayaran</label>
+                                            <div id="image-containerbuktipembayaran-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatebuktipembayaran<?= $project['id'] ?>" name="buktipembayaran" hidden />
+                                                <div id="js-upload-createbuktipembayaran-<?= $project['id'] ?>" class="js-upload-createbuktipembayaran-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createbuktipembayaran-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        </div>
+
+                                        <script type="text/javascript">
+                                            // Upload Bukti Pembayaran
+                                            var bar = document.getElementById('js-progressbar-createbuktipembayaran-<?= $project['id'] ?>');
+
+                                            UIkit.upload('.js-upload-createbuktipembayaran-<?= $project['id'] ?>', {
+                                                url: 'upload/buktipembayaran',
+                                                multiple: false,
+                                                name: 'uploads',
+                                                param: {
+                                                    lorem: 'ipsum'
+                                                },
+                                                method: 'POST',
+                                                type: 'json',
+
+                                                beforeSend: function() {
+                                                    console.log('beforeSend', arguments);
+                                                },
+                                                beforeAll: function() {
+                                                    console.log('beforeAll', arguments);
+                                                },
+                                                load: function() {
+                                                    console.log('load', arguments);
+                                                },
+                                                error: function() {
+                                                    console.log('error', arguments);
+                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                    alert(error);
+                                                },
+
+                                                complete: function() {
+                                                    console.log('complete', arguments);
+
+                                                    var filename = arguments[0].response;
+
+                                                    if (document.getElementById('display-container-createbuktipembayaran-<?= $project['id'] ?>')) {
+                                                        document.getElementById('display-container-createbuktipembayaran-<?= $project['id'] ?>').remove();
+                                                    };
+
+                                                    document.getElementById('photocreatebuktipembayaran<?= $project['id'] ?>').value = filename;
+
+                                                    var imgContainer = document.getElementById('image-container-createbuktipembayaran-<?= $project['id'] ?>');
+
+                                                    var displayContainer = document.createElement('div');
+                                                    displayContainer.setAttribute('id', 'display-container-createbuktipembayaran-<?= $project['id'] ?>');
+                                                    displayContainer.setAttribute('class', 'uk-inline uk-width-1-2 uk-widht-1-3@m');
+
+                                                    var displayImg = document.createElement('div');
+                                                    displayImg.setAttribute('uk-lightbox', 'animation: fade');
+                                                    displayImg.setAttribute('class', 'uk-inline');
+
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/bukti/pembayaran/' + filename);
+
+                                                    var image = document.createElement('img');
+                                                    image.setAttribute('src', 'img/bukti/pembayaran/' + filename);
+
+                                                    var closeContainer = document.createElement('div');
+                                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                    var closeButton = document.createElement('a');
+                                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                                    closeButton.setAttribute('onClick', 'removeImgCreatebuktipembayaran<?= $project['id'] ?>()');
+                                                    closeButton.setAttribute('uk-icon', 'close');
+
+                                                    closeContainer.appendChild(closeButton);
+                                                    displayContainer.appendChild(displayImg);
+                                                    displayContainer.appendChild(closeContainer);
+                                                    link.appendChild(image);
+                                                    displayImg.appendChild(link);
+                                                    imgContainer.appendChild(displayContainer);
+
+                                                    document.getElementById('js-upload-createbuktipembayaran-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                },
+
+                                                loadStart: function(e) {
+                                                    console.log('loadStart', arguments);
+
+                                                    bar.removeAttribute('hidden');
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                progress: function(e) {
+                                                    console.log('progress', arguments);
+
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                loadEnd: function(e) {
+                                                    console.log('loadEnd', arguments);
+
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                completeAll: function() {
+                                                    console.log('completeAll', arguments);
+
+                                                    setTimeout(function() {
+                                                        bar.setAttribute('hidden', 'hidden');
+                                                    }, 1000);
+
+                                                    alert('Data Berhasil Terunggah');
+                                                }
+                                            });
+
+                                            function removeImgCreatebuktipembayaran<?= $project['id'] ?>() {
+                                                $.ajax({
+                                                    type: 'post',
+                                                    url: 'upload/removebuktipembayaran',
+                                                    data: {
+                                                        'buktipembayaran': document.getElementById('photocreatebuktipembayaran<?= $project['id'] ?>').value
+                                                    },
+                                                    dataType: 'json',
+
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+
+                                                    success: function() {
+                                                        console.log('success', arguments);
+
+                                                        var pesan = arguments[0][1];
+
+                                                        document.getElementById('display-container-createbuktipembayaran-<?= $project['id'] ?>').remove();
+                                                        document.getElementById('photocreatebuktipembayaran<?= $project['id'] ?>').value = '';
+
+                                                        alert(pesan);
+
+                                                        document.getElementById('js-upload-createbuktipembayaran-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                    }
+                                                });
+                                            };
+                                        </script>
+                                        <div class="uk-modal-footer uk-text-center">
+                                            <button class="uk-button uk-button-primary" type="submit">Kirim</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Bukti Pembayaran End -->
                     </div>
                 <?php }
                 }

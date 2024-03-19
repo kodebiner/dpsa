@@ -1885,6 +1885,215 @@
                                         </table>
                                     </div>
 
+                                        <!-- Bukti Pengiriman -->
+                                        <div class="uk-margin" id="image-container-createbuktipengiriman-<?= $project['id'] ?>">
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate" style="text-transform: uppercase;">Bukti Pengiriman</label>
+                                            <div class="uk-margin uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                                <?php foreach($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
+                                                    <div>
+                                                        <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
+                                                            <img src="img/bukti/pengiriman/<?= $sendproof['file'] ?>" alt="<?= $sendproof['file'] ?>" class="uk-transition-opaque">
+                                                            <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                            <div class="uk-position-center uk-transition-fade">
+                                                                <div class="uk-overlay">
+                                                                    <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="pengiriman<?= $sendproof['id'] ?>"></div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <script>
+                                                            // Date In Indonesia
+                                                            var publishupdate   = "<?= $sendproof['created_at'] ?>";
+                                                            var thatdate        = publishupdate.split( /[- :]/ );
+                                                            thatdate[1]--;
+                                                            var publishthatdate = new Date( ...thatdate );
+                                                            var publishyear     = publishthatdate.getFullYear();
+                                                            var publishmonth    = publishthatdate.getMonth();
+                                                            var publishdate     = publishthatdate.getDate();
+                                                            var publishday      = publishthatdate.getDay();
+
+                                                            switch(publishday) {
+                                                                case 0: publishday     = "Minggu"; break;
+                                                                case 1: publishday     = "Senin"; break;
+                                                                case 2: publishday     = "Selasa"; break;
+                                                                case 3: publishday     = "Rabu"; break;
+                                                                case 4: publishday     = "Kamis"; break;
+                                                                case 5: publishday     = "Jum'at"; break;
+                                                                case 6: publishday     = "Sabtu"; break;
+                                                            }
+                                                            switch(publishmonth) {
+                                                                case 0: publishmonth   = "Januari"; break;
+                                                                case 1: publishmonth   = "Februari"; break;
+                                                                case 2: publishmonth   = "Maret"; break;
+                                                                case 3: publishmonth   = "April"; break;
+                                                                case 4: publishmonth   = "Mei"; break;
+                                                                case 5: publishmonth   = "Juni"; break;
+                                                                case 6: publishmonth   = "Juli"; break;
+                                                                case 7: publishmonth   = "Agustus"; break;
+                                                                case 8: publishmonth   = "September"; break;
+                                                                case 9: publishmonth   = "Oktober"; break;
+                                                                case 10: publishmonth  = "November"; break;
+                                                                case 11: publishmonth  = "Desember"; break;
+                                                            }
+
+                                                            var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                            document.getElementById("pengiriman<?= $sendproof['id'] ?>").innerHTML = publishfulldate;
+                                                        </script>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+
+                                            <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatebuktipengiriman<?= $project['id'] ?>" name="buktipengiriman" hidden />
+                                                <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas bukti pengiriman disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createbuktipengiriman-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        </div>
+
+                                        <script type="text/javascript">
+                                            // Upload Bukti Pembayaran
+                                            var bar = document.getElementById('js-progressbar-createbuktipengiriman-<?= $project['id'] ?>');
+
+                                            UIkit.upload('.js-upload-createbuktipengiriman-<?= $project['id'] ?>', {
+                                                url: 'upload/buktipengiriman',
+                                                multiple: false,
+                                                name: 'uploads',
+                                                param: {
+                                                    lorem: 'ipsum'
+                                                },
+                                                method: 'POST',
+                                                type: 'json',
+
+                                                beforeSend: function() {
+                                                    console.log('beforeSend', arguments);
+                                                },
+                                                beforeAll: function() {
+                                                    console.log('beforeAll', arguments);
+                                                },
+                                                load: function() {
+                                                    console.log('load', arguments);
+                                                },
+                                                error: function() {
+                                                    console.log('error', arguments);
+                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                    alert(error);
+                                                },
+
+                                                complete: function() {
+                                                    console.log('complete', arguments);
+
+                                                    var filename = arguments[0].response;
+
+                                                    if (document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>')) {
+                                                        document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>').remove();
+                                                    };
+
+                                                    document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value = filename;
+
+                                                    var imgContainer = document.getElementById('image-container-createbuktipengiriman-<?= $project['id'] ?>');
+
+                                                    var displayContainer = document.createElement('div');
+                                                    displayContainer.setAttribute('id', 'display-container-createbuktipengiriman-<?= $project['id'] ?>');
+                                                    displayContainer.setAttribute('class', 'uk-inline uk-width-1-2 uk-width-1-5@m uk-margin');
+
+                                                    var displayImg = document.createElement('div');
+                                                    displayImg.setAttribute('uk-lightbox', 'animation: fade');
+                                                    displayImg.setAttribute('class', 'uk-inline');
+
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/bukti/pengiriman/' + filename);
+
+                                                    var image = document.createElement('img');
+                                                    image.setAttribute('src', 'img/bukti/pengiriman/' + filename);
+
+                                                    var closeContainer = document.createElement('div');
+                                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                    var closeButton = document.createElement('a');
+                                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                                    closeButton.setAttribute('onClick', 'removeImgCreatebuktipengiriman<?= $project['id'] ?>()');
+                                                    closeButton.setAttribute('uk-icon', 'close');
+
+                                                    closeContainer.appendChild(closeButton);
+                                                    displayContainer.appendChild(displayImg);
+                                                    displayContainer.appendChild(closeContainer);
+                                                    link.appendChild(image);
+                                                    displayImg.appendChild(link);
+                                                    imgContainer.appendChild(displayContainer);
+
+                                                    document.getElementById('js-upload-createbuktipengiriman-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                },
+
+                                                loadStart: function(e) {
+                                                    console.log('loadStart', arguments);
+
+                                                    bar.removeAttribute('hidden');
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                progress: function(e) {
+                                                    console.log('progress', arguments);
+
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                loadEnd: function(e) {
+                                                    console.log('loadEnd', arguments);
+
+                                                    bar.max = e.total;
+                                                    bar.value = e.loaded;
+                                                },
+
+                                                completeAll: function() {
+                                                    console.log('completeAll', arguments);
+
+                                                    setTimeout(function() {
+                                                        bar.setAttribute('hidden', 'hidden');
+                                                    }, 1000);
+
+                                                    alert('Data Berhasil Terunggah');
+                                                }
+                                            });
+
+                                            function removeImgCreatebuktipengiriman<?= $project['id'] ?>() {
+                                                $.ajax({
+                                                    type: 'post',
+                                                    url: 'upload/removebuktipengiriman',
+                                                    data: {
+                                                        'buktipengiriman': document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value
+                                                    },
+                                                    dataType: 'json',
+
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+
+                                                    success: function() {
+                                                        console.log('success', arguments);
+
+                                                        var pesan = arguments[0][1];
+
+                                                        document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>').remove();
+                                                        document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value = '';
+
+                                                        alert(pesan);
+
+                                                        document.getElementById('js-upload-createbuktipengiriman-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                    }
+                                                });
+                                            };
+                                        </script>
+                                        <!-- End Of Bukti Pengiriman -->
+
                                     <!-- Serah Terima -->
                                     <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
                                         <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA</label>
@@ -2950,13 +3159,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice4<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'"; } ?> name="pphinvoice4<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'"; } ?> name="pphinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2965,13 +3170,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice4<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'"; } ?> name="emailinvoice4<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'"; } ?> name="emailinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3122,6 +3323,87 @@
                                 });
                             </script>
                             <!-- Finance Section End -->
+
+                            <!-- Bukti Pembayarn Section -->
+                            <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
+                                <div>
+                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Bukti Pembayaran</div>
+                                </div>
+                                <div class="uk-text-right">
+                                    <a class="uk-link-reset uk-icon-button" id="togglebuktipembayaran<?= $project['id'] ?>" uk-toggle="target: .togglebuktipembayaran<?= $project['id'] ?>"><span class="uk-light" id="closebuktipembayaran<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openbuktipembayaran<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                </div>
+                            </div>
+
+                            <div class="togglebuktipembayaran<?= $project['id'] ?>" hidden>
+                                <div class="uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                    <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
+                                        <div>
+                                            <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
+                                                <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
+                                                <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
+                                                <div class="uk-position-center uk-transition-fade">
+                                                    <div class="uk-overlay">
+                                                        <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+
+                                            <script>
+                                                // Date In Indonesia
+                                                var publishupdate   = "<?= $payproof['created_at'] ?>";
+                                                var thatdate        = publishupdate.split( /[- :]/ );
+                                                thatdate[1]--;
+                                                var publishthatdate = new Date( ...thatdate );
+                                                var publishyear     = publishthatdate.getFullYear();
+                                                var publishmonth    = publishthatdate.getMonth();
+                                                var publishdate     = publishthatdate.getDate();
+                                                var publishday      = publishthatdate.getDay();
+
+                                                switch(publishday) {
+                                                    case 0: publishday     = "Minggu"; break;
+                                                    case 1: publishday     = "Senin"; break;
+                                                    case 2: publishday     = "Selasa"; break;
+                                                    case 3: publishday     = "Rabu"; break;
+                                                    case 4: publishday     = "Kamis"; break;
+                                                    case 5: publishday     = "Jum'at"; break;
+                                                    case 6: publishday     = "Sabtu"; break;
+                                                }
+                                                switch(publishmonth) {
+                                                    case 0: publishmonth   = "Januari"; break;
+                                                    case 1: publishmonth   = "Februari"; break;
+                                                    case 2: publishmonth   = "Maret"; break;
+                                                    case 3: publishmonth   = "April"; break;
+                                                    case 4: publishmonth   = "Mei"; break;
+                                                    case 5: publishmonth   = "Juni"; break;
+                                                    case 6: publishmonth   = "Juli"; break;
+                                                    case 7: publishmonth   = "Agustus"; break;
+                                                    case 8: publishmonth   = "September"; break;
+                                                    case 9: publishmonth   = "Oktober"; break;
+                                                    case 10: publishmonth  = "November"; break;
+                                                    case 11: publishmonth  = "Desember"; break;
+                                                }
+
+                                                var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
+                                                document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
+                                            </script>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <script>
+                                // Dropdown
+                                document.getElementById('togglebuktipembayaran<?= $project['id'] ?>').addEventListener('click', function() {
+                                    if (document.getElementById('closebuktipembayaran<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                        document.getElementById('closebuktipembayaran<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('openbuktipembayaran<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    } else {
+                                        document.getElementById('openbuktipembayaran<?= $project['id'] ?>').removeAttribute('hidden');
+                                        document.getElementById('closebuktipembayaran<?= $project['id'] ?>').setAttribute('hidden', '');
+                                    }
+                                });
+                            </script>
+                            <!-- Bukti Pembayarn Section End -->
 
                             <div class="uk-modal-footer uk-text-right">
                                 <?php if ($authorize->hasPermission('admin.project.delete', $uid)) { ?>

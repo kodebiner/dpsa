@@ -16,6 +16,7 @@ use App\Models\ReferensiModel;
 use App\Models\UserModel;
 use App\Models\CustomRabModel;
 use App\Models\GconfigModel;
+use App\Models\BuktiModel;
 use App\Models\LogModel;
 
 class Project extends BaseController
@@ -51,6 +52,7 @@ class Project extends BaseController
             $InvoiceModel           = new InvoiceModel();
             $ReferensiModel         = new ReferensiModel();
             $CustomRabModel         = new CustomRabModel();
+            $BuktiModel             = new BuktiModel();
             $LogModel               = new LogModel();
 
             // Populating Data
@@ -330,10 +332,18 @@ class Project extends BaseController
 
                     // PIC
                     $projectdata[$project['id']]['pic']         = $users;
+
+                    // Bukti Pembayaran
+                    $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
+
+                    // Bukti Pengiriman
+                    $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                 }
             } else {
                 $rabs           = [];
             }
+            
+            // Parsing Data To View
             $data                   = $this->data;
             $data['title']          = "Proyek";
             $data['description']    = "Data Proyek";
@@ -542,6 +552,7 @@ class Project extends BaseController
             $BastModel          = new BastModel();
             $InvoiceModel       = new InvoiceModel();
             $CustomRabModel     = new CustomRabModel();
+            $BuktiModel         = new BuktiModel();
             $LogModel           = new LogModel();
 
             // initialize
@@ -1031,6 +1042,19 @@ class Project extends BaseController
                     'tanggal_bast'  => $tgltempobast,
                 ];
                 $BastModel->save($bastcreate);
+            }
+
+            // Bukti Pengiriman Data
+            if (!empty($input['buktipengiriman'])) {
+                $senddate       = date_create();
+                $tanggalkirim   = date_format($senddate, 'Y-m-d H:i:s');
+                $databukti  = [
+                    'projectid'     => $id,
+                    'file'          => $input['buktipengiriman'],
+                    'status'        => 1,
+                    'created_at'    => $tanggalkirim,
+                ];
+                $BuktiModel->insert($databukti);
             }
 
             // Project Data

@@ -14,6 +14,7 @@ use App\Models\MdlModel;
 use App\Models\DesignModel;
 use App\Models\LogModel;
 use App\Models\ProductionModel;
+use App\Models\BuktiModel;
 
 class Home extends BaseController
 {
@@ -46,7 +47,6 @@ class Home extends BaseController
             $MdlModel       = new MdlModel();
             $DesignModel    = new DesignModel();
 
-
             // Populating data
             $input = $this->request->getGet();
 
@@ -65,7 +65,6 @@ class Home extends BaseController
             $offset = ($page - 1) * $perpage;
 
             if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
-
                 // New Client Data 
                 $clients = $this->db->table('company')->where('deleted_at', null);
                 $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
@@ -98,7 +97,6 @@ class Home extends BaseController
 
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client pusat') {
-
                 // New Client Pusat Function
                 $clients = array();
 
@@ -144,13 +142,13 @@ class Home extends BaseController
                 $BastModel          = new BastModel();
                 $ProductionModel    = new ProductionModel();
                 $CustomRabModel     = new CustomRabModel();
+                $BuktiModel         = new BuktiModel();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
                 } else {
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->paginate($perpage, 'projects');
                 }
-
 
                 $projectdata = [];
                 $projectdesign = [];
@@ -328,6 +326,12 @@ class Home extends BaseController
                             $projectdata[$project['id']]['dateline'] = '';
                             $projectdata[$project['id']]['now'] = '';
                         }
+
+                        // Bukti Pembayaran
+                        $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
+    
+                        // Bukti Pengiriman
+                        $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                     }
                 }
 
@@ -379,6 +383,7 @@ class Home extends BaseController
             $BastModel          = new BastModel();
             $ProductionModel    = new ProductionModel();
             $CustomRabModel     = new CustomRabModel();
+            $BuktiModel         = new BuktiModel();
 
             // Populating Data
             $input = $this->request->getGet();
@@ -572,6 +577,12 @@ class Home extends BaseController
                         $projectdata[$project['id']]['dateline'] = '';
                         $projectdata[$project['id']]['now'] = '';
                     }
+
+                    // Bukti Pembayaran
+                    $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
+
+                    // Bukti Pengiriman
+                    $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                 }
             }
 
@@ -715,6 +726,41 @@ class Home extends BaseController
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
+
+    public function buktipembayaran($id)
+    {
+        // Calling Models
+        $BuktiModel   = new BuktiModel();
+
+        $input = $this->request->getPost();
+
+        // Validation Rules
+        $rules = [
+            'buktipembayaran' => [
+                'label'  => 'Bukti Pembayaran',
+                'rules'  => 'required',
+                'errors' => [
+                    'required'      => '{field} Belum Di Unggah',
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+        
+        $date       = date_create();
+        $tanggal    = date_format($date, 'Y-m-d H:i:s');
+        $databukti  = [
+            'projectid'     => $id,
+            'file'          => $input['buktipembayaran'],
+            'status'        => 0,
+            'created_at'    => $tanggal,
+        ];
+        $BuktiModel->insert($databukti);
+
+        return redirect()->back()->with('message', 'Bukti telah tekirim');
     }
 
     public function installation()
