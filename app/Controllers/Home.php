@@ -515,7 +515,7 @@ class Home extends BaseController
                             $progresdata[] = [
                                 'id'    => $progresval['id'], // mdlid
                                 'proid' => $progresval['proid'],
-                                'val'   => (($progresval['price'] / $total) * 65) / 7,
+                                'val'   => (($progresval['price'] / $total) * 65) / 8,
                             ];
                             $datamdlid[] = $progresval['id'];
                         }
@@ -924,6 +924,21 @@ class Home extends BaseController
         $authorize->addPermissionToGroup('finance.project.edit', 'finance');
         $authorize->addPermissionToGroup('client.read', 'finance');
         $authorize->addPermissionToGroup('finance.project.edit', 'superuser');
+
+        // Redirect to Login
+        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
+    }
+
+    public function updateadmin()
+    {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        // Prebuild permissions
+        $authorize->addPermissionToGroup('production.project.edit', 'admin');
+        $authorize->addPermissionToGroup('marketing.project.edit', 'admin');
+        $authorize->addPermissionToGroup('design.project.edit', 'admin');
+        $authorize->addPermissionToGroup('finance.project.edit', 'admin');
 
         // Redirect to Login
         return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');

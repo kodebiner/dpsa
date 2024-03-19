@@ -1246,14 +1246,19 @@
                                                         <p class="" uk-margin>
                                                             <?php
                                                             if(!empty($projectdata[$project['id']]['project'])){
-                                                                if ($projectdata[$project['id']]['project']['status_spk'] === null) {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-remove-top' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                                    // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
-                                                                } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                                                // if ($projectdata[$project['id']]['project']['status_spk'] === null) {
+                                                                //     echo "<a class='uk-button uk-button-primary uk-margin-remove-top' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                                //     // echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
+                                                                // } elseif ($projectdata[$project['id']]['project']['status_spk'] === "0") {
+                                                                //     echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                                //     // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
+                                                                // } else {
+                                                                //     echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . "' target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                                // }
+                                                                if($projectdata[$project['id']]['project']['spk'] != null){
                                                                     echo "<button class='uk-button uk-button-primary uk-margin-right' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</button><a class='uk-button uk-button-secondary' target='_blank' href='img/spk/" . $spkpro . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
-                                                                    // echo "<a class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon: upload; ratio: 1.2'></span>Upload SPK</a>";
-                                                                } else {
-                                                                    echo "<a class='uk-button uk-button-secondary' href='img/spk/" . $spkpro . "' target='_blank'><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPK</a>";
+                                                                }elseif($projectdata[$project['id']]['project']['spk'] === null){
+                                                                    echo "<button class='uk-button uk-button-primary' uk-toggle='target: #modal-spk" . $project['id'] . "'>Upload SPK</button>";
                                                                 }
                                                             }
                                                             ?>

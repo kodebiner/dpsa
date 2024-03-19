@@ -987,9 +987,7 @@
                                                                             <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
                                                                         </td>
                                                                         <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]">
-                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
-                                                                            " "; ?>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');" "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -1731,13 +1729,15 @@
                                                     <th class="uk-text-center">Packing</th>
                                                     <th class="uk-text-center">Pengiriman</th>
                                                     <th class="uk-text-center">Setting</th>
+                                                    <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                     <th class="uk-text-center">PIC Produksi</th>
+                                                    <?php } ?>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
-                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                         <tr>
                                                             <td><?= $production['name'] ?></td>
                                                             <td class="uk-text-center">
@@ -1796,25 +1796,10 @@
                                                                     <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
                                                                 <?php } ?>
                                                             </td>
-                                                            <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
+                                                            <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                                 <td class="uk-text-center">
                                                                     <div class="uk-margin">
                                                                         <select class="uk-select" name="picpro[<?= $production['id'] ?>]">
-                                                                            <option value="">Pilih PIC</option>
-                                                                            <?php if(!empty($picpro)) { 
-                                                                                foreach ($picpro as $propic) {?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
-                                                                                <?php }
-                                                                            }else{ ?>
-                                                                                <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                            <?php }else { ?>
-                                                                <td class="uk-text-center">
-                                                                    <div class="uk-margin">
-                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]" disabled>
                                                                             <option value="">Pilih PIC</option>
                                                                             <?php if(!empty($picpro)) { 
                                                                                 foreach ($picpro as $propic) {?>
@@ -1874,20 +1859,22 @@
                                                                     <div uk-icon="check"></div>
                                                                 <?php } ?>
                                                             </td>
-                                                            <td class="uk-text-center">
-                                                                <div class="uk-margin">
-                                                                    <select class="uk-select" name="picpro<?= $production['id'] ?>" disabled>
-                                                                        <option value="">Pilih PIC</option>
-                                                                        <?php if(!empty($picpro)) { 
-                                                                            foreach ($picpro as $propic) {?>
-                                                                                <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
-                                                                            <?php }
-                                                                        }else{ ?>
-                                                                            <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </div>
-                                                            </td>
+                                                            <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                                <td class="uk-text-center">
+                                                                    <div class="uk-margin">
+                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]">
+                                                                            <option value="">Pilih PIC</option>
+                                                                            <?php if(!empty($picpro)) { 
+                                                                                foreach ($picpro as $propic) {?>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                                <?php }
+                                                                            }else{ ?>
+                                                                                <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                            <?php } ?>
                                                             <td class="uk-text-center">
                                                                 <div><?= $production['percentages'] ?> %</div>
                                                             </td>
@@ -1965,17 +1952,9 @@
                                                     <div class="uk-inline">
                                                         <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
-                                                                                                                echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                            } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo "value='" . date_format($tempo, 'm/d/Y') . "'";} ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         <?php } else { ?>
-                                                            <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
-                                                                                echo date_format($tempo, 'm/d/Y');
-                                                                            } else {
-                                                                                echo date('m/d/Y');
-                                                                            } ?></span>
+                                                            <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo date_format($tempo, 'm/d/Y');} else {echo date('m/d/Y');} ?></span>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2322,7 +2301,8 @@
 
                                     <!-- Invoice Generate Button -->
                                     <div class="uk-width-1-1">
-                                        <p class="uk-margin-remove-top" uk-margin>
+                                        <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
+                                        <p class="uk-margin" uk-margin>
                                             <?php
                                             // Invoice I
                                             if(!empty($project)){
@@ -2510,6 +2490,72 @@
                                                         <?php } ?>
                                                     </div>
                                                 </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">Upload Invoice I</label>
+                                                    <div class="uk-form-controls">:
+                                                        <div class="js-upload" uk-form-custom>
+                                                            <input type="file" multiple>
+                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- BAST -->
+                                                <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
+                                                    <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
+                                                    <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
+                                                        <?php
+                                                            $bastid = "";
+                                                            if (!empty($bast) && $bast['status'] === "1") {
+                                                                $bastid = $bast['id']; ?>
+                                                                <div id="bast-file-<?= $bast['id'] ?>">
+                                                                    <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                        <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                        <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
+                                                                    </div>
+                                                                </div>
+                                                                <script>
+                                                                    function removeCardFilebast<?= $bast['id']; ?>() {
+                                                                        let text = "Hapus file BAST ini?";
+                                                                        if (confirm(text) == true) {
+                                                                            $.ajax({
+                                                                                url: "project/removesertrim/<?= $bast['id'] ?>",
+                                                                                method: "POST",
+                                                                                data: {
+                                                                                    bast: <?= $bast['id'] ?>,
+                                                                                },
+                                                                                dataType: "json",
+                                                                                error: function() {
+                                                                                    console.log('error', arguments);
+                                                                                },
+                                                                                success: function() {
+                                                                                    console.log('success', arguments);
+                                                                                    alert('data berhasil di hapus');
+                                                                                    $("#bast-file-<?= $bast['id'] ?>").remove();
+                                                                                },
+                                                                            })
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            <?php }?>
+                                                    </div>
+                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                        <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
+                                                            <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
+                                                            <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
+                                                                <span uk-icon="icon: cloud-upload"></span>
+                                                                <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                                <div uk-form-custom>
+                                                                    <input type="file">
+                                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                                </div>
+                                                            </div>
+                                                            <progress id="js-progressbar-createbast-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                                <!-- End Of BAST -->
 
                                             </div>
                                         </div>

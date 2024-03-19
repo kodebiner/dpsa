@@ -260,7 +260,7 @@ class Project extends BaseController
                             $progresdata[] = [
                                 'id'    => $progresval['id'], // mdlid
                                 'proid' => $progresval['proid'],
-                                'val'   => (($progresval['price'] / $total) * 65) / 7,
+                                'val'   => (($progresval['price'] / $total) * 65) / 8,
                             ];
                             $datamdlid[] = $progresval['id'];
                         }
