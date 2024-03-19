@@ -34,11 +34,11 @@
 
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
-           $progress   = "0";
-           $status     = "Sedang Dalam Proses Persiapan";
+            $progress   = "0";
+            $status     = "Sedang Dalam Proses Persiapan";
             if ($project['type_design'] === "1") {
-                if(!empty($projectdata[$project['id']]['design'])){
-                    
+                if (!empty($projectdata[$project['id']]['design'])) {
+
                     if ($projectdata[$project['id']]['design']['status'] === '0') {
                         $progress = "10";
                         $status = "Menunggu Aprroval Desain";
@@ -53,8 +53,7 @@
                         $progress = "20";
                         $status = "Desain Disetujui";
                     }
-
-                }else{
+                } else {
                     $progress = "10";
                     $status = "Menunggu Desain";
                 }
@@ -113,9 +112,9 @@
                                 </div>
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center match-height">Progress Proyek</h3>
-                                    <div class="uk-text-center">
-                                        <?= $progress ?> %
-                                    </div>
+                                        <div class="uk-text-center">
+                                            <?= $progress ?> %
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -421,16 +420,16 @@
                                 <label class="uk-form-label">PIC Marketing</label>
                                 <div class="uk-form-controls">
                                     <select class="uk-select uk-form-width-medium" name="marketing" required>
-                                    <option value="" selected disabled>Pilih Marketing</option>
-                                        <?php 
-                                            foreach ($marketings as $pic) {
-                                                if ($pic->id === "0") {
-                                                    $selected = 'selected';
-                                                } else {
-                                                    $selected = "";
-                                                }
-                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                            } 
+                                        <option value="" selected disabled>Pilih Marketing</option>
+                                        <?php
+                                        foreach ($marketings as $pic) {
+                                            if ($pic->id === "0") {
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                        }
                                         ?>
                                     </select>
                                 </div>
@@ -438,9 +437,9 @@
                             <!-- End Markerting (PIC) -->
 
                             <div class="uk-modal-footer uk-text-right">
-                            <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
-                                <button class="uk-button uk-button-primary" type="submit">Save</button>
-                            <?php } ?>
+                                <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
+                                    <button class="uk-button uk-button-primary" type="submit">Save</button>
+                                <?php } ?>
                             </div>
                         </form>
                     </div>
@@ -926,208 +925,208 @@
                                     </div>
 
                                     <!-- </?php if ($project['status_spk'] != 1) { ?> -->
-                                        <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                            <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                                                <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                                        <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
-                                                        <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
-                                                    <hr>              
-                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                                        <table class="uk-table uk-table-middle uk-table-divider">
-                                                            <thead>
+                                    <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                        <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                            <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
+                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                <hr>
+                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <table class="uk-table uk-table-middle uk-table-divider">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Status</th>
+                                                                <th>Nama</th>
+                                                                <th>Panjang</th>
+                                                                <th>Lebar</th>
+                                                                <th>Tinggi</th>
+                                                                <th>Volume</th>
+                                                                <th>Satuan</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Jumlah Pesanan</th>
+                                                                <th>Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
                                                                 <tr>
-                                                                    <th>Status</th>
-                                                                    <th>Nama</th>
-                                                                    <th>Panjang</th>
-                                                                    <th>Lebar</th>
-                                                                    <th>Tinggi</th>
-                                                                    <th>Volume</th>
-                                                                    <th>Satuan</th>
-                                                                    <th>Keterangan</th>
-                                                                    <th>Jumlah Pesanan</th>
-                                                                    <th>Harga</th>
+                                                                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
                                                                 </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
+                                                                <?php foreach ($paket['mdl'] as $mdl) { ?>
                                                                     <tr>
-                                                                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
-                                                                    </tr>
-                                                                    <?php foreach ($paket['mdl'] as $mdl) { ?>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <?php
-                                                                                if ($mdl['checked']) {
-                                                                                    $checked = 'checked';
-                                                                                } else {
-                                                                                    $checked = '';
-                                                                                }
-                                                                                ?>
-                                                                                <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
-                                                                            </td>
-                                                                            <td><?= $mdl['name'] ?></td>
-                                                                            <td><?= $mdl['length'] ?></td>
-                                                                            <td><?= $mdl['width'] ?></td>
-                                                                            <td><?= $mdl['height'] ?></td>
-                                                                            <td><?= $mdl['volume'] ?></td>
-                                                                            <td>
-                                                                                <?php
-                                                                                if ($mdl['denomination'] === "1") {
-                                                                                    echo "Unit";
-                                                                                } elseif ($mdl['denomination'] === "2") {
-                                                                                    echo "Meter Lari";
-                                                                                } elseif ($mdl['denomination'] === "3") {
-                                                                                    echo "Meter Persegi";
-                                                                                } elseif ($mdl['denomination'] === "4") {
-                                                                                    echo "Set";
-                                                                                }
-                                                                                ?>
-                                                                            </td>
-                                                                            <td><?= $mdl['keterangan'] ?></td>
-                                                                            <td class="uk-form-controls">
-                                                                                <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
-                                                                            </td>
-                                                                            <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                            <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]">
-                                                                                <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
-                                                                                " "; ?>
-                                                                            </td>
-                                                                        </tr>
-                                                                    <?php } ?>
-                                                                    <script>
-                                                                        function eprice(n) {
-                                                                            var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
-                                                                            var ebaseqty = document.getElementById('eqty[' + n + ']').value;
-                                                                            var epricetd = document.getElementById('eshowprice[' + n + ']');
-                                                                            var echeckbox = document.getElementById('checked[' + n + ']');
-                                                                            var eprojprice = ebaseprice * ebaseqty;
-                                                                            epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
-
-                                                                            if (ebaseqty > 0) {
-                                                                                echeckbox.checked = true;
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($mdl['checked']) {
+                                                                                $checked = 'checked';
                                                                             } else {
-                                                                                echeckbox.checked = false;
+                                                                                $checked = '';
                                                                             }
-                                                                        };
-                                                                    </script>
+                                                                            ?>
+                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
+                                                                        </td>
+                                                                        <td><?= $mdl['name'] ?></td>
+                                                                        <td><?= $mdl['length'] ?></td>
+                                                                        <td><?= $mdl['width'] ?></td>
+                                                                        <td><?= $mdl['height'] ?></td>
+                                                                        <td><?= $mdl['volume'] ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($mdl['denomination'] === "1") {
+                                                                                echo "Unit";
+                                                                            } elseif ($mdl['denomination'] === "2") {
+                                                                                echo "Meter Lari";
+                                                                            } elseif ($mdl['denomination'] === "3") {
+                                                                                echo "Meter Persegi";
+                                                                            } elseif ($mdl['denomination'] === "4") {
+                                                                                echo "Set";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?= $mdl['keterangan'] ?></td>
+                                                                        <td class="uk-form-controls">
+                                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
+                                                                        </td>
+                                                                        <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]">
+                                                                            <?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
+                                                                            " "; ?>
+                                                                        </td>
+                                                                    </tr>
                                                                 <?php } ?>
-                                                                <tr>
-                                                                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
-                                                                </tr>
-                                                                <?php if (!empty($projectdata[$project['id']]['customrab'])) { 
-                                                                    foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
-                                                                            </td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <input type="number" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['price'] ?>" />
-                                                                            </td>
-                                                                        </tr>
-                                                                    <?php }
-                                                                } ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="uk-h4">Tambah Pesanan</div>
-                                                <?php } ?>
+                                                                <script>
+                                                                    function eprice(n) {
+                                                                        var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
+                                                                        var ebaseqty = document.getElementById('eqty[' + n + ']').value;
+                                                                        var epricetd = document.getElementById('eshowprice[' + n + ']');
+                                                                        var echeckbox = document.getElementById('checked[' + n + ']');
+                                                                        var eprojprice = ebaseprice * ebaseqty;
+                                                                        epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
 
-                                                <div class="uk-margin-bottom">
-                                                    <label class="uk-form-label" for="paket">Cari Paket</label>
-                                                    <div class="uk-form-controls">
-                                                        <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Paket">
-                                                    </div>
+                                                                        if (ebaseqty > 0) {
+                                                                            echeckbox.checked = true;
+                                                                        } else {
+                                                                            echeckbox.checked = false;
+                                                                        }
+                                                                    };
+                                                                </script>
+                                                            <?php } ?>
+                                                            <tr>
+                                                                <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
+                                                            </tr>
+                                                            <?php if (!empty($projectdata[$project['id']]['customrab'])) {
+                                                                foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="number" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['price'] ?>" />
+                                                                        </td>
+                                                                    </tr>
+                                                            <?php }
+                                                            } ?>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                                <div class="uk-h4">Tambah Pesanan</div>
+                                            <?php } ?>
 
-                                                <div id="listmdl<?= $project['id'] ?>"></div>
-
-                                                <div id="createCustomRab<?= $project['id'] ?>" class="uk-margin">
-                                                    <div class="uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <label class="uk-form-label" for="custompemesanan">Custom Pemesanan</label>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a onclick="createNewCustomRab(<?= $project['id'] ?>)">+ Tambah Custom Pemesanan</a>
-                                                        </div>
-                                                    </div>
-                                                    <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
-                                                        <div id="createName<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
-                                                        </div>
-                                                        <div id="createPrice<?= $project['id'] ?>0">
-                                                            <input type="number" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
-                                                        </div>
-                                                    </div>
+                                            <div class="uk-margin-bottom">
+                                                <label class="uk-form-label" for="paket">Cari Paket</label>
+                                                <div class="uk-form-controls">
+                                                    <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Paket">
                                                 </div>
-                                                <script type="text/javascript">
-                                                    var createCount = 0;
-
-                                                    function createNewCustomRab(x) {
-                                                        createCount++;
-
-                                                        const createCustomRab = document.getElementById('createCustomRab' + x +'');
-
-                                                        const newCreateCustomRab = document.createElement('div');
-                                                        newCreateCustomRab.setAttribute('id', 'create' + x + '' + createCount);
-                                                        newCreateCustomRab.setAttribute('class', 'uk-margin uk-child-width-auto');
-                                                        newCreateCustomRab.setAttribute('uk-grid', '');
-
-                                                        const createName = document.createElement('div');
-                                                        createName.setAttribute('id', 'createName' + x + '' + createCount);
-
-                                                        const createNameInput = document.createElement('input');
-                                                        createNameInput.setAttribute('type', 'text');
-                                                        createNameInput.setAttribute('class', 'uk-input');
-                                                        createNameInput.setAttribute('placeholder', 'Nama');
-                                                        createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
-                                                        createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
-
-                                                        const createPrice = document.createElement('div');
-                                                        createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
-
-                                                        const createPriceInput = document.createElement('input');
-                                                        createPriceInput.setAttribute('type', 'number');
-                                                        createPriceInput.setAttribute('class', 'uk-input');
-                                                        createPriceInput.setAttribute('placeholder', 'Harga');
-                                                        createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
-                                                        createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
-
-                                                        const createRemove = document.createElement('div');
-                                                        createRemove.setAttribute('id', 'remove' + x + '' + createCount);
-                                                        createRemove.setAttribute('class', 'uk-text-center uk-text-bold uk-text-danger uk-flex uk-flex-middle');
-
-                                                        const createRemoveButton = document.createElement('a');
-                                                        createRemoveButton.setAttribute('onclick', 'createRemove' + x + '(' + createCount + ')');
-                                                        createRemoveButton.setAttribute('class', 'uk-link-reset');
-                                                        createRemoveButton.innerHTML = 'X';
-
-                                                        createName.appendChild(createNameInput);
-                                                        newCreateCustomRab.appendChild(createName);
-                                                        createPrice.appendChild(createPriceInput);
-                                                        newCreateCustomRab.appendChild(createPrice);
-                                                        createRemove.appendChild(createRemoveButton);
-                                                        newCreateCustomRab.appendChild(createRemove);
-                                                        createCustomRab.appendChild(newCreateCustomRab);
-                                                    };
-
-                                                    function createRemove<?= $project['id'] ?>(i) {
-                                                        const createRemoveElement = document.getElementById('create<?= $project['id'] ?>' + i);
-                                                        createRemoveElement.remove();
-                                                    };
-                                                </script>
                                             </div>
-                                        <?php } ?>
+
+                                            <div id="listmdl<?= $project['id'] ?>"></div>
+
+                                            <div id="createCustomRab<?= $project['id'] ?>" class="uk-margin">
+                                                <div class="uk-child-width-1-2" uk-grid>
+                                                    <div>
+                                                        <label class="uk-form-label" for="custompemesanan">Custom Pemesanan</label>
+                                                    </div>
+                                                    <div class="uk-text-right">
+                                                        <a onclick="createNewCustomRab(<?= $project['id'] ?>)">+ Tambah Custom Pemesanan</a>
+                                                    </div>
+                                                </div>
+                                                <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
+                                                    <div id="createName<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
+                                                    </div>
+                                                    <div id="createPrice<?= $project['id'] ?>0">
+                                                        <input type="number" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script type="text/javascript">
+                                                var createCount = 0;
+
+                                                function createNewCustomRab(x) {
+                                                    createCount++;
+
+                                                    const createCustomRab = document.getElementById('createCustomRab' + x + '');
+
+                                                    const newCreateCustomRab = document.createElement('div');
+                                                    newCreateCustomRab.setAttribute('id', 'create' + x + '' + createCount);
+                                                    newCreateCustomRab.setAttribute('class', 'uk-margin uk-child-width-auto');
+                                                    newCreateCustomRab.setAttribute('uk-grid', '');
+
+                                                    const createName = document.createElement('div');
+                                                    createName.setAttribute('id', 'createName' + x + '' + createCount);
+
+                                                    const createNameInput = document.createElement('input');
+                                                    createNameInput.setAttribute('type', 'text');
+                                                    createNameInput.setAttribute('class', 'uk-input');
+                                                    createNameInput.setAttribute('placeholder', 'Nama');
+                                                    createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
+                                                    createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
+
+                                                    const createPrice = document.createElement('div');
+                                                    createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
+
+                                                    const createPriceInput = document.createElement('input');
+                                                    createPriceInput.setAttribute('type', 'number');
+                                                    createPriceInput.setAttribute('class', 'uk-input');
+                                                    createPriceInput.setAttribute('placeholder', 'Harga');
+                                                    createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
+                                                    createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
+
+                                                    const createRemove = document.createElement('div');
+                                                    createRemove.setAttribute('id', 'remove' + x + '' + createCount);
+                                                    createRemove.setAttribute('class', 'uk-text-center uk-text-bold uk-text-danger uk-flex uk-flex-middle');
+
+                                                    const createRemoveButton = document.createElement('a');
+                                                    createRemoveButton.setAttribute('onclick', 'createRemove' + x + '(' + createCount + ')');
+                                                    createRemoveButton.setAttribute('class', 'uk-link-reset');
+                                                    createRemoveButton.innerHTML = 'X';
+
+                                                    createName.appendChild(createNameInput);
+                                                    newCreateCustomRab.appendChild(createName);
+                                                    createPrice.appendChild(createPriceInput);
+                                                    newCreateCustomRab.appendChild(createPrice);
+                                                    createRemove.appendChild(createRemoveButton);
+                                                    newCreateCustomRab.appendChild(createRemove);
+                                                    createCustomRab.appendChild(newCreateCustomRab);
+                                                };
+
+                                                function createRemove<?= $project['id'] ?>(i) {
+                                                    const createRemoveElement = document.getElementById('create<?= $project['id'] ?>' + i);
+                                                    createRemoveElement.remove();
+                                                };
+                                            </script>
+                                        </div>
+                                    <?php } ?>
                                     <!-- </?php } ?> -->
                                     <!-- </?php } else { ?> -->
-                                        <!-- <div class="uk-padding uk-padding-remove-vertical togglesph</?= $project['id'] ?>" hidden>
+                                    <!-- <div class="uk-padding uk-padding-remove-vertical togglesph</?= $project['id'] ?>" hidden>
                                             <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/</?= $project['id'] ?>">Download SPH</a>
                                             <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                 <table class="uk-table uk-table-middle uk-table-divider">
@@ -1443,71 +1442,80 @@
                                             removeList.remove();
                                         };
                                     </script>
-                                <?php }
+                            <?php }
                             } ?>
                             <!-- Detail Pemesanan Section End -->
 
                             <!-- SPK Section -->
-                            <?php if ($project['spk'] != null) {
-                                if ($project['status_spk'] === '0') { ?>
-                                    <div class="uk-margin uk-child-width-1-2" uk-grid>
-                                        <div>
-                                            <div class="uk-child-width-auto uk-flex-middle" uk-grid>
-                                                <div>
-                                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">SPK</div>
-                                                </div>
-                                                <div>
-                                                    <div class="uk-text-light uk-text-center" style="border-style: solid; border-color: #ff0000; color: #ff0000; font-weight: bold; padding: 3px;">Menuggu Persetujuan DPSA</div>
-                                                </div>
+                            <!-- </?php if ($project['spk'] != null) {
+                                if ($project['status_spk'] === '0') { ?> -->
+                                <div class="uk-margin uk-child-width-1-2" uk-grid>
+                                    <div>
+                                        <div class="uk-child-width-auto uk-flex-middle" uk-grid>
+                                            <div>
+                                                <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">SPK</div>
                                             </div>
-                                        </div>
-                                        <div class="uk-text-right">
-                                            <a class="uk-link-reset uk-icon-button" id="togglespk<?= $project['id'] ?>" uk-toggle="target: .togglespk<?= $project['id'] ?>"><span class="uk-light" id="closespk<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openspk<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            <div>
+                                                <?php  if ($project['status_spk'] === '0') { ?> 
+                                                    <div class="uk-text-light uk-text-center" style="border-style: solid; border-color: #ff0000; color: #ff0000; font-weight: bold; padding: 3px;">Menuggu Persetujuan DPSA</div>
+                                                <?php }elseif($project['status_spk'] === '1'){ ?>
+                                                    <div class="uk-text-light uk-text-center" style="border-style: solid; border-color: #32CD32; color: #32CD32; font-weight: bold; padding: 3px;">Disetujui</div>
+                                                <?php }?>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="uk-text-right">
+                                        <a class="uk-link-reset uk-icon-button" id="togglespk<?= $project['id'] ?>" uk-toggle="target: .togglespk<?= $project['id'] ?>"><span class="uk-light" id="closespk<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openspk<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                    </div>
+                                </div>
 
-                                    <div class="togglespk<?= $project['id'] ?>" hidden>
-                                        <div class="uk-form-horizontal">
-                                            <div class="uk-margin-small">
-                                                <label class="uk-form-label uk-margin-remove-top">Tanggal Upload SPK</label>
-                                                <div class="uk-form-controls">: <?= date('d M Y, H:i', strtotime($project['updated_at'])); ?></div>
-                                            </div>
+                                <div class="togglespk<?= $project['id'] ?>" hidden>
+                                    <div class="uk-form-horizontal">
+                                        <div class="uk-margin-small">
+                                            <label class="uk-form-label uk-margin-remove-top">Tanggal Upload SPK</label>
+                                            <div class="uk-form-controls">: <?= date('d M Y, H:i', strtotime($project['updated_at'])); ?></div>
+                                        </div>
 
-                                            <div class="uk-margin-small">
-                                                <label class="uk-form-label uk-margin-remove-top">File SPK</label>
-                                                <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
-                                            </div>
-
-                                            <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                                <div class="uk-margin-small">
-                                                    <label class="uk-form-label">NO SPK</label>
-                                                    <div class="uk-form-controls">:
-                                                        <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>" placeholder="NO SPK" />
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-
+                                        <div class="uk-margin-small">
+                                            <label class="uk-form-label uk-margin-remove-top">File SPK</label>
+                                            <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
                                         </div>
 
                                         <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                            <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
-                                                <div id="image-containerspk-<?= $project['id'] ?>" class="uk-form-controls">
-                                                    <input id="photocreatespk<?= $project['id'] ?>" name="spk" hidden />
-                                                    <div id="js-upload-createspk-<?= $project['id'] ?>" class="js-upload-createspk-<?= $project['id'] ?> uk-placeholder uk-text-center">
-                                                        <span uk-icon="icon: cloud-upload"></span>
-                                                        <span class="uk-text-middle">Tarik dan lepas file SPK disini atau</span>
-                                                        <div uk-form-custom>
-                                                            <input type="file">
-                                                            <span class="uk-link uk-preserve-color">pilih satu</span>
-                                                        </div>
-                                                    </div>
-                                                    <progress id="js-progressbar-createspk-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label">NO SPK</label>
+                                                <div class="uk-form-controls">:
+                                                    <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk'];} ?>" placeholder="NO SPK" />
                                                 </div>
+                                            </div>
+                                        <?php }else{ ?>
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
+                                                <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) { echo $project['no_spk'];} ?> </a></div>
+                                                <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { $project['no_spk']; } ?>" />
                                             </div>
                                         <?php } ?>
                                     </div>
-                                <?php } elseif ($project['status_spk'] === '1') { ?>
-                                    <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+
+                                    <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                        <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
+                                            <div id="image-containerspk-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatespk<?= $project['id'] ?>" name="spk" hidden />
+                                                <div id="js-upload-createspk-<?= $project['id'] ?>" class="js-upload-createspk-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file SPK disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createspk-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <!-- </?php } elseif ($project['status_spk'] === '1') { ?> -->
+                                    <!-- <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                         <div>
                                             <div class="uk-child-width-auto uk-flex-middle" uk-grid>
                                                 <div>
@@ -1519,30 +1527,30 @@
                                             </div>
                                         </div>
                                         <div class="uk-text-right">
-                                            <a class="uk-link-reset uk-icon-button" id="togglespk<?= $project['id'] ?>" uk-toggle="target: .togglespk<?= $project['id'] ?>"><span class="uk-light" id="closespk<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openspk<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                            <a class="uk-link-reset uk-icon-button" id="togglespk??= $project['id'] ?>" uk-toggle="target: .togglespk</?= $project['id'] ?>"><span class="uk-light" id="closespk<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openspk<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
                                         </div>
                                     </div>
 
-                                    <div class="togglespk<?= $project['id'] ?>" hidden>
+                                    <div class="togglespk</?= $project['id'] ?>" hidden>
                                         <div class="uk-form-horizontal">
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">Tanggal Upload SPK</label>
-                                                <div class="uk-form-controls">: <?= date('d M Y, H:i', strtotime($project['updated_at'])); ?></div>
+                                                <div class="uk-form-controls">: </?= date('d M Y, H:i', strtotime($project['updated_at'])); ?></div>
                                             </div>
 
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">File SPK</label>
-                                                <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
+                                                <div class="uk-form-controls">: <a href="/img/spk/</?= $project['spk'] ?>"><span uk-icon="file-pdf"></span></?= $project['spk'] ?></a></div>
                                             </div>
 
                                             <div class="uk-margin-small">
                                                 <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
-                                                <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?> </a></div>
-                                                <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>"/>
+                                                <div class="uk-form-controls">: </?php if (!empty($project['no_spk'])) { $project['no_spk'];} ?> </a></div>
+                                                <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="</?php if (!empty($project['no_spk'])) { $project['no_spk']; } ?>" />
                                             </div>
                                         </div>
-                                    </div>
-                                <?php } ?>
+                                    </div> -->
+                                <!-- </?php } ?> -->
 
                                 <script type="text/javascript">
                                     var bar = document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>');
@@ -1695,251 +1703,224 @@
                                         }
                                     });
                                 </script>
-                            <?php } ?>
+                            <!-- </?php } ?> -->
                             <!-- SPK Section End -->
 
                             <!-- Production Section -->
-                                <?php if ($project['status_spk'] == 1) { ?>
-                                    <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
-                                        <div>
-                                            <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
-                                        </div>
-                                        <div class="uk-text-right">
-                                            <a class="uk-link-reset uk-icon-button" id="toggleproduction<?= $project['id'] ?>" uk-toggle="target: .toggleproduction<?= $project['id'] ?>"><span class="uk-light" id="closeproduction<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openproduction<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
-                                        </div>
+                            <?php if ($project['status_spk'] == 1) { ?>
+                                <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
+                                    <div>
+                                        <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
+                                    </div>
+                                    <div class="uk-text-right">
+                                        <a class="uk-link-reset uk-icon-button" id="toggleproduction<?= $project['id'] ?>" uk-toggle="target: .toggleproduction<?= $project['id'] ?>"><span class="uk-light" id="closeproduction<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openproduction<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
+                                    </div>
+                                </div>
+
+                                <div class="toggleproduction<?= $project['id'] ?>" hidden>
+                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                        <table class="uk-table uk-table-middle uk-table-divider">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama</th>
+                                                    <th class="uk-text-center">Gambar Kerja</th>
+                                                    <th class="uk-text-center">Mesin Awal</th>
+                                                    <th class="uk-text-center">Tukang</th>
+                                                    <th class="uk-text-center">Mesin Lanjutan</th>
+                                                    <th class="uk-text-center">Finishing</th>
+                                                    <th class="uk-text-center">Packing</th>
+                                                    <th class="uk-text-center">Pengiriman</th>
+                                                    <th class="uk-text-center">Setting</th>
+                                                    <th class="uk-text-center">PIC Produksi</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
+                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                        <tr>
+                                                            <td><?= $production['name'] ?></td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['tukang']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['finishing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['packing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['pengiriman']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['setting']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } else { ?>
+                                                                    <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                <?php } ?>
+                                                            </td>
+                                                            <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
+                                                                <td class="uk-text-center">
+                                                                    <div class="uk-margin">
+                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]">
+                                                                            <option value="">Pilih PIC</option>
+                                                                            <?php if(!empty($picpro)) { 
+                                                                                foreach ($picpro as $propic) {?>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                                <?php }
+                                                                            }else{ ?>
+                                                                                <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                            <?php }else { ?>
+                                                                <td class="uk-text-center">
+                                                                    <div class="uk-margin">
+                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]" disabled>
+                                                                            <option value="">Pilih PIC</option>
+                                                                            <?php if(!empty($picpro)) { 
+                                                                                foreach ($picpro as $propic) {?>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                                <?php }
+                                                                            }else{ ?>
+                                                                                <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                            <?php } ?>
+                                                            <td class="uk-text-center">
+                                                                <div><?= $production['percentages'] ?> %</div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } elseif (!$authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                        <tr>
+                                                            <td><?= $production['name'] ?></td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['tukang']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['finishing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['packing']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['pengiriman']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <?php if (strtoupper($production['setting']) == '1') { ?>
+                                                                    <div uk-icon="check"></div>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <div class="uk-margin">
+                                                                    <select class="uk-select" name="picpro<?= $production['id'] ?>" disabled>
+                                                                        <option value="">Pilih PIC</option>
+                                                                        <?php if(!empty($picpro)) { 
+                                                                            foreach ($picpro as $propic) {?>
+                                                                                <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                            <?php }
+                                                                        }else{ ?>
+                                                                            <option value="" disabled > Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+                                                            <td class="uk-text-center">
+                                                                <div><?= $production['percentages'] ?> %</div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
                                     </div>
 
-                                    <div class="toggleproduction<?= $project['id'] ?>" hidden>
-                                        <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                            <table class="uk-table uk-table-middle uk-table-divider">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nama</th>
-                                                        <th class="uk-text-center">Gambar Kerja</th>
-                                                        <th class="uk-text-center">Mesin Awal</th>
-                                                        <th class="uk-text-center">Tukang</th>
-                                                        <th class="uk-text-center">Mesin Lanjutan</th>
-                                                        <th class="uk-text-center">Finishing</th>
-                                                        <th class="uk-text-center">Packing</th>
-                                                        <th class="uk-text-center">Pengiriman</th>
-                                                        <th class="uk-text-center">Setting</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
-                                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
-                                                            <tr>
-                                                                <td><?= $production['name'] ?></td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['tukang']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['finishing']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['packing']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['pengiriman']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['setting']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <div><?= $production['percentages'] ?> %</div>
-                                                                </td>
-                                                            </tr>
-                                                        <?php } else{ ?>
-                                                            <tr>
-                                                                <td><?= $production['name'] ?></td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['tukang']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['finishing']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['packing']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['pengiriman']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <?php if (strtoupper($production['setting']) == '1') { ?>
-                                                                        <div uk-icon="check"></div>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td class="uk-text-center">
-                                                                    <div><?= $production['percentages'] ?> %</div>
-                                                                </td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                    <?php } ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <!-- Serah Terima -->
-                                        <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA</label>
-                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
-                                                <?php
-                                                if (!empty($projectdata[$project['id']]['bast'])) {
-                                                    foreach ($projectdata[$project['id']]['bast'] as $bast) {
-                                                        if (!empty($bast) && $bast['status'] === "0") { ?>
-                                                            <div id="sertrim-file-<?= $bast['id']; ?>">
-                                                                <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                    <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
-                                                                    <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
-                                                                </div>
-                                                            </div>
-                                                            <script>
-                                                                function removeCardFile<?= $bast['id']; ?>() {
-                                                                    let text = "Hapus file Serah Terima ini?";
-                                                                    if (confirm(text) == true) {
-                                                                        $.ajax({
-                                                                            url: "project/removesertrim/<?= $bast['id'] ?>",
-                                                                            method: "POST",
-                                                                            data: {
-                                                                                sertrim: <?= $bast['id'] ?>,
-                                                                            },
-                                                                            dataType: "json",
-                                                                            error: function() {
-                                                                                console.log('error', arguments);
-                                                                            },
-                                                                            success: function() {
-                                                                                console.log('success', arguments);
-                                                                                $("#sertrim-file-<?= $bast['id']; ?>").remove();
-                                                                            },
-                                                                        })
-                                                                    }
-                                                                }
-                                                            </script>
-                                                <?php }
-                                                    }
-                                                } ?>
-                                            </div>
-                                            <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
-                                                <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
-                                                    <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
-                                                    <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
-                                                        <span uk-icon="icon: cloud-upload"></span>
-                                                        <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                                        <div uk-form-custom>
-                                                            <input type="file">
-                                                            <span class="uk-link uk-preserve-color">pilih satu</span>
-                                                        </div>
-                                                    </div>
-                                                    <progress id="js-progressbar-createsertrim-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                        <!-- End Of Serah Terima -->
-
-                                        <!-- BAST -->
-                                        <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
-                                            <div class="uk-form-horizontal">
-                                                <div class="uk-margin-small">
-                                                    <label class="uk-form-label">Tanggal BAST</label>
-                                                    <div class="uk-form-controls">:
-                                                        <div class="uk-inline">
-                                                            <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
-                                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                                <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo=date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
-                                                            <?php }else{ ?>
-                                                                <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo=date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo date_format($tempo,'m/d/Y'); }else{ echo date('m/d/Y'); } ?></span>
-                                                            <?php } ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
-                                                <?php
+                                    <!-- Serah Terima -->
+                                    <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>">
+                                        <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA</label>
+                                        <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
+                                            <?php
+                                            if (!empty($projectdata[$project['id']]['bast'])) {
                                                 foreach ($projectdata[$project['id']]['bast'] as $bast) {
-                                                    $bastid = "";
-                                                    if (!empty($bast) && $bast['status'] === "1") {
-                                                        $bastid = $bast['id']; ?>
-                                                        <div id="bast-file-<?= $bast['id'] ?>">
-                                                            <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
-                                                                <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
+                                                    if (!empty($bast) && $bast['status'] === "0") { ?>
+                                                        <div id="sertrim-file-<?= $bast['id']; ?>">
+                                                            <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
                                                         <script>
-                                                            function removeCardFilebast<?= $bast['id']; ?>() {
-                                                                let text = "Hapus file BAST ini?";
+                                                            function removeCardFile<?= $bast['id']; ?>() {
+                                                                let text = "Hapus file Serah Terima ini?";
                                                                 if (confirm(text) == true) {
                                                                     $.ajax({
                                                                         url: "project/removesertrim/<?= $bast['id'] ?>",
                                                                         method: "POST",
                                                                         data: {
-                                                                            bast: <?= $bast['id'] ?>,
+                                                                            sertrim: <?= $bast['id'] ?>,
                                                                         },
                                                                         dataType: "json",
                                                                         error: function() {
@@ -1947,302 +1928,383 @@
                                                                         },
                                                                         success: function() {
                                                                             console.log('success', arguments);
-                                                                            alert('data berhasil di hapus');
-                                                                            $("#bast-file-<?= $bast['id'] ?>").remove();
+                                                                            $("#sertrim-file-<?= $bast['id']; ?>").remove();
                                                                         },
                                                                     })
                                                                 }
                                                             }
                                                         </script>
-                                                <?php }
-                                                } ?>
+                                            <?php }
+                                                }
+                                            } ?>
+                                        </div>
+                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                            <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
+                                                <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createsertrim-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                             </div>
-                                            <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
-                                                <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
-                                                    <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
-                                                    <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
-                                                        <span uk-icon="icon: cloud-upload"></span>
-                                                        <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                                        <div uk-form-custom>
-                                                            <input type="file">
-                                                            <span class="uk-link uk-preserve-color">pilih satu</span>
+                                        <?php } ?>
+                                    </div>
+                                    <!-- End Of Serah Terima -->
+
+                                    <!-- BAST -->
+                                    <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
+                                        <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
+                                        <div class="uk-form-horizontal">
+                                            <div class="uk-margin-small">
+                                                <label class="uk-form-label">Tanggal BAST</label>
+                                                <div class="uk-form-controls">:
+                                                    <div class="uk-inline">
+                                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) {
+                                                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
+                                                                                                                echo "value='" . date_format($tempo, 'm/d/Y') . "'";
+                                                                                                            } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                        <?php } else { ?>
+                                                            <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) {
+                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
+                                                                                echo date_format($tempo, 'm/d/Y');
+                                                                            } else {
+                                                                                echo date('m/d/Y');
+                                                                            } ?></span>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
+                                            <?php
+                                            foreach ($projectdata[$project['id']]['bast'] as $bast) {
+                                                $bastid = "";
+                                                if (!empty($bast) && $bast['status'] === "1") {
+                                                    $bastid = $bast['id']; ?>
+                                                    <div id="bast-file-<?= $bast['id'] ?>">
+                                                        <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                            <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                            <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
                                                         </div>
                                                     </div>
-                                                    <progress id="js-progressbar-createbast-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                </div>
-                                            <?php } ?>
+                                                    <script>
+                                                        function removeCardFilebast<?= $bast['id']; ?>() {
+                                                            let text = "Hapus file BAST ini?";
+                                                            if (confirm(text) == true) {
+                                                                $.ajax({
+                                                                    url: "project/removesertrim/<?= $bast['id'] ?>",
+                                                                    method: "POST",
+                                                                    data: {
+                                                                        bast: <?= $bast['id'] ?>,
+                                                                    },
+                                                                    dataType: "json",
+                                                                    error: function() {
+                                                                        console.log('error', arguments);
+                                                                    },
+                                                                    success: function() {
+                                                                        console.log('success', arguments);
+                                                                        alert('data berhasil di hapus');
+                                                                        $("#bast-file-<?= $bast['id'] ?>").remove();
+                                                                    },
+                                                                })
+                                                            }
+                                                        }
+                                                    </script>
+                                            <?php }
+                                            } ?>
                                         </div>
-                                        <!-- End Of BAST -->
-
-                                        <script type="text/javascript">
-                                            // Serah terima
-                                            UIkit.upload('#js-upload-createsertrim-<?= $project['id'] ?>', {
-                                                url: 'upload/sertrim/<?= $project['id'] ?>',
-                                                multiple: false,
-                                                name: 'uploads',
-                                                data: {
-                                                    'id': <?= $project['id'] ?>,
-                                                },
-                                                method: 'POST',
-                                                type: 'json',
-
-                                                beforeSend: function() {
-                                                    console.log('beforeSend', arguments);
-                                                },
-                                                beforeAll: function() {
-                                                    console.log('beforeAll', arguments);
-                                                },
-                                                load: function() {
-                                                    console.log('load', arguments);
-                                                },
-                                                error: function() {
-                                                    console.log('error', arguments);
-                                                    var error = arguments[0].xhr.response.message.uploads;
-                                                    alert(error);
-                                                },
-
-                                                complete: function() {
-                                                    console.log('complete', arguments);
-                                                    var sertrimid = arguments[0].response.id;
-                                                    var filename = arguments[0].response.file;
-                                                    var proid = arguments[0].response.proid;
-
-                                                    var contsertrim = document.getElementById('containersertrim-<?= $project['id'] ?>');
-                                                    var container = document.createElement('div');
-                                                    container.setAttribute('id', 'sertrim-file-' + sertrimid);
-
-                                                    var cardsertrim = document.createElement('div');
-                                                    cardsertrim.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
-
-                                                    var divclosed = document.createElement('div');
-                                                    divclosed.setAttribute('class', 'uk-position-small uk-position-right');
-
-                                                    var close = document.createElement('a');
-                                                    close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
-                                                    close.setAttribute('onClick', 'removeCardFile(' + sertrimid + ',' + proid + ')');
-                                                    close.setAttribute('uk-icon', 'close');
-
-                                                    var link = document.createElement('a');
-                                                    link.setAttribute('href', 'img/sertrim/' + filename);
-                                                    link.setAttribute('target', '_blank');
-
-                                                    var file = document.createTextNode(filename);
-
-                                                    var icon = document.createElement('span');
-                                                    icon.setAttribute('uk-icon', 'file-text');
-
-                                                    contsertrim.appendChild(container);
-                                                    container.appendChild(cardsertrim);
-                                                    cardsertrim.appendChild(divclosed);
-                                                    divclosed.appendChild(close);
-                                                    cardsertrim.appendChild(link);
-                                                    link.appendChild(icon);
-                                                    link.appendChild(file);
-
-                                                    return sertrimid;
-                                                },
-
-                                                loadStart: function(e) {
-                                                    console.log('loadStart', arguments);
-
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
-
-                                                },
-
-                                                progress: function(e) {
-                                                    console.log('progress', arguments);
-
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
-                                                },
-
-                                                loadEnd: function(e) {
-                                                    console.log('loadEnd', arguments);
-
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
-                                                },
-
-                                                completeAll: function() {
-                                                    console.log('completeAll', arguments);
-
-                                                    setTimeout(function() {
-                                                        document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                        alert('<?= lang('Proses selesai, File Serah Terima berhasil di unggah.') ?>');
-                                                    }, 1000);
-                                                }
-
-                                            });
-
-                                            function removeCardFile(id, proid) {
-                                                let text = "Hapus file Serah Terima ini?";
-                                                if (confirm(text) == true) {
-                                                    $.ajax({
-                                                        url: "project/removesertrim/" + id,
-                                                        method: "POST",
-                                                        data: {
-                                                            bast: id,
-                                                        },
-                                                        dataType: "json",
-                                                        error: function() {
-                                                            console.log('error', arguments);
-                                                        },
-                                                        success: function() {
-                                                            console.log('success', arguments);
-                                                            $("#sertrim-file-" + id).remove();
-                                                        },
-                                                    })
-                                                }
-                                            }
-                                            //   End Of Serah Terima
-
-                                            // Bast
-                                            UIkit.upload('.js-upload-createbast-<?= $project['id'] ?>', {
-                                                url: 'upload/bast/<?= $project['id'] ?>',
-                                                multiple: false,
-                                                name: 'uploads',
-                                                param: {
-                                                    lorem: 'ipsum'
-                                                },
-                                                method: 'POST',
-                                                type: 'json',
-
-                                                beforeSend: function() {
-                                                    console.log('beforeSend', arguments);
-                                                },
-                                                beforeAll: function() {
-                                                    console.log('beforeAll', arguments);
-                                                },
-                                                load: function() {
-                                                    console.log('load', arguments);
-                                                },
-                                                error: function() {
-                                                    console.log('error', arguments);
-                                                    var error = arguments[0].xhr.response.message.uploads;
-                                                    alert(error);
-                                                },
-
-                                                complete: function() {
-                                                    console.log('complete', arguments);
-
-                                                    var id = arguments[0].response.id;
-                                                    var filename = arguments[0].response.file;
-                                                    var proid = arguments[0].response.proid;
-
-                                                    console.log(id,filename,proid);
-
-                                                    if (document.getElementById('bast-file-'+ id)) {
-                                                        document.getElementById('bast-file-'+ id).remove();
-                                                    };
-
-                                                    var contbast = document.getElementById('containerbast-<?= $project['id'] ?>');
-
-                                                    var container = document.createElement('div');
-                                                    container.setAttribute('id', 'bast-file-' + id);
-
-                                                    var cardbast = document.createElement('div');
-                                                    cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
-
-                                                    var divclosed = document.createElement('div');
-                                                    divclosed.setAttribute('class', 'uk-position-small uk-position-right');
-
-                                                    var close = document.createElement('a');
-                                                    close.setAttribute('id', 'remove-bast-' + id);
-                                                    close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
-                                                    close.setAttribute('onClick', 'removeCardFilebast('+id+','+proid+')');
-                                                    close.setAttribute('uk-icon', 'close');
-
-                                                    var link = document.createElement('a');
-                                                    link.setAttribute('href', 'img/bast/' + filename);
-                                                    link.setAttribute('target', '_blank');
-
-                                                    var file = document.createTextNode(filename);
-
-                                                    var icon = document.createElement('span');
-                                                    icon.setAttribute('uk-icon', 'file-text');
-
-                                                    contbast.appendChild(container);
-                                                    container.appendChild(cardbast);
-                                                    cardbast.appendChild(divclosed);
-                                                    divclosed.appendChild(close);
-                                                    cardbast.appendChild(link);
-                                                    link.appendChild(icon);
-                                                    link.appendChild(file);
-                                                },
-
-                                                loadStart: function(e) {
-                                                    console.log('loadStart', arguments);
-
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').removeAttribute('hidden');
-
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
-
-                                                },
-
-                                                progress: function(e) {
-                                                    console.log('progress', arguments);
-
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
-                                                },
-
-                                                loadEnd: function(e) {
-                                                    console.log('loadEnd', arguments);
-
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
-                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
-                                                },
-
-                                                completeAll: function() {
-                                                    console.log('completeAll', arguments);
-
-                                                    setTimeout(function() {
-                                                        document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
-                                                        alert('<?= lang('Proses selesai, File BAST berhasil di unggah.') ?>');
-                                                    }, 1000);
-                                                }
-
-                                            });
-
-                                            function removeCardFilebast(id,proid) {
-                                                let text = "Hapus BAST Terima ini?";
-                                                if (confirm(text) == true) {
-                                                    $.ajax({
-                                                        url: "project/removesertrim/" + id,
-                                                        method: "POST",
-                                                        data: {
-                                                            bast: id,
-                                                        },
-                                                        dataType: "json",
-                                                        error: function() {
-                                                            console.log('error', arguments);
-                                                        },
-                                                        success: function() {
-                                                            console.log('success', arguments);
-                                                            $("#bast-file-" + id).remove();
-                                                        },
-                                                    })
-                                                }
-                                            }
-                                        </script>
+                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                            <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
+                                                <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
+                                                </div>
+                                                <progress id="js-progressbar-createbast-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            </div>
+                                        <?php } ?>
                                     </div>
+                                    <!-- End Of BAST -->
+
                                     <script type="text/javascript">
-                                        // Dropdown Production
-                                        document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
-                                            if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
-                                                document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                                                document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
-                                            } else {
-                                                document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
-                                                document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        // Serah terima
+                                        UIkit.upload('#js-upload-createsertrim-<?= $project['id'] ?>', {
+                                            url: 'upload/sertrim/<?= $project['id'] ?>',
+                                            multiple: false,
+                                            name: 'uploads',
+                                            data: {
+                                                'id': <?= $project['id'] ?>,
+                                            },
+                                            method: 'POST',
+                                            type: 'json',
+
+                                            beforeSend: function() {
+                                                console.log('beforeSend', arguments);
+                                            },
+                                            beforeAll: function() {
+                                                console.log('beforeAll', arguments);
+                                            },
+                                            load: function() {
+                                                console.log('load', arguments);
+                                            },
+                                            error: function() {
+                                                console.log('error', arguments);
+                                                var error = arguments[0].xhr.response.message.uploads;
+                                                alert(error);
+                                            },
+
+                                            complete: function() {
+                                                console.log('complete', arguments);
+                                                var sertrimid = arguments[0].response.id;
+                                                var filename = arguments[0].response.file;
+                                                var proid = arguments[0].response.proid;
+
+                                                var contsertrim = document.getElementById('containersertrim-<?= $project['id'] ?>');
+                                                var container = document.createElement('div');
+                                                container.setAttribute('id', 'sertrim-file-' + sertrimid);
+
+                                                var cardsertrim = document.createElement('div');
+                                                cardsertrim.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
+
+                                                var divclosed = document.createElement('div');
+                                                divclosed.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                var close = document.createElement('a');
+                                                close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                close.setAttribute('onClick', 'removeCardFile(' + sertrimid + ',' + proid + ')');
+                                                close.setAttribute('uk-icon', 'close');
+
+                                                var link = document.createElement('a');
+                                                link.setAttribute('href', 'img/sertrim/' + filename);
+                                                link.setAttribute('target', '_blank');
+
+                                                var file = document.createTextNode(filename);
+
+                                                var icon = document.createElement('span');
+                                                icon.setAttribute('uk-icon', 'file-text');
+
+                                                contsertrim.appendChild(container);
+                                                container.appendChild(cardsertrim);
+                                                cardsertrim.appendChild(divclosed);
+                                                divclosed.appendChild(close);
+                                                cardsertrim.appendChild(link);
+                                                link.appendChild(icon);
+                                                link.appendChild(file);
+
+                                                return sertrimid;
+                                            },
+
+                                            loadStart: function(e) {
+                                                console.log('loadStart', arguments);
+
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+
+                                            },
+
+                                            progress: function(e) {
+                                                console.log('progress', arguments);
+
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+                                            },
+
+                                            loadEnd: function(e) {
+                                                console.log('loadEnd', arguments);
+
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').value = e.loaded;
+                                            },
+
+                                            completeAll: function() {
+                                                console.log('completeAll', arguments);
+
+                                                setTimeout(function() {
+                                                    document.getElementById('js-progressbar-createsertrim-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                    alert('<?= lang('Proses selesai, File Serah Terima berhasil di unggah.') ?>');
+                                                }, 1000);
                                             }
+
                                         });
-                                    </script>   
-                                <?php } ?>
+
+                                        function removeCardFile(id, proid) {
+                                            let text = "Hapus file Serah Terima ini?";
+                                            if (confirm(text) == true) {
+                                                $.ajax({
+                                                    url: "project/removesertrim/" + id,
+                                                    method: "POST",
+                                                    data: {
+                                                        bast: id,
+                                                    },
+                                                    dataType: "json",
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+                                                    success: function() {
+                                                        console.log('success', arguments);
+                                                        $("#sertrim-file-" + id).remove();
+                                                    },
+                                                })
+                                            }
+                                        }
+                                        //   End Of Serah Terima
+
+                                        // Bast
+                                        UIkit.upload('.js-upload-createbast-<?= $project['id'] ?>', {
+                                            url: 'upload/bast/<?= $project['id'] ?>',
+                                            multiple: false,
+                                            name: 'uploads',
+                                            param: {
+                                                lorem: 'ipsum'
+                                            },
+                                            method: 'POST',
+                                            type: 'json',
+
+                                            beforeSend: function() {
+                                                console.log('beforeSend', arguments);
+                                            },
+                                            beforeAll: function() {
+                                                console.log('beforeAll', arguments);
+                                            },
+                                            load: function() {
+                                                console.log('load', arguments);
+                                            },
+                                            error: function() {
+                                                console.log('error', arguments);
+                                                var error = arguments[0].xhr.response.message.uploads;
+                                                alert(error);
+                                            },
+
+                                            complete: function() {
+                                                console.log('complete', arguments);
+
+                                                var id = arguments[0].response.id;
+                                                var filename = arguments[0].response.file;
+                                                var proid = arguments[0].response.proid;
+
+                                                console.log(id, filename, proid);
+
+                                                if (document.getElementById('bast-file-' + id)) {
+                                                    document.getElementById('bast-file-' + id).remove();
+                                                };
+
+                                                var contbast = document.getElementById('containerbast-<?= $project['id'] ?>');
+
+                                                var container = document.createElement('div');
+                                                container.setAttribute('id', 'bast-file-' + id);
+
+                                                var cardbast = document.createElement('div');
+                                                cardbast.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
+
+                                                var divclosed = document.createElement('div');
+                                                divclosed.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                var close = document.createElement('a');
+                                                close.setAttribute('id', 'remove-bast-' + id);
+                                                close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                close.setAttribute('onClick', 'removeCardFilebast(' + id + ',' + proid + ')');
+                                                close.setAttribute('uk-icon', 'close');
+
+                                                var link = document.createElement('a');
+                                                link.setAttribute('href', 'img/bast/' + filename);
+                                                link.setAttribute('target', '_blank');
+
+                                                var file = document.createTextNode(filename);
+
+                                                var icon = document.createElement('span');
+                                                icon.setAttribute('uk-icon', 'file-text');
+
+                                                contbast.appendChild(container);
+                                                container.appendChild(cardbast);
+                                                cardbast.appendChild(divclosed);
+                                                divclosed.appendChild(close);
+                                                cardbast.appendChild(link);
+                                                link.appendChild(icon);
+                                                link.appendChild(file);
+                                            },
+
+                                            loadStart: function(e) {
+                                                console.log('loadStart', arguments);
+
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+
+                                            },
+
+                                            progress: function(e) {
+                                                console.log('progress', arguments);
+
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+                                            },
+
+                                            loadEnd: function(e) {
+                                                console.log('loadEnd', arguments);
+
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').max = e.total;
+                                                document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').value = e.loaded;
+                                            },
+
+                                            completeAll: function() {
+                                                console.log('completeAll', arguments);
+
+                                                setTimeout(function() {
+                                                    document.getElementById('js-progressbar-createbast-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                    alert('<?= lang('Proses selesai, File BAST berhasil di unggah.') ?>');
+                                                }, 1000);
+                                            }
+
+                                        });
+
+                                        function removeCardFilebast(id, proid) {
+                                            let text = "Hapus BAST Terima ini?";
+                                            if (confirm(text) == true) {
+                                                $.ajax({
+                                                    url: "project/removesertrim/" + id,
+                                                    method: "POST",
+                                                    data: {
+                                                        bast: id,
+                                                    },
+                                                    dataType: "json",
+                                                    error: function() {
+                                                        console.log('error', arguments);
+                                                    },
+                                                    success: function() {
+                                                        console.log('success', arguments);
+                                                        $("#bast-file-" + id).remove();
+                                                    },
+                                                })
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <script type="text/javascript">
+                                    // Dropdown Production
+                                    document.getElementById('toggleproduction<?= $project['id'] ?>').addEventListener('click', function() {
+                                        if (document.getElementById('closeproduction<?= $project['id'] ?>').hasAttribute('hidden')) {
+                                            document.getElementById('closeproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('openproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        } else {
+                                            document.getElementById('openproduction<?= $project['id'] ?>').removeAttribute('hidden');
+                                            document.getElementById('closeproduction<?= $project['id'] ?>').setAttribute('hidden', '');
+                                        }
+                                    });
+                                </script>
+                            <?php } ?>
                             <!-- Production Section End -->
 
                             <!-- Finance Section -->
@@ -2257,7 +2319,47 @@
 
                             <div class="toggleinvoice<?= $project['id'] ?>" hidden>
                                 <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-                                    
+
+                                    <!-- Invoice Generate Button -->
+                                    <div class="uk-width-1-1">
+                                        <p class="uk-margin-remove-top" uk-margin>
+                                            <?php
+                                            // Invoice I
+                                            if(!empty($project)){
+                                                if ($project['status_spk'] === "1") {
+                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
+                                                }
+                                            }
+
+                                            // Invoice II
+                                            if(!empty($project)){
+                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                }
+                                            }
+
+                                            // Invoice III
+                                            if(!empty($projectdata[$project['id']]['bastfile'])){
+                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" && $projectdata[$project['id']]['bastfile']['status'] === "1") {
+                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                    $status = "Retensi";
+                                                }
+                                            }
+
+                                            // Invoice IV
+                                            if(!empty($projectdata[$project['id']]['bastfile'])){
+                                            if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
+                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
+                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                        $progress   = "100";
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                    <!-- End Of Invoice Generate Button -->
+
                                     <!-- Invoice I -->
                                     <div>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -2277,9 +2379,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo=date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
-                                                            <?php }else{?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo=date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> placeholder="<?= date('m/d/Y') ?>" disabled/>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {$tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php } else { ?>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {$tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);echo "value='" . date_format($tempo, 'm/d/Y') . "'";} ?> placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -2290,15 +2392,15 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>">
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice1']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice1']['referensi'])) {
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
                                                                 } ?>
                                                                 <?php
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -2310,17 +2412,17 @@
                                                                     echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice1<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice1']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice1']['referensi'])) {
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice1']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
                                                                 } ?>
                                                                 <?php
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -2340,9 +2442,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['pph23']."'"; } ?> name="pphinvoice1<?= $project['id'] ?>">
-                                                        <?php }else{?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['pph23']."'"; } ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'"; } ?> name="pphinvoice1<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'"; } ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2351,9 +2453,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['email']."'"; } ?> name="emailinvoice1<?= $project['id'] ?>">
-                                                        <?php }else{?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='".$projectdata[$project['id']]['invoice1']['email']."'"; } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'";} ?> name="emailinvoice1<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'"; } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2363,52 +2465,52 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>">
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice1']['pic'])){
-                                                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                            if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
-                                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice1']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if ($pic->id === "0") {
-                                                                            $selected = 'selected';
-                                                                        } else {
-                                                                            $selected = "";
+                                                                        if ($projectdata[$project['id']]['invoice1']['pic'] === $pic->id) {
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
-                                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                    } 
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                    if ($pic->id === "0") {
+                                                                        $selected = 'selected';
+                                                                    } else {
+                                                                        $selected = "";
+                                                                    }
+                                                                    echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                }
                                                                 ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice1']['pic'])){
-                                                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                            if($projectdata[$project['id']]['invoice1']['pic'] === $pic->id){
-                                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice1']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if ($pic->id === "0") {
-                                                                            $selected = 'selected';
-                                                                        } else {
-                                                                            $selected = "";
+                                                                        if ($projectdata[$project['id']]['invoice1']['pic'] === $pic->id) {
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
-                                                                        echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                    } 
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                    if ($pic->id === "0") {
+                                                                        $selected = 'selected';
+                                                                    } else {
+                                                                        $selected = "";
+                                                                    }
+                                                                    echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                }
                                                                 ?>
                                                             </select>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -2433,9 +2535,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo=date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
-                                                            <?php }else{ ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo=date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php } else { ?>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']);echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -2446,17 +2548,17 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice2']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice2']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
                                                                     } else {
@@ -2465,19 +2567,19 @@
                                                                     echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice2']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice2']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice2']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
                                                                     } else {
@@ -2494,9 +2596,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['pph23']."'"; } ?> name="pphinvoice2<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['pph23']."'"; } ?> name="pphinvoice2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'";} ?> name="pphinvoice2<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'";} ?> name="pphinvoice2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2505,9 +2607,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['email']."'"; } ?> name="emailinvoice2<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='".$projectdata[$project['id']]['invoice2']['email']."'"; } ?> name="emailinvoice2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> name="emailinvoice2<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> name="emailinvoice2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2517,17 +2619,17 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice2<?= $project['id'] ?>">
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice2']['pic'])){
-                                                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                            if($projectdata[$project['id']]['invoice2']['pic'] === $pic->id){
-                                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice2']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                        if ($projectdata[$project['id']]['invoice2']['pic'] === $pic->id) {
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
                                                                     } else {
@@ -2536,19 +2638,19 @@
                                                                     echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice2<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice2']['pic'])){
-                                                                        foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                            if($projectdata[$project['id']]['invoice2']['pic'] === $pic->id){
-                                                                                echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                    } 
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice2']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
+                                                                        if ($projectdata[$project['id']]['invoice2']['pic'] === $pic->id) {
+                                                                            echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih PIC</option>';
+                                                                }
+                                                                foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
                                                                     } else {
@@ -2584,9 +2686,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { $tempo=date_create($projectdata[$project['id']]['invoice3']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
-                                                            <?php }else{ ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { $tempo=date_create($projectdata[$project['id']]['invoice3']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled/>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {$tempo = date_create($projectdata[$project['id']]['invoice3']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'";} ?> name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php } else { ?>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice3<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {$tempo = date_create($projectdata[$project['id']]['invoice3']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'";} ?> name="dateinvoice3<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -2597,16 +2699,16 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>">
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice3']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice3']['referensi'])) {
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                } 
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
@@ -2616,18 +2718,18 @@
                                                                     echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice3<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                    if(!empty($projectdata[$project['id']]['invoice3']['referensi'])){
-                                                                        foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                            if($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']){
-                                                                                echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
-                                                                            }
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice3']['referensi'])) {
+                                                                    foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
+                                                                        if ($projectdata[$project['id']]['invoice3']['referensi'] === $referensi['id']) {
+                                                                            echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
-                                                                    }else{
-                                                                        echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                } 
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" selected disabled>Pilih Referensi</option>';
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
@@ -2645,9 +2747,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['pph23']."'"; } ?> name="pphinvoice3<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['pph23']."'"; } ?> name="pphinvoice3<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> name="pphinvoice3<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> name="pphinvoice3<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2656,9 +2758,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['email']."'"; } ?> name="emailinvoice3<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='".$projectdata[$project['id']]['invoice3']['email']."'"; } ?> name="emailinvoice3<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'";} ?> name="emailinvoice3<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'";} ?> name="emailinvoice3<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2669,15 +2771,15 @@
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice3<?= $project['id'] ?>">
                                                                 <?php
-                                                                if(!empty($projectdata[$project['id']]['invoice3'])){
+                                                                if (!empty($projectdata[$project['id']]['invoice3'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if($projectdata[$project['id']]['invoice3']['pic'] === $pic->id){
+                                                                        if ($projectdata[$project['id']]['invoice3']['pic'] === $pic->id) {
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
@@ -2687,18 +2789,18 @@
                                                                     echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice3<?= $project['id'] ?>" disabled>
                                                                 <?php
-                                                                if(!empty($projectdata[$project['id']]['invoice3'])){
+                                                                if (!empty($projectdata[$project['id']]['invoice3'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if($projectdata[$project['id']]['invoice3']['pic'] === $pic->id){
+                                                                        if ($projectdata[$project['id']]['invoice3']['pic'] === $pic->id) {
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
@@ -2735,9 +2837,15 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo=date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
-                                                            <?php }else{ ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo=date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='".date_format($tempo,'m/d/Y')."'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']);
+                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
+                                                                                                                                                    } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <?php } else { ?>
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']);
+                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
+                                                                                                                                                    } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -2748,16 +2856,16 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
-                                                                <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice4']['referensi'])){
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice4']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                        if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
+                                                                        if ($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']) {
                                                                             echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
@@ -2767,18 +2875,18 @@
                                                                     echo '<option value="' . $referensi['id'] . '" ' . $selected . '>' . $referensi['name'] . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>" disabled>
-                                                                <?php 
-                                                                if(!empty($projectdata[$project['id']]['invoice4']['referensi'])){
+                                                                <?php
+                                                                if (!empty($projectdata[$project['id']]['invoice4']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
-                                                                        if($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']){
+                                                                        if ($projectdata[$project['id']]['invoice4']['referensi'] === $referensi['id']) {
                                                                             echo '<option value="' . $referensi['id'] . '" selected >' . $referensi['name'] . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih Referensi</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
                                                                     if ($referensi['id'] === "0") {
                                                                         $selected = 'selected';
@@ -2796,9 +2904,13 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['pph23']."'"; } ?> name="pphinvoice4<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['pph23']."'"; } ?> name="pphinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";
+                                                                                                                                            } ?> name="pphinvoice4<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";
+                                                                                                                                            } ?> name="pphinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2807,9 +2919,13 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['email']."'"; } ?> name="emailinvoice4<?= $project['id'] ?>">
-                                                        <?php }else{ ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='".$projectdata[$project['id']]['invoice4']['email']."'"; } ?> name="emailinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";
+                                                                                                                                            } ?> name="emailinvoice4<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
+                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";
+                                                                                                                                            } ?> name="emailinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2820,15 +2936,15 @@
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>">
                                                                 <?php
-                                                                if(!empty($projectdata[$project['id']]['invoice4']['pic'])){
+                                                                if (!empty($projectdata[$project['id']]['invoice4']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if($projectdata[$project['id']]['invoice4']['pic'] === $pic->id){
+                                                                        if ($projectdata[$project['id']]['invoice4']['pic'] === $pic->id) {
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
@@ -2838,18 +2954,18 @@
                                                                     echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                 } ?>
                                                             </select>
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>" disabled>
                                                                 <?php
-                                                                if(!empty($projectdata[$project['id']]['invoice4']['pic'])){
+                                                                if (!empty($projectdata[$project['id']]['invoice4']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
-                                                                        if($projectdata[$project['id']]['invoice4']['pic'] === $pic->id){
+                                                                        if ($projectdata[$project['id']]['invoice4']['pic'] === $pic->id) {
                                                                             echo '<option value="' . $pic->id . '" ' . $selected . '>' . $pic->name . '</option>';
                                                                         }
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     echo '<option value="" selected disabled>Pilih PIC</option>';
-                                                                } 
+                                                                }
                                                                 foreach ($projectdata[$project['id']]['pic'] as $pic) {
                                                                     if ($pic->id === "0") {
                                                                         $selected = 'selected';
@@ -2965,7 +3081,7 @@
                                 <?php if ($authorize->hasPermission('admin.project.delete', $uid)) { ?>
                                     <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
                                 <?php } ?>
-                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid)|| $authorize->hasPermission('design.project.edit', $uid)|| $authorize->hasPermission('marketing.project.edit', $uid) ) { ?>
+                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <button class="uk-button uk-button-primary" type="submit">Simpan</button>
                                 <?php } ?>
                             </div>

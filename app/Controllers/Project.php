@@ -57,7 +57,6 @@ class Project extends BaseController
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
-            // $users                  = $UserModel->where('parentid', null)->find();
 
             // Users
             $this->builder = $this->db->table('users');
@@ -69,7 +68,7 @@ class Project extends BaseController
             $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $users = $this->builder->get()->getResult();
 
-            // Marketing
+            // User Marketing
             $this->builder = $this->db->table('users');
             $this->builder->where('deleted_at', null);
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
@@ -77,6 +76,15 @@ class Project extends BaseController
             $this->builder->where('auth_groups.name =', 'marketing');
             $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $marketings = $this->builder->get()->getResult();
+
+            // User Production
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'production');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $picPro = $this->builder->get()->getResult();
 
             $projectdata    = [];
             if (!empty($projects)) {
@@ -167,7 +175,7 @@ class Project extends BaseController
                     $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
 
                     // Production
-                    $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
+                    $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
                     if (!empty($productions)) {
                         foreach ($productions as $production) {
 
@@ -203,7 +211,7 @@ class Project extends BaseController
 
                                 $projectdata[$project['id']]['production'][$production['id']]  = [
                                     'id'                => $production['id'],
-                                    // 'mdlid'             => $production['mdlid'],
+                                    'userid'            => $production['userid'],
                                     'mdlid'             => $mdlp['id'],
                                     'name'              => $mdlp['name'],
                                     'gambar_kerja'      => $production['gambar_kerja'],
@@ -223,6 +231,9 @@ class Project extends BaseController
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
+
+                    // bast
+                    $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
 
                     // BAST
                     $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
@@ -332,9 +343,9 @@ class Project extends BaseController
             $data['company']        = $company;
             $data['pakets']         = $pakets;
             $data['rabs']           = $rabs;
-            $data['pager']          = $ProjectModel->pager;
             $data['marketings']     = $marketings;
-
+            $data['picpro']         = $picPro;
+            $data['pager']          = $ProjectModel->pager;
 
             return view('project', $data);
         } else {
@@ -389,9 +400,6 @@ class Project extends BaseController
             $InvoiceModel   = new InvoiceModel();
             $BastModel      = new BastModel();
             $LogModel       = new LogModel();
-            // $MdlModel       = new MdlModel();
-            // $RabModel       = new RabModel();
-            // $DesignModel    = new DesignModel();
 
             // initialize
             $input  = $this->request->getPost();
@@ -539,7 +547,6 @@ class Project extends BaseController
             // initialize
             $input  = $this->request->getPost();
             $pro    = $ProjectModel->find($id);
-            // dd($input);
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -559,18 +566,6 @@ class Project extends BaseController
                     $spk        = $input['spk'];
                     $statusspk  = 1;
                     $status     = 4;
-
-                    // Crating Rows In Production
-                    // $sphs = $RabModel->where('projectid', $id)->where('qty !=', '0')->find();
-                    // foreach ($sphs as $sph) {
-                    //     for ($i = 1; $i <= $sph['qty']; $i++) {
-                    //         $productiondata = [
-                    //             'mdlid'     => $sph['mdlid'],
-                    //             'projectid' => $sph['projectid'],
-                    //         ];
-                    //         $ProductionModel->insert($productiondata);
-                    //     }
-                    // }
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
@@ -584,39 +579,6 @@ class Project extends BaseController
             if (!empty($input['nospk'])) {
                 $spknum = $input['nospk'];
             }
-
-            // Removing old data production
-            $prod = $ProductionModel->where('projectid',$id)->find();
-            if(!empty($prod)){
-                $proid = [];
-                foreach($prod as $product){
-                    $proid [] = $product['id'];
-                }
-                $ProductionModel->whereIn('id', $proid)->delete();
-            }
-
-            // $sphs = $RabModel->where('projectid', $id)->where('qty !=', '0')->find();
-            // $sphs = $RabModel->where('projectid', $id)->find();
-            // // dd($sphs);
-            // foreach ($sphs as $sph) {
-            //     // $prod = $ProductionModel->where('projectid',$id)->where('mdlid',$sph['mdlid'])->find();
-            //     // $prod = $ProductionModel->where('projectid',$id)->find();
-            //     // if(!empty($prod)){
-            //     //     $proid = [];
-            //     //     foreach($prod as $product){
-            //     //         $proid [] = $product['id'];
-            //     //     }
-            //     //     $ProductionModel->whereIn('id', $proid)->delete();
-            //     // }
-                
-            //     for ($i = 1; $i <= $sph['qty']; $i++) {
-            //         $productiondata = [
-            //             'mdlid'     => $sph['mdlid'],
-            //             'projectid' => $sph['projectid'],
-            //         ];
-            //         $ProductionModel->insert($productiondata);
-            //     }
-            // }
 
             // Validation Rules
             $rules = [
@@ -648,14 +610,32 @@ class Project extends BaseController
                     foreach ($mdls as $mdlid => $qty) {
                         if (isset($input['checked' . $id][$mdlid])) {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            // $prod = $ProductionModel->where('mdlid', $mdlid)->where('projectid', $id)->find();
-                            // dd($prod);
                             if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid]) && $input['eqty' . $id][$paketid][$mdlid] != "0") {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
+                                    $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                                    if ($rab['qty'] < $input['eqty' . $id][$paketid][$mdlid]) {
+                                        $countDiff = (int)$input['eqty' . $id][$paketid][$mdlid] - (int)$rab['qty'];
+                                        for ($n = 1; $n <= (int)$countDiff; $n++) {
+                                            $dataProduction = [
+                                                'mdlid'     => $mdlid,
+                                                'projectid' => $id
+                                            ];
+                                            $ProductionModel->save($dataProduction);
+                                        }
+                                    } elseif ($rab['qty'] > $input['eqty' . $id][$paketid][$mdlid]) {
+                                        $countDiff = (int)$rab['qty'] - (int)$input['eqty' . $id][$paketid][$mdlid];
+                                        $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->orderBy('id', 'DESC')->limit($countDiff)->find();
+                                        foreach ($productions as $production) {
+                                            $ProductionModel->delete($production['id']);
+                                        }
+                                    }
                                     $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
                                 } else {
+                                    $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                                    foreach ($productions as $production) {
+                                        $ProductionModel->delete($production['id']);
+                                    }
                                     $RabModel->delete($rab);
-                                    // $ProductionModel->delete($prod);
                                 }
                             } elseif (empty($rab)) {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
@@ -665,28 +645,27 @@ class Project extends BaseController
                                         'paketid'   => $paketid,
                                         'qty'       => $qty
                                     ];
-                                    $RabModel->insert($datarab);
+                                    $RabModel->save($datarab);
+                                    for ($n = 1; $n <= (int)$qty; $n++) {
+                                        $dataProduction = [
+                                            'mdlid'     => $mdlid,
+                                            'projectid' => $id
+                                        ];
+                                        $ProductionModel->save($dataProduction);
+                                    }
                                 }
                             }
                         } else {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
                             if (!empty($rab)) {
+                                $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                                foreach ($productions as $production) {
+                                    $ProductionModel->delete($production['id']);
+                                }
                                 $RabModel->delete($rab['id']);
                             }
                         }
                     }
-                }
-            }
-
-            // Create New Data Production
-            $sphs = $RabModel->where('projectid', $id)->find();
-            foreach ($sphs as $sph) {
-                for ($i = 1; $i <= $sph['qty']; $i++) {
-                    $productiondata = [
-                        'mdlid'     => $sph['mdlid'],
-                        'projectid' => $sph['projectid'],
-                    ];
-                    $ProductionModel->insert($productiondata);
                 }
             }
 
@@ -866,6 +845,18 @@ class Project extends BaseController
                         'setting'           => $setting,
                     ];
                     $ProductionModel->save($settinginput);
+                }
+            }
+
+            // PIC Production
+            $productionpic = $ProductionModel->where('projectid',$id)->find();
+            foreach($productionpic as $picprod){
+                if (isset($input['picpro'][$picprod['id']]) && ($input['picpro'][$picprod['id']] != $picprod['userid'])) {
+                    $inputpropic = [
+                        'id'                => $picprod['id'],
+                        'userid'            => $input['picpro'][$picprod['id']],
+                    ];
+                    $ProductionModel->save($inputpropic);
                 }
             }
 
