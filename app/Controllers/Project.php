@@ -172,8 +172,35 @@ class Project extends BaseController
                         foreach ($productions as $production) {
 
                             // MDL Production
-                            $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                            $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
+                            $percentages    = [];
                             foreach ($mdlprod as $mdlp) {
+                                // Percentage Production
+                                if ($production['gambar_kerja'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_awal'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['tukang'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_lanjutan'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['finishing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['packing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['pengiriman'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['setting'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+
                                 $projectdata[$project['id']]['production'][$production['id']]  = [
                                     'id'                => $production['id'],
                                     // 'mdlid'             => $production['mdlid'],
@@ -185,9 +212,12 @@ class Project extends BaseController
                                     'mesin_lanjutan'    => $production['mesin_lanjutan'],
                                     'finishing'         => $production['finishing'],
                                     'packing'           => $production['packing'],
+                                    'pengiriman'        => $production['pengiriman'],
                                     'setting'           => $production['setting'],
                                 ];
                             }
+
+                            $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                         }
                     } else {
                         $mdlprod    = [];
@@ -246,6 +276,9 @@ class Project extends BaseController
                                         array_push($progress, $value['val']);
                                     }
                                     if ($proses['packing'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['pengiriman'] === "1") {
                                         array_push($progress, $value['val']);
                                     }
                                     if ($proses['setting'] === "1") {
@@ -632,7 +665,7 @@ class Project extends BaseController
                                         'paketid'   => $paketid,
                                         'qty'       => $qty
                                     ];
-                                    $RabModel->save($datarab);
+                                    $RabModel->insert($datarab);
                                 }
                             }
                         } else {
@@ -751,77 +784,88 @@ class Project extends BaseController
             // Gambar Kerja
             if (isset($input['gambarkerja' . $id])) {
                 foreach ($input['gambarkerja' . $id] as $prodid => $gambar) {
-                    $productioninput = [
+                    $gambarkerjainput = [
                         'id'                => $prodid,
                         'gambar_kerja'      => $gambar,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($gambarkerjainput);
                 }
             }
 
             // Mesin Awal
             if (isset($input['mesinawal' . $id])) {
                 foreach ($input['mesinawal' . $id] as $prodid => $mesinawal) {
-                    $productioninput = [
+                    $mesinawalinput = [
                         'id'                => $prodid,
                         'mesin_awal'        => $mesinawal,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($mesinawalinput);
                 }
             }
 
             // Tukang
             if (isset($input['tukang' . $id])) {
                 foreach ($input['tukang' . $id] as $prodid => $tukang) {
-                    $productioninput = [
+                    $tukanginput = [
                         'id'                => $prodid,
                         'tukang'            => $tukang,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($tukanginput);
                 }
             }
 
             // Mesin Lanjutan
             if (isset($input['mesinlanjutan' . $id])) {
                 foreach ($input['mesinlanjutan' . $id] as $prodid => $mesinlanjutan) {
-                    $productioninput = [
+                    $mesinlanjutaninput = [
                         'id'                => $prodid,
                         'mesin_lanjutan'    => $mesinlanjutan,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($mesinlanjutaninput);
                 }
             }
 
             // Finishing
             if (isset($input['finishing' . $id])) {
                 foreach ($input['finishing' . $id] as $prodid => $finishing) {
-                    $productioninput = [
+                    $finishinginput = [
                         'id'                => $prodid,
                         'finishing'         => $finishing,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($finishinginput);
                 }
             }
 
             // Packing
             if (isset($input['packing' . $id])) {
                 foreach ($input['packing' . $id] as $prodid => $packing) {
-                    $productioninput = [
+                    $packinginput = [
                         'id'                => $prodid,
                         'packing'           => $packing,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($packinginput);
+                }
+            }
+
+            // Pengiriman
+            if (isset($input['pengiriman' . $id])) {
+                foreach ($input['pengiriman' . $id] as $prodid => $pengiriman) {
+                    $pengirimaninput = [
+                        'id'                => $prodid,
+                        'pengiriman'        => $pengiriman,
+                    ];
+                    $ProductionModel->save($pengirimaninput);
                 }
             }
 
             // Setting
             if (isset($input['setting' . $id])) {
                 foreach ($input['setting' . $id] as $prodid => $setting) {
-                    $productioninput = [
+                    $settinginput = [
                         'id'                => $prodid,
                         'setting'           => $setting,
                     ];
-                    $ProductionModel->save($productioninput);
+                    $ProductionModel->save($settinginput);
                 }
             }
 

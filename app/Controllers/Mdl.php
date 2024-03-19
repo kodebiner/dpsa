@@ -163,7 +163,7 @@ class Mdl extends BaseController
             foreach ($MDL as $mdl) {
                 $return[] = [
                     'id'    => $mdl['id'],
-                    'text'  => $mdl['name']
+                    'text'  => $mdl['name'].' || '.$mdl['keterangan'],
                 ];
             }
 

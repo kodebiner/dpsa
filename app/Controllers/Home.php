@@ -187,11 +187,11 @@ class Home extends BaseController
                         }
 
                         // Custom RAB MODEL
-                        $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
+                        $projectdata[$project['id']]['custrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
 
                         // bast
-                        $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
-                        $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+                        $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                        $projectdata[$project['id']]['bast']            = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
 
                         // Production
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
@@ -199,8 +199,35 @@ class Home extends BaseController
                             foreach ($productions as $production) {
     
                                 // MDL Production
-                                $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                                $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
+                                $percentages    = [];
                                 foreach ($mdlprod as $mdlp) {
+                                    // Percentage Production
+                                    if ($production['gambar_kerja'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['mesin_awal'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['tukang'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['mesin_lanjutan'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['finishing'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['packing'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['pengiriman'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($production['setting'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+
                                     $projectdata[$project['id']]['production'][$production['id']]  = [
                                         'id'                => $production['id'],
                                         'mdlid'             => $production['mdlid'],
@@ -211,9 +238,12 @@ class Home extends BaseController
                                         'mesin_lanjutan'    => $production['mesin_lanjutan'],
                                         'finishing'         => $production['finishing'],
                                         'packing'           => $production['packing'],
+                                        'pengiriman'        => $production['pengiriman'],
                                         'setting'           => $production['setting'],
                                     ];
                                 }
+
+                                $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                             }
                         } else {
                             $mdlprod    = [];
@@ -268,6 +298,9 @@ class Home extends BaseController
                                             array_push($progress, $value['val']);
                                         }
                                         if ($proses['packing'] === "1") {
+                                            array_push($progress, $value['val']);
+                                        }
+                                        if ($proses['pengiriman'] === "1") {
                                             array_push($progress, $value['val']);
                                         }
                                         if ($proses['setting'] === "1") {
@@ -397,11 +430,11 @@ class Home extends BaseController
                     }
 
                     // Custom RAB MODEL
-                    $projectdata[$project['id']]['custrab']        = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdata[$project['id']]['custrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
 
                     // bast
-                    $projectdata[$project['id']]['sertrim']        = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
-                    $projectdata[$project['id']]['bast']           = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+                    $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                    $projectdata[$project['id']]['bast']            = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
 
                     // Production
                     $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
@@ -409,8 +442,36 @@ class Home extends BaseController
                         foreach ($productions as $production) {
 
                             // MDL Production
-                            $mdlprod    = $MdlModel->where('id', $production['mdlid'])->find();
+                            $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
+                            $percentages    = [];
                             foreach ($mdlprod as $mdlp) {
+                                // Percentage Production
+                                if ($production['gambar_kerja'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_awal'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['tukang'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_lanjutan'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['finishing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['packing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['pengiriman'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['setting'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+
+                                // Data Prodcution
                                 $projectdata[$project['id']]['production'][$production['id']]  = [
                                     'id'                => $production['id'],
                                     'mdlid'             => $production['mdlid'],
@@ -421,9 +482,12 @@ class Home extends BaseController
                                     'mesin_lanjutan'    => $production['mesin_lanjutan'],
                                     'finishing'         => $production['finishing'],
                                     'packing'           => $production['packing'],
+                                    'pengiriman'        => $production['pengiriman'],
                                     'setting'           => $production['setting'],
                                 ];
                             }
+
+                            $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                         }
                     } else {
                         $mdlprod    = [];
@@ -480,6 +544,9 @@ class Home extends BaseController
                                     if ($proses['packing'] === "1") {
                                         array_push($progress, $value['val']);
                                     }
+                                    if ($proses['pengiriman'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
                                     if ($proses['setting'] === "1") {
                                         array_push($progress, $value['val']);
                                     }
@@ -507,7 +574,6 @@ class Home extends BaseController
                     }
                 }
             }
-
 
             // Parsing Data to View
             $data                   = $this->data;

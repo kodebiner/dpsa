@@ -508,7 +508,7 @@
                             <!-- Add Client Auto Complete -->
                             <?php if (!empty($company)) {
                                 foreach ($company as $comp) {
-                                    if ($comp['id'] === $project['id']) {
+                                    if ($comp['id'] === $project['clientid']) {
                                         $klien = $comp['rsname'];
                                     }
                                 }
@@ -1721,7 +1721,9 @@
                                                         <th class="uk-text-center">Mesin Lanjutan</th>
                                                         <th class="uk-text-center">Finishing</th>
                                                         <th class="uk-text-center">Packing</th>
+                                                        <th class="uk-text-center">Pengiriman</th>
                                                         <th class="uk-text-center">Setting</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1772,14 +1774,24 @@
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td class="uk-text-center">
+                                                                    <?php if (strtoupper($production['pengiriman']) == '1') { ?>
+                                                                        <div uk-icon="check"></div>
+                                                                    <?php } else { ?>
+                                                                        <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <?php } ?>
+                                                                </td>
+                                                                <td class="uk-text-center">
                                                                     <?php if (strtoupper($production['setting']) == '1') { ?>
                                                                         <div uk-icon="check"></div>
                                                                     <?php } else { ?>
                                                                         <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
                                                                     <?php } ?>
                                                                 </td>
+                                                                <td class="uk-text-center">
+                                                                    <div><?= $production['percentages'] ?> %</div>
+                                                                </td>
                                                             </tr>
-                                                        <?php }else{ ?>
+                                                        <?php } else{ ?>
                                                             <tr>
                                                                 <td><?= $production['name'] ?></td>
                                                                 <td class="uk-text-center">
@@ -1813,9 +1825,17 @@
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td class="uk-text-center">
+                                                                    <?php if (strtoupper($production['pengiriman']) == '1') { ?>
+                                                                        <div uk-icon="check"></div>
+                                                                    <?php } ?>
+                                                                </td>
+                                                                <td class="uk-text-center">
                                                                     <?php if (strtoupper($production['setting']) == '1') { ?>
                                                                         <div uk-icon="check"></div>
                                                                     <?php } ?>
+                                                                </td>
+                                                                <td class="uk-text-center">
+                                                                    <div><?= $production['percentages'] ?> %</div>
                                                                 </td>
                                                             </tr>
                                                         <?php } ?>

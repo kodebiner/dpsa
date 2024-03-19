@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class ProductionModel extends Model
 {
     protected $allowedFields = [
-        'id', 'mdlid', 'projectid', 'gambar_kerja', 'mesin_awal', 'tukang', 'mesin_lanjutan', 'finishing', 'packing', 'setting',
+        'mdlid', 'projectid', 'gambar_kerja', 'mesin_awal', 'tukang', 'mesin_lanjutan', 'finishing', 'packing', 'pengiriman', 'setting',
     ];
     
     protected $table            = 'production';
