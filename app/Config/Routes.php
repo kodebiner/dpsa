@@ -59,6 +59,10 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('removesertrim/(:num)', 'Upload::removesertrim/$1');
     $routes->post('bast/(:num)', 'Upload::bast/$1');
     $routes->post('removebast/(:num)', 'Upload::removebast/$1');
+    $routes->post('invoice/(:num)', 'Upload::invoice/$1');
+    $routes->post('invoice2/(:num)', 'Upload::invoice2/$1');
+    $routes->post('invoice3/(:num)', 'Upload::invoice3/$1');
+    $routes->post('invoice4/(:num)', 'Upload::invoice4/$1');
     $routes->post('buktipembayaran', 'Upload::buktipembayaran');
     $routes->post('removebuktipembayaran', 'Upload::removebuktipembayaran');
     $routes->post('buktipengiriman', 'Upload::buktipengiriman');

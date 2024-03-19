@@ -930,6 +930,7 @@
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
                                                 <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
                                                 <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                <a class="uk-button uk-button-default uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Upload SPH</a>
                                                 <hr>
                                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                     <table class="uk-table uk-table-middle uk-table-divider">
@@ -2561,7 +2562,19 @@
                                         </div>
 
                                         <div class="toggleinvoice1<?= $project['id'] ?>" hidden>
+                                            
                                             <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">No Invoice I</label>
+                                                    <div class="uk-form-controls">:
+                                                        <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>" disabled>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
                                                     <div class="uk-form-controls">:
@@ -2701,70 +2714,116 @@
                                                 </div>
 
                                                 <div class="uk-margin-small">
-                                                    <label class="uk-form-label">Upload Invoice I</label>
-                                                    <div class="uk-form-controls">:
-                                                        <div class="js-upload" uk-form-custom>
-                                                            <input type="file" multiple>
-                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- BAST -->
-                                                <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>">
-                                                    <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
-                                                    <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containerbast-<?= $project['id'] ?>" uk-grid>
-                                                        <?php
-                                                            $bastid = "";
-                                                            if (!empty($bast) && $bast['status'] === "1") {
-                                                                $bastid = $bast['id']; ?>
-                                                                <div id="bast-file-<?= $bast['id'] ?>">
-                                                                    <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                        <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
-                                                                        <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
-                                                                    </div>
-                                                                </div>
-                                                                <script>
-                                                                    function removeCardFilebast<?= $bast['id']; ?>() {
-                                                                        let text = "Hapus file BAST ini?";
-                                                                        if (confirm(text) == true) {
-                                                                            $.ajax({
-                                                                                url: "project/removesertrim/<?= $bast['id'] ?>",
-                                                                                method: "POST",
-                                                                                data: {
-                                                                                    bast: <?= $bast['id'] ?>,
-                                                                                },
-                                                                                dataType: "json",
-                                                                                error: function() {
-                                                                                    console.log('error', arguments);
-                                                                                },
-                                                                                success: function() {
-                                                                                    console.log('success', arguments);
-                                                                                    alert('data berhasil di hapus');
-                                                                                    $("#bast-file-<?= $bast['id'] ?>").remove();
-                                                                                },
-                                                                            })
-                                                                        }
-                                                                    }
-                                                                </script>
-                                                            <?php }?>
-                                                    </div>
-                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
-                                                        <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
-                                                            <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
-                                                            <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
-                                                                <span uk-icon="icon: cloud-upload"></span>
-                                                                <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
-                                                                <div uk-form-custom>
-                                                                    <input type="file">
-                                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
-                                                                </div>
-                                                            </div>
-                                                            <progress id="js-progressbar-createbast-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <?php if(!empty($projectdata[$project['id']]['invoice1'])) {?>
+                                                        <div class="uk-form-controls" id="continv<?=$projectdata[$project['id']]['invoice1']['id']?>">:
+                                                            <?php if(!empty($projectdata[$project['id']]['invoice1']['file'])) {?>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice1']['file'] ?>" id="inv<?=$projectdata[$project['id']]['invoice1']['id']?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice1']['file'] ?></a>
+                                                            <?php } ?>
                                                         </div>
                                                     <?php } ?>
                                                 </div>
-                                                <!-- End Of BAST -->
+
+                                                <div class="uk-margin-small">
+                                                    <p class="uk-margin-left-remove" uk-margin>
+                                                        <div class="js-upload-<?=$projectdata[$project['id']]['invoice1']['id']?>" uk-form-custom>
+                                                            <input type="file" multiple>
+                                                            <progress id="js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice I</button>
+                                                        </div>
+                                                    </p>
+                                                </div>
+
+                                                <script>
+                                                    var bar = document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>');
+                                                    UIkit.upload('.js-upload-<?=$projectdata[$project['id']]['invoice1']['id']?>', {
+                                                        url: 'upload/invoice/<?= $project['id'] ?>',
+                                                        multiple: false,
+                                                        name: 'uploads',
+                                                        param: {
+                                                            lorem: 'ipsum'
+                                                        },
+                                                        method: 'POST',
+                                                        type: 'json',
+
+                                                        beforeSend: function () {
+                                                            console.log('beforeSend', arguments);
+                                                        },
+                                                        beforeAll: function () {
+                                                            console.log('beforeAll', arguments);
+                                                        },
+                                                        load: function () {
+                                                            console.log('load', arguments);
+                                                        },
+                                                        error: function () {
+                                                            console.log('error', arguments);
+                                                            var error = arguments[0].xhr.response.message.uploads;
+                                                            alert(error);
+                                                        },
+                                                        complete: function () {
+                                                            console.log('complete', arguments);
+
+                                                            var id = arguments[0].response.id;
+                                                            var filename = arguments[0].response.file;
+                                                            var proid = arguments[0].response.proid;
+
+                                                            console.log(id, filename, proid);
+
+                                                            if (document.getElementById('inv' + id)) {
+                                                                document.getElementById('inv' + id).remove();
+                                                            };
+
+                                                            var setcontinv = document.getElementById('continv<?=$projectdata[$project['id']]['invoice1']['id']?>');
+
+                                                            var container = document.createElement('a');
+                                                            container.setAttribute('id', 'inv' + proid);
+
+                                                            var icon = document.createElement('span');
+                                                            icon.setAttribute('uk-icon', 'file-text');
+
+                                                            var file = document.createTextNode(filename);
+
+                                                            setcontinv.appendChild(container);
+                                                            container.appendChild(icon);
+                                                            container.appendChild(file);
+                                                        },
+
+                                                        loadStart: function (e) {
+                                                            console.log('loadStart', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').removeAttribute('hidden');
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        progress: function (e) {
+                                                            console.log('progress', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        loadEnd: function (e) {
+                                                            console.log('loadEnd', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        completeAll: function () {
+                                                            console.log('completeAll', arguments);
+
+                                                            setTimeout(function() {
+                                                                document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>').setAttribute('hidden', 'hidden');
+                                                                alert('<?= lang('Proses selesai, File invoice berhasil di unggah.') ?>');
+                                                            }, 1000);
+
+                                                            alert('Upload Selesai');
+                                                        }
+
+                                                    });
+                                                </script>
 
                                             </div>
                                         </div>
@@ -2784,6 +2843,17 @@
 
                                         <div class="toggleinvoice2<?= $project['id'] ?>" hidden>
                                             <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">No Invoice II</label>
+                                                    <div class="uk-form-controls">:
+                                                        <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>" disabled>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
                                                     <div class="uk-form-controls">:
@@ -2917,6 +2987,119 @@
                                                         <?php } ?>
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <?php if(!empty($projectdata[$project['id']]['invoice2'])) {?>
+                                                        <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice2']['id'] ?>">:
+                                                            <?php if(!empty($projectdata[$project['id']]['invoice2']['file'])) {?>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice2']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice2']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice2']['file'] ?></a>
+                                                            <?php } ?>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <p class="uk-margin-left-remove" uk-margin>
+                                                        <div class="js-upload-<?=$projectdata[$project['id']]['invoice2']['id']?>" uk-form-custom>
+                                                            <input type="file" multiple>
+                                                            <progress id="js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice II</button>
+                                                        </div>
+                                                    </p>
+                                                </div>
+
+                                                <script>
+                                                    var bar = document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>');
+                                                    UIkit.upload('.js-upload-<?=$projectdata[$project['id']]['invoice2']['id']?>', {
+                                                        url: 'upload/invoice2/<?= $project['id'] ?>',
+                                                        multiple: false,
+                                                        name: 'uploads',
+                                                        param: {
+                                                            lorem: 'ipsum'
+                                                        },
+                                                        method: 'POST',
+                                                        type: 'json',
+
+                                                        beforeSend: function () {
+                                                            console.log('beforeSend', arguments);
+                                                        },
+                                                        beforeAll: function () {
+                                                            console.log('beforeAll', arguments);
+                                                        },
+                                                        load: function () {
+                                                            console.log('load', arguments);
+                                                        },
+                                                        error: function () {
+                                                            console.log('error', arguments);
+                                                            var error = arguments[0].xhr.response.message.uploads;
+                                                            alert(error);
+                                                        },
+                                                        complete: function () {
+                                                            console.log('complete', arguments);
+
+                                                            var id = arguments[0].response.id;
+                                                            var filename = arguments[0].response.file;
+                                                            var proid = arguments[0].response.proid;
+
+                                                            console.log(id, filename, proid);
+
+                                                            if (document.getElementById('inv' + id)) {
+                                                                document.getElementById('inv' + id).remove();
+                                                            };
+
+                                                            var setcontinv = document.getElementById('continv<?=$projectdata[$project['id']]['invoice2']['id']?>');
+
+                                                            var container = document.createElement('a');
+                                                            container.setAttribute('id', 'inv' + id);
+
+                                                            var icon = document.createElement('span');
+                                                            icon.setAttribute('uk-icon', 'file-text');
+
+                                                            var file = document.createTextNode(filename);
+
+                                                            setcontinv.appendChild(container);
+                                                            container.appendChild(icon);
+                                                            container.appendChild(file);
+                                                        },
+
+                                                        loadStart: function (e) {
+                                                            console.log('loadStart', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').removeAttribute('hidden');
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        progress: function (e) {
+                                                            console.log('progress', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        loadEnd: function (e) {
+                                                            console.log('loadEnd', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        completeAll: function () {
+                                                            console.log('completeAll', arguments);
+
+                                                            setTimeout(function() {
+                                                                document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice2']['id']?>').setAttribute('hidden', 'hidden');
+                                                                alert('<?= lang('Proses selesai, File invoice berhasil di unggah.') ?>');
+                                                            }, 1000);
+
+                                                            alert('Upload Selesai');
+                                                        }
+
+                                                    });
+                                                </script>
+
                                             </div>
                                         </div>
                                     </div>
@@ -2935,6 +3118,17 @@
 
                                         <div class="toggleinvoice3<?= $project['id'] ?>" hidden>
                                             <div class="uk-form-horizontal">
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">No Invoice III</label>
+                                                    <div class="uk-form-controls">:
+                                                        <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'"; } ?> name="noinv3<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'"; } ?> name="noinv3<?= $project['id'] ?>" disabled>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
                                                     <div class="uk-form-controls">:
@@ -3068,6 +3262,118 @@
                                                         <?php } ?>
                                                     </div>
                                                 </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <?php if(!empty($projectdata[$project['id']]['invoice3'])) {?>
+                                                        <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice3']['id'] ?>">:
+                                                            <?php if(!empty($projectdata[$project['id']]['invoice3']['file'])) {?>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice3']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice3']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice3']['file'] ?></a>
+                                                            <?php } ?>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <p class="uk-margin-left-remove" uk-margin>
+                                                        <div class="js-upload-<?=$projectdata[$project['id']]['invoice3']['id']?>" uk-form-custom>
+                                                            <input type="file" multiple>
+                                                            <progress id="js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice III</button>
+                                                        </div>
+                                                    </p>
+                                                </div>
+
+                                                <script>
+                                                    var bar = document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>');
+                                                    UIkit.upload('.js-upload-<?=$projectdata[$project['id']]['invoice3']['id']?>', {
+                                                        url: 'upload/invoice3/<?= $project['id'] ?>',
+                                                        multiple: false,
+                                                        name: 'uploads',
+                                                        param: {
+                                                            lorem: 'ipsum'
+                                                        },
+                                                        method: 'POST',
+                                                        type: 'json',
+
+                                                        beforeSend: function () {
+                                                            console.log('beforeSend', arguments);
+                                                        },
+                                                        beforeAll: function () {
+                                                            console.log('beforeAll', arguments);
+                                                        },
+                                                        load: function () {
+                                                            console.log('load', arguments);
+                                                        },
+                                                        error: function () {
+                                                            console.log('error', arguments);
+                                                            var error = arguments[0].xhr.response.message.uploads;
+                                                            alert(error);
+                                                        },
+                                                        complete: function () {
+                                                            console.log('complete', arguments);
+
+                                                            var id = arguments[0].response.id;
+                                                            var filename = arguments[0].response.file;
+                                                            var proid = arguments[0].response.proid;
+
+                                                            console.log(id, filename, proid);
+
+                                                            if (document.getElementById('inv' + id)) {
+                                                                document.getElementById('inv' + id).remove();
+                                                            };
+
+                                                            var setcontinv = document.getElementById('continv<?=$projectdata[$project['id']]['invoice3']['id']?>');
+
+                                                            var container = document.createElement('a');
+                                                            container.setAttribute('id', 'inv' + id);
+
+                                                            var icon = document.createElement('span');
+                                                            icon.setAttribute('uk-icon', 'file-text');
+
+                                                            var file = document.createTextNode(filename);
+
+                                                            setcontinv.appendChild(container);
+                                                            container.appendChild(icon);
+                                                            container.appendChild(file);
+                                                        },
+
+                                                        loadStart: function (e) {
+                                                            console.log('loadStart', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').removeAttribute('hidden');
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        progress: function (e) {
+                                                            console.log('progress', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        loadEnd: function (e) {
+                                                            console.log('loadEnd', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        completeAll: function () {
+                                                            console.log('completeAll', arguments);
+
+                                                            setTimeout(function() {
+                                                                document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice3']['id']?>').setAttribute('hidden', 'hidden');
+                                                                alert('<?= lang('Proses selesai, File invoice berhasil di unggah.') ?>');
+                                                            }, 1000);
+
+                                                            alert('Upload Selesai');
+                                                        }
+
+                                                    });
+                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -3086,21 +3392,27 @@
 
                                         <div class="toggleinvoice4<?= $project['id'] ?>" hidden>
                                             <div class="uk-form-horizontal">
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">No Invoice IV</label>
+                                                    <div class="uk-form-controls">:
+                                                        <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> name="noinv4<?= $project['id'] ?>">
+                                                        <?php } else { ?>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>" disabled>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Jatuh Tempo</label>
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']);
-                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                    } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {$tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'";} ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {
-                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']);
-                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                    } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -3225,6 +3537,118 @@
                                                         <?php } ?>
                                                     </div>
                                                 </div>
+
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <?php if(!empty($projectdata[$project['id']]['invoice4'])) {?>
+                                                        <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice4']['id'] ?>">:
+                                                            <?php if(!empty($projectdata[$project['id']]['invoice4']['file'])) {?>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice4']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice4']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice4']['file'] ?></a>
+                                                            <?php } ?>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <div class="uk-margin-small">
+                                                    <p class="uk-margin-left-remove" uk-margin>
+                                                        <div class="js-upload-<?=$projectdata[$project['id']]['invoice4']['id']?>" uk-form-custom>
+                                                            <input type="file" multiple>
+                                                            <progress id="js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice IV</button>
+                                                        </div>
+                                                    </p>
+                                                </div>
+
+                                                <script>
+                                                    var bar = document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>');
+                                                    UIkit.upload('.js-upload-<?=$projectdata[$project['id']]['invoice4']['id']?>', {
+                                                        url: 'upload/invoice4/<?= $project['id'] ?>',
+                                                        multiple: false,
+                                                        name: 'uploads',
+                                                        param: {
+                                                            lorem: 'ipsum'
+                                                        },
+                                                        method: 'POST',
+                                                        type: 'json',
+
+                                                        beforeSend: function () {
+                                                            console.log('beforeSend', arguments);
+                                                        },
+                                                        beforeAll: function () {
+                                                            console.log('beforeAll', arguments);
+                                                        },
+                                                        load: function () {
+                                                            console.log('load', arguments);
+                                                        },
+                                                        error: function () {
+                                                            console.log('error', arguments);
+                                                            var error = arguments[0].xhr.response.message.uploads;
+                                                            alert(error);
+                                                        },
+                                                        complete: function () {
+                                                            console.log('complete', arguments);
+
+                                                            var id = arguments[0].response.id;
+                                                            var filename = arguments[0].response.file;
+                                                            var proid = arguments[0].response.proid;
+
+                                                            console.log(id, filename, proid);
+
+                                                            if (document.getElementById('inv' + id)) {
+                                                                document.getElementById('inv' + id).remove();
+                                                            };
+
+                                                            var setcontinv = document.getElementById('continv<?=$projectdata[$project['id']]['invoice4']['id']?>');
+
+                                                            var container = document.createElement('a');
+                                                            container.setAttribute('id', 'inv' + id);
+
+                                                            var icon = document.createElement('span');
+                                                            icon.setAttribute('uk-icon', 'file-text');
+
+                                                            var file = document.createTextNode(filename);
+
+                                                            setcontinv.appendChild(container);
+                                                            container.appendChild(icon);
+                                                            container.appendChild(file);
+                                                        },
+
+                                                        loadStart: function (e) {
+                                                            console.log('loadStart', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').removeAttribute('hidden');
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        progress: function (e) {
+                                                            console.log('progress', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        loadEnd: function (e) {
+                                                            console.log('loadEnd', arguments);
+
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').max = e.total;
+                                                            document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').value = e.loaded;
+                                                        },
+
+                                                        completeAll: function () {
+                                                            console.log('completeAll', arguments);
+
+                                                            setTimeout(function() {
+                                                                document.getElementById('js-progressbar-<?=$projectdata[$project['id']]['invoice4']['id']?>').setAttribute('hidden', 'hidden');
+                                                                alert('<?= lang('Proses selesai, File invoice berhasil di unggah.') ?>');
+                                                            }, 1000);
+
+                                                            alert('Upload Selesai');
+                                                        }
+
+                                                    });
+                                                </script>
                                             </div>
                                         </div>
                                     </div>

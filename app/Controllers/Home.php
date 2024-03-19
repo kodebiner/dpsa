@@ -15,6 +15,7 @@ use App\Models\DesignModel;
 use App\Models\LogModel;
 use App\Models\ProductionModel;
 use App\Models\BuktiModel;
+use App\Models\InvoiceModel;
 
 class Home extends BaseController
 {
@@ -327,6 +328,13 @@ class Home extends BaseController
                             $projectdata[$project['id']]['now'] = '';
                         }
 
+                        // INVOICE
+                        $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
+                        $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
+                        $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
+                        $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
+
+
                         // Bukti Pembayaran
                         $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
     
@@ -383,6 +391,7 @@ class Home extends BaseController
             $BastModel          = new BastModel();
             $ProductionModel    = new ProductionModel();
             $CustomRabModel     = new CustomRabModel();
+            $InvoiceModel       = new InvoiceModel();
             $BuktiModel         = new BuktiModel();
 
             // Populating Data
@@ -578,6 +587,12 @@ class Home extends BaseController
                         $projectdata[$project['id']]['now'] = '';
                     }
 
+                    // INVOICE
+                    $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
+                    $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
+                    $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
+                    $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
+
                     // Bukti Pembayaran
                     $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
 
@@ -599,6 +614,7 @@ class Home extends BaseController
             $data['pager']          = $pager->links('projects', 'uikit_full');
             $data['projectdata']    = $projectdata;
             $data['projectdesign']  = $projectdesign;
+
 
             return view('dashboard', $data);
         } else {

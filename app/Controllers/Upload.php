@@ -8,6 +8,7 @@ use App\Models\ProjectModel;
 use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
 use App\Models\LogModel;
+use App\Models\InvoiceModel;
 
 class Upload extends BaseController
 {
@@ -496,7 +497,7 @@ class Upload extends BaseController
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
         ];
 
         // Get Extention
@@ -533,7 +534,6 @@ class Upload extends BaseController
             if (!empty($returnFile)) {
                 $bast = $BastModel->where('projectid',$id)->where('status','1')->first();
                 if (empty($bast)) {
-                    // unlink(FCPATH . '/img/bast/' . $returnFile);
                     $databast = [
                         'projectid'     => $id,
                         'file'          => $returnFile,
@@ -543,14 +543,9 @@ class Upload extends BaseController
                     $bastId = $BastModel->getInsertID();
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast '.$project['name']]);
                 } else {
-                    // $filebast = FCPATH . '/img/bast/' . $bast['file'];
-                    // if (file_exists(FCPATH . '/img/bast/' . $bast['file'])) { 
-                    //     unlink(FCPATH . '/img/bast/' . $bast['file']);
-                    // }
                     if (!empty($bast['file'])) { 
                         unlink(FCPATH . '/img/bast/' . $bast['file']);
                     }
-                    // unlink(FCPATH . '/img/bast/' . $bast['file']);
                     $databast = [
                         'id'            => $bast['id'],
                         'projectid'     => $id,
@@ -577,6 +572,342 @@ class Upload extends BaseController
 
             // Returning Message
             die(json_encode($returnBast));
+        }
+    }
+
+    public function invoice($id){
+
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $InvoiceModel   = new InvoiceModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
+            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            $invoiceId="";
+            if (!empty($returnFile)) {
+                $invoice = $InvoiceModel->where('projectid',$id)->where('status','1')->first();
+                if (empty($invoice)) {
+                    $datainvoice = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 1,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $invoiceId = $InvoiceModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice I'.$project['name']]);
+                } else {
+                    if (!empty($invoice['file'])) { 
+                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    }
+                    $datainvoice = [
+                        'id'            => $invoice['id'],
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 1,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice I'.$project['name']]);
+                    $invoiceId = $invoice['id'];
+                }
+            }
+           
+            $returninvoice = [
+                'id'    => $invoiceId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
+            // Returning Message
+            die(json_encode($returninvoice));
+        }
+    }
+
+    public function invoice2($id){
+
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $InvoiceModel   = new InvoiceModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
+            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            $invoiceId="";
+            if (!empty($returnFile)) {
+                $invoice = $InvoiceModel->where('projectid',$id)->where('status','2')->first();
+                if (empty($invoice)) {
+                    $datainvoice = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 2,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $invoiceId = $InvoiceModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice II'.$project['name']]);
+                } else {
+                    if (!empty($invoice['file'])) { 
+                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    }
+                    $datainvoice = [
+                        'id'            => $invoice['id'],
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 2,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice II'.$project['name']]);
+                    $invoiceId = $invoice['id'];
+                }
+            }
+           
+            $returninvoice = [
+                'id'    => $invoiceId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
+            // Returning Message
+            die(json_encode($returninvoice));
+        }
+    }
+
+    public function invoice3($id){
+
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $InvoiceModel   = new InvoiceModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
+            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            $invoiceId="";
+            if (!empty($returnFile)) {
+                $invoice = $InvoiceModel->where('projectid',$id)->where('status','3')->first();
+                if (empty($invoice)) {
+                    $datainvoice = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 3,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $invoiceId = $InvoiceModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III'.$project['name']]);
+                } else {
+                    if (!empty($invoice['file'])) { 
+                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    }
+                    $datainvoice = [
+                        'id'            => $invoice['id'],
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 3,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice III'.$project['name']]);
+                    $invoiceId = $invoice['id'];
+                }
+            }
+           
+            $returninvoice = [
+                'id'    => $invoiceId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
+            // Returning Message
+            die(json_encode($returninvoice));
+        }
+    }
+
+    public function invoice4($id){
+
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $InvoiceModel   = new InvoiceModel();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
+            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            $invoiceId="";
+            if (!empty($returnFile)) {
+                $invoice = $InvoiceModel->where('projectid',$id)->where('status','4')->first();
+                if (empty($invoice)) {
+                    $datainvoice = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 4,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $invoiceId = $InvoiceModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice IV'.$project['name']]);
+                } else {
+                    if (!empty($invoice['file'])) { 
+                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    }
+                    $datainvoice = [
+                        'id'            => $invoice['id'],
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'status'        => 4,
+                    ];
+                    $InvoiceModel->save($datainvoice);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice IV'.$project['name']]);
+                    $invoiceId = $invoice['id'];
+                }
+            }
+           
+            $returninvoice = [
+                'id'    => $invoiceId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
+            // Returning Message
+            die(json_encode($returninvoice));
         }
     }
 

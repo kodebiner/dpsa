@@ -558,6 +558,7 @@ class Project extends BaseController
             // initialize
             $input  = $this->request->getPost();
             $pro    = $ProjectModel->find($id);
+            dd($input);
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -613,7 +614,6 @@ class Project extends BaseController
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
-
 
             // RAB Data
             if (isset($input['checked' . $id])) {
