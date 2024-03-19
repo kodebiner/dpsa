@@ -925,7 +925,7 @@
                                         </div>
                                     </div>
 
-                                    <?php if ($project['status_spk'] != 1) { ?>
+                                    <!-- </?php if ($project['status_spk'] != 1) { ?> -->
                                         <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                             <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
                                                 <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
@@ -1040,7 +1040,6 @@
                                                     <div class="uk-h4">Tambah Pesanan</div>
                                                 <?php } ?>
 
-                                                
                                                 <div class="uk-margin-bottom">
                                                     <label class="uk-form-label" for="paket">Cari Paket</label>
                                                     <div class="uk-form-controls">
@@ -1126,9 +1125,10 @@
                                                 </script>
                                             </div>
                                         <?php } ?>
-                                    <?php } else { ?>
-                                        <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                                            <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>">Download SPH</a>
+                                    <!-- </?php } ?> -->
+                                    <!-- </?php } else { ?> -->
+                                        <!-- <div class="uk-padding uk-padding-remove-vertical togglesph</?= $project['id'] ?>" hidden>
+                                            <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/</?= $project['id'] ?>">Download SPH</a>
                                             <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                 <table class="uk-table uk-table-middle uk-table-divider">
                                                     <thead>
@@ -1145,16 +1145,16 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php if (!empty($projectdata[$project['id']]['rab'])) {
+                                                        </?php if (!empty($projectdata[$project['id']]['rab'])) {
                                                             foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
                                                                 <tr>
-                                                                    <td><?= $mdlrab['name'] ?></td>
-                                                                    <td><?= $mdlrab['length'] ?></td>
-                                                                    <td><?= $mdlrab['width'] ?></td>
-                                                                    <td><?= $mdlrab['height'] ?></td>
-                                                                    <td><?= $mdlrab['volume'] ?></td>
+                                                                    <td></?= $mdlrab['name'] ?></td>
+                                                                    <td></?= $mdlrab['length'] ?></td>
+                                                                    <td></?= $mdlrab['width'] ?></td>
+                                                                    <td></?= $mdlrab['height'] ?></td>
+                                                                    <td></?= $mdlrab['volume'] ?></td>
                                                                     <td>
-                                                                        <?php
+                                                                        </?php
                                                                         if ($mdlrab['denomination'] === "1") {
                                                                             echo "Unit";
                                                                         } elseif ($mdlrab['denomination'] === "2") {
@@ -1166,19 +1166,19 @@
                                                                         }
                                                                         ?>
                                                                     </td>
-                                                                    <td><?= $mdlrab['keterangan'] ?></td>
-                                                                    <td class="uk-text-center"><?= $mdlrab['qty'] ?></td>
-                                                                    <td><?= "Rp. " . number_format($mdlrab['price'], 0, ',', '.');" "; ?></td>
+                                                                    <td></?= $mdlrab['keterangan'] ?></td>
+                                                                    <td class="uk-text-center"></?= $mdlrab['qty'] ?></td>
+                                                                    <td></?= "Rp. " . number_format($mdlrab['price'], 0, ',', '.');" "; ?></td>
                                                                 </tr>
-                                                            <?php }
+                                                            </?php }
                                                         } ?>
                                                         <tr>
                                                             <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
                                                         </tr>
-                                                        <?php if (!empty($projectdata[$project['id']]['customrab'])) {
+                                                        </?php if (!empty($projectdata[$project['id']]['customrab'])) {
                                                             foreach ($projectdata[$project['id']]['customrab'] as $customsph) { ?>
                                                                 <tr>
-                                                                    <td><?= $customsph['name'] ?></td>
+                                                                    <td></?= $customsph['name'] ?></td>
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
@@ -1186,15 +1186,15 @@
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
-                                                                    <td><?= "Rp. " . number_format($customsph['price'], 0, ',', '.');" "; ?></td>
+                                                                    <td></?= "Rp. " . number_format($customsph['price'], 0, ',', '.');" "; ?></td>
                                                                 </tr>
-                                                            <?php }
+                                                            </?php }
                                                         } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                                    <?php } ?>
+                                    </?php } ?> -->
                                     <script>
                                         // Dropdown SPH
                                         document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
