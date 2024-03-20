@@ -336,7 +336,9 @@
                                             
                                         </div>
                                         <p class="uk-text-left uk-width-1-1" uk-margin>
-                                            <a class="uk-button uk-button-primary uk-button-small" href="project/sphprint/<?= $project['id'] ?>" target="_blank"> Download SPH</a>
+                                            <?php if(!empty($project['sph'])) { ?>
+                                                <a class="uk-button uk-button-primary uk-button-small" href="img/sph/<?= $project['sph'] ?>" target="_blank"> Download SPH</a>
+                                            <?php }?>
                                         </p>
                                     </div>
                                 </div>
@@ -989,10 +991,12 @@
                                                     <?php } ?>
                                                 </tbody>
                                             </table>
-                                            <p class="uk-text-right uk-width-1-1" uk-margin>
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/<?= $project['id'] ?>" target="_blank"><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPH</a>
-                                            </p>
-                                            <hr class="uk-margin">
+                                            <?php if(!empty($project['sph'])) { ?>
+                                                <p class="uk-text-right uk-width-1-1" uk-margin>
+                                                    <a class="uk-button uk-button-primary uk-margin-small-right" href="img/sph/<?= $project['sph'] ?>" target="_blank"><span class='uk-margin-small-right uk-icon' uk-icon='icon: download; ratio: 1.2'></span>Download SPH</a>
+                                                </p>
+                                                <hr class="uk-margin">
+                                            <?php } ?>
                                         </div>
 
                                         <!-- Desain -->

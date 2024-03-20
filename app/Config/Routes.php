@@ -63,6 +63,7 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('invoice2/(:num)', 'Upload::invoice2/$1');
     $routes->post('invoice3/(:num)', 'Upload::invoice3/$1');
     $routes->post('invoice4/(:num)', 'Upload::invoice4/$1');
+    $routes->post('sph/(:num)', 'Upload::sph/$1');
     $routes->post('buktipembayaran', 'Upload::buktipembayaran');
     $routes->post('removebuktipembayaran', 'Upload::removebuktipembayaran');
     $routes->post('buktipengiriman', 'Upload::buktipengiriman');
@@ -133,6 +134,8 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('invoiceexcel/(:num)', 'Project::invoiceexcel/$1');
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
+    $routes->post('removesph/(:num)', 'Project::removesph/$1');
+
     // $routes->post('inv4/(:num)', 'Project::inv4/$1');
 
     // Project Temp Routes

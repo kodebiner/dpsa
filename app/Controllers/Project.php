@@ -2609,20 +2609,25 @@ class Project extends BaseController
         die(json_encode(array($filename)));
     }
 
-    // public function inv4($id)
-    // {
-    //     $ProjectModel = new ProjectModel();
-    //     $input = $this->request->getPost();
+    public function removesph($id)
+    {
+        $LogModel       = new LogModel;
+        $ProjectModel   = new ProjectModel;
 
-    //     $date = date_create($input['dateline']);
-    //     $day = date_format($date, "Y-m-d H:i:s");
+        $project   = $ProjectModel->find($id);
+        $filename  = $project['sph'];
 
-    //     $invoice = [
-    //         'id'    => $id,
-    //         'inv4'  => $day,
-    //     ];
-    //     $ProjectModel->save($invoice);
+        if (!empty($filename)) {
+            unlink(FCPATH . 'img/sph/' . $filename);
+        }
 
-    //     die(json_encode($invoice));
-    // }
+        $datasph = [
+            'id'    => $id,
+            'sph'   => "",
+        ];
+        $ProjectModel->save($datasph);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus File sph ' . $project['name']]);
+
+        die(json_encode(array($filename)));
+    }
 }

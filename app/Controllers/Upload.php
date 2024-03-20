@@ -575,6 +575,87 @@ class Upload extends BaseController
         }
     }
 
+    public function sph($id)
+    {
+        $image          = \Config\Services::image();
+        $validation     = \Config\Services::validation();
+        $ProjectModel   = new ProjectModel();
+        $LogModel       = new LogModel();
+        $input          = $this->request->getFile('uploads');
+        $project        = $ProjectModel->find($id);
+
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd.ms-excel,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        ];
+
+        // Get Extention
+        $ext = $input->getClientExtension();
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            // Saving uploaded file
+            $filename = $input->getRandomName();
+
+            function random_string($filename)
+            {
+                $key = '';
+                $keys = array_merge(range(0, 9), range('a', 'z'));
+
+                for ($i = 0; $i < $filename; $i++) {
+                    $key .= $keys[array_rand($keys)];
+                }
+
+                return $key;
+            }
+            $truename = random_string(20);
+            $input->move(FCPATH . '/img/sph/', $truename . '.' . $ext);
+
+            // Getting True Filename
+            $returnFile = $truename . '.' . $ext;
+
+            $sphId="";
+            if (!empty($returnFile)) {
+                $sph = $ProjectModel->where('id',$id)->first();
+                if (empty($sph)) {
+                    $datasph = [
+                        'id'            => $id,
+                        'sph'           => $returnFile,
+                    ];
+                    $ProjectModel->save($datasph);
+                    $sphId = $ProjectModel->getInsertID();
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload sph '.$project['name']]);
+                } else {
+                    if (!empty($sph['sph'])) { 
+                        unlink(FCPATH . '/img/sph/' . $sph['sph']);
+                    }
+                    $datasph = [
+                        'id'            => $sph['id'],
+                        'sph'           => $returnFile,
+                    ];
+                    $ProjectModel->save($datasph);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah sph '.$project['name']]);
+                    $sphId = $sph['id'];
+                }
+            }
+           
+            $returnBast = [
+                'id'    => $sphId,
+                'file'  => $returnFile,
+                'proid' => $id,
+            ];
+
+            // Returning Message
+            die(json_encode($returnBast));
+        }
+    }
+
     public function invoice($id){
 
         $image          = \Config\Services::image();

@@ -975,7 +975,6 @@
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
                                                 <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
                                                 <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
-                                                <a class="uk-button uk-button-default uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Upload SPH</a>
                                                 <hr>
                                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                     <table class="uk-table uk-table-middle uk-table-divider">
@@ -1089,6 +1088,190 @@
                                                     <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if(!empty($project['no_sph'])){ $nosph = $project['no_sph']; echo "value='$nosph'";} ?> placeholder="Nomor SPH">
                                                 </div>
                                             </div>
+
+                                            <!-- SPH -->
+                                            <div class="uk-margin" id="image-container-createsph-<?= $project['id'] ?>">
+                                                <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">UPLOAD SPH</label>
+                                                <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center uk-margin-top" id="containersph-<?= $project['id'] ?>" uk-grid>
+                                                    <div id="sph-file-<?= $project['id'] ?>">
+                                                        <?php if(!empty($project['sph'])){ ?>
+                                                            <div id="sph-card<?= $project['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
+                                                                <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilesph<?= $project['id']; ?>" onclick="removeCardFilesph<?= $project['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                <a href="img/sph/<?= $project['sph'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $project['sph'] ?> </a>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                    <script>
+                                                        function removeCardFilesph<?= $project['id']; ?>() {
+                                                            let text = "Hapus file sph ini?";
+                                                            if (confirm(text) == true) {
+                                                                $.ajax({
+                                                                    url: "project/removesph/<?= $project['id'] ?>",
+                                                                    method: "POST",
+                                                                    data: {
+                                                                        sph: <?= $project['id'] ?>,
+                                                                    },
+                                                                    dataType: "json",
+                                                                    error: function() {
+                                                                        console.log('error', arguments);
+                                                                    },
+                                                                    success: function() {
+                                                                        console.log('success', arguments);
+                                                                        alert('data berhasil di hapus');
+                                                                        $("#sph-file-<?= $project['id'] ?>").remove();
+                                                                    },
+                                                                })
+                                                            }
+                                                        }
+                                                    </script>
+                                                </div>
+                                                <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                    <div id="image-containersph-<?= $project['id'] ?>" class="uk-form-controls">
+                                                        <input id="photocreatesph<?= $project['id'] ?>" name="sph" hidden />
+                                                        <div id="js-upload-createsph-<?= $project['id'] ?>" class="js-upload-createsph-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
+                                                            <span uk-icon="icon: cloud-upload"></span>
+                                                            <span class="uk-text-middle">Tarik dan lepas file disini atau</span>
+                                                            <div uk-form-custom>
+                                                                <input type="file">
+                                                                <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                            </div>
+                                                        </div>
+                                                        <progress id="js-progressbar-createsph-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+
+                                            <script>
+                                                UIkit.upload('.js-upload-createsph-<?= $project['id'] ?>', {
+                                                url: 'upload/sph/<?= $project['id'] ?>',
+                                                multiple: false,
+                                                name: 'uploads',
+                                                param: {
+                                                    lorem: 'ipsum'
+                                                },
+                                                method: 'POST',
+                                                type: 'json',
+
+                                                beforeSend: function() {
+                                                    console.log('beforeSend', arguments);
+                                                },
+                                                beforeAll: function() {
+                                                    console.log('beforeAll', arguments);
+                                                },
+                                                load: function() {
+                                                    console.log('load', arguments);
+                                                },
+                                                error: function() {
+                                                    console.log('error', arguments);
+                                                    var error = arguments[0].xhr.response.message.uploads;
+                                                    alert(error);
+                                                },
+
+                                                complete: function() {
+                                                    console.log('complete', arguments);
+
+                                                    var id = arguments[0].response.id;
+                                                    var filename = arguments[0].response.file;
+                                                    var proid = arguments[0].response.proid;
+
+                                                    console.log(id, filename, proid);
+
+                                                    if (document.getElementById('sph-file-' + id)) {
+                                                        document.getElementById('sph-file-' + id).remove();
+                                                    };
+
+                                                    var contsph = document.getElementById('containersph-<?= $project['id'] ?>');
+
+                                                    var container = document.createElement('div');
+                                                    container.setAttribute('id', 'sph-file-' + id);
+
+                                                    var cardsph = document.createElement('div');
+                                                    cardsph.setAttribute('class', 'uk-card uk-card-default uk-card-body uk-margin-bottom');
+
+                                                    var divclosed = document.createElement('div');
+                                                    divclosed.setAttribute('class', 'uk-position-small uk-position-right');
+
+                                                    var close = document.createElement('a');
+                                                    close.setAttribute('id', 'remove-sph-' + id);
+                                                    close.setAttribute('class', 'tm-img-remove2 uk-border-circle uk-icon');
+                                                    close.setAttribute('onClick', 'removeCardFilesph(' + id + ',' + proid + ')');
+                                                    close.setAttribute('uk-icon', 'close');
+
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/sph/' + filename);
+                                                    link.setAttribute('target', '_blank');
+
+                                                    var file = document.createTextNode(filename);
+
+                                                    var icon = document.createElement('span');
+                                                    icon.setAttribute('uk-icon', 'file-text');
+
+                                                    contsph.appendChild(container);
+                                                    container.appendChild(cardsph);
+                                                    cardsph.appendChild(divclosed);
+                                                    divclosed.appendChild(close);
+                                                    cardsph.appendChild(link);
+                                                    link.appendChild(icon);
+                                                    link.appendChild(file);
+                                                },
+
+                                                loadStart: function(e) {
+                                                    console.log('loadStart', arguments);
+
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').removeAttribute('hidden');
+
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').value = e.loaded;
+
+                                                },
+
+                                                progress: function(e) {
+                                                    console.log('progress', arguments);
+
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                loadEnd: function(e) {
+                                                    console.log('loadEnd', arguments);
+
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').max = e.total;
+                                                    document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').value = e.loaded;
+                                                },
+
+                                                completeAll: function() {
+                                                    console.log('completeAll', arguments);
+
+                                                    setTimeout(function() {
+                                                        document.getElementById('js-progressbar-createsph-<?= $project['id'] ?>').setAttribute('hidden', 'hidden');
+                                                        alert('<?= lang('Proses selesai, File sph berhasil di unggah.') ?>');
+                                                    }, 1000);
+                                                }
+
+                                            });
+
+                                            function removeCardFilesph(id, proid) {
+                                                let text = "Hapus sph Terima ini?";
+                                                if (confirm(text) == true) {
+                                                    $.ajax({
+                                                        url: "project/removesph/" + id,
+                                                        method: "POST",
+                                                        data: {
+                                                            sph: id,
+                                                        },
+                                                        dataType: "json",
+                                                        error: function() {
+                                                            console.log('error', arguments);
+                                                        },
+                                                        success: function() {
+                                                            console.log('success', arguments);
+                                                            $("#sph-file-" + id).remove();
+                                                        },
+                                                    })
+                                                }
+                                            }
+                                            </script>
+                                            <!-- end SPH -->
 
                                             <div class="uk-margin-bottom">
                                                 <label class="uk-form-label" for="paket">Cari Paket</label>

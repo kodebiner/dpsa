@@ -212,21 +212,6 @@ class Mdl extends BaseController
             // Get Data
             $input = $this->request->getPost();
 
-            // Validation
-            // $rules = [
-            //     'name'      => [
-            //         'label'     => 'Nama Paket/Kategori',
-            //         'rules'     => 'required|is_unique[paket.name]',
-            //         'errors'    => [
-            //             'required'      => '{field} wajib diisi.',
-            //             'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-            //         ],
-            //     ],
-            // ];
-            // if (!$this->validate($rules)) {
-            //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            // }
-
             // Save Data
             $lastOrder      = $PaketModel->where('parentid', $input['parent'])->orderBy('ordering', 'DESC')->first();
             if (!empty($lastOrder)) {
