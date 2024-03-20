@@ -53,6 +53,7 @@
                         $progress = "20";
                         $status = "Desain Disetujui";
                     }
+
                 } else {
                     $progress = "10";
                     $status = "Menunggu Desain";
@@ -478,7 +479,53 @@
 
     <!-- Modal Update Proyek -->
     <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('admin.project.create', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid)  || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
-        <?php foreach ($projects as $project) { ?>
+        <?php foreach ($projects as $project) { 
+            $progress   = "0";
+            $status     = "Sedang Dalam Proses Persiapan";
+            if ($project['type_design'] === "1") {
+                if (!empty($projectdata[$project['id']]['design'])) {
+
+                    if ($projectdata[$project['id']]['design']['status'] === '0') {
+                        $progress = "10";
+                        $status = "Menunggu Aprroval Desain";
+                    }
+
+                    if ($projectdata[$project['id']]['design']['status'] === '1') {
+                        $progress = "10";
+                        $status = "Menunggu Proses Revisi Desain";
+                    }
+
+                    if ($projectdata[$project['id']]['design']['status'] === '2') {
+                        $progress = "20";
+                        $status = "Desain Disetujui";
+                    }
+
+                } else {
+                    $progress = "10";
+                    $status = "Menunggu Desain";
+                }
+            } else {
+                $status = "Menunggu SPH";
+                $progress = "30";
+            }
+
+            if ($project['status_spk'] === "1") {
+                $progress = "30";
+                $status = "SPK DiSetujui";
+            }
+
+            if (!empty($projectdata[$project['id']]['progress'])) {
+                $produksi = round((int)$projectdata[$project['id']]['progress']);
+                $progress = round($projectdata[$project['id']]['progress'] + $progress);
+                $status   = "Retensi";
+            }
+
+            if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) {
+                if ($projectdata[$project['id']]['now'] > $projectdata[$project['id']]['dateline']) {
+                    $progress = "100";
+                    $status   = "Proyek Selesai";
+                }
+            }?>
             <div class="uk-modal-container" id="modalupdatepro<?= $project['id'] ?>" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                     <button class="uk-modal-close-default uk-icon-button-delete" type="button" uk-close></button>
@@ -612,8 +659,7 @@
 
                                     </div>
                                     <?php } else {
-                                    if ($projectdata[$project['id']]['design']['status'] === '0') {
-                                        $progress = "10"; ?>
+                                    if ($projectdata[$project['id']]['design']['status'] === '0') {?>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="uk-child-width-auto uk-flex-middle" uk-grid>
@@ -719,8 +765,7 @@
                                         </div>
                                     <?php } ?>
 
-                                    <?php if ($projectdata[$project['id']]['design']['status'] === '2') {
-                                        $progress = "20"; ?>
+                                    <?php if ($projectdata[$project['id']]['design']['status'] === '2') { ?>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
                                             <div>
                                                 <div class="uk-child-width-auto uk-flex-middle" uk-grid>
@@ -1037,6 +1082,13 @@
                                                 </div>
                                                 <div class="uk-h4">Tambah Pesanan</div>
                                             <?php } ?>
+
+                                            <div class="uk-margin-bottom">
+                                                <label class="uk-form-label" for="paket">Nomor SPH</label>
+                                                <div class="uk-form-controls">
+                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if(!empty($project['no_sph'])){ $nosph = $project['no_sph']; echo "value='$nosph'";} ?> placeholder="Nomor SPH">
+                                                </div>
+                                            </div>
 
                                             <div class="uk-margin-bottom">
                                                 <label class="uk-form-label" for="paket">Cari Paket</label>
