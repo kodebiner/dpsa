@@ -144,6 +144,7 @@ class Home extends BaseController
                 $ProductionModel    = new ProductionModel();
                 $CustomRabModel     = new CustomRabModel();
                 $BuktiModel         = new BuktiModel();
+                $InvoiceModel       = new InvoiceModel();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
@@ -196,7 +197,7 @@ class Home extends BaseController
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
                         if (!empty($productions)) {
                             foreach ($productions as $production) {
-    
+
                                 // MDL Production
                                 $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
                                 $percentages    = [];
@@ -337,7 +338,7 @@ class Home extends BaseController
 
                         // Bukti Pembayaran
                         $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
-    
+
                         // Bukti Pengiriman
                         $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                     }
@@ -709,7 +710,7 @@ class Home extends BaseController
             $project = $ProjectModel->find($id);
             $design = $DesignModel->where('projectid', $id)->first();
             if (!empty($design)) {
-                if(!empty($design['revision'])){
+                if (!empty($design['revision'])) {
                     unlink(FCPATH . '/img/revisi/' . $design['revision']);
                 }
                 $datadesign = [
@@ -719,7 +720,7 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi '.$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi ' . $project['name']]);
             } else {
                 $datadesign = [
                     'projectid'     => $id,
@@ -727,7 +728,7 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi '.$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi ' . $project['name']]);
             }
         }
 
@@ -765,7 +766,7 @@ class Home extends BaseController
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        
+
         $date       = date_create();
         $tanggal    = date_format($date, 'Y-m-d H:i:s');
         $databukti  = [

@@ -121,6 +121,13 @@ class Project extends BaseController
                     // Custom RAB
                     $projectdata[$project['id']]['customrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
 
+                    
+                    // Setrim
+                    $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+                    // BAST
+                    $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
                     if (!empty($rabs)) {
                         // Paket
                         $paketdata      = [];
@@ -233,13 +240,7 @@ class Project extends BaseController
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
-
-                    // bast
-                    $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
-
-                    // BAST
-                    $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
-                    $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+                   
 
                     // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
@@ -342,7 +343,7 @@ class Project extends BaseController
             } else {
                 $rabs           = [];
             }
-            
+
             // Parsing Data To View
             $data                   = $this->data;
             $data['title']          = "Proyek";
@@ -498,7 +499,7 @@ class Project extends BaseController
                 'name'          => $input['name'],
                 'clientid'      => $input['company'],
                 'status'        => 1,
-                'no_sph'        => $amountsph,
+                // 'no_sph'        => $amountsph,
                 'tahun'         => date('Y-m-d H:i:s'),
                 'marketing'     => $input['marketing'],
             ];
@@ -520,7 +521,7 @@ class Project extends BaseController
                 $datainv = [
                     'projectid' => $projectid,
                     'status'    => $inv,
-                    'no_inv'    => $amount++,
+                    // 'no_inv'    => $amount++,
                 ];
                 $InvoiceModel->save($datainv);
             }
@@ -558,7 +559,7 @@ class Project extends BaseController
             // initialize
             $input  = $this->request->getPost();
             $pro    = $ProjectModel->find($id);
-            dd($input);
+            // dd($input);
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -860,8 +861,8 @@ class Project extends BaseController
             }
 
             // PIC Production
-            $productionpic = $ProductionModel->where('projectid',$id)->find();
-            foreach($productionpic as $picprod){
+            $productionpic = $ProductionModel->where('projectid', $id)->find();
+            foreach ($productionpic as $picprod) {
                 if (isset($input['picpro'][$picprod['id']]) && ($input['picpro'][$picprod['id']] != $picprod['userid'])) {
                     $inputpropic = [
                         'id'                => $picprod['id'],
@@ -900,6 +901,7 @@ class Project extends BaseController
                     'status'        => "1",
                     'pic'           => $input['picinvoice1' . $id],
                     'tahun'         => date('Y-m-d H:i:s'),
+                    'no_inv'        => $input['noinv1' . $id],
                 ];
                 $InvoiceModel->save($invoice1);
             } elseif (isset($input['referensiinvoice1' . $id], $input['picinvoice1' . $id]) && !empty($input['dateinvoice1' . $id]) && !empty($input['emailinvoice1' . $id]) && !empty($input['pphinvoice1' . $id])) {
@@ -914,6 +916,7 @@ class Project extends BaseController
                     'status'        => "1",
                     'pic'           => $input['picinvoice1' . $id],
                     'tahun'         => $tahunini,
+                    'no_inv'        => $input['noinv1' . $id],
                 ];
                 $InvoiceModel->save($invoice1);
             }
@@ -934,6 +937,7 @@ class Project extends BaseController
                     'status'        => "2",
                     'pic'           => $input['picinvoice2' . $id],
                     'tahun'         => date('Y-m-d H:i:s'),
+                    'no_inv'        => $input['noinv2' . $id],
                 ];
 
                 $InvoiceModel->save($invoice2);
@@ -950,6 +954,7 @@ class Project extends BaseController
                     'status'        => "2",
                     'pic'           => $input['picinvoice2' . $id],
                     'tahun'         => $tahunini,
+                    'no_inv'        => $input['noinv2' . $id],
                 ];
                 $InvoiceModel->save($invoice2);
             }
@@ -969,6 +974,7 @@ class Project extends BaseController
                     'status'        => "3",
                     'pic'           => $input['picinvoice3' . $id],
                     'tahun'         => date('Y-m-d H:i:s'),
+                    'no_inv'        => $input['noinv3' . $id],
                 ];
                 $InvoiceModel->save($invoice3);
             } elseif (isset($input['referensiinvoice3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) && !empty($input['pphinvoice3' . $id])) {
@@ -984,6 +990,7 @@ class Project extends BaseController
                     'status'        => "3",
                     'pic'           => $input['picinvoice3' . $id],
                     'tahun'         => $tahunini,
+                    'no_inv'        => $input['noinv3' . $id],
                 ];
                 $InvoiceModel->save($invoice3);
             }
@@ -1003,6 +1010,7 @@ class Project extends BaseController
                     'status'        => "4",
                     'pic'           => $input['picinvoice4' . $id],
                     'tahun'         => date('Y-m-d H:i:s'),
+                    'no_inv'        => $input['noinv4' . $id],
                 ];
                 $InvoiceModel->save($invoice4);
             } elseif (isset($input['referensiinvoice4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id]) && !empty($input['pphinvoice4' . $id])) {
@@ -1018,6 +1026,7 @@ class Project extends BaseController
                     'status'        => "4",
                     'pic'           => $input['picinvoice4' . $id],
                     'tahun'         => $tahunini,
+                    'no_inv'        => $input['noinv4' . $id],
                 ];
                 $InvoiceModel->save($invoice4);
             }
@@ -1066,6 +1075,7 @@ class Project extends BaseController
                 'status_spk'    => $statusspk,
                 'status'        => $status,
                 'no_spk'        => $spknum,
+                'no_sph'        => $input['nosph' . $id],
                 'inv4'          => $tanggalinv4,
             ];
             $ProjectModel->save($project);
@@ -2205,7 +2215,8 @@ class Project extends BaseController
                     'refbank'   => $refbank,
                     'email'     => $email,
                     'pic'       => $picname,
-                    'noinv'     => $numinv,
+                    // 'noinv'     => $numinv,
+                    'noinv'     => $noinv,
                     'direktur'  => $gconf['direktur'],
                     'ppnval'    => (int)$ppnvalue,
                     'no_spk'    => $projects['no_spk'],

@@ -48,35 +48,37 @@ $dateFormatted =
     );
 $tanggalsph = ucwords($dateFormatted);
 
-$date = date_create($projects['tahun']);
-$Year   = date_format($date, 'Y');
-$number = date_format($date, 'n');
-function sphnum($number)
-{
-    $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-    $returnValue = '';
-    while ($number > 0) {
-        foreach ($map as $roman => $int) {
-            if ($number >= $int) {
-                $number -= $int;
-                $returnValue .= $roman;
-                break;
-            }
-        }
-    }
-    return $returnValue;
-}
-$roman = sphnum($number);
+// $date = date_create($projects['tahun']);
+// $Year   = date_format($date, 'Y');
+// $number = date_format($date, 'n');
+// function sphnum($number)
+// {
+//     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+//     $returnValue = '';
+//     while ($number > 0) {
+//         foreach ($map as $roman => $int) {
+//             if ($number >= $int) {
+//                 $number -= $int;
+//                 $returnValue .= $roman;
+//                 break;
+//             }
+//         }
+//     }
+//     return $returnValue;
+// }
+// $roman = sphnum($number);
 
-$sphnum = str_pad($projects['no_sph'], 3, '0', STR_PAD_LEFT);
+// $sphnum = str_pad($projects['no_sph'], 3, '0', STR_PAD_LEFT);
 
-$numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode'] . "/" . $roman . "/" . $Year;
+// $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode'] . "/" . $roman . "/" . $Year;
 ?>
 
 <body>
     <?php
+    $nosph = $projects['no_sph'];
 	header("Content-type: application/vnd-ms-excel");
-	header("Content-Disposition: attachment; filename=Sphfile'.$numsph.'.xls");
+	header("Content-Disposition: attachment; filename=Sphfile'.$nosph.'.xls");
+	// header("Content-Disposition: attachment; filename=Sphfile'.$numsph.'.xls");
 	?>
     <!-- <table style="width:100%">
         <tr>
@@ -99,7 +101,7 @@ $numsph = $sphnum . "/DPSA/" . $sphdata['marketing'] . "/SPH/" . $client['rscode
             <th style="width:60%; text-align:left; font-weight:normal;">Kepada Yth.</th>
             <th></th>
             <th style="width:10%; text-align:left; font-weight:normal;">Nomor</th>
-            <th style="width:30%; text-align:left; font-weight:normal;"> : <?= $numsph ?></th>
+            <th style="width:30%; text-align:left; font-weight:normal;"> : <?= $nosph ?></th>
         </tr>
         <tr>
             <td>Direktur RS <?= $client['rsname'] ?></td>
