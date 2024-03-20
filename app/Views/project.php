@@ -1251,7 +1251,7 @@
                                             });
 
                                             function removeCardFilesph(id, proid) {
-                                                let text = "Hapus sph Terima ini?";
+                                                let text = "Hapus file sph ini?";
                                                 if (confirm(text) == true) {
                                                     $.ajax({
                                                         url: "project/removesph/" + id,
