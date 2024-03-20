@@ -2726,11 +2726,13 @@
 
                                                 <div class="uk-margin-small">
                                                     <p class="uk-margin-left-remove" uk-margin>
+                                                        <?php if (!empty($projectdata[$project['id']]['invoice1']['id'])) { ?>
                                                         <div class="js-upload-<?=$projectdata[$project['id']]['invoice1']['id']?>" uk-form-custom>
                                                             <input type="file" multiple>
                                                             <progress id="js-progressbar-<?=$projectdata[$project['id']]['invoice1']['id']?>" class="uk-progress" value="0" max="100" hidden></progress>
                                                             <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice I</button>
                                                         </div>
+                                                        <?php } ?>
                                                     </p>
                                                 </div>
 
