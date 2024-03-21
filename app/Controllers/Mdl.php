@@ -658,7 +658,7 @@ class Mdl extends BaseController
         $mdlPaket = [];
         foreach ($mdls as $mdl) {
             foreach ($packs as $pack) {
-                // $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+                $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
                 $packCount = count($packMdl);
                 if ($packCount > 1) {
                     // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
