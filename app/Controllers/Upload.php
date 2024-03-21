@@ -82,11 +82,6 @@ class Upload extends BaseController
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
             $input->move(FCPATH . '/img/revisi/', $filename);
 
-            // Removing uploaded if it's not the same filename
-            if ($filename != $truename . '.pdf') {
-                unlink(FCPATH . '/img/revisi/' . $filename);
-            }
-
             // Getting True Filename
             $returnFile = $truename . '.pdf';
 
@@ -304,9 +299,16 @@ class Upload extends BaseController
 
             // Save Data MDL Paket
             $idmdl = $MdlModel->getInsertID();
+            $lastOrder  = $MdlPaketModel->where('paketid', $id)->orderBy('ordering', 'DESC')->first();
+            if (!empty($lastOrder)) {
+                $order  = $lastOrder['ordering'] + 1;
+            } else {
+                $order  = '1';
+            }
             $datamdlpaket   = [
                 'mdlid'     => $idmdl,
                 'paketid'   => $id,
+                'ordering'  => $order
             ];
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan Mdl']);
             $MdlPaketModel->insert($datamdlpaket);
@@ -367,12 +369,13 @@ class Upload extends BaseController
     {
         $image      = \Config\Services::image();
         $input      = $this->request->getFile('uploads');
-        $ext        = $input->getClientExtension();
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,image/png,image/jpeg,image/pjpeg]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,image/png,image/x-png,image/jpeg,image/pjpeg]',
         ];
+
+        $ext        = $input->getClientExtension();
 
         // Validating
         if (!$this->validate($rules)) {
@@ -384,12 +387,7 @@ class Upload extends BaseController
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/mdl/', $filename);
-
-            // Removing uploaded if it's not the same filename
-            if ($filename != $truename.'.'. $ext) {
-                unlink(FCPATH . '/img/mdl/' . $filename);
-            }
+            $input->move(FCPATH . 'img/mdl/', $filename);
 
             // Getting True Filename
             $returnFile = $truename.'.'. $ext;

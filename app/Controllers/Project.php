@@ -129,7 +129,10 @@ class Project extends BaseController
                     }
 
                     // Custom RAB
-                    $projectdata[$project['id']]['customrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
 
 
                     // Setrim
@@ -727,7 +730,7 @@ class Project extends BaseController
             // Update Custom RAB
             if (!empty($input['pricecustrab' . $id])) {
                 foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
-                    $customrabdata  = $CustomRabModel->find($custrabid);
+                    $customrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($custrabid);
 
                     if ($pricecustrab != $customrabdata['price']) {
                         if (!empty($pricecustrab)) {
@@ -748,7 +751,7 @@ class Project extends BaseController
             }
             if (!empty($input['namecustrab' . $id])) {
                 foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
-                    $custrabdata  = $CustomRabModel->find($idcustrab);
+                    $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
 
                     if (!empty($custrabdata)) {
                         if ($namecustrab != $custrabdata['name']) {
@@ -764,6 +767,27 @@ class Project extends BaseController
                             }
                         }
                     }
+                }
+            }
+
+            // Shipping Data
+            if (!empty($input['shippingcost'])) {
+                $shipping       = $CustomRabModel->where('projectid', $id)->like('name', 'biaya pengiriman')->first();
+
+                if (empty($shipping)) {
+                    $datashipping = [
+                        'projectid'     => $id,
+                        'name'          => 'biaya pengiriman',
+                        'price'         => $input['shippingcost'],
+                    ];
+                    $CustomRabModel->insert($datashipping);
+                } else {
+                    $datashipping = [
+                        'id'            => $shipping['id'],
+                        'projectid'     => $id,
+                        'price'         => $input['shippingcost'],
+                    ];
+                    $CustomRabModel->save($datashipping);
                 }
             }
 

@@ -1272,11 +1272,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="uk-margin" id="image-container-createmdl-<?= $mdl['id'] ?>">
-                                        <div id="image-containermdl-<?= $mdl['id'] ?>" class="uk-form-controls">
+                                    <div class="uk-margin" id="image-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>">
+                                        <div id="image-containermdl-<?= $paket['id'] ?><?= $mdl['id'] ?>" class="uk-form-controls">
                                             <label class="uk-form-label" for="photo">Foto MDL</label>
-                                            <input id="photocreatemdl<?= $mdl['id'] ?>" name="photo" hidden />
-                                            <div id="js-upload-createmdl-<?= $mdl['id'] ?>" class="js-upload-createmdl-<?= $mdl['id'] ?> uk-placeholder uk-text-center">
+                                            <input id="photocreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>" name="photo" hidden />
+                                            <div id="js-upload-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>" class="js-upload-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?> uk-placeholder uk-text-center">
                                                 <span uk-icon="icon: cloud-upload"></span>
                                                 <span class="uk-text-middle">Tarik dan lepas foto disini atau</span>
                                                 <div uk-form-custom>
@@ -1284,15 +1284,15 @@
                                                     <span class="uk-link uk-preserve-color">pilih satu</span>
                                                 </div>
                                             </div>
-                                            <progress id="js-progressbar-createmdl-<?= $mdl['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                            <progress id="js-progressbar-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                         </div>
                                     </div>
 
                                     <script>
                                     // Upload Photo MDL
-                                    var bar = document.getElementById('js-progressbar-createmdl-<?= $mdl['id'] ?>');
+                                    var bar = document.getElementById('js-progressbar-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>');
 
-                                    UIkit.upload('.js-upload-createmdl-<?= $mdl['id'] ?>', {
+                                    UIkit.upload('.js-upload-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>', {
                                         url: 'upload/photomdl',
                                         multiple: false,
                                         name: 'uploads',
@@ -1323,16 +1323,16 @@
                                             var filename = arguments[0].response;
                                             console.log(filename);
 
-                                            if (document.getElementById('display-container-createmdl-<?= $mdl['id'] ?>')) {
-                                                document.getElementById('display-container-createmdl-<?= $mdl['id'] ?>').remove();
+                                            if (document.getElementById('display-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>')) {
+                                                document.getElementById('display-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>').remove();
                                             };
 
-                                            document.getElementById('photocreatemdl<?= $mdl['id'] ?>').value = filename;
+                                            document.getElementById('photocreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>').value = filename;
 
-                                            var imgContainer = document.getElementById('image-container-createmdl-<?= $mdl['id'] ?>');
+                                            var imgContainer = document.getElementById('image-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>');
 
                                             var displayContainer = document.createElement('div');
-                                            displayContainer.setAttribute('id', 'display-container-createmdl-<?= $mdl['id'] ?>');
+                                            displayContainer.setAttribute('id', 'display-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>');
                                             displayContainer.setAttribute('class', 'uk-inline');
 
                                             var displayImg = document.createElement('div');
@@ -1350,7 +1350,7 @@
 
                                             var closeButton = document.createElement('a');
                                             closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                            closeButton.setAttribute('onClick', 'removeImgCreatemdl<?= $mdl['id'] ?>()');
+                                            closeButton.setAttribute('onClick', 'removeImgCreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>()');
                                             closeButton.setAttribute('uk-icon', 'close');
 
                                             closeContainer.appendChild(closeButton);
@@ -1360,7 +1360,7 @@
                                             displayImg.appendChild(link);
                                             imgContainer.appendChild(displayContainer);
 
-                                            document.getElementById('js-upload-createmdl-<?= $mdl['id'] ?>').setAttribute('hidden', '');
+                                            document.getElementById('js-upload-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>').setAttribute('hidden', '');
                                         },
 
                                         loadStart: function(e) {
@@ -1396,12 +1396,12 @@
                                         }
                                     });
 
-                                    function removeImgCreatemdl<?= $mdl['id'] ?>() {
+                                    function removeImgCreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>() {
                                         $.ajax({
                                             type: 'post',
                                             url: 'upload/removephotomdl',
                                             data: {
-                                                'photo': document.getElementById('photocreatemdl<?= $mdl['id'] ?>').value
+                                                'photo': document.getElementById('photocreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>').value
                                             },
                                             dataType: 'json',
 
@@ -1414,19 +1414,17 @@
 
                                                 var pesan = arguments[0][1];
 
-                                                document.getElementById('display-container-createmdl-<?= $mdl['id'] ?>').remove();
-                                                document.getElementById('photocreatemdl<?= $mdl['id'] ?>').value = '';
+                                                document.getElementById('display-container-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>').remove();
+                                                document.getElementById('photocreatemdl<?= $paket['id'] ?><?= $mdl['id'] ?>').value = '';
 
                                                 alert(pesan);
 
-                                                document.getElementById('js-upload-createmdl-<?= $mdl['id'] ?>').removeAttribute('hidden', '');
+                                                document.getElementById('js-upload-createmdl-<?= $paket['id'] ?><?= $mdl['id'] ?>').removeAttribute('hidden', '');
                                             }
                                         });
                                     };
-                                    </script>
-
-                                    <script>
-                                        $("input[data-type='curencyupdate']").on({
+                                    
+                                    $("input[data-type='curencyupdate']").on({
                                             keyup: function() {
                                                 formatCurrency($(this));
                                             },
