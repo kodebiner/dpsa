@@ -2310,6 +2310,976 @@ class Project extends BaseController
         }
     }
 
+    public function invoiceexcel1($id){
+
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // NEW FUNCTION INVOICE
+            // Calling models
+            $ProjectModel   = new ProjectModel;
+            $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
+            $BastModel      = new BastModel();
+            $GconfigModel   = new GconfigModel();
+            $InvoiceModel   = new InvoiceModel();
+            $ReferensiModel = new ReferensiModel();
+            $UserModel      = new UserModel();
+            $CustomRabModel = new CustomRabModel();
+            $BastModel      = new BastModel();
+
+            // PROJECT DATA
+            $projects   = $ProjectModel->find($id);
+            $gconf      = $GconfigModel->first();
+            $alamat = "";
+
+            if (!empty($gconf)) {
+                $alamat = $gconf['alamat'];
+            }
+            if (!empty($rabcustom)) {
+                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
+            } else {
+                $rabcustom  = [];
+            }
+
+            // INVOICE 
+            $rabdata    = [];
+            if (!empty($projects)) {
+                $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+                $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+                $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+                $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
+
+                // CLIENT DATA
+                $client   = $CompanyModel->find($projects['clientid']);
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[]  = $rab['paketid'];
+
+                    // MDL RAB
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $rabdata[]  = [
+                            'id'            => $mdlr['id'],
+                            'proid'         => $projects['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
+                        ];
+                    }
+                }
+            } else {
+
+                $invoice1  = [];
+                $invoice2  = [];
+                $invoice3  = [];
+                $invoice4  = [];
+                $client    = [];
+                $rabs      = [];
+            }
+
+            // BAST DATA
+            if (!empty($id)) {
+                $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+                $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+            } else {
+                $bast       = [];
+                $sertrim    = [];
+            }
+
+            // TOTAL RAB PRICE
+            $total = "";
+            if (!empty($rabdata)) {
+                $total = array_sum(array_column($rabdata, 'price'));
+            }
+
+            // RAB CUSTOM VALUE
+            $rabcustotal = "";
+            if (!empty($rabcustom)) {
+                $rabcustotal = array_sum(array_column($rabcustom, 'price'));
+            }
+
+            // Biaya Kirim 
+            $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
+            $biayakirim = "";
+            if (!empty($biaya)) {
+                $biayakirim = $biaya['price'];
+            }
+
+            // PPN
+            $ppn = "";
+            $ppnval = "";
+            if (!empty($gconf)) {
+                $ppn        = (int)$gconf['ppn'];
+                $ppnval     = ($ppn / 100) * (int)$total;
+            }
+
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
+
+            // Invoice Data Array
+            $termin     = "";
+            $progress   = "";
+            $nilaispk   = "";
+            $dateinv    = "";
+            $dateline   = "";
+            $pph        = "";
+            $referensi  = "";
+            $email      = "";
+            $status     = "";
+            $pic        = "";
+            $noinv      = "";
+            $ppnvalue   = "";
+            $pphvalue   = "";
+
+            if (!empty($projects)) {
+                // INVOICE I
+                if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+                    $termin     = "30";
+                    $progress   = "30";
+                    $nilaispk   = ((int)$total - ((70 / 100) * (int)$total)) + (int)$rabcustotal;
+                    $dateinv    = $projects['inv1'];
+                    $dateline   = $invoice1['jatuhtempo'];
+                    $pph        = (int)$invoice1['pph23'];
+                    $pphvalue   = ($pph / 100) * $nilaispk;
+                    $ppnvalue   = ($pph / 100) * $nilaispk;
+                    $referensi  = $invoice1['referensi'];
+                    $email      = $invoice1['email'];
+                    $status     = $invoice1['status'];
+                    $pic        = $invoice1['pic'];
+                    $noinv      = $invoice1['no_inv'];
+                    $npwpdpsa   = $gconf['npwp'];
+                }
+
+                // DATA REFERENSI
+                $refdata    = "";
+                $refname    = "";
+                $refacc     = "";
+                $refbank    = "";
+                if (!empty($referensi)) {
+                    $refdata = $ReferensiModel->where('id', $referensi)->first();
+                    $refname    = $refdata['name'];
+                    $refacc     = $refdata['no_rek'];
+                    $refbank    = $refdata['bank'];
+                }
+
+                // DATA PIC
+                $picdata = "";
+                $picname = "";
+                if (!empty($pic)) {
+                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picname    = $picdata->name;
+                }
+
+
+                $terminval = "";
+                if (!empty($termin)) {
+                    $terminval = $total * ($termin / 100);
+                }
+
+                // PPN VALUE RUPIAH
+                $terminvalue = "";
+                if (!empty($ppn)) {
+                    $terminvalue = (int)$terminval * ($ppn / 100);
+                }
+
+                // PPH VALUE RUPIAH
+                $pphtermin = "";
+                if (!empty($pph)) {
+                    $pphtermin = (int)$terminval * ($pph / 100);
+                }
+
+                $invoicedata = [
+                    'termin'    => $termin,
+                    'progress'  => $progress,
+                    'nilai_spk' => $nilaispk,
+                    'dateinv'   => $dateinv,
+                    'dateline'  => $dateline,
+                    'total'     => (int)$total,
+                    'ppn'       => $ppn,
+                    'pph'       => $pph,
+                    'pphval'    => (int)$pphvalue,
+                    'referensi' => $refname,
+                    'refacc'    => $refacc,
+                    'refbank'   => $refbank,
+                    'email'     => $email,
+                    'pic'       => $picname,
+                    'biayakirim' => $biayakirim,
+                    'noinv'     => $noinv,
+                    'direktur'  => $gconf['direktur'],
+                    'ppnval'    => (int)$ppnvalue,
+                    'no_spk'    => $projects['no_spk'],
+                    'alamat'    => $alamat,
+                    'totalterm' => (int)$terminvalue,
+                    'pphtermin' => (int)$pphtermin,
+                    'npwpdpsa'  => $npwpdpsa,
+                ];
+            } else {
+                $invoicedata  = [];
+            }
+
+            //--- END NEW FUCTION ---//
+
+            // Parsing Data to View
+            $data                   = $this->data;
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['projects']       = $projects;
+            $data['rabs']           = $rabdata;
+            $data['rabcustom']      = $rabcustom;
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
+            $data['client']         = $client;
+            $data['invoice']        = $invoicedata;
+
+            return view('invoiceexcel', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+    }
+    public function invoiceexcel2($id){
+
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+
+            // Calling models
+            $ProjectModel   = new ProjectModel;
+            $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
+            $BastModel      = new BastModel();
+            $GconfigModel   = new GconfigModel();
+            $InvoiceModel   = new InvoiceModel();
+            $ReferensiModel = new ReferensiModel();
+            $UserModel      = new UserModel();
+            $CustomRabModel = new CustomRabModel();
+            $BastModel      = new BastModel();
+
+            // PROJECT DATA
+            $projects   = $ProjectModel->find($id);
+            $gconf      = $GconfigModel->first();
+            $alamat = "";
+
+            if (!empty($gconf)) {
+                $alamat = $gconf['alamat'];
+            }
+            if (!empty($rabcustom)) {
+                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
+            } else {
+                $rabcustom  = [];
+            }
+
+            // INVOICE 
+            $rabdata    = [];
+            if (!empty($projects)) {
+                $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+                $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+                $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+                $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
+
+                // CLIENT DATA
+                $client   = $CompanyModel->find($projects['clientid']);
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[]  = $rab['paketid'];
+
+                    // MDL RAB
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $rabdata[]  = [
+                            'id'            => $mdlr['id'],
+                            'proid'         => $projects['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
+                        ];
+                    }
+                }
+            } else {
+
+                $invoice1  = [];
+                $invoice2  = [];
+                $invoice3  = [];
+                $invoice4  = [];
+                $client    = [];
+                $rabs      = [];
+            }
+
+            // BAST DATA
+            if (!empty($id)) {
+                $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+                $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+            } else {
+                $bast       = [];
+                $sertrim    = [];
+            }
+
+            // TOTAL RAB PRICE
+            $total = "";
+            if (!empty($rabdata)) {
+                $total = array_sum(array_column($rabdata, 'price'));
+            }
+
+            // RAB CUSTOM VALUE
+            $rabcustotal = "";
+            if (!empty($rabcustom)) {
+                $rabcustotal = array_sum(array_column($rabcustom, 'price'));
+            }
+
+            // Biaya Kirim 
+            $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
+            $biayakirim = "";
+            if (!empty($biaya)) {
+                $biayakirim = $biaya['price'];
+            }
+
+            // PPN
+            $ppn = "";
+            $ppnval = "";
+            if (!empty($gconf)) {
+                $ppn        = (int)$gconf['ppn'];
+                $ppnval     = ($ppn / 100) * (int)$total;
+            }
+
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
+
+            // Invoice Data Array
+            $termin     = "";
+            $progress   = "";
+            $nilaispk   = "";
+            $dateinv    = "";
+            $dateline   = "";
+            $pph        = "";
+            $referensi  = "";
+            $email      = "";
+            $status     = "";
+            $pic        = "";
+            $noinv      = "";
+            $ppnvalue   = "";
+            $pphvalue   = "";
+
+            if (!empty($projects)) {
+
+                // INVOICE II
+                if (!empty($sertrim) && !empty($projects['inv2']) && !empty($invoice3)) {
+                    $termin     = "30";
+                    $progress   = "60";
+                    $nilaispk   = (int)$total - ((70 / 100) * (int)$total) + (int)$rabcustotal;
+                    $dateinv    = $projects['inv2'];
+                    $dateline   = $invoice2['jatuhtempo'];
+                    $pph        = (int)$invoice2['pph23'];
+                    $pphvalue   = (($pph / 100) * $nilaispk);
+                    $ppnvalue   = ($ppn / 100) * $nilaispk;
+                    $referensi  = $invoice2['referensi'];
+                    $email      = $invoice2['email'];
+                    $status     = $invoice2['status'];
+                    $pic        = $invoice2['pic'];
+                    $noinv      = $invoice2['no_inv'];
+                    $npwpdpsa   = $gconf['npwp'];
+                }
+
+                // DATA REFERENSI
+                $refdata    = "";
+                $refname    = "";
+                $refacc     = "";
+                $refbank    = "";
+                if (!empty($referensi)) {
+                    $refdata = $ReferensiModel->where('id', $referensi)->first();
+                    $refname    = $refdata['name'];
+                    $refacc     = $refdata['no_rek'];
+                    $refbank    = $refdata['bank'];
+                }
+
+                // DATA PIC
+                $picdata = "";
+                $picname = "";
+                if (!empty($pic)) {
+                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picname    = $picdata->name;
+                }
+
+                $terminval = "";
+                if (!empty($termin)) {
+                    $terminval = $total * ($termin / 100);
+                }
+
+                // PPN VALUE RUPIAH
+                $terminvalue = "";
+                if (!empty($ppn)) {
+                    $terminvalue = (int)$terminval * ($ppn / 100);
+                }
+
+                // PPH VALUE RUPIAH
+                $pphtermin = "";
+                if (!empty($pph)) {
+                    $pphtermin = (int)$terminval * ($pph / 100);
+                }
+
+                $invoicedata = [
+                    'termin'    => $termin,
+                    'progress'  => $progress,
+                    'nilai_spk' => $nilaispk,
+                    'dateinv'   => $dateinv,
+                    'dateline'  => $dateline,
+                    'total'     => (int)$total,
+                    'ppn'       => $ppn,
+                    'pph'       => $pph,
+                    'pphval'    => (int)$pphvalue,
+                    'referensi' => $refname,
+                    'refacc'    => $refacc,
+                    'refbank'   => $refbank,
+                    'email'     => $email,
+                    'pic'       => $picname,
+                    'biayakirim' => $biayakirim,
+                    'noinv'     => $noinv,
+                    'direktur'  => $gconf['direktur'],
+                    'ppnval'    => (int)$ppnvalue,
+                    'no_spk'    => $projects['no_spk'],
+                    'alamat'    => $alamat,
+                    'totalterm' => (int)$terminvalue,
+                    'pphtermin' => (int)$pphtermin,
+                    'npwpdpsa'  => $npwpdpsa,
+                ];
+            } else {
+                $invoicedata  = [];
+            }
+
+            //--- END NEW FUCTION ---//
+
+            // Parsing Data to View
+            $data                   = $this->data;
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['projects']       = $projects;
+            $data['rabs']           = $rabdata;
+            $data['rabcustom']      = $rabcustom;
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
+            $data['client']         = $client;
+            $data['invoice']        = $invoicedata;
+
+            return view('invoiceexcel', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+    }
+    public function invoiceexcel3($id){
+
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // NEW FUNCTION INVOICE
+            // Calling models
+            $ProjectModel   = new ProjectModel;
+            $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
+            $BastModel      = new BastModel();
+            $GconfigModel   = new GconfigModel();
+            $InvoiceModel   = new InvoiceModel();
+            $ReferensiModel = new ReferensiModel();
+            $UserModel      = new UserModel();
+            $CustomRabModel = new CustomRabModel();
+            $BastModel      = new BastModel();
+
+            // PROJECT DATA
+            $projects   = $ProjectModel->find($id);
+            $gconf      = $GconfigModel->first();
+            $alamat = "";
+
+            if (!empty($gconf)) {
+                $alamat = $gconf['alamat'];
+            }
+            if (!empty($rabcustom)) {
+                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
+            } else {
+                $rabcustom  = [];
+            }
+
+            // INVOICE 
+            $rabdata    = [];
+            if (!empty($projects)) {
+                $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+                $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+                $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+                $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
+
+                // CLIENT DATA
+                $client   = $CompanyModel->find($projects['clientid']);
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[]  = $rab['paketid'];
+
+                    // MDL RAB
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $rabdata[]  = [
+                            'id'            => $mdlr['id'],
+                            'proid'         => $projects['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
+                        ];
+                    }
+                }
+            } else {
+
+                $invoice1  = [];
+                $invoice2  = [];
+                $invoice3  = [];
+                $invoice4  = [];
+                $client    = [];
+                $rabs      = [];
+            }
+
+            // BAST DATA
+            if (!empty($id)) {
+                $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+                $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+            } else {
+                $bast       = [];
+                $sertrim    = [];
+            }
+
+            // TOTAL RAB PRICE
+            $total = "";
+            if (!empty($rabdata)) {
+                $total = array_sum(array_column($rabdata, 'price'));
+            }
+
+            // RAB CUSTOM VALUE
+            $rabcustotal = "";
+            if (!empty($rabcustom)) {
+                $rabcustotal = array_sum(array_column($rabcustom, 'price'));
+            }
+
+            // Biaya Kirim 
+            $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
+            $biayakirim = "";
+            if (!empty($biaya)) {
+                $biayakirim = $biaya['price'];
+            }
+
+            // PPN
+            $ppn = "";
+            $ppnval = "";
+            if (!empty($gconf)) {
+                $ppn        = (int)$gconf['ppn'];
+                $ppnval     = ($ppn / 100) * (int)$total;
+            }
+
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
+
+            // Invoice Data Array
+            $termin     = "";
+            $progress   = "";
+            $nilaispk   = "";
+            $dateinv    = "";
+            $dateline   = "";
+            $pph        = "";
+            $referensi  = "";
+            $email      = "";
+            $status     = "";
+            $pic        = "";
+            $noinv      = "";
+            $ppnvalue   = "";
+            $pphvalue   = "";
+
+            if (!empty($projects)) {
+
+                // INVOICE III
+                if (!empty($bast) && !empty($projects['inv3']) && !empty($invoice3)) {
+                    $termin     = "35";
+                    $progress   = "95";
+                    $nilaispk   = (int)$total - ((int)(65 / 100) * (int)$total) + (int)$rabcustotal;
+                    $dateinv    = $projects['inv3'];
+                    $dateline   = $invoice3['jatuhtempo'];
+                    // $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
+                    $pph        = (int)$invoice3['pph23'];
+                    $pphvalue   = (($pph / 100) * $nilaispk);
+                    $ppnvalue   = ($ppn / 100) * $nilaispk;
+                    $referensi  = $invoice3['referensi'];
+                    $email      = $invoice3['email'];
+                    $status     = $invoice3['status'];
+                    $pic        = $invoice3['pic'];
+                    $noinv      = $invoice3['no_inv'];
+                    $npwpdpsa   = $gconf['npwp'];
+                }
+
+                // DATA REFERENSI
+                $refdata    = "";
+                $refname    = "";
+                $refacc     = "";
+                $refbank    = "";
+                if (!empty($referensi)) {
+                    $refdata = $ReferensiModel->where('id', $referensi)->first();
+                    $refname    = $refdata['name'];
+                    $refacc     = $refdata['no_rek'];
+                    $refbank    = $refdata['bank'];
+                }
+
+                // DATA PIC
+                $picdata = "";
+                $picname = "";
+                if (!empty($pic)) {
+                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picname    = $picdata->name;
+                }
+
+                $terminval = "";
+                if (!empty($termin)) {
+                    $terminval = $total * ($termin / 100);
+                }
+
+                // PPN VALUE RUPIAH
+                $terminvalue = "";
+                if (!empty($ppn)) {
+                    $terminvalue = (int)$terminval * ($ppn / 100);
+                }
+
+                // PPH VALUE RUPIAH
+                $pphtermin = "";
+                if (!empty($pph)) {
+                    $pphtermin = (int)$terminval * ($pph / 100);
+                }
+
+                $invoicedata = [
+                    'termin'    => $termin,
+                    'progress'  => $progress,
+                    'nilai_spk' => $nilaispk,
+                    'dateinv'   => $dateinv,
+                    'dateline'  => $dateline,
+                    'total'     => (int)$total,
+                    'ppn'       => $ppn,
+                    'pph'       => $pph,
+                    'pphval'    => (int)$pphvalue,
+                    'referensi' => $refname,
+                    'refacc'    => $refacc,
+                    'refbank'   => $refbank,
+                    'email'     => $email,
+                    'pic'       => $picname,
+                    // 'noinv'     => $numinv,
+                    'biayakirim' => $biayakirim,
+                    'noinv'     => $noinv,
+                    'direktur'  => $gconf['direktur'],
+                    'ppnval'    => (int)$ppnvalue,
+                    'no_spk'    => $projects['no_spk'],
+                    'alamat'    => $alamat,
+                    'totalterm' => (int)$terminvalue,
+                    'pphtermin' => (int)$pphtermin,
+                    'npwpdpsa'  => $npwpdpsa,
+                ];
+            } else {
+                $invoicedata  = [];
+            }
+
+            //--- END NEW FUCTION ---//
+
+            // Parsing Data to View
+            $data                   = $this->data;
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['projects']       = $projects;
+            $data['rabs']           = $rabdata;
+            $data['rabcustom']      = $rabcustom;
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
+            $data['client']         = $client;
+            $data['invoice']        = $invoicedata;
+
+            return view('invoiceexcel', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+    }
+    public function invoiceexcel4($id){
+
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // Calling models
+            $ProjectModel   = new ProjectModel;
+            $CompanyModel   = new CompanyModel();
+            $RabModel       = new RabModel();
+            $PaketModel     = new PaketModel();
+            $MdlModel       = new MdlModel();
+            $BastModel      = new BastModel();
+            $GconfigModel   = new GconfigModel();
+            $InvoiceModel   = new InvoiceModel();
+            $ReferensiModel = new ReferensiModel();
+            $UserModel      = new UserModel();
+            $CustomRabModel = new CustomRabModel();
+            $BastModel      = new BastModel();
+
+            // PROJECT DATA
+            $projects   = $ProjectModel->find($id);
+            $gconf      = $GconfigModel->first();
+            $alamat = "";
+
+            if (!empty($gconf)) {
+                $alamat = $gconf['alamat'];
+            }
+            if (!empty($rabcustom)) {
+                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
+            } else {
+                $rabcustom  = [];
+            }
+
+            // INVOICE 
+            $rabdata    = [];
+            if (!empty($projects)) {
+                $invoice1  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '1')->first();
+                $invoice2  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '2')->first();
+                $invoice3  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '3')->first();
+                $invoice4  = $InvoiceModel->where('projectid', $projects['id'])->where('status', '4')->first();
+
+                // CLIENT DATA
+                $client   = $CompanyModel->find($projects['clientid']);
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $projects['id'])->find();
+                foreach ($rabs as $rab) {
+                    $paketid[]  = $rab['paketid'];
+
+                    // MDL RAB
+                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                    foreach ($rabmdl as $mdlr) {
+                        $rabdata[]  = [
+                            'id'            => $mdlr['id'],
+                            'proid'         => $projects['id'],
+                            'name'          => $mdlr['name'],
+                            'length'        => $mdlr['length'],
+                            'width'         => $mdlr['width'],
+                            'height'        => $mdlr['height'],
+                            'volume'        => $mdlr['volume'],
+                            'denomination'  => $mdlr['denomination'],
+                            'keterangan'    => $mdlr['keterangan'],
+                            'qty'           => $rab['qty'],
+                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'oriprice'      => (int)$mdlr['price'],
+                        ];
+                    }
+                }
+            } else {
+
+                $invoice1  = [];
+                $invoice2  = [];
+                $invoice3  = [];
+                $invoice4  = [];
+                $client    = [];
+                $rabs      = [];
+            }
+
+            // BAST DATA
+            if (!empty($id)) {
+                $bast       = $BastModel->where('projectid', $id)->where('status', 1)->first();
+                $sertrim    = $BastModel->where('projectid', $id)->where('status', 0)->first();
+            } else {
+                $bast       = [];
+                $sertrim    = [];
+            }
+
+            // TOTAL RAB PRICE
+            $total = "";
+            if (!empty($rabdata)) {
+                $total = array_sum(array_column($rabdata, 'price'));
+            }
+
+            // RAB CUSTOM VALUE
+            $rabcustotal = "";
+            if (!empty($rabcustom)) {
+                $rabcustotal = array_sum(array_column($rabcustom, 'price'));
+            }
+
+            // Biaya Kirim 
+            $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
+            $biayakirim = "";
+            if (!empty($biaya)) {
+                $biayakirim = $biaya['price'];
+            }
+
+            // PPN
+            $ppn = "";
+            $ppnval = "";
+            if (!empty($gconf)) {
+                $ppn        = (int)$gconf['ppn'];
+                $ppnval     = ($ppn / 100) * (int)$total;
+            }
+
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
+
+            // Invoice Data Array
+            $termin     = "";
+            $progress   = "";
+            $nilaispk   = "";
+            $dateinv    = "";
+            $dateline   = "";
+            $pph        = "";
+            $referensi  = "";
+            $email      = "";
+            $status     = "";
+            $pic        = "";
+            $noinv      = "";
+            $ppnvalue   = "";
+            $pphvalue   = "";
+
+            if (!empty($projects)) {
+
+                // INVOCE 4 BAST 3 MONTH CONDITION
+                $nowtime = "";
+                $datelinebast = "";
+                $bast = $BastModel->where('projectid', $projects['id'])->where('status', "1")->first();
+                if (!empty($bast)) {
+                    if (!empty($bast['tanggal_bast'])) {
+                        $day    = $bast['tanggal_bast'];
+                        $date   = date_create($day);
+                        $key    = date_format($date, "Y-m-d");
+                        $hari   = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $datelinebast = date_format($hari, 'Y-m-d');
+
+                        $now    = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                    }
+                }
+                // INVOCE 4 BAST 3 MONTH CONDITION
+
+                // INVOICE IV
+                if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4) && $nowtime > $datelinebast) {
+                    $termin     = "5";
+                    $progress   = "100";
+                    $nilaispk   = (int)$total - ((95 / 100) * (int)$total) + (int)$rabcustotal;
+                    $dateinv    = $projects['inv4'];
+                    $dateline   = $invoice4['jatuhtempo'];
+                    $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
+                    $pph        = (int)$invoice4['pph23'];
+                    $pphvalue   = ($pph / 100) * $nilaispk;
+                    $ppnvalue   = ($ppn / 100) * $nilaispk;
+                    $referensi  = $invoice4['referensi'];
+                    $email      = $invoice4['email'];
+                    $status     = $invoice4['status'];
+                    $pic        = $invoice4['pic'];
+                    $noinv      = $invoice4['no_inv'];
+                    $npwpdpsa   = $gconf['npwp'];
+                }
+
+                // DATA REFERENSI
+                $refdata    = "";
+                $refname    = "";
+                $refacc     = "";
+                $refbank    = "";
+                if (!empty($referensi)) {
+                    $refdata = $ReferensiModel->where('id', $referensi)->first();
+                    $refname    = $refdata['name'];
+                    $refacc     = $refdata['no_rek'];
+                    $refbank    = $refdata['bank'];
+                }
+
+                // DATA PIC
+                $picdata = "";
+                $picname = "";
+                if (!empty($pic)) {
+                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picname    = $picdata->name;
+                }
+
+                $terminval = "";
+                if (!empty($termin)) {
+                    $terminval = $total * ($termin / 100);
+                }
+
+                // PPN VALUE RUPIAH
+                $terminvalue = "";
+                if (!empty($ppn)) {
+                    $terminvalue = (int)$terminval * ($ppn / 100);
+                }
+
+                // PPH VALUE RUPIAH
+                $pphtermin = "";
+                if (!empty($pph)) {
+                    $pphtermin = (int)$terminval * ($pph / 100);
+                }
+
+                $invoicedata = [
+                    'termin'    => $termin,
+                    'progress'  => $progress,
+                    'nilai_spk' => $nilaispk,
+                    'dateinv'   => $dateinv,
+                    'dateline'  => $dateline,
+                    'total'     => (int)$total,
+                    'ppn'       => $ppn,
+                    'pph'       => $pph,
+                    'pphval'    => (int)$pphvalue,
+                    'referensi' => $refname,
+                    'refacc'    => $refacc,
+                    'refbank'   => $refbank,
+                    'email'     => $email,
+                    'pic'       => $picname,
+                    'biayakirim' => $biayakirim,
+                    'noinv'     => $noinv,
+                    'direktur'  => $gconf['direktur'],
+                    'ppnval'    => (int)$ppnvalue,
+                    'no_spk'    => $projects['no_spk'],
+                    'alamat'    => $alamat,
+                    'totalterm' => (int)$terminvalue,
+                    'pphtermin' => (int)$pphtermin,
+                    'npwpdpsa'  => $npwpdpsa,
+                ];
+            } else {
+                $invoicedata  = [];
+            }
+
+            //--- END NEW FUCTION ---//
+
+            // Parsing Data to View
+            $data                   = $this->data;
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['projects']       = $projects;
+            $data['rabs']           = $rabdata;
+            $data['rabcustom']      = $rabcustom;
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
+            $data['client']         = $client;
+            $data['invoice']        = $invoicedata;
+
+            return view('invoiceexcel', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+    }
+
     public function invoiceview($id)
     {
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
