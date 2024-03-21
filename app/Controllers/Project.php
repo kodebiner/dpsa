@@ -319,7 +319,7 @@ class Project extends BaseController
                     }
 
                     if (!empty($projectdata[$project['id']]['bastfile'])) {
-                        $day =  $projectdata[$project['id']]['bastfile']['updated_at'];
+                        $day =  $projectdata[$project['id']]['bastfile']['tanggal_bast'];
                         $date = date_create($day);
                         $key = date_format($date, "Y-m-d");
                         $hari = date_create($key);
@@ -928,7 +928,6 @@ class Project extends BaseController
                 $datebast = $input['jatuhtempobast' . $id];
                 $tglbast = date('Y-m-d H:i:s', strtotime($datebast));
             }
-            dd($input['jatuhtempobast' . $id]);
 
             // FINANCE
 

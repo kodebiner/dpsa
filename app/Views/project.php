@@ -2877,7 +2877,7 @@
                                             // Invoice IV
                                             if (!empty($projectdata[$project['id']]['bastfile'])) {
                                                 if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95" ||  $progress >= 95) {
+                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] &&  $progress >= 95) {
                                                         echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                         $progress   = "100";
                                                     }
