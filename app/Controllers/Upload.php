@@ -434,22 +434,22 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
-            // $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
-            if (!empty($input)) {
-                function random_string($filename)
-                {
-                    $key = '';
-                    $keys = array_merge(range(0, 9), range('a', 'z'));
+            // if (!empty($input)) {
+            //     function random_string($filename)
+            //     {
+            //         $key = '';
+            //         $keys = array_merge(range(0, 9), range('a', 'z'));
 
-                    for ($i = 0; $i < $filename; $i++) {
-                        $key .= $keys[array_rand($keys)];
-                    }
+            //         for ($i = 0; $i < $filename; $i++) {
+            //             $key .= $keys[array_rand($keys)];
+            //         }
 
-                    return $key;
-                }
-                $truename = random_string(20);
-            }
+            //         return $key;
+            //     }
+            //     $truename = random_string(20);
+            // }
 
             $input->move(FCPATH . '/img/sertrim/', $truename . '.' . $ext);
 
@@ -510,19 +510,19 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
-
-                return $key;
-            }
-            $truename = random_string(20);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
             $input->move(FCPATH . '/img/bast/', $truename . '.' . $ext);
 
             // Getting True Filename
@@ -599,20 +599,21 @@ class Upload extends BaseController
 
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
-            $filename = strlen($input->getRandomName());
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                return $key;
-            }
-            $truename = random_string(20);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
             $input->move(FCPATH . '/img/sph/', $truename . '.' . $ext);
 
             // Getting True Filename
@@ -681,19 +682,19 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
-
-                return $key;
-            }
-            $truename = random_string(20);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
             $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename
@@ -765,19 +766,20 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                return $key;
-            }
-            $truename = random_string(20);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
             $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename
@@ -849,20 +851,21 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                return $key;
-            }
-            $truename = random_string(20);
-            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
+            // $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
@@ -933,19 +936,20 @@ class Upload extends BaseController
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
             $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
-            function random_string($filename)
-            {
-                $key = '';
-                $keys = array_merge(range(0, 9), range('a', 'z'));
+            // function random_string($filename)
+            // {
+            //     $key = '';
+            //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
-                for ($i = 0; $i < $filename; $i++) {
-                    $key .= $keys[array_rand($keys)];
-                }
+            //     for ($i = 0; $i < $filename; $i++) {
+            //         $key .= $keys[array_rand($keys)];
+            //     }
 
-                return $key;
-            }
-            $truename = random_string(20);
+            //     return $key;
+            // }
+            // $truename = random_string(20);
             $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename

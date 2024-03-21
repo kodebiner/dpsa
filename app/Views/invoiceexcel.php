@@ -195,16 +195,16 @@ if(!empty($invoice)){
         <div class="column" style="width: 50%;">
             <table>
                 <tr>
-                    <th style="border: 1pt solid black; border-bottom-style: none;">INVOICE No.</th>
-                    <th style="border: 1pt solid black; border-bottom-style: none;">Tanggal</th>
+                    <th style="border: 1pt solid black; border-bottom-style: none; border-right-style: none;">INVOICE No.</th>
+                    <th style="border: 1pt solid black; border-bottom-style: none; border-left-style: none;">Tanggal</th>
                     <!-- <th style="border: 1pt solid black; border-bottom-style: none;">Hal</th> -->
                     <th style="padding-left:20px">Email</th>
                     <th></th>
                     <th>Refrensi PT.DPSA</th>
                 </tr>
                 <tr>
-                    <td style="border: 1pt solid black; border-top-style: none;">No. <?php if(!empty($invoice)){ echo $invoice['noinv'] ;} ?></td>
-                    <td style="border: 1pt solid black; border-top-style: none;"><?= $tanggalspk ?></td>
+                    <td style="border: 1pt solid black; border-top-style:none; none; border-right-style: none;">No. <?php if(!empty($invoice)){ echo $invoice['noinv'] ;} ?></td>
+                    <td style="border: 1pt solid black; border-top-style:none; none; border-left-style: none;"><?= $tanggalspk ?></td>
                     <!-- <td style="border: 1pt solid black; border-top-style: none;">1 dari </td> -->
                     <td style="padding-left:20px">Email : <?php if(!empty($invoice)){ echo $invoice['email'] ;} ?></td>
                     <td></td>
