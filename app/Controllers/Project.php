@@ -615,7 +615,8 @@ class Project extends BaseController
                 $tglspk = date('Y-m-d H:i:s', strtotime($input['tanggalspk'.$id]));
             }
 
-            $batasproduksi = "";
+            $batasproduksi  = "";
+            $tglbtspro      = "";
             if(!empty($input['batasproduksi'.$id])){
                 $batasproduksi = $input['batasproduksi'.$id];
                 $tglbtspro = date('Y-m-d H:i:s', strtotime($batasproduksi));
