@@ -626,36 +626,46 @@
                                             <div class="uk-width-1-1">
 
                                                 <!-- Invoice I -->
-                                                <?php if(!empty($projectdata[$project['id']]['project'])){ if ($projectdata[$project['id']]['project']['status_spk'] === "1") {?>
-                                                    <p class="uk-margin-remove-top" uk-margin>
-                                                        <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice1']['file'] ?>" target="_blank">Download Invoice I</a>
-                                                    </p>
-                                                <?php }
+                                                <?php if(!empty($projectdata[$project['id']]['project'])){ if ($projectdata[$project['id']]['project']['status_spk'] === "1") {
+                                                    if(!empty($projectdata[$project['id']]['invoice1']['file'])){ ?>
+                                                        <p class="uk-margin-remove-top" uk-margin>
+                                                            <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice1']['file'] ?>" target="_blank">Download Invoice I</a>
+                                                        </p>
+                                                    <?php }
+                                                    }
                                                 } ?>
 
                                                 <!-- Invoice II -->
-                                                <?php if(!empty($projectdata[$project['id']]['sertrim'])){ if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") { ?>
-                                                    <p class="uk-margin-remove-top" uk-margin>
-                                                        <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice2']['file'] ?>" target="_blank">Download Invoice II</a>
-                                                    </p>
-                                                <?php }
+                                                <?php if(!empty($projectdata[$project['id']]['sertrim'])){ 
+                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") { 
+                                                        if(!empty($projectdata[$project['id']]['invoice2']['file'])){ ?>
+                                                            <p class="uk-margin-remove-top" uk-margin>
+                                                                <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice2']['file'] ?>" target="_blank">Download Invoice II</a>
+                                                            </p>
+                                                    <?php }
+                                                    }
                                                 } ?>
 
                                                 <!-- Invoice III -->
-                                                <?php if(!empty($projectdata[$project['id']]['bast'])){ if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") { ?>
-                                                    <p class="uk-margin-remove-top" uk-margin>
-                                                        <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice3']['file'] ?>" target="_blank">Download Invoice III</a>
-                                                    </p>
+                                                <?php if(!empty($projectdata[$project['id']]['bast'])){ if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
+                                                    if(!empty($projectdata[$project['id']]['invoice3']['file'])){ ?>
+                                                        <p class="uk-margin-remove-top" uk-margin>
+                                                            <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice3']['file'] ?>" target="_blank">Download Invoice III</a>
+                                                        </p>
                                                 <?php }
+                                                    }
                                                 }?>
 
                                                 <!-- Invoice IV -->
-                                                <?php if(!empty($projectdata[$project['id']]['bast'])){ if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) { 
-                                                    if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") { ?>
-                                                        <p class="uk-margin-remove-top" uk-margin>
-                                                            <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice4']['file'] ?>" target="_blank">Download Invoice IV</a>
-                                                        </p>
-                                                    <?php }
+                                                <?php if(!empty($projectdata[$project['id']]['bast'])){
+                                                    if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) { 
+                                                        if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") { 
+                                                            if(!empty($projectdata[$project['id']]['invoice4']['file'])){ ?>
+                                                                <p class="uk-margin-remove-top" uk-margin>
+                                                                    <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" href="img/invoice/<?= $projectdata[$project['id']]['invoice4']['file'] ?>" target="_blank">Download Invoice IV</a>
+                                                                </p>
+                                                        <?php }
+                                                        }
                                                     }
                                                 }?>
 
@@ -1323,22 +1333,22 @@
                                                             <?php
                                                             // Invoice I
                                                             if(!empty($projectdata[$project['id']]['project'])){
-                                                                if ($projectdata[$project['id']]['project']['status_spk'] === "1") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='img/invoice/". $projectdata[$project['id']]['invoice1']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
+                                                                if ($projectdata[$project['id']]['project']['status_spk'] === "1" && !empty($projectdata[$project['id']]['invoice1']['file']) ) {
+                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' target='_blank' href='img/invoice/". $projectdata[$project['id']]['invoice1']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
                                                                 }
                                                             }
 
                                                             // Invoice II
                                                             if(!empty($projectdata[$project['id']]['sertrim'])){
-                                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='img/invoice/". $projectdata[$project['id']]['invoice2']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0" &&  !empty($projectdata[$project['id']]['invoice2']['file'])) {
+                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' target='_blank' href='img/invoice/". $projectdata[$project['id']]['invoice2']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
                                                                 }
                                                             }
 
                                                             // Invoice III
                                                             if(!empty($projectdata[$project['id']]['bast'])){
-                                                                if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1") {
-                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='img/invoice/". $projectdata[$project['id']]['invoice3']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                                if (isset($projectdata[$project['id']]['bast']['status']) && $progress >= "95" && $projectdata[$project['id']]['bast']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file']) && !empty($projectdata[$project['id']]['invoice3']['file'])) {
+                                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' target='_blank' href='img/invoice/". $projectdata[$project['id']]['invoice3']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
                                                                     $status = "Retensi";
                                                                 }
                                                             }
@@ -1346,8 +1356,8 @@
                                                             // Invoice IV
                                                             if(!empty($projectdata[$project['id']]['bast'])){
                                                             if (!empty($projectdata[$project['id']]['bast']['tanggal_bast'])) {
-                                                                    if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
-                                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/". $projectdata[$project['id']]['invoice4']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                                    if ($projectdata[$project['id']]['bast']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95" && !empty($projectdata[$project['id']]['invoice4']['file'])) {
+                                                                        echo "<a id='btninv" . $project['id'] . "'  target='_blank' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/". $projectdata[$project['id']]['invoice4']['file']."'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                                         $progress   = "100";
                                                                     }
                                                                 }

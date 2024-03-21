@@ -233,12 +233,12 @@ class User extends BaseController
             if ($input['username'] === $user->username) {
                 $is_unique =  '';
             } else {
-                $is_unique =  'is_unique[user.username]';
+                $is_unique =  '|is_unique[users.username]';
             }
             if ($input['email'] === $user->email) {
                 $emailis_unique =  '';
             } else {
-                $emailis_unique =  'is_unique[user.email]';
+                $emailis_unique =  '|is_unique[users.email]';
             }
 
             // Validation Rules

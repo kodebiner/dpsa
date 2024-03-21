@@ -1712,7 +1712,7 @@
 
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label uk-margin-remove-top">File SPK</label>
-                                            <div class="uk-form-controls">: <a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a></div>
+                                            <div class="uk-form-controls">: <?php if(!empty($project['spk'])){ ?><a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a> <?php } ?></div>
                                         </div>
 
                                         <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
@@ -1944,7 +1944,7 @@
                             <?php if ($project['status_spk'] == 1) { ?>
                                 <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
                                     <div>
-                                        <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Production</div>
+                                        <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Produksi</div>
                                     </div>
                                     <div class="uk-text-right">
                                         <a class="uk-link-reset uk-icon-button" id="toggleproduction<?= $project['id'] ?>" uk-toggle="target: .toggleproduction<?= $project['id'] ?>"><span class="uk-light" id="closeproduction<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openproduction<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
@@ -2734,7 +2734,7 @@
                             <!-- Finance Section -->
                             <div class="uk-margin uk-child-width-1-2 uk-flex-middle" uk-grid>
                                 <div>
-                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Finance</div>
+                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Keuangan</div>
                                 </div>
                                 <div class="uk-text-right">
                                     <a class="uk-link-reset uk-icon-button" id="togglefinance<?= $project['id'] ?>" uk-toggle="target: .toggleinvoice<?= $project['id'] ?>"><span class="uk-light" id="closefinance<?= $project['id'] ?>" uk-icon="chevron-down" hidden></span><span class="uk-light" id="openfinance<?= $project['id'] ?>" uk-icon="chevron-right"></span></a>
@@ -2765,7 +2765,7 @@
 
                                             // Invoice III
                                             if(!empty($projectdata[$project['id']]['bastfile'])){
-                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" && $projectdata[$project['id']]['bastfile']['status'] === "1") {
+                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
                                                     echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
                                                     $status = "Retensi";
                                                 }

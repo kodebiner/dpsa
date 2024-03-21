@@ -88,6 +88,16 @@ class Project extends BaseController
             $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $picPro = $this->builder->get()->getResult();
 
+            // User PIC Invoice
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'client cabang');
+            $this->builder->orWhere('auth_groups.name =', 'client pusat');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $picinv = $this->builder->get()->getResult();
+
             $projectdata    = [];
             if (!empty($projects)) {
                 foreach ($projects as $project) {
@@ -121,7 +131,7 @@ class Project extends BaseController
                     // Custom RAB
                     $projectdata[$project['id']]['customrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
 
-                    
+
                     // Setrim
                     $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
                     // BAST
@@ -240,7 +250,7 @@ class Project extends BaseController
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
-                   
+
 
                     // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
@@ -333,6 +343,7 @@ class Project extends BaseController
 
                     // PIC
                     $projectdata[$project['id']]['pic']         = $users;
+                    $projectdata[$project['id']]['pic']         = $picinv;
 
                     // Bukti Pembayaran
                     $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
@@ -439,59 +450,58 @@ class Project extends BaseController
             }
 
             // This Year
-            $yearEnd = date('Y');
+            // $yearEnd = date('Y');
 
             // DATA SPH
-            $amountsph = "";
+            // $amountsph = "";
 
             // PROYEK TERAKHIR
-            $lastproyek = $ProjectModel->orderBy('id', 'DESC')->first();
+            // $lastproyek = $ProjectModel->orderBy('id', 'DESC')->first();
 
-            $lastpro = "";
-            if (!empty($lastproyek)) {
-                $dateprox = date_create($lastproyek['tahun']);
-                $lastpro =  date_format($dateprox, 'Y');
-            }
+            // $lastpro = "";
+            // if (!empty($lastproyek)) {
+            //     $dateprox = date_create($lastproyek['tahun']);
+            //     $lastpro =  date_format($dateprox, 'Y');
+            // }
 
             // DATE DATA
-            if (!empty($lastproyek)) {
-                if ($lastpro <= $yearEnd) {
-                    $amountsph = $lastproyek['no_sph'] + 1;
-                } elseif ($yearEnd > $lastpro) {
-                    $amountsph = 1;
-                } else {
-                    $amountsph = 1;
-                }
-            } else {
-                $amountsph = 1;
-            }
-
+            // if (!empty($lastproyek)) {
+            //     if ($lastpro <= $yearEnd) {
+            //         $amountsph = $lastproyek['no_sph'] + 1;
+            //     } elseif ($yearEnd > $lastpro) {
+            //         $amountsph = 1;
+            //     } else {
+            //         $amountsph = 1;
+            //     }
+            // } else {
+            //     $amountsph = 1;
+            // }
             // --- END SPH NUM ---//
 
             // INVOICE NUM
-            $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
+            // $lastinvoice = $InvoiceModel->orderBy('id', 'DESC')->first();
 
-            $lastinv = "";
-            if (!empty($lastinvoice)) {
-                $dateinvx = date_create($lastinvoice['tahun']);
-                $lastinv = date_format($dateinvx, 'Y');
-            }
+            // $lastinv = "";
+            // if (!empty($lastinvoice)) {
+            //     $dateinvx = date_create($lastinvoice['tahun']);
+            //     $lastinv = date_format($dateinvx, 'Y');
+            // }
 
             // CREATE INVOICE DATA
-            $amount = "";
+            // $amount = "";
 
             // DATE DATA
-            if (!empty($lastinvoice)) {
-                if ($lastinv <= $yearEnd) {
-                    $amount = $lastinvoice['no_inv'] + 1;
-                } elseif ($yearEnd > $lastinv) {
-                    $amount = 1;
-                } else {
-                    $amount = 1;
-                }
-            } else {
-                $amount = 1;
-            }
+            // if (!empty($lastinvoice)) {
+            //     if ($lastinv <= $yearEnd) {
+            //         $amount = $lastinvoice['no_inv'] + 1;
+            //     } elseif ($yearEnd > $lastinv) {
+            //         $amount = 1;
+            //     } else {
+            //         $amount = 1;
+            //     }
+            // } else {
+            //     $amount = 1;
+            // }
             // END INVOICE NUM
 
             // Project Data
@@ -591,6 +601,11 @@ class Project extends BaseController
             $spknum = "";
             if (!empty($input['nospk'])) {
                 $spknum = $input['nospk'];
+            }
+
+            $sphnum = "";
+            if (!empty($input['nosph' . $id])) {
+                $sphnum = $input['nosph' . $id];
             }
 
             // Validation Rules
@@ -745,7 +760,6 @@ class Project extends BaseController
             // Design Data
             if (!empty($input['submitted'])) {
                 $design = $DesignModel->where('projectid', $id)->first();
-
                 if (empty($design)) {
                     $datadesign = [
                         'projectid'     => $id,
@@ -754,12 +768,13 @@ class Project extends BaseController
                     ];
                     $DesignModel->insert($datadesign);
                 } else {
-                    unlink(FCPATH . '/img/design/' . $design['submitted']);
+                    if (!empty($design['submitted'])) {
+                        unlink(FCPATH . '/img/design/' . $design['submitted']);
+                    }
                     $datadesign = [
                         'id'            => $design['id'],
                         'projectid'     => $id,
                         'submitted'     => $input['submitted'],
-                        // 'revision'      => $input['submitted'],
                         'status'        => 0,
                     ];
                     $DesignModel->save($datadesign);
@@ -888,7 +903,7 @@ class Project extends BaseController
             $idinv4 = $InvoiceModel->where('projectid', $id)->where('status', '4')->first();
 
             // if (!empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty( $input['emailinvoice1' . $id]) && !empty($idinv1)){
-            if (isset($input['dateinvoice1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
+            if (isset($input['dateinvoice1' . $id], $input['noinv1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
                 $date1 = $input['dateinvoice1' . $id];
                 $newDate1 = date('Y-m-d H:i:s', strtotime($date1));
                 $invoice1 = [
@@ -904,7 +919,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv1' . $id],
                 ];
                 $InvoiceModel->save($invoice1);
-            } elseif (isset($input['referensiinvoice1' . $id], $input['picinvoice1' . $id]) && !empty($input['dateinvoice1' . $id]) && !empty($input['emailinvoice1' . $id]) && !empty($input['pphinvoice1' . $id])) {
+            } elseif (isset($input['referensiinvoice1' . $id], $input['noinv1' . $id], $input['picinvoice1' . $id]) && !empty($input['dateinvoice1' . $id]) && !empty($input['emailinvoice1' . $id]) && !empty($input['pphinvoice1' . $id])) {
 
                 $tahunini = date('Y-m-d H:i:s');
                 $invoice1 = [
@@ -922,7 +937,7 @@ class Project extends BaseController
             }
 
             // INVOICE 2 UPDATE
-            if (isset($input['dateinvoice2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty($input['emailinvoice2' . $id])) {
+            if (isset($input['dateinvoice2' . $id], $input['noinv2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty($input['emailinvoice2' . $id])) {
                 // if (!empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty( $input['emailinvoice2' . $id]) && !empty($idinv2)){
                 $date2 = $input['dateinvoice2' . $id];
                 $newDate2 = date('Y-m-d H:i:s', strtotime($date2));
@@ -941,7 +956,7 @@ class Project extends BaseController
                 ];
 
                 $InvoiceModel->save($invoice2);
-            } elseif (isset($input['referensiinvoice2' . $id], $input['picinvoice2' . $id]) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id]) && !empty($input['pphinvoice2' . $id])) {
+            } elseif (isset($input['referensiinvoice2' . $id], $input['noinv2' . $id], $input['picinvoice2' . $id]) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id]) && !empty($input['pphinvoice2' . $id])) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
@@ -960,7 +975,7 @@ class Project extends BaseController
             }
 
             // INVOICE 3 UPDATE
-            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty($input['emailinvoice3' . $id])) {
+            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty($input['emailinvoice3' . $id])) {
                 // if (!empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty( $input['emailinvoice3' . $id]) && !empty($idinv3)){
                 $date3 = $input['dateinvoice3' . $id];
                 $newDate3 = date('Y-m-d H:i:s', strtotime($date3));
@@ -977,7 +992,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv3' . $id],
                 ];
                 $InvoiceModel->save($invoice3);
-            } elseif (isset($input['referensiinvoice3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) && !empty($input['pphinvoice3' . $id])) {
+            } elseif (isset($input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) && !empty($input['pphinvoice3' . $id])) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
@@ -996,7 +1011,7 @@ class Project extends BaseController
             }
 
             // INVOICE 4 UPDATE
-            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty($input['emailinvoice4' . $id])) {
+            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty($input['emailinvoice4' . $id])) {
                 // if (!empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty( $input['emailinvoice4' . $id]) && !empty($idinv4)){
                 $date4 = $input['dateinvoice3' . $id];
                 $newDate4 = date('Y-m-d H:i:s', strtotime($date4));
@@ -1013,7 +1028,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv4' . $id],
                 ];
                 $InvoiceModel->save($invoice4);
-            } elseif (isset($input['referensiinvoice4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id]) && !empty($input['pphinvoice4' . $id])) {
+            } elseif (isset($input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id]) && !empty($input['pphinvoice4' . $id])) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
@@ -1075,7 +1090,7 @@ class Project extends BaseController
                 'status_spk'    => $statusspk,
                 'status'        => $status,
                 'no_spk'        => $spknum,
-                'no_sph'        => $input['nosph' . $id],
+                'no_sph'        => $sphnum,
                 'inv4'          => $tanggalinv4,
             ];
             $ProjectModel->save($project);
@@ -2157,29 +2172,29 @@ class Project extends BaseController
                 }
 
                 // INVOICE FORMAT NUMBER
-                $date = date_create($dateinv);
-                $Year   = date_format($date, 'Y');
-                $number = date_format($date, 'n');
-                function invoicenumberview($number)
-                {
-                    $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-                    $returnValue = '';
-                    while ($number > 0) {
-                        foreach ($map as $roman => $int) {
-                            if ($number >= $int) {
-                                $number -= $int;
-                                $returnValue .= $roman;
-                                break;
-                            }
-                        }
-                    }
-                    return $returnValue;
-                }
-                $roman = invoicenumberview($number);
+                // $date = date_create($dateinv);
+                // $Year   = date_format($date, 'Y');
+                // $number = date_format($date, 'n');
+                // function invoicenumberview($number)
+                // {
+                //     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+                //     $returnValue = '';
+                //     while ($number > 0) {
+                //         foreach ($map as $roman => $int) {
+                //             if ($number >= $int) {
+                //                 $number -= $int;
+                //                 $returnValue .= $roman;
+                //                 break;
+                //             }
+                //         }
+                //     }
+                //     return $returnValue;
+                // }
+                // $roman = invoicenumberview($number);
 
-                $invnum = str_pad($noinv, 3, '0', STR_PAD_LEFT);
+                // $invnum = str_pad($noinv, 3, '0', STR_PAD_LEFT);
 
-                $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
+                // $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
                 //---END OF INVOICE FORMAT NUMBER---//
 
 
@@ -2486,29 +2501,29 @@ class Project extends BaseController
                 }
 
                 // INVOICE FORMAT NUMBER
-                $date = date_create($dateinv);
-                $Year   = date_format($date, 'Y');
-                $number = date_format($date, 'n');
-                function invoicenumberview($number)
-                {
-                    $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-                    $returnValue = '';
-                    while ($number > 0) {
-                        foreach ($map as $roman => $int) {
-                            if ($number >= $int) {
-                                $number -= $int;
-                                $returnValue .= $roman;
-                                break;
-                            }
-                        }
-                    }
-                    return $returnValue;
-                }
-                $roman = invoicenumberview($number);
+                // $date = date_create($dateinv);
+                // $Year   = date_format($date, 'Y');
+                // $number = date_format($date, 'n');
+                // function invoicenumberview($number)
+                // {
+                //     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+                //     $returnValue = '';
+                //     while ($number > 0) {
+                //         foreach ($map as $roman => $int) {
+                //             if ($number >= $int) {
+                //                 $number -= $int;
+                //                 $returnValue .= $roman;
+                //                 break;
+                //             }
+                //         }
+                //     }
+                //     return $returnValue;
+                // }
+                // $roman = invoicenumberview($number);
 
-                $invnum = str_pad($noinv, 3, '0', STR_PAD_LEFT);
+                // $invnum = str_pad($noinv, 3, '0', STR_PAD_LEFT);
 
-                $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
+                // $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
                 //---END OF INVOICE FORMAT NUMBER---//
 
 
@@ -2544,7 +2559,7 @@ class Project extends BaseController
                     'refbank'   => $refbank,
                     'email'     => $email,
                     'pic'       => $picname,
-                    'noinv'     => $numinv,
+                    // 'noinv'     => $numinv,
                     'direktur'  => $gconf['direktur'],
                     'ppnval'    => (int)$ppnvalue,
                     'no_spk'    => $projects['no_spk'],
