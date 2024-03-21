@@ -1290,7 +1290,7 @@
                                             <div class="uk-margin-bottom">
                                                 <label class="uk-form-label" for="paket">Cari Sub Kategori</label>
                                                 <div class="uk-form-controls">
-                                                    <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Paket">
+                                                    <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Sub Kategori">
                                                 </div>
                                             </div>
 
