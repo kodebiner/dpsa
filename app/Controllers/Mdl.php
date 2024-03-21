@@ -655,37 +655,37 @@ class Mdl extends BaseController
         $mdls = $MdlModel->findAll();
         $packs = $PaketModel->findAll();
 
-        $MdlPaketModel->where('mdlid', '127')->where('paketid', '4')->where('ordering', '2')->delete();
-        $MdlPaketModel->where('mdlid', '127')->where('paketid', '5')->where('ordering', '11')->delete();
-        $MdlPaketModel->where('mdlid', '127')->where('paketid', '6')->where('ordering', '3')->delete();
-        $MdlPaketModel->where('mdlid', '128')->where('paketid', '3')->where('ordering', '11')->delete();
-        $MdlPaketModel->where('mdlid', '129')->where('paketid', '4')->where('ordering', '3')->delete();
-        $MdlPaketModel->where('mdlid', '130')->where('paketid', '3')->where('ordering', '12')->delete();
-        $MdlPaketModel->where('mdlid', '131')->where('paketid', '3')->where('ordering', '13')->delete();
-        $MdlPaketModel->where('mdlid', '132')->where('paketid', '24')->where('ordering', '10')->delete();
-        $MdlPaketModel->where('mdlid', '133')->where('paketid', '6')->where('ordering', '4')->delete();
-        $MdlPaketModel->where('mdlid', '134')->where('paketid', '6')->where('ordering', '5')->delete();
+        // $MdlPaketModel->where('mdlid', '127')->where('paketid', '4')->where('ordering', '2')->delete();
+        // $MdlPaketModel->where('mdlid', '127')->where('paketid', '5')->where('ordering', '11')->delete();
+        // $MdlPaketModel->where('mdlid', '127')->where('paketid', '6')->where('ordering', '3')->delete();
+        // $MdlPaketModel->where('mdlid', '128')->where('paketid', '3')->where('ordering', '11')->delete();
+        // $MdlPaketModel->where('mdlid', '129')->where('paketid', '4')->where('ordering', '3')->delete();
+        // $MdlPaketModel->where('mdlid', '130')->where('paketid', '3')->where('ordering', '12')->delete();
+        // $MdlPaketModel->where('mdlid', '131')->where('paketid', '3')->where('ordering', '13')->delete();
+        // $MdlPaketModel->where('mdlid', '132')->where('paketid', '24')->where('ordering', '10')->delete();
+        // $MdlPaketModel->where('mdlid', '133')->where('paketid', '6')->where('ordering', '4')->delete();
+        // $MdlPaketModel->where('mdlid', '134')->where('paketid', '6')->where('ordering', '5')->delete();
 
-        // $mdlPaket = [];
-        // foreach ($mdls as $mdl) {
-        //     foreach ($packs as $pack) {
-        //         $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
-        //         $packCount = count($packMdl);
-        //         if ($packCount > 1) {
-        //             // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
-        //             $mdlpacks = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
-        //             foreach ($mdlpacks as $mdlpack) {
-        //                 $mdlPaket[] = [
-        //                     'mdlid'     => $mdlpack['mdlid'],
-        //                     'paketid'   => $mdlpack['paketid'],
-        //                     'ordering'  => $mdlpack['ordering']
-        //                 ];
-        //             }
-        //         }
-        //     }
-        // }
+        $mdlPaket = [];
+        foreach ($mdls as $mdl) {
+            foreach ($packs as $pack) {
+                $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+                $packCount = count($packMdl);
+                if ($packCount > 1) {
+                    // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
+                    $mdlpacks = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+                    foreach ($mdlpacks as $mdlpack) {
+                        $mdlPaket[] = [
+                            'mdlid'     => $mdlpack['mdlid'],
+                            'paketid'   => $mdlpack['paketid'],
+                            'ordering'  => $mdlpack['ordering']
+                        ];
+                    }
+                }
+            }
+        }
 
-        // dd($mdlPaket);
+        dd($mdlPaket);
     }
 
     public function orderingpaket()
