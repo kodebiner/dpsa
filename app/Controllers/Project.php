@@ -1996,7 +1996,7 @@ class Project extends BaseController
                 $alamat = $gconf['alamat'];
             }
             if (!empty($rabcustom)) {
-                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
+                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
             } else {
                 $rabcustom  = [];
             }
@@ -2065,6 +2065,13 @@ class Project extends BaseController
             $rabcustotal = "";
             if (!empty($rabcustom)) {
                 $rabcustotal = array_sum(array_column($rabcustom, 'price'));
+            }
+
+            // Biaya Kirim 
+            $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
+            $biayakirim = "";
+            if(!empty($biaya)){
+                $biayakirim = $biaya['price'];
             }
 
             // PPN
@@ -2267,6 +2274,7 @@ class Project extends BaseController
                     'email'     => $email,
                     'pic'       => $picname,
                     // 'noinv'     => $numinv,
+                    'biayakirim'=> $biayakirim,
                     'noinv'     => $noinv,
                     'direktur'  => $gconf['direktur'],
                     'ppnval'    => (int)$ppnvalue,
