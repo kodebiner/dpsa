@@ -589,7 +589,7 @@ class Upload extends BaseController
         ];
 
         // Get Extention
-        $ext = $input->getClientExtension();
+        $ext = strtolower($input->getClientExtension());
 
         // Validating
         if (!$this->validate($rules)) {
