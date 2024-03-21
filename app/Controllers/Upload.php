@@ -599,7 +599,7 @@ class Upload extends BaseController
 
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
-            $filename = $input->getRandomName();
+            $filename = strlen($input->getRandomName());
 
             function random_string($filename)
             {
