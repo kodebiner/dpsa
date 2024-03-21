@@ -644,6 +644,39 @@ class Mdl extends BaseController
         }
     }
 
+    public function fixorder()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+        $MdlModel       = new MdlModel();
+
+        // Populating Data
+        $mdls = $MdlModel->findAll();
+        $packs = $PaketModel->findAll();
+
+        $mdlPaket = [];
+        foreach ($mdls as $mdl) {
+            foreach ($packs as $pack) {
+                // $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+                $packCount = count($packMdl);
+                if ($packCount > 1) {
+                    // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
+                    $mdlpacks = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+                    foreach ($mdlpacks as $mdlpack) {
+                        $mdlPaket[] = [
+                            'mdlid'     => $mdlpack['mdlid'],
+                            'paketid'   => $mdlpack['paketid'],
+                            'ordering'  => $mdlpack['ordering']
+                        ];
+                    }
+                }
+            }
+        }
+
+        dd($mdlPaket);
+    }
+
     public function orderingpaket()
     {
         // Calling Models

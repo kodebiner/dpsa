@@ -177,6 +177,7 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->post('reorderingparent', 'Mdl::reorderingparent');
     $routes->post('reorderingpaket', 'Mdl::reorderingpaket');
     $routes->post('reorderingmdl', 'Mdl::reorderingmdl');
+    $routes->post('checkordering', 'Mdl::fixorder');
 });
 
 // Account
