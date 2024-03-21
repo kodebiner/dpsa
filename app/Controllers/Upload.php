@@ -375,7 +375,7 @@ class Upload extends BaseController
             'uploads'   => 'uploaded[uploads]|mime_in[uploads,image/png,image/x-png,image/jpeg,image/pjpeg]',
         ];
 
-        $ext        = $input->getClientExtension();
+        $ext        = strtolower($input->getClientExtension());
 
         // Validating
         if (!$this->validate($rules)) {
