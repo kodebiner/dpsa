@@ -719,57 +719,10 @@
                                         <a class="uk-button uk-button-primary uk-button-small uk-width-1-1" uk-toggle="target: #modal-bukti-pembayaran<?= $project['id'] ?>">Upload Bukti Pembayaran</a>
                                     </div>
                                     <hr>
-                                    <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                    <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
                                         <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
                                             <div>
-                                                <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
-                                                    <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
-                                                    <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
-                                                    <div class="uk-position-center uk-transition-fade">
-                                                        <div class="uk-overlay">
-                                                            <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-
-                                                <script>
-                                                    // Date In Indonesia
-                                                    var publishupdate   = "<?= $payproof['created_at'] ?>";
-                                                    var thatdate        = publishupdate.split( /[- :]/ );
-                                                    thatdate[1]--;
-                                                    var publishthatdate = new Date( ...thatdate );
-                                                    var publishyear     = publishthatdate.getFullYear();
-                                                    var publishmonth    = publishthatdate.getMonth();
-                                                    var publishdate     = publishthatdate.getDate();
-                                                    var publishday      = publishthatdate.getDay();
-
-                                                    switch(publishday) {
-                                                        case 0: publishday     = "Minggu"; break;
-                                                        case 1: publishday     = "Senin"; break;
-                                                        case 2: publishday     = "Selasa"; break;
-                                                        case 3: publishday     = "Rabu"; break;
-                                                        case 4: publishday     = "Kamis"; break;
-                                                        case 5: publishday     = "Jum'at"; break;
-                                                        case 6: publishday     = "Sabtu"; break;
-                                                    }
-                                                    switch(publishmonth) {
-                                                        case 0: publishmonth   = "Januari"; break;
-                                                        case 1: publishmonth   = "Februari"; break;
-                                                        case 2: publishmonth   = "Maret"; break;
-                                                        case 3: publishmonth   = "April"; break;
-                                                        case 4: publishmonth   = "Mei"; break;
-                                                        case 5: publishmonth   = "Juni"; break;
-                                                        case 6: publishmonth   = "Juli"; break;
-                                                        case 7: publishmonth   = "Agustus"; break;
-                                                        case 8: publishmonth   = "September"; break;
-                                                        case 9: publishmonth   = "Oktober"; break;
-                                                        case 10: publishmonth  = "November"; break;
-                                                        case 11: publishmonth  = "Desember"; break;
-                                                    }
-
-                                                    var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
-                                                    document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
-                                                </script>
+                                                <div class="uk-card uk-card-default uk-card-body"><a href="/img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>"><span uk-icon="file-pdf"></span><?= $payproof['file'] ?></a></div>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -1470,57 +1423,10 @@
                                         </div>
 
                                         <div id="contentbuktipembayaran<?= $project['id'] ?>" hidden>
-                                            <div class="uk-child-width-1-6 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                            <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
                                                 <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
                                                     <div>
-                                                        <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
-                                                            <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
-                                                            <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
-                                                            <div class="uk-position-center uk-transition-fade">
-                                                                <div class="uk-overlay">
-                                                                    <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <script>
-                                                            // Date In Indonesia
-                                                            var publishupdate   = "<?= $payproof['created_at'] ?>";
-                                                            var thatdate        = publishupdate.split( /[- :]/ );
-                                                            thatdate[1]--;
-                                                            var publishthatdate = new Date( ...thatdate );
-                                                            var publishyear     = publishthatdate.getFullYear();
-                                                            var publishmonth    = publishthatdate.getMonth();
-                                                            var publishdate     = publishthatdate.getDate();
-                                                            var publishday      = publishthatdate.getDay();
-
-                                                            switch(publishday) {
-                                                                case 0: publishday     = "Minggu"; break;
-                                                                case 1: publishday     = "Senin"; break;
-                                                                case 2: publishday     = "Selasa"; break;
-                                                                case 3: publishday     = "Rabu"; break;
-                                                                case 4: publishday     = "Kamis"; break;
-                                                                case 5: publishday     = "Jum'at"; break;
-                                                                case 6: publishday     = "Sabtu"; break;
-                                                            }
-                                                            switch(publishmonth) {
-                                                                case 0: publishmonth   = "Januari"; break;
-                                                                case 1: publishmonth   = "Februari"; break;
-                                                                case 2: publishmonth   = "Maret"; break;
-                                                                case 3: publishmonth   = "April"; break;
-                                                                case 4: publishmonth   = "Mei"; break;
-                                                                case 5: publishmonth   = "Juni"; break;
-                                                                case 6: publishmonth   = "Juli"; break;
-                                                                case 7: publishmonth   = "Agustus"; break;
-                                                                case 8: publishmonth   = "September"; break;
-                                                                case 9: publishmonth   = "Oktober"; break;
-                                                                case 10: publishmonth  = "November"; break;
-                                                                case 11: publishmonth  = "Desember"; break;
-                                                            }
-
-                                                            var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
-                                                            document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
-                                                        </script>
+                                                        <div class="uk-card uk-card-default uk-card-body"><a href="/img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>"><span uk-icon="file-pdf"></span><?= $payproof['file'] ?></a></div>
                                                     </div>
                                                 <?php } ?>
                                             </div>
@@ -2031,6 +1937,16 @@
                                 <form class="uk-form-stacked" action="home/buktipembayaran/<?= $project['id'] ?>" method="post">
                                     <div class="uk-margin" id="image-container-createbuktipembayaran-<?= $project['id'] ?>">
                                         <label class="uk-form-label" for="photocreate">Kirim File Bukti Pembayaran</label>
+                                        <div class="uk-placeholder" id="placepayproof<?= $project['id'] ?>" hidden>
+                                            <div uk-grid>
+                                                <div class="uk-text-left uk-width-3-4">
+                                                    <div id="uppayproof<?= $project['id'] ?>"></div>
+                                                </div>
+                                                <div class="uk-text-right uk-width-1-4">
+                                                    <div id="closepayproof<?= $project['id'] ?>"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div id="image-containerbuktipembayaran-<?= $project['id'] ?>" class="uk-form-controls">
                                             <input id="photocreatebuktipembayaran<?= $project['id'] ?>" name="buktipembayaran" hidden />
                                             <div id="js-upload-createbuktipembayaran-<?= $project['id'] ?>" class="js-upload-createbuktipembayaran-<?= $project['id'] ?> uk-placeholder uk-text-center">
@@ -2085,36 +2001,35 @@
 
                                                 document.getElementById('photocreatebuktipembayaran<?= $project['id'] ?>').value = filename;
 
-                                                var imgContainer = document.getElementById('image-container-createbuktipembayaran-<?= $project['id'] ?>');
+                                                document.getElementById('placepayproof<?= $project['id'] ?>').removeAttribute('hidden');
 
-                                                var displayContainer = document.createElement('div');
-                                                displayContainer.setAttribute('id', 'display-container-createbuktipembayaran-<?= $project['id'] ?>');
-                                                displayContainer.setAttribute('class', 'uk-inline uk-width-1-2 uk-widht-1-3@m');
+                                                var uprev = document.getElementById('uppayproof<?= $project['id'] ?>');
+                                                var closed = document.getElementById('closepayproof<?= $project['id'] ?>');
 
-                                                var displayImg = document.createElement('div');
-                                                displayImg.setAttribute('uk-lightbox', 'animation: fade');
-                                                displayImg.setAttribute('class', 'uk-inline');
+                                                var divuprev = document.createElement('h6');
+                                                divuprev.setAttribute('class', 'uk-margin-remove');
+                                                divuprev.setAttribute('id', 'uppayment<?= $project['id'] ?>');
+                                                
+                                                var linkrev = document.createElement('a');
+                                                linkrev.setAttribute('href', 'img/bukti/pembayaran/' + filename);
+                                                linkrev.setAttribute('uk-icon', 'file-text');
 
                                                 var link = document.createElement('a');
                                                 link.setAttribute('href', 'img/bukti/pembayaran/' + filename);
+                                                link.setAttribute('target', '_blank');
 
-                                                var image = document.createElement('img');
-                                                image.setAttribute('src', 'img/bukti/pembayaran/' + filename);
+                                                var linktext = document.createTextNode(filename);
 
-                                                var closeContainer = document.createElement('div');
-                                                closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+                                                var divclosed = document.createElement('a');
+                                                divclosed.setAttribute('uk-icon', 'icon: close');
+                                                divclosed.setAttribute('onClick', 'removeImgCreatebuktipembayaran<?= $project['id'] ?>()');
+                                                divclosed.setAttribute('id', 'closedpayproof<?= $project['id'] ?>');
 
-                                                var closeButton = document.createElement('a');
-                                                closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                                closeButton.setAttribute('onClick', 'removeImgCreatebuktipembayaran<?= $project['id'] ?>()');
-                                                closeButton.setAttribute('uk-icon', 'close');
-
-                                                closeContainer.appendChild(closeButton);
-                                                displayContainer.appendChild(displayImg);
-                                                displayContainer.appendChild(closeContainer);
-                                                link.appendChild(image);
-                                                displayImg.appendChild(link);
-                                                imgContainer.appendChild(displayContainer);
+                                                uprev.appendChild(divuprev);
+                                                divuprev.appendChild(linkrev);
+                                                divuprev.appendChild(link);
+                                                link.appendChild(linktext);
+                                                closed.appendChild(divclosed);
 
                                                 document.getElementById('js-upload-createbuktipembayaran-<?= $project['id'] ?>').setAttribute('hidden', '');
                                             },
@@ -2170,12 +2085,13 @@
 
                                                     var pesan = arguments[0][1];
 
-                                                    document.getElementById('display-container-createbuktipembayaran-<?= $project['id'] ?>').remove();
+                                                    document.getElementById('uppayment<?= $project['id'] ?>').remove();
+                                                    document.getElementById('closedpayproof<?= $project['id'] ?>').remove();
+                                                    document.getElementById('placepayproof<?= $project['id'] ?>').setAttribute('hidden', '');
                                                     document.getElementById('photocreatebuktipembayaran<?= $project['id'] ?>').value = '';
 
-                                                    alert(pesan);
-
                                                     document.getElementById('js-upload-createbuktipembayaran-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                    alert(pesan);
                                                 }
                                             });
                                         };

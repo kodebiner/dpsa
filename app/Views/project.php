@@ -1163,7 +1163,7 @@
                                             }
                                             </script>
                                             <!-- end SPH -->
-                                            
+
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
                                                 <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
                                                 <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
@@ -2400,7 +2400,7 @@
                                                                 }
                                                             }
                                                         </script>
-                                            <?php }
+                                                    <?php }
                                                 }
                                             } ?>
                                         </div>
@@ -4042,57 +4042,10 @@
                             </div>
 
                             <div class="togglebuktipembayaran<?= $project['id'] ?>" hidden>
-                                <div class="uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
                                     <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
                                         <div>
-                                            <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>">
-                                                <img src="img/bukti/pembayaran/<?= $payproof['file'] ?>" alt="<?= $payproof['file'] ?>" class="uk-transition-opaque">
-                                                <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
-                                                <div class="uk-position-center uk-transition-fade">
-                                                    <div class="uk-overlay">
-                                                        <div class="uk-h4 uk-margin-top uk-margin-remove-bottom uk-text-center uk-light" id="publish_up<?= $payproof['id'] ?>"></div>
-                                                    </div>
-                                                </div>
-                                            </a>
-
-                                            <script>
-                                                // Date In Indonesia
-                                                var publishupdate   = "<?= $payproof['created_at'] ?>";
-                                                var thatdate        = publishupdate.split( /[- :]/ );
-                                                thatdate[1]--;
-                                                var publishthatdate = new Date( ...thatdate );
-                                                var publishyear     = publishthatdate.getFullYear();
-                                                var publishmonth    = publishthatdate.getMonth();
-                                                var publishdate     = publishthatdate.getDate();
-                                                var publishday      = publishthatdate.getDay();
-
-                                                switch(publishday) {
-                                                    case 0: publishday     = "Minggu"; break;
-                                                    case 1: publishday     = "Senin"; break;
-                                                    case 2: publishday     = "Selasa"; break;
-                                                    case 3: publishday     = "Rabu"; break;
-                                                    case 4: publishday     = "Kamis"; break;
-                                                    case 5: publishday     = "Jum'at"; break;
-                                                    case 6: publishday     = "Sabtu"; break;
-                                                }
-                                                switch(publishmonth) {
-                                                    case 0: publishmonth   = "Januari"; break;
-                                                    case 1: publishmonth   = "Februari"; break;
-                                                    case 2: publishmonth   = "Maret"; break;
-                                                    case 3: publishmonth   = "April"; break;
-                                                    case 4: publishmonth   = "Mei"; break;
-                                                    case 5: publishmonth   = "Juni"; break;
-                                                    case 6: publishmonth   = "Juli"; break;
-                                                    case 7: publishmonth   = "Agustus"; break;
-                                                    case 8: publishmonth   = "September"; break;
-                                                    case 9: publishmonth   = "Oktober"; break;
-                                                    case 10: publishmonth  = "November"; break;
-                                                    case 11: publishmonth  = "Desember"; break;
-                                                }
-
-                                                var publishfulldate         = publishday + ", " + publishdate + " " + publishmonth + " " + publishyear;
-                                                document.getElementById("publish_up<?= $payproof['id'] ?>").innerHTML = publishfulldate;
-                                            </script>
+                                            <div class="uk-card uk-card-default uk-card-body"><a href="/img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>"><span uk-icon="file-pdf"></span><?= $payproof['file'] ?></a></div>
                                         </div>
                                     <?php } ?>
                                 </div>
