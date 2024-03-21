@@ -655,26 +655,28 @@ class Mdl extends BaseController
         $mdls = $MdlModel->findAll();
         $packs = $PaketModel->findAll();
 
-        $mdlPaket = [];
-        foreach ($mdls as $mdl) {
-            foreach ($packs as $pack) {
-                $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
-                $packCount = count($packMdl);
-                if ($packCount > 1) {
-                    // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
-                    $mdlpacks = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
-                    foreach ($mdlpacks as $mdlpack) {
-                        $mdlPaket[] = [
-                            'mdlid'     => $mdlpack['mdlid'],
-                            'paketid'   => $mdlpack['paketid'],
-                            'ordering'  => $mdlpack['ordering']
-                        ];
-                    }
-                }
-            }
-        }
+        $MdlPaketModel->where('paketid', '3')->where('mdlid', '127')->where('ordering', '10')->delete();
 
-        dd($mdlPaket);
+        // $mdlPaket = [];
+        // foreach ($mdls as $mdl) {
+        //     foreach ($packs as $pack) {
+        //         $packMdl = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+        //         $packCount = count($packMdl);
+        //         if ($packCount > 1) {
+        //             // $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->where('ordering', '1')->delete();
+        //             $mdlpacks = $MdlPaketModel->where('mdlid', $mdl['id'])->where('paketid', $pack['id'])->find();
+        //             foreach ($mdlpacks as $mdlpack) {
+        //                 $mdlPaket[] = [
+        //                     'mdlid'     => $mdlpack['mdlid'],
+        //                     'paketid'   => $mdlpack['paketid'],
+        //                     'ordering'  => $mdlpack['ordering']
+        //                 ];
+        //             }
+        //         }
+        //     }
+        // }
+
+        // dd($mdlPaket);
     }
 
     public function orderingpaket()
