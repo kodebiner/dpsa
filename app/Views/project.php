@@ -514,7 +514,7 @@
 
             if (!empty($projectdata[$project['id']]['progress'])) {
                 $produksi = round((int)$projectdata[$project['id']]['progress']);
-                $progress = round($projectdata[$project['id']]['progress'] + $progress);
+                $progress = ((int)$projectdata[$project['id']]['progress'] + (int)$progress);
                 $status   = "Retensi";
             }
 
@@ -2500,17 +2500,9 @@
                                                     <div class="uk-inline">
                                                         <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
-                                                                                                                echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                            } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> id="jatuhtempobast<?= $project['id'] ?>" name="jatuhtempobast<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         <?php } else { ?>
-                                                            <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                                                $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
-                                                                                echo date_format($tempo, 'm/d/Y');
-                                                                            } else {
-                                                                                echo date('m/d/Y');
-                                                                            } ?></span>
+                                                            <span class=""><?php if (!empty($projectdata[$project['id']]['bastfile'])) { $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']); echo date_format($tempo, 'm/d/Y');} else {echo date('m/d/Y');} ?></span>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2869,14 +2861,14 @@
 
                                             // Invoice II
                                             if (!empty($project)) {
-                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
                                                     echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
                                                 }
                                             }
 
                                             // Invoice III
                                             if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
+                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" || $progress >= 95  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
                                                     echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
                                                     $status = "Retensi";
                                                 }
@@ -2885,8 +2877,8 @@
                                             // Invoice IV
                                             if (!empty($projectdata[$project['id']]['bastfile'])) {
                                                 if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95") {
-                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoice/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] && $progress >= "95" ||  $progress >= 95) {
+                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                         $progress   = "100";
                                                     }
                                                 }

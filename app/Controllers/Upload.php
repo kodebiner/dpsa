@@ -203,9 +203,9 @@ class Upload extends BaseController
                     'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK '.$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK ' . $project['name']]);
             } else {
-                if(!empty($spk['spk'])){
+                if (!empty($spk['spk'])) {
                     unlink(FCPATH . '/img/spk/' . $spk['spk']);
                 }
                 $dataspk = [
@@ -215,7 +215,7 @@ class Upload extends BaseController
                     'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
-                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Malakukan upload SPK '.$project['name']]);
+                $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Malakukan upload SPK ' . $project['name']]);
             }
         }
 
@@ -339,10 +339,10 @@ class Upload extends BaseController
 
         if ($input->isValid() && !$input->hasMoved()) {
             // Check Directory
-            if(!file_exists('/var/www/html/dpsa/public/design')){
+            if (!file_exists('/var/www/html/dpsa/public/design')) {
                 mkdir('/var/www/html/dpsa/public/design', 0777, true);
             }
-            
+
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
@@ -390,7 +390,7 @@ class Upload extends BaseController
             $input->move(FCPATH . 'img/mdl/', $filename);
 
             // Getting True Filename
-            $returnFile = $truename.'.'. $ext;
+            $returnFile = $truename . '.' . $ext;
 
             // Returning Message
             die(json_encode($returnFile));
@@ -462,7 +462,7 @@ class Upload extends BaseController
                 'status'    => 0,
             ];
             $BastModel->save($sertrim);
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Sertrim '.$project['name']]);
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Sertrim ' . $project['name']]);
             $idBast = $BastModel->getInsertID();
 
             $inv2date = [
@@ -528,9 +528,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
-            $bastId="";
+            $bastId = "";
             if (!empty($returnFile)) {
-                $bast = $BastModel->where('projectid',$id)->where('status','1')->first();
+                $bast = $BastModel->where('projectid', $id)->where('status', '1')->first();
                 if (empty($bast)) {
                     $databast = [
                         'projectid'     => $id,
@@ -539,9 +539,9 @@ class Upload extends BaseController
                     ];
                     $BastModel->save($databast);
                     $bastId = $BastModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast '.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast ' . $project['name']]);
                 } else {
-                    if (!empty($bast['file'])) { 
+                    if (!empty($bast['file'])) {
                         unlink(FCPATH . '/img/bast/' . $bast['file']);
                     }
                     $databast = [
@@ -551,7 +551,7 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $BastModel->save($databast);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast '.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast ' . $project['name']]);
                     $bastId = $bast['id'];
                 }
             }
@@ -561,7 +561,7 @@ class Upload extends BaseController
                 'inv3'  => date("Y-m-d H:i:s"),
             ];
             $ProjectModel->save($inv3date);
-           
+
             $returnBast = [
                 'id'    => $bastId,
                 'file'  => $returnFile,
@@ -618,10 +618,10 @@ class Upload extends BaseController
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
-
-            $sphId="";
+            
+            $sphId = "";
             if (!empty($returnFile)) {
-                $sph = $ProjectModel->where('id',$id)->first();
+                $sph = $ProjectModel->where('id', $id)->first();
                 if (empty($sph)) {
                     $datasph = [
                         'id'            => $id,
@@ -629,9 +629,9 @@ class Upload extends BaseController
                     ];
                     $ProjectModel->save($datasph);
                     $sphId = $ProjectModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload sph '.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload sph ' . $project['name']]);
                 } else {
-                    if (!empty($sph['sph'])) { 
+                    if (!empty($sph['sph'])) {
                         unlink(FCPATH . '/img/sph/' . $sph['sph']);
                     }
                     $datasph = [
@@ -639,11 +639,11 @@ class Upload extends BaseController
                         'sph'           => $returnFile,
                     ];
                     $ProjectModel->save($datasph);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah sph '.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah sph ' . $project['name']]);
                     $sphId = $sph['id'];
                 }
             }
-           
+
             $returnBast = [
                 'id'    => $sphId,
                 'file'  => $returnFile,
@@ -655,7 +655,8 @@ class Upload extends BaseController
         }
     }
 
-    public function invoice($id){
+    public function invoice($id)
+    {
 
         $image          = \Config\Services::image();
         $validation     = \Config\Services::validation();
@@ -700,9 +701,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
-            $invoiceId="";
+            $invoiceId = "";
             if (!empty($returnFile)) {
-                $invoice = $InvoiceModel->where('projectid',$id)->where('status','1')->first();
+                $invoice = $InvoiceModel->where('projectid', $id)->where('status', '1')->first();
                 if (empty($invoice)) {
                     $datainvoice = [
                         'projectid'     => $id,
@@ -711,9 +712,9 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice I'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice I' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) { 
+                    if (!empty($invoice['file'])) {
                         unlink(FCPATH . '/img/invoice/' . $invoice['file']);
                     }
                     $datainvoice = [
@@ -723,11 +724,11 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $InvoiceModel->save($datainvoice);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice I'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice I' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
             }
-           
+
             $returninvoice = [
                 'id'    => $invoiceId,
                 'file'  => $returnFile,
@@ -739,7 +740,8 @@ class Upload extends BaseController
         }
     }
 
-    public function invoice2($id){
+    public function invoice2($id)
+    {
 
         $image          = \Config\Services::image();
         $validation     = \Config\Services::validation();
@@ -785,9 +787,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
-            $invoiceId="";
+            $invoiceId = "";
             if (!empty($returnFile)) {
-                $invoice = $InvoiceModel->where('projectid',$id)->where('status','2')->first();
+                $invoice = $InvoiceModel->where('projectid', $id)->where('status', '2')->first();
                 if (empty($invoice)) {
                     $datainvoice = [
                         'projectid'     => $id,
@@ -796,9 +798,9 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice II'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice II' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) { 
+                    if (!empty($invoice['file'])) {
                         unlink(FCPATH . '/img/invoice/' . $invoice['file']);
                     }
                     $datainvoice = [
@@ -808,11 +810,11 @@ class Upload extends BaseController
                         'status'        => 2,
                     ];
                     $InvoiceModel->save($datainvoice);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice II'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice II' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
             }
-           
+
             $returninvoice = [
                 'id'    => $invoiceId,
                 'file'  => $returnFile,
@@ -824,7 +826,8 @@ class Upload extends BaseController
         }
     }
 
-    public function invoice3($id){
+    public function invoice3($id)
+    {
 
         $image          = \Config\Services::image();
         $validation     = \Config\Services::validation();
@@ -870,9 +873,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
-            $invoiceId="";
+            $invoiceId = "";
             if (!empty($returnFile)) {
-                $invoice = $InvoiceModel->where('projectid',$id)->where('status','3')->first();
+                $invoice = $InvoiceModel->where('projectid', $id)->where('status', '3')->first();
                 if (empty($invoice)) {
                     $datainvoice = [
                         'projectid'     => $id,
@@ -881,9 +884,9 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) { 
+                    if (!empty($invoice['file'])) {
                         unlink(FCPATH . '/img/invoice/' . $invoice['file']);
                     }
                     $datainvoice = [
@@ -893,11 +896,11 @@ class Upload extends BaseController
                         'status'        => 3,
                     ];
                     $InvoiceModel->save($datainvoice);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice III'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice III' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
             }
-           
+
             $returninvoice = [
                 'id'    => $invoiceId,
                 'file'  => $returnFile,
@@ -909,7 +912,8 @@ class Upload extends BaseController
         }
     }
 
-    public function invoice4($id){
+    public function invoice4($id)
+    {
 
         $image          = \Config\Services::image();
         $validation     = \Config\Services::validation();
@@ -955,9 +959,9 @@ class Upload extends BaseController
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
 
-            $invoiceId="";
+            $invoiceId = "";
             if (!empty($returnFile)) {
-                $invoice = $InvoiceModel->where('projectid',$id)->where('status','4')->first();
+                $invoice = $InvoiceModel->where('projectid', $id)->where('status', '4')->first();
                 if (empty($invoice)) {
                     $datainvoice = [
                         'projectid'     => $id,
@@ -966,9 +970,9 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice IV'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice IV' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) { 
+                    if (!empty($invoice['file'])) {
                         unlink(FCPATH . '/img/invoice/' . $invoice['file']);
                     }
                     $datainvoice = [
@@ -978,11 +982,11 @@ class Upload extends BaseController
                         'status'        => 4,
                     ];
                     $InvoiceModel->save($datainvoice);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice IV'.$project['name']]);
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice IV' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
             }
-           
+
             $returninvoice = [
                 'id'    => $invoiceId,
                 'file'  => $returnFile,

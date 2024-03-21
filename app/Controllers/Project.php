@@ -611,14 +611,14 @@ class Project extends BaseController
             }
 
             $tglspk = "";
-            if(!empty($input['tanggalspk'.$id])){
-                $tglspk = date('Y-m-d H:i:s', strtotime($input['tanggalspk'.$id]));
+            if (!empty($input['tanggalspk' . $id])) {
+                $tglspk = date('Y-m-d H:i:s', strtotime($input['tanggalspk' . $id]));
             }
 
             $batasproduksi  = "";
             $tglbtspro      = "";
-            if(!empty($input['batasproduksi'.$id])){
-                $batasproduksi = $input['batasproduksi'.$id];
+            if (!empty($input['batasproduksi' . $id])) {
+                $batasproduksi = $input['batasproduksi' . $id];
                 $tglbtspro = date('Y-m-d H:i:s', strtotime($batasproduksi));
             }
 
@@ -923,11 +923,12 @@ class Project extends BaseController
             }
 
             // JATUH TEMPO BAST
-            $tgltempobast = "";
+            $tglbast = "";
             if (!empty($input['jatuhtempobast' . $id])) {
                 $datebast = $input['jatuhtempobast' . $id];
-                $tgltempobast = date('Y-m-d H:i:s', strtotime($datebast));
+                $tglbast = date('Y-m-d H:i:s', strtotime($datebast));
             }
+            dd($input['jatuhtempobast' . $id]);
 
             // FINANCE
 
@@ -1083,8 +1084,8 @@ class Project extends BaseController
             // END NEW INVOICE FUNCTION
 
             $tanggalinv4 = "";
-            if (!empty($tgltempobast)) {
-                $day =  $tgltempobast;
+            if (!empty($tglbast)) {
+                $day =  $tglbast;
                 $date = date_create($day);
                 $key = date_format($date, "Y-m-d");
                 $hari = date_create($key);
@@ -1094,11 +1095,11 @@ class Project extends BaseController
 
             // TANGGAL BAST
             $bast = $BastModel->where('projectid', $id)->where('status', "1")->first();
-            if (!empty($bast) && !empty($tgltempobast)) {
+            if (!empty($bast) && !empty($tglbast)) {
                 $bastcreate = [
                     'id'            => $bast['id'],
                     'projectid'     => $id,
-                    'tanggal_bast'  => $tgltempobast,
+                    'tanggal_bast'  => $tglbast,
                 ];
                 $BastModel->save($bastcreate);
             }
@@ -2071,7 +2072,7 @@ class Project extends BaseController
             // Biaya Kirim 
             $biaya = $CustomRabModel->where('projectid', $projects['id'])->like('name', 'biaya pengiriman')->first();
             $biayakirim = "";
-            if(!empty($biaya)){
+            if (!empty($biaya)) {
                 $biayakirim = $biaya['price'];
             }
 
@@ -2175,6 +2176,7 @@ class Project extends BaseController
                     }
                 }
                 // INVOCE 4 BAST 3 MONTH CONDITION
+                // dd($nowtime > $datelinebast);
 
                 // INVOICE IV
                 if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4) && $nowtime > $datelinebast) {
@@ -2275,7 +2277,7 @@ class Project extends BaseController
                     'email'     => $email,
                     'pic'       => $picname,
                     // 'noinv'     => $numinv,
-                    'biayakirim'=> $biayakirim,
+                    'biayakirim' => $biayakirim,
                     'noinv'     => $noinv,
                     'direktur'  => $gconf['direktur'],
                     'ppnval'    => (int)$ppnvalue,
