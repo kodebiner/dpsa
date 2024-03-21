@@ -1706,13 +1706,17 @@
                                 <div class="togglespk<?= $project['id'] ?>" hidden>
                                     <div class="uk-form-horizontal">
                                         <div class="uk-margin-small">
-                                            <label class="uk-form-label uk-margin-remove-top">Tanggal Upload SPK</label>
-                                            <div class="uk-form-controls">: <?= date('d M Y, H:i', strtotime($project['updated_at'])); ?></div>
-                                        </div>
-
-                                        <div class="uk-margin-small">
-                                            <label class="uk-form-label uk-margin-remove-top">File SPK</label>
-                                            <div class="uk-form-controls">: <?php if(!empty($project['spk'])){ ?><a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a> <?php } ?></div>
+                                            <label class="uk-form-label">Tanggal Upload SPK</label>
+                                            <div class="uk-form-controls">:
+                                                <div class="uk-inline">
+                                                    <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                        <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']); echo "value='" . date_format($tglspk, 'm/d/Y') . "'";} ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                    <?php } else { ?>
+                                                        <span class=""><?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']); echo date_format($tglspk, 'm/d/Y');} else {echo date('m/d/Y');} ?></span>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
@@ -1729,6 +1733,11 @@
                                                 <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { $project['no_spk']; } ?>" />
                                             </div>
                                         <?php } ?>
+
+                                        <div class="uk-margin-small">
+                                            <label class="uk-form-label uk-margin-remove-top">File SPK</label>
+                                            <div class="uk-form-controls">: <?php if(!empty($project['spk'])){ ?><a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a> <?php } ?></div>
+                                        </div>
                                     </div>
 
                                     <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
@@ -1952,6 +1961,22 @@
                                 </div>
 
                                 <div class="toggleproduction<?= $project['id'] ?>" hidden>
+                                    <div class="uk-form-horizontal">
+                                        <div class="uk-margin-small">
+                                            <label class="uk-form-label">Tanggal Batas Produksi</label>
+                                            <div class="uk-form-controls">:
+                                                <div class="uk-inline">
+                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                        <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'";} ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                    <?php } else { ?>
+                                                        <span class=""><?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo date_format($batasproduksi, 'm/d/Y');} else {echo date('m/d/Y');} ?></span>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                         <table class="uk-table uk-table-middle uk-table-divider">
                                             <thead>
@@ -3977,6 +4002,20 @@
                                 // Date Picker Jatuh Tempo Bast
                                 $(function() {
                                     $("#jatuhtempobast<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+
+                                // Date Picker Tanggal SPK
+                                $(function() {
+                                    $("#tanggalspk<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+                        
+                                // Date Picker Batas Produksi
+                                $(function() {
+                                    $("#batasproduksi<?= $project['id'] ?>").datepicker({
                                         dateFormat: "yy-mm-dd",
                                     });
                                 });

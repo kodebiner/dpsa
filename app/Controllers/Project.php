@@ -569,7 +569,6 @@ class Project extends BaseController
             // initialize
             $input  = $this->request->getPost();
             $pro    = $ProjectModel->find($id);
-            // dd($input);
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -606,6 +605,17 @@ class Project extends BaseController
             $sphnum = "";
             if (!empty($input['nosph' . $id])) {
                 $sphnum = $input['nosph' . $id];
+            }
+
+            $tglspk = "";
+            if(!empty($input['tanggalspk'.$id])){
+                $tglspk = date('Y-m-d H:i:s', strtotime($input['tanggalspk'.$id]));
+            }
+
+            $batasproduksi = "";
+            if(!empty($input['batasproduksi'.$id])){
+                $batasproduksi = $input['batasproduksi'.$id];
+                $tglbtspro = date('Y-m-d H:i:s', strtotime($batasproduksi));
             }
 
             // Validation Rules
@@ -1083,15 +1093,17 @@ class Project extends BaseController
 
             // Project Data
             $project = [
-                'id'            => $id,
-                'name'          => $name,
-                'clientid'      => $client,
-                'spk'           => $spk,
-                'status_spk'    => $statusspk,
-                'status'        => $status,
-                'no_spk'        => $spknum,
-                'no_sph'        => $sphnum,
-                'inv4'          => $tanggalinv4,
+                'id'                => $id,
+                'name'              => $name,
+                'clientid'          => $client,
+                'spk'               => $spk,
+                'status_spk'        => $statusspk,
+                'status'            => $status,
+                'no_spk'            => $spknum,
+                'no_sph'            => $sphnum,
+                'tanggal_spk'       => $tglspk,
+                'batas_produksi'    => $tglbtspro,
+                'inv4'              => $tanggalinv4,
             ];
             $ProjectModel->save($project);
 
