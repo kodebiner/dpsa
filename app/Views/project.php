@@ -974,10 +974,7 @@
                                             <div class="uk-margin-bottom">
                                                 <label class="uk-form-label" for="paket">Nomor SPH</label>
                                                 <div class="uk-form-controls">
-                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {
-                                                                                                                                                                $nosph = $project['no_sph'];
-                                                                                                                                                                echo "value='$nosph'";
-                                                                                                                                                            } ?> placeholder="Nomor SPH">
+                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) { $nosph = $project['no_sph']; echo "value='$nosph'"; } ?> placeholder="Nomor SPH">
                                                 </div>
                                             </div>
 

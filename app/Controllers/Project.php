@@ -438,6 +438,9 @@ class Project extends BaseController
             // User Admin
             $admins     = $authorize->usersInGroup('admin');
 
+            // User Designer
+            $designers  = $authorize->usersInGroup('design');
+
             // User Marketing
             $marketings = $UserModel->find($input['marketing']);
 
@@ -566,6 +569,18 @@ class Project extends BaseController
 
                     $NotificationModel->insert($notifadmin);
                 }
+    
+                // Notif Designer
+                foreach ($designers as $designer) {
+                    $notifdesigner  = [
+                        'userid'        => $designer['id'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'url'           => 'project?projectid='.$projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifdesigner);
+                }
 
                 // Notif Client
                 foreach ($clients as $client) {
@@ -653,11 +668,29 @@ class Project extends BaseController
             $InvoiceModel       = new InvoiceModel();
             $CustomRabModel     = new CustomRabModel();
             $BuktiModel         = new BuktiModel();
+            $UserModel          = new UserModel();
+            $NotificationModel  = new NotificationModel();
+            $CompanyModel       = new CompanyModel();
             $LogModel           = new LogModel();
 
             // initialize
-            $input  = $this->request->getPost();
-            $pro    = $ProjectModel->find($id);
+            $input      = $this->request->getPost();
+            $pro        = $ProjectModel->find($id);
+
+            $authorize  = $auth = service('authorization');
+
+            // Notification
+            // User Admin
+            $admins     = $authorize->usersInGroup('admin');
+
+            // User Designer
+            $designers  = $authorize->usersInGroup('design');
+
+            // User Marketing
+            $marketings = $UserModel->find($pro['marketing']);
+
+            // User Client
+            $clients    = $UserModel->where('parentid', $pro['clientid'])->find();
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -888,6 +921,52 @@ class Project extends BaseController
                         'status'        => 0,
                     ];
                     $DesignModel->insert($datadesign);
+
+                    // Notif Marketing
+                    $notifmarketing  = [
+                        'userid'        => $marketings->id,
+                        'keterangan'    => 'Desain telah diterbitkan',
+                        'url'           => 'project?projectid='.$pro['id'],
+                        'status'        => 0,
+                    ];
+    
+                    $NotificationModel->insert($notifmarketing);
+    
+                    // Notif Admin
+                    foreach ($admins as $admin) {
+                        $notifadmin  = [
+                            'userid'        => $admin['id'],
+                            'keterangan'    => 'Desain telah diterbitkan',
+                            'url'           => 'project?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifadmin);
+                    }
+    
+                    // Notif Designer
+                    foreach ($designers as $designer) {
+                        $notifdesigner  = [
+                            'userid'        => $designer['id'],
+                            'keterangan'    => 'Desain telah diterbitkan',
+                            'url'           => 'project?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifdesigner);
+                    }
+    
+                    // Notif Client
+                    foreach ($clients as $clin) {
+                        $notifclient  = [
+                            'userid'        => $clin->id,
+                            'keterangan'    => 'Desain telah diterbitkan',
+                            'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifclient);
+                    }
                 } else {
                     if (!empty($design['submitted'])) {
                         unlink(FCPATH . '/img/design/' . $design['submitted']);
@@ -899,6 +978,52 @@ class Project extends BaseController
                         'status'        => 0,
                     ];
                     $DesignModel->save($datadesign);
+                    
+                    // Notif Marketing
+                    $notifmarketing  = [
+                        'userid'        => $marketings->id,
+                        'keterangan'    => 'Desain telah diperbaharui',
+                        'url'           => 'project?projectid='.$pro['id'],
+                        'status'        => 0,
+                    ];
+    
+                    $NotificationModel->insert($notifmarketing);
+    
+                    // Notif Admin
+                    foreach ($admins as $admin) {
+                        $notifadmin  = [
+                            'userid'        => $admin['id'],
+                            'keterangan'    => 'Desain telah diperbaharui',
+                            'url'           => 'project?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifadmin);
+                    }
+    
+                    // Notif Designer
+                    foreach ($designers as $designer) {
+                        $notifdesigner  = [
+                            'userid'        => $designer['id'],
+                            'keterangan'    => 'Desain telah diterbitkan',
+                            'url'           => 'project?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifdesigner);
+                    }
+    
+                    // Notif Client
+                    foreach ($clients as $clin) {
+                        $notifclient  = [
+                            'userid'        => $clin->id,
+                            'keterangan'    => 'Desain telah diperbaharui',
+                            'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                            'status'        => 0,
+                        ];
+    
+                        $NotificationModel->insert($notifclient);
+                    }
                 }
 
                 // Save Status Project
@@ -1005,6 +1130,16 @@ class Project extends BaseController
                         'userid'            => $input['picpro'][$picprod['id']],
                     ];
                     $ProductionModel->save($inputpropic);
+                    
+                    // Notif Production
+                    $notifproduksi  = [
+                        'userid'        => $input['picpro'][$picprod['id']],
+                        'keterangan'    => 'Ditugaskan sebagai PIC Produksi',
+                        'url'           => 'project?projectid='.$pro['id'],
+                        'status'        => 0,
+                    ];
+    
+                    $NotificationModel->insert($notifproduksi);
                 }
             }
 
@@ -1200,6 +1335,40 @@ class Project extends BaseController
                     'created_at'    => $tanggalkirim,
                 ];
                 $BuktiModel->insert($databukti);
+                    
+                // Notif Marketing
+                $notifmarketing  = [
+                    'userid'        => $marketings->id,
+                    'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
+                    'url'           => 'project?projectid='.$pro['id'],
+                    'status'        => 0,
+                ];
+
+                $NotificationModel->insert($notifmarketing);
+
+                // Notif Admin
+                foreach ($admins as $admin) {
+                    $notifadmin  = [
+                        'userid'        => $admin['id'],
+                        'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
+                        'url'           => 'project?projectid='.$pro['id'],
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifadmin);
+                }
+
+                // Notif Client
+                foreach ($clients as $clin) {
+                    $notifclient  = [
+                        'userid'        => $clin->id,
+                        'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
+                        'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifclient);
+                }
             }
 
             // Project Data
