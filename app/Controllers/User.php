@@ -174,12 +174,19 @@ class User extends BaseController
             }
 
             // New user data
-            $newUser->username  = $input['username'];
-            $newUser->email     = $input['email'];
-            $newUser->firstname = $input['firstname'];
-            $newUser->lastname  = $input['lastname'];
-            $newUser->password  = $input['password'];
-            $newUser->active    = 1;
+            $newUser->username          = $input['username'];
+            $newUser->email             = $input['email'];
+            $newUser->firstname         = $input['firstname'];
+            $newUser->lastname          = $input['lastname'];
+            $newUser->password          = $input['password'];
+            $newUser->active            = 1;
+
+            if(!empty($input['kodemarketing'])){
+                $newUser->kode_marketing    = $input['kodemarketing'];
+            }else{
+                $newUser->kode_marketing    = Null;
+            }
+
             if (!empty($input['compid'])) {
                 $newUser->parentid = $input['compid'];
             } else {
@@ -317,6 +324,11 @@ class User extends BaseController
                 $updateUser->active    = $input['status'];
             } else {
                 $updateUser->active     = $updateUser->active;
+            }
+            if(!empty($input['kodemarketing'])){
+                $updateUser->kode_marketing    = $input['kodemarketing'];
+            }else{
+                $updateUser->kode_marketing    = Null;
             }
 
             // Reset password

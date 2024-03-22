@@ -15,6 +15,7 @@ use App\Models\DesignModel;
 use App\Models\LogModel;
 use App\Models\ProductionModel;
 use App\Models\BuktiModel;
+use App\Models\NotificationModel;
 use App\Models\InvoiceModel;
 
 class Home extends BaseController
@@ -626,12 +627,37 @@ class Home extends BaseController
     public function acc($id)
     {
         if (($this->data['authorize']->hasPermission('client.auth.holding', $this->data['uid'])) || ($this->data['authorize']->hasPermission('client.auth.branch', $this->data['uid']))) {
-            $DesignModel = new DesignModel();
-            $ProjectModel = new ProjectModel();
-            $LogModel    = new LogModel();
-            $input = $this->request->getPost('status');
+            $DesignModel        = new DesignModel();
+            $UserModel          = new UserModel();
+            $ProjectModel       = new ProjectModel();
+            $LogModel           = new LogModel();
+            $NotifikasiModel    = new NotificationModel();
+            $input              = $this->request->getPost('status');
 
             $design = $DesignModel->find($id);
+            $project = $ProjectModel->find($design['projectid']);
+
+            // Users
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('users.id !=', $this->data['uid']);
+            $this->builder->where('auth_groups.name =', 'marketing');
+            $this->builder->orWhere('auth_groups.name =', 'design');
+            $this->builder->orWhere('auth_groups.name =', 'client');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $users = $this->builder->get()->getResult();
+
+            foreach($users as $user){
+                $datanotifikasi = [
+                    'userid'        => $user->id,
+                    'keterangan'    => 'Design '.$project['name'].' telah di disetujui client',
+                    'url'           => 'project',
+                    'status'        => 0,
+                ];
+                $NotifikasiModel->insert($datanotifikasi);
+            }
 
             $status = [
                 'id'        => $id,
@@ -684,12 +710,35 @@ class Home extends BaseController
 
     public function saverevisi($id)
     {
-        $ProjectModel   = new ProjectModel();
-        $DesignModel    = new DesignModel();
-        $LogModel       = new LogModel();
+        $ProjectModel       = new ProjectModel();
+        $DesignModel        = new DesignModel();
+        $LogModel           = new LogModel();
+        $NotifikasiModel    = new NotificationModel();
 
         $input = $this->request->getPost();
         $project = $ProjectModel->find($id);
+
+        // Users
+        $this->builder = $this->db->table('users');
+        $this->builder->where('deleted_at', null);
+        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name =', 'marketing');
+        $this->builder->orWhere('auth_groups.name =', 'design');
+        $this->builder->orWhere('auth_groups.name =', 'client');
+        $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+        $users = $this->builder->get()->getResult();
+
+        foreach($users as $user){
+            $datanotifikasi = [
+                'userid'        => $user->id,
+                'keterangan'    => 'Ravisi design '.$project['name'].' telah di upload client',
+                'url'           => 'project',
+                'status'        => 0,
+            ];
+            $NotifikasiModel->insert($datanotifikasi);
+        }
 
         // Validation Rules
         $rules = [
@@ -730,6 +779,16 @@ class Home extends BaseController
                 $DesignModel->save($datadesign);
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi ' . $project['name']]);
             }
+
+            foreach($users as $user){
+                $datanotifikasi = [
+                    'userid'        => $user->id,
+                    'keterangan'    => 'Design telah disetujui client',
+                    'url'           => '/project',
+                    'status'        => 0,
+                ];
+                $NotifikasiModel->insert($datanotifikasi);
+            }
         }
 
         return redirect()->back()->with('message', 'Revisi telah tekirim');
@@ -748,9 +807,12 @@ class Home extends BaseController
     public function buktipembayaran($id)
     {
         // Calling Models
-        $BuktiModel   = new BuktiModel();
+        $BuktiModel         = new BuktiModel();
+        $ProjectModel       = new ProjectModel();
+        $NotifikasiModel    = new NotificationModel();
 
-        $input = $this->request->getPost();
+        $input      = $this->request->getPost();
+        $project    = $ProjectModel->find($id);
 
         // Validation Rules
         $rules = [
@@ -776,6 +838,29 @@ class Home extends BaseController
             'created_at'    => $tanggal,
         ];
         $BuktiModel->insert($databukti);
+
+        // Users
+        $this->builder = $this->db->table('users');
+        $this->builder->where('deleted_at', null);
+        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->builder->where('users.id !=', $this->data['uid']);
+        $this->builder->where('auth_groups.name =', 'marketing');
+        $this->builder->orWhere('auth_groups.name =', 'design');
+        $this->builder->orWhere('auth_groups.name =', 'client');
+        $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+        $users = $this->builder->get()->getResult();
+
+        foreach($users as $user){
+            $datanotifikasi = [
+                'userid'        => $user->id,
+                'keterangan'    => 'Bukti pembayaran '.$project['name'].' telah di Kirim client',
+                'url'           => 'project',
+                'status'        => 0,
+            ];
+            $NotifikasiModel->insert($datanotifikasi);
+        }
+
 
         return redirect()->back()->with('message', 'Bukti telah tekirim');
     }

@@ -77,8 +77,7 @@ $tanggalsph = ucwords($dateFormatted);
     <?php
     $nosph = $projects['no_sph'];
 	header("Content-type: application/vnd-ms-excel");
-	header("Content-Disposition: attachment; filename=Sphfile'.$nosph.'.xls");
-	// header("Content-Disposition: attachment; filename=Sphfile'.$numsph.'.xls");
+	header("Content-Disposition: attachment; filename=SPH_$nosph.xls");
 	?>
     <!-- <table style="width:100%">
         <tr>
@@ -133,19 +132,19 @@ $tanggalsph = ucwords($dateFormatted);
         <div>
             <div>
                 <div>
-                    <font style="font-weight: bold; text-decoration: underline;"><?= $sphdata['clientpic'] ?></font> <br><br>Dengan hormat,
+                    <font style="font-weight: bold; text-decoration: underline;"><?= $sphdata['clientpic'] ?> Kepala Jangum</font> <br><br>Dengan hormat,
                 </div>
                 <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit <?= $client['rsname'] ?> <br> dengan perincian sebagai berikut :</p>
             </div>
 
             <table style="width:100%; border: 1pt solid black;">
                 <tr style="border: 1pt solid black;">
-                    <th style="border: 1pt solid black; column-width: 50px;" rowspan="2">No</th>
+                    <!-- <th style="border: 1pt solid black; width: 50px;" rowspan="2">No</th> -->
                     <th style="border: 1pt solid black;" rowspan="2">Ruang</th>
                     <th style="border: 1pt solid black;" rowspan="2">Jenis Furniture</th>
                     <td colspan="6" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Dimensi & Qty</td>
                     <td colspan="2" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Harga</td>
-                    <th style="border: 1pt solid black;" rowspan="2">Keterangan</th>
+                    <th style="border: 1pt solid black;">Keterangan</th>
                 </tr>
                 <tr style="border: 1pt solid black;">
                     <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">P</td>
@@ -159,7 +158,7 @@ $tanggalsph = ucwords($dateFormatted);
                 </tr>
 
                 <?php
-                $x = 1;
+                // $x = 1;
                 if(!empty($sphrabs)){
                     foreach ($sphrabs as $mdl){ 
                         $denom = "";
@@ -181,7 +180,7 @@ $tanggalsph = ucwords($dateFormatted);
                         }?>
                     
                         <tr class="uk-text-center">
-                        <td style="border: 1pt solid black; column-width: 50px; text-align:center;"><?php echo $x++; ?></td>
+                        <!-- <td style="border: 1pt solid black; column-width: 50px; text-align:center;"></?php echo $x++; ?></td> -->
                         <td style="border: 1pt solid black;"><?= $mdl['kategori'] ?></td>
                         <td style="border: 1pt solid black;"><?= $mdl['name'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $mdl['length'] ?></td>
@@ -199,8 +198,8 @@ $tanggalsph = ucwords($dateFormatted);
                 
 
                 <tr class="uk-text-center">
+                    <!-- <td style="border: 1pt solid black;"></td> -->
                     <td style="border: 1pt solid black;">&nbsp;</td>
-                    <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
@@ -216,7 +215,7 @@ $tanggalsph = ucwords($dateFormatted);
                 <?php
                  foreach ($custom as $cusrab) { ?>
                     <tr style="border: 1pt solid black;">
-                        <td style="border: 1pt solid black;"></td>
+                        <!-- <td style="border: 1pt solid black;"></td> -->
                         <td class="uk-text-left"><?= $cusrab['name'] ?></td>
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
@@ -229,13 +228,13 @@ $tanggalsph = ucwords($dateFormatted);
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black; text-align:right;">
                             <?php if (!empty($cusrab['price'])) {
-                                echo number_format($cusrab['price'], 0, ',', '.');
+                                echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
                             } ?>
                         </td>
                     </tr>
                 <?php } ?>
                 <tr style="border: 1pt solid black;">
-                    <td style="border: 1pt solid black;"></td>
+                    <!-- <td style="border: 1pt solid black;"></td> -->
                     <td class="uk-text-left">Total</td>
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black;"></td>
@@ -248,7 +247,7 @@ $tanggalsph = ucwords($dateFormatted);
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black; text-align:right;">
                         <?php if (!empty($sphdata)) {
-                            echo number_format($sphdata['total'], 0, ',', '.');
+                            echo "Rp." .number_format($sphdata['total'], 0, ',', '.');
                         } ?>
                     </td>
                 </tr>
@@ -281,22 +280,22 @@ $tanggalsph = ucwords($dateFormatted);
                     <td class="uk-text-right"> 1.500.000</td>
                 </tr> -->
                 <tr style="border: 1pt solid black;">
-                    <td style="border: 1pt solid black;"></td>
+                    <!-- <td style="border: 1pt solid black;"></td> -->
                     <td style="border: 1pt solid black;" class="uk-text-left" colspan="9">PPN</td>
                     <td style="border: 1pt solid black; text-align:right" class="uk-text-center"><?= $sphdata['ppn'] ?> %</td>
-                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= number_format($sphdata['ppnval'], 0, ',', '.'); ?></td>
+                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= "Rp." .number_format($sphdata['ppnval'], 0, ',', '.'); ?></td>
                 </tr>
                 <tr style="border: 1pt solid black;">
-                    <td style="border: 1pt solid black;"></td>
+                    <!-- <td style="border: 1pt solid black;"></td> -->
                     <td style="border: 1pt solid black;" class="uk-text-left" colspan="10">Grand Total</td>
-                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= number_format($sphdata['totalsph'], 0, ',', '.'); ?></td>
+                    <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= "Rp." .number_format($sphdata['totalsph'], 0, ',', '.'); ?></td>
                 </tr>
                 <tr style="border: 1pt solid black;">
-                    <td style="border: 1pt solid black;"></td>
+                    <!-- <td style="border: 1pt solid black;"></td> -->
                     <td class="uk-text-left" colspan="11" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:left;">Terbilang : <?= ucwords($sphdata['terbilang']) ?></td>
                 </tr>
             </table>
-            <dl>
+            <!-- <dl>
                 <dt>Catatan :</dt>
                 <dd>Harga diatas sudah termasuk Biaya transport</dd>
                 <dd>Harga diatas sudah termasuk Pajak PPN</dd>
@@ -331,7 +330,7 @@ $tanggalsph = ucwords($dateFormatted);
                         <font style="text-decoration: underline;"> <?= $sphdata['direktur'] ?> </font> <br> Direktur
                     </td>
                 </tr>
-            </table>
+            </table> -->
 
         </div>
     </div>

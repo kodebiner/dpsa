@@ -9,6 +9,8 @@ use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
 use App\Models\LogModel;
 use App\Models\InvoiceModel;
+use App\Models\UserModel;
+use App\Models\NotificationModel;
 
 class Upload extends BaseController
 {
@@ -1003,6 +1005,7 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
+        
 
         // Validation Rules
         $rules = [

@@ -127,6 +127,13 @@
                                 </div>
                             </div>
 
+                            <div class="uk-margin-bottom" id="marketingcode" hidden>
+                                <label class="uk-form-label" for="kodemarketing">Kode Marketing</label>
+                                <div class="uk-form-controls">
+                                    <input type="text" id="kodemarketing" class="uk-input" id="kodemarketing" name="kodemarketing" placeholder="Kode Marketing" autofocus required />
+                                </div>
+                            </div>
+
                             <script>
                                 $(document).ready(function() {
                                     $("select[id='role']").change(function() {
@@ -134,10 +141,17 @@
                                             $("#pusat").removeAttr("hidden");
                                             $("#kliencabang").attr("hidden", true);
                                             $("#cabang").attr("required", false);
+                                            $("#marketingcode").attr("hidden", true);
+                                            $("#kodemarketing").attr("required", false);
                                         } else if ($('#role').find(":selected").text() === "client cabang") {
                                             $("#kliencabang").removeAttr("hidden");
                                             $("#pusat").attr("hidden", true);
                                             $("#company").attr("required", false);
+                                            $("#marketingcode").attr("hidden", true);
+                                            $("#kodemarketing").attr("required", false);
+                                        }else if ($('#role').find(":selected").text() === "marketing"){
+                                            $("#marketingcode").removeAttr("hidden");
+                                            $("#kodemarketing").attr("required", true);
                                         } else {
                                             $("#pusat").attr("hidden", true);
                                             $("#kliencabang").attr("hidden", true);
@@ -145,6 +159,8 @@
                                             $("#company").attr("required", false);
                                             $("#cabang").attr("required", false);
                                             $("#compid").val("");
+                                            $("#marketingcode").attr("hidden", true);
+                                            $("#kodemarketing").attr("required", false);
                                         }
                                     });
                                 });
@@ -509,6 +525,13 @@
                                     </div>
                                 </div>
 
+                                <div class="uk-margin-bottom" id="marketingcode<?= $user->id; ?>" hidden>
+                                    <label class="uk-form-label" for="kodemarketing">Kode Marketing</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text" class="uk-input" id="kodemarketing<?= $user->id; ?>" name="kodemarketing<?= $user->id; ?>" placeholder="Kode Marketing" autofocus required />
+                                    </div>
+                                </div>
+
                                 <script>
                                     $(document).ready(function() {
                                         $("select[id='role<?= $user->id; ?>']").change(function() {
@@ -519,33 +542,29 @@
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
                                                 $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                            } else {
+                                            }else if($('#role<?= $user->id; ?>').find(":selected").text() === "marketing")  {
+                                                $("#marketingcode<?= $user->id; ?>").removeAttr("hidden");
+                                                $("#kodemarketing<?= $user->id; ?>").attr("required",true);
+                                            }else {
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                                 $("#company<?= $user->id; ?>").val("");
                                                 $("#company<?= $user->id; ?>").attr("required", false);
                                                 $("#compid<?= $user->id ?>").val(null);
                                                 $("#pusat<?= $user->id; ?>").attr("required", false);
                                                 $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                                $("#marketingcode<?= $user->id; ?>").attr("hidden",true);
+                                                $("#kodemarketing<?= $user->id; ?>").attr("required",false);
                                             }
                                         });
 
-                                        // if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
-                                        //     $("#pusat<?= $user->id; ?>").removeAttr("hidden");
-                                        //     $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
-                                        //     $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
-                                        // } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
-                                        //     $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
-                                        //     $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                        //     $("#pusat<?= $user->id; ?>").attr("required", false);
-                                        //     $("input[id='company<?= $user->id; ?>']").attr("required", false);
-                                        // } else {
-                                        //     $("#pusat<?= $user->id; ?>").attr("hidden", true);
-                                        //     $("#pusat<?= $user->id; ?>").attr("required", false);
-                                        //     $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
-                                        //     $("#compid").val(null);
-                                        //     $("input[id='company<?= $user->id; ?>']").attr("required", false);
-                                        //     $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
-                                        // }
+                                        // $("input[id='role</?= $user->id; ?>']").change(function() {
+                                        //     if ($(this).is(':selected')) {
+                                        //         console.log($(this).is(':selected'));
+                                        //         $("#marketingcode</?= $user->id; ?>").removeAttr("hidden");
+                                        //     } else {
+                                        //         $("#marketingcode</?= $user->id; ?>").attr("hidden",false);
+                                        //     }
+                                        // });
                                     });
                                 </script>
 
