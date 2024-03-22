@@ -1252,9 +1252,7 @@
                                                             <tr>
                                                                 <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
                                                                 <td>
-                                                                    <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {
-                                                                                                                                                                                echo $projectdata[$project['id']]['shippingcost']['price'];
-                                                                                                                                                                            } ?>" />
+                                                                    <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) { echo $projectdata[$project['id']]['shippingcost']['price']; } ?>" />
                                                                 </td>
                                                             </tr>
 
@@ -4260,6 +4258,14 @@
         <?php } ?>
     <?php } ?>
     <!-- Modal Update Proyek End -->
+<?php } ?>
+<?php if (!empty($input)) { ?>
+    <script>
+        $(document).ready(function() {
+            var editmodal = document.getElementById('modalupdatepro<?=$input?>');
+            UIkit.modal(editmodal).show();
+        });
+    </script>
 <?php } ?>
 
 <?= $this->endSection() ?>

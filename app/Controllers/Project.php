@@ -17,6 +17,7 @@ use App\Models\UserModel;
 use App\Models\CustomRabModel;
 use App\Models\GconfigModel;
 use App\Models\BuktiModel;
+use App\Models\NotificationModel;
 use App\Models\LogModel;
 
 class Project extends BaseController
@@ -53,6 +54,7 @@ class Project extends BaseController
             $ReferensiModel         = new ReferensiModel();
             $CustomRabModel         = new CustomRabModel();
             $BuktiModel             = new BuktiModel();
+            $NotificationModel      = new NotificationModel();
             $LogModel               = new LogModel();
 
             // Populating Data
@@ -371,6 +373,7 @@ class Project extends BaseController
             $data['marketings']     = $marketings;
             $data['picpro']         = $picPro;
             $data['pager']          = $ProjectModel->pager;
+            $data['input']          = $this->request->getGet('projectid');
 
             return view('project', $data);
         } else {
@@ -381,9 +384,9 @@ class Project extends BaseController
     public function mdl()
     {
         // Calling Model
-        $MdlModel       = new MdlModel();
-        $MdlPaketModel  = new MdlPaketModel();
-        $PaketModel     = new PaketModel();
+        $MdlModel           = new MdlModel();
+        $MdlPaketModel      = new MdlPaketModel();
+        $PaketModel         = new PaketModel();
 
         // Initialize
         $input      = $this->request->getPost();
@@ -421,13 +424,25 @@ class Project extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.project.create', $this->data['uid'])) {
             // Calling Model
-            $ProjectModel   = new ProjectModel();
-            $InvoiceModel   = new InvoiceModel();
-            $BastModel      = new BastModel();
-            $LogModel       = new LogModel();
+            $ProjectModel       = new ProjectModel();
+            $InvoiceModel       = new InvoiceModel();
+            $BastModel          = new BastModel();
+            $LogModel           = new LogModel();
+            $NotificationModel  = new NotificationModel();
+            $UserModel          = new UserModel();
 
             // initialize
-            $input  = $this->request->getPost();
+            $input      = $this->request->getPost();
+            $authorize  = $auth = service('authorization');
+
+            // User Admin
+            $admins     = $authorize->usersInGroup('admin');
+
+            // User Marketing
+            $marketings = $UserModel->find($input['marketing']);
+
+            // User Client
+            $clients    = $UserModel->where('parentid', $input['company'])->find();
 
             // Validation Rules
             $rules = [
@@ -519,7 +534,7 @@ class Project extends BaseController
 
             if (isset($input['designtype'])) {
                 $project['type_design'] = 1;
-                $project['ded'] = $input['design'];
+                $project['ded']         = $input['design'];
             } else {
                 $project['type_design'] = 0;
             }
@@ -527,6 +542,77 @@ class Project extends BaseController
             $ProjectModel->insert($project);
 
             $projectid = $ProjectModel->getInsertID();
+
+            // Data Notification
+            if (isset($input['designtype'])) {
+                // Notif Marketing
+                $notifmarketing  = [
+                    'userid'        => $input['marketing'],
+                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                    'url'           => 'project?projectid='.$projectid,
+                    'status'        => 0,
+                ];
+
+                $NotificationModel->insert($notifmarketing);
+
+                // Notif Admin
+                foreach ($admins as $admin) {
+                    $notifadmin  = [
+                        'userid'        => $admin['id'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'url'           => 'project?projectid='.$projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifadmin);
+                }
+
+                // Notif Client
+                foreach ($clients as $client) {
+                    $notifclient  = [
+                        'userid'        => $client->id,
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'url'           => 'dashboard/'.$input['company'].'?projectid='.$projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifclient);
+                }
+            } else {
+                // Notif Marketing
+                $notifmarketing  = [
+                    'userid'        => $input['marketing'],
+                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
+                    'url'           => 'project?projectid='.$projectid,
+                    'status'        => 0,
+                ];
+
+                $NotificationModel->insert($notifmarketing);
+
+                // Notif Admin
+                foreach ($admins as $admin) {
+                    $notifadmin  = [
+                        'userid'        => $admin['id'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
+                        'url'           => 'project?projectid='.$projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifadmin);
+                }
+
+                // Notif Client
+                foreach ($clients as $client) {
+                    $notifclient  = [
+                        'userid'        => $client->id,
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
+                        'url'           => 'dashboard/'.$input['company'].'?projectid='.$projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifclient);
+                }
+            }
 
             // INSERT INVOICE DATA
             $statusinv = [1, 2, 3, 4];
