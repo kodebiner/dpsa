@@ -9,6 +9,9 @@ class Account extends BaseController
 {
     protected $auth;
     protected $config;
+    
+    protected $data;
+    protected $session;
 
     public function __construct()
     {
@@ -95,8 +98,8 @@ class Account extends BaseController
         $newdata = [
             'id' =>  $this->data['uid'],
             'username' => $input['username'],
-            'firtsname' => $input['username'],
-            'lastname' => $input['email'],
+            'firstname' => $input['firstname'],
+            'lastname' => $input['lastname'],
             'email' => $input['email'],
         ];
         
