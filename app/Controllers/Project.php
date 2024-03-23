@@ -364,6 +364,10 @@ class Project extends BaseController
 
                     // Bukti Pengiriman
                     $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
+
+                    // Notifikasi
+                    $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid',$this->data['uid'])->find();
+
                 }
             } else {
                 $rabs           = [];

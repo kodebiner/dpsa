@@ -14,6 +14,7 @@ use App\Models\UserModel;
 use Myth\Auth\Models\GroupModel;
 use App\Models\GroupUserModel;
 use App\Models\GconfigModel;
+use App\Models\NotificationModel;
 
 /**
  * Class BaseController
@@ -71,6 +72,7 @@ abstract class BaseController extends Controller
         $this->GroupUserModel = new GroupUserModel();
         $this->CompanyModel = new CompanyModel();
         $this->GconfigModel = new GconfigModel();
+        $this->NotificationModel = new NotificationModel();
 
         // Login Check
         $auth = service('authentication');
@@ -145,6 +147,8 @@ abstract class BaseController extends Controller
             'fullname'      => $fullname,
             'parentid'      => $compid,
             'gconfig'       => $gconfig,
+            'notifications' => $this->NotificationModel->where('userid',$this->userId)->find(),
+            'countnotif'    => count($this->NotificationModel->where('userid',$this->userId)->find()),
         ];
 
 

@@ -129,7 +129,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if (in_groups('superuser',$uid)) { ?>
+                        <?php if (in_groups('superuser', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users/log') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="users/log">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -236,7 +236,7 @@
                     </li>
                 <?php } ?>
 
-                <?php if (in_groups('superuser',$uid)) { ?>
+                <?php if (in_groups('superuser', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users/log')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="users/log">
                             <div class="uk-width-1-1 uk-margin-right">
@@ -283,20 +283,18 @@
                             </div>
                             <div class="uk-navbar-right">
                                 <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
-                                    <a class="uk-icon-button uk-margin-small-right" uk-icon="bell"></a>
+                                    <span class="uk-badge"><?= $countnotif ?></span><a class="uk-icon-button uk-margin-small-right" uk-icon="bell"></a>
                                     <div class="uk-width-medium" uk-dropdown="mode: click">
                                         <div class="uk-flex-middle uk-grid-small" uk-grid>
                                             <div class="uk-width-expand">
-                                                <div class="uk-h4 uk-margin-remove" style="color: #000;"><?= $fullname ?></div>
-                                                <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><?= $role; ?></div>
+                                                <div class="uk-h4 uk-margin-remove" style="color: #000;">Notifikasi</div>
+                                                <hr style="border-top-color: rgba(0, 0, 0, .5);" />
+                                                <?php foreach ($notifications as $notif) { ?>
+                                                    <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><a href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
+                                                    <hr style="border-top-color: rgba(0, 0, 0, .5);" />
+                                                <?php } ?>
                                             </div>
                                         </div>
-                                        <hr style="border-top-color: rgba(0, 0, 0, .5);" />
-                                        <div>
-                                            <a class="uk-link-reset uk-h4" href="account"><span uk-icon="user"></span> Kelola Akun</a>
-                                        </div>
-                                        <hr style="border-top-color: rgba(0, 0, 0, .5);" />
-                                        <a class="uk-button uk-button-danger" href="logout"><?= lang('Global.logout') ?></a>
                                     </div>
                                     <a class="uk-link-reset" type="button">
                                         <?php
