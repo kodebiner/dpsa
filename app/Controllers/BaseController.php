@@ -148,7 +148,7 @@ abstract class BaseController extends Controller
             'parentid'      => $compid,
             'gconfig'       => $gconfig,
             'notifications' => $this->NotificationModel->where('userid',$this->userId)->find(),
-            'countnotif'    => count($this->NotificationModel->where('userid',$this->userId)->find()),
+            'countnotif'    => count($this->NotificationModel->where('userid',$this->userId)->where('status',"0")->find()),
         ];
 
 
