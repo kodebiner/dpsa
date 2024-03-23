@@ -111,6 +111,12 @@ $tanggalsph = ucwords($dateFormatted);
         <tr>
             <td></td>
             <td></td>
+            <td>Kode Marketing</td>
+            <td> :  <?= $sphdata['marketing'] ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
             <td>Pekerjaan</td>
             <td> : <?= $projects['name'] ?></td>
         </tr>

@@ -558,6 +558,13 @@
                                 }
                             } ?>
 
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="company">Kode Marketing</label>
+                                <div class="uk-uk-form-controls">
+                                    <input class="uk-input" type="text" name="marketing" placeholder="<?= $projectdata[$project['id']]['marketing']; ?>" aria-label="disabled" value="<?= $projectdata[$project['id']]['marketing']; ?>" disabled>
+                                </div>
+                            </div>
+
                             <div class="uk-margin" id="pusat">
                                 <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <label class="uk-form-label" for="company">Perusahaan</label>

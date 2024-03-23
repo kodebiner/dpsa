@@ -68,7 +68,7 @@ class User extends BaseController
             if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
                 $this->builder->where('auth_groups.id', $input['rolesearch']);
             }
-            $this->builder->select('users.id as id, users.username as username, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $this->builder->select('users.id as id, users.username as username, users.kode_marketing as kodemarketing, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $query =   $this->builder->get($perpage, $offset)->getResult();
 
             $total = $this->builder

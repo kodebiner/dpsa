@@ -88,7 +88,6 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
     $routes->post('removerevisi', 'Home::removerevisi');
     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
     $routes->post('acc/(:num)', 'Home::acc/$1');
-    // $routes->get('accres/(:num)', 'Home::accres/$1');
     $routes->post('buktipembayaran/(:num)', 'Home::buktipembayaran/$1');
 });
 

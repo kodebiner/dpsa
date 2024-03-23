@@ -54,6 +54,7 @@ class Project extends BaseController
             $ReferensiModel         = new ReferensiModel();
             $CustomRabModel         = new CustomRabModel();
             $BuktiModel             = new BuktiModel();
+            $UserModel              = new UserModel();
             $NotificationModel      = new NotificationModel();
             $LogModel               = new LogModel();
 
@@ -346,8 +347,16 @@ class Project extends BaseController
                     // REFERENSI
                     $projectdata[$project['id']]['referensi']   = $ReferensiModel->findAll();
 
+                    // Marketing
+                    if (!empty($project['marketing'])) {
+                        $mark     = $UserModel->find($project['marketing']);
+                    } else {
+                        $mark     = $UserModel->where('parentid', $project['clientid'])->first();
+                    }
+                    $projectdata[$project['id']]['marketing']   = $mark->kode_marketing;
+
                     // PIC
-                    $projectdata[$project['id']]['pic']         = $users;
+                    // $projectdata[$project['id']]['pic']         = $users;
                     $projectdata[$project['id']]['pic']         = $picinv;
 
                     // Bukti Pembayaran
@@ -1842,10 +1851,10 @@ class Project extends BaseController
             // MARKETING INITIAL
             $markname = "";
             if (!empty($mark)) {
-                $markname = $mark->name;
+                $markname = $mark->kode_marketing;
             }
-            $vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " ");
-            $markname = str_replace($vowels, "", $markname);
+            // $vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " ");
+            // $markname = str_replace($vowels, "", $markname);
             // END MARKETING INITIAL
 
             $datasph = [

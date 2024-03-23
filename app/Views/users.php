@@ -528,7 +528,7 @@
                                 <div class="uk-margin-bottom" id="marketingcode<?= $user->id; ?>" hidden>
                                     <label class="uk-form-label" for="kodemarketing">Kode Marketing</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="kodemarketing<?= $user->id; ?>" name="kodemarketing<?= $user->id; ?>" placeholder="Kode Marketing" autofocus required />
+                                        <input type="text" class="uk-input" id="kodemarketing<?= $user->id; ?>" value="<?= $user->kodemarketing; ?>" name="kodemarketing" placeholder="Kode Marketing" autofocus required />
                                     </div>
                                 </div>
 
@@ -538,10 +538,12 @@
                                             if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                                 $("#pusat<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
+                                                $("#kodemarketing<?= $user->id; ?>").val("");
                                                 $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
                                                 $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                                $("#kodemarketing<?= $user->id; ?>").val("");
                                             }else if($('#role<?= $user->id; ?>').find(":selected").text() === "marketing")  {
                                                 $("#marketingcode<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#kodemarketing<?= $user->id; ?>").attr("required",true);
@@ -554,17 +556,14 @@
                                                 $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
                                                 $("#marketingcode<?= $user->id; ?>").attr("hidden",true);
                                                 $("#kodemarketing<?= $user->id; ?>").attr("required",false);
+                                                $("#kodemarketing<?= $user->id; ?>").val("");
                                             }
                                         });
 
-                                        // $("input[id='role</?= $user->id; ?>']").change(function() {
-                                        //     if ($(this).is(':selected')) {
-                                        //         console.log($(this).is(':selected'));
-                                        //         $("#marketingcode</?= $user->id; ?>").removeAttr("hidden");
-                                        //     } else {
-                                        //         $("#marketingcode</?= $user->id; ?>").attr("hidden",false);
-                                        //     }
-                                        // });
+                                        if ($('#role<?= $user->id; ?>').find(":selected").text() === "marketing") {
+                                            $("#marketingcode<?= $user->id; ?>").removeAttr("hidden");
+                                            $("#kodemarketing<?= $user->id; ?>").attr("required",true);
+                                        }
                                     });
                                 </script>
 
