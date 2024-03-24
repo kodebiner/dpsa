@@ -289,7 +289,7 @@
                                     </a>
                                     <!-- <span class="uk-badge"></?= $countnotif ?></span><a class="uk-icon-button uk-margin-small-right" uk-icon="bell"></a> -->
                                     <div class="uk-width-large" uk-dropdown="mode: click">
-                                        <div class="uk-flex-middle uk-grid-small uk-panel uk-panel-scrollable" uk-grid>
+                                        <div class="uk-grid-small uk-panel uk-panel-scrollable" style="height: 300px !important;" uk-grid>
                                             <div class="uk-width-expand">
                                                 <div class="uk-h4 uk-margin-remove" style="color: #000;">Notifikasi</div>
                                                 <hr style="border-top-color: rgba(0, 0, 0, .5);" />
@@ -298,10 +298,16 @@
                                                         foreach ($notifications as $notif) {
                                                         
                                                             if ($notif['status'] === "0") { ?>
-                                                                <div class="uk-text-meta uk-tile uk-tile-primary uk-padding-small" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
+                                                                <a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>">
+                                                                    <div class="uk-text-bold"><?= $notif['keterangan'] ?></div>
+                                                                </a>
+                                                                <!-- <div class="uk-text-meta uk-tile uk-tile-primary uk-padding-small" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div> -->
                                                                 <hr style="border-top-color: rgba(0, 0, 0, .5);" />
                                                             <?php } elseif($notif['status'] === "1") { ?>
-                                                                <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
+                                                                <a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>">
+                                                                    <div class="uk-text-emphasis"><?= $notif['keterangan'] ?></div>
+                                                                </a>
+                                                                <!-- <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div> -->
                                                                 <hr style="border-top-color: rgba(0, 0, 0, .5);" />
                                                             <?php } ?>
 

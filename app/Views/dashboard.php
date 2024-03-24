@@ -548,7 +548,7 @@
 
                                     <!-- Bukti Pengiriman -->
                                     <div class="uk-margin">Bukti Pengiriman</div>
-                                    <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                    <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle uk-grid-divider" uk-grid uk-lightbox="animation: slide">
                                         <?php foreach($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
                                             <div>
                                                 <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
@@ -560,6 +560,8 @@
                                                         </div>
                                                     </div>
                                                 </a>
+
+                                                <div class="uk-margin"><?= $sendproof['note'] ?></div>
 
                                                 <script>
                                                     // Date In Indonesia
@@ -1205,7 +1207,7 @@
 
                                             <!-- Bukti Pengiriman -->
                                             <div class="uk-margin">Bukti Pengiriman</div>
-                                            <div class="uk-child-width-1-6 uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                            <div class="uk-child-width-1-6 uk-grid-match uk-flex-middle uk-grid-divider" uk-grid uk-lightbox="animation: slide">
                                                 <?php foreach($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
                                                     <div>
                                                         <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
@@ -1217,6 +1219,8 @@
                                                                 </div>
                                                             </div>
                                                         </a>
+
+                                                        <div class="uk-margin"><?= $sendproof['note'] ?></div>
 
                                                         <script>
                                                             // Date In Indonesia

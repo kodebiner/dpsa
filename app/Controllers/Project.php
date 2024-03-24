@@ -564,7 +564,7 @@ class Project extends BaseController
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $input['marketing'],
-                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
                     'url'           => 'project?projectid='.$projectid,
                     'status'        => 0,
                 ];
@@ -575,7 +575,7 @@ class Project extends BaseController
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
                         'url'           => 'project?projectid='.$projectid,
                         'status'        => 0,
                     ];
@@ -587,7 +587,7 @@ class Project extends BaseController
                 foreach ($designers as $designer) {
                     $notifdesigner  = [
                         'userid'        => $designer['id'],
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
                         'url'           => 'project?projectid='.$projectid,
                         'status'        => 0,
                     ];
@@ -599,7 +599,7 @@ class Project extends BaseController
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain'.$input['design'],
+                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
                         'url'           => 'dashboard/'.$input['company'].'?projectid='.$projectid,
                         'status'        => 0,
                     ];
@@ -1344,6 +1344,7 @@ class Project extends BaseController
                 $databukti  = [
                     'projectid'     => $id,
                     'file'          => $input['buktipengiriman'],
+                    'note'          => $input['note'],
                     'status'        => 1,
                     'created_at'    => $tanggalkirim,
                 ];

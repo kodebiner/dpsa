@@ -2191,7 +2191,7 @@
                                     <!-- Bukti Pengiriman -->
                                     <div class="uk-margin" id="image-container-createbuktipengiriman-<?= $project['id'] ?>">
                                         <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate" style="text-transform: uppercase;">Bukti Pengiriman</label>
-                                        <div class="uk-margin uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                        <div class="uk-margin uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle uk-grid-divider" uk-grid uk-lightbox="animation: slide">
                                             <?php foreach ($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
                                                 <div>
                                                     <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
@@ -2203,6 +2203,8 @@
                                                             </div>
                                                         </div>
                                                     </a>
+
+                                                    <div class="uk-margin"><?= $sendproof['note'] ?></div>
 
                                                     <script>
                                                         // Date In Indonesia
@@ -2354,6 +2356,16 @@
                                                 var image = document.createElement('img');
                                                 image.setAttribute('src', 'img/bukti/pengiriman/' + filename);
 
+                                                var createNote = document.createElement('div');
+                                                createNote.setAttribute('class', 'uk-margin');
+
+                                                var createNoteInput = document.createElement('input');
+                                                createNoteInput.setAttribute('type', 'text');
+                                                createNoteInput.setAttribute('class', 'uk-input uk-form-width-large');
+                                                createNoteInput.setAttribute('placeholder', 'Keterangan (optional)');
+                                                createNoteInput.setAttribute('id', 'note');
+                                                createNoteInput.setAttribute('name', 'note');
+
                                                 var closeContainer = document.createElement('div');
                                                 closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
 
@@ -2362,8 +2374,10 @@
                                                 closeButton.setAttribute('onClick', 'removeImgCreatebuktipengiriman<?= $project['id'] ?>()');
                                                 closeButton.setAttribute('uk-icon', 'close');
 
-                                                closeContainer.appendChild(closeButton);
+                                                createNote.appendChild(createNoteInput);
                                                 displayContainer.appendChild(displayImg);
+                                                closeContainer.appendChild(closeButton);
+                                                displayContainer.appendChild(createNote);
                                                 displayContainer.appendChild(closeContainer);
                                                 link.appendChild(image);
                                                 displayImg.appendChild(link);

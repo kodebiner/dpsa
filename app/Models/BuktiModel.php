@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class BuktiModel extends Model
 {
     protected $allowedFields = [
-        'projectid', 'file', 'status', 'created_at',
+        'projectid', 'file', 'note', 'status', 'created_at',
     ];
     protected $table            = 'bukti';
     protected $primaryKey       = 'id';
