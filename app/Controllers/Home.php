@@ -673,6 +673,25 @@ class Home extends BaseController
         }
     }
 
+    public function notif($id)
+    {
+            // $DesignModel        = new DesignModel();
+            // $UserModel          = new UserModel();
+            // $ProjectModel       = new ProjectModel();
+            // $LogModel           = new LogModel();
+            $NotifikasiModel    = new NotificationModel();
+            $input              = $this->request->getPost('status');
+
+            $datanotifikasi = [
+                'id'            => $id,
+                'status'        => "1",
+            ];
+            $NotifikasiModel->save($datanotifikasi);
+
+            $data = $this->data;
+            die(json_encode(array($datanotifikasi)));
+    }
+
     public function revisi()
     {
         $image      = \Config\Services::image();

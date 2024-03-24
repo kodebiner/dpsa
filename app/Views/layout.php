@@ -285,27 +285,56 @@
                                 <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
                                     <span class="uk-badge"><?= $countnotif ?></span>
                                     <a class="uk-link-reset" type="button">
-                                        <span class="uk-icon-button uk-margin-small-right uk-object-cover uk-object-position-top-center uk-border-circle"  width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" uk-icon="bell"></span>
+                                        <span class="uk-icon-button uk-margin-small-right uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" uk-icon="bell"></span>
                                     </a>
                                     <!-- <span class="uk-badge"></?= $countnotif ?></span><a class="uk-icon-button uk-margin-small-right" uk-icon="bell"></a> -->
                                     <div class="uk-width-large" uk-dropdown="mode: click">
-                                        <div class="uk-flex-middle uk-grid-small" uk-grid>
+                                        <div class="uk-flex-middle uk-grid-small uk-panel uk-panel-scrollable" uk-grid>
                                             <div class="uk-width-expand">
                                                 <div class="uk-h4 uk-margin-remove" style="color: #000;">Notifikasi</div>
                                                 <hr style="border-top-color: rgba(0, 0, 0, .5);" />
-                                                <?php foreach ($notifications as $notif) { 
-                                                    if($notif['status'] === "0"){?>
-                                                    <div class="uk-text-meta uk-tile uk-tile-primary uk-padding-small" style="color: rgba(0, 0, 0, .5);"><a href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
-                                                    <hr style="border-top-color: rgba(0, 0, 0, .5);" />
-                                                <?php }else{ ?>
-                                                    <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><a href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
-                                                    <hr style="border-top-color: rgba(0, 0, 0, .5);" />
-                                                <?php } 
-                                            }?>
+                                                <?php 
+                                                    if(!empty($notifications)){
+                                                        foreach ($notifications as $notif) {
+                                                        
+                                                            if ($notif['status'] === "0") { ?>
+                                                                <div class="uk-text-meta uk-tile uk-tile-primary uk-padding-small" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
+                                                                <hr style="border-top-color: rgba(0, 0, 0, .5);" />
+                                                            <?php } elseif($notif['status'] === "1") { ?>
+                                                                <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);"><a id="notif<?= $notif['id'] ?>" value="1" href="<?= $notif['url'] ?>"><?= $notif['keterangan'] ?></a></div>
+                                                                <hr style="border-top-color: rgba(0, 0, 0, .5);" />
+                                                            <?php } ?>
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $("#notif<?= $notif['id'] ?>").click(function() {
+                                                                        $.ajax({
+                                                                            url: "home/notif/<?= $notif['id'] ?>",
+                                                                            method: "POST",
+                                                                            data: {
+                                                                                status: $('#notif<?= $notif['id'] ?>').val(),
+                                                                            },
+                                                                            dataType: "json",
+                                                                            error: function() {
+                                                                                console.log('error', arguments);
+                                                                            },
+                                                                            success: function() {
+                                                                                console.log('success', arguments);
+                                                                            },
+                                                                        })
+                                                                    });
+                                                                });
+                                                            </script>
+
+                                                        <?php }
+                                                    }else{ ?>
+                                                        <div class="uk-text-meta" style="color: rgba(0, 0, 0, .5);">Belum ada notifikasi</div>
+                                                        <hr style="border-top-color: rgba(0, 0, 0, .5);" />
+                                                    <?php } ?>
                                             </div>
                                         </div>
                                     </div>
-                                   
+
                                     <a class="uk-link-reset" type="button">
                                         <?php
                                         if (!empty($account->photo)) {
