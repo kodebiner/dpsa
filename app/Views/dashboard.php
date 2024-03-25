@@ -199,7 +199,7 @@
                 ?>
 
                 <?php if ($ismobile) { ?>
-                    <div class="uk-margin uk-card uk-card-default">
+                    <div class="uk-margin uk-card uk-card-default" id="card-project<?= $project['id'] ?>">
                         <div class="uk-card-header">
                             <div class="uk-grid-small uk-flex-middle" uk-grid>
                                 <div class="uk-width-expand">
@@ -811,7 +811,7 @@
                         });
                     </script>
                 <?php } else { ?>
-                    <div class="uk-margin uk-card uk-card-default uk-card-hover uk-width-1-1">
+                    <div class="uk-margin uk-card uk-card-default uk-card-hover uk-width-1-1" id="card-project<?= $project['id'] ?>">
                         <div class="uk-card-header">
                             <div class="uk-child-width-1-2" uk-grid>
                                 <div>
@@ -2122,4 +2122,41 @@
         </script>
     </div>
 <?php } ?>
+<?php if (!empty($input)) {
+    if ($ismobile == false) { ?>
+        <script>
+            $(document).ready(function() {
+                var unhidecontent = document.getElementById('content<?=$input?>');
+                unhidecontent.removeAttribute('hidden');
+
+                var opendropdown = document.getElementById('containerbtnup<?=$input?>');
+                opendropdown.removeAttribute('hidden');
+
+                var closedropdown = document.getElementById('containerbtn<?=$input?>');
+                closedropdown.setAttribute('hidden', '');
+            });
+                
+            window.addEventListener('load', () => setTimeout(() => {
+                document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+            }))
+        </script>
+    <?php } else { ?>
+        <script>
+            $(document).ready(function() {
+                var unhidebody = document.getElementById('body<?=$input?>');
+                unhidebody.removeAttribute('hidden');
+
+                var openmobile = document.getElementById('open<?=$input?>');
+                openmobile.removeAttribute('hidden');
+
+                var closemobile = document.getElementById('close<?=$input?>');
+                closemobile.setAttribute('hidden', '');
+            });
+            
+            window.addEventListener('load', () => setTimeout(() => {
+                document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+            }))
+        </script>
+    <?php }
+} ?>
 <?= $this->endSection() ?>

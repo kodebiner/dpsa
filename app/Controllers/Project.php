@@ -257,7 +257,6 @@ class Project extends BaseController
                         $projectdata[$project['id']]['production']   = [];
                     }
 
-
                     // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
                         $price = [];
@@ -974,7 +973,7 @@ class Project extends BaseController
                         $notifclient  = [
                             'userid'        => $clin->id,
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                            'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
                             'status'        => 0,
                         ];
     
@@ -1031,7 +1030,7 @@ class Project extends BaseController
                         $notifclient  = [
                             'userid'        => $clin->id,
                             'keterangan'    => 'Desain telah diperbaharui',
-                            'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                            'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
                             'status'        => 0,
                         ];
     
@@ -1377,7 +1376,7 @@ class Project extends BaseController
                     $notifclient  = [
                         'userid'        => $clin->id,
                         'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$clin->id.'?projectid='.$pro['id'],
+                        'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
                         'status'        => 0,
                     ];
 

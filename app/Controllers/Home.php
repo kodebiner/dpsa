@@ -96,6 +96,7 @@ class Home extends BaseController
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['input']          = $this->request->getGet('projectid');
 
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client pusat') {
@@ -131,6 +132,7 @@ class Home extends BaseController
                 $data['pakets']         = $PaketModel->findAll();
                 $data['clients']        = array_slice($clients, $offset, $perpage);
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['input']          = $this->request->getGet('projectid');
 
                 return view('dashboard-superuser', $data);
             } elseif ($this->data['role'] === 'client cabang') {
@@ -369,6 +371,7 @@ class Home extends BaseController
                 $data['pager']          = $pager->links('projects', 'uikit_full');
                 $data['projectdata']    = $projectdata;
                 $data['projectdesign']  = $projectdesign;
+                $data['input']          = $this->request->getGet('projectid');
 
                 return view('dashboard', $data);
             }
@@ -616,7 +619,7 @@ class Home extends BaseController
             $data['pager']          = $pager->links('projects', 'uikit_full');
             $data['projectdata']    = $projectdata;
             $data['projectdesign']  = $projectdesign;
-
+            $data['input']          = $this->request->getGet('projectid');
 
             return view('dashboard', $data);
         } else {
@@ -675,21 +678,17 @@ class Home extends BaseController
 
     public function notif($id)
     {
-            // $DesignModel        = new DesignModel();
-            // $UserModel          = new UserModel();
-            // $ProjectModel       = new ProjectModel();
-            // $LogModel           = new LogModel();
-            $NotifikasiModel    = new NotificationModel();
-            $input              = $this->request->getPost('status');
+        $NotifikasiModel    = new NotificationModel();
+        $input              = $this->request->getPost('status');
 
-            $datanotifikasi = [
-                'id'            => $id,
-                'status'        => "1",
-            ];
-            $NotifikasiModel->save($datanotifikasi);
+        $datanotifikasi = [
+            'id'            => $id,
+            'status'        => "1",
+        ];
+        $NotifikasiModel->save($datanotifikasi);
 
-            $data = $this->data;
-            die(json_encode(array($datanotifikasi)));
+        $data = $this->data;
+        die(json_encode(array($datanotifikasi)));
     }
 
     public function revisi()

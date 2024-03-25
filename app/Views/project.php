@@ -1727,17 +1727,9 @@
                                             <div class="uk-inline">
                                                 <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                    <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) {
-                                                                                                        $tglspk = date_create($project['tanggal_spk']);
-                                                                                                        echo "value='" . date_format($tglspk, 'm/d/Y') . "'";
-                                                                                                    } ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                    <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']); echo "value='" . date_format($tglspk, 'm/d/Y') . "'"; } ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                 <?php } else { ?>
-                                                    <span class=""><?php if (!empty($project['tanggal_spk'])) {
-                                                                        $tglspk = date_create($project['tanggal_spk']);
-                                                                        echo date_format($tglspk, 'm/d/Y');
-                                                                    } else {
-                                                                        echo date('m/d/Y');
-                                                                    } ?></span>
+                                                    <span class=""><?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']); echo date_format($tglspk, 'm/d/Y'); } else { echo date('m/d/Y'); } ?></span>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -1747,20 +1739,14 @@
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label">NO SPK</label>
                                             <div class="uk-form-controls">:
-                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
-                                                                                                                                    echo $project['no_spk'];
-                                                                                                                                } ?>" placeholder="NO SPK" />
+                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>" placeholder="NO SPK" />
                                             </div>
                                         </div>
                                     <?php } else { ?>
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
-                                            <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) {
-                                                                                echo $project['no_spk'];
-                                                                            } ?> </a></div>
-                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
-                                                                                                                                    $project['no_spk'];
-                                                                                                                                } ?>" />
+                                            <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?> </a></div>
+                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { $project['no_spk']; } ?>" />
                                         </div>
                                     <?php } ?>
 
@@ -1998,17 +1984,9 @@
                                                 <div class="uk-inline">
                                                     <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
                                                         <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                        <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) {
-                                                                                                            $batasproduksi = date_create($project['batas_produksi']);
-                                                                                                            echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'";
-                                                                                                        } ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                        <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'"; } ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                     <?php } else { ?>
-                                                        <span class=""><?php if (!empty($project['batas_produksi'])) {
-                                                                            $batasproduksi = date_create($project['batas_produksi']);
-                                                                            echo date_format($batasproduksi, 'm/d/Y');
-                                                                        } else {
-                                                                            echo date('m/d/Y');
-                                                                        } ?></span>
+                                                        <span class=""><?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo date_format($batasproduksi, 'm/d/Y'); } else { echo date('m/d/Y'); } ?></span>
                                                     <?php } ?>
                                                 </div>
                                             </div>
@@ -2102,9 +2080,7 @@
                                                                             <option value="">Pilih PIC</option>
                                                                             <?php if (!empty($picpro)) {
                                                                                 foreach ($picpro as $propic) { ?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) {
-                                                                                                                            echo 'selected';
-                                                                                                                        } ?>><?= $propic->name ?></option>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
                                                                                 <?php }
                                                                             } else { ?>
                                                                                 <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
@@ -2167,9 +2143,7 @@
                                                                             <option value="">Pilih PIC</option>
                                                                             <?php if (!empty($picpro)) {
                                                                                 foreach ($picpro as $propic) { ?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) {
-                                                                                                                            echo 'selected';
-                                                                                                                        } ?>><?= $propic->name ?></option>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
                                                                                 <?php }
                                                                             } else { ?>
                                                                                 <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
@@ -2485,7 +2459,7 @@
                                                                 }
                                                             }
                                                         </script>
-                                            <?php }
+                                                    <?php }
                                                 }
                                             } ?>
                                         </div>
@@ -2559,7 +2533,7 @@
                                                             }
                                                         }
                                                     </script>
-                                            <?php }
+                                                <?php }
                                             } ?>
                                         </div>
                                         <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
@@ -2960,13 +2934,9 @@
                                                     <label class="uk-form-label">No Invoice I</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                    echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'";
-                                                                                                                                                } ?> name="noinv1<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                    echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'";
-                                                                                                                                                } ?> name="noinv1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2977,15 +2947,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                                                                    $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);
-                                                                                                                                                                                                    echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                                                                } ?> placeholder="<?= date('m/d/Y') ?>" />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                                                                    $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);
-                                                                                                                                                                                                    echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                                                                } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -3046,13 +3010,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice1<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'"; } ?> name="pphinvoice1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'"; } ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3061,13 +3021,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice1<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'"; } ?> name="emailinvoice1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'"; } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3257,13 +3213,9 @@
                                                     <label class="uk-form-label">No Invoice II</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {
-                                                                                                                                                        echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";
-                                                                                                                                                    } ?> name="noinv2<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {
-                                                                                                                                                        echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";
-                                                                                                                                                    } ?> name="noinv2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3274,15 +3226,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {
-                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']);
-                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                    } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {
-                                                                                                                                                        $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']);
-                                                                                                                                                        echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                    } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice2<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { $tempo = date_create($projectdata[$project['id']]['invoice2']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice2<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
