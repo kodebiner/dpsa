@@ -1,0 +1,205 @@
+<?= $this->extend('layout') ?>
+
+<?= $this->section('extraScript') ?>
+<script src="js/jquery-3.1.1.js"></script>
+<?= $this->endSection() ?>
+
+<?= $this->section('main') ?>
+
+
+<!-- Page Heading -->
+<?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
+    <?php if ($ismobile === false) { ?>
+        <div class="tm-card-header uk-light uk-margin-remove-left">
+            <div uk-grid class="uk-flex-middle">
+                <div class="uk-width-1-2@m">
+                    <h3 class="tm-h3">Laporan</h3>
+                </div>
+            </div>
+        </div>
+    <?php } else { ?>
+        <h3 class="tm-h3 uk-text-center">Laporan</h3>
+        <div class="uk-child-width-auto uk-flex-center" uk-grid>
+            <div>
+                <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
+            </div>
+        </div>
+    <?php } ?>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2013',  1000,      400],
+          ['2014',  1170,      460],
+          ['2015',  660,       1120],
+          ['2016',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+
+    <!-- End Of Page Heading -->
+    <?= view('Views/Auth/_message_block') ?>
+
+    <!-- form input -->
+    <?php if ($ismobile === false) { ?>
+        <form class="uk-margin" id="searchform" action="laporan" method="GET">
+            <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
+                <div>
+                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                        <div>Cari:</div>
+                        <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                        <div>
+                            <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
+                                <option value="0">Marketing</option>
+                                <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Pusat</option>
+                                <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Cabang</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                        <div>Tampilan</div>
+                        <div>
+                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                            </select>
+                        </div>
+                        <div>Per Halaman</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <?php } else { ?>
+        <div id="filter" class="uk-margin" hidden>
+            <form id="searchform" action="laporan" method="GET">
+                <div class="uk-margin-small uk-flex uk-flex-center">
+                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                </div>
+                <div class="uk-margin-small uk-flex uk-flex-center">
+                    <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
+                        <option value="0">Marketing</option>
+                        <option value="1" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Pusat</option>
+                        <option value="2" <?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Cabang</option>
+                    </select>
+                </div>
+                <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
+                    <div>Tampilan</div>
+                    <div>
+                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                            <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                            <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                            <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                            <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                        </select>
+                    </div>
+                    <div>Per Halaman</div>
+                </div>
+            </form>
+        </div>
+    <?php } ?>
+    <!-- form input -->
+
+    <!-- script form -->
+    <script>
+        document.getElementById('rolesearch').addEventListener("change", submitform);
+        document.getElementById('search').addEventListener("change", submitform);
+        document.getElementById('perpage').addEventListener("change", submitform);
+
+        function submitform() {
+            document.getElementById('searchform').submit();
+        };
+    </script>
+    <!-- end script form -->
+
+
+    <!-- Table Of Content -->
+    <div class="uk-overflow-auto uk-margin">
+        <table class="uk-table uk-table-justify uk-table-middle uk-table-divider">
+            <div class="uk-child-width-1-4@s uk-text-left" uk-grid>
+                <div>
+                    <div class="">Total Jumlah Proyek : <?= $total ?></div>
+                </div>
+                <div>
+                    <div class="">Total SPK :
+                        <?php
+                            $spkvalue = [];
+                            foreach($projects as $project){
+                                $spkvalue[] = $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'];
+                            } 
+                            echo "Rp." . number_format(array_sum($spkvalue), 0, ',', '.');
+                        ?>
+                    </div>
+                </div>
+                <div>
+                    <div class="">
+                        <?php
+                            $selesai = 0;
+                            foreach($projects as $project){
+                                if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']){
+                                    $selesai += 1;
+                                }
+                            } 
+                        ?>
+                        Total Proyek Selesai : <?=$selesai?>
+                    </div>
+                </div>
+                <div>
+                    <div class="">Total Proyek Dalam Proses : <?= $total - $selesai ?></div>
+                </div>
+            </div>
+            <thead>
+                <tr>
+                    <th class="uk-width-large">Nama Proyek</th>
+                    <th class="uk-width-medium">Klien</th>
+                    <th class="uk-width-medium">Marketing</th>
+                    <th class="uk-width-medium">Nilai SPK</th>
+                    <th class="uk-text-center uk-width-medium">Status Proyek</th>
+                    <th class="uk-text-center uk-width-medium">Tanggal Proyek</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($projects as $project) {?>
+                    <tr>
+                        <td class=""><?= $project['name'] ?></td>
+                        <td class=""><?=$projectdata[$project['id']]['klien']['rsname']?></td>
+                        <td class=""><?= $projectdata[$project['id']]['marketing']->username ?></td>
+                        <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td>
+                        <td class="uk-text-center">
+                            <?php if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']){
+                                echo 'Selesai';
+                            }else{
+                                echo 'Dalam Proses';
+                            }?>
+                        </td>
+                        <td class="uk-text-center"><?=$project['created_at']?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <?= $pager ?>
+    <!-- End Of Table Content -->
+<?php } ?>
+
+
+<?= $this->endSection() ?>

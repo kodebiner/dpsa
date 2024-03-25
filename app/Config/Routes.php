@@ -199,11 +199,8 @@ $routes->group('setting',['filter' => 'login'], function ($routes) {
     $routes->get('deletereferensi/(:num)', 'Setting::deletereferensi/$1');
 });
 
+// Laporan
+$routes->group('laporan',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'Laporan::index');
+});
 
-// Log
-// $routes->group('log',['filter' => 'login'], function ($routes) {
-//     $routes->get('', 'Log::index');
-    // $routes->post('create', 'Bar::create');
-    // $routes->get('update/(:num)', 'Bar::index');
-    // $routes->post('update/(:num)', 'Bar::update/$1');
-// });

@@ -116,6 +116,19 @@
                             </li>
                         <?php } ?>
 
+                        <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="laporan">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/finance.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Laporan</div>
+                                    </div>
+                                </a>
+                            </li>
+                        <?php } ?>
+
                         <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="setting">
@@ -222,6 +235,18 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'laporan')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="laporan">
+                            <div class="uk-width-1-1 uk-margin-right">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/finance.svg" uk-svg>
+                                </div>
+                                <div class="uk-text-center">Laporan</div>
+                            </div>
+                        </a>
+                    </li>
+                <?php } ?>
 
                 <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'setting')) ? 'uk-active' : '' ?>">
@@ -283,7 +308,9 @@
                             </div>
                             <div class="uk-navbar-right">
                                 <div class="uk-navbar-item uk-flex uk-flex-middle uk-inline">
-                                    <span class="uk-badge"><?= $countnotif ?></span>
+                                    <?php if (!empty($countnotif)) {?>
+                                        <span class="uk-badge"><?= $countnotif ?></span>
+                                    <?php } ?>
                                     <a class="uk-link-reset" type="button">
                                         <span class="uk-icon-button uk-margin-small-right uk-object-cover uk-object-position-top-center uk-border-circle" width="40" height="40" style="aspect-ratio: 1 / 1; border: 2px solid #39f;" uk-icon="bell"></span>
                                     </a>
