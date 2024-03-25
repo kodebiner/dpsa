@@ -247,7 +247,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
 
@@ -293,7 +293,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
 
@@ -596,7 +596,7 @@ class Upload extends BaseController
                 $notifclient  = [
                     'userid'        => $client->id,
                     'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                    'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                    'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                     'status'        => 0,
                 ];
 
@@ -714,7 +714,7 @@ class Upload extends BaseController
                         $notifclient  = [
                             'userid'        => $client->id,
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                            'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                             'status'        => 0,
                         ];
         
@@ -761,7 +761,7 @@ class Upload extends BaseController
                         $notifclient  = [
                             'userid'        => $client->id,
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                            'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                             'status'        => 0,
                         ];
         
@@ -898,7 +898,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPH telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
     
@@ -1046,7 +1046,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
     
@@ -1195,7 +1195,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
     
@@ -1344,7 +1344,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
     
@@ -1492,7 +1492,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'dashboard/'.$client->id.'?projectid='.$project['id'],
+                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
                         'status'        => 0,
                     ];
     
