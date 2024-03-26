@@ -96,31 +96,29 @@
     <!-- form input -->
     <?php if ($ismobile === false) { ?>
         <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
-            <div>
+            <div class="uk-width-1-3">
                 <div class="">
                     <form id="short" action="laporan" method="get">
                         <div class="uk-inline">
                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                            <input class="uk-input uk-width-medium uk-border-rounded" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
+                            <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
                         </div>
                     </form>
                 </div>
             </div>
-            <div>
-                <div class="">
+            <div class="uk-width-expand">
+                <div>
                     <form class="uk-margin" id="searchform" action="laporan" method="GET">
                         <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                             <div>
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                     <div>Cari:</div>
                                     <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
-                                    <!-- <div>
-                                        <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                                            <option value="0">Progress</option>
-                                            <option value="1" </?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Selesai</option>
-                                            <option value="2" </?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Dalam Proses</option>
-                                        </select>
-                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                <div>
+                                    <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel" target="_blank"><span uk-icon="download"></span>Laporan</a>
                                 </div>
                             </div>
                             <div>
@@ -175,14 +173,16 @@
 
     <!-- script form -->
     <script>
-        document.getElementById('rolesearch').addEventListener("change", submitform);
+        // document.getElementById('rolesearch').addEventListener("change", submitform);
         document.getElementById('search').addEventListener("change", submitform);
         document.getElementById('perpage').addEventListener("change", submitform);
 
         function submitform() {
             document.getElementById('searchform').submit();
         };
+    </script>
 
+    <script>
         $(document).ready(function() {
             $(function() {
                 $('input[name="daterange"]').daterangepicker({

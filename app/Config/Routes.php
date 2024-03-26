@@ -202,5 +202,7 @@ $routes->group('setting',['filter' => 'login'], function ($routes) {
 // Laporan
 $routes->group('laporan',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Laporan::index');
+    $routes->get('excel', 'Laporan::excel');
+
 });
 

@@ -2851,8 +2851,10 @@
 
                                             // Invoice II
                                             if (!empty($project)) {
-                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                if(!empty($projectdata[$project['id']]['sertrim'])){
+                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                    }
                                                 }
                                             }
 
