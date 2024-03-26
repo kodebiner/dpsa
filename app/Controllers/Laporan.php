@@ -50,6 +50,16 @@ class Laporan extends BaseController
 
 
             // Populating data
+            $input = $this->request->getVar('daterange');
+            if (!empty($input)) {
+                $daterange = explode(' - ', $input);
+                $startdate = $daterange[0];
+                $enddate = $daterange[1];
+            } else {
+                $startdate = date('Y-m-1');
+                $enddate = date('Y-m-t');
+            }
+
             // $projects = $ProjectModel->findAll();
             $companys = $CompanyModel->findAll();
             // $users    = $UserModel->where('parentid !=', null)->find();
@@ -66,23 +76,48 @@ class Laporan extends BaseController
             $page = (@$_GET['page']) ? $_GET['page'] : 1;
             $offset = ($page - 1) * $perpage;
 
+            if ($startdate === $enddate) {
+                $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+            } else {
+                $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+            }
             $this->builder->join('users', 'users.id = project.marketing');
-            // $this->builder->where('deleted_at', null);
-            // $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-            // $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->join('company', 'company.id = project.clientid');
+            // $this->builder->join('bast', 'bast.projectid = project.id');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('project.name', $input['search']);
                 $this->builder->orLike('users.username', $input['search']);
-                // $this->builder->orLike('company.address', $input['search']);
+                $this->builder->orLike('company.rsname', $input['search']);
             }
             // if (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
             //     if ($input['rolesearch'] === "1") {
-            //         $this->builder->where('company.parentid', "0");
-            //     } elseif ($input['rolesearch'] === "2") {
-            //         $this->builder->where('company.parentid !=', "0");
-            //     }
+            //         $this->builder->where('bast.status', "1")->where('bast.tanggal_bast !=', '');
+                    // $day =  $this->builder->get()->getResultArray();
+                    // $bastdata = [];
+                    // foreach ($day as $d) {
+                    //     $day =  $d['tanggal_bast'];
+                    //     $date = date_create($day);
+                    //     $key = date_format($date, "Y-m-d");
+                    //     $hari = date_create($key);
+                    //     date_add($hari, date_interval_create_from_date_string('3 month'));
+                    //     $dateline = date_format($hari, 'Y-m-d');
+
+                    //     $now = strtotime("now");
+                    //     $nowtime = date("Y-m-d", $now);
+
+                    //     if ($now < $dateline) {
+                    //         $bastdata[] = $d['id'];
+                    //     }
+                    // }
+                    // $this->builder->whereIn('bast.id', $bastdata);
+                // } elseif ($input['rolesearch'] === "2") {
+                //     $this->builder->where('bast.status !=', "1");
+                // }
             // }
-            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, project.marketing as marketing, project.created_at as created_at, users.username as username');
+            // $this->builder->join('company', 'company.id = project.clientid');
+            // $this->builder->join('users', 'users.id = project.marketing');
+            // $this->builder->join('bast', 'bast.projectid = project.id');
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
 
             // $total = $this->builder->countAllResults();
@@ -191,6 +226,8 @@ class Laporan extends BaseController
             $data['input']          = $input;
             $data['projectdata']    = $projectdata;
             $data['projects']       = $projects;
+            $data['startdate']      = strtotime($startdate);
+            $data['enddate']        = strtotime($enddate);
 
             return view('laporan', $data);
         } else {

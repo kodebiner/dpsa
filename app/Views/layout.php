@@ -116,7 +116,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="laporan">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -235,7 +235,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'laporan')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="laporan">
                             <div class="uk-width-1-1 uk-margin-right">

@@ -1097,6 +1097,26 @@ class Home extends BaseController
         return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
     }
 
+    public function addppic()
+    {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        // Creating Permissions
+        $authorize->createPermission('ppic.project.edit', 'Merubah data PPIC.');
+
+        // Creating Prebuild Groups
+        $authorize->createGroup('PPIC', 'Divisi PPIC.');
+
+        // Prebuild permissions
+        $authorize->addPermissionToGroup('admin.project.read', 'ppic');
+        $authorize->addPermissionToGroup('ppic.project.edit', 'ppic');
+        $authorize->addPermissionToGroup('client.read', 'ppic');
+
+        // Redirect to Login
+        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
+    }
+
     public function logedin()
     {
         $data = $this->data;
