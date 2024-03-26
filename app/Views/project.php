@@ -2909,45 +2909,6 @@
                                             ?>
                                         </p>
                                     </div>
-                                    <!-- <div class="uk-width-1-1">
-                                        <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
-                                        <p class="uk-margin" uk-margin>
-                                            </?php
-                                            // Invoice I
-                                            if (!empty($project)) {
-                                                if ($project['status_spk'] === "1") {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
-                                                }
-                                            }
-
-                                            // Invoice II
-                                            if (!empty($project)) {
-                                                if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
-                                                }
-                                            }
-
-                                            // Invoice III
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" || $progress >= 95  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
-                                                    $status = "Retensi";
-                                                }
-                                            }
-
-                                            // Invoice IV
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] &&  $progress >= 95) {
-                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
-                                                        $progress   = "100";
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                        </p>
-                                    </div> -->
-                                    <!-- End Of Invoice Generate Button -->
 
                                     <!-- Invoice I -->
                                     <div>
