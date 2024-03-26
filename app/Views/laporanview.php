@@ -37,18 +37,6 @@
     </style>
 </head>
 
-<?php
-
-// $dateline = new DateTime($projects['tahun'], new DateTimeZone('Asia/Jakarta'));
-// $dateFormatted =
-//     IntlDateFormatter::formatObject(
-//         $dateline,
-//         'd MMMM y',
-//         'id'
-//     );
-// $tanggalsph = ucwords($dateFormatted);
-?>
-
 <body>
     <?php
 	header("Content-type: application/vnd-ms-excel");
