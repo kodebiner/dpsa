@@ -249,6 +249,7 @@
                                                         <th class="uk-text-center">Tinggi</th>
                                                         <th class="uk-text-center">Volume</th>
                                                         <th class="uk-text-center">Satuan</th>
+                                                        <th class="uk-text-center">Foto</th>
                                                         <th class="uk-text-center">Jumlah Pesanan</th>
                                                         <th class="uk-text-left">Harga</th>
                                                     </tr>
@@ -280,6 +281,13 @@
                                                                                             echo "Set";
                                                                                         }
                                                                                         ?>
+                                                                                    </td>
+                                                                                    <td class="uk-text-center">
+                                                                                        <div uk-lightbox="">
+                                                                                            <a class="uk-inline" href="img/mdl/<?=$mdl['photo']?>" role="button">
+                                                                                                <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$mdl['photo']?>" width="40" height="40" alt="<?=$mdl['photo']?>">
+                                                                                            </a>
+                                                                                        </div>
                                                                                     </td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                     <?php
@@ -873,6 +881,7 @@
                                                         <th class="uk-text-center">Tinggi</th>
                                                         <th class="uk-text-center">Volume</th>
                                                         <th class="uk-text-center">Satuan</th>
+                                                        <th class="uk-text-center">Foto</th>
                                                         <th class="uk-text-center">Jumlah Pesanan</th>
                                                         <th class="uk-text-left">Harga</th>
                                                     </tr>
@@ -904,6 +913,13 @@
                                                                                             echo "Set";
                                                                                         }
                                                                                         ?>
+                                                                                    </td>
+                                                                                    <td class="uk-text-center">
+                                                                                        <div uk-lightbox="">
+                                                                                            <a class="uk-inline" href="img/mdl/<?=$mdl['photo']?>" role="button">
+                                                                                                <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$mdl['photo']?>" width="40" height="40" alt="<?=$mdl['photo']?>">
+                                                                                            </a>
+                                                                                        </div>
                                                                                     </td>
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                     <?php

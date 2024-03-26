@@ -182,6 +182,7 @@ class Home extends BaseController
                                     'volume'        => $mdlr['volume'],
                                     'denomination'  => $mdlr['denomination'],
                                     'keterangan'    => $mdlr['keterangan'],
+                                    'photo'         => $mdlr['photo'],
                                     'qty'           => $rab['qty'],
                                     'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
                                     'oriprice'      => (int)$mdlr['price'],
@@ -768,7 +769,7 @@ class Home extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/')->withInput()->with('errors', $this->validator->getErrors());
         }
 
         if (isset($input['revisi'])) {
@@ -797,7 +798,7 @@ class Home extends BaseController
             }
         }
 
-        return redirect()->back()->with('message', 'Revisi telah tekirim');
+        return redirect()->to('/')->with('message', 'Revisi telah tekirim');
     }
 
     public function removerevisi()
@@ -832,7 +833,7 @@ class Home extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/')->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $date       = date_create();
@@ -867,7 +868,7 @@ class Home extends BaseController
         }
 
 
-        return redirect()->back()->with('message', 'Bukti telah tekirim');
+        return redirect()->to('/')->with('message', 'Bukti telah tekirim');
     }
 
     public function installation()
@@ -1027,7 +1028,7 @@ class Home extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/')->with('errors', $this->validator->getErrors());
         }
 
         // Vaalidating Password
@@ -1037,7 +1038,7 @@ class Home extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/')->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // New User Data

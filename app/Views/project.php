@@ -1226,13 +1226,18 @@
                                                                             ?>
                                                                         </td>
                                                                         <td><?= $mdl['keterangan'] ?></td>
+                                                                        <td>
+                                                                            <div uk-lightbox="">
+                                                                                <a class="uk-inline" href="img/mdl/<?=$mdl['photo']?>" role="button">
+                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$mdl['photo']?>" width="40" height="40" alt="<?=$mdl['photo']?>">
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
                                                                         <td class="uk-form-controls">
                                                                             <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
                                                                         </td>
                                                                         <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
-                                                                                                                                                        " "; ?>
-                                                                        </td>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
                                                                     </tr>
                                                                 <?php } ?>
                                                                 <script>
@@ -1563,6 +1568,9 @@
                                                             var thden = document.createElement('th');
                                                             thden.innerHTML = 'Satuan';
 
+                                                            var thphoto = document.createElement('th');
+                                                            thphoto.innerHTML = 'Foto';
+
                                                             var thqty = document.createElement('th');
                                                             thqty.innerHTML = 'Jumlah Item';
 
@@ -1610,6 +1618,24 @@
                                                                     tdden.innerHTML = 'Set'
                                                                 }
 
+                                                                var tdphoto = document.createElement('td');
+                                                                tdphoto.innerHTML = emdlarray[t]['photo']
+
+                                                                var divlightbox = document.createElement('div');
+                                                                divlightbox.setAttribute('uk-lightbox', '')
+
+                                                                var anchorlightbox = document.createElement('a');
+                                                                anchorlightbox.setAttribute('class', 'uk-inline')
+                                                                anchorlightbox.setAttribute('href', 'img/mdl/' + emdlarray[t]['photo'] );
+                                                                anchorlightbox.setAttribute('role', 'button')
+
+                                                                var imglightbox = document.createElement('img');
+                                                                imglightbox.setAttribute('class', 'uk-preserve-width uk-border-circle')
+                                                                imglightbox.setAttribute('src', 'img/mdl/' + emdlarray[t]['photo']);
+                                                                imglightbox.setAttribute('alt', emdlarray[t]['photo']);
+                                                                imglightbox.setAttribute('width', '40');
+                                                                imglightbox.setAttribute('height', '40');
+
                                                                 var tdqty = document.createElement('td');
                                                                 tdqty.setAttribute('class', 'uk-form-controls');
 
@@ -1630,6 +1656,9 @@
                                                                 hiddenprice.setAttribute('hidden', '');
                                                                 hiddenprice.innerHTML = emdlarray[t]['price'];
 
+                                                                anchorlightbox.appendChild(imglightbox);
+                                                                divlightbox.appendChild(achorlightbox);
+                                                                tdphoto.appendChild(divlightbox);
                                                                 tdqty.appendChild(inputqty);
                                                                 tdchecklist.appendChild(inputchecklist);
                                                                 trbody.appendChild(tdchecklist);
@@ -1639,6 +1668,7 @@
                                                                 trbody.appendChild(tdheight);
                                                                 trbody.appendChild(tdvol);
                                                                 trbody.appendChild(tdden);
+                                                                trbody.appendChild(tdphoto);
                                                                 trbody.appendChild(tdqty);
                                                                 trbody.appendChild(tdprice);
                                                                 trbody.appendChild(hiddenprice);
@@ -1651,6 +1681,7 @@
                                                             trhead.appendChild(thheigth);
                                                             trhead.appendChild(thvol);
                                                             trhead.appendChild(thden);
+                                                            trhead.appendChild(thphoto);
                                                             trhead.appendChild(thqty);
                                                             trhead.appendChild(thprice);
                                                             thead.appendChild(trhead);
@@ -2937,10 +2968,8 @@
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                             <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>">
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>">
                                                         <?php } else { ?>
                                                             <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>" disabled>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'";} ?> name="noinv1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -2952,10 +2981,8 @@
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                                                 <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
                                                                 <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>

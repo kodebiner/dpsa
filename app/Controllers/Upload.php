@@ -206,7 +206,7 @@ class Upload extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/')->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // Design Data
@@ -303,7 +303,7 @@ class Upload extends BaseController
             }
         }
 
-        return redirect()->back()->with('message', 'SPK terkirim');
+        return redirect()->to('/')->with('message', 'SPK terkirim');
     }
 
     public function removespk()

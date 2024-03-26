@@ -123,6 +123,7 @@ class Project extends BaseController
                                 'height'        => $mdlr['height'],
                                 'volume'        => $mdlr['volume'],
                                 'denomination'  => $mdlr['denomination'],
+                                'photo'         => $mdlr['photo'],
                                 'keterangan'    => $mdlr['keterangan'],
                                 'qty'           => $rab['qty'],
                                 'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
@@ -168,6 +169,7 @@ class Project extends BaseController
                                         'height'        => $mdl['height'],
                                         'volume'        => $mdl['volume'],
                                         'denomination'  => $mdl['denomination'],
+                                        'photo'         => $mdl['photo'],
                                         'keterangan'    => $mdl['keterangan'],
                                         'price'         => $mdl['price'],
                                     ];
@@ -424,6 +426,7 @@ class Project extends BaseController
                     'height'        => $mdl['height'],
                     'volume'        => $mdl['volume'],
                     'denomination'  => $mdl['denomination'],
+                    'photo'         => $mdl['photo'],
                     'price'         => $mdl['price'],
                 ];
             }
@@ -479,7 +482,7 @@ class Project extends BaseController
             ];
 
             if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()->to('project')->withInput()->with('errors', $this->validator->getErrors());
             }
 
             // This Year
@@ -662,7 +665,7 @@ class Project extends BaseController
                 $BastModel->save($bastcreate);
             }
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Membuat Proyek ' . $input['name']]);
-            return redirect()->back()->with('message', "Data berhasil di simpan.");
+            return redirect()->to('project')->with('message', "Data berhasil di simpan.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -773,7 +776,7 @@ class Project extends BaseController
             ];
 
             if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()->to('project')->withInput()->with('errors', $this->validator->getErrors());
             }
 
             // RAB Data
@@ -1402,7 +1405,7 @@ class Project extends BaseController
 
 
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data Proyek ' . $name]);
-            return redirect()->back()->with('message', "Data berhasil di perbaharui.");
+            return redirect()->to('project')->with('message', "Data berhasil di perbaharui.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -1464,7 +1467,7 @@ class Project extends BaseController
             // Delete Project
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus data Proyek ' . $project['name']]);
             $ProjectModel->delete($id);
-            return redirect()->back()->with('error', "Data berhasil di hapus");
+            return redirect()->to('project')->with('error', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

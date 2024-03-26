@@ -170,7 +170,7 @@ class User extends BaseController
             ];
 
             if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()->to('users')->withInput()->with('errors', $this->validator->getErrors());
             }
 
             // New user data
@@ -204,7 +204,7 @@ class User extends BaseController
             }
 
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan' . $input['username'] . 'sebagai pengguna baru']);
-            return redirect()->back()->with('message', 'Data pengguna berhasil di simpan');
+            return redirect()->to('users')->with('message', 'Data pengguna berhasil di simpan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -290,7 +290,7 @@ class User extends BaseController
             ];
 
             if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()->to('users')->withInput()->with('errors', $this->validator->getErrors());
             }
 
             // Data user update
@@ -354,7 +354,7 @@ class User extends BaseController
                 ];
 
                 if (!$this->validate($rules)) {
-                    return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                    return redirect()->to('users')->withInput()->with('errors', $this->validator->getErrors());
                 }
 
                 $updateUser->password   = $input['password'];
@@ -381,7 +381,7 @@ class User extends BaseController
 
             // Redirect to user management
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data' . $input['username']]);
-            return redirect()->back()->with('message', 'Data berhasil diperbaharui.');
+            return redirect()->to('users')->with('message', 'Data berhasil diperbaharui.');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -418,7 +418,7 @@ class User extends BaseController
             ]);
             $usersModel->delete($id);
 
-            return redirect()->to('users')->with('massage', lang('Global.deleted'));
+            return redirect()->to('users')->with('errors', 'Data berhasil dihapus');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -437,8 +437,8 @@ class User extends BaseController
             $grouparr = ['superuser', 'admin', 'owner', 'marketing', 'design', 'production', 'client pusat', 'client cabang', 'finance'];
             // Parsing data to view
             $data                   = $this->data;
-            $data['title']          = lang('Global.employeeList');
-            $data['description']    = lang('Global.employeeListDesc');
+            $data['title']          = 'Hak Akses';
+            $data['description']    = 'Pengelolaan Hak Akses';
             $data['groups']         = $groups;
             $data['permissions']    = $permission;
             $data['GroupModel']     = new GroupModel();
@@ -470,7 +470,7 @@ class User extends BaseController
                 $authorize->addPermissionToGroup($permissionid, $id);
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menambahkan akses baru']);
             }
-            return redirect()->to('users/access-control')->with('message', lang('Global.saved'));
+            return redirect()->to('users/access-control')->with('message', 'Data berhasil ditambahkan');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
