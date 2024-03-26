@@ -152,6 +152,12 @@
                                         }else if ($('#role').find(":selected").text() === "marketing"){
                                             $("#marketingcode").removeAttr("hidden");
                                             $("#kodemarketing").attr("required", true);
+                                            $("#pusat").attr("hidden", true);
+                                            $("#kliencabang").attr("hidden", true);
+                                            $("#company").val("");
+                                            $("#company").attr("required", false);
+                                            $("#cabang").attr("required", false);
+                                            $("#compid").val("");
                                         } else {
                                             $("#pusat").attr("hidden", true);
                                             $("#kliencabang").attr("hidden", true);
@@ -538,11 +544,15 @@
                                             if ($('#role<?= $user->id; ?>').find(":selected").text() === "client pusat") {
                                                 $("#pusat<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#kliencabang<?= $user->id; ?>").attr("hidden", true);
-                                                $("#kodemarketing<?= $user->id; ?>").val("");
                                                 $("input[id='cabang<?= $user->id; ?>']").attr("required", false);
+                                                $("#marketingcode<?= $user->id; ?>").attr("hidden",true);
+                                                $("#kodemarketing<?= $user->id; ?>").attr("required",false);
+                                                $("#kodemarketing<?= $user->id; ?>").val("");
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
                                                 $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
+                                                $("#marketingcode<?= $user->id; ?>").attr("hidden",true);
+                                                $("#kodemarketing<?= $user->id; ?>").attr("required",false);
                                                 $("#kodemarketing<?= $user->id; ?>").val("");
                                             }else if($('#role<?= $user->id; ?>').find(":selected").text() === "marketing")  {
                                                 $("#marketingcode<?= $user->id; ?>").removeAttr("hidden");

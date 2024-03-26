@@ -2907,50 +2907,10 @@
                             </div>
 
                             <div class="toggleinvoice<?= $project['id'] ?>" hidden>
+                                <?php if (empty($projectdata[$project['id']]['finnance'])){ ?>
+                                    <p>* Mohon tambahkan pegawai keuangan terlebih dahulu untuk dapat melakukan upload invoice</p>
+                                <?php } ?>
                                 <div class="uk-margin-small uk-child-width-1-2" uk-grid>
-
-                                    <!-- Invoice Generate Button -->
-                                    <div class="uk-width-1-1">
-                                        <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
-                                        <p class="uk-margin" uk-margin>
-                                            <?php
-                                            // Invoice I
-                                            if (!empty($project)) {
-                                                if ($project['status_spk'] === "1") {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel1/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
-                                                }
-                                            }
-
-                                            // Invoice II
-                                            if (!empty($project)) {
-                                                if (!empty($projectdata[$project['id']]['sertrim'])) {
-                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
-                                                    }
-                                                }
-                                            }
-
-                                            // Invoice III
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" || $progress >= 95  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel3/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
-                                                    $status = "Retensi";
-                                                }
-                                            }
-
-                                            // Invoice IV
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] &&  $progress >= 95) {
-                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel4/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
-                                                        $progress   = "100";
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                        </p>
-                                    </div>
-
                                     <!-- Invoice I -->
                                     <div>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -3144,15 +3104,25 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <div class="uk-margin-small">
-                                                        <p class="uk-margin-left-remove" uk-margin>
-                                                        <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
-                                                            <input type="file" multiple>
-                                                            <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice I</button>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
+                                                                <input type="file" multiple>
+                                                                <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice I</button>
+                                                            </div>
+                                                            </p>
                                                         </div>
-                                                        </p>
-                                                    </div>
+                                                    <?php }else{ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                                <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1" disabled>Upload invoice I</button>
+                                                            </div>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
                                                 <?php } ?>
 
                                                 <script>
@@ -3439,15 +3409,25 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <div class="uk-margin-small">
-                                                        <p class="uk-margin-left-remove" uk-margin>
-                                                        <div class="js-upload-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" uk-form-custom>
-                                                            <input type="file" multiple>
-                                                            <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice II</button>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" uk-form-custom>
+                                                                <input type="file" multiple>
+                                                                <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice II</button>
+                                                            </div>
+                                                            </p>
                                                         </div>
-                                                        </p>
-                                                    </div>
+                                                    <?php }else{ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" uk-form-custom>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1" disabled>Upload invoice II</button>
+                                                            </div>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
                                                 <?php } ?>
 
                                                 <script>
@@ -3734,15 +3714,25 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <div class="uk-margin-small">
-                                                        <p class="uk-margin-left-remove" uk-margin>
-                                                        <div class="js-upload-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" uk-form-custom>
-                                                            <input type="file" multiple>
-                                                            <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice III</button>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" uk-form-custom>
+                                                                <input type="file" multiple>
+                                                                <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice III</button>
+                                                            </div>
+                                                            </p>
                                                         </div>
-                                                        </p>
-                                                    </div>
+                                                    <?php } else { ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" uk-form-custom>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1" disabled>Upload invoice III</button>
+                                                            </div>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
                                                 <?php } ?>
 
                                                 <script>
@@ -4029,15 +4019,25 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <div class="uk-margin-small">
-                                                        <p class="uk-margin-left-remove" uk-margin>
-                                                        <div class="js-upload-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" uk-form-custom>
-                                                            <input type="file" multiple>
-                                                            <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                                            <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice IV</button>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" uk-form-custom>
+                                                                <input type="file" multiple>
+                                                                <progress id="js-progressbar-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload invoice IV</button>
+                                                            </div>
+                                                            </p>
                                                         </div>
-                                                        </p>
-                                                    </div>
+                                                    <?php }else{ ?>
+                                                        <div class="uk-margin-small">
+                                                            <p class="uk-margin-left-remove" uk-margin>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" uk-form-custom>
+                                                                <button class="uk-button uk-button-default" type="button" tabindex="-1" disabled>Upload invoice IV</button>
+                                                            </div>
+                                                            </p>
+                                                        </div>
+                                                    <?php } ?>
                                                 <?php } ?>
 
                                                 <script>
@@ -4134,6 +4134,49 @@
                                         </div>
                                     </div>
                                     <!-- Invoice IV End -->
+
+                                    <!-- Invoice Generate Button -->
+                                    <div class="uk-width-1-1">
+                                        <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
+                                        <p class="uk-margin" uk-margin>
+                                            <?php
+                                            // Invoice I
+                                            if (!empty($project)) {
+                                                if ($project['status_spk'] === "1") {
+                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel1/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
+                                                }
+                                            }
+
+                                            // Invoice II
+                                            if (!empty($project)) {
+                                                if (!empty($projectdata[$project['id']]['sertrim'])) {
+                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                    }
+                                                }
+                                            }
+
+                                            // Invoice III
+                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
+                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" || $progress >= 95  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
+                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel3/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                    $status = "Retensi";
+                                                }
+                                            }
+
+                                            // Invoice IV
+                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
+                                                if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
+                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] &&  $progress >= 95) {
+                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel4/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                        $progress   = "100";
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                    <!-- End Of Invoice Generate Button -->
                                 </div>
                             </div>
                             <script type="text/javascript">

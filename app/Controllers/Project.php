@@ -59,9 +59,11 @@ class Project extends BaseController
             $LogModel               = new LogModel();
 
             // Populating Data
+            $authorize  = $auth = service('authorization');
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
+
 
             // Users
             $this->builder = $this->db->table('users');
@@ -100,6 +102,15 @@ class Project extends BaseController
             $this->builder->orWhere('auth_groups.name =', 'client pusat');
             $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $picinv = $this->builder->get()->getResult();
+
+            // Finance
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'finance');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $finances = $this->builder->get()->getResult();
 
             $projectdata    = [];
             if (!empty($projects)) {
@@ -360,6 +371,10 @@ class Project extends BaseController
                     // $projectdata[$project['id']]['pic']         = $users;
                     $projectdata[$project['id']]['pic']         = $picinv;
 
+                    // Finance
+                    $projectdata[$project['id']]['finnance']         = $finances;
+
+
                     // Bukti Pembayaran
                     $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
 
@@ -367,8 +382,7 @@ class Project extends BaseController
                     $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
 
                     // Notifikasi
-                    $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid',$this->data['uid'])->find();
-
+                    $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid', $this->data['uid'])->find();
                 }
             } else {
                 $rabs           = [];
@@ -566,8 +580,8 @@ class Project extends BaseController
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $input['marketing'],
-                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
-                    'url'           => 'project?projectid='.$projectid,
+                    'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                    'url'           => 'project?projectid=' . $projectid,
                     'status'        => 0,
                 ];
 
@@ -577,20 +591,20 @@ class Project extends BaseController
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
-                        'url'           => 'project?projectid='.$projectid,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'project?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Designer
                 foreach ($designers as $designer) {
                     $notifdesigner  = [
                         'userid'        => $designer['id'],
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
-                        'url'           => 'project?projectid='.$projectid,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'project?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -601,8 +615,8 @@ class Project extends BaseController
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].') dengan desain '.$input['design'],
-                        'url'           => 'dashboard/'.$input['company'].'?projectid='.$projectid,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'dashboard/' . $input['company'] . '?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -612,8 +626,8 @@ class Project extends BaseController
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $input['marketing'],
-                    'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
-                    'url'           => 'project?projectid='.$projectid,
+                    'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                    'url'           => 'project?projectid=' . $projectid,
                     'status'        => 0,
                 ];
 
@@ -623,8 +637,8 @@ class Project extends BaseController
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
-                        'url'           => 'project?projectid='.$projectid,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                        'url'           => 'project?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -635,8 +649,8 @@ class Project extends BaseController
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
-                        'keterangan'    => $marketings->firstname.' '.$marketings->lastname.' baru saja menambahkan Proyek Baru ('.$input['name'].')',
-                        'url'           => 'dashboard/'.$input['company'].'?projectid='.$projectid,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                        'url'           => 'dashboard/' . $input['company'] . '?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -721,7 +735,9 @@ class Project extends BaseController
 
             if (!empty($input['spk'])) {
                 if ($input['spk'] != $pro['spk']) {
-                    unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                    if (!empty($pro['spk'])) {
+                        unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                    }
                     $spk        = $input['spk'];
                     $statusspk  = 1;
                     $status     = 4;
@@ -941,45 +957,45 @@ class Project extends BaseController
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Desain telah diterbitkan',
-                        'url'           => 'project?projectid='.$pro['id'],
+                        'url'           => 'project?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifmarketing);
-    
+
                     // Notif Admin
                     foreach ($admins as $admin) {
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid='.$pro['id'],
+                            'url'           => 'project?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifadmin);
                     }
-    
+
                     // Notif Designer
                     foreach ($designers as $designer) {
                         $notifdesigner  = [
                             'userid'        => $designer['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid='.$pro['id'],
+                            'url'           => 'project?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifdesigner);
                     }
-    
+
                     // Notif Client
                     foreach ($clients as $clin) {
                         $notifclient  = [
                             'userid'        => $clin->id,
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
+                            'url'           => 'dashboard/' . $pro['clientid'] . '?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifclient);
                     }
                 } else {
@@ -993,50 +1009,50 @@ class Project extends BaseController
                         'status'        => 0,
                     ];
                     $DesignModel->save($datadesign);
-                    
+
                     // Notif Marketing
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Desain telah diperbaharui',
-                        'url'           => 'project?projectid='.$pro['id'],
+                        'url'           => 'project?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifmarketing);
-    
+
                     // Notif Admin
                     foreach ($admins as $admin) {
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Desain telah diperbaharui',
-                            'url'           => 'project?projectid='.$pro['id'],
+                            'url'           => 'project?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifadmin);
                     }
-    
+
                     // Notif Designer
                     foreach ($designers as $designer) {
                         $notifdesigner  = [
                             'userid'        => $designer['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid='.$pro['id'],
+                            'url'           => 'project?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifdesigner);
                     }
-    
+
                     // Notif Client
                     foreach ($clients as $clin) {
                         $notifclient  = [
                             'userid'        => $clin->id,
                             'keterangan'    => 'Desain telah diperbaharui',
-                            'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
+                            'url'           => 'dashboard/' . $pro['clientid'] . '?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
-    
+
                         $NotificationModel->insert($notifclient);
                     }
                 }
@@ -1145,15 +1161,15 @@ class Project extends BaseController
                         'userid'            => $input['picpro'][$picprod['id']],
                     ];
                     $ProductionModel->save($inputpropic);
-                    
+
                     // Notif Production
                     $notifproduksi  = [
                         'userid'        => $input['picpro'][$picprod['id']],
                         'keterangan'    => 'Ditugaskan sebagai PIC Produksi',
-                        'url'           => 'project?projectid='.$pro['id'],
+                        'url'           => 'project?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifproduksi);
                 }
             }
@@ -1351,12 +1367,12 @@ class Project extends BaseController
                     'created_at'    => $tanggalkirim,
                 ];
                 $BuktiModel->insert($databukti);
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                    'url'           => 'project?projectid='.$pro['id'],
+                    'url'           => 'project?projectid=' . $pro['id'],
                     'status'        => 0,
                 ];
 
@@ -1367,7 +1383,7 @@ class Project extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                        'url'           => 'project?projectid='.$pro['id'],
+                        'url'           => 'project?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
@@ -1379,7 +1395,7 @@ class Project extends BaseController
                     $notifclient  = [
                         'userid'        => $clin->id,
                         'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$pro['clientid'].'?projectid='.$pro['id'],
+                        'url'           => 'dashboard/' . $pro['clientid'] . '?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
@@ -2371,6 +2387,7 @@ class Project extends BaseController
             $noinv      = "";
             $ppnvalue   = "";
             $pphvalue   = "";
+            $npwpdpsa   = "";
 
             if (!empty($projects)) {
                 // INVOICE I
@@ -2581,7 +2598,8 @@ class Project extends BaseController
         }
     }
 
-    public function invoiceexcel1($id){
+    public function invoiceexcel1($id)
+    {
 
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
             // NEW FUNCTION INVOICE
@@ -2711,6 +2729,7 @@ class Project extends BaseController
             $noinv      = "";
             $ppnvalue   = "";
             $pphvalue   = "";
+            $npwpdpsa   = "";
 
             if (!empty($projects)) {
                 // INVOICE I
@@ -2816,9 +2835,9 @@ class Project extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
     }
-    public function invoiceexcel2($id){
+    public function invoiceexcel2($id)
+    {
 
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
 
@@ -2948,6 +2967,7 @@ class Project extends BaseController
             $noinv      = "";
             $ppnvalue   = "";
             $pphvalue   = "";
+            $npwpdpsa   = "";
 
             if (!empty($projects)) {
 
@@ -3053,9 +3073,9 @@ class Project extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
     }
-    public function invoiceexcel3($id){
+    public function invoiceexcel3($id)
+    {
 
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
             // NEW FUNCTION INVOICE
@@ -3185,6 +3205,7 @@ class Project extends BaseController
             $noinv      = "";
             $ppnvalue   = "";
             $pphvalue   = "";
+            $npwpdpsa   = "";
 
             if (!empty($projects)) {
 
@@ -3292,9 +3313,9 @@ class Project extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
     }
-    public function invoiceexcel4($id){
+    public function invoiceexcel4($id)
+    {
 
         if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
             // Calling models
@@ -3423,6 +3444,7 @@ class Project extends BaseController
             $noinv      = "";
             $ppnvalue   = "";
             $pphvalue   = "";
+            $npwpdpsa   = "";
 
             if (!empty($projects)) {
 
@@ -3548,7 +3570,6 @@ class Project extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
     }
 
     public function invoiceview($id)
