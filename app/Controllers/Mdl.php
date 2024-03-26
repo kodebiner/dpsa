@@ -127,6 +127,9 @@ class Mdl extends BaseController
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;
             $data['pager']          =   $PaketModel->pager;
+            $data['idmdl']          =   $this->request->getGet('mdlid');
+            $data['idpaket']        =   $this->request->getGet('paketid');
+            $data['idparent']       =   $this->request->getGet('parentid');
 
             // Return
             return view('mdl', $data);
@@ -423,13 +426,15 @@ class Mdl extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.edit', $this->data['uid'])) {
             // Populating Data
-            $MdlModel   = new MdlModel();
-            $LogModel   = new LogModel();
+            $MdlModel       = new MdlModel();
+            $MdlPaketModel  = new MdlPaketModel();
+            $PaketModel     = new PaketModel();
+            $LogModel       = new LogModel();
 
             // Get Data
-            $input = $this->request->getPost();
-            $mdls  = $MdlModel->find($id);
-            $str = $input['price'];
+            $input  = $this->request->getPost();
+            $mdls   = $MdlModel->find($id);
+            $str    = $input['price'];
 
             function strupdate($str)
             {
@@ -481,6 +486,11 @@ class Mdl extends BaseController
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
+
+            $mdlpakets          = $MdlPaketModel->where('mdlid', $id)->where('paketid', $input['paketid'.$id])->first();
+            $pakets             = $PaketModel->find($mdlpakets['paketid']);
+            $parents            = $PaketModel->find($pakets['parentid']);
+
             $mdlup = [
                 'id'            => $id,
                 'name'          => $input['name'],
@@ -493,13 +503,12 @@ class Mdl extends BaseController
                 'photo'         => $input['photo'],
                 'price'         => strupdate($str),
             ];
-
             // Save Data MDL
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah MDL ' . $input['name']]);
             $MdlModel->save($mdlup);
 
             // Return
-            return redirect()->back()->with('message', 'Data Behasil Diperbaharui');
+            return redirect()->to('mdl?parentid=' . $parents['id'] . '&paketid=' . $pakets['id'] . '&mdlid=' . $id)->with('message', 'Data Behasil Diperbaharui');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

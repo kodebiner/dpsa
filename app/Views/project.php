@@ -4185,8 +4185,10 @@
                                     <div class="uk-child-1-2 uk-margin uk-margin-left" uk-grid>
                                         <div>
                                             <label class="uk-form-label" for="tanggal">Tanggal Pembayaran</label>
-                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                            <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                            <div class="uk-inline">
+                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                            </div>
                                         </div>
 
                                         <div>
@@ -4218,7 +4220,10 @@
                                                         ?>
                                                         <tr>
                                                             <td>
-                                                                <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" />
+                                                                <div class="uk-inline">
+                                                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                                                    <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" />
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <input class="uk-input uk-form-width-large" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['qty'] ?>" />

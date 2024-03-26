@@ -170,7 +170,7 @@
                     $paketCount = count($mdldata[$parent['id']]['paket']);
                     foreach ($mdldata[$parent['id']]['paket'] as $paket) {
                     ?>
-                        <tr class="togglepaket<?= $parent['id'] ?>" hidden>
+                        <tr class="togglepaket<?= $parent['id'] ?>" id="togglepaket<?= $parent['id'] ?>" hidden>
                             <td>
                                 <select class="uk-select uk-form-width-xsmall uk-margin-left" aria-label="Paket" id="paketList<?= $paket['id'] ?>" >
                                     <?php
@@ -207,7 +207,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="togglemdl<?= $paket['id'] ?>" hidden>
+                        <tr class="togglemdl<?= $paket['id'] ?>" id="togglemdl<?= $paket['id'] ?>" hidden>
                             <td></td>
                             <td colspan="9">
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -274,7 +274,7 @@
                                     <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                         <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
                                             <div>
-                                                <a class="uk-icon-button" href="#modalupdatemdl<?= $mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
+                                                <a class="uk-icon-button" href="#modalupdatemdl<?= $paket['id'].$mdl['id'] ?>" uk-icon="pencil" uk-toggle></a>
                                             </div>
                                         <?php } ?>
                                         <?php if ($authorize->hasPermission('admin.mdl.delete', $uid)) { ?>
@@ -357,7 +357,6 @@
                             } else {
                                 document.getElementById('openpaket<?= $parent['id'] ?>').removeAttribute('hidden');
                                 document.getElementById('closepaket<?= $parent['id'] ?>').setAttribute('hidden', '');
-
                             }
                         });
 
@@ -1673,4 +1672,43 @@
     }
 } ?>
 <!-- Modal Update MDL per Sub Paket End -->
+<?php if ((!empty($idparent)) && (!empty($idmdl)) && (!empty($idpaket))) { ?>
+    <script>
+        $(document).ready(function() {
+            var unhideparent = document.getElementById('togglepaket<?= $idparent ?>');
+            unhideparent.removeAttribute('hidden');
+
+            var openparent = document.getElementById('openpaket<?=$idparent?>');
+
+            var closeparent = document.getElementById('closepaket<?=$idparent?>');
+
+            if (closeparent.hasAttribute('hidden')) {
+                closeparent.removeAttribute('hidden');
+                openparent.setAttribute('hidden', '');
+            } else {
+                openparent.removeAttribute('hidden');
+                closeparent.setAttribute('hidden', '');
+            }
+
+            var unhidepaket = document.getElementById('togglemdl<?= $idpaket ?>');
+            unhidepaket.removeAttribute('hidden');
+
+            var openpaket = document.getElementById('open<?=$idpaket?>');
+
+            var closepaket = document.getElementById('close<?=$idpaket?>');
+
+            if (closepaket.hasAttribute('hidden')) {
+                closepaket.removeAttribute('hidden');
+                openpaket.setAttribute('hidden', '');
+            } else {
+                openpaket.removeAttribute('hidden');
+                closepaket.setAttribute('hidden', '');
+            }
+        });
+        
+        // window.addEventListener('load', () => setTimeout(() => {
+        //     document.querySelector('.mdlList<?= $idpaket . $idmdl ?>').scrollIntoView()
+        // }))
+    </script>
+<?php } ?>
 <?= $this->endSection() ?>
