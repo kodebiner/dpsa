@@ -1182,7 +1182,7 @@
             <!-- Modal Update MDL per Sub Paket -->
             <?php foreach ($paket['mdl'] as $mdl) { ?>
                 <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
-                    <div class="uk-modal-container" id="modalupdatemdl<?= $mdl['id'] ?>" uk-modal>
+                    <div class="uk-modal-container" id="modalupdatemdl<?= $paket['id'].$mdl['id'] ?>" uk-modal>
                         <div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto>
                             <div class="uk-modal-header">
                                 <h2 class="uk-modal-title">Ubah MDL <?= $mdl['name'] ?></h2>
@@ -1192,6 +1192,7 @@
                             <div class="uk-modal-body">
                                 <form class="uk-form-stacked" role="form" action="mdl/update/<?= $mdl['id'] ?>" method="post">
                                     <?= csrf_field() ?>
+                                    <input type="text" class="uk-input" id="paketid<?= $mdl['id'] ?>" name="paketid<?= $mdl['id'] ?>" value="<?= $paket['id'] ?>" hidden/>
 
                                     <div class="uk-margin-bottom">
                                         <label class="uk-form-label" for="name">Nama</label>

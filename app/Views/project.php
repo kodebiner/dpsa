@@ -1626,7 +1626,6 @@
                                                                 }
 
                                                                 var tdphoto = document.createElement('td');
-                                                                tdphoto.innerHTML = emdlarray[t]['photo']
 
                                                                 var divlightbox = document.createElement('div');
                                                                 divlightbox.setAttribute('uk-lightbox', '')
@@ -4178,6 +4177,74 @@
                                     </div>
                                     <!-- End Of Invoice Generate Button -->
                                 </div>
+
+                                <!-- Payment Record Section -->
+                                <div class="uk-margin">
+                                    <div class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Catatan Pembayaran</div>
+
+                                    <div class="uk-child-1-2 uk-margin uk-margin-left" uk-grid>
+                                        <div>
+                                            <label class="uk-form-label" for="tanggal">Tanggal Pembayaran</label>
+                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                            <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                        </div>
+
+                                        <div>
+                                            <label class="uk-form-label" for="nominal">Nominal Pembayaran</label>
+                                            <input class="uk-input uk-form-width-medium" id="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp 0,-" />
+                                        </div>
+                                    </div>
+
+                                    <?php if ($projectdata[$project['id']]['pembayaran']){ ?>
+                                        <div class="uk-overflow-auto uk-margin-left">
+                                            <table class="uk-table uk-table-middle uk-table-hover uk-table-divider">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tanggal</th>
+                                                        <th>Nominal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($projectdata[$project['id']]['pembayaran'] as $payment) { ?>
+                                                        <?php 
+                                                        $dateTimeObj = new DateTime($payment['date'], new DateTimeZone('Asia/Jakarta'));
+                                                        $dateFormatted =
+                                                            IntlDateFormatter::formatObject(
+                                                                $dateTimeObj,
+                                                                'eeee, d MMMM y',
+                                                                'id'
+                                                            );
+                                                        $dateact = ucwords($dateFormatted);    
+                                                        ?>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" />
+                                                            </td>
+                                                            <td>
+                                                                <input class="uk-input uk-form-width-large" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['qty'] ?>" />
+                                                            </td>
+                                                        </tr>
+                                                        <script>
+                                                            $(function() {
+                                                                $("#updatepayment<?= $project['id'] ?><?= $payment['id'] ?>").datepicker({
+                                                                    dateFormat: "yy-mm-dd",
+                                                                });
+                                                            });
+                                                        </script>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php }?>
+                                </div>
+                                <script>
+                                $(function() {
+                                    $("#datepayment<?= $project['id'] ?>").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                    });
+                                });
+                                </script>
+                                <!-- Payment Record Section End -->
                             </div>
                             <script type="text/javascript">
                                 // Dropdown Finance

@@ -18,6 +18,7 @@ use App\Models\CustomRabModel;
 use App\Models\GconfigModel;
 use App\Models\BuktiModel;
 use App\Models\NotificationModel;
+use App\Models\PembayaranModel;
 use App\Models\LogModel;
 
 class Project extends BaseController
@@ -56,6 +57,7 @@ class Project extends BaseController
             $BuktiModel             = new BuktiModel();
             $UserModel              = new UserModel();
             $NotificationModel      = new NotificationModel();
+            $PembayaranModel        = new PembayaranModel();
             $LogModel               = new LogModel();
 
             // Populating Data
@@ -355,6 +357,9 @@ class Project extends BaseController
                     $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
                     $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
                     $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
+
+                    // Pembayaran
+                    $projectdata[$project['id']]['pembayaran']  = $PembayaranModel->where('projectid', $project['id'])->find();
 
                     // REFERENSI
                     $projectdata[$project['id']]['referensi']   = $ReferensiModel->findAll();
@@ -699,6 +704,7 @@ class Project extends BaseController
             $BuktiModel         = new BuktiModel();
             $UserModel          = new UserModel();
             $NotificationModel  = new NotificationModel();
+            $PembayaranModel    = new PembayaranModel();
             $CompanyModel       = new CompanyModel();
             $LogModel           = new LogModel();
 
@@ -1402,6 +1408,73 @@ class Project extends BaseController
                     $NotificationModel->insert($notifclient);
                 }
             }
+
+            // Record Payment Data
+            if ((!empty($input['qtypayment' . $id])) || (!empty($input['datepayment' . $id]))) {
+                $paydate = date('Y-m-d H:i:s', strtotime($input['datepayment' . $id]));
+
+                $reportpayment  = [
+                    'projectid' => $id,
+                    'date'      => $paydate,
+                    'qty'       => $input['qtypayment' . $id]
+                ];
+
+                $PembayaranModel->insert($reportpayment);
+            }
+
+            // Update Record Payment Data
+            // if ((isset($input['upqtypayment' . $id])) || isset($input['updatepayment' . $id])) {
+            //     if ((!empty($input['upqtypayment' . $id])) || (!empty($input['updatepayment' . $id]))) {
+            //         foreach ($input['updatepayment' . $id] as $paymentid => $datepayment) {
+            //             foreach ($input['upqtypayment' . $id] as $paymentid => $qtypayment) {
+            //                 $uppaydate  = date('Y-m-d H:i:s', strtotime($datepayment));
+    
+            //                 $updatereportpayment  = [
+            //                     'id'        => $paymentid,
+            //                     'projectid' => $id,
+            //                     'date'      => $uppaydate,
+            //                     'qty'       => $qtypayment,
+            //                 ];
+    
+            //                 $PembayaranModel->save($updatereportpayment);
+            //             }
+            //         }
+            //     }
+            // }
+
+            // Update Qty Payment Record
+            if (isset($input['updatepayment' . $id])) {
+                if (!empty($input['updatepayment' . $id])) {
+                    foreach ($input['upqtypayment' . $id] as $paymentid => $qtypayment) {
+    
+                        $upqtyreportpayment  = [
+                            'id'        => $paymentid,
+                            'projectid' => $id,
+                            'qty'       => $qtypayment,
+                        ];
+
+                        $PembayaranModel->save($upqtyreportpayment);
+                    }
+                }
+            }
+
+            // Update Date Payment Record
+            if (isset($input['upqtypayment' . $id])) {
+                if (!empty($input['upqtypayment' . $id])) {
+                    foreach ($input['updatepayment' . $id] as $payid => $datepayment) {
+                        $uppaydate  = date('Y-m-d H:i:s', strtotime($datepayment));
+    
+                        $upreportpayment  = [
+                            'id'        => $payid,
+                            'projectid' => $id,
+                            'date'      => $uppaydate,
+                        ];
+
+                        $PembayaranModel->save($upreportpayment);
+                    }
+                }
+            }
+            dd($input);
 
             // Project Data
             $project = [
