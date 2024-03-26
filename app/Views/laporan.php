@@ -147,13 +147,6 @@
                 <div class="uk-margin-small uk-flex uk-flex-center">
                     <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
                 </div>
-                <!-- <div class="uk-margin-small uk-flex uk-flex-center">
-                    <select class="uk-select uk-form-width-medium" id="rolesearch" name="rolesearch">
-                        <option value="0">Progress</option>
-                        <option value="1" </?= (isset($input['rolesearch']) && ($input['rolesearch'] === '1') ? 'selected' : '') ?>>Selesai</option>
-                        <option value="2" </?= (isset($input['rolesearch']) && ($input['rolesearch'] === '2') ? 'selected' : '') ?>>Dalam Proses</option>
-                    </select>
-                </div> -->
                 <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                     <div>Tampilan</div>
                     <div>

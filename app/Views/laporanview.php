@@ -54,52 +54,9 @@
 	header("Content-type: application/vnd-ms-excel");
 	header("Content-Disposition: attachment; filename=Laporan.xls");
 	?>
-    <!-- <table style="width:100%">
-        <tr>
-            <td style="text-align:right; width:45%; height: 100px;"><img src="img/logo.png" width="100px" height="100px"></td>
-            <td>
-                <font style="font-weight:bold; font-size: 8px;"> PT. DHARMA PUTRA SEJAHTERA ABADI</font><br>
-                <font style="font-weight:bold; font-size: 8px;"> Interior & Furniture Manufaktur</font><br>
-                <font style="font-size: 5px;">Jl. Mataraman No.88, Ringinsari, Maguwoharjo, Depok, Sleman, Yogyakarta.</font><br>
-                <font style="font-size: 5px;">Telephone : (0274) 2800089 Fax : (0274) 4332246</font><br>
-                <font style="font-size: 5px;">Email : dpsa@gmail.com</font><br>
-                <font style="font-size: 5px;">Website : dharmaputra04.com</font><br>
-            </td>
-        </tr>
-    </table> -->
-    <table>
-        <tr></tr>
-        <tr>
-            <td>Total Jumlah Proyek :</td>
-            <td style="text-align: left; font-weight:bold;"> <?= $total ?></td>
-            <td>
-                Total SPK :
-                <?php
-                    $spkvalue = [];
-                    foreach ($projects as $project) {
-                        $spkvalue[] = $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'];
-                    }
-                ?>
-            </td>
-            <td  style="text-align: left; font-weight:bold;"> <?= "Rp." . number_format(array_sum($spkvalue), 0, ',', '.') ?></td>
-            <td>
-                <?php
-                $selesai = 0;
-                foreach ($projects as $project) {
-                    if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']) {
-                        $selesai += 1;
-                    }
-                }
-                ?>
-                Total Proyek Selesai : 
-            </td>
-            <td  style="text-align: left; font-weight:bold;"> <?= $selesai ?></td>
-            <td> Total Proyek Dalam Proses :</td>
-            <td  style="text-align: left; font-weight:bold;"> <?= $total - $selesai ?></td>
-        </tr>
-    </table>
-    <tr></tr>
+
     <table class="uk-table uk-table-justify uk-table-middle uk-table-divider">
+        <tr></tr>
         <thead>
             <tr>
                 <th class="uk-width-large">Nama Proyek</th>
@@ -128,6 +85,44 @@
                 </tr>
             <?php } ?>
         </tbody>
+    </table>
+
+    <table>
+        <tr></tr>
+        <tr>
+            <td style="font-weight:bold;">Total Jumlah Proyek</td>
+            <td style="text-align: left; font-weight:bold;">: <?= $total ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">
+                <?php
+                $selesai = 0;
+                foreach ($projects as $project) {
+                    if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']) {
+                        $selesai += 1;
+                    }
+                }
+                ?>
+                Total Proyek Selesai 
+            </td>
+            <td style="text-align: left; font-weight:bold;">: <?= $selesai ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;"> Total Proyek Dalam Proses </td>
+            <td style="text-align: left; font-weight:bold;">: <?= $total - $selesai ?></td>
+        </tr> 
+        <tr>
+            <td style="font-weight:bold;">
+                Total SPK 
+                <?php
+                    $spkvalue = [];
+                    foreach ($projects as $project) {
+                        $spkvalue[] = $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'];
+                    }
+                ?>
+            </td>
+            <td style="text-align: left; font-weight:bold;">: <?= "Rp." . number_format(array_sum($spkvalue), 0, ',', '.') ?></td>
+        </tr>
     </table>
 </body>
 
