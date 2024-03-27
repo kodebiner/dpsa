@@ -1266,9 +1266,7 @@
                                                             <tr>
                                                                 <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
                                                                 <td>
-                                                                    <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {
-                                                                                                                                                                                echo $projectdata[$project['id']]['shippingcost']['price'];
-                                                                                                                                                                            } ?>" />
+                                                                    <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?>" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" />
                                                                 </td>
                                                             </tr>
 
@@ -1290,11 +1288,136 @@
                                                                         <td></td>
                                                                         <td></td>
                                                                         <td>
-                                                                            <input type="number" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['price'] ?>" />
+                                                                            <input type="text" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="<?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" />
                                                                         </td>
                                                                     </tr>
+                                                                    <script>
+                                                                        $("input[data-type='curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>']").on({
+                                                                            keyup: function() {
+                                                                                formatCurrency($(this));
+                                                                            },
+                                                                            blur: function() {
+                                                                                formatCurrency($(this), "blur");
+                                                                            }
+                                                                        });
+
+                                                                        function formatNumber(n) {
+                                                                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                                        }
+
+                                                                        function formatCurrency(input, blur) {
+
+                                                                            var input_val = input.val();
+
+                                                                            if (input_val === "") {
+                                                                                return;
+                                                                            }
+
+                                                                            var original_len = input_val.length;
+
+                                                                            var caret_pos = input.prop("selectionStart");
+
+                                                                            if (input_val.indexOf(".") >= 0) {
+
+                                                                                var decimal_pos = input_val.indexOf(".");
+
+                                                                                var left_side = input_val.substring(0, decimal_pos);
+                                                                                var right_side = input_val.substring(decimal_pos);
+
+                                                                                left_side = formatNumber(left_side);
+
+                                                                                right_side = formatNumber(right_side);
+
+                                                                                if (blur === "blur") {
+                                                                                    right_side += "";
+                                                                                }
+
+                                                                                right_side = right_side.substring(0, 0);
+
+                                                                                input_val = "Rp" + left_side + "." + right_side;
+
+                                                                            } else {
+
+                                                                                input_val = formatNumber(input_val);
+                                                                                input_val = "Rp" + input_val;
+
+                                                                                if (blur === "blur") {
+                                                                                    input_val += "";
+                                                                                }
+                                                                            }
+
+                                                                            input.val(input_val);
+
+                                                                            var updated_len = input_val.length;
+                                                                            caret_pos = updated_len - original_len + caret_pos;
+                                                                            input[0].setSelectionRange(caret_pos, caret_pos);
+                                                                        }
+                                                                    </script>
                                                             <?php }
                                                             } ?>
+
+                                                            <script>
+                                                                $("input[data-type='curencyupdate<?= $project['id'] ?>']").on({
+                                                                    keyup: function() {
+                                                                        formatCurrency($(this));
+                                                                    },
+                                                                    blur: function() {
+                                                                        formatCurrency($(this), "blur");
+                                                                    }
+                                                                });
+
+                                                                function formatNumber(n) {
+                                                                    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                                }
+
+                                                                function formatCurrency(input, blur) {
+
+                                                                    var input_val = input.val();
+
+                                                                    if (input_val === "") {
+                                                                        return;
+                                                                    }
+
+                                                                    var original_len = input_val.length;
+
+                                                                    var caret_pos = input.prop("selectionStart");
+
+                                                                    if (input_val.indexOf(".") >= 0) {
+
+                                                                        var decimal_pos = input_val.indexOf(".");
+
+                                                                        var left_side = input_val.substring(0, decimal_pos);
+                                                                        var right_side = input_val.substring(decimal_pos);
+
+                                                                        left_side = formatNumber(left_side);
+
+                                                                        right_side = formatNumber(right_side);
+
+                                                                        if (blur === "blur") {
+                                                                            right_side += "";
+                                                                        }
+
+                                                                        right_side = right_side.substring(0, 0);
+
+                                                                        input_val = "Rp" + left_side + "." + right_side;
+
+                                                                    } else {
+
+                                                                        input_val = formatNumber(input_val);
+                                                                        input_val = "Rp" + input_val;
+
+                                                                        if (blur === "blur") {
+                                                                            input_val += "";
+                                                                        }
+                                                                    }
+
+                                                                    input.val(input_val);
+
+                                                                    var updated_len = input_val.length;
+                                                                    caret_pos = updated_len - original_len + caret_pos;
+                                                                    input[0].setSelectionRange(caret_pos, caret_pos);
+                                                                }
+                                                            </script>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1324,12 +1447,14 @@
                                                         <input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
                                                     </div>
                                                     <div id="createPrice<?= $project['id'] ?>0">
-                                                        <input type="number" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
+                                                        <input type="text" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <script type="text/javascript">
                                                 var createCount = 0;
+                                                var createx = 0;
+                                                var elementExists = document.getElementById("customprice<?= $project['id'] ?>");
 
                                                 function createNewCustomRab(x) {
                                                     createCount++;
@@ -1355,11 +1480,12 @@
                                                     createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
 
                                                     const createPriceInput = document.createElement('input');
-                                                    createPriceInput.setAttribute('type', 'number');
+                                                    createPriceInput.setAttribute('type', 'text');
                                                     createPriceInput.setAttribute('class', 'uk-input');
                                                     createPriceInput.setAttribute('placeholder', 'Harga');
                                                     createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
                                                     createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
+                                                    createPriceInput.setAttribute('data-type', 'customprice' + x + '[' + createCount + ']');
 
                                                     const createRemove = document.createElement('div');
                                                     createRemove.setAttribute('id', 'remove' + x + '' + createCount);
@@ -1377,7 +1503,131 @@
                                                     createRemove.appendChild(createRemoveButton);
                                                     newCreateCustomRab.appendChild(createRemove);
                                                     createCustomRab.appendChild(newCreateCustomRab);
+
+                                                    $("input[id='customprice"+ x +"["+createCount+"]']").on({
+                                                        keyup: function() {
+                                                            formatNumber($(this));
+                                                            formatCurrency($(this));
+                                                        },
+                                                        blur: function() {
+                                                            formatCurrency($(this), "blur");
+                                                        }
+                                                    });
+
+                                                    function formatNumber(n) {
+                                                        return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                    };
+
+                                                    function formatCurrency(input, blur) {
+                                                        var input_val = input.val();
+
+                                                        if (input_val === "") {
+                                                            return;
+                                                        }
+
+                                                        var original_len = input_val.length;
+
+                                                        var caret_pos = input.prop("selectionStart");
+
+                                                        if (input_val.indexOf(".") >= 0) {
+
+                                                            var decimal_pos = input_val.indexOf(".");
+
+                                                            var left_side = input_val.substring(0, decimal_pos);
+                                                            var right_side = input_val.substring(decimal_pos);
+
+                                                            left_side = formatNumber(left_side);
+
+                                                            right_side = formatNumber(right_side);
+
+                                                            if (blur === "blur") {
+                                                                right_side += "";
+                                                            }
+
+                                                            right_side = right_side.substring(0, 0);
+
+                                                            input_val = "Rp" + left_side + "." + right_side;
+
+                                                        } else {
+
+                                                            input_val = formatNumber(input_val);
+                                                            input_val = "Rp" + input_val;
+
+                                                            if (blur === "blur") {
+                                                                input_val += "";
+                                                            }
+                                                        }
+
+                                                        input.val(input_val);
+
+                                                        var updated_len = input_val.length;
+                                                        caret_pos = updated_len - original_len + caret_pos;
+                                                        input[0].setSelectionRange(caret_pos, caret_pos);
+                                                    }
+                                                    
                                                 };
+
+                                                // Currency
+                                                $("input[id='customprice"+ <?= $project['id'] ?> +"[0]']").on({
+                                                        keyup: function() {
+                                                            formatCurrency($(this));
+                                                        },
+                                                        blur: function() {
+                                                            formatCurrency($(this), "blur");
+                                                        }
+                                                    });
+
+                                                    function formatNumber(n) {
+                                                        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                    }
+
+                                                    function formatCurrency(input, blur) {
+
+                                                        var input_val = input.val();
+
+                                                        if (input_val === "") {
+                                                            return;
+                                                        }
+
+                                                        var original_len = input_val.length;
+
+                                                        var caret_pos = input.prop("selectionStart");
+
+                                                        if (input_val.indexOf(".") >= 0) {
+
+                                                            var decimal_pos = input_val.indexOf(".");
+
+                                                            var left_side = input_val.substring(0, decimal_pos);
+                                                            var right_side = input_val.substring(decimal_pos);
+
+                                                            left_side = formatNumber(left_side);
+
+                                                            right_side = formatNumber(right_side);
+
+                                                            if (blur === "blur") {
+                                                                right_side += "";
+                                                            }
+
+                                                            right_side = right_side.substring(0, 0);
+
+                                                            input_val = "Rp" + left_side + "." + right_side;
+
+                                                        } else {
+
+                                                            input_val = formatNumber(input_val);
+                                                            input_val = "Rp" + input_val;
+
+                                                            if (blur === "blur") {
+                                                                input_val += "";
+                                                            }
+                                                        }
+
+                                                        input.val(input_val);
+
+                                                        var updated_len = input_val.length;
+                                                        caret_pos = updated_len - original_len + caret_pos;
+                                                        input[0].setSelectionRange(caret_pos, caret_pos);
+                                                    }
 
                                                 function createRemove<?= $project['id'] ?>(i) {
                                                     const createRemoveElement = document.getElementById('create<?= $project['id'] ?>' + i);
@@ -2906,7 +3156,7 @@
                             </div>
 
                             <div class="toggleinvoice<?= $project['id'] ?>" hidden>
-                                <?php if (empty($projectdata[$project['id']]['finnance'])){ ?>
+                                <?php if (empty($projectdata[$project['id']]['finnance'])) { ?>
                                     <p>* Mohon tambahkan pegawai keuangan terlebih dahulu untuk dapat melakukan upload invoice</p>
                                 <?php } ?>
                                 <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -3103,7 +3353,7 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])) { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
@@ -3113,10 +3363,10 @@
                                                             </div>
                                                             </p>
                                                         </div>
-                                                    <?php }else{ ?>
+                                                    <?php } else { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
-                                                                <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
+                                                            <div class="js-upload-<?= $projectdata[$project['id']]['invoice1']['id'] ?>" uk-form-custom>
                                                                 <button class="uk-button uk-button-default" type="button" tabindex="-1" disabled>Upload invoice I</button>
                                                             </div>
                                                             </p>
@@ -3408,7 +3658,7 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])) { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" uk-form-custom>
@@ -3418,7 +3668,7 @@
                                                             </div>
                                                             </p>
                                                         </div>
-                                                    <?php }else{ ?>
+                                                    <?php } else { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice2']['id'] ?>" uk-form-custom>
@@ -3713,7 +3963,7 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])) { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice3']['id'] ?>" uk-form-custom>
@@ -4018,7 +4268,7 @@
                                                 </div>
 
                                                 <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])){ ?>
+                                                    <?php if (!empty($projectdata[$project['id']]['finnance'])) { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" uk-form-custom>
@@ -4028,7 +4278,7 @@
                                                             </div>
                                                             </p>
                                                         </div>
-                                                    <?php }else{ ?>
+                                                    <?php } else { ?>
                                                         <div class="uk-margin-small">
                                                             <p class="uk-margin-left-remove" uk-margin>
                                                             <div class="js-upload-<?= $projectdata[$project['id']]['invoice4']['id'] ?>" uk-form-custom>
@@ -4193,11 +4443,75 @@
 
                                         <div>
                                             <label class="uk-form-label" for="nominal">Nominal Pembayaran</label>
-                                            <input class="uk-input uk-form-width-medium" id="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp 0,-" />
+                                            <input class="uk-input uk-form-width-medium" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp 0,-" />
                                         </div>
                                     </div>
 
-                                    <?php if ($projectdata[$project['id']]['pembayaran']){ ?>
+                                    <script>
+                                        $("input[id='qtypayment<?= $project['id'] ?>']").on({
+                                        keyup: function() {
+                                            formatCurrency($(this));
+                                        },
+                                        blur: function() {
+                                            formatCurrency($(this), "blur");
+                                        }
+                                        });
+
+                                        function formatNumber(n) {
+                                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                        }
+
+                                        function formatCurrency(input, blur) {
+
+                                            var input_val = input.val();
+
+                                            if (input_val === "") {
+                                                return;
+                                            }
+
+                                            var original_len = input_val.length;
+
+                                            var caret_pos = input.prop("selectionStart");
+
+                                            if (input_val.indexOf(".") >= 0) {
+
+                                                var decimal_pos = input_val.indexOf(".");
+
+                                                var left_side = input_val.substring(0, decimal_pos);
+                                                var right_side = input_val.substring(decimal_pos);
+
+                                                left_side = formatNumber(left_side);
+
+                                                right_side = formatNumber(right_side);
+
+                                                if (blur === "blur") {
+                                                    right_side += "";
+                                                }
+
+                                                right_side = right_side.substring(0, 0);
+
+                                                input_val = "Rp" + left_side + "." + right_side;
+
+                                            } else {
+
+                                                input_val = formatNumber(input_val);
+                                                input_val = "Rp" + input_val;
+
+                                                if (blur === "blur") {
+                                                    input_val += "";
+                                                }
+                                            }
+
+                                            input.val(input_val);
+
+                                            var updated_len = input_val.length;
+                                            caret_pos = updated_len - original_len + caret_pos;
+                                            input[0].setSelectionRange(caret_pos, caret_pos);
+                                        }
+                                    </script>
+
+
+                                    <?php if ($projectdata[$project['id']]['pembayaran']) { ?>
                                         <div class="uk-overflow-auto uk-margin-left">
                                             <table class="uk-table uk-table-middle uk-table-hover uk-table-divider">
                                                 <thead>
@@ -4208,7 +4522,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php foreach ($projectdata[$project['id']]['pembayaran'] as $payment) { ?>
-                                                        <?php 
+                                                        <?php
                                                         $dateTimeObj = new DateTime($payment['date'], new DateTimeZone('Asia/Jakarta'));
                                                         $dateFormatted =
                                                             IntlDateFormatter::formatObject(
@@ -4216,7 +4530,7 @@
                                                                 'eeee, d MMMM y',
                                                                 'id'
                                                             );
-                                                        $dateact = ucwords($dateFormatted);    
+                                                        $dateact = ucwords($dateFormatted);
                                                         ?>
                                                         <tr>
                                                             <td>
@@ -4226,9 +4540,71 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <input class="uk-input uk-form-width-large" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['qty'] ?>" />
+                                                                <input class="uk-input uk-form-width-large" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" />
                                                             </td>
                                                         </tr>
+                                                        <script>
+                                                            $("input[id='upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>']").on({
+                                                            keyup: function() {
+                                                                formatCurrency($(this));
+                                                            },
+                                                            blur: function() {
+                                                                formatCurrency($(this), "blur");
+                                                            }
+                                                            });
+
+                                                            function formatNumber(n) {
+                                                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                            }
+
+                                                            function formatCurrency(input, blur) {
+
+                                                                var input_val = input.val();
+
+                                                                if (input_val === "") {
+                                                                    return;
+                                                                }
+
+                                                                var original_len = input_val.length;
+
+                                                                var caret_pos = input.prop("selectionStart");
+
+                                                                if (input_val.indexOf(".") >= 0) {
+
+                                                                    var decimal_pos = input_val.indexOf(".");
+
+                                                                    var left_side = input_val.substring(0, decimal_pos);
+                                                                    var right_side = input_val.substring(decimal_pos);
+
+                                                                    left_side = formatNumber(left_side);
+
+                                                                    right_side = formatNumber(right_side);
+
+                                                                    if (blur === "blur") {
+                                                                        right_side += "";
+                                                                    }
+
+                                                                    right_side = right_side.substring(0, 0);
+
+                                                                    input_val = "Rp. " + left_side + "." + right_side;
+
+                                                                } else {
+
+                                                                    input_val = formatNumber(input_val);
+                                                                    input_val = "Rp. " + input_val;
+
+                                                                    if (blur === "blur") {
+                                                                        input_val += "";
+                                                                    }
+                                                                }
+
+                                                                input.val(input_val);
+
+                                                                var updated_len = input_val.length;
+                                                                caret_pos = updated_len - original_len + caret_pos;
+                                                                input[0].setSelectionRange(caret_pos, caret_pos);
+                                                            }
+                                                        </script>
                                                         <script>
                                                             $(function() {
                                                                 $("#updatepayment<?= $project['id'] ?><?= $payment['id'] ?>").datepicker({
@@ -4240,14 +4616,14 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    <?php }?>
+                                    <?php } ?>
                                 </div>
                                 <script>
-                                $(function() {
-                                    $("#datepayment<?= $project['id'] ?>").datepicker({
-                                        dateFormat: "yy-mm-dd",
+                                    $(function() {
+                                        $("#datepayment<?= $project['id'] ?>").datepicker({
+                                            dateFormat: "yy-mm-dd",
+                                        });
                                     });
-                                });
                                 </script>
                                 <!-- Payment Record Section End -->
                             </div>

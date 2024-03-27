@@ -213,7 +213,8 @@
                 </div>
             </div>
         </div>
-    <?php } else { ?>
+    <?php } ?>
+    <!-- </?php } else { ?> -->
         <!-- <div id="filter" class="uk-margin" hidden>
             <form id="searchform" action="laporan" method="GET">
                 <div class="uk-margin-small uk-flex uk-flex-center">
@@ -233,7 +234,7 @@
                 </div>
             </form>
         </div> -->
-    <?php } ?>
+    <!-- </?php } ?> -->
     <!-- form input -->
 
     <!-- script form -->

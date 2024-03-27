@@ -707,9 +707,11 @@ class Project extends BaseController
             $PembayaranModel    = new PembayaranModel();
             $CompanyModel       = new CompanyModel();
             $LogModel           = new LogModel();
-
+            
             // initialize
             $input      = $this->request->getPost();
+            // dd($input);
+            // dd($input);
             $pro        = $ProjectModel->find($id);
 
             $authorize  = $auth = service('authorization');
@@ -870,7 +872,8 @@ class Project extends BaseController
             if (!empty($input['customprice' . $id])) {
                 foreach ($input['customprice' . $id] as $priceKey => $cusprice) {
                     if (!empty($cusprice)) {
-                        $custrab['price']       = $cusprice;
+                        // $custrab['price']       = $cusprice;
+                        $custrab['price']       = (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $cusprice));
                         $custrab['projectid']   = $id;
 
                         foreach ($input['customname' . $id] as $nameKey => $cusname) {
@@ -894,7 +897,7 @@ class Project extends BaseController
                             if ($pricecustrab != 0) {
                                 $datacustomrab  = [
                                     'id'    => $custrabid,
-                                    'price' => $pricecustrab,
+                                    'price' => (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab)),
                                 ];
                                 $CustomRabModel->save($datacustomrab);
                             } else {
@@ -930,19 +933,24 @@ class Project extends BaseController
             // Shipping Data
             if (!empty($input['shippingcost'])) {
                 $shipping       = $CustomRabModel->where('projectid', $id)->like('name', 'biaya pengiriman')->first();
+                $shipp = $input['shippingcost'];
+                function toInt($shipp)
+                {
+                    return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $shipp));
+                }
 
                 if (empty($shipping)) {
                     $datashipping = [
                         'projectid'     => $id,
                         'name'          => 'biaya pengiriman',
-                        'price'         => $input['shippingcost'],
+                        'price'         => toInt($shipp),
                     ];
                     $CustomRabModel->insert($datashipping);
                 } else {
                     $datashipping = [
                         'id'            => $shipping['id'],
                         'projectid'     => $id,
-                        'price'         => $input['shippingcost'],
+                        'price'         => toInt($shipp),
                     ];
                     $CustomRabModel->save($datashipping);
                 }
@@ -1412,11 +1420,15 @@ class Project extends BaseController
             // Record Payment Data
             if ((!empty($input['qtypayment' . $id])) || (!empty($input['datepayment' . $id]))) {
                 $paydate = date('Y-m-d H:i:s', strtotime($input['datepayment' . $id]));
-
+                $upqtypay = $input['qtypayment' . $id];
+                function upqtypay($upqtypay)
+                {
+                    return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $upqtypay));
+                }
                 $reportpayment  = [
                     'projectid' => $id,
                     'date'      => $paydate,
-                    'qty'       => $input['qtypayment' . $id]
+                    'qty'       => upqtypay($upqtypay)
                 ];
 
                 $PembayaranModel->insert($reportpayment);
@@ -1428,14 +1440,14 @@ class Project extends BaseController
             //         foreach ($input['updatepayment' . $id] as $paymentid => $datepayment) {
             //             foreach ($input['upqtypayment' . $id] as $paymentid => $qtypayment) {
             //                 $uppaydate  = date('Y-m-d H:i:s', strtotime($datepayment));
-    
+
             //                 $updatereportpayment  = [
             //                     'id'        => $paymentid,
             //                     'projectid' => $id,
             //                     'date'      => $uppaydate,
             //                     'qty'       => $qtypayment,
             //                 ];
-    
+
             //                 $PembayaranModel->save($updatereportpayment);
             //             }
             //         }
@@ -1446,11 +1458,16 @@ class Project extends BaseController
             if (isset($input['updatepayment' . $id])) {
                 if (!empty($input['updatepayment' . $id])) {
                     foreach ($input['upqtypayment' . $id] as $paymentid => $qtypayment) {
-    
+                        $updatepayment = $qtypayment;
+
+                        // function upqty($updatepayment)
+                        // {
+                        //     return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $updatepayment));
+                        // }
                         $upqtyreportpayment  = [
                             'id'        => $paymentid,
                             'projectid' => $id,
-                            'qty'       => $qtypayment,
+                            'qty'       => (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $updatepayment)),
                         ];
 
                         $PembayaranModel->save($upqtyreportpayment);
@@ -1463,7 +1480,7 @@ class Project extends BaseController
                 if (!empty($input['upqtypayment' . $id])) {
                     foreach ($input['updatepayment' . $id] as $payid => $datepayment) {
                         $uppaydate  = date('Y-m-d H:i:s', strtotime($datepayment));
-    
+
                         $upreportpayment  = [
                             'id'        => $payid,
                             'projectid' => $id,
@@ -1474,7 +1491,6 @@ class Project extends BaseController
                     }
                 }
             }
-            dd($input);
 
             // Project Data
             $project = [
