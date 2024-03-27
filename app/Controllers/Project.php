@@ -710,8 +710,6 @@ class Project extends BaseController
             
             // initialize
             $input      = $this->request->getPost();
-            // dd($input);
-            // dd($input);
             $pro        = $ProjectModel->find($id);
 
             $authorize  = $auth = service('authorization');
