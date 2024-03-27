@@ -14,6 +14,7 @@ use App\Models\LogModel;
 use App\Models\MdlModel;
 use App\Models\RabModel;
 use App\Models\BastModel;
+use App\Models\PembayaranModel;
 
 class Laporan extends BaseController
 {
@@ -47,6 +48,7 @@ class Laporan extends BaseController
             $MdlModel                  = new MdlModel();
             $CustomRabModel            = new CustomRabModel();
             $BastModel                 = new BastModel();
+            $PembayaranModel           = new PembayaranModel();
 
 
             // Populating data
@@ -177,6 +179,10 @@ class Laporan extends BaseController
                 $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
                 $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
 
+                // Pembayaran Value
+                $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                $projectdata[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
                 // Rab Sum Value
                 $projectdata[$project['id']]['rabvalue'] = 0;
                 if (!empty($price)) {
@@ -214,6 +220,7 @@ class Laporan extends BaseController
         $MdlModel                  = new MdlModel();
         $CustomRabModel            = new CustomRabModel();
         $BastModel                 = new BastModel();
+        $PembayaranModel           = new PembayaranModel();
 
         // Populating data
         $input = $this->request->getVar('daterange');
@@ -338,6 +345,10 @@ class Laporan extends BaseController
             // All Custom RAB 
             $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
             $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+            // Pembayaran Value
+            $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+            $projectdata[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
 
             // Rab Sum Value
             $projectdata[$project['id']]['rabvalue'] = 0;

@@ -111,6 +111,28 @@
             </td>
             <td style="text-align: left; font-weight:bold;">: <?= "Rp." . number_format(array_sum($spkvalue), 0, ',', '.') ?></td>
         </tr>
+        <tr>
+            <td style="font-weight:bold;">
+                Total Terbayar 
+                <?php
+                $terbayar = [];
+                foreach ($projects as $project) {
+                    $terbayar[] = $projectdata[$project['id']]['pembayaran'];
+                }
+                ?>
+            </td>
+            <td style="text-align: left; font-weight:bold;">: <?= "Rp." . number_format(array_sum($terbayar), 0, ',', '.') ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">
+                Total Belum Terbayar 
+                <?php
+                $pembayarankurang = array_sum($terbayar);
+                $spkval = array_sum($spkvalue);
+                ?>
+            </td>
+            <td style="text-align: left; font-weight:bold;">: <?= "Rp." . number_format($spkval - $pembayarankurang, 0, ',', '.') ?></td>
+        </tr>
     </table>
 </body>
 
