@@ -170,7 +170,20 @@
                     $paketCount = count($mdldata[$parent['id']]['paket']);
                     foreach ($mdldata[$parent['id']]['paket'] as $paket) {
                     ?>
-                        <tr class="togglepaket<?= $parent['id'] ?>" id="togglepaket<?= $parent['id'] ?>" hidden>
+                        <?php
+                        if ($idparent === $parent['id']) {
+                            $parenthide = '';
+                        } else {
+                            $parenthide = 'hidden';
+                        }
+
+                        if ($idpaket === $paket['id']) {
+                            $pakethide = '';
+                        } else {
+                            $pakethide = 'hidden';
+                        }
+                        ?>
+                        <tr class="togglepaket<?= $parent['id'] ?>" id="togglepaket<?= $parent['id'] ?>" <?=$parenthide?>>
                             <td>
                                 <select class="uk-select uk-form-width-xsmall uk-margin-left" aria-label="Paket" id="paketList<?= $paket['id'] ?>" >
                                     <?php
@@ -207,7 +220,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="togglemdl<?= $paket['id'] ?>" id="togglemdl<?= $paket['id'] ?>" hidden>
+                        <tr class="togglemdl<?= $paket['id'] ?>" id="togglemdl<?= $paket['id'] ?>" <?=$pakethide?>>
                             <td></td>
                             <td colspan="9">
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -227,7 +240,7 @@
                         <?php
                         $mdlCount = count($paket['mdl']);
                         foreach ($paket['mdl'] as $mdl) { ?>
-                            <tr class="togglemdl<?= $paket['id'] ?>" hidden>
+                            <tr class="togglemdl<?= $paket['id'] ?>" id="togglemdl<?= $mdl['id'] ?>" <?=$pakethide?>>
                                 <td>
                                     <select class="uk-select uk-form-width-xsmall uk-margin-large-left" aria-label="Mdl" id="mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>" >
                                         <?php
@@ -1675,9 +1688,6 @@
 <?php if ((!empty($idparent)) && (!empty($idmdl)) && (!empty($idpaket))) { ?>
     <script>
         $(document).ready(function() {
-            var unhideparent = document.getElementById('togglepaket<?= $idparent ?>');
-            unhideparent.removeAttribute('hidden');
-
             var openparent = document.getElementById('openpaket<?=$idparent?>');
 
             var closeparent = document.getElementById('closepaket<?=$idparent?>');
@@ -1689,9 +1699,6 @@
                 openparent.removeAttribute('hidden');
                 closeparent.setAttribute('hidden', '');
             }
-
-            var unhidepaket = document.getElementById('togglemdl<?= $idpaket ?>');
-            unhidepaket.removeAttribute('hidden');
 
             var openpaket = document.getElementById('open<?=$idpaket?>');
 
@@ -1706,9 +1713,9 @@
             }
         });
         
-        // window.addEventListener('load', () => setTimeout(() => {
-        //     document.querySelector('.mdlList<?= $idpaket . $idmdl ?>').scrollIntoView()
-        // }))
+        window.addEventListener('load', () => setTimeout(() => {
+            document.querySelector('#togglemdl<?=$idmdl?>').scrollIntoView()
+        }))
     </script>
 <?php } ?>
 <?= $this->endSection() ?>
