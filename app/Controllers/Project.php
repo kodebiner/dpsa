@@ -1696,7 +1696,7 @@ class Project extends BaseController
         }
 
         // END RAB DATA
-        $ppnval   = ($ppn / 100) * ((int)$totalcustom + (int)$totalrab);
+        $ppnval   = ((int)$ppn / 100) * ((int)$totalcustom + (int)$totalrab);
         $totalsph = (int)$totalcustom + (int)$totalrab + (int)$ppnval;
 
         // Terbilang
@@ -1907,12 +1907,16 @@ class Project extends BaseController
             }
 
             $ppn = "";
+            $direktur = "";
             if (!empty($gconf)) {
                 $ppn = (int)$gconf['ppn'];
+                $direktur = $gconf['direktur'];
             }
 
+            
+
             // END RAB DATA
-            $ppnval   = ($ppn / 100) * ((int)$totalcustom + (int)$totalrab);
+            $ppnval   = ((int)$ppn / 100) * ((int)$totalcustom + (int)$totalrab);
             $totalsph = (int)$totalcustom + (int)$totalrab + (int)$ppnval;
 
             // Terbilang
@@ -1973,13 +1977,13 @@ class Project extends BaseController
                 'lokasi'    => $client['rsname'],
                 'tanggal'   => $projects['tahun'],
                 'clientpic' => $picklien->name,
-                'ppn'       => $gconf['ppn'],
+                'ppn'       => (int)$ppn,
                 'ppnval'    => (int)$ppnval,
                 'total'     => $total + (int)$totalcustom,
                 'totalsph'  => $totalsph,
                 'terbilang' => terbilang($angka) . " rupiah",
                 'marketing' => strtoupper($markname),
-                'direktur'  => $gconf['direktur'],
+                'direktur'  => $direktur,
                 'totcustom' => $totalcustom,
             ];
 
