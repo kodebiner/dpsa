@@ -183,7 +183,7 @@
                             $pakethide = 'hidden';
                         }
                         ?>
-                        <tr class="togglepaket<?= $parent['id'] ?>" id="togglepaket<?= $parent['id'] ?>" <?=$parenthide?>>
+                        <tr class="togglepaket<?= $parent['id'] ?>" <?=$parenthide?>>
                             <td>
                                 <select class="uk-select uk-form-width-xsmall uk-margin-left" aria-label="Paket" id="paketList<?= $paket['id'] ?>" >
                                     <?php
@@ -220,7 +220,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="togglemdl<?= $paket['id'] ?>" id="togglemdl<?= $paket['id'] ?>" <?=$pakethide?>>
+                        <tr class="togglemdl<?= $paket['id'] ?>" <?=$pakethide?>>
                             <td></td>
                             <td colspan="9">
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
