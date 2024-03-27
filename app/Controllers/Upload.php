@@ -216,7 +216,7 @@ class Upload extends BaseController
                 $dataspk = [
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
-                    'inv1'          => date("Y-m-d H:i:s"),
+                    // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
                     
@@ -262,7 +262,7 @@ class Upload extends BaseController
                     'id'            => $spk['id'],
                     'spk'           => $input['spk'],
                     'status_spk'    => 0,
-                    'inv1'          => date("Y-m-d H:i:s"),
+                    // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
                     

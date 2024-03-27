@@ -301,14 +301,14 @@ if(!empty($invoice)){
                     <th></th>
                     <th style="border: 1pt solid black; width:50%;">Total Harga</th>
                     <td style="border: 1pt solid black; border-right-style: none; text-align:left"></td>
-                    <td style="border: 1pt solid black; text-align:right; border-left-style: none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((($invoice['termin'] / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
+                    <td style="border: 1pt solid black; text-align:right; border-left-style: none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
                 </tr>
                 <tr>
                     <td style="border: 1pt solid black; border-top-style:none;"><?= $tanggaldateline ?></td>
                     <td style="border: 1pt solid black; border-top-style:none; border-bottom-style:none;"></td>
                     <td style="border: 1pt solid black; border-top-style:none; font-weight:bold;">Biaya Kirim / Setting</td>
                     <td style="border: 1pt solid black; border-top-style:none; border-right-style:none;"></td>
-                    <td style="border: 1pt solid black; border-top-style:none; text-align:right; border-left-style:none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((($invoice['termin'] / 100) * $invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
+                    <td style="border: 1pt solid black; border-top-style:none; text-align:right; border-left-style:none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * $invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
                 </tr>
             </table>
         </div>

@@ -150,7 +150,7 @@ $tanggalsph = ucwords($dateFormatted);
                     <th style="border: 1pt solid black;" rowspan="2">Jenis Furniture</th>
                     <td colspan="6" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Dimensi & Qty</td>
                     <td colspan="2" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black">Harga</td>
-                    <th style="border: 1pt solid black;">Keterangan</th>
+                    <th rowspan="2" style="border: 1pt solid black;">Keterangan</th>
                 </tr>
                 <tr style="border: 1pt solid black;">
                     <td style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:center; border: 1pt solid black;">P</td>

@@ -739,6 +739,7 @@ class Project extends BaseController
                 $client = $pro['clientid'];
             }
 
+            $tglinv1 = "";
             if (!empty($input['spk'])) {
                 if ($input['spk'] != $pro['spk']) {
                     if (!empty($pro['spk'])) {
@@ -747,13 +748,16 @@ class Project extends BaseController
                     $spk        = $input['spk'];
                     $statusspk  = 1;
                     $status     = 4;
+                    $tglinv1    = date("Y-m-d H:i:s");
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
+                    $tglinv1    = date("Y-m-d H:i:s");
                 }
             } else {
                 $spk        = $pro['spk'];
                 $statusspk  = $pro['status_spk'];
+                $tglinv1    = $pro['inv1'];
             }
 
             $spknum = "";
@@ -1503,6 +1507,7 @@ class Project extends BaseController
                 'tanggal_spk'       => $tglspk,
                 'batas_produksi'    => $tglbtspro,
                 'inv4'              => $tanggalinv4,
+                'inv1'              => $tglinv1,
             ];
             $ProjectModel->save($project);
 
@@ -2824,7 +2829,8 @@ class Project extends BaseController
 
             if (!empty($projects)) {
                 // INVOICE I
-                if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+                // if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+                if ($projects['status_spk'] === "1" && !empty($invoice1)) {
                     $termin     = "30";
                     $progress   = "30";
                     $nilaispk   = ((int)$total - ((70 / 100) * (int)$total)) + (int)$rabcustotal;

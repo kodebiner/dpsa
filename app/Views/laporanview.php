@@ -51,6 +51,8 @@
                 <th class="uk-width-medium">Klien</th>
                 <th class="uk-width-medium">Marketing</th>
                 <th class="uk-width-medium">Nilai SPK</th>
+                <th class="uk-width-medium">Terbayar</th>
+                <th class="uk-width-medium">Belum Tebayar</th>
                 <th class="uk-text-center uk-width-medium">Status Proyek</th>
                 <th class="uk-text-center uk-width-medium">Tanggal Proyek</th>
             </tr>
@@ -62,6 +64,8 @@
                     <td class=""><?= $projectdata[$project['id']]['klien']['rsname'] ?></td>
                     <td class=""><?= $projectdata[$project['id']]['marketing']->username ?></td>
                     <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td>
+                    <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
+                    <td class=""><?= "Rp." . number_format(($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab']) - $projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
                     <td class="uk-text-center">
                         <?php if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']) {
                             echo 'Selesai';
