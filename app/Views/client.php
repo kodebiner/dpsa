@@ -396,12 +396,9 @@
                                                 echo '<option value="" selected disabled>Pilih PIC Klien</option>';
                                             } 
                                             foreach ($users as $user) {
-                                                if ($user->id === $comp['pic']) {
-                                                    $selected = 'selected';
-                                                } else {
-                                                    $selected = "";
+                                                if ($user->id != $comp['pic']) {
+                                                     echo '<option value="' . $user->id . '" >' . $user->name . '</option>';
                                                 }
-                                                echo '<option value="' . $user->id . '" ' . $selected . '>' . $user->name . '</option>';
                                             }
                                             ?>
                                         </select>

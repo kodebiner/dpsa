@@ -133,8 +133,8 @@ if(!empty($invoice)){
 
     <?php
     $noinv = $invoice['noinv'];
-	header("Content-type: application/vnd-ms-excel");
-	header("Content-Disposition: attachment; filename=invoice/$noinv.xls");
+	// header("Content-type: application/vnd-ms-excel");
+	// header("Content-Disposition: attachment; filename=invoice/$noinv.xls");
 	?>
 
     <table style="height: 70px;">
@@ -248,14 +248,14 @@ if(!empty($invoice)){
         </tr>
         <tr style="border:1pt solid #900; border-bottom-style: none; border-top-style: none;">
             <td style="width: 30%; border:1pt solid; border-top-style: none; border-bottom-style: none;"></td>
-            <td style="width: 40%; font-weight:bold;text-align:center;">Biaya Kirim<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><font style="text-decoration: underline;"><?php if(!empty($invoice)){ echo "Rp. " . number_format($invoice['biayakirim'], 0, ',', '.');" ";}  ?></font></td>
+            <td style="width: 40%; font-weight:bold;text-align:center;">Biaya Kirim<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><font style="text-decoration: underline;"><?php if(!empty($invoice)){ echo "Rp. " . number_format((int)$invoice['biayakirim'], 0, ',', '.');" ";}  ?></font></td>
             <td style="text-align: center; border:1pt solid; border-top-style:none; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-top-style:none; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"></td>
         </tr>
         <tr style="border:1pt solid #900; border-bottom-style: none; border-top-style: none;">
             <td style="width: 30%; border:1pt solid; border-top-style: none;  border-bottom-style: none;"></td>
-            <td style="width: 40%; font-weight:bold;text-align:center;">Total SPK<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span> <?php if(!empty($invoice)){ echo "Rp. " . number_format($invoice['total'] + $invoice['biayakirim'], 0, ',', '.');" ";}  ?></td>
+            <td style="width: 40%; font-weight:bold;text-align:center;">Total SPK<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span> <?php if(!empty($invoice)){ echo "Rp. " . number_format((int)$invoice['total'] + (int)$invoice['biayakirim'], 0, ',', '.');" ";}  ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style:none; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"></td>
             <td style="text-align: right; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"></td>
@@ -264,8 +264,8 @@ if(!empty($invoice)){
             <td style="width: 30%; border:1pt solid; border-top-style: none; border-bottom-style: none;"><?php if(!empty($invoice)){ echo $invoice['no_spk'] ;} ?></td>
             <td style="width: 40%; border:1pt solid; border-top-style: none; border-bottom-style: none; text-align:center;">Progress <?php if(!empty($invoice)){ echo $invoice['progress']."%" ;} ?> <?php if(!empty($projects)){ echo $projects['name'] ;} ?></td>
             <td style="text-align: center; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"><?php if(!empty($invoice)){ echo $invoice['termin']."%" ;} ?></td>
-            <td style="text-align: center; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format($invoice['total'], 0, ',', '.');" ";}  ?></td>
-            <td style="text-align: right; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format((((int)$invoice['termin'] / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
+            <td style="text-align: center; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format((int)$invoice['total'], 0, ',', '.');" ";}  ?></td>
+            <td style="text-align: right; border:1pt solid; border-top-style: none; border-bottom-style: none; width: 10%;"><?php if(!empty($invoice)){ echo "Rp. " . number_format((((int)$invoice['termin'] / 100) * (int)$invoice['total']), 0, ',', '.');" ";}  ?></td>
         </tr>
         <tr style="border:1pt solid #900; border-bottom-style: none; border-top-style: none;">
             <td style="width: 30%; border:1pt solid; border-top-style: none;  border-bottom-style: none;"></td>
@@ -308,7 +308,7 @@ if(!empty($invoice)){
                     <td style="border: 1pt solid black; border-top-style:none; border-bottom-style:none;"></td>
                     <td style="border: 1pt solid black; border-top-style:none; font-weight:bold;">Biaya Kirim / Setting</td>
                     <td style="border: 1pt solid black; border-top-style:none; border-right-style:none;"></td>
-                    <td style="border: 1pt solid black; border-top-style:none; text-align:right; border-left-style:none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * $invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
+                    <td style="border: 1pt solid black; border-top-style:none; text-align:right; border-left-style:none;"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * (int)$invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
                 </tr>
             </table>
         </div>
@@ -345,7 +345,7 @@ if(!empty($invoice)){
             <td style="border: 1pt solid black; border-left-style: none; border-right-style:none;"></td>
             <th style="border: 1pt solid black; border-right-style:none; text-align:right; border-left-style:none; width:22.2%;">JUMLAH DITAGIHKAN (DPP)<span>&nbsp;</span></th>
             <td style="border: 1pt solid black; border-right-style:none;"></td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * $invoice['total']) + (((int)$invoice['termin'] / 100) * $invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($invoice)){ echo "Rp. ".number_format((((int)$invoice['termin'] / 100) * $invoice['total']) + (((int)$invoice['termin'] / 100) * (int)$invoice['biayakirim']), 0, ',', '.');" ";}  ?></td>
         </tr>
     </table>
 

@@ -1469,7 +1469,8 @@ class Project extends BaseController
                         $upqtyreportpayment  = [
                             'id'        => $paymentid,
                             'projectid' => $id,
-                            'qty'       => (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $updatepayment)),
+                            'qty'       => (int)preg_replace("/[^0-9]/", '', $updatepayment),
+                            // 'qty'       => (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $updatepayment)),
                         ];
 
                         $PembayaranModel->save($upqtyreportpayment);
@@ -1972,6 +1973,13 @@ class Project extends BaseController
             if (!empty($mark)) {
                 $markname = $mark->kode_marketing;
             }
+
+            $clientpic = "";
+            if(!empty($picklien)){
+                $clientpic = $picklien->name;
+            }
+
+
             // $vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " ");
             // $markname = str_replace($vowels, "", $markname);
             // END MARKETING INITIAL
@@ -1981,7 +1989,7 @@ class Project extends BaseController
                 'proyek'    => $projects['name'],
                 'lokasi'    => $client['rsname'],
                 'tanggal'   => $projects['tahun'],
-                'clientpic' => $picklien->name,
+                'clientpic' => $clientpic,
                 'ppn'       => (int)$ppn,
                 'ppnval'    => (int)$ppnval,
                 'total'     => $total + (int)$totalcustom,

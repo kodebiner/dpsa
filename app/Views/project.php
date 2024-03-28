@@ -4353,15 +4353,15 @@
                                             // Invoice II
                                             if (!empty($project)) {
                                                 if (!empty($projectdata[$project['id']]['sertrim'])) {
-                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && $progress >= "60" || $progress >= 60 && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && ($progress >= "60" || $progress >= 60) && $projectdata[$project['id']]['sertrim']['status'] === "0") {
                                                         echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
                                                     }
                                                 }
                                             }
 
                                             // Invoice III
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
-                                                if (isset($projectdata[$project['id']]['bastfile']['status']) && $progress >= "95" || $progress >= 95  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file'])) {
+                                            if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim'])) {
+                                                if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
                                                     echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel3/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
                                                     $status = "Retensi";
                                                 }
@@ -4397,12 +4397,12 @@
 
                                         <div>
                                             <label class="uk-form-label" for="nominal">Nominal Pembayaran</label>
-                                            <input class="uk-input uk-form-width-medium" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp 0,-" />
+                                            <input class="uk-input uk-form-width-medium" type="text" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" data-type="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp0,-" />
                                         </div>
                                     </div>
 
                                     <script>
-                                        $("input[id='qtypayment<?= $project['id'] ?>']").on({
+                                        $("input[data-type='qtypayment<?= $project['id'] ?>']").on({
                                         keyup: function() {
                                             formatCurrency($(this));
                                         },
@@ -4494,11 +4494,33 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <input class="uk-input uk-form-width-large" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" />
+                                                                <input class="uk-input uk-form-width-large" type="text" data-type="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" />
                                                             </td>
                                                         </tr>
-                                                        <script>
-                                                            $("input[id='upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>']").on({
+                                                        <script type="text/javascript">
+                                                            var rupiah = document.getElementById('upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>');
+                                                            rupiah.addEventListener('keyup', function(e){
+                                                                rupiah.value = formatRupiah(this.value, 'Rp. ');
+                                                            });
+                                                    
+                                                            function formatRupiah(angka, prefix){
+                                                                var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                                                split   		= number_string.split(','),
+                                                                sisa     		= split[0].length % 3,
+                                                                rupiah     		= split[0].substr(0, sisa),
+                                                                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                                                    
+                                                                if(ribuan){
+                                                                    separator = sisa ? '.' : '';
+                                                                    rupiah += separator + ribuan.join('.');
+                                                                }
+                                                    
+                                                                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                                                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+                                                            }
+                                                        </script>
+                                                        <!-- <script>
+                                                            $("input[data-type='upqtypayment</?= $project['id'] ?>[</?= $payment['id'] ?>]']").on({
                                                             keyup: function() {
                                                                 formatCurrency($(this));
                                                             },
@@ -4558,7 +4580,7 @@
                                                                 caret_pos = updated_len - original_len + caret_pos;
                                                                 input[0].setSelectionRange(caret_pos, caret_pos);
                                                             }
-                                                        </script>
+                                                        </script> -->
                                                         <script>
                                                             $(function() {
                                                                 $("#updatepayment<?= $project['id'] ?><?= $payment['id'] ?>").datepicker({
