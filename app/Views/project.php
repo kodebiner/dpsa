@@ -4368,9 +4368,9 @@
                                             }
 
                                             // Invoice IV
-                                            if (!empty($projectdata[$project['id']]['bastfile'])) {
+                                            if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim']) && ($progress >= "95" || $progress >= 95)) {
                                                 if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline'] &&  $progress >= 95) {
+                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
                                                         echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel4/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
                                                         $progress   = "100";
                                                     }
@@ -4498,9 +4498,9 @@
                                                             </td>
                                                         </tr>
                                                         <script type="text/javascript">
-                                                            var rupiah = document.getElementById('upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>');
-                                                            rupiah.addEventListener('keyup', function(e){
-                                                                rupiah.value = formatRupiah(this.value, 'Rp. ');
+                                                            var rupiah<?= $project['id'] ?><?= $payment['id'] ?> = document.getElementById('upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>');
+                                                            rupiah<?= $project['id'] ?><?= $payment['id'] ?>.addEventListener('keyup', function(e){
+                                                                rupiah<?= $project['id'] ?><?= $payment['id'] ?>.value = formatRupiah(this.value, 'Rp. ');
                                                             });
                                                     
                                                             function formatRupiah(angka, prefix){
@@ -4519,68 +4519,6 @@
                                                                 return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
                                                             }
                                                         </script>
-                                                        <!-- <script>
-                                                            $("input[data-type='upqtypayment</?= $project['id'] ?>[</?= $payment['id'] ?>]']").on({
-                                                            keyup: function() {
-                                                                formatCurrency($(this));
-                                                            },
-                                                            blur: function() {
-                                                                formatCurrency($(this), "blur");
-                                                            }
-                                                            });
-
-                                                            function formatNumber(n) {
-                                                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                                            }
-
-                                                            function formatCurrency(input, blur) {
-
-                                                                var input_val = input.val();
-
-                                                                if (input_val === "") {
-                                                                    return;
-                                                                }
-
-                                                                var original_len = input_val.length;
-
-                                                                var caret_pos = input.prop("selectionStart");
-
-                                                                if (input_val.indexOf(".") >= 0) {
-
-                                                                    var decimal_pos = input_val.indexOf(".");
-
-                                                                    var left_side = input_val.substring(0, decimal_pos);
-                                                                    var right_side = input_val.substring(decimal_pos);
-
-                                                                    left_side = formatNumber(left_side);
-
-                                                                    right_side = formatNumber(right_side);
-
-                                                                    if (blur === "blur") {
-                                                                        right_side += "";
-                                                                    }
-
-                                                                    right_side = right_side.substring(0, 0);
-
-                                                                    input_val = "Rp. " + left_side + "." + right_side;
-
-                                                                } else {
-
-                                                                    input_val = formatNumber(input_val);
-                                                                    input_val = "Rp. " + input_val;
-
-                                                                    if (blur === "blur") {
-                                                                        input_val += "";
-                                                                    }
-                                                                }
-
-                                                                input.val(input_val);
-
-                                                                var updated_len = input_val.length;
-                                                                caret_pos = updated_len - original_len + caret_pos;
-                                                                input[0].setSelectionRange(caret_pos, caret_pos);
-                                                            }
-                                                        </script> -->
                                                         <script>
                                                             $(function() {
                                                                 $("#updatepayment<?= $project['id'] ?><?= $payment['id'] ?>").datepicker({

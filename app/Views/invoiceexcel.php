@@ -133,8 +133,8 @@ if(!empty($invoice)){
 
     <?php
     $noinv = $invoice['noinv'];
-	// header("Content-type: application/vnd-ms-excel");
-	// header("Content-Disposition: attachment; filename=invoice/$noinv.xls");
+	header("Content-type: application/vnd-ms-excel");
+	header("Content-Disposition: attachment; filename=invoice/$noinv.xls");
 	?>
 
     <table style="height: 70px;">

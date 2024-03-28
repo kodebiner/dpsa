@@ -65,6 +65,7 @@ class Project extends BaseController
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
+            array_multisort($projects,SORT_DESC);
 
 
             // Users
