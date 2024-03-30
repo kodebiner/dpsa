@@ -63,7 +63,7 @@ class Laporan extends BaseController
             }
 
             // $projects = $ProjectModel->findAll();
-            $companys = $CompanyModel->findAll();
+            // $companys = $CompanyModel->findAll();
             // $users    = $UserModel->where('parentid !=', null)->find();
 
             // Initialize
@@ -90,6 +90,7 @@ class Laporan extends BaseController
                 $this->builder->orLike('users.username', $input['search']);
                 $this->builder->orLike('company.rsname', $input['search']);
             }
+            $this->builder->orderBy('id',"DESC");
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
             $total = count($query);
@@ -257,6 +258,7 @@ class Laporan extends BaseController
             $this->builder->orLike('users.username', $input['search']);
             $this->builder->orLike('company.rsname', $input['search']);
         }
+        $this->builder->orderBy('id',"DESC");
         $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
         $query = $this->builder->get($perpage, $offset)->getResultArray();
         $total = count($query);

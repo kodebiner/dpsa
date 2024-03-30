@@ -1422,7 +1422,11 @@ class Project extends BaseController
 
             // Record Payment Data
             if ((!empty($input['qtypayment' . $id])) || (!empty($input['datepayment' . $id]))) {
-                $paydate = date('Y-m-d H:i:s', strtotime($input['datepayment' . $id]));
+                if(!empty($input['datepayment' . $id])){
+                    $paydate = date('Y-m-d H:i:s', strtotime($input['datepayment' . $id]));
+                }else{
+                    $paydate =  date('Y-m-d H:i:s');
+                }
                 $upqtypay = $input['qtypayment' . $id];
                 function upqtypay($upqtypay)
                 {

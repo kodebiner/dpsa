@@ -4535,6 +4535,7 @@
                                 <script>
                                     $(function() {
                                         $("#datepayment<?= $project['id'] ?>").datepicker({
+                                            "setDate": new Date(),
                                             dateFormat: "yy-mm-dd",
                                         });
                                     });
