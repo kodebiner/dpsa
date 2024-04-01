@@ -119,7 +119,7 @@
                             </div>
                         </div>
                         <div class="uk-card-footer uk-text-center">
-                            <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                            <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) ||  $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                 <button class="uk-button uk-button-secondary" type="button" uk-toggle="target: #modalupdatepro<?= $project['id'] ?>">Ubah Data</button>
                             <?php } ?>
                         </div>
@@ -477,7 +477,7 @@
     <!-- Modal Add Proyek End -->
 
     <!-- Modal Update Proyek -->
-    <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('admin.project.create', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid)  || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
+    <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('admin.project.create', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid)  || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
         <?php foreach ($projects as $project) {
             $progress   = "0";
             $status     = "Sedang Dalam Proses Persiapan";
@@ -974,17 +974,144 @@
                                         </div>
                                     </div>
 
-                                    <!-- </?php if ($project['status_spk'] != 1) { ?> -->
-                                    <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                        <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                    <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
+                                        <?php if (!$authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                         <div class="uk-margin-bottom">
+                                             <label class="uk-form-label" for="paket">Nomor SPH</label>
+                                             <div class="uk-form-controls">
+                                                 <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH" disabled>
+                                             </div>
+                                         </div>
+                                         <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
+                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
+                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                <hr>
+                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <table class="uk-table uk-table-middle uk-table-divider">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Status</th>
+                                                                <th>Nama</th>
+                                                                <th>Panjang</th>
+                                                                <th>Lebar</th>
+                                                                <th>Tinggi</th>
+                                                                <th>Volume</th>
+                                                                <th>Satuan</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Foto</th>
+                                                                <th>Jumlah Pesanan</th>
+                                                                <th>Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
+                                                                <tr>
+                                                                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                                                                </tr>
+                                                                <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($mdl['checked']) {
+                                                                                $checked = 'checked';
+                                                                            } else {
+                                                                                $checked = '';
+                                                                            }
+                                                                            ?>
+                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" disabled/>
+                                                                        </td>
+                                                                        <td><?= $mdl['name'] ?></td>
+                                                                        <td><?= $mdl['length'] ?></td>
+                                                                        <td><?= $mdl['width'] ?></td>
+                                                                        <td><?= $mdl['height'] ?></td>
+                                                                        <td><?= $mdl['volume'] ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($mdl['denomination'] === "1") {
+                                                                                echo "Unit";
+                                                                            } elseif ($mdl['denomination'] === "2") {
+                                                                                echo "Meter Lari";
+                                                                            } elseif ($mdl['denomination'] === "3") {
+                                                                                echo "Meter Persegi";
+                                                                            } elseif ($mdl['denomination'] === "4") {
+                                                                                echo "Set";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?= $mdl['keterangan'] ?></td>
+                                                                        <td>
+                                                                            <div uk-lightbox="">
+                                                                                <a class="uk-inline" href="img/mdl/<?= $mdl['photo'] ?>" role="button">
+                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?= $mdl['photo'] ?>" width="40" height="40" alt="<?= $mdl['photo'] ?>">
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="uk-form-controls">
+                                                                            <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" disabled/>
+                                                                        </td>
+                                                                        <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
+                                                                    </tr>
+                                                                <?php } ?>
+                                                                <script>
+                                                                    function eprice(n) {
+                                                                        var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
+                                                                        var ebaseqty = document.getElementById('eqty[' + n + ']').value;
+                                                                        var epricetd = document.getElementById('eshowprice[' + n + ']');
+                                                                        var echeckbox = document.getElementById('checked[' + n + ']');
+                                                                        var eprojprice = ebaseprice * ebaseqty;
+                                                                        epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
 
+                                                                        if (ebaseqty > 0) {
+                                                                            echeckbox.checked = true;
+                                                                        } else {
+                                                                            echeckbox.checked = false;
+                                                                        }
+                                                                    };
+                                                                </script>
+                                                            <?php } ?>
+
+                                                            <tr>
+                                                                <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
+                                                                <td>
+                                                                    <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?>" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" disabled/>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
+                                                            </tr>
+                                                            <?php if (!empty($projectdata[$project['id']]['customrab'])) {
+                                                                foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" disabled/>
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="<?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" disabled />
+                                                                        </td>
+                                                                    </tr>
+                                                            <?php }
+                                                            } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <?php } ?>
+                                        <?php } ?>
+
+                                        <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                             <div class="uk-margin-bottom">
                                                 <label class="uk-form-label" for="paket">Nomor SPH</label>
                                                 <div class="uk-form-controls">
-                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {
-                                                                                                                                                                $nosph = $project['no_sph'];
-                                                                                                                                                                echo "value='$nosph'";
-                                                                                                                                                            } ?> placeholder="Nomor SPH">
+                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH">
                                                 </div>
                                             </div>
 
@@ -1241,8 +1368,7 @@
                                                                             <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
                                                                         </td>
                                                                         <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.');
-                                                                                                                                                        " "; ?></td>
+                                                                        <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
                                                                     </tr>
                                                                 <?php } ?>
                                                                 <script>
@@ -1634,8 +1760,8 @@
                                                     createRemoveElement.remove();
                                                 };
                                             </script>
-                                        </div>
-                                    <?php } ?>
+                                        <?php } ?>
+                                    </div>
                                     <!-- </?php } ?> -->
                                     <!-- </?php } else { ?> -->
                                     <!-- <div class="uk-padding uk-padding-remove-vertical togglesph</?= $project['id'] ?>" hidden>
@@ -3178,13 +3304,9 @@
                                                     <label class="uk-form-label">No Invoice I</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                    echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'";
-                                                                                                                                                } ?> name="noinv1<?= $project['id'] ?>">
+                                                            <input id="inputinv1<?=$project['id']?>" class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                    echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'";
-                                                                                                                                                } ?> name="noinv1<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice I" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['no_inv'] . "'"; } ?> name="noinv1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3195,15 +3317,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                                                                    $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);
-                                                                                                                                                                                                    echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                                                                } ?> placeholder="<?= date('m/d/Y') ?>" />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {$tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                                                                    $tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']);
-                                                                                                                                                                                                    echo "value='" . date_format($tempo, 'm/d/Y') . "'";
-                                                                                                                                                                                                } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice1<?= $project['id'] ?>" name="dateinvoice1<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {$tempo = date_create($projectdata[$project['id']]['invoice1']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -4339,46 +4455,48 @@
                                     <!-- Invoice IV End -->
 
                                     <!-- Invoice Generate Button -->
-                                    <div class="uk-width-1-1">
-                                        <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
-                                        <p class="uk-margin" uk-margin>
-                                            <?php
-                                            // Invoice I
-                                            if (!empty($project)) {
-                                                if ($project['status_spk'] === "1") {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel1/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
-                                                }
-                                            }
-
-                                            // Invoice II
-                                            if (!empty($project)) {
-                                                if (!empty($projectdata[$project['id']]['sertrim'])) {
-                                                    if (isset($projectdata[$project['id']]['sertrim']['status']) && ($progress >= "60" || $progress >= 60) && $projectdata[$project['id']]['sertrim']['status'] === "0") {
-                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                    <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                        <div class="uk-width-1-1">
+                                            <label class="uk-h5 uk-margin uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">CETAK INVOICE</label>
+                                            <p class="uk-margin" uk-margin>
+                                                <?php
+                                                // Invoice I
+                                                if (!empty($project)) {
+                                                    if ($project['status_spk'] === "1") {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel1/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice I</a>";
                                                     }
                                                 }
-                                            }
 
-                                            // Invoice III
-                                            if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim'])) {
-                                                if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
-                                                    echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel3/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
-                                                    $status = "Retensi";
-                                                }
-                                            }
-
-                                            // Invoice IV
-                                            if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim']) && ($progress >= "95" || $progress >= 95)) {
-                                                if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
-                                                    if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
-                                                        echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel4/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
-                                                        $progress   = "100";
+                                                // Invoice II
+                                                if (!empty($project)) {
+                                                    if (!empty($projectdata[$project['id']]['sertrim'])) {
+                                                        if (isset($projectdata[$project['id']]['sertrim']['status']) && ($progress >= "60" || $progress >= 60) && $projectdata[$project['id']]['sertrim']['status'] === "0") {
+                                                            echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel2/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice II</a>";
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            ?>
-                                        </p>
-                                    </div>
+
+                                                // Invoice III
+                                                if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim'])) {
+                                                    if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
+                                                        echo "<a class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel3/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice III</a>";
+                                                        $status = "Retensi";
+                                                    }
+                                                }
+
+                                                // Invoice IV
+                                                if (!empty($projectdata[$project['id']]['bastfile']) && !empty($projectdata[$project['id']]['sertrim']) && ($progress >= "95" || $progress >= 95)) {
+                                                    if (!empty($projectdata[$project['id']]['bastfile']['tanggal_bast'])) {
+                                                        if ($projectdata[$project['id']]['bastfile']['status'] === "1" && $projectdata[$project['id']]['now'] >=  $projectdata[$project['id']]['dateline']) {
+                                                            echo "<a id='btninv" . $project['id'] . "' class='uk-button uk-button-primary uk-margin-right' href='project/invoiceexcel4/" . $project['id'] . "'><span class='uk-margin-small-right uk-icon' uk-icon='icon:  file-text; ratio: 1.2'></span>Invoice IV</a>";
+                                                            $progress   = "100";
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+                                            </p>
+                                        </div>
+                                    <?php } ?>
                                     <!-- End Of Invoice Generate Button -->
                                 </div>
 
@@ -4391,13 +4509,21 @@
                                             <label class="uk-form-label" for="tanggal">Tanggal Pembayaran</label>
                                             <div class="uk-inline">
                                                 <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                    <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                <?php }else{ ?> 
+                                                    <input class="uk-input uk-form-width-medium" id="datepayment<?= $project['id'] ?>" name="datepayment<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                <?php } ?> 
                                             </div>
                                         </div>
 
                                         <div>
                                             <label class="uk-form-label" for="nominal">Nominal Pembayaran</label>
-                                            <input class="uk-input uk-form-width-medium" type="text" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" data-type="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp0,-" />
+                                            <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                <input class="uk-input uk-form-width-medium" type="text" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" data-type="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp0,-" />
+                                            <?php }else{ ?>
+                                                <input class="uk-input uk-form-width-medium" type="text" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" id="qtypayment<?= $project['id'] ?>" data-type="qtypayment<?= $project['id'] ?>" name="qtypayment<?= $project['id'] ?>" placeholder="Rp0,-" / disabled>
+                                            <?php } ?>
                                         </div>
                                     </div>
 
@@ -4490,11 +4616,19 @@
                                                             <td>
                                                                 <div class="uk-inline">
                                                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                                    <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" />
+                                                                    <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                                        <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" />
+                                                                    <?php }else{ ?>
+                                                                        <input class="uk-input uk-form-width-large" id="updatepayment<?= $project['id'] ?><?= $payment['id'] ?>" name="updatepayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= $payment['date'] ?>" disabled/>
+                                                                    <?php } ?>
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <input class="uk-input uk-form-width-large" type="text" data-type="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" />
+                                                                <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                                                    <input class="uk-input uk-form-width-large" type="text" data-type="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" />
+                                                                <?php }else{ ?>
+                                                                    <input class="uk-input uk-form-width-large" type="text" data-type="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" id="upqtypayment<?= $project['id'] ?><?= $payment['id'] ?>" name="upqtypayment<?= $project['id'] ?>[<?= $payment['id'] ?>]" value="<?= 'Rp' . number_format((int)$payment['qty'], 0, ',', ','); ' '; ?>" disabled/>
+                                                                <?php } ?>
                                                             </td>
                                                         </tr>
                                                         <script type="text/javascript">

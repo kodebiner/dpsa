@@ -890,17 +890,17 @@ class Project extends BaseController
                 }
             }
 
-            // Update Custom RAB
+            // Update Custom RAB Price
             if (!empty($input['pricecustrab' . $id])) {
                 foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
                     $customrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($custrabid);
-
-                    if ($pricecustrab != $customrabdata['price']) {
-                        if (!empty($pricecustrab)) {
-                            if ($pricecustrab != 0) {
+                    $newPrice = preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab));
+                    if ($newPrice != $customrabdata['price']) {
+                        if (!empty($newPrice)) {
+                            if ($newPrice != 0) {
                                 $datacustomrab  = [
                                     'id'    => $custrabid,
-                                    'price' => (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab)),
+                                    'price' => $newPrice,
                                 ];
                                 $CustomRabModel->save($datacustomrab);
                             } else {
@@ -912,6 +912,8 @@ class Project extends BaseController
                     }
                 }
             }
+
+            // Update Custom RAB Name
             if (!empty($input['namecustrab' . $id])) {
                 foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
                     $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
@@ -923,7 +925,6 @@ class Project extends BaseController
                                     'id'    => $idcustrab,
                                     'name'  => $namecustrab,
                                 ];
-
                                 $CustomRabModel->save($updatecustrab);
                             } else {
                                 $CustomRabModel->delete($customrabdata);

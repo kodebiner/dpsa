@@ -1098,7 +1098,7 @@ class Home extends BaseController
         return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
     }
 
-    public function addppic()
+    public function updateppic()
     {
         // Calling Libraries and Services
         $authorize = service('authorization');
@@ -1107,12 +1107,11 @@ class Home extends BaseController
         $authorize->createPermission('ppic.project.edit', 'Merubah data PPIC.');
 
         // Creating Prebuild Groups
-        $authorize->createGroup('PPIC', 'Divisi PPIC.');
+        $authorize->createGroup('ppic', 'Divisi PPIC.');
 
         // Prebuild permissions
         $authorize->addPermissionToGroup('admin.project.read', 'ppic');
         $authorize->addPermissionToGroup('ppic.project.edit', 'ppic');
-        $authorize->addPermissionToGroup('client.read', 'ppic');
 
         // Redirect to Login
         return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
