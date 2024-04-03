@@ -2521,22 +2521,20 @@
                                                             <!-- end production edit permission -->
 
                                                             <!-- ppic edit production employe -->
-                                                            <?php if (($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
-                                                                <td class="uk-text-center">
-                                                                    <div class="uk-margin">
-                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]" <?=$dispermitppic?>>
-                                                                            <option value="">Pilih PIC</option>
-                                                                            <?php if (!empty($picpro)) {
-                                                                                foreach ($picpro as $propic) { ?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
-                                                                                <?php }
-                                                                            } else { ?>
-                                                                                <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                            <?php } ?>
+                                                            <td class="uk-text-center">
+                                                                <div class="uk-margin">
+                                                                    <select class="uk-select" name="picpro[<?= $production['id'] ?>]" <?=$dispermitppic?>>
+                                                                        <option value="">Pilih PIC</option>
+                                                                        <?php if (!empty($picpro)) {
+                                                                            foreach ($picpro as $propic) { ?>
+                                                                                <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                            <?php }
+                                                                        } else { ?>
+                                                                            <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
                                                             <!-- end ppic edit production employe -->
 
                                                             <td class="uk-text-center">
