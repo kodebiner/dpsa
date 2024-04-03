@@ -2451,13 +2451,14 @@
                                             <tbody>
                                                 <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
                                                     <?php if ($authorize->hasPermission('ppic.project.edit', $uid) ||$authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
-                                                        <?php if($authorize->hasPermission('ppic.project.edit', $uid)){
-                                                            $dispermission = "disabled";
-                                                            $dispermitppic = "";
-                                                        }else{
-                                                            $dispermission = "";
-                                                            $dispermitppic = "disabled";
-                                                        } 
+                                                        <?php 
+                                                            if($authorize->hasPermission('ppic.project.edit', $uid)){
+                                                                $dispermission = "disabled";
+                                                                $dispermitppic = "";
+                                                            }else{
+                                                                $dispermission = "";
+                                                                $dispermitppic = "disabled";
+                                                            } 
                                                         ?>
                                                         <tr>
                                                             <!-- production edit permission -->

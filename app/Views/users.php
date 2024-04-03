@@ -130,7 +130,7 @@
                             <div class="uk-margin-bottom" id="marketingcode" hidden>
                                 <label class="uk-form-label" for="kodemarketing">Kode Marketing</label>
                                 <div class="uk-form-controls">
-                                    <input type="text" id="kodemarketing" class="uk-input" id="kodemarketing" name="kodemarketing" placeholder="Kode Marketing" autofocus required />
+                                    <input type="text" id="kodemarketing" class="uk-input" id="kodemarketing" name="kodemarketing" placeholder="Kode Marketing" autofocus />
                                 </div>
                             </div>
 
@@ -534,7 +534,7 @@
                                 <div class="uk-margin-bottom" id="marketingcode<?= $user->id; ?>" hidden>
                                     <label class="uk-form-label" for="kodemarketing">Kode Marketing</label>
                                     <div class="uk-form-controls">
-                                        <input type="text" class="uk-input" id="kodemarketing<?= $user->id; ?>" value="<?= $user->kodemarketing; ?>" name="kodemarketing" placeholder="Kode Marketing" autofocus required />
+                                        <input type="text" class="uk-input" id="kodemarketing<?= $user->id; ?>" value="<?= $user->kodemarketing; ?>" name="kodemarketing" placeholder="Kode Marketing" autofocus/>
                                     </div>
                                 </div>
 
