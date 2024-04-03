@@ -158,7 +158,7 @@
                                 </h3>
                             </div>
                             <div class="uk-text-right uk-width-auto">
-                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('admin.project.create', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
+                                <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('admin.project.create', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
                                     <button class="uk-button uk-button-secondary uk-margin-small-right" type="button" uk-toggle="target: #modalupdatepro<?= $project['id'] ?>">Ubah Data</button>
                                 <?php } ?>
                             </div>
@@ -2441,83 +2441,94 @@
                                                     <th class="uk-text-center">Packing</th>
                                                     <th class="uk-text-center">Pengiriman</th>
                                                     <th class="uk-text-center">Setting</th>
-                                                    <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
-                                                        <th class="uk-text-center">PIC Produksi</th>
-                                                    <?php } ?>
+                                                    <!-- </?php if (( $authorize->hasPermission('ppic.project.edit', $uid) ||$authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?> -->
+                                                    <!-- </?php if ( $authorize->hasPermission('ppic.project.edit', $uid)) { ?> -->
+                                                    <th class="uk-text-center">PIC Produksi</th>
+                                                    <!-- </?php } ?> -->
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
-                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                    <?php if ($authorize->hasPermission('ppic.project.edit', $uid) ||$authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                        <?php if($authorize->hasPermission('ppic.project.edit', $uid)){
+                                                            $dispermission = "disabled";
+                                                            $dispermitppic = "";
+                                                        }else{
+                                                            $dispermission = "";
+                                                            $dispermitppic = "disabled";
+                                                        } 
+                                                        ?>
                                                         <tr>
+                                                            <!-- production edit permission -->
                                                             <td><?= $production['name'] ?></td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['gambar_kerja']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="gambarkerja<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?= $dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['mesin_awal']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinawal<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['tukang']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="tukang<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['mesin_lanjutan']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="mesinlanjutan<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['finishing']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="finishing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['packing']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="packing<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['pengiriman']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
                                                             <td class="uk-text-center">
                                                                 <?php if (strtoupper($production['setting']) == '1') { ?>
                                                                     <div uk-icon="check"></div>
                                                                 <?php } else { ?>
-                                                                    <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1">
+                                                                    <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
                                                                 <?php } ?>
                                                             </td>
-                                                            <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                            <!-- end production edit permission -->
+
+                                                            <!-- ppic edit production employe -->
+                                                            <?php if (($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                                 <td class="uk-text-center">
                                                                     <div class="uk-margin">
-                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]">
+                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]" <?=$dispermitppic?>>
                                                                             <option value="">Pilih PIC</option>
                                                                             <?php if (!empty($picpro)) {
                                                                                 foreach ($picpro as $propic) { ?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) {
-                                                                                                                            echo 'selected';
-                                                                                                                        } ?>><?= $propic->name ?></option>
+                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
                                                                                 <?php }
                                                                             } else { ?>
                                                                                 <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
@@ -2526,6 +2537,8 @@
                                                                     </div>
                                                                 </td>
                                                             <?php } ?>
+                                                            <!-- end ppic edit production employe -->
+
                                                             <td class="uk-text-center">
                                                                 <div><?= $production['percentages'] ?> %</div>
                                                             </td>
@@ -2573,24 +2586,20 @@
                                                                     <div uk-icon="check"></div>
                                                                 <?php } ?>
                                                             </td>
-                                                            <?php if (($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
-                                                                <td class="uk-text-center">
-                                                                    <div class="uk-margin">
-                                                                        <select class="uk-select" name="picpro[<?= $production['id'] ?>]">
-                                                                            <option value="">Pilih PIC</option>
-                                                                            <?php if (!empty($picpro)) {
-                                                                                foreach ($picpro as $propic) { ?>
-                                                                                    <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) {
-                                                                                                                            echo 'selected';
-                                                                                                                        } ?>><?= $propic->name ?></option>
-                                                                                <?php }
-                                                                            } else { ?>
-                                                                                <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                            <?php } ?>
+                                                            <td class="uk-text-center">
+                                                                <div class="uk-margin">
+                                                                    <select class="uk-select" name="picpro[<?= $production['id'] ?>]" disabled>
+                                                                        <option value="">Pilih PIC</option>
+                                                                        <?php if (!empty($picpro)) {
+                                                                            foreach ($picpro as $propic) { ?>
+                                                                                <option value="<?= $propic->id ?>" <?php if ($production['userid'] === $propic->id) { echo 'selected'; } ?>><?= $propic->name ?></option>
+                                                                            <?php }
+                                                                        } else { ?>
+                                                                            <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
                                                             <td class="uk-text-center">
                                                                 <div><?= $production['percentages'] ?> %</div>
                                                             </td>

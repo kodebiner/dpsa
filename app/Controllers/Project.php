@@ -693,7 +693,7 @@ class Project extends BaseController
 
     public function update($id)
     {
-        if ($this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('ppic.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) {
             // Calling Model
             $ProjectModel       = new ProjectModel();
             $RabModel           = new RabModel();
