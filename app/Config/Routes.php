@@ -20,6 +20,7 @@ $routes->group('/', static function ($routes) {
     $routes->get('update-finance', 'Home::addfinance');
     $routes->get('update-admin', 'Home::updateadmin');
     $routes->get('update-ppic', 'Home::updateppic');
+    $routes->get('update-client', 'Home::updateclient');
 
     // Developer Access Only
     $routes->get('trial', 'Home::trial');

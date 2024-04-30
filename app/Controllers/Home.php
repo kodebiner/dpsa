@@ -1117,6 +1117,16 @@ class Home extends BaseController
         return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
     }
 
+    public function updateclient()
+    {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        // Add Permission
+        $authorize->addPermissionToGroup('admin.mdl.read', 'client pusat');
+        $authorize->addPermissionToGroup('admin.mdl.read', 'client cabang');
+    }
+
     public function logedin()
     {
         $data = $this->data;
