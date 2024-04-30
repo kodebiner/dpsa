@@ -919,6 +919,8 @@ class Home extends BaseController
         $authorize->createPermission('marketing.project.edit', 'Merubah data proyek.');
         $authorize->createPermission('design.project.edit', 'Merubah data design proyek.');
         $authorize->createPermission('production.project.edit', 'Merubah data produksi proyek.');
+        $authorize->createPermission('finance.project.edit', 'Merubah data finance.');
+        $authorize->createPermission('ppic.project.edit', 'Merubah data PPIC.');
 
         // Remove Old Groups
         $groups = $authorize->groups();
@@ -938,6 +940,8 @@ class Home extends BaseController
         $authorize->createGroup('client pusat', 'Client Pusat.');
         $authorize->createGroup('client cabang', 'Client Cabang.');
         $authorize->createGroup('guests', 'Unauthorized users.');
+        $authorize->createGroup('finance', 'Divisi finance.');
+        $authorize->createGroup('ppic', 'Divisi PPIC.');
 
         // Prebuild permissions
         $authorize->addPermissionToGroup('client.read', 'superuser');
@@ -998,6 +1002,18 @@ class Home extends BaseController
         $authorize->addPermissionToGroup('client.auth.holding', 'client pusat');
         $authorize->addPermissionToGroup('client.read', 'client cabang');
         $authorize->addPermissionToGroup('client.auth.branch', 'client cabang');
+        $authorize->addPermissionToGroup('admin.project.read', 'finance');
+        $authorize->addPermissionToGroup('finance.project.edit', 'finance');
+        $authorize->addPermissionToGroup('client.read', 'finance');
+        $authorize->addPermissionToGroup('finance.project.edit', 'superuser');
+        $authorize->addPermissionToGroup('production.project.edit', 'admin');
+        $authorize->addPermissionToGroup('marketing.project.edit', 'admin');
+        $authorize->addPermissionToGroup('design.project.edit', 'admin');
+        $authorize->addPermissionToGroup('finance.project.edit', 'admin');
+        $authorize->addPermissionToGroup('admin.project.read', 'ppic');
+        $authorize->addPermissionToGroup('ppic.project.edit', 'ppic');
+        $authorize->addPermissionToGroup('admin.mdl.read', 'client pusat');
+        $authorize->addPermissionToGroup('admin.mdl.read', 'client cabang');
 
         // Parsing Data to View
         $data = $this->data;
@@ -1062,71 +1078,6 @@ class Home extends BaseController
         return redirect()->to('login')->with('message', 'Aplikasi berhasil terpasang. Silahkan melakukan Login');
     }
 
-    public function addfinance()
-    {
-        // Calling Libraries and Services
-        $authorize = service('authorization');
-
-        // Creating Permissions
-        $authorize->createPermission('finance.project.edit', 'Merubah data finance.');
-
-        // Creating Prebuild Groups
-        $authorize->createGroup('finance', 'Divisi finance.');
-
-        // Prebuild permissions
-        $authorize->addPermissionToGroup('admin.project.read', 'finance');
-        $authorize->addPermissionToGroup('finance.project.edit', 'finance');
-        $authorize->addPermissionToGroup('client.read', 'finance');
-        $authorize->addPermissionToGroup('finance.project.edit', 'superuser');
-
-        // Redirect to Login
-        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
-    }
-
-    public function updateadmin()
-    {
-        // Calling Libraries and Services
-        $authorize = service('authorization');
-
-        // Prebuild permissions
-        $authorize->addPermissionToGroup('production.project.edit', 'admin');
-        $authorize->addPermissionToGroup('marketing.project.edit', 'admin');
-        $authorize->addPermissionToGroup('design.project.edit', 'admin');
-        $authorize->addPermissionToGroup('finance.project.edit', 'admin');
-
-        // Redirect to Login
-        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
-    }
-
-    public function updateppic()
-    {
-        // Calling Libraries and Services
-        $authorize = service('authorization');
-
-        // Creating Permissions
-        $authorize->createPermission('ppic.project.edit', 'Merubah data PPIC.');
-
-        // Creating Prebuild Groups
-        $authorize->createGroup('ppic', 'Divisi PPIC.');
-
-        // Prebuild permissions
-        $authorize->addPermissionToGroup('admin.project.read', 'ppic');
-        $authorize->addPermissionToGroup('ppic.project.edit', 'ppic');
-
-        // Redirect to Login
-        return redirect()->to('login')->with('message', 'Aplikasi berhasil diperbarui. Silahkan melakukan Login');
-    }
-
-    public function updateclient()
-    {
-        // Calling Libraries and Services
-        $authorize = service('authorization');
-
-        // Add Permission
-        $authorize->addPermissionToGroup('admin.mdl.read', 'client pusat');
-        $authorize->addPermissionToGroup('admin.mdl.read', 'client cabang');
-    }
-
     public function logedin()
     {
         $data = $this->data;
@@ -1140,18 +1091,12 @@ class Home extends BaseController
 
     public function trial()
     {
-        $authorize = service('authorization');
-        $authorize->removeUserFromGroup(3, 9);
+        echo "There's nothing to see here";
     }
 
     public function information()
     {
-        // Calling Libraries and Services
-        $authorize = service('authorization');
-
-        $userId = '19';
-        $authorize->removeUserFromGroup($userId, 'admin');
-        $authorize->addUserToGroup($userId, 'superuser');
-        phpinfo();
+        echo "There's nothing to see here";
+        // phpinfo();
     }
 }
