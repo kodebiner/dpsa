@@ -115,6 +115,7 @@ class Home extends BaseController
                         ];
                     }
                     $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
+                    // $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->orWhere('id', $this->data['parentid'])->where('deleted_at', null)->find();
                 }
 
                 foreach ($branches as $branch) {

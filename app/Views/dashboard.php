@@ -416,7 +416,7 @@
                                             </div>
 
                                             <?php if ($designStatus != "2") { ?>
-                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)  || $authorize->hasPermission('client.auth.holding', $uid) ) { ?>
                                                     <div class="uk-text-left uk-margin-top" id="btndesain<?= $designId ?>" uk-margin>
                                                         <button class="uk-button uk-button-primary uk-button-small" value="2" id="acc<?= $designId ?>" >Konfirmasi</button>
                                                         <button class="uk-button uk-button-secondary uk-button-small" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
@@ -631,7 +631,7 @@
 
                                 <!-- Invoice & SPK Mobile  -->
                                 <div id="contentspk<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
-                                    <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                    <?php if ($authorize->hasPermission('client.auth.branch', $uid) || $authorize->hasPermission('client.auth.holding', $uid) ) { ?>
                                         <div class="uk-container uk-container-small">
                                             <div class="uk-width-1-1">
 
@@ -1074,7 +1074,7 @@
                                                         <?php } ?>
 
                                                         <?php if ($designStatus != "2") { ?>
-                                                            <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                            <?php if ($authorize->hasPermission('client.auth.branch', $uid) || $authorize->hasPermission('client.auth.holding', $uid) ) { ?>
                                                                 <div class="uk-text-right" id="btndesain<?= $designId ?>" uk-margin>
                                                                     <button class="uk-button uk-button-primary" value="2" id="acc<?= $designId ?>">Konfirmasi</button>
                                                                     <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-revisi<?= $project['id'] ?>">Revisi</button>
@@ -1299,7 +1299,7 @@
                                                 </div>
                                             </div>
                                             <div class="uk-margin uk-margin-remove-top" uk-grid>
-                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid) || $authorize->hasPermission('client.auth.holding', $uid) ) { ?>
                                                     <div class="uk-width-1-1">
                                                         <!-- Invoice -->
                                                         <p class="uk-margin-remove-top" uk-margin>
@@ -1393,7 +1393,7 @@
                                                 </div>
                                             </div>
                                             <div class="uk-margin-remove-top" uk-grid>
-                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+                                                <?php if ($authorize->hasPermission('client.auth.branch', $uid) || $authorize->hasPermission('client.auth.holding', $uid)) { ?>
                                                     <div class="uk-width-1-1">
                                                         <!-- SPK -->
                                                         <p class="" uk-margin>
@@ -1532,7 +1532,7 @@
         <?= $pager ?>
 
         <!-- This Is The Modal Revisi -->
-        <?php if ($authorize->hasPermission('client.auth.branch', $uid)) { ?>
+        <?php if ($authorize->hasPermission('client.auth.branch', $uid) || $authorize->hasPermission('client.auth.holding', $uid) ) { ?>
             <?php if (!empty($projects)){ 
                 foreach ($projects as $project) {?>
                     <div id="modal-revisi<?= $project['id'] ?>" uk-modal>
