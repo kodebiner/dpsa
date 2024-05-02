@@ -418,7 +418,7 @@ class User extends BaseController
             ]);
             $usersModel->delete($id);
 
-            return redirect()->to('users')->with('errors', 'Data berhasil dihapus');
+            return redirect()->to('users')->with('message', 'Data berhasil dihapus');
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
