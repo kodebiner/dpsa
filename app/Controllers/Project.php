@@ -372,11 +372,11 @@ class Project extends BaseController
                         $mark     = $UserModel->where('parentid', $project['clientid'])->first();
                     }
 
-                    $marketing = "";
-                    if(!empty($mark->kode_marketing)){
-                        $marketing = $mark->kode_marketing;
+                    $marketing_code = "";
+                    if(!empty($mark)){
+                        $marketing_code = $mark->kode_marketing;
                     }
-                    $projectdata[$project['id']]['marketing']   = $marketing;
+                    $projectdata[$project['id']]['marketing']   = $marketing_code;
                     // $projectdata[$project['id']]['marketing']   = $marketing->kode_marketing;
 
                     // PIC
