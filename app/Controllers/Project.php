@@ -64,9 +64,11 @@ class Project extends BaseController
             $authorize  = $auth = service('authorization');
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
+
+            // Company With Deleted
+            $companydel             = $CompanyModel->withDeleted()->where('status !=', "0")->find();
             $projects               = $ProjectModel->paginate(10, 'projects');
             array_multisort($projects,SORT_DESC);
-
 
             // Users
             $this->builder = $this->db->table('users');
@@ -98,7 +100,7 @@ class Project extends BaseController
 
             // User PIC Invoice
             $this->builder = $this->db->table('users');
-            $this->builder->where('deleted_at', null);
+            // $this->builder->where('deleted_at', null);
             $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
             $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
             $this->builder->where('auth_groups.name =', 'client cabang');
@@ -155,6 +157,7 @@ class Project extends BaseController
 
                     // Setrim
                     $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
                     // BAST
                     $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
                     $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
@@ -169,7 +172,7 @@ class Project extends BaseController
                             $projectdata[$project['id']]['paket'][$pack['id']]['name']  = $pack['name'];
 
                             // MDL Paket
-                            $mdlpaket       = $MdlPaketModel->where('paketid', $pack['id'])->find();
+                            $mdlpaket       = $MdlPaketModel->withDeleted()->where('paketid', $pack['id'])->find();
 
                             // MDL
                             foreach ($mdlpaket as $mdlpak) {
@@ -217,11 +220,12 @@ class Project extends BaseController
 
                     // Production
                     $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                    $projectdata[$project['id']]['productionproject'] = [];
                     if (!empty($productions)) {
                         foreach ($productions as $production) {
 
                             // MDL Production
-                            $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
+                            $mdlprod        = $MdlModel->withDeleted()->where('id', $production['mdlid'])->find();
                             $percentages    = [];
                             foreach ($mdlprod as $mdlp) {
                                 // Percentage Production
@@ -267,11 +271,16 @@ class Project extends BaseController
                             }
 
                             $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
+                            $projectdata[$project['id']]['productionproject'] = $projectdata[$project['id']]['production'][$production['id']];
+
                         }
                     } else {
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
+
+
+                    // dd($projectdata[$project['id']]['productionproject']);
 
                     // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
@@ -358,6 +367,10 @@ class Project extends BaseController
                     $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
                     $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
                     $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
+                    // $projectdata[$project['id']]['invoice1'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '1')->first();
+                    // $projectdata[$project['id']]['invoice2'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '2')->first();
+                    // $projectdata[$project['id']]['invoice3'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '3')->first();
+                    // $projectdata[$project['id']]['invoice4'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '4')->first();
 
                     // Pembayaran
                     $projectdata[$project['id']]['pembayaran']  = $PembayaranModel->where('projectid', $project['id'])->find();
@@ -367,24 +380,25 @@ class Project extends BaseController
 
                     // Marketing
                     if (!empty($project['marketing'])) {
-                        $mark     = $UserModel->find($project['marketing']);
+                        $mark     = $UserModel->withDeleted()->find($project['marketing']);
                     } else {
-                        $mark     = $UserModel->where('parentid', $project['clientid'])->first();
+                        $mark     = $UserModel->withDeleted()->where('parentid', $project['clientid'])->first();
                     }
 
-                    $marketing_code = "";
-                    if(!empty($mark)){
-                        $marketing_code = $mark->kode_marketing;
-                    }
-                    $projectdata[$project['id']]['marketing']   = $marketing_code;
-                    // $projectdata[$project['id']]['marketing']   = $marketing->kode_marketing;
+                    // $marketing_code = "";
+                    // if(!empty($mark)){
+                    //     $marketing_code = $mark->kode_marketing;
+                    // }
+                    // $projectdata[$project['id']]['marketing']        = $marketing_code;
+
+                    $projectdata[$project['id']]['marketing']           = $mark->kode_marketing;
 
                     // PIC
-                    // $projectdata[$project['id']]['pic']         = $users;
-                    $projectdata[$project['id']]['pic']         = $picinv;
+                    // $projectdata[$project['id']]['pic']              = $users;
+                    $projectdata[$project['id']]['pic']                 = $picinv;
 
                     // Finance
-                    $projectdata[$project['id']]['finnance']         = $finances;
+                    $projectdata[$project['id']]['finnance']            = $finances;
 
 
                     // Bukti Pembayaran
@@ -395,6 +409,33 @@ class Project extends BaseController
 
                     // Notifikasi
                     $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid', $this->data['uid'])->find();
+
+                    // All Deleted Rab Data Or Mdl Data
+                    $datarabnew = [];
+                    $allrabdata = $RabModel->where('projectid',$project['id'])->where('paketid',null)->find();
+                    foreach($allrabdata as $rabedelete){
+                        $mdldatas    = $MdlModel->where('id',$rabedelete['mdlid'])->find();
+                        foreach ($mdldatas as $mdldel){
+                            if($mdldel['id'] === $rabedelete['mdlid']){
+                                $datarabnew [] = [
+                                    'id'            => $mdldel['id'],
+                                    'name'          => $mdldel['name'],
+                                    'length'        => $mdldel['length'],
+                                    'width'         => $mdldel['width'],
+                                    'height'        => $mdldel['height'],
+                                    'volume'        => $mdldel['volume'],
+                                    'photo'         => $mdldel['photo'],
+                                    'keterangan'    => $mdldel['keterangan'],
+                                    'denomination'  => $mdldel['denomination'],
+                                    'price'         => $mdldel['price'],
+                                    'qty'           => $rabedelete['qty'],
+                                ];
+                            }
+                        }
+                    }
+                    // dd($datarabnew);
+                    $projectdata[$project['id']]['allrabdatadeleted']   = $datarabnew;
+
                 }
             } else {
                 $rabs           = [];
@@ -408,6 +449,7 @@ class Project extends BaseController
             $data['projects']       = $projects;
             $data['projectdata']    = $projectdata;
             $data['company']        = $company;
+            $data['companydel']     = $companydel;
             $data['pakets']         = $pakets;
             $data['rabs']           = $rabs;
             $data['marketings']     = $marketings;
@@ -419,6 +461,25 @@ class Project extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function removemdlpro($mdl)
+    {
+        $RabModel           = new RabModel();
+        $ProductionModel    = new ProductionModel();
+
+        $input = $this->request->getPost();
+
+        $rabs           = $RabModel->where('projectid',$input['proid'])->where('mdlid',$input['mdlid'])->find();
+        $productions    = $ProductionModel->where('projectid',$input['proid'])->where('mdlid',$input['mdlid'])->find();
+
+        foreach ($productions as $production){
+            $ProductionModel->delete($production['id']);
+        }
+
+        $RabModel->delete($rabs[0]['id']);
+
+        die(json_encode(array($rabs)));
     }
 
     public function mdl()
@@ -729,10 +790,10 @@ class Project extends BaseController
             $designers  = $authorize->usersInGroup('design');
 
             // User Marketing
-            $marketings = $UserModel->find($pro['marketing']);
+            $marketings = $UserModel->withDeleted()->find($pro['marketing']);
 
             // User Client
-            $clients    = $UserModel->where('parentid', $pro['clientid'])->find();
+            $clients    = $UserModel->withDeleted()->where('parentid', $pro['clientid'])->find();
 
             if ($input['name'] != $pro['name']) {
                 $name = $input['name'];
@@ -812,6 +873,7 @@ class Project extends BaseController
                 return redirect()->to('project')->withInput()->with('errors', $this->validator->getErrors());
             }
 
+            // dd($input);
             // RAB Data
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
@@ -837,7 +899,7 @@ class Project extends BaseController
                                             $ProductionModel->delete($production['id']);
                                         }
                                     }
-                                    $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                                    $RabModel->save(['id' => $rab['id'], 'qty' => $qty,'deleted_at' => null,],);
                                 } else {
                                     $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
                                     foreach ($productions as $production) {
@@ -851,7 +913,7 @@ class Project extends BaseController
                                         'mdlid'     => $mdlid,
                                         'projectid' => $id,
                                         'paketid'   => $paketid,
-                                        'qty'       => $qty
+                                        'qty'       => $qty,
                                     ];
                                     $RabModel->save($datarab);
                                     for ($n = 1; $n <= (int)$qty; $n++) {
@@ -875,6 +937,20 @@ class Project extends BaseController
                         }
                     }
                 }
+            }else{
+                foreach ($input['eqty' . $id] as $paketid => $mdls) {
+                    foreach ($mdls as $mdlid => $qty) {
+                        $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                        if (!empty($rab)) {
+                            $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                            foreach ($productions as $production) {
+                                $ProductionModel->delete($production['id']);
+                            }
+                            $RabModel->delete($rab['id']);
+                        }
+                    }
+                }
+
             }
 
             // Custom RAB Data
@@ -940,6 +1016,7 @@ class Project extends BaseController
                 }
             }
 
+           
             // Shipping Data
             if (!empty($input['shippingcost'])) {
                 $shipping       = $CustomRabModel->where('projectid', $id)->like('name', 'biaya pengiriman')->first();
@@ -964,6 +1041,13 @@ class Project extends BaseController
                     ];
                     $CustomRabModel->save($datashipping);
                 }
+            } else {
+
+                $shipping   = $CustomRabModel->where('projectid', $id)->like('name', 'biaya pengiriman')->first();
+                if(!empty($shipping)){
+                    $CustomRabModel->delete($shipping['id']);
+                }
+
             }
 
             // Design Data
@@ -1208,10 +1292,10 @@ class Project extends BaseController
             // FINANCE
 
             // FUNCTION INVOICE
-            $idinv1 = $InvoiceModel->where('projectid', $id)->where('status', '1')->first();
-            $idinv2 = $InvoiceModel->where('projectid', $id)->where('status', '2')->first();
-            $idinv3 = $InvoiceModel->where('projectid', $id)->where('status', '3')->first();
-            $idinv4 = $InvoiceModel->where('projectid', $id)->where('status', '4')->first();
+            $idinv1 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '1')->first();
+            $idinv2 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '2')->first();
+            $idinv3 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '3')->first();
+            $idinv4 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '4')->first();
 
             // if (!empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty( $input['emailinvoice1' . $id]) && !empty($idinv1)){
             if (isset($input['dateinvoice1' . $id], $input['noinv1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
@@ -2883,7 +2967,7 @@ class Project extends BaseController
                 $picdata = "";
                 $picname = "";
                 if (!empty($pic)) {
-                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picdata    = $UserModel->withDeleted()->where('id', $pic)->first();
                     $picname    = $picdata->name;
                 }
 
@@ -3122,7 +3206,7 @@ class Project extends BaseController
                 $picdata = "";
                 $picname = "";
                 if (!empty($pic)) {
-                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picdata    = $UserModel->withDeleted()->where('id', $pic)->first();
                     $picname    = $picdata->name;
                 }
 
@@ -3361,7 +3445,7 @@ class Project extends BaseController
                 $picdata = "";
                 $picname = "";
                 if (!empty($pic)) {
-                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picdata    = $UserModel->withDeleted()->where('id', $pic)->first();
                     $picname    = $picdata->name;
                 }
 
@@ -3619,7 +3703,7 @@ class Project extends BaseController
                 $picdata = "";
                 $picname = "";
                 if (!empty($pic)) {
-                    $picdata    = $UserModel->where('id', $pic)->first();
+                    $picdata    = $UserModel->withDeleted()->where('id', $pic)->first();
                     $picname    = $picdata->name;
                 }
 

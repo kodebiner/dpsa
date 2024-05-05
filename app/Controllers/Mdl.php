@@ -6,7 +6,7 @@ use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
 use App\Models\PaketModel;
 use App\Models\LogModel;
-
+use App\Models\RabModel;
 use \phpoffice\PhpOffice\PhpSpreadsheet;
 
 class Mdl extends BaseController
@@ -521,10 +521,22 @@ class Mdl extends BaseController
             $MdlModel           = new MdlModel();
             $MdlPaketModel      = new MdlPaketModel();
             $LogModel           = new LogModel();
+            $RabModel           = new RabModel();
 
             // initialize
             $input              = $this->request->getpost();
             $mdl                = $MdlModel->find($id);
+
+            // Delete Paket Id In Rab
+            $rabpaketid = $RabModel->where('mdlid',$id)->find();
+            // dd($rabpaketid);
+            foreach ( $rabpaketid as $rabdata ){
+                $data = [
+                    'id'        => $rabdata['id'],
+                    'paketid'   => null,
+                ];
+                $RabModel->save($data);
+            }
 
             // Delete Data MDL
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus MDL ' . $mdl['name']]);

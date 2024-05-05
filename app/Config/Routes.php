@@ -137,6 +137,7 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('invoiceview/(:num)', 'Project::invoiceview/$1');
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
     $routes->post('removesph/(:num)', 'Project::removesph/$1');
+    $routes->post('removemdlpro/(:num)', 'Project::removemdlpro/$1');
 
     // $routes->post('inv4/(:num)', 'Project::inv4/$1');
 
@@ -203,4 +204,5 @@ $routes->group('laporan',['filter' => 'login'], function ($routes) {
     $routes->get('excel', 'Laporan::excel');
 
 });
+
 

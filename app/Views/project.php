@@ -595,6 +595,8 @@
                                                 }
                                             } ?>
                                         ];
+
+                                        // console.log(company);
                                         console.log(company);
                                         $("#companyupdated<?= $project['id'] ?>").autocomplete({
                                             source: company,
@@ -1145,6 +1147,7 @@
                                                                         console.log('success', arguments);
                                                                         alert('data berhasil di hapus');
                                                                         $("#sph-file-<?= $project['id'] ?>").remove();
+                                                                        $("#downloadsph<?= $project['id'] ?>").remove();
                                                                     },
                                                                 })
                                                             }
@@ -1299,11 +1302,115 @@
                                                 }
                                             </script>
                                             <!-- end SPH -->
+                                            
+
+                                            <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
+                                            <?php if(!empty($project['sph'])){?>
+                                                <a id="downloadsph<?=$project['id']?>" class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                            <?php } ?>
+                                            <hr>
+
+                                            <!-- Current MDL Proyek Removed -->
+                                            <?php if (!empty($projectdata[$project['id']]['allrabdatadeleted'])) { ?>
+                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <table class="uk-table uk-table-divider uk-text-muted">
+                                                        <!-- <caption class="uk-text-muted tm-h3">MDL Dalam Proyek Yang Telah Terhapus Dari Data MDL</caption> -->
+                                                        
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="8" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Kelola</th>
+                                                                <th>Nama</th>
+                                                                <th>Panjang</th>
+                                                                <th>Lebar</th>
+                                                                <th>Tinggi</th>
+                                                                <th>Volume</th>
+                                                                <th>Satuan</th>
+                                                                <th>Keterangan</th>
+                                                                <!-- <th>Foto</th> -->
+                                                                <th>Jumlah Pesanan</th>
+                                                                <th>Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?>
+                                                                <tr class="uk-text-muted" id="mdl<?=$allcurrentrabdata['id']?>">
+                                                                    <td class="uk-text-center">
+                                                                        <a onclick="removeMDL<?=$allcurrentrabdata['id']?>()" uk-icon="trash"></a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $allcurrentrabdata['name'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $allcurrentrabdata['length'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $allcurrentrabdata['width'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $allcurrentrabdata['height'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $allcurrentrabdata['volume'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php
+                                                                            if ($allcurrentrabdata['denomination'] === "1") {
+                                                                                echo "Unit";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "2") {
+                                                                                echo "Meter Lari";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "3") {
+                                                                                echo "Meter Persegi";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "4") {
+                                                                                echo "Set";
+                                                                            }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $allcurrentrabdata['keterangan'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" class="uk-input uk-form-width-small" placeholder="<?= $allcurrentrabdata['qty'] ?>" disabled/>
+                                                                    </td>
+                                                                    <td>
+                                                                    <?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
+                                                                    </td>
+                                                                </tr>
+                                                                <script>
+                                                                    function removeMDL<?= $allcurrentrabdata['id']; ?>() {
+                                                                        let text = "Anda yakin ingin menghapus <?=$allcurrentrabdata['name']?> dari proyek <?=$project['name']?>";
+                                                                        if (confirm(text) == true) {
+                                                                            $.ajax({
+                                                                                url: "project/removemdlpro/<?= $allcurrentrabdata['id'] ?>",
+                                                                                method: "POST",
+                                                                                name: 'mdldata',
+                                                                                data: {
+                                                                                    mdlid: <?= $allcurrentrabdata['id'] ?>,
+                                                                                    proid: <?=$project['id']?>,
+                                                                                },
+                                                                                dataType: "json",
+                                                                                error: function() {
+                                                                                    console.log('error', arguments);
+                                                                                },
+                                                                                success: function() {
+                                                                                    console.log('success', arguments);
+                                                                                    alert('MDL berhasil di hapus dari proyek.');
+                                                                                    $("#mdl<?=$allcurrentrabdata['id']?>").remove();
+                                                                                },
+                                                                            })
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <?php } ?>
+                                            <!-- End MDL Proyek Removed -->
 
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
-                                                <hr>
                                                 <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                     <table class="uk-table uk-table-middle uk-table-divider">
                                                         <thead>
@@ -1388,6 +1495,64 @@
                                                                     };
                                                                 </script>
                                                             <?php } ?>
+
+                                                            <!-- MDL Remove Form Center List -->
+                                                            <!-- <tr>
+                                                                <td colspan="9" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
+                                                            </tr> -->
+
+                                                            <!-- </?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?> -->
+                                                                <!-- <tr class="uk-text-muted">
+                                                                    <td>
+                                                                        <input type="checkbox" class="uk-checkbox" checked disabled/>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['name'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['length'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['width'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['height'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['volume'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?php
+                                                                            if ($allcurrentrabdata['denomination'] === "1") {
+                                                                                echo "Unit";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "2") {
+                                                                                echo "Meter Lari";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "3") {
+                                                                                echo "Meter Persegi";
+                                                                            } elseif ($allcurrentrabdata['denomination'] === "4") {
+                                                                                echo "Set";
+                                                                            }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        </?= $allcurrentrabdata['keterangan'] ?>
+                                                                    </td> -->
+                                                                    <!-- <td>
+                                                                        <div uk-lightbox="">
+                                                                            <a class="uk-inline" href="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" role="button">
+                                                                                <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
+                                                                            </a>
+                                                                        </div>
+                                                                    </td> -->
+                                                                    <!-- <td>
+                                                                        <input type="number" class="uk-input uk-form-width-small" placeholder="</?= $allcurrentrabdata['qty'] ?>" disabled/>
+                                                                    </td>
+                                                                    <td>
+                                                                    </?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
+                                                                    </td>
+                                                                </tr> -->
+                                                            <!-- </?php } ?> -->
+                                                            <!-- End MDL Remove Form Center List -->
 
                                                             <tr>
                                                                 <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
@@ -2450,7 +2615,7 @@
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
-                                                    <?php if ($authorize->hasPermission('ppic.project.edit', $uid) ||$authorize->hasPermission('production.project.edit', $uid) && ($uid === $production['userid']) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
+                                                    <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                         <?php 
                                                             if($authorize->hasPermission('ppic.project.edit', $uid)){
                                                                 $dispermission = "disabled";
@@ -4829,7 +4994,7 @@
                                 <?php if ($authorize->hasPermission('admin.project.delete', $uid)) { ?>
                                     <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
                                 <?php } ?>
-                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <button class="uk-button uk-button-primary" type="submit">Simpan</button>
                                 <?php } ?>
                             </div>
