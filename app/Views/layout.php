@@ -121,7 +121,7 @@
                                 <a class="tm-h4" href="pesanan">
                                     <div class="uk-width-1-1 uk-margin-left">
                                         <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                            <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
+                                            <img class="uk-width-1-6" src="img/layout/cart.svg" uk-svg>
                                         </div>
                                         <div class="uk-text-center">Pesanan Pembelian</div>
                                     </div>
@@ -134,7 +134,7 @@
                                 <a class="tm-h4" href="laporan">
                                     <div class="uk-width-1-1 uk-margin-left">
                                         <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                            <img class="uk-width-1-6" src="img/layout/finance.svg" uk-svg>
+                                            <img class="uk-width-1-6" src="img/layout/report.svg" uk-svg>
                                         </div>
                                         <div class="uk-text-center">Laporan</div>
                                     </div>
@@ -253,7 +253,7 @@
                         <a class="tm-h4" href="pesanan">
                             <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                    <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
+                                    <img class="uk-width-1-2" src="img/layout/cart.svg" uk-svg>
                                 </div>
                                 <div class="uk-text-center">Pesanan Pembelian</div>
                             </div>
@@ -265,7 +265,7 @@
                         <a class="tm-h4" href="laporan">
                             <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                    <img class="uk-width-1-2" src="img/layout/marketing.svg" uk-svg>
+                                    <img class="uk-width-1-2" src="img/layout/report.svg" uk-svg>
                                 </div>
                                 <div class="uk-text-center">Laporan</div>
                             </div>
