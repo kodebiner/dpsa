@@ -90,9 +90,9 @@
             ]);
 
             var options = {
-                title: 'Laporan',
+                title: 'Laporan SPK',
                 hAxis: {
-                    title: 'Year',
+                    title: '',
                     titleTextStyle: {
                         color: '#333'
                     }
@@ -214,32 +214,7 @@
             </div>
         </div>
     <?php } ?>
-    <!-- </?php } else { ?> -->
-        <!-- <div id="filter" class="uk-margin" hidden>
-            <form id="searchform" action="laporan" method="GET">
-                <div class="uk-margin-small uk-flex uk-flex-center">
-                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" </?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
-                </div>
-                <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
-                    <div>Tampilan</div>
-                    <div>
-                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                            <option value="10" </?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                            <option value="25" </?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                            <option value="50" </?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                            <option value="100" </?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
-                        </select>
-                    </div>
-                    <div>Per Halaman</div>
-                </div>
-            </form>
-        </div> -->
-    <!-- </?php } ?> -->
-    <!-- form input -->
-
-    <!-- script form -->
     <script>
-        // document.getElementById('rolesearch').addEventListener("change", submitform);
         document.getElementById('search').addEventListener("change", submitform);
         document.getElementById('perpage').addEventListener("change", submitform);
 

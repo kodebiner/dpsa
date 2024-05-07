@@ -549,11 +549,12 @@
                                                 $("#kodemarketing<?= $user->id; ?>").attr("required",false);
                                                 $("#kodemarketing<?= $user->id; ?>").val("");
                                             } else if ($('#role<?= $user->id; ?>').find(":selected").text() === "client cabang") {
-                                                $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
+                                                // $("#kliencabang<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#pusat<?= $user->id; ?>").attr("hidden", true);
                                                 $("#marketingcode<?= $user->id; ?>").attr("hidden",true);
                                                 $("#kodemarketing<?= $user->id; ?>").attr("required",false);
                                                 $("#kodemarketing<?= $user->id; ?>").val("");
+                                                $("#kliencabang<?= $user->id; ?>").attr("hidden", false);
                                             }else if($('#role<?= $user->id; ?>').find(":selected").text() === "marketing")  {
                                                 $("#marketingcode<?= $user->id; ?>").removeAttr("hidden");
                                                 $("#kodemarketing<?= $user->id; ?>").attr("required",true);
@@ -581,21 +582,22 @@
                                 $client = "";
                                 $pusat = "";
                                 if (!empty($Companys)) {
-                                    foreach ($Companys as $comp) {
-                                        if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
-                                            $client = $comp['rsname'] . " Pusat";
-                                        } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
-                                            foreach ($Companys as $parent) {
-                                                if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
-                                                    $pusat = $parent['rsname'];
+                                        foreach ($Companys as $comp) {
+                                            if ($user->parent === $comp['id'] && $comp['parentid'] === "0") {
+                                                $client = $comp['rsname'] . " Pusat";
+                                            } elseif ($user->parent === $comp['id'] && $comp['parentid'] != "0") {
+                                                foreach ($Companys as $parent) {
+                                                    if ($comp['parentid'] === $parent['id'] && $comp['parentid'] != "0") {
+                                                        $pusat = $parent['rsname'];
+                                                    }
                                                 }
+                                                $client = $comp['rsname'] . " Cabang " . $pusat;
+                                            } elseif ($user->parent === null) {
+                                                $client = " DPSA ";
                                             }
-                                            $client = $comp['rsname'] . " Cabang " . $pusat;
-                                        } elseif ($user->parent === null) {
-                                            $client = " DPSA ";
                                         }
-                                    }
-                                } ?>
+                                    } 
+                                ?>
 
                                 <div class="uk-margin" id="pusat<?= $user->id; ?>" hidden>
                                     <label class="uk-form-label" for="company">Perusahaan</label>
@@ -647,7 +649,7 @@
                                             $("#cabang<?= $user->id; ?>").autocomplete({
                                                 source: cabang,
                                                 select: function(e, i) {
-                                                    $("input[id='compid']").val(i.item.idx); // save selected id to hidden input
+                                                    $("input[id='compid<?= $user->id ?>']").val(i.item.idx); // save selected id to hidden input
                                                 },
                                                 minLength: 2
                                             });

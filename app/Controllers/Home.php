@@ -17,6 +17,7 @@ use App\Models\ProductionModel;
 use App\Models\BuktiModel;
 use App\Models\NotificationModel;
 use App\Models\InvoiceModel;
+use App\Models\PembayaranModel;
 
 class Home extends BaseController
 {
@@ -41,13 +42,16 @@ class Home extends BaseController
             $pager = \Config\Services::pager();
 
             // Calling Models
-            $UserModel      = new UserModel();
-            $ProjectModel   = new ProjectModel();
-            $CompanyModel   = new CompanyModel();
-            $RabModel       = new RabModel();
-            $PaketModel     = new PaketModel();
-            $MdlModel       = new MdlModel();
-            $DesignModel    = new DesignModel();
+            $UserModel          = new UserModel();
+            $ProjectModel       = new ProjectModel();
+            $CompanyModel       = new CompanyModel();
+            $RabModel           = new RabModel();
+            $PaketModel         = new PaketModel();
+            $MdlModel           = new MdlModel();
+            $DesignModel        = new DesignModel();
+            $BastModel          = new BastModel();
+            $CustomRabModel     = new CustomRabModel();
+            $PembayaranModel    = new PembayaranModel();
 
             // Populating data
             $input = $this->request->getGet();
@@ -66,7 +70,19 @@ class Home extends BaseController
             $page = (@$_GET['page']) ? $_GET['page'] : 1;
             $offset = ($page - 1) * $perpage;
 
+            // Daterange Filter
+            $inputdate = $this->request->getVar('daterange');
+            if (!empty($inputdate)) {
+                $daterange = explode(' - ', $inputdate);
+                $startdate = $daterange[0];
+                $enddate = $daterange[1];
+            } else {
+                $startdate = date('Y-m-1');
+                $enddate = date('Y-m-t');
+            }
+
             if (($this->data['role'] === 'superuser') || ($this->data['role'] === 'owner')) {
+
                 // New Client Data 
                 $clients = $this->db->table('company')->where('deleted_at', null);
                 $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
@@ -89,6 +105,135 @@ class Home extends BaseController
                         ->countAllResults();
                 }
 
+                // Report Script
+                $this->db       = \Config\Database::connect();
+                $validation     = \Config\Services::validation();
+                $proyek         = $this->builder  = $this->db->table('project');
+
+                if ($startdate === $enddate) {
+                    $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+                } else {
+                    $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+                }
+
+                $this->builder->join('users', 'users.id = project.marketing');
+                $this->builder->join('company', 'company.id = project.clientid');
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $this->builder->like('project.name', $input['searchproyek']);
+                    $this->builder->orLike('users.username', $input['searchproyek']);
+                    $this->builder->orLike('company.rsname', $input['searchproyek']);
+                }
+                $this->builder->orderBy('id',"DESC");
+                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $totalpro = $proyek
+                        ->like('project.name', $input['searchproyek'])
+                        ->orLike('users.username', $input['searchproyek'])
+                        ->orLike('company.rsname', $input['searchproyek'])
+                        ->countAllResults();
+                } else {
+                    $totalpro = $proyek
+                        ->countAllResults();
+                }
+
+                // Query Data Project
+                $projectdata = [];
+                foreach ($queryproject as $project) {
+
+                    // Klien
+                    $projectdata[$project['id']]['klien'] = $CompanyModel->where('id', $project['clientid'])->first();
+
+                    // Marketing
+                    $projectdata[$project['id']]['marketing'] = $UserModel->where('id', $project['marketing'])->first();
+
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    if (!empty($rabs)) {
+                        foreach ($rabs as $rab) {
+                            $paketid[]  = $rab['paketid'];
+
+                            // MDL RAB
+                            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                            foreach ($rabmdl as $mdlr) {
+                                $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                    'id'            => $mdlr['id'],
+                                    'proid'         => $project['id'],
+                                    'name'          => $mdlr['name'],
+                                    'length'        => $mdlr['length'],
+                                    'width'         => $mdlr['width'],
+                                    'height'        => $mdlr['height'],
+                                    'volume'        => $mdlr['volume'],
+                                    'denomination'  => $mdlr['denomination'],
+                                    'keterangan'    => $mdlr['keterangan'],
+                                    'qty'           => $rab['qty'],
+                                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                    'oriprice'      => (int)$mdlr['price'],
+                                ];
+                            }
+                        }
+                    }
+
+                    // Get RAB data
+                    $price = [];
+                    if (!empty($projectdata[$project['id']]['rab'])) {
+                        foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty']
+                            ];
+                        }
+                    }
+
+                    // Setrim
+                    $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                    // BAST
+                    $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    if (!empty($projectdata[$project['id']]['bastfile'])) {
+                        $day =  $projectdata[$project['id']]['bastfile']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdata[$project['id']]['dateline'] = $dateline;
+                        $projectdata[$project['id']]['now'] = $nowtime;
+                    } else {
+                        $projectdata[$project['id']]['dateline'] = "";
+                        $projectdata[$project['id']]['now'] = "";
+                    }
+
+                    // Custom RAB
+                    $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+                    // All Custom RAB 
+                    $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // Pembayaran Value
+                    $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                    $projectdata[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
+                    // Rab Sum Value
+                    $projectdata[$project['id']]['rabvalue'] = 0;
+                    if (!empty($price)) {
+                        $projectdata[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
+                    }
+                }
+
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
                 $data['clients']        = $query;
@@ -96,12 +241,21 @@ class Home extends BaseController
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['pagerpro']       = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
+                $data['projectdata']    = $projectdata;
+                $data['projects']       = $queryproject;
+                $data['total']          = count($queryproject);
+                $data['startdate']      = strtotime($startdate);
+                $data['enddate']        = strtotime($enddate);
 
                 return view('dashboard-superuser', $data);
+
             } elseif ($this->data['role'] === 'client pusat') {
+
                 // New Client Pusat Function
                 $clients = array();
+                $klienid = array();
 
                 if (isset($input['search']) && !empty($input['search'])) {
                     $branches = $CompanyModel->where('parentid', $this->data['parentid'])->where('deleted_at', null)->like('rsname', $input['search'])->orLike('ptname', $input['search'])->find();
@@ -113,9 +267,9 @@ class Home extends BaseController
                             'id'        => $company['id'],
                             'rsname'    => $company['rsname'],
                         ];
+                        $klienid []= $company['id'];
                     }
                     $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
-                    // $branches = $CompanyModel->whereIn('parentid', $this->data['parentid'])->orWhere('id', $this->data['parentid'])->where('deleted_at', null)->find();
                 }
 
                 foreach ($branches as $branch) {
@@ -123,9 +277,139 @@ class Home extends BaseController
                         'id'        => $branch['id'],
                         'rsname'    => $branch['rsname'],
                     ];
+                    $klienid[] = $branch['id'];
+                }
+                $total = count($clients); 
+                
+                // Report Script
+                $this->db       = \Config\Database::connect();
+                $validation     = \Config\Services::validation();
+                $proyek         = $this->builder  = $this->db->table('project');
+
+                if ($startdate === $enddate) {
+                    $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+                } else {
+                    $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+                }
+                $this->builder->whereIn('project.clientid',$klienid);
+                $this->builder->join('users', 'users.id = project.marketing');
+                $this->builder->join('company', 'company.id = project.clientid');
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $this->builder->like('project.name', $input['searchproyek']);
+                    $this->builder->orLike('users.username', $input['searchproyek']);
+                    $this->builder->orLike('company.rsname', $input['searchproyek']);
+                }
+                $this->builder->orderBy('id',"DESC");
+                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $totalpro = $proyek
+                        ->like('project.name', $input['searchproyek'])
+                        ->orLike('users.username', $input['searchproyek'])
+                        ->orLike('company.rsname', $input['searchproyek'])
+                        ->countAllResults();
+                } else {
+                    $totalpro = $proyek
+                        // ->where('company.rsname !=', '')
+                        ->countAllResults();
                 }
 
-                $total = count($clients);
+                // Query Data Project
+                $projectdata = [];
+                foreach ($queryproject as $project) {
+
+                    // Klien
+                    $projectdata[$project['id']]['klien'] = $CompanyModel->where('id', $project['clientid'])->first();
+
+                    // Marketing
+                    $projectdata[$project['id']]['marketing'] = $UserModel->where('id', $project['marketing'])->first();
+
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    if (!empty($rabs)) {
+                        foreach ($rabs as $rab) {
+                            $paketid[]  = $rab['paketid'];
+
+                            // MDL RAB
+                            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                            foreach ($rabmdl as $mdlr) {
+                                $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                    'id'            => $mdlr['id'],
+                                    'proid'         => $project['id'],
+                                    'name'          => $mdlr['name'],
+                                    'length'        => $mdlr['length'],
+                                    'width'         => $mdlr['width'],
+                                    'height'        => $mdlr['height'],
+                                    'volume'        => $mdlr['volume'],
+                                    'denomination'  => $mdlr['denomination'],
+                                    'keterangan'    => $mdlr['keterangan'],
+                                    'qty'           => $rab['qty'],
+                                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                    'oriprice'      => (int)$mdlr['price'],
+                                ];
+                            }
+                        }
+                    }
+
+                    // Get RAB data
+                    $price = [];
+                    if (!empty($projectdata[$project['id']]['rab'])) {
+                        foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty']
+                            ];
+                        }
+                    }
+
+                    // Setrim
+                    $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                    // BAST
+                    $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    if (!empty($projectdata[$project['id']]['bastfile'])) {
+                        $day =  $projectdata[$project['id']]['bastfile']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdata[$project['id']]['dateline'] = $dateline;
+                        $projectdata[$project['id']]['now'] = $nowtime;
+                    } else {
+                        $projectdata[$project['id']]['dateline'] = "";
+                        $projectdata[$project['id']]['now'] = "";
+                    }
+
+                    // Custom RAB
+                    $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+                    // All Custom RAB 
+                    $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // Pembayaran Value
+                    $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                    $projectdata[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
+                    // Rab Sum Value
+                    $projectdata[$project['id']]['rabvalue'] = 0;
+                    if (!empty($price)) {
+                        $projectdata[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
+                    }
+                }
 
                 $data['title']          = lang('Global.titleDashboard');
                 $data['description']    = lang('Global.dashboardDescription');
@@ -133,10 +417,18 @@ class Home extends BaseController
                 $data['pakets']         = $PaketModel->findAll();
                 $data['clients']        = array_slice($clients, $offset, $perpage);
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['pagerpro']       = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
+                $data['projectdata']    = $projectdata;
+                $data['projects']       = $queryproject;
+                $data['total']          = count($queryproject);
+                $data['startdate']      = strtotime($startdate);
+                $data['enddate']        = strtotime($enddate);
 
                 return view('dashboard-superuser', $data);
+
             } elseif ($this->data['role'] === 'client cabang') {
+
                 // Client Cabang function
                 $ProjectModel       = new ProjectModel;
                 $CompanyModel       = new CompanyModel();
@@ -159,17 +451,17 @@ class Home extends BaseController
                 $projectdata = [];
                 $projectdesign = [];
                 $client = "";
+
                 if (!empty($projects)) {
                     foreach ($projects as $project) {
-                        $client = $CompanyModel->find($project['clientid']);
                         $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
                         $projectdesign[$project['id']]['design']    = $DesignModel->where('projectid', $project['id'])->first();
-
+    
                         // RAB
                         $rabs       = $RabModel->where('projectid', $project['id'])->find();
                         foreach ($rabs as $rab) {
                             $paketid[]  = $rab['paketid'];
-
+    
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
@@ -183,26 +475,25 @@ class Home extends BaseController
                                     'volume'        => $mdlr['volume'],
                                     'denomination'  => $mdlr['denomination'],
                                     'keterangan'    => $mdlr['keterangan'],
-                                    'photo'         => $mdlr['photo'],
                                     'qty'           => $rab['qty'],
                                     'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
                                     'oriprice'      => (int)$mdlr['price'],
                                 ];
                             }
                         }
-
+    
                         // Custom RAB MODEL
                         $projectdata[$project['id']]['custrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
-
+    
                         // bast
                         $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
                         $projectdata[$project['id']]['bast']            = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
-
+    
                         // Production
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
                         if (!empty($productions)) {
                             foreach ($productions as $production) {
-
+    
                                 // MDL Production
                                 $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
                                 $percentages    = [];
@@ -232,7 +523,8 @@ class Home extends BaseController
                                     if ($production['setting'] == 1) {
                                         $percentages[]    = 1;
                                     }
-
+    
+                                    // Data Prodcution
                                     $projectdata[$project['id']]['production'][$production['id']]  = [
                                         'id'                => $production['id'],
                                         'mdlid'             => $production['mdlid'],
@@ -247,14 +539,14 @@ class Home extends BaseController
                                         'setting'           => $production['setting'],
                                     ];
                                 }
-
+    
                                 $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                             }
                         } else {
                             $mdlprod    = [];
                             $projectdata[$project['id']]['production']   = [];
                         }
-
+    
                         // Production Proggres
                         if (!empty($projectdata[$project['id']]['rab'])) {
                             $price = [];
@@ -267,22 +559,22 @@ class Home extends BaseController
                                     'qty'       => $mdldata['qty'],
                                 ];
                             }
-
+    
                             $total = array_sum(array_column($price, 'sumprice'));
-
+    
                             $progresdata = [];
                             $datamdlid = [];
                             foreach ($price as $progresval) {
                                 $progresdata[] = [
                                     'id'    => $progresval['id'], // mdlid
                                     'proid' => $progresval['proid'],
-                                    'val'   => (($progresval['price'] / $total) * 65) / 7,
+                                    'val'   => (($progresval['price'] / $total) * 65) / 8,
                                 ];
                                 $datamdlid[] = $progresval['id'];
                             }
-
+    
                             $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
-
+    
                             $progress = [];
                             foreach ($productval as $proses) {
                                 foreach ($progresdata as $value) {
@@ -315,7 +607,7 @@ class Home extends BaseController
                                 }
                             }
                             $projectdata[$project['id']]['progress']    = array_sum($progress);
-
+    
                             if (!empty($projectdata[$project['id']]['bast'])) {
                                 $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
                                 $date = date_create($day);
@@ -323,7 +615,7 @@ class Home extends BaseController
                                 $hari = date_create($key);
                                 date_add($hari, date_interval_create_from_date_string('3 month'));
                                 $dateline = date_format($hari, 'Y-m-d');
-
+    
                                 $now = strtotime("now");
                                 $nowtime = date("Y-m-d", $now);
                                 $projectdata[$project['id']]['dateline'] = $dateline;
@@ -333,17 +625,16 @@ class Home extends BaseController
                             $projectdata[$project['id']]['dateline'] = '';
                             $projectdata[$project['id']]['now'] = '';
                         }
-
+    
                         // INVOICE
                         $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
                         $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
                         $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
                         $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
-
-
+    
                         // Bukti Pembayaran
                         $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
-
+    
                         // Bukti Pengiriman
                         $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                     }
@@ -351,29 +642,170 @@ class Home extends BaseController
 
                 $company = $CompanyModel->whereIn('parentid', $this->data['parentid'])->where('deleted_at', null)->find();
 
-                $clients = array();
+                $clients    = array();
+                $klienid    = array();
                 foreach ($company as $comp) {
                     if (!empty($clients)) {
                         $clients[] = [
                             'id'  => $comp['id'],
                             'rsname' => $comp['rsname'],
                         ];
+                        $klienid[] = $comp['id'];
                     }
                 }
 
+                // Report Script
+                $this->db       = \Config\Database::connect();
+                $validation     = \Config\Services::validation();
+                $proyek         = $this->builder  = $this->db->table('project');
+
+                if ($startdate === $enddate) {
+                    $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+                } else {
+                    $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+                }
+                $this->builder->whereIn('project.clientid', $this->data['parentid']);
+                $this->builder->join('users', 'users.id = project.marketing');
+                $this->builder->join('company', 'company.id = project.clientid');
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $this->builder->like('project.name', $input['searchproyek']);
+                    // $this->builder->orLike('users.username', $input['searchproyek']);
+                    // $this->builder->orLike('company.rsname', $input['searchproyek']);
+                    $this->builder->whereIn('project.clientid', $this->data['parentid']);
+                }
+                $this->builder->orderBy('id',"DESC");
+                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $totalpro = $proyek
+                        ->like('project.name', $input['searchproyek'])
+                        ->whereIn('project.clientid', $this->data['parentid'])
+                        // ->orLike('users.username', $input['searchproyek'])
+                        // ->orLike('company.rsname', $input['searchproyek'])
+                        ->countAllResults();
+                } else {
+                    $totalpro = $proyek
+                        // ->where('company.parentid !=', '0')
+                        ->countAllResults();
+                }
+
+                // Query Data Project
+                $projectdatareport = [];
+                foreach ($queryproject as $project) {
+
+                    // Klien
+                    $projectdatareport[$project['id']]['klien'] = $CompanyModel->where('id', $project['clientid'])->first();
+
+                    // Marketing
+                    $projectdatareport[$project['id']]['marketing'] = $UserModel->where('id', $project['marketing'])->first();
+
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    if (!empty($rabs)) {
+                        foreach ($rabs as $rab) {
+                            $paketid[]  = $rab['paketid'];
+
+                            // MDL RAB
+                            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                            foreach ($rabmdl as $mdlr) {
+                                $projectdatareport[$project['id']]['rab'][$rab['id']]  = [
+                                    'id'            => $mdlr['id'],
+                                    'proid'         => $project['id'],
+                                    'name'          => $mdlr['name'],
+                                    'length'        => $mdlr['length'],
+                                    'width'         => $mdlr['width'],
+                                    'height'        => $mdlr['height'],
+                                    'volume'        => $mdlr['volume'],
+                                    'denomination'  => $mdlr['denomination'],
+                                    'keterangan'    => $mdlr['keterangan'],
+                                    'qty'           => $rab['qty'],
+                                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                    'oriprice'      => (int)$mdlr['price'],
+                                ];
+                            }
+                        }
+                    }
+
+                    // Get RAB data
+                    $price = [];
+                    if (!empty($projectdatareport[$project['id']]['rab'])) {
+                        foreach ($projectdatareport[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty']
+                            ];
+                        }
+                    }
+
+                    // Setrim
+                    $projectdatareport[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                    // BAST
+                    $projectdatareport[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdatareport[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    if (!empty($projectdatareport[$project['id']]['bastfile'])) {
+                        $day =  $projectdatareport[$project['id']]['bastfile']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdatareport[$project['id']]['dateline'] = $dateline;
+                        $projectdatareport[$project['id']]['now'] = $nowtime;
+                    } else {
+                        $projectdatareport[$project['id']]['dateline'] = "";
+                        $projectdatareport[$project['id']]['now'] = "";
+                    }
+
+                    // Custom RAB
+                    $projectdatareport[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdatareport[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+                    // All Custom RAB 
+                    $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // Pembayaran Value
+                    $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                    $projectdatareport[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
+                    // Rab Sum Value
+                    $projectdatareport[$project['id']]['rabvalue'] = 0;
+                    if (!empty($price)) {
+                        $projectdatareport[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
+                    }
+                }
+                
+
                 // Parsing Data to View
-                $data['title']          = lang('Global.titleDashboard');
-                $data['description']    = lang('Global.dashboardDescription');
-                $data['client']         = $client;
-                $data['projects']       = $projects;
-                $data['design']         = $DesignModel->findAll();
-                $data['rabs']           = $RabModel->findAll();
-                $data['pakets']         = $PaketModel->findAll();
-                $data['mdls']           = $MdlModel->findAll();
-                $data['pager']          = $pager->links('projects', 'uikit_full');
-                $data['projectdata']    = $projectdata;
-                $data['projectdesign']  = $projectdesign;
-                $data['input']          = $this->request->getGet('projectid');
+                $data['title']              = lang('Global.titleDashboard');
+                $data['description']        = lang('Global.dashboardDescription');
+                $data['client']             = $client;
+                $data['projects']           = $projects;
+                $data['design']             = $DesignModel->findAll();
+                $data['rabs']               = $RabModel->findAll();
+                $data['pakets']             = $PaketModel->findAll();
+                $data['mdls']               = $MdlModel->findAll();
+                $data['pager']              = $pager->links('projects', 'uikit_full');
+                $data['pagerpro']           = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+                $data['projectdata']        = $projectdata;
+                $data['projectdesign']      = $projectdesign;
+                $data['input']              = $this->request->getGet('projectid');
+                $data['projectdatareport']  = $projectdatareport;
+                $data['projectsreport']     = $queryproject;
+                $data['total']              = count($queryproject);
+                $data['startdate']          = strtotime($startdate);
+                $data['enddate']            = strtotime($enddate);
 
                 return view('dashboard', $data);
             }
@@ -388,7 +820,9 @@ class Home extends BaseController
 
             // Calling Services
             $pager = \Config\Services::pager();
+
             // Calling models
+            $UserModel          = new UserModel();
             $ProjectModel       = new ProjectModel;
             $CompanyModel       = new CompanyModel();
             $RabModel           = new RabModel();
@@ -400,14 +834,34 @@ class Home extends BaseController
             $CustomRabModel     = new CustomRabModel();
             $InvoiceModel       = new InvoiceModel();
             $BuktiModel         = new BuktiModel();
+            $PembayaranModel    = new PembayaranModel();
 
-            // Populating Data
+            // Populating data
             $input = $this->request->getGet();
 
-            if (isset($input['perpage']) && !empty($input['perpage'])) {
+            // parsing data to view
+            $data           = $this->data;
+            $data['input']  = $input;
+
+            // Variable for pagination
+            if (isset($input['perpage'])) {
                 $perpage = $input['perpage'];
             } else {
                 $perpage = 10;
+            }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
+            // Daterange Filter
+            $inputdate = $this->request->getVar('daterange');
+            if (!empty($inputdate)) {
+                $daterange = explode(' - ', $inputdate);
+                $startdate = $daterange[0];
+                $enddate = $daterange[1];
+            } else {
+                $startdate = date('Y-m-1');
+                $enddate = date('Y-m-t');
             }
 
             $client = $CompanyModel->find($id);
@@ -606,22 +1060,160 @@ class Home extends BaseController
                     // Bukti Pengiriman
                     $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                 }
+
+                // Report Script
+                $this->db       = \Config\Database::connect();
+                $validation     = \Config\Services::validation();
+                $proyek         = $this->builder  = $this->db->table('project');
+
+                if ($startdate === $enddate) {
+                    $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+                } else {
+                    $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+                }
+                $this->builder->where('project.clientid', $id);
+                $this->builder->join('users', 'users.id = project.marketing');
+                $this->builder->join('company', 'company.id = project.clientid');
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $this->builder->like('project.name', $input['searchproyek']);
+                    // $this->builder->orLike('users.username', $input['searchproyek']);
+                    // $this->builder->orLike('company.rsname', $input['searchproyek']);
+                    $this->builder->where('project.clientid', $id);
+                }
+                $this->builder->orderBy('id',"DESC");
+                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $totalpro = $proyek
+                        ->like('project.name', $input['searchproyek'])
+                        ->where('project.clientid', $id)
+                        // ->orLike('users.username', $input['searchproyek'])
+                        // ->orLike('company.rsname', $input['searchproyek'])
+                        ->countAllResults();
+                } else {
+                    $totalpro = $proyek
+                        // ->where('company.parentid !=', '0')
+                        ->countAllResults();
+                }
+
+                // Query Data Project
+                $projectdatareport = [];
+                foreach ($queryproject as $project) {
+
+                    // Klien
+                    $projectdatareport[$project['id']]['klien'] = $CompanyModel->where('id', $project['clientid'])->first();
+
+                    // Marketing
+                    $projectdatareport[$project['id']]['marketing'] = $UserModel->where('id', $project['marketing'])->first();
+
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    if (!empty($rabs)) {
+                        foreach ($rabs as $rab) {
+                            $paketid[]  = $rab['paketid'];
+
+                            // MDL RAB
+                            $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                            foreach ($rabmdl as $mdlr) {
+                                $projectdatareport[$project['id']]['rab'][$rab['id']]  = [
+                                    'id'            => $mdlr['id'],
+                                    'proid'         => $project['id'],
+                                    'name'          => $mdlr['name'],
+                                    'length'        => $mdlr['length'],
+                                    'width'         => $mdlr['width'],
+                                    'height'        => $mdlr['height'],
+                                    'volume'        => $mdlr['volume'],
+                                    'denomination'  => $mdlr['denomination'],
+                                    'keterangan'    => $mdlr['keterangan'],
+                                    'qty'           => $rab['qty'],
+                                    'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                    'oriprice'      => (int)$mdlr['price'],
+                                ];
+                            }
+                        }
+                    }
+
+                    // Get RAB data
+                    $price = [];
+                    if (!empty($projectdatareport[$project['id']]['rab'])) {
+                        foreach ($projectdatareport[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty']
+                            ];
+                        }
+                    }
+
+                    // Setrim
+                    $projectdatareport[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                    // BAST
+                    $projectdatareport[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdatareport[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    if (!empty($projectdatareport[$project['id']]['bastfile'])) {
+                        $day =  $projectdatareport[$project['id']]['bastfile']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdatareport[$project['id']]['dateline'] = $dateline;
+                        $projectdatareport[$project['id']]['now'] = $nowtime;
+                    } else {
+                        $projectdatareport[$project['id']]['dateline'] = "";
+                        $projectdatareport[$project['id']]['now'] = "";
+                    }
+
+                    // Custom RAB
+                    $projectdatareport[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdatareport[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+                    // All Custom RAB 
+                    $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // Pembayaran Value
+                    $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                    $projectdatareport[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
+                    // Rab Sum Value
+                    $projectdatareport[$project['id']]['rabvalue'] = 0;
+                    if (!empty($price)) {
+                        $projectdatareport[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
+                    }
+                }
             }
 
             // Parsing Data to View
-            $data                   = $this->data;
-            $data['title']          = lang('Global.titleDashboard');
-            $data['description']    = lang('Global.dashboardDescription');
-            $data['client']         = $client;
-            $data['projects']       = $projects;
-            $data['design']         = $DesignModel->findAll();
-            $data['rabs']           = $RabModel->findAll();
-            $data['pakets']         = $PaketModel->findAll();
-            $data['mdls']           = $MdlModel->findAll();
-            $data['pager']          = $pager->links('projects', 'uikit_full');
-            $data['projectdata']    = $projectdata;
-            $data['projectdesign']  = $projectdesign;
-            $data['input']          = $this->request->getGet('projectid');
+            $data                       = $this->data;
+            $data['title']              = lang('Global.titleDashboard');
+            $data['description']        = lang('Global.dashboardDescription');
+            $data['client']             = $client;
+            $data['projects']           = $projects;
+            $data['design']             = $DesignModel->findAll();
+            $data['rabs']               = $RabModel->findAll();
+            $data['pakets']             = $PaketModel->findAll();
+            $data['mdls']               = $MdlModel->findAll();
+            $data['pager']              = $pager->links('projects', 'uikit_full');
+            $data['pagerpro']           = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+            $data['projectdata']        = $projectdata;
+            $data['projectdesign']      = $projectdesign;
+            $data['input']              = $this->request->getGet('projectid');
+            $data['projectdatareport']  = $projectdatareport;
+            $data['projectsreport']     = $queryproject;
+            $data['total']              = count($queryproject);
+            $data['startdate']          = strtotime($startdate);
+            $data['enddate']            = strtotime($enddate);
 
             return view('dashboard', $data);
         } else {

@@ -82,6 +82,7 @@ $routes->group('/',['filter' => 'login'], function ($routes) {
 
 // Revisi & Acc Design
 $routes->group('home', ['filter' => 'login'], function($routes) {
+    $routes->get('', 'Home::index');
     $routes->post('revisi', 'Home::revisi');
     $routes->post('removerevisi', 'Home::removerevisi');
     $routes->post('saverevisi/(:num)', 'Home::saverevisi/$1');
@@ -117,6 +118,11 @@ $routes->group('client',['filter' => 'login'], function ($routes){
     $routes->post('create','Client::create');
     $routes->post('update/(:num)','Client::update/$1');
     $routes->get('delete/(:num)','Client::delete/$1');
+});
+
+// Purchase Order
+$routes->group('pesanan',['filter' => 'login'], function ($routes){
+    $routes->get('','Purchase::index');
 });
 
 // Project

@@ -293,7 +293,6 @@ class User extends BaseController
                 return redirect()->to('users')->withInput()->with('errors', $this->validator->getErrors());
             }
 
-            // Data user update
             $updateUser->id = $id;
             if (!empty($input['username']) && $input['username'] != "") {
                 $updateUser->username  = $input['username'];
@@ -318,7 +317,7 @@ class User extends BaseController
             if (!empty($input['compid'])) {
                 $updateUser->parentid    = $input['compid'];
             } else {
-                $updateUser->parentid  = NULL;
+                $updateUser->parentid   = NULL;
             }
             if (!empty($input['status'])) {
                 $updateUser->active    = $input['status'];

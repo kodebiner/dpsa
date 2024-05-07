@@ -116,6 +116,19 @@
                             </li>
                         <?php } ?>
 
+                        <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanan') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="pesanan">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/produksi.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Pesanan Pembelian</div>
+                                    </div>
+                                </a>
+                            </li>
+                        <?php } ?>
+
                         <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="laporan">
@@ -235,12 +248,24 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+                    <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanan')) ? 'uk-active' : '' ?>">
+                        <a class="tm-h4" href="pesanan">
+                            <div class="uk-width-1-1 uk-margin-right">
+                                <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                    <img class="uk-width-1-2" src="img/layout/produksi.svg" uk-svg>
+                                </div>
+                                <div class="uk-text-center">Pesanan Pembelian</div>
+                            </div>
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'laporan')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="laporan">
                             <div class="uk-width-1-1 uk-margin-right">
                                 <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                    <img class="uk-width-1-2" src="img/layout/finance.svg" uk-svg>
+                                    <img class="uk-width-1-2" src="img/layout/marketing.svg" uk-svg>
                                 </div>
                                 <div class="uk-text-center">Laporan</div>
                             </div>

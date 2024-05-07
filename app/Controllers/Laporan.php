@@ -62,10 +62,6 @@ class Laporan extends BaseController
                 $enddate = date('Y-m-t');
             }
 
-            // $projects = $ProjectModel->findAll();
-            // $companys = $CompanyModel->findAll();
-            // $users    = $UserModel->where('parentid !=', null)->find();
-
             // Initialize
             $input = $this->request->getGet();
 
@@ -195,8 +191,6 @@ class Laporan extends BaseController
             $data                   = $this->data;
             $data['title']          = 'Laporan';
             $data['description']    = lang('Global.clientListDesc');
-            $data['roles']          = $CompanyModel->where('deleted_at', null)->find();
-            $data['company']        = $query;
             $data['total']          = $total;
             $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
             $data['input']          = $input;
@@ -225,6 +219,7 @@ class Laporan extends BaseController
 
         // Populating data
         $input = $this->request->getVar('daterange');
+        dd($input);
         if (!empty($input)) {
             $daterange = explode(' - ', $input);
             $startdate = $daterange[0];
@@ -317,6 +312,7 @@ class Laporan extends BaseController
 
             // Setrim
             $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
             // BAST
             $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
             $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();

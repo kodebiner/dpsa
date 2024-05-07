@@ -16,4 +16,9 @@ class UserModel extends MythModel
     protected $validationRules  = [
         'id'          =>  'permit_empty|is_natural_no_zero'
     ];
+    protected $useTimestamps    = true;
+    protected $useSoftDeletes   = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
+    protected $deletedField     = 'deleted_at';
 }
