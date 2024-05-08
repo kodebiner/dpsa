@@ -219,7 +219,6 @@ class Laporan extends BaseController
 
         // Populating data
         $input = $this->request->getVar('daterange');
-        dd($input);
         if (!empty($input)) {
             $daterange = explode(' - ', $input);
             $startdate = $daterange[0];

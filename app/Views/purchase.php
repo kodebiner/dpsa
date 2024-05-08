@@ -115,7 +115,6 @@
             <table class="uk-table uk-table-middle uk-table-large uk-table-hover uk-table-divider">
                 <thead>
                     <tr>
-                        <!-- <th>No. Urut</th> -->
                         <th>Detail</th>
                         <th>Nama</th>
                         <th>Panjang</th>
@@ -192,31 +191,167 @@
                                     <td class="uk-text-center">
                                         <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                             <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
-                                                <div>
-                                                    <a class="uk-icon-button" href="#modalupdatemdl<?= $paket['id'].$mdl['id'] ?>" uk-icon="cart" uk-toggle></a>
+                                                <div id="buttonadd<?= $paket['id'].$mdl['id'] ?>">
+                                                    <!-- <a class="uk-icon-button" href="#modalupdatemdl</?= $paket['id'].$mdl['id'] ?>" uk-icon="cart" uk-toggle></a> -->
+                                                    <a class="uk-icon-button" id="addtocart<?= $paket['id'].$mdl['id'] ?>" uk-icon="cart"></a>
                                                 </div>
                                             <?php } ?>
                                         </div>
                                     </td>
                                 </tr>
                                 <script>
-                                    // Reposiition MDL List
-                                    $('#mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>').change(function() {
+                                    // Add To Cart Function
+                                    $('#addtocart<?= $paket['id'] ?><?= $mdl['id'] ?>').click(function() {
                                         $.ajax({
                                             type: 'POST',
-                                            url: "mdl/reorderingmdl",
+                                            url: "pesanan/createpurchase",
                                             data: {
                                                 id: <?= $mdl['id'] ?>,
                                                 paket: <?= $paket['id'] ?>,
-                                                order: $("#mdlList<?= $paket['id'] ?><?= $mdl['id'] ?>").val()
                                             },
                                             dataType: "json",
-                                            error: function(mdlOrder) {
+                                            error: function() {
                                                 console.log('error', arguments);
                                             },
-                                            success: function(mdlOrder) {
-                                                console.log(mdlOrder);
-                                                location.reload();
+                                            success: function() {
+                                                console.log('success', arguments);
+
+                                                $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', false);
+                                                $('#addtocart<?= $paket['id'] ?><?= $mdl['id'] ?>').attr('hidden','true');
+                                                $('#buttonadd<?= $paket['id'] ?><?= $mdl['id'] ?>').append("<p>Item telah masuk dalam daftar pesanan</p>");
+
+                                                var item = document.createElement('tr');
+                                                item.setAttribute('id','item');
+
+                                                var name = document.createElement('td');
+                                                name.setAttribute('id','name');
+                                                itemname = document.createTextNode(arguments[0][0]['name']);
+
+                                                var length = document.createElement('td');
+                                                length.setAttribute('id','length');
+                                                length.setAttribute('class','uk-text-center'); 
+                                                itemlength = document.createTextNode(arguments[0][0]['length']);
+
+                                                var width = document.createElement('td');
+                                                width.setAttribute('id','width');
+                                                width.setAttribute('class','uk-text-center'); 
+                                                itemwidth = document.createTextNode(arguments[0][0]['width']);
+
+                                                var height = document.createElement('td');
+                                                height.setAttribute('id','height');
+                                                height.setAttribute('class','uk-text-center'); 
+                                                itemheight = document.createTextNode(arguments[0][0]['heigth']); 
+
+                                                var volume = document.createElement('td');
+                                                volume.setAttribute('id','volume');
+                                                volume.setAttribute('class','uk-text-center'); 
+                                                itemvolume = document.createTextNode(arguments[0][0]['volume']);  
+
+                                                var denom = "";
+                                                if (arguments[0][0]['denomination'] === "1") {
+                                                    denom = "Unit";
+                                                } else if (arguments[0][0]['denomination'] === "2") {
+                                                    denom = "Meter Lari";
+                                                } else if (arguments[0][0]['denomination'] === "3") {
+                                                    denom = "Meter Persegi";
+                                                } else if (arguments[0][0]['denomination'] === "4") {
+                                                    denom = "Set";
+                                                }
+
+                                                var denomination = document.createElement('td');
+                                                denomination.setAttribute('id','denomination'); 
+                                                denomination.setAttribute('class','uk-text-center'); 
+                                                itemdenomination = document.createTextNode(denom);  
+                                                
+                                                var keterangan = document.createElement('td');
+                                                keterangan.setAttribute('id','keterangan');
+                                                itemketerangan = document.createTextNode(arguments[0][0]['keterangan']);  
+
+                                                var photo = document.createElement('td');
+                                                photo.setAttribute('id','photo'); 
+                                                itemphoto = document.createTextNode(arguments[0][0]['photo']); 
+
+                                                var lightbox = document.createElement('div');
+                                                lightbox.toggleAttribute('uk-lightbox');
+
+                                                var linkphoto = document.createElement('a');
+                                                linkphoto.setAttribute('class','uk-inline');
+                                                linkphoto.setAttribute('href','img/mdl/'+ arguments[0][0]['photo']);
+                                                linkphoto.setAttribute('role','button');
+
+                                                var imgphoto = document.createElement('img');
+                                                imgphoto.setAttribute('class','uk-preserve-width uk-border-circle');
+                                                imgphoto.setAttribute('src','img/mdl/'+ arguments[0][0]['photo']);
+                                                imgphoto.setAttribute('width','40');
+                                                imgphoto.setAttribute('height','40');
+                                                imgphoto.setAttribute('alt', arguments[0][0]['photo']);
+                                                
+                                                var price = document.createElement('td');
+                                                price.setAttribute('id','price'); 
+                                                itemprice = document.createTextNode("Rp. " + arguments[0][0]['price'] + ",-"); 
+
+                                                var trinput = document.createElement('td');
+                                                var divinput = document.createElement('div');
+                                                divinput.setAttribute('class','uk-margin');
+
+                                                var input = document.createElement('input');
+                                                input.setAttribute('class','uk-input uk-form-width-small uk-text-center');
+                                                input.setAttribute('name','qty');
+                                                input.setAttribute('value','1');
+                                                input.setAttribute('type','number');
+                                                input.setAttribute('min','1');
+                                                input.setAttribute('aria-label','X-Small');
+
+                                                var inputmdl = document.createElement('input');
+                                                inputmdl.setAttribute('name','mdl');
+                                                inputmdl.setAttribute('value',arguments[0][0]['mdl']);
+                                                inputmdl.setAttribute('type','number');
+                                                inputmdl.setAttribute('hidden',true);
+
+                                                var inputpaket = document.createElement('input');
+                                                inputpaket.setAttribute('class','uk-input uk-form-width-small uk-text-center');
+                                                inputpaket.setAttribute('name','paket');
+                                                inputpaket.setAttribute('value',arguments[0][0]['paket']);
+                                                inputpaket.setAttribute('hidden',true);
+
+                                                var tdtrash = document.createElement('td');
+                                                var divtrash = document.createElement('div');
+                                                var linktrash = document.createElement('a');
+                                                linktrash.setAttribute('uk-icon','trash');
+                                                linktrash.setAttribute('class','uk-icon-button-delete');
+
+                                                var itemorder = document.getElementById('itemorder');
+
+                                                itemorder.appendChild(item);
+                                                item.appendChild(name);
+                                                item.appendChild(length);
+                                                item.appendChild(width);
+                                                item.appendChild(height);
+                                                item.appendChild(volume);
+                                                item.appendChild(denomination);
+                                                item.appendChild(keterangan);
+                                                item.appendChild(photo);
+                                                item.appendChild(price);
+                                                item.appendChild(trinput);
+                                                item.appendChild(tdtrash);
+                                                item.appendChild(inputmdl);
+                                                item.appendChild(inputpaket);
+                                                name.appendChild(itemname);
+                                                length.appendChild(itemlength);
+                                                width.appendChild(itemwidth);
+                                                height.appendChild(itemheight);
+                                                volume.appendChild(itemvolume);
+                                                denomination.appendChild(itemdenomination);
+                                                keterangan.appendChild(itemketerangan);
+                                                photo.appendChild(lightbox);
+                                                lightbox.appendChild(linkphoto);
+                                                linkphoto.appendChild(imgphoto);
+                                                price.appendChild(itemprice);
+                                                trinput.appendChild(divinput);
+                                                divinput.appendChild(input);
+                                                tdtrash.appendChild(divtrash);
+                                                divtrash.appendChild(linktrash);
+
                                             }
                                         });
                                     });
@@ -235,27 +370,6 @@
                                         document.getElementById('close<?= $paket['id'] ?>').setAttribute('hidden', '');
                                     }
                                 });
-                                
-                                // Reposiition Paket List
-                                $('#paketList<?= $paket['id'] ?>').change(function() {
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: "mdl/reorderingpaket",
-                                        data: {
-                                            id: <?= $paket['id'] ?>,
-                                            parent: <?= $parent['id'] ?>,
-                                            order: $("#paketList<?= $paket['id'] ?>").val()
-                                        },
-                                        dataType: "json",
-                                        error: function(paketOrder) {
-                                            console.log('error', arguments);
-                                        },
-                                        success: function(paketOrder) {
-                                            console.log(paketOrder);
-                                            location.reload();
-                                        }
-                                    });
-                                });
                             </script>
                         <?php } ?>
                         
@@ -270,26 +384,6 @@
                                     document.getElementById('closepaket<?= $parent['id'] ?>').setAttribute('hidden', '');
                                 }
                             });
-
-                            // Reposiition Parent List
-                            $('#parentList<?= $parent['id'] ?>').change(function() {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: "mdl/reorderingparent",
-                                    data: {
-                                        id: <?= $parent['id'] ?>,
-                                        order: $("#parentList<?= $parent['id'] ?>").val()
-                                    },
-                                    dataType: "json",
-                                    error: function(parentOrder) {
-                                        console.log('error', arguments);
-                                    },
-                                    success: function(parentOrder) {
-                                        console.log(parentOrder);
-                                        location.reload();
-                                    }
-                                });
-                            });
                         </script>
                     <?php
                     }
@@ -299,61 +393,46 @@
         </div>
         <!-- End Table Of Content -->
 
-        <div class="uk-card uk-card-default uk-margin-large-top uk-width-1-1@m">
+        <!-- Detail Pesanan Pembelian -->
+        <div class="uk-card uk-card-default uk-margin-large-top uk-width-1-1@m" id="detailpesanan<?=$this->data['account']->parentid?>" hidden>
             <div class="uk-card-header">
                 <div class="uk-grid-small uk-flex-middle" uk-grid>
                     <div class="uk-width-auto">
                     </div>
                     <div class="uk-width-expand">
-                        <h3 class="uk-card-title uk-margin-remove-bottom">Detail Pesanan</h3>
+                        <h3 class="uk-card-title uk-margin-remove-bottom">Detail Pesanan Klien</h3>
                     </div>
                 </div>
             </div>
-            <div class="uk-card-body">
-                <table class="uk-table uk-table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Panjang</th>
-                            <th>Lebar</th>
-                            <th>Tinggi</th>
-                            <th>Volume</th>
-                            <th>Satuan</th>
-                            <th>Keterangan</th>
-                            <th>Photo</th>
-                            <th>Harga</th>
-                            <th>Jumlah Pesanan</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>Table Data</td>
-                            <td>
-                                <div class="uk-margin">
-                                    <input class="uk-input uk-form-width-small uk-text-center" type="number" placeholder="1" aria-label="X-Small">
-                                </div>
-                            </td>
-                            <td><a href="" uk-icon="trash"></a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- <div class="uk-text-right">
-                    <a href="#" class="uk-button uk-button-primary">Buat Pesanan</a>
-                </div> -->
-            </div>
-            <div class="uk-card-footer uk-text-right">
-                <a href="#" class="uk-button uk-button-primary">Buat Pesanan</a>
-            </div>
+            <form method="post" action="pesanan/insertpurchase">
+                <div class="uk-card-body uk-overflow-auto uk-margin">
+                    <table class="uk-table uk-table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th class="uk-text-center">Panjang</th>
+                                <th class="uk-text-center">Lebar</th>
+                                <th class="uk-text-center">Tinggi</th>
+                                <th class="uk-text-center">Volume</th>
+                                <th id="denomination" class="uk-text-center">Satuan</th>
+                                <th>Keterangan</th>
+                                <th id="photo">Photo</th>
+                                <th id="price">Harga</th>
+                                <th id="qty">Jumlah Pesanan</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemorder">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="uk-card-footer uk-text-right">
+                    <button type="submit" class="uk-button uk-button-primary">Buat Pesanan</button>
+                    <a href="#" class="uk-button uk-button-danger">Batal</a>
+                </div>
+            </form>
         </div>
+        <!-- End Detail Pesanan Pembelian -->
     
     <?php }
 } ?>

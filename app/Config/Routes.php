@@ -123,6 +123,8 @@ $routes->group('client',['filter' => 'login'], function ($routes){
 // Purchase Order
 $routes->group('pesanan',['filter' => 'login'], function ($routes){
     $routes->get('','Purchase::index');
+    $routes->post('createpurchase','Purchase::createpurchase');
+    $routes->post('insertpurchase', 'Purchase::insertpurchase');
 });
 
 // Project

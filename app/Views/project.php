@@ -1154,7 +1154,7 @@
                                                         }
                                                     </script>
                                                 </div>
-                                                <?php if ($authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid) ) { ?>
+                                                <?php if ( $authorize->hasPermission('marketing.project.edit', $uid) ) { ?>
                                                     <div id="image-containersph-<?= $project['id'] ?>" class="uk-form-controls">
                                                         <input id="photocreatesph<?= $project['id'] ?>" name="sph" hidden />
                                                         <div id="js-upload-createsph-<?= $project['id'] ?>" class="js-upload-createsph-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">

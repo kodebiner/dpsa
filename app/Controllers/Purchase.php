@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
 use App\Models\PaketModel;
+use App\Models\PurchaseModel;
+use App\Models\PurchaseDetailModel;
 use App\Models\LogModel;
 use App\Models\RabModel;
 use \phpoffice\PhpOffice\PhpSpreadsheet;
@@ -32,9 +34,11 @@ class Purchase extends BaseController
             $pager      = \Config\Services::pager();
 
             // Calling Models
-            $MdlModel       = new MdlModel();
-            $PaketModel     = new PaketModel();
-            $MdlPaketModel  = new MdlPaketModel();
+            $MdlModel               = new MdlModel();
+            $PaketModel             = new PaketModel();
+            $MdlPaketModel          = new MdlPaketModel();
+            $PurchaseModel          = new PurchaseModel();
+            $PurchaseDetailModel    = new PurchaseDetailModel();
 
             // Filter Input
             $input          = $this->request->getGet();
@@ -45,15 +49,30 @@ class Purchase extends BaseController
                 $perpage    = 10;
             }
 
-            // Populating Data
-            // List Parent
-            // $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
-
             // Search Engine
             if (isset($input['search']) && !empty($input['search'])) {
                 $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
             } else {
                 $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
+            }
+
+            // Purchase List
+            $clientid = $this->data['account']->parentid;
+            if($this->data['parentid'] === null){
+                $purchases = $PurchaseModel->findAll();
+            }else{
+                $purchases = $PurchaseModel->where('clientid', $clientid)->find();
+            }
+
+            // Purchase Data
+            $purchasedata = [];
+            foreach ($purchases as $purchase){
+                if($this->data['parentid'] === null){
+                    $purchasedetail = $PurchaseDetailModel->findAll();
+                }else{
+                    $purchasedetail = $PurchaseDetailModel->where('clientid',$clientid)->find();
+                }
+                $purchasesdata[$purchase['id']['purchasedetail']] =  $purchasedetail;
             }
 
             // List Paket Auto Complete
@@ -130,6 +149,7 @@ class Purchase extends BaseController
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
             $data['idparent']       =   $this->request->getGet('parentid');
+            $data['purchasedata']   =   $purchasedata;
 
             // Return
             return view('purchase', $data);
@@ -174,6 +194,58 @@ class Purchase extends BaseController
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function createpurchase()
+    {
+        // Calling Models
+        $PurchaseModel          = new PurchaseModel();
+        $PurchaseDetailModel    = new PurchaseDetailModel();
+        $MdlModel               = new MdlModel();
+
+        // Get Data
+        $input = $this->request->getPost();
+        $mdl    = $MdlModel->find($input['id']);
+
+        // Purchase
+        $purchase  = [
+            'clientid' => $this->data['account']->parentid,
+        ];
+
+        $data = [
+            'mdl'           => $input['id'],
+            'paket'         => $input['paket'],
+            'name'          => $mdl['name'],
+            'width'         => $mdl['width'],
+            'heigth'        => $mdl['height'],
+            'length'        => $mdl['length'],
+            'volume'        => $mdl['volume'],
+            'denomination'  => $mdl['denomination'],
+            'price'         => $mdl['price'],
+            'keterangan'    => $mdl['keterangan'],
+            'photo'         => $mdl['photo'],
+        ];
+
+        die(json_encode(array($data)));
+        
+    }
+
+    public function insertpurchase()
+    {
+        $PurchaseModel          = new PurchaseModel();
+        $PurchaseDetailModel    = new PurchaseDetailModel();
+
+        // Get Data
+        $input = $this->request->getPost();
+        dd($input);
+    }
+
+    public function createpurchasedetail()
+    {
+        // Calling Models
+        $PurchaseModel          = new PurchaseModel();
+        $PurchaseDetailModel    = new PurchaseDetailModel();
+
     }
 
     public function submitcat()

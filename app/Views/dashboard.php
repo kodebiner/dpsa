@@ -1634,7 +1634,7 @@
                     }
                 </script>
             <?php } else { ?>
-                <h3 class="tm-h3 uk-margin-remove-bottom">Laporan Proyek Pusat Dan Cabang</h3>
+                <h3 class="tm-h3 uk-margin-remove-bottom">Laporan Proyek Klien</h3>
             <?php } ?>
             <!-- end of Page Heading Report -->
 
