@@ -874,6 +874,7 @@ class Project extends BaseController
             }
 
             // dd($input);
+
             // RAB Data
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
@@ -926,9 +927,9 @@ class Project extends BaseController
                                 }
                             }
                         } else {
-                            $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
+                            $rab = $RabModel->where('projectid', $id)->find();
                             if (!empty($rab)) {
-                                $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                                $productions = $ProductionModel->where('projectid', $id)->find();
                                 foreach ($productions as $production) {
                                     $ProductionModel->delete($production['id']);
                                 }
@@ -938,19 +939,14 @@ class Project extends BaseController
                     }
                 }
             }else{
-                foreach ($input['eqty' . $id] as $paketid => $mdls) {
-                    foreach ($mdls as $mdlid => $qty) {
-                        $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                        if (!empty($rab)) {
-                            $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
-                            foreach ($productions as $production) {
-                                $ProductionModel->delete($production['id']);
-                            }
-                            $RabModel->delete($rab['id']);
-                        }
+                $rab = $RabModel->where('projectid', $id)->find();
+                if (!empty($rab)) {
+                    $productions = $ProductionModel->where('projectid', $id)->find();
+                    foreach ($productions as $production) {
+                        $ProductionModel->delete($production['id']);
                     }
+                    $RabModel->delete($rab['id']);
                 }
-
             }
 
             // Custom RAB Data
