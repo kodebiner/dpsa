@@ -127,6 +127,14 @@ $routes->group('pesanan',['filter' => 'login'], function ($routes){
     $routes->post('insertpurchase', 'Purchase::insertpurchase');
 });
 
+// Order Recieved
+$routes->group('pesanmasuk',['filter' => 'login'], function ($routes){
+    $routes->get('','Purchase::orderlist');
+    $routes->post('confirm/(:num)','Purchase::confirm/$1');
+    $routes->post('delete','Purchase::deletepurchase');
+});
+
+
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('', 'Project::index');

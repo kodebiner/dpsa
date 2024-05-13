@@ -2,6 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Models\ProjectModel;
+use App\Models\InvoiceModel;
+use App\Models\BastModel;
+use App\Models\NotificationModel;
+use App\Models\UserModel;
+use App\Models\CompanyModel;
 use App\Models\MdlModel;
 use App\Models\MdlPaketModel;
 use App\Models\PaketModel;
@@ -9,6 +15,7 @@ use App\Models\PurchaseModel;
 use App\Models\PurchaseDetailModel;
 use App\Models\LogModel;
 use App\Models\RabModel;
+use Mpdf\Tag\P;
 use \phpoffice\PhpOffice\PhpSpreadsheet;
 
 class Purchase extends BaseController
@@ -43,11 +50,15 @@ class Purchase extends BaseController
             // Filter Input
             $input          = $this->request->getGet();
 
+            // Variable for pagination
             if (isset($input['perpage'])) {
-                $perpage    = $input['perpage'];
+                $perpage = $input['perpage'];
             } else {
-                $perpage    = 10;
+                $perpage = 10;
             }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
 
             // Search Engine
             if (isset($input['search']) && !empty($input['search'])) {
@@ -135,6 +146,7 @@ class Purchase extends BaseController
                 $mdldata['mdluncate']   = [];
             }
 
+
             // Parsing Data to View
             $data                   =   $this->data;
             $data['title']          =   "Pesanan Klien";
@@ -145,52 +157,16 @@ class Purchase extends BaseController
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;
-            $data['pager']          =   $PaketModel->pager;
+            // $data['pagerpro']       =   $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
             $data['idparent']       =   $this->request->getGet('parentid');
             $data['purchasedata']   =   $purchasedata;
+            $data['mdls']           =   $MdlModel->findAll();
+            $data['input']          =   $this->request->getGet('companyid');
 
             // Return
             return view('purchase', $data);
-        } else {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-    }
-
-    public function datapaket()
-    {
-        if ($this->data['authorize']->hasPermission('admin.mdl.read', $this->data['uid'])) {
-            // Calling Model
-            $MDLModel       = new MdlModel();
-            $MDLPaketModel  = new MdlPaketModel();
-
-            // Populating Data
-            $input          = $this->request->getGET();
-            $MdlPaket       = $MDLPaketModel->where('paketid', $input['paketid'])->find();
-
-            $exclude = [];
-
-            foreach ($MdlPaket as $paket) {
-                $exclude[] = $paket['mdlid'];
-            }
-
-            if (!empty($exclude)) {
-                $MDL = $MDLModel->like('name', $input['search']['term'])->whereNotIn('id', $exclude)->find();
-            } else {
-                $MDL = $MDLModel->like('name', $input['search']['term'])->find();
-            }
-
-            $return     = [];
-
-            foreach ($MDL as $mdl) {
-                $return[] = [
-                    'id'    => $mdl['id'],
-                    'text'  => $mdl['name'].' || '.$mdl['keterangan'],
-                ];
-            }
-
-            die(json_encode($return));
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -206,11 +182,6 @@ class Purchase extends BaseController
         // Get Data
         $input = $this->request->getPost();
         $mdl    = $MdlModel->find($input['id']);
-
-        // Purchase
-        $purchase  = [
-            'clientid' => $this->data['account']->parentid,
-        ];
 
         $data = [
             'mdl'           => $input['id'],
@@ -234,58 +205,376 @@ class Purchase extends BaseController
     {
         $PurchaseModel          = new PurchaseModel();
         $PurchaseDetailModel    = new PurchaseDetailModel();
+        $MdlPaketModel          = new MdlPaketModel();
+        $UserModel              = new UserModel();
+        $NotificationModel      = new NotificationModel();
+
 
         // Get Data
-        $input = $this->request->getPost();
-        dd($input);
+        $authorize  = $auth = service('authorization');
+        $quantity = $this->request->getPost('qty');
+
+        $purchase = [
+            'clientid' => $this->data['account']->parentid,
+        ];
+        $PurchaseModel->insert($purchase);
+
+        $purchaseid = $PurchaseModel->getInsertID();
+
+        foreach($quantity as $key => $qty){
+            $paket = $MdlPaketModel->where('mdlid', $key)->first();
+            $podetail = [
+                'purchaseid'    => $purchaseid,
+                'clientid'      => $this->data['account']->parentid,
+                'mdlid'         => $key,
+                'paketid'       => $paket['paketid'],
+                'qty'           => $qty,
+            ];
+            $PurchaseDetailModel->insert($podetail);
+        }
+
+        // User Admin
+        $admins     = $authorize->usersInGroup('admin');
+
+        // User Designer
+        $designers  = $authorize->usersInGroup('design');
+
+        // User Marketing
+        $marketings = $UserModel->find($this->data['account']->id);
+
+        // User Client
+        $clients    = $UserModel->where('parentid', $this->data['account']->parentid)->find();
+
+        // Notif Marketing
+        $notifmarketing  = [
+            'userid'        => $this->data['account']->id,
+            'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan item baru ',
+            'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
+            'status'        => 0,
+        ];
+
+        $NotificationModel->insert($notifmarketing);
+
+        // Notif Admin
+        foreach ($admins as $admin) {
+            $notifadmin  = [
+                'userid'        => $admin['id'],
+                'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan Baru ',
+                'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
+                'status'        => 0,
+            ];
+
+            $NotificationModel->insert($notifadmin);
+        }
+
+        return redirect()->to('pesanan')->with('message','Pesanan Telah Dikirimkan Mohon Tunggu Konfirmasi Dari DPSA');
     }
 
-    public function createpurchasedetail()
+    public function orderlist()
     {
+        // Calling Services
+        $pager      = \Config\Services::pager();
+
         // Calling Models
+        $MdlModel               = new MdlModel();
+        $PaketModel             = new PaketModel();
+        $MdlPaketModel          = new MdlPaketModel();
         $PurchaseModel          = new PurchaseModel();
         $PurchaseDetailModel    = new PurchaseDetailModel();
+        $CompanyModel           = new CompanyModel();
 
-    }
+        // Filter Input
+        $input          = $this->request->getGet();
 
-    public function submitcat()
-    {
-        // Calling Models
-        $MdlPaketModel  = new MdlPaketModel();
-
-        // Populating Data
-        $input          = $this->request->getPOST();
-        $lastOrder      = $MdlPaketModel->where('paketid', $input['paketid'])->orderBy('ordering', 'DESC')->first();
-        if (!empty($lastOrder)) {
-            $order = $lastOrder['ordering'] + 1;
+        if (isset($input['perpage'])) {
+            $perpage    = $input['perpage'];
         } else {
-            $order = '1';
+            $perpage    = 10;
         }
 
-        $submit = [
-            'mdlid'     => $input['mdlid'],
-            'paketid'   => $input['paketid'],
-            'ordering'  => $order
-        ];
-        $exist = $MdlPaketModel->where('mdlid', $input['mdlid'])->where('paketid', $input['paketid'])->find();
-
-        //Processing Data
-        if (empty($exist)) {
-            $MdlPaketModel->save($submit);
+        // Search Engine
+        if (isset($input['search']) && !empty($input['search'])) {
+            $companys     = $CompanyModel->like('rsname', $input['search'])->orderBy('id', 'DESC')->find();
+        } else {
+            $companys     = $CompanyModel->orderBy('id', 'DESC')->paginate($perpage, 'companys');
         }
 
-        die(json_encode($submit));
+        // Purchase List
+        $purchases = [];
+        if($this->data['account']->parentid === null){
+            $purchases = $PurchaseModel->findAll();
+        }
+
+        // Purchase Data
+        $purchasedata       = [];
+        $purchasedetails    = [];
+        $quantity                = [];
+       
+        foreach ($purchases as $purchase){
+            $purchasedetails[$purchase['clientid']]['mdls']  = $PurchaseDetailModel->where('clientid',$purchase['clientid'])->find();
+            foreach($purchasedetails[$purchase['clientid']]['mdls'] as $purdet){
+                $mdls[] = $MdlModel->where('id',$purdet['mdlid'])->first();
+                $quantity[]  = [
+                            'id'    => $purdet['id'],
+                            'mdlid' => $purdet['mdlid'],
+                            'qty'   => $purdet['qty'],
+                        ];
+                foreach($mdls as $mdl){
+                    if($purdet['mdlid'] === $mdl['id']){
+                        foreach($quantity as $qty){
+                            if($qty['mdlid'] === $mdl['id']){
+                                $purchasedata[$purchase['clientid']]['purdet'][$mdl['id']]  = [
+                                    'id'            => $mdl['id'],  
+                                    'name'          => $mdl['name'],
+                                    'length'        => $mdl['length'],
+                                    'width'         => $mdl['width'],
+                                    'height'        => $mdl['height'],
+                                    'volume'        => $mdl['volume'],
+                                    'denomination'  => $mdl['denomination'],
+                                    'photo'         => $mdl['photo'],
+                                    'keterangan'    => $mdl['keterangan'],
+                                    'qty'           => (int)$qty['qty'],
+                                    'price'         => (int)$qty['qty'] * (int)$mdl['price'],
+                                    'oriprice'      => (int)$mdl['price'],
+                                ];
+                            }
+                        }
+                    }
+                   
+                }
+            }
+        }
+
+       // Parsing Data to View
+       $data                   =   $this->data;
+       $data['title']          =   "Daftar Pesanan Klien";
+       $data['description']    =   "Daftar Pesanan Klien";
+       $data['items']          =    $purchasedata;
+       $data['companys']       =    $companys;
+       $data['pager']          =    $CompanyModel->pager;
+
+       // Return
+       return view('purchaseorderlist', $data);
     }
 
-    public function create()
-    {
-        if ($this->data['authorize']->hasPermission('admin.mdl.create', $this->data['uid'])) {
-            
+    public function confirm($id){
 
-            // Return
-            return redirect()->back()->with('message', "Data Tersimpan");
+        if ($this->data['authorize']->hasPermission('admin.project.create', $this->data['uid'])) {
+
+            // Calling Model
+            $ProjectModel           = new ProjectModel();
+            $InvoiceModel           = new InvoiceModel();
+            $BastModel              = new BastModel();
+            $LogModel               = new LogModel();
+            $NotificationModel      = new NotificationModel();
+            $UserModel              = new UserModel();
+            $PurchaseModel          = new PurchaseModel();
+            $PurchaseDetailModel    = new PurchaseDetailModel();
+            $RabModel               = new RabModel();
+
+            // initialize
+            $input      = $this->request->getPost();
+            $authorize  = $auth = service('authorization');
+
+            // User Admin
+            $admins     = $authorize->usersInGroup('admin');
+
+            // User Designer
+            $designers  = $authorize->usersInGroup('design');
+
+            // User Marketing
+            $marketings = $UserModel->find($this->data['account']->id);
+
+            // User Client
+            $clients    = $UserModel->where('parentid', $id)->find();
+
+            // Purchase Order Data
+            $purchases       = $PurchaseModel->where('clientid',$id)->find();
+            $purchasedetails = $PurchaseDetailModel->where('clientid',$id)->find();
+
+            // Validation Rules
+            $rules = [
+                'name' => [
+                    'label'  => 'Nama Proyek',
+                    'rules'  => 'required|is_unique[project.name]',
+                    'errors' => [
+                        'required'      => '{field} wajib diisi',
+                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->to('project')->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            // Project Data
+            $project = [
+                'name'          => $input['name'],
+                'clientid'      => $id,
+                'status'        => 1,
+                'tahun'         => date('Y-m-d H:i:s'),
+                'marketing'     => $this->data['account']->id,
+            ];
+
+            if (isset($input['designtype'])) {
+                $project['type_design'] = 1;
+                $project['ded']         = $input['design'];
+            } else {
+                $project['type_design'] = 0;
+            }
+
+            $ProjectModel->insert($project);
+
+            $projectid = $ProjectModel->getInsertID();
+
+            // Data Notification
+            if (isset($input['designtype'])) {
+                // Notif Marketing
+                $notifmarketing  = [
+                    'userid'        => $this->data['account']->id,
+                    'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                    'url'           => 'project?projectid=' . $projectid,
+                    'status'        => 0,
+                ];
+
+                $NotificationModel->insert($notifmarketing);
+
+                // Notif Admin
+                foreach ($admins as $admin) {
+                    $notifadmin  = [
+                        'userid'        => $admin['id'],
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'project?projectid=' . $projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifadmin);
+                }
+
+                // Notif Designer
+                foreach ($designers as $designer) {
+                    $notifdesigner  = [
+                        'userid'        => $designer['id'],
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'project?projectid=' . $projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifdesigner);
+                }
+
+                // Notif Client
+                foreach ($clients as $client) {
+                    $notifclient  = [
+                        'userid'        => $client->id,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
+                        'url'           => 'dashboard/' . $id . '?projectid=' . $projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifclient);
+                }
+            } else {
+                // Notif Marketing
+                $notifmarketing  = [
+                    'userid'        => $this->data['account']->id,
+                    'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                    'url'           => 'project?projectid=' . $projectid,
+                    'status'        => 0,
+                ];
+
+                $NotificationModel->insert($notifmarketing);
+
+                // Notif Admin
+                foreach ($admins as $admin) {
+                    $notifadmin  = [
+                        'userid'        => $admin['id'],
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                        'url'           => 'project?projectid=' . $projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifadmin);
+                }
+
+                // Notif Client
+                foreach ($clients as $client) {
+                    $notifclient  = [
+                        'userid'        => $client->id,
+                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
+                        'url'           => 'dashboard/' . $id . '?projectid=' . $projectid,
+                        'status'        => 0,
+                    ];
+
+                    $NotificationModel->insert($notifclient);
+                }
+            }
+            
+            // Replace Data From PO to RAB
+            foreach($purchasedetails as $podetail){
+                $datarab = [
+                    'projectid' => $projectid,
+                    'mdlid'     => $podetail['mdlid'],
+                    'paketid'   => $podetail['paketid'],
+                    'qty'       => $podetail['qty'],
+                ];
+                $RabModel->insert($datarab);
+
+                // Delete PO Data
+                $PurchaseDetailModel->delete($podetail['id']);
+            }
+
+            // Delete Purchase Data
+            foreach($purchases as $purchase){
+                $PurchaseModel->delete($purchase['id']);
+            }
+
+            // INSERT INVOICE DATA
+            $statusinv = [1, 2, 3, 4];
+            foreach ($statusinv as $inv) {
+                $datainv = [
+                    'projectid' => $projectid,
+                    'status'    => $inv,
+                ];
+                $InvoiceModel->save($datainv);
+            }
+
+            // INSERT BAST DATA
+            $bast = $BastModel->where('projectid', $projectid)->where('status', "1")->first();
+            if (empty($bast)) {
+                $bastcreate = [
+                    'projectid'     => $projectid,
+                    'status'        => "1",
+                ];
+                $BastModel->save($bastcreate);
+            }
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Membuat Proyek ' . $input['name']]);
+
+            return redirect()->to('pesanmasuk')->with('message', "Data berhasil di konfirmasi dan telah dibuat sebagai proyek". $input['name']);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+    }
+
+    public function deletepurchase()
+    {
+        $PurchaseModel          = new PurchaseModel();
+        $PurchaseDetailModel    = new PurchaseDetailModel();
+
+        $input = $this->request->getPost('id');
+
+        $purchases = $PurchaseModel->where('clientid',$input)->find();
+        $Purchasedetails = $PurchaseDetailModel->where('clientid',$input)->find();
+
+        foreach($Purchasedetails as $purchasedet){
+            $PurchaseDetailModel->delete($purchasedet['id']);
+        }
+
+        foreach($purchases as $purchase){
+            $PurchaseModel->delete($purchase['id']);
+        }
+
+        die(json_encode('Data Berhasil Dihapus'));
     }
 }

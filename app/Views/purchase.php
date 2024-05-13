@@ -15,28 +15,21 @@
             <div class="tm-card-header uk-light uk-margin-remove-left">
                 <div uk-grid class="uk-flex-middle uk-child-width-1-2">
                     <div>
-                        <h3 class="tm-h3">Pesanan Pembelian</h3>
+                        <h3 class="tm-h3">Pesan Item</h3>
                     </div>
 
                     <!-- Button Trigger Modal Add -->
-                    <?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
+                    <!-- </?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
                         <div class="uk-text-right">
                             <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Buat Pesanan</button>
                         </div>
-                    <?php } ?>
+                    </?php } ?> -->
                     <!-- End Of Button Trigger Modal Add -->
                 </div>
             </div>
         <?php } else { ?>
-            <h3 class="tm-h3 uk-text-center">Daftar MDL</h3>
+            <h3 class="tm-h3 uk-text-center">Pesan Item</h3>
             <div class="uk-child-width-auto uk-flex-center" uk-grid>
-                <!-- Button Trigger Modal Add -->
-                <?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
-                    <div>
-                        <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Buat Pesanan</button>
-                    </div>
-                <?php } ?>
-                <!-- Button Trigger Modal Add End -->
 
                 <!-- Button Filter -->
                 <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
@@ -51,7 +44,7 @@
 
         <!-- form input -->
         <?php if ($ismobile === false) { ?>
-            <form class="uk-margin" id="searchform" action="mdl" method="GET">
+            <form class="uk-margin" id="searchform" action="pesanan" method="GET">
                 <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                     <div>
                         <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -77,7 +70,7 @@
             </form>
         <?php } else { ?>
             <div id="filter" class="uk-margin" hidden>
-                <form id="searchform" action="mdl" method="GET">
+                <form id="searchform" action="pesanan" method="GET">
                     <div class="uk-margin-small uk-flex uk-flex-center">
                         <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
                     </div>
@@ -191,9 +184,8 @@
                                     <td class="uk-text-center">
                                         <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
                                             <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
-                                                <div id="buttonadd<?= $paket['id'].$mdl['id'] ?>">
-                                                    <!-- <a class="uk-icon-button" href="#modalupdatemdl</?= $paket['id'].$mdl['id'] ?>" uk-icon="cart" uk-toggle></a> -->
-                                                    <a class="uk-icon-button" id="addtocart<?= $paket['id'].$mdl['id'] ?>" uk-icon="cart"></a>
+                                                <div id="buttonadd<?=$mdl['id'] ?>">
+                                                    <a class="uk-icon-button addtocart" id="addtocart<?=$mdl['id'] ?>" uk-icon="cart"></a>
                                                 </div>
                                             <?php } ?>
                                         </div>
@@ -201,7 +193,7 @@
                                 </tr>
                                 <script>
                                     // Add To Cart Function
-                                    $('#addtocart<?= $paket['id'] ?><?= $mdl['id'] ?>').click(function() {
+                                    $('#addtocart<?= $mdl['id'] ?>').click(function() {
                                         $.ajax({
                                             type: 'POST',
                                             url: "pesanan/createpurchase",
@@ -214,14 +206,15 @@
                                                 console.log('error', arguments);
                                             },
                                             success: function() {
-                                                console.log('success', arguments);
+                                                // console.log('success', arguments);
 
                                                 $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', false);
-                                                $('#addtocart<?= $paket['id'] ?><?= $mdl['id'] ?>').attr('hidden','true');
-                                                $('#buttonadd<?= $paket['id'] ?><?= $mdl['id'] ?>').append("<p>Item telah masuk dalam daftar pesanan</p>");
+                                                $('#addtocart<?= $mdl['id'] ?>').attr('hidden',true);
+                                                $('#buttonadd<?= $mdl['id'] ?>').append("<p id='info<?= $mdl['id'] ?>' class='info'>Item telah masuk daftar pesanan</p>");
 
                                                 var item = document.createElement('tr');
-                                                item.setAttribute('id','item');
+                                                item.setAttribute('id','item<?= $mdl['id'] ?>');
+                                                item.setAttribute('class','itemrowmdl');
 
                                                 var name = document.createElement('td');
                                                 name.setAttribute('id','name');
@@ -296,30 +289,18 @@
 
                                                 var input = document.createElement('input');
                                                 input.setAttribute('class','uk-input uk-form-width-small uk-text-center');
-                                                input.setAttribute('name','qty');
-                                                input.setAttribute('value','1');
+                                                input.setAttribute('name','qty['+arguments[0][0]['mdl']+']');
+                                                input.setAttribute('placeholder','1');
                                                 input.setAttribute('type','number');
                                                 input.setAttribute('min','1');
                                                 input.setAttribute('aria-label','X-Small');
-
-                                                var inputmdl = document.createElement('input');
-                                                inputmdl.setAttribute('name','mdl');
-                                                inputmdl.setAttribute('value',arguments[0][0]['mdl']);
-                                                inputmdl.setAttribute('type','number');
-                                                inputmdl.setAttribute('hidden',true);
-
-                                                var inputpaket = document.createElement('input');
-                                                inputpaket.setAttribute('class','uk-input uk-form-width-small uk-text-center');
-                                                inputpaket.setAttribute('name','paket');
-                                                inputpaket.setAttribute('value',arguments[0][0]['paket']);
-                                                inputpaket.setAttribute('hidden',true);
-
+                                                
                                                 var tdtrash = document.createElement('td');
                                                 var divtrash = document.createElement('div');
                                                 var linktrash = document.createElement('a');
                                                 linktrash.setAttribute('uk-icon','trash');
                                                 linktrash.setAttribute('class','uk-icon-button-delete');
-
+                                                linktrash.setAttribute('onclick','removemdl'+ arguments[0][0]['mdl']+'()');
                                                 var itemorder = document.getElementById('itemorder');
 
                                                 itemorder.appendChild(item);
@@ -334,8 +315,6 @@
                                                 item.appendChild(price);
                                                 item.appendChild(trinput);
                                                 item.appendChild(tdtrash);
-                                                item.appendChild(inputmdl);
-                                                item.appendChild(inputpaket);
                                                 name.appendChild(itemname);
                                                 length.appendChild(itemlength);
                                                 width.appendChild(itemwidth);
@@ -428,10 +407,33 @@
                 </div>
                 <div class="uk-card-footer uk-text-right">
                     <button type="submit" class="uk-button uk-button-primary">Buat Pesanan</button>
-                    <a href="#" class="uk-button uk-button-danger">Batal</a>
+                    <a onclick="resetitem()" class="uk-button uk-button-danger">Batal</a>
                 </div>
             </form>
         </div>
+
+        <script>
+            <?php foreach ($mdls as $mdl){ ?>
+                function removemdl<?= $mdl['id']; ?>() {
+                    $('#item<?= $mdl['id'] ?>').remove();
+                    $('#addtocart<?=$mdl['id'] ?>').attr('hidden', false);
+                    $('#info<?= $mdl['id'] ?>').remove();
+
+                    if ($(".itemrowmdl").length) {
+                        $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', false);
+                    } else {
+                        $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', true);
+                    }
+                }
+
+                function resetitem(){
+                    $('.itemrowmdl').remove();
+                    $('.info').remove();
+                    $('.addtocart').attr('hidden', false);
+                    $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', true);
+                }
+            <?php } ?>
+        </script>
         <!-- End Detail Pesanan Pembelian -->
     
     <?php }

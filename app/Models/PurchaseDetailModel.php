@@ -5,12 +5,11 @@ use CodeIgniter\Model;
 class PurchaseDetailModel extends Model
 {
     protected $allowedFields = [
-        'mdlid', 'paketid', 'qty',
+        'id','clientid', 'purchaseid', 'mdlid', 'paketid', 'qty',
     ];
     
     protected $table            = 'purchaseorderdetail';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useTimestamps    = true;
 }
