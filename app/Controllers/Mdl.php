@@ -7,7 +7,10 @@ use App\Models\MdlPaketModel;
 use App\Models\PaketModel;
 use App\Models\LogModel;
 use App\Models\RabModel;
+use App\Models\PurchaseModel;
+use App\Models\PurchaseDetailModel;
 use \phpoffice\PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 
 class Mdl extends BaseController
 {
@@ -296,10 +299,10 @@ class Mdl extends BaseController
     {
         if ($this->data['authorize']->hasPermission('admin.mdl.delete', $this->data['uid'])) {
             // Calling Models
-            $PaketModel         = new PaketModel();
-            $MdlModel           = new MdlModel();
-            $MdlPaketModel      = new MdlPaketModel();
-            $LogModel           = new LogModel();
+            $PaketModel             = new PaketModel();
+            $MdlModel               = new MdlModel();
+            $MdlPaketModel          = new MdlPaketModel();
+            $LogModel               = new LogModel();
 
             // Populating Data
             $Paket              = $PaketModel->find($id);
@@ -552,11 +555,20 @@ class Mdl extends BaseController
     public function deletemdluncategories($id)
     {
         // Calling Models
-        $MdlModel           = new MdlModel();
-        $LogModel           = new LogModel();
+        $MdlModel               = new MdlModel();
+        $LogModel               = new LogModel();
+        $PurchaseModel          = new PurchaseModel();
+        $PurchasedetailModel    = new PurchaseDetailModel();
 
         // initialize
-        $mdl                = $MdlModel->find($id);
+        $mdl                    = $MdlModel->find($id);
+        
+        // Delete Purchase Item
+        $purchasedetails      = $PurchasedetailModel->where('mdlid', $id )->find();
+        foreach($purchasedetails as $purdet){
+            $PurchasedetailModel->delete($purdet['id']);
+        }
+
 
         // Delete Data MDL
         $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus MDL ' . $mdl['name']]);

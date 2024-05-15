@@ -50,7 +50,6 @@ class Laporan extends BaseController
             $BastModel                 = new BastModel();
             $PembayaranModel           = new PembayaranModel();
 
-
             // Populating data
             $input = $this->request->getVar('daterange');
             if (!empty($input)) {
@@ -218,16 +217,21 @@ class Laporan extends BaseController
         $PembayaranModel           = new PembayaranModel();
 
         // Populating data
-        $input = $this->request->getVar('daterange');
-        if (!empty($input)) {
-            $daterange = explode(' - ', $input);
-            $startdate = $daterange[0];
-            $enddate = $daterange[1];
+        $inputDate = $this->request->getGet('daterange');
+
+        // dd($inputDate);
+        $pattern = "/\//";
+        if (!empty($inputDate)) {
+            $daterange = explode(' - ', $inputDate);
+            // $startdate = $daterange[0];
+            // $enddate = $daterange[1];
+            $startdate  = preg_replace($pattern, '-', $daterange[0]);
+            $enddate    =  preg_replace($pattern, '-', $daterange[1]);;
         } else {
             $startdate = date('Y-m-1');
             $enddate = date('Y-m-t');
         }
-
+        
         // Initialize
         $input = $this->request->getGet();
 
@@ -240,24 +244,62 @@ class Laporan extends BaseController
         $page = (@$_GET['page']) ? $_GET['page'] : 1;
         $offset = ($page - 1) * $perpage;
 
-        if ($startdate === $enddate) {
-            $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
-        } else {
-            $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
-        }
-        $this->builder->join('users', 'users.id = project.marketing');
-        $this->builder->join('company', 'company.id = project.clientid');
-        if (isset($input['search']) && !empty($input['search'])) {
-            $this->builder->like('project.name', $input['search']);
-            $this->builder->orLike('users.username', $input['search']);
-            $this->builder->orLike('company.rsname', $input['search']);
-        }
-        $this->builder->orderBy('id',"DESC");
-        $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-        $query = $this->builder->get($perpage, $offset)->getResultArray();
-        $total = count($query);
+        // if ($startdate === $enddate) {
+        //     $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+        // } else {
+        //     $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+        // }
+        // dd($this->builder->get()->getResultArray());
 
-        $projects = $query;
+        if($this->data['role'] === "client cabang"){
+            
+            $this->builder->where('project.clientid',$this->data['account']->parentid);
+            $this->builder->join('users', 'users.id = project.marketing');
+            $this->builder->join('company', 'company.id = project.clientid');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('project.name', $input['search']);
+                $this->builder->orLike('users.username', $input['search']);
+                $this->builder->orLike('company.rsname', $input['search']);
+            }
+            $this->builder->orderBy('id',"DESC");
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $total = count($query);
+            $projects = $query;
+
+        }elseif($this->data['role'] === "client pusat"){
+
+            $this->builder->join('users', 'users.id = project.marketing');
+            $this->builder->join('company', 'company.id = project.clientid');
+            $this->builder->where('company.id',$this->data['account']->parentid);
+            $this->builder->orWhere('company.parentid',$this->data['account']->parentid);
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('project.name', $input['search']);
+                $this->builder->orLike('users.username', $input['search']);
+                $this->builder->orLike('company.rsname', $input['search']);
+            }
+            $this->builder->orderBy('id',"DESC");
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $total = count($query);
+            $projects = $query;
+
+        }elseif($this->data['role'] === "superuser"){
+           
+            $this->builder->join('company', 'company.id = project.clientid');
+            $this->builder->join('users', 'users.id = project.marketing');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('project.name', $input['search']);
+                $this->builder->orLike('users.username', $input['search']);
+                $this->builder->orLike('company.rsname', $input['search']);
+            }
+            $this->builder->orderBy('id',"DESC");
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $total = count($query);
+            $projects = $query;
+
+        }
 
         $projectdata = [];
         foreach ($projects as $project) {
@@ -357,11 +399,10 @@ class Laporan extends BaseController
         // Parsing data to view
         $data                   = $this->data;
         $data['title']          = 'Laporan';
-        $data['description']    = lang('Global.clientListDesc');
+        $data['description']    = "Data Laporan";
         $data['roles']          = $CompanyModel->where('deleted_at', null)->find();
         $data['company']        = $query;
         $data['total']          = $total;
-        // $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
         $data['input']          = $input;
         $data['projectdata']    = $projectdata;
         $data['projects']       = $projects;
