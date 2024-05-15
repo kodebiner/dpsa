@@ -208,7 +208,6 @@
                     </script>
              <?php } ?>
         <?php } ?>
-        <!-- </?= $pager->links('company', 'uikit_full') ?> -->
         <?= $pager ?>
     <?php } ?>
 
@@ -271,7 +270,7 @@
         if ($ismobile == false) { ?>
             <script>
                 $(document).ready(function() {
-                    var unhidecontent = document.getElementById('order<?=$input?>');
+                    var unhidecontent = document.getElementById('body<?=$input?>');
                     unhidecontent.removeAttribute('hidden');
 
                     var opendropdown = document.getElementById('openorder<?=$input?>');
@@ -282,13 +281,13 @@
                 });
                     
                 window.addEventListener('load', () => setTimeout(() => {
-                    document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                    document.querySelector('#body<?= $input ?>').scrollIntoView()
                 }))
             </script>
         <?php } else { ?>
             <script>
                 $(document).ready(function() {
-                    var unhidebody = document.getElementById('order<?=$input?>');
+                    var unhidebody = document.getElementById('body<?=$input?>');
                     unhidebody.removeAttribute('hidden');
 
                     var openmobile = document.getElementById('openorder<?=$input?>');
@@ -299,7 +298,7 @@
                 });
                 
                 window.addEventListener('load', () => setTimeout(() => {
-                    document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                    document.querySelector('#body<?= $input ?>').scrollIntoView()
                 }))
             </script>
         <?php }

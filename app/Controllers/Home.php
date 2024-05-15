@@ -130,8 +130,8 @@ class Home extends BaseController
                 if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
                     $totalpro = $proyek
                         ->like('project.name', $input['searchproyek'])
-                        ->orLike('users.username', $input['searchproyek'])
-                        ->orLike('company.rsname', $input['searchproyek'])
+                        // ->orLike('users.username', $input['searchproyek'])
+                        // ->orLike('company.rsname', $input['searchproyek'])
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
@@ -306,7 +306,7 @@ class Home extends BaseController
                 }else{
                     $queryproject = $this->builder->where('project.clientid',$this->data['account']->parentid)->get()->getResultArray();
                 }
-                
+
                 // $this->builder->whereIn('project.clientid',$klienid);
                 // $this->builder->join('users', 'users.id = project.marketing');
                 // $this->builder->join('company', 'company.id = project.clientid');
