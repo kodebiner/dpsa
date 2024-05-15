@@ -223,10 +223,10 @@ class Laporan extends BaseController
         $pattern = "/\//";
         if (!empty($inputDate)) {
             $daterange = explode(' - ', $inputDate);
-            // $startdate = $daterange[0];
-            // $enddate = $daterange[1];
-            $startdate  = preg_replace($pattern, '-', $daterange[0]);
-            $enddate    =  preg_replace($pattern, '-', $daterange[1]);;
+            $startdate = $daterange[0];
+            $enddate = $daterange[1];
+            // $startdate  = preg_replace($pattern, '-', $daterange[0]);
+            // $enddate    =  preg_replace($pattern, '-', $daterange[1]);;
         } else {
             $startdate = date('Y-m-1');
             $enddate = date('Y-m-t');
@@ -244,11 +244,11 @@ class Laporan extends BaseController
         $page = (@$_GET['page']) ? $_GET['page'] : 1;
         $offset = ($page - 1) * $perpage;
 
-        // if ($startdate === $enddate) {
-        //     $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
-        // } else {
-        //     $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
-        // }
+        if ($startdate === $enddate) {
+            $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+        } else {
+            $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+        }
         // dd($this->builder->get()->getResultArray());
 
         if($this->data['role'] === "client cabang"){
@@ -284,7 +284,7 @@ class Laporan extends BaseController
             $total = count($query);
             $projects = $query;
 
-        }elseif($this->data['role'] === "superuser"){
+        }else{
            
             $this->builder->join('company', 'company.id = project.clientid');
             $this->builder->join('users', 'users.id = project.marketing');
@@ -298,7 +298,7 @@ class Laporan extends BaseController
             $query = $this->builder->get($perpage, $offset)->getResultArray();
             $total = count($query);
             $projects = $query;
-
+            
         }
 
         $projectdata = [];
