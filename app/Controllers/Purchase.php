@@ -36,7 +36,7 @@ class Purchase extends BaseController
 
     public function index()
     {
-        if ($this->data['authorize']->hasPermission('admin.mdl.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
             // Calling Services
             $pager      = \Config\Services::pager();
 
@@ -77,14 +77,15 @@ class Purchase extends BaseController
 
             // Purchase Data
             $purchasedata = [];
-            foreach ($purchases as $purchase){
-                if($this->data['parentid'] === null){
-                    $purchasedetail = $PurchaseDetailModel->findAll();
-                }else{
-                    $purchasedetail = $PurchaseDetailModel->where('clientid',$clientid)->find();
-                }
-                $purchasesdata[$purchase['id']['purchasedetail']] =  $purchasedetail;
-            }
+            // foreach ($purchases as $purchase){
+            //     if($this->data['parentid'] === null){
+            //         $purchasedetail = $PurchaseDetailModel->findAll();
+            //     }else{
+            //         $purchasedetail = $PurchaseDetailModel->where('clientid',$clientid)->find();
+            //     }
+
+            //     $purchasesdata[$purchase['id']['purchasedetail']] =  $purchasedetail;
+            // }
 
             // List Paket Auto Complete
             $autopakets     = $PaketModel->where('parentid !=', 0)->find();
@@ -214,36 +215,58 @@ class Purchase extends BaseController
         $authorize  = $auth = service('authorization');
         $quantity = $this->request->getPost('qty');
 
-        $purchase = [
-            'clientid' => $this->data['account']->parentid,
-        ];
-        $PurchaseModel->insert($purchase);
+        // Check Current Client Id Order
+        $currentOrderId = $PurchaseModel->where('clientid',$this->data['account']->parentid)->first();
+        // $currentOrderId = $PurchaseModel->where('clientid',1)->first();
 
-        $purchaseid = $PurchaseModel->getInsertID();
+        if(empty($currentOrderId)){
+            $purchase = [
+                'clientid' => $this->data['account']->parentid,
+                // 'clientid' => 1,
+            ];
+            $PurchaseModel->insert($purchase);
+            $purchaseid = $PurchaseModel->getInsertID();
+
+        }elseif(!empty($currentOrderId)){
+            $purchaseid = $currentOrderId['id'];
+        }
 
         foreach($quantity as $key => $qty){
+            // Get Paket Data
             $paket = $MdlPaketModel->where('mdlid', $key)->first();
-            $podetail = [
-                'purchaseid'    => $purchaseid,
-                'clientid'      => $this->data['account']->parentid,
-                'mdlid'         => $key,
-                'paketid'       => $paket['paketid'],
-                'qty'           => $qty,
-            ];
-            $PurchaseDetailModel->insert($podetail);
+
+            // Check Data If Get Same Order
+            $currentOrder = $PurchaseDetailModel->where('clientid',$this->data['account']->parentid)->where('mdlid',$key)->where('paketid',$paket['paketid'])->first();
+            // $currentOrder = $PurchaseDetailModel->where('clientid',1)->where('mdlid',$key)->where('paketid',$paket['paketid'])->first();
+            if(!empty($currentOrder)){
+                $podetail = [
+                    'id'            => $currentOrder['id'],
+                    'purchaseid'    => $purchaseid,
+                    'clientid'      => $this->data['account']->parentid,
+                    // 'clientid'      => 1,
+                    'mdlid'         => $key,
+                    'paketid'       => $paket['paketid'],
+                    'qty'           => (int)$qty,
+                ];
+                $PurchaseDetailModel->save($podetail);
+            }else{
+                $podetail = [
+                    'purchaseid'    => $purchaseid,
+                    'clientid'      => $this->data['account']->parentid,
+                    // 'clientid'      => 1,
+                    'mdlid'         => $key,
+                    'paketid'       => $paket['paketid'],
+                    'qty'           => $qty,
+                ];
+                $PurchaseDetailModel->insert($podetail);
+            }
         }
 
         // User Admin
         $admins     = $authorize->usersInGroup('admin');
 
-        // User Designer
-        $designers  = $authorize->usersInGroup('design');
-
         // User Marketing
         $marketings = $UserModel->find($this->data['account']->id);
-
-        // User Client
-        $clients    = $UserModel->where('parentid', $this->data['account']->parentid)->find();
 
         // Notif Marketing
         $notifmarketing  = [
@@ -282,6 +305,7 @@ class Purchase extends BaseController
         $PurchaseModel          = new PurchaseModel();
         $PurchaseDetailModel    = new PurchaseDetailModel();
         $CompanyModel           = new CompanyModel();
+        $companyclient          = $this->builder  = $this->db->table('company');
 
         // Filter Input
         $input          = $this->request->getGet();
@@ -292,11 +316,21 @@ class Purchase extends BaseController
             $perpage    = 10;
         }
 
-        // Search Engine
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page - 1) * $perpage;
+
+        // Search Company Order
         if (isset($input['search']) && !empty($input['search'])) {
-            $companys     = $CompanyModel->like('rsname', $input['search'])->orderBy('id', 'DESC')->find();
+            $companys       = $CompanyModel->like('rsname', $input['search'])->orderBy('id', 'ASC')->find();
+            $totalpro       = $companyclient
+                ->join('purchaseorder', 'purchaseorder.clientid = company.id')
+                ->like('company.rsname', $input['search'])
+                ->countAllResults();
         } else {
-            $companys     = $CompanyModel->orderBy('id', 'DESC')->paginate($perpage, 'companys');
+            $companys     = $this->builder  = $this->db->table('company')->orderBy('id', 'ASC')->get($perpage, $offset)->getResultArray();
+            $totalpro     = $companyclient
+            ->join('purchaseorder', 'purchaseorder.clientid = company.id')
+            ->countAllResults();
         }
 
         // Purchase List
@@ -351,7 +385,8 @@ class Purchase extends BaseController
        $data['description']    =   "Daftar Pesanan Klien";
        $data['items']          =    $purchasedata;
        $data['companys']       =    $companys;
-       $data['pager']          =    $CompanyModel->pager;
+       $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+       $data['input']          =    $this->request->getGet('companyid');
 
        // Return
        return view('purchaseorderlist', $data);

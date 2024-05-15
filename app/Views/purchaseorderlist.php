@@ -8,7 +8,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
-    <?php if ($authorize->hasPermission('marketing.project.create', $uid)) { ?>
+    <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
         <!-- Page Heading -->
         <?php if ($ismobile === false) { ?>
             <div class="tm-card-header uk-light uk-margin-remove-left">
@@ -208,7 +208,8 @@
                     </script>
              <?php } ?>
         <?php } ?>
-        <!-- </?= $pager->links('companys', 'uikit_full') ?> -->
+        <!-- </?= $pager->links('company', 'uikit_full') ?> -->
+        <?= $pager ?>
     <?php } ?>
 
     <!-- Confirm Modal -->
@@ -265,5 +266,43 @@
         </div>
     <?php } ?>
     <!--End Confirm Modal -->
+
+    <?php if (!empty($input)) {
+        if ($ismobile == false) { ?>
+            <script>
+                $(document).ready(function() {
+                    var unhidecontent = document.getElementById('order<?=$input?>');
+                    unhidecontent.removeAttribute('hidden');
+
+                    var opendropdown = document.getElementById('openorder<?=$input?>');
+                    opendropdown.removeAttribute('hidden');
+
+                    var closedropdown = document.getElementById('closeorder<?=$input?>');
+                    closedropdown.setAttribute('hidden', '');
+                });
+                    
+                window.addEventListener('load', () => setTimeout(() => {
+                    document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                }))
+            </script>
+        <?php } else { ?>
+            <script>
+                $(document).ready(function() {
+                    var unhidebody = document.getElementById('order<?=$input?>');
+                    unhidebody.removeAttribute('hidden');
+
+                    var openmobile = document.getElementById('openorder<?=$input?>');
+                    openmobile.removeAttribute('hidden');
+
+                    var closemobile = document.getElementById('closeorder<?=$input?>');
+                    closemobile.setAttribute('hidden', '');
+                });
+                
+                window.addEventListener('load', () => setTimeout(() => {
+                    document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                }))
+            </script>
+        <?php }
+    } ?>
 
 <?= $this->endSection() ?>

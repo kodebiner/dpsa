@@ -873,8 +873,6 @@ class Project extends BaseController
                 return redirect()->to('project')->withInput()->with('errors', $this->validator->getErrors());
             }
 
-            // dd($input);
-
             // RAB Data
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
@@ -927,25 +925,29 @@ class Project extends BaseController
                                 }
                             }
                         } else {
-                            $rab = $RabModel->where('projectid', $id)->find();
-                            if (!empty($rab)) {
+                            $rabs = $RabModel->where('projectid', $id)->find();
+                            if (!empty($rabs)) {
                                 $productions = $ProductionModel->where('projectid', $id)->find();
                                 foreach ($productions as $production) {
                                     $ProductionModel->delete($production['id']);
                                 }
-                                $RabModel->delete($rab['id']);
+                                foreach($rabs as $rab){
+                                    $RabModel->delete($rab['id']);
+                                }
                             }
                         }
                     }
                 }
-            }else{
+            }elseif(!isset($input['checked' . $id])){
                 $rab = $RabModel->where('projectid', $id)->find();
                 if (!empty($rab)) {
                     $productions = $ProductionModel->where('projectid', $id)->find();
                     foreach ($productions as $production) {
                         $ProductionModel->delete($production['id']);
                     }
-                    $RabModel->delete($rab['id']);
+                    foreach($rab as $rb){
+                        $RabModel->delete($rb['id']);
+                    }
                 }
             }
 

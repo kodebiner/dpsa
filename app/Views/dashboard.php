@@ -1722,7 +1722,7 @@
                                 </div>
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                     <div>
-                                        <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel" target="_blank"><span uk-icon="download"></span>Laporan</a>
+                                        <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
                                     </div>
                                 </div>
                                 <div>

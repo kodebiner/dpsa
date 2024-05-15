@@ -285,23 +285,39 @@ class Home extends BaseController
                 $this->db       = \Config\Database::connect();
                 $validation     = \Config\Services::validation();
                 $proyek         = $this->builder  = $this->db->table('project');
-
                 if ($startdate === $enddate) {
                     $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
                 } else {
                     $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
                 }
-                $this->builder->whereIn('project.clientid',$klienid);
-                $this->builder->join('users', 'users.id = project.marketing');
-                $this->builder->join('company', 'company.id = project.clientid');
-                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
-                    $this->builder->like('project.name', $input['searchproyek']);
-                    $this->builder->orLike('users.username', $input['searchproyek']);
-                    $this->builder->orLike('company.rsname', $input['searchproyek']);
+                // dd($this->builder->where('project.clientid',12)->get()->getResultArray());
+                if(!empty($klienid)){
+                    $this->builder->whereIn('project.clientid',$klienid);
+                    $this->builder->join('users', 'users.id = project.marketing');
+                    $this->builder->join('company', 'company.id = project.clientid');
+                    if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                        $this->builder->like('project.name', $input['searchproyek']);
+                        $this->builder->orLike('users.username', $input['searchproyek']);
+                        $this->builder->orLike('company.rsname', $input['searchproyek']);
+                    }
+                    $this->builder->orderBy('id',"DESC");
+                    $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                    $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+                }else{
+                    $queryproject = $this->builder->where('project.clientid',$this->data['account']->parentid)->get()->getResultArray();
                 }
-                $this->builder->orderBy('id',"DESC");
-                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-                $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+                
+                // $this->builder->whereIn('project.clientid',$klienid);
+                // $this->builder->join('users', 'users.id = project.marketing');
+                // $this->builder->join('company', 'company.id = project.clientid');
+                // if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                //     $this->builder->like('project.name', $input['searchproyek']);
+                //     $this->builder->orLike('users.username', $input['searchproyek']);
+                //     $this->builder->orLike('company.rsname', $input['searchproyek']);
+                // }
+                // $this->builder->orderBy('id',"DESC");
+                // $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+                // $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
 
                 if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
                     $totalpro = $proyek
@@ -1084,6 +1100,7 @@ class Home extends BaseController
                 $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
                 $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
 
+                $totalpro = 0;
                 if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
                     $totalpro = $proyek
                         ->like('project.name', $input['searchproyek'])
@@ -1193,6 +1210,21 @@ class Home extends BaseController
                     }
                 }
             }
+
+            // Empty Project Condition
+            if(!isset($totalpro)){
+                $totalpro = 0 ;
+            }
+            
+            if(!isset($projectdatareport)){
+                $projectdatareport = [];
+            }
+
+            if(!isset($queryproject)){
+                $queryproject = [];
+            }
+            // End Empty Project Condition
+
 
             // Parsing Data to View
             $data                       = $this->data;

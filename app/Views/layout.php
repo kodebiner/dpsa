@@ -129,7 +129,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($authorize->hasPermission('marketing.project.read', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanmasuk') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="pesanmasuk">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -273,7 +273,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanmasuk')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="pesanmasuk">
                             <div class="uk-width-1-1 uk-margin-right">

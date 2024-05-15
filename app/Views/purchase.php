@@ -8,8 +8,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
-<?php if (in_groups('superuser',$uid)) { ?>
-    <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+    <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
         <!-- Page Heading -->
         <?php if ($ismobile === false) { ?>
             <div class="tm-card-header uk-light uk-margin-remove-left">
@@ -17,14 +16,6 @@
                     <div>
                         <h3 class="tm-h3">Pesan Item</h3>
                     </div>
-
-                    <!-- Button Trigger Modal Add -->
-                    <!-- </?php if ($authorize->hasPermission('admin.mdl.create', $uid)) { ?>
-                        <div class="uk-text-right">
-                            <button type="button" class="uk-button uk-button-primary uk-preserve-color" uk-toggle="target: #modaladd">Buat Pesanan</button>
-                        </div>
-                    </?php } ?> -->
-                    <!-- End Of Button Trigger Modal Add -->
                 </div>
             </div>
         <?php } else { ?>
@@ -32,7 +23,7 @@
             <div class="uk-child-width-auto uk-flex-center" uk-grid>
 
                 <!-- Button Filter -->
-                <?php if ($authorize->hasPermission('admin.mdl.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
                     <div>
                         <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
                     </div>
@@ -183,7 +174,7 @@
                                     </td>
                                     <td class="uk-text-center">
                                         <div class="uk-grid-small uk-flex-center uk-flex-middle" uk-grid>
-                                            <?php if ($authorize->hasPermission('admin.mdl.edit', $uid)) { ?>
+                                            <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
                                                 <div id="buttonadd<?=$mdl['id'] ?>">
                                                     <a class="uk-icon-button addtocart" id="addtocart<?=$mdl['id'] ?>" uk-icon="cart"></a>
                                                 </div>
@@ -292,6 +283,7 @@
                                                 input.setAttribute('name','qty['+arguments[0][0]['mdl']+']');
                                                 input.setAttribute('placeholder','1');
                                                 input.setAttribute('type','number');
+                                                input.setAttribute('value','1');
                                                 input.setAttribute('min','1');
                                                 input.setAttribute('aria-label','X-Small');
                                                 
@@ -436,6 +428,5 @@
         </script>
         <!-- End Detail Pesanan Pembelian -->
     
-    <?php }
-} ?>
+    <?php }?>
 <?= $this->endSection() ?>
