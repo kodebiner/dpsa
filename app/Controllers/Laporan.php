@@ -85,11 +85,19 @@ class Laporan extends BaseController
                 $this->builder->orLike('users.username', $input['search']);
                 $this->builder->orLike('company.rsname', $input['search']);
             }
-            $this->builder->orderBy('id',"DESC");
+            $this->builder->orderBy('company.id',"DESC");
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
             $total = count($query);
 
+            if (isset($input['search']) && !empty($input['search'])) {
+                $totalLaporan = $ProjectModel
+                    ->like('project.name', $input['search'])
+                    ->countAllResults();
+            } else {
+                $totalLaporan = $ProjectModel
+                    ->countAllResults();
+            }
             $projects = $query;
 
             $projectdata = [];
@@ -191,10 +199,10 @@ class Laporan extends BaseController
             $data['title']          = 'Laporan';
             $data['description']    = lang('Global.clientListDesc');
             $data['total']          = $total;
-            $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
             $data['input']          = $input;
             $data['projectdata']    = $projectdata;
             $data['projects']       = $projects;
+            $data['pager']          = $pager->makeLinks($page, $perpage, $totalLaporan, 'uikit_full');
             $data['startdate']      = strtotime($startdate);
             $data['enddate']        = strtotime($enddate);
 

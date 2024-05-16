@@ -276,8 +276,8 @@
                 <?php } ?>
             </tbody>
         </table>
+        <?= $pager ?>
     </div>
-    <?= $pager ?>
     <!-- End Of Table Content -->
 <?php } ?>
 
