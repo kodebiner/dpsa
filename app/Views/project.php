@@ -32,6 +32,67 @@
     <?php } ?>
     <hr class="uk-divider-icon uk-margin-remove-top">
 
+    <!-- form input -->
+    <?php if ($ismobile === false) { ?>
+        <form class="uk-margin" id="searchform" action="project" method="GET">
+            <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
+                <div>
+                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                        <div>Cari:</div>
+                        <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                        <div>Tampilan</div>
+                        <div>
+                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                            </select>
+                        </div>
+                        <div>Per Halaman</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <?php } else { ?>
+        <div id="filter" class="uk-margin" hidden>
+            <form id="searchform" action="project" method="GET">
+                <div class="uk-margin-small uk-flex uk-flex-center">
+                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                </div>
+                <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
+                    <div>Tampilan</div>
+                    <div>
+                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                            <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                            <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                            <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                            <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                        </select>
+                    </div>
+                    <div>Per Halaman</div>
+                </div>
+            </form>
+        </div>
+    <?php } ?>
+    <!-- form input -->
+
+    <!-- script form -->
+    <script>
+        // document.getElementById('rolesearch').addEventListener("change", submitform);
+        document.getElementById('search').addEventListener("change", submitform);
+        document.getElementById('perpage').addEventListener("change", submitform);
+
+        function submitform() {
+            document.getElementById('searchform').submit();
+        };
+    </script>
+    <!-- end script form -->
+
     <div class="uk-container uk-container-large">
         <?php foreach ($projects as $project) {
             $progress   = "0";
@@ -186,7 +247,8 @@
                 </div>
         <?php }
         } ?>
-        <?= $pager->links('projects', 'uikit_full') ?>
+        <!-- </?= $pager->links('projects', 'uikit_full') ?> -->
+        <?= $pager ?>
     </div>
 
     <!-- Modal Add Proyek -->

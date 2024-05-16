@@ -182,154 +182,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <script>
-                                    // Add To Cart Function
-                                    $('#addtocart<?= $mdl['id'] ?>').click(function() {
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: "pesanan/createpurchase",
-                                            data: {
-                                                id: <?= $mdl['id'] ?>,
-                                                paket: <?= $paket['id'] ?>,
-                                            },
-                                            dataType: "json",
-                                            error: function() {
-                                                console.log('error', arguments);
-                                            },
-                                            success: function() {
-                                                // console.log('success', arguments);
-
-                                                $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', false);
-                                                $('#addtocart<?= $mdl['id'] ?>').attr('hidden',true);
-                                                $('#buttonadd<?= $mdl['id'] ?>').append("<p id='info<?= $mdl['id'] ?>' class='info'>Item telah masuk daftar pesanan</p>");
-
-                                                var item = document.createElement('tr');
-                                                item.setAttribute('id','item<?= $mdl['id'] ?>');
-                                                item.setAttribute('class','itemrowmdl');
-
-                                                var name = document.createElement('td');
-                                                name.setAttribute('id','name');
-                                                itemname = document.createTextNode(arguments[0][0]['name']);
-
-                                                var length = document.createElement('td');
-                                                length.setAttribute('id','length');
-                                                length.setAttribute('class','uk-text-center'); 
-                                                itemlength = document.createTextNode(arguments[0][0]['length']);
-
-                                                var width = document.createElement('td');
-                                                width.setAttribute('id','width');
-                                                width.setAttribute('class','uk-text-center'); 
-                                                itemwidth = document.createTextNode(arguments[0][0]['width']);
-
-                                                var height = document.createElement('td');
-                                                height.setAttribute('id','height');
-                                                height.setAttribute('class','uk-text-center'); 
-                                                itemheight = document.createTextNode(arguments[0][0]['heigth']); 
-
-                                                var volume = document.createElement('td');
-                                                volume.setAttribute('id','volume');
-                                                volume.setAttribute('class','uk-text-center'); 
-                                                itemvolume = document.createTextNode(arguments[0][0]['volume']);  
-
-                                                var denom = "";
-                                                if (arguments[0][0]['denomination'] === "1") {
-                                                    denom = "Unit";
-                                                } else if (arguments[0][0]['denomination'] === "2") {
-                                                    denom = "Meter Lari";
-                                                } else if (arguments[0][0]['denomination'] === "3") {
-                                                    denom = "Meter Persegi";
-                                                } else if (arguments[0][0]['denomination'] === "4") {
-                                                    denom = "Set";
-                                                }
-
-                                                var denomination = document.createElement('td');
-                                                denomination.setAttribute('id','denomination'); 
-                                                denomination.setAttribute('class','uk-text-center'); 
-                                                itemdenomination = document.createTextNode(denom);  
-                                                
-                                                var keterangan = document.createElement('td');
-                                                keterangan.setAttribute('id','keterangan');
-                                                itemketerangan = document.createTextNode(arguments[0][0]['keterangan']);  
-
-                                                var photo = document.createElement('td');
-                                                photo.setAttribute('id','photo'); 
-                                                itemphoto = document.createTextNode(arguments[0][0]['photo']); 
-
-                                                var lightbox = document.createElement('div');
-                                                lightbox.toggleAttribute('uk-lightbox');
-
-                                                var linkphoto = document.createElement('a');
-                                                linkphoto.setAttribute('class','uk-inline');
-                                                linkphoto.setAttribute('href','img/mdl/'+ arguments[0][0]['photo']);
-                                                linkphoto.setAttribute('role','button');
-
-                                                var imgphoto = document.createElement('img');
-                                                imgphoto.setAttribute('class','uk-preserve-width uk-border-circle');
-                                                imgphoto.setAttribute('src','img/mdl/'+ arguments[0][0]['photo']);
-                                                imgphoto.setAttribute('width','40');
-                                                imgphoto.setAttribute('height','40');
-                                                imgphoto.setAttribute('alt', arguments[0][0]['photo']);
-                                                
-                                                var price = document.createElement('td');
-                                                price.setAttribute('id','price'); 
-                                                itemprice = document.createTextNode("Rp. " + arguments[0][0]['price'] + ",-"); 
-
-                                                var trinput = document.createElement('td');
-                                                var divinput = document.createElement('div');
-                                                divinput.setAttribute('class','uk-margin');
-
-                                                var input = document.createElement('input');
-                                                input.setAttribute('class','uk-input uk-form-width-small uk-text-center');
-                                                input.setAttribute('name','qty['+arguments[0][0]['mdl']+']');
-                                                input.setAttribute('placeholder','1');
-                                                input.setAttribute('type','number');
-                                                input.setAttribute('value','1');
-                                                input.setAttribute('min','1');
-                                                input.setAttribute('aria-label','X-Small');
-                                                
-                                                var tdtrash = document.createElement('td');
-                                                var divtrash = document.createElement('div');
-                                                var linktrash = document.createElement('a');
-                                                linktrash.setAttribute('uk-icon','trash');
-                                                linktrash.setAttribute('class','uk-icon-button-delete');
-                                                linktrash.setAttribute('onclick','removemdl'+ arguments[0][0]['mdl']+'()');
-                                                var itemorder = document.getElementById('itemorder');
-
-                                                itemorder.appendChild(item);
-                                                item.appendChild(name);
-                                                item.appendChild(length);
-                                                item.appendChild(width);
-                                                item.appendChild(height);
-                                                item.appendChild(volume);
-                                                item.appendChild(denomination);
-                                                item.appendChild(keterangan);
-                                                item.appendChild(photo);
-                                                item.appendChild(price);
-                                                item.appendChild(trinput);
-                                                item.appendChild(tdtrash);
-                                                name.appendChild(itemname);
-                                                length.appendChild(itemlength);
-                                                width.appendChild(itemwidth);
-                                                height.appendChild(itemheight);
-                                                volume.appendChild(itemvolume);
-                                                denomination.appendChild(itemdenomination);
-                                                keterangan.appendChild(itemketerangan);
-                                                photo.appendChild(lightbox);
-                                                lightbox.appendChild(linkphoto);
-                                                linkphoto.appendChild(imgphoto);
-                                                price.appendChild(itemprice);
-                                                trinput.appendChild(divinput);
-                                                divinput.appendChild(input);
-                                                tdtrash.appendChild(divtrash);
-                                                divtrash.appendChild(linktrash);
-
-                                            }
-                                        });
-                                    });
-                                </script>
-                            <?php
-                            }
-                            ?>
+                            <?php } ?>
                             <script>
                                 // Dropdown MDL
                                 document.getElementById('toggle<?= $paket['id'] ?>').addEventListener('click', function() {
@@ -424,6 +277,150 @@
                     $('.addtocart').attr('hidden', false);
                     $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', true);
                 }
+
+                // Add To Cart Function
+                $('#addtocart<?= $mdl['id'] ?>').click(function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: "pesanan/createpurchase",
+                        data: {
+                            id: <?= $mdl['id'] ?>,
+                            paket: <?= $paket['id'] ?>,
+                        },
+                        dataType: "json",
+                        error: function() {
+                            console.log('error', arguments);
+                        },
+                        success: function() {
+                            // console.log('success', arguments);
+
+                            $('#detailpesanan<?=$this->data['account']->parentid?>').attr('hidden', false);
+                            $('#addtocart<?= $mdl['id'] ?>').attr('hidden',true);
+                            $('#buttonadd<?= $mdl['id'] ?>').append("<p id='info<?= $mdl['id'] ?>' class='info'>Item telah masuk daftar pesanan</p>");
+
+                            var item = document.createElement('tr');
+                            item.setAttribute('id','item<?= $mdl['id'] ?>');
+                            item.setAttribute('class','itemrowmdl');
+
+                            var name = document.createElement('td');
+                            name.setAttribute('id','name');
+                            itemname = document.createTextNode(arguments[0][0]['name']);
+
+                            var length = document.createElement('td');
+                            length.setAttribute('id','length');
+                            length.setAttribute('class','uk-text-center'); 
+                            itemlength = document.createTextNode(arguments[0][0]['length']);
+
+                            var width = document.createElement('td');
+                            width.setAttribute('id','width');
+                            width.setAttribute('class','uk-text-center'); 
+                            itemwidth = document.createTextNode(arguments[0][0]['width']);
+
+                            var height = document.createElement('td');
+                            height.setAttribute('id','height');
+                            height.setAttribute('class','uk-text-center'); 
+                            itemheight = document.createTextNode(arguments[0][0]['heigth']); 
+
+                            var volume = document.createElement('td');
+                            volume.setAttribute('id','volume');
+                            volume.setAttribute('class','uk-text-center'); 
+                            itemvolume = document.createTextNode(arguments[0][0]['volume']);  
+
+                            var denom = "";
+                            if (arguments[0][0]['denomination'] === "1") {
+                                denom = "Unit";
+                            } else if (arguments[0][0]['denomination'] === "2") {
+                                denom = "Meter Lari";
+                            } else if (arguments[0][0]['denomination'] === "3") {
+                                denom = "Meter Persegi";
+                            } else if (arguments[0][0]['denomination'] === "4") {
+                                denom = "Set";
+                            }
+
+                            var denomination = document.createElement('td');
+                            denomination.setAttribute('id','denomination'); 
+                            denomination.setAttribute('class','uk-text-center'); 
+                            itemdenomination = document.createTextNode(denom);  
+                            
+                            var keterangan = document.createElement('td');
+                            keterangan.setAttribute('id','keterangan');
+                            itemketerangan = document.createTextNode(arguments[0][0]['keterangan']);  
+
+                            var photo = document.createElement('td');
+                            photo.setAttribute('id','photo'); 
+                            itemphoto = document.createTextNode(arguments[0][0]['photo']); 
+
+                            var lightbox = document.createElement('div');
+                            lightbox.toggleAttribute('uk-lightbox');
+
+                            var linkphoto = document.createElement('a');
+                            linkphoto.setAttribute('class','uk-inline');
+                            linkphoto.setAttribute('href','img/mdl/'+ arguments[0][0]['photo']);
+                            linkphoto.setAttribute('role','button');
+
+                            var imgphoto = document.createElement('img');
+                            imgphoto.setAttribute('class','uk-preserve-width uk-border-circle');
+                            imgphoto.setAttribute('src','img/mdl/'+ arguments[0][0]['photo']);
+                            imgphoto.setAttribute('width','40');
+                            imgphoto.setAttribute('height','40');
+                            imgphoto.setAttribute('alt', arguments[0][0]['photo']);
+                            
+                            var price = document.createElement('td');
+                            price.setAttribute('id','price'); 
+                            itemprice = document.createTextNode("Rp. " + arguments[0][0]['price'] + ",-"); 
+
+                            var trinput = document.createElement('td');
+                            var divinput = document.createElement('div');
+                            divinput.setAttribute('class','uk-margin');
+
+                            var input = document.createElement('input');
+                            input.setAttribute('class','uk-input uk-form-width-small uk-text-center');
+                            input.setAttribute('name','qty['+arguments[0][0]['mdl']+']');
+                            input.setAttribute('placeholder','1');
+                            input.setAttribute('type','number');
+                            input.setAttribute('value','1');
+                            input.setAttribute('min','1');
+                            input.setAttribute('aria-label','X-Small');
+                            
+                            var tdtrash = document.createElement('td');
+                            var divtrash = document.createElement('div');
+                            var linktrash = document.createElement('a');
+                            linktrash.setAttribute('uk-icon','trash');
+                            linktrash.setAttribute('class','uk-icon-button-delete');
+                            linktrash.setAttribute('onclick','removemdl'+ arguments[0][0]['mdl']+'()');
+                            var itemorder = document.getElementById('itemorder');
+
+                            itemorder.appendChild(item);
+                            item.appendChild(name);
+                            item.appendChild(length);
+                            item.appendChild(width);
+                            item.appendChild(height);
+                            item.appendChild(volume);
+                            item.appendChild(denomination);
+                            item.appendChild(keterangan);
+                            item.appendChild(photo);
+                            item.appendChild(price);
+                            item.appendChild(trinput);
+                            item.appendChild(tdtrash);
+                            name.appendChild(itemname);
+                            length.appendChild(itemlength);
+                            width.appendChild(itemwidth);
+                            height.appendChild(itemheight);
+                            volume.appendChild(itemvolume);
+                            denomination.appendChild(itemdenomination);
+                            keterangan.appendChild(itemketerangan);
+                            photo.appendChild(lightbox);
+                            lightbox.appendChild(linkphoto);
+                            linkphoto.appendChild(imgphoto);
+                            price.appendChild(itemprice);
+                            trinput.appendChild(divinput);
+                            divinput.appendChild(input);
+                            tdtrash.appendChild(divtrash);
+                            divtrash.appendChild(linktrash);
+
+                        }
+                    });
+                });
             <?php } ?>
         </script>
         <!-- End Detail Pesanan Pembelian -->

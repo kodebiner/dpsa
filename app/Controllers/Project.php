@@ -60,15 +60,52 @@ class Project extends BaseController
             $PembayaranModel        = new PembayaranModel();
             $LogModel               = new LogModel();
 
+             // Calling Services
+             $pager = \Config\Services::pager();
+
+            // Initilize
+            $input = $this->request->getGet();
+
+            if (isset($input['perpage'])) {
+                $perpage = $input['perpage'];
+            } else {
+                $perpage = 10;
+            }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
             // Populating Data
             $authorize  = $auth = service('authorization');
             $pakets                 = $PaketModel->where('parentid !=', 0)->find();
             $company                = $CompanyModel->where('status !=', "0")->find();
 
+            // New Searh Company Project System
+            $this->builder  = $this->db->table('project');
+            $this->builder->where('project.deleted_at', null);
+            $this->builder->join('company', 'company.id = project.clientid');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('project.name', $input['search']);
+                $this->builder->orLike('company.rsname', $input['search']);
+            }
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, project.sph as sph, project.batas_produksi as batas_produksi, project.status_spk as status_spk, project.no_sph as no_sph, project.ded as ded, project.tahun as tahun, project.type_design as type_design, project.marketing as marketing, project.status as status, project.inv1 as inv1, project.inv2 as inv2, project.inv3 as inv3, project.inv4 as inv4, project.spk as spk, company.id as compid, company.rsname as rsname');
+            $projects = $this->builder->get($perpage, $offset)->getResultArray();
+            array_multisort($projects,SORT_DESC);
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $totalprolist       = $ProjectModel
+                    ->join('company', 'company.id = project.clientid')
+                    ->like('project.name', $input['search'])
+                    ->orLike('company.rsname', $input['search'])
+                    ->countAllResults();
+            } else {
+                $totalprolist     = $ProjectModel
+                ->join('company', 'company.id = project.clientid')
+                ->countAllResults();
+            }
+
             // Company With Deleted
             $companydel             = $CompanyModel->withDeleted()->where('status !=', "0")->find();
-            $projects               = $ProjectModel->paginate(10, 'projects');
-            array_multisort($projects,SORT_DESC);
 
             // Users
             $this->builder = $this->db->table('users');
@@ -433,7 +470,6 @@ class Project extends BaseController
                             }
                         }
                     }
-                    // dd($datarabnew);
                     $projectdata[$project['id']]['allrabdatadeleted']   = $datarabnew;
 
                 }
@@ -454,7 +490,8 @@ class Project extends BaseController
             $data['rabs']           = $rabs;
             $data['marketings']     = $marketings;
             $data['picpro']         = $picPro;
-            $data['pager']          = $ProjectModel->pager;
+            // $data['pager']          = $ProjectModel->pager;
+            $data['pager']          = $pager->makeLinks($page, $perpage, $totalprolist, 'uikit_full');
             $data['input']          = $this->request->getGet('projectid');
 
             return view('project', $data);

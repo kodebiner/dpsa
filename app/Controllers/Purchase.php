@@ -387,7 +387,6 @@ class Purchase extends BaseController
        $data['companys']       =    $companys;
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
-
        // Return
        return view('purchaseorderlist', $data);
     }
