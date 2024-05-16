@@ -229,15 +229,10 @@ class Laporan extends BaseController
 
         // Populating data
         $inputDate = $this->request->getGet('daterange');
-
-        // dd($inputDate);
-        $pattern = "/\//";
         if (!empty($inputDate)) {
             $daterange = explode(' - ', $inputDate);
             $startdate = $daterange[0];
             $enddate = $daterange[1];
-            // $startdate  = preg_replace($pattern, '-', $daterange[0]);
-            // $enddate    =  preg_replace($pattern, '-', $daterange[1]);;
         } else {
             $startdate = date('Y-m-1');
             $enddate = date('Y-m-t');
@@ -411,7 +406,6 @@ class Laporan extends BaseController
         $data                   = $this->data;
         $data['title']          = 'Laporan';
         $data['description']    = "Data Laporan";
-        $data['roles']          = $CompanyModel->where('deleted_at', null)->find();
         $data['company']        = $query;
         $data['total']          = $total;
         $data['input']          = $input;
