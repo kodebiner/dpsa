@@ -22,32 +22,16 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-
-        // Validation Rules
-        // $rules = [
-        //     'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/macbinary,application/mac-binary,application/octet-stream,application/x-binary,application/x-macbinary,image/png,image/jpeg,image/pjpeg]',
-        // ];
-
+        $file       = $input->getName();
+        
         // Get Extention
         $ext = $input->getClientExtension();
 
-        // Validating
-        // if (!$this->validate($rules)) {
-        //     http_response_code(400);
-        //     die(json_encode(array('message' => $this->validator->getErrors())));
-        // }
-
         if ($input->isValid() && !$input->hasMoved()) {
-            // Saving uploaded file
-            $filename = $input->getRandomName();
-            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/design/', $truename . '.' . $ext);
-
-            // Getting True Filename
-            $returnFile = $truename . '.' . $ext;
+            $input->move(FCPATH . '/img/design/', $file);
 
             // Returning Message
-            die(json_encode($returnFile));
+            die(json_encode($file));
         }
     }
 
@@ -406,37 +390,13 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-
-        // Validation Rules
-        // $rules = [
-        //     'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
-        // ];
-
-        // Get Extention
-        $ext = $input->getClientExtension();
-
-        // Validating
-        // if (!$this->validate($rules)) {
-        //     http_response_code(400);
-        //     die(json_encode(array('message' => $this->validator->getErrors())));
-        // }
+        $file       = $input->getName();
 
         if ($input->isValid() && !$input->hasMoved()) {
-            // Check Directory
-            if (!file_exists('/var/www/html/dpsa/public/design')) {
-                mkdir('/var/www/html/dpsa/public/design', 0777, true);
-            }
-
-            // Saving uploaded file
-            $filename = $input->getRandomName();
-            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/design/', $truename . '.' . $ext);
-
-            // Getting True Filename
-            $returnFile = $truename . '.' . $ext;
+            $input->move(FCPATH . '/img/design/', $file);
 
             // Returning Message
-            die(json_encode($returnFile));
+            die(json_encode($file));
         }
     }
 
