@@ -590,10 +590,9 @@ class Project extends BaseController
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|is_unique[project.name]',
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
                 'company' => [
@@ -891,10 +890,9 @@ class Project extends BaseController
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|is_unique[project.name,project.id,' . $id . ']',
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
                 'company' => [

@@ -24,18 +24,18 @@ class Upload extends BaseController
         $input      = $this->request->getFile('uploads');
 
         // Validation Rules
-        $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/macbinary,application/mac-binary,application/octet-stream,application/x-binary,application/x-macbinary,image/png,image/jpeg,image/pjpeg]',
-        ];
+        // $rules = [
+        //     'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/macbinary,application/mac-binary,application/octet-stream,application/x-binary,application/x-macbinary,image/png,image/jpeg,image/pjpeg]',
+        // ];
 
         // Get Extention
         $ext = $input->getClientExtension();
 
         // Validating
-        if (!$this->validate($rules)) {
-            http_response_code(400);
-            die(json_encode(array('message' => $this->validator->getErrors())));
-        }
+        // if (!$this->validate($rules)) {
+        //     http_response_code(400);
+        //     die(json_encode(array('message' => $this->validator->getErrors())));
+        // }
 
         if ($input->isValid() && !$input->hasMoved()) {
             // Saving uploaded file
@@ -408,18 +408,18 @@ class Upload extends BaseController
         $input      = $this->request->getFile('uploads');
 
         // Validation Rules
-        $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
-        ];
+        // $rules = [
+        //     'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+        // ];
 
         // Get Extention
         $ext = $input->getClientExtension();
 
         // Validating
-        if (!$this->validate($rules)) {
-            http_response_code(400);
-            die(json_encode(array('message' => $this->validator->getErrors())));
-        }
+        // if (!$this->validate($rules)) {
+        //     http_response_code(400);
+        //     die(json_encode(array('message' => $this->validator->getErrors())));
+        // }
 
         if ($input->isValid() && !$input->hasMoved()) {
             // Check Directory

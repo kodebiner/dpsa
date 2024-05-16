@@ -15,8 +15,6 @@ use App\Models\PurchaseModel;
 use App\Models\PurchaseDetailModel;
 use App\Models\LogModel;
 use App\Models\RabModel;
-use Mpdf\Tag\P;
-use \phpoffice\PhpOffice\PhpSpreadsheet;
 
 class Purchase extends BaseController
 {
@@ -430,10 +428,9 @@ class Purchase extends BaseController
             $rules = [
                 'name' => [
                     'label'  => 'Nama Proyek',
-                    'rules'  => 'required|is_unique[project.name]',
+                    'rules'  => 'required',
                     'errors' => [
                         'required'      => '{field} wajib diisi',
-                        'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Harap menggunakan {field} lain',
                     ],
                 ],
             ];
