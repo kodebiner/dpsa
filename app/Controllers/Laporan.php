@@ -78,6 +78,7 @@ class Laporan extends BaseController
             } else {
                 $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
             }
+            $this->builder->where('project.deleted_at ='.null);
             $this->builder->join('users', 'users.id = project.marketing');
             $this->builder->join('company', 'company.id = project.clientid');
             if (isset($input['search']) && !empty($input['search'])) {
@@ -98,6 +99,7 @@ class Laporan extends BaseController
                 $totalLaporan = $ProjectModel
                     ->countAllResults();
             }
+
             $projects = $query;
 
             $projectdata = [];
@@ -194,6 +196,7 @@ class Laporan extends BaseController
                 }
             }
 
+
             // Parsing data to view
             $data                   = $this->data;
             $data['title']          = 'Laporan';
@@ -257,7 +260,7 @@ class Laporan extends BaseController
         } else {
             $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
         }
-        // dd($this->builder->get()->getResultArray());
+        $this->builder->where('project.deleted_at ='.null);
 
         if($this->data['role'] === "client cabang"){
             
