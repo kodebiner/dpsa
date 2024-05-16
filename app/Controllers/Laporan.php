@@ -241,14 +241,14 @@ class Laporan extends BaseController
         // Initialize
         $input = $this->request->getGet();
 
-        if (isset($input['perpage'])) {
-            $perpage = $input['perpage'];
-        } else {
-            $perpage = 10;
-        }
+        // if (isset($input['perpage'])) {
+        //     $perpage = $input['perpage'];
+        // } else {
+        //     $perpage = 10;
+        // }
 
-        $page = (@$_GET['page']) ? $_GET['page'] : 1;
-        $offset = ($page - 1) * $perpage;
+        // $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        // $offset = ($page - 1) * $perpage;
 
         if ($startdate === $enddate) {
             $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
@@ -269,7 +269,8 @@ class Laporan extends BaseController
             }
             $this->builder->orderBy('id',"DESC");
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            // $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $query = $this->builder->get()->getResultArray();
             $total = count($query);
             $projects = $query;
 
@@ -286,7 +287,8 @@ class Laporan extends BaseController
             }
             $this->builder->orderBy('id',"DESC");
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            // $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $query = $this->builder->get()->getResultArray();
             $total = count($query);
             $projects = $query;
 
@@ -301,7 +303,8 @@ class Laporan extends BaseController
             }
             $this->builder->orderBy('id',"DESC");
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-            $query = $this->builder->get($perpage, $offset)->getResultArray();
+            // $query = $this->builder->get($perpage, $offset)->getResultArray();
+            $query = $this->builder->get()->getResultArray();
             $total = count($query);
             $projects = $query;
             
