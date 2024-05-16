@@ -74,7 +74,7 @@
                     </a>
                 <?php } ?>
             <?php } else { ?>
-                <div class="uk-width-1-1 uk-text-center uk-text-italic"><?= lang('Global.noData') ?></div>
+                <div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Proyek</div>
             <?php } ?>
         <?php } else { ?>
             <form class="uk-margin" id="searchform" action="home" method="GET">
@@ -204,11 +204,11 @@
                         <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                             <div><?= lang('Global.display') ?></div>
                             <div>
-                                <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                    <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                    <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                    <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                    <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
+                                    <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                    <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                    <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                    <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
                                 </select>
                             </div>
                             <div><?= lang('Global.perPage') ?></div>
@@ -308,12 +308,12 @@
                 </div>
                 <div class="uk-width-auto">
                     <div>
-                        <form class="uk-margin" id="searchform" action="home" method="GET">
+                        <form class="uk-margin" id="searchreport" action="home" method="GET">
                             <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                                 <div>
                                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                         <div>Cari:</div>
-                                        <div><input class="uk-input uk-form-width-medium" id="search" name="searchproyek" <?= (isset($input['searchproyek']) ? 'value="' . $input['searchproyek'] . '"' : '') ?> /></div>
+                                        <div><input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
                                     </div>
                                 </div>
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -325,11 +325,11 @@
                                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                         <div>Tampilan</div>
                                         <div>
-                                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                            <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
+                                                <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                                <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                                <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                                <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
                                             </select>
                                         </div>
                                         <div>Per Halaman</div>
@@ -342,12 +342,22 @@
             </div>
         <?php } ?>
         <script>
+            // Searching Proyek
             document.getElementById('search').addEventListener("change", submitform);
             document.getElementById('perpage').addEventListener("change", submitform);
 
             function submitform() {
                 document.getElementById('searchform').submit();
             };
+
+            // Searching Report Proyek
+            document.getElementById('searchreport').addEventListener("change", submitform);
+            document.getElementById('perpagereport').addEventListener("change", submitform);
+
+            function submitreport() {
+                document.getElementById('searchreport').submit();
+            };
+
         </script>
 
         <script>
