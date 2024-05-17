@@ -58,7 +58,7 @@ class Home extends BaseController
 
             // parsing data to view
             $data           = $this->data;
-            $data['input']  = $input;
+            // $data['input']  = $input;
 
             // Variable for pagination
             if (isset($input['perpage'])) {
@@ -124,8 +124,8 @@ class Home extends BaseController
                     $perpagereport = 10;
                 }
                 
-                $pagereport = (@$_GET['page']) ? $_GET['page'] : 1;
-                $offsetreport = ($pagereport - 1) * $perpage;
+                $pagereport = (@$_GET['pagereport']) ? $_GET['pagereport'] : 1;
+                $offsetreport = ($pagereport - 1) * $perpagereport;
                 
                 $this->builder->join('users', 'users.id = project.marketing');
                 $this->builder->join('company', 'company.id = project.clientid');
@@ -254,8 +254,8 @@ class Home extends BaseController
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
-                $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
-                $data['pagerpro']       = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full');
+                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full');
+                $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;
@@ -834,8 +834,8 @@ class Home extends BaseController
                 $data['rabs']               = $RabModel->findAll();
                 $data['pakets']             = $PaketModel->findAll();
                 $data['mdls']               = $MdlModel->findAll();
-                $data['pager']              = $pager->links('projects', 'uikit_full');
-                $data['pagerpro']           = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+                $data['pager']              = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+                $data['pagerpro']           = $pager->links('projects', 'uikit_full');
                 $data['projectdata']        = $projectdata;
                 $data['projectdesign']      = $projectdesign;
                 $data['input']              = $this->request->getGet('projectid');
