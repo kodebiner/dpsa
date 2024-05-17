@@ -155,7 +155,7 @@ class Purchase extends BaseController
             $data['countparents']   =   count($parents);
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
-            $data['input']          =   $input;
+            $data['inputpage']      =   $input;
             // $data['pagerpro']       =   $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
@@ -385,6 +385,7 @@ class Purchase extends BaseController
        $data['companys']       =    $companys;
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
+       $data['inputpage']      =    $this->request->getVar();
        // Return
        return view('purchaseorderlist', $data);
     }

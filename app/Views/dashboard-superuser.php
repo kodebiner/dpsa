@@ -351,8 +351,8 @@
             };
 
             // Searching Report Proyek
-            document.getElementById('searchreport').addEventListener("change", submitform);
-            document.getElementById('perpagereport').addEventListener("change", submitform);
+            document.getElementById('searchreport').addEventListener("change", submitreport);
+            document.getElementById('perpagereport').addEventListener("change", submitreport);
 
             function submitreport() {
                 document.getElementById('searchreport').submit();

@@ -48,7 +48,7 @@
                     <div>
                         <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                             <div>Cari :</div>
-                            <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                            <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($inputpage['search']) ? 'value="' . $inputpage['search'] . '"' : '') ?> /></div>
                         </div>
                     </div>
                     <div>
@@ -56,10 +56,10 @@
                             <div><?= lang('Global.display') ?></div>
                             <div>
                                 <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                    <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                    <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                    <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                    <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                    <option value="10" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                    <option value="25" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                    <option value="50" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                    <option value="100" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '100') ? 'selected' : '') ?>>100</option>
                                 </select>
                             </div>
                             <div><?= lang('Global.perPage') ?></div>
@@ -71,16 +71,16 @@
             <div id="filter" class="uk-margin" hidden>
                 <form id="searchform" action="pesanmasuk" method="GET">
                     <div class="uk-margin-small uk-flex uk-flex-center">
-                        <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                        <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($inputpage['search']) ? 'value="' . $inputpage['search'] . '"' : '') ?> />
                     </div>
                     <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                         <div><?= lang('Global.display') ?></div>
                         <div>
                             <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                <option value="10" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                <option value="25" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                <option value="50" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                <option value="100" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '100') ? 'selected' : '') ?>>100</option>
                             </select>
                         </div>
                         <div><?= lang('Global.perPage') ?></div>
@@ -102,7 +102,9 @@
 
         <?= view('Views/Auth/_message_block') ?>
 
-        <?php foreach($companys as $company){ ?>
+        <?php
+        $empty ="";
+        foreach($companys as $company){ ?>
             <?php if (!empty($items[$company['id']]['purdet'])){ ?>
                     <div id="order<?=$company['id']?>" class="uk-grid-column-small uk-grid-row-large uk-child-width-1-1@s uk-margin" uk-grid>
                         <div>
@@ -206,8 +208,11 @@
                             }
                         });
                     </script>
-             <?php } ?>
+             <?php }elseif(empty($items[$company['id']]['purdet'])){ 
+                $empty = '<div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Pesanan Masuk</div>';
+              }?>
         <?php } ?>
+        <?= $empty ?>
         <?= $pager ?>
     <?php } ?>
 

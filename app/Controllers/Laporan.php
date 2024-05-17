@@ -217,6 +217,7 @@ class Laporan extends BaseController
 
     public function excel()
     {
+        
         // Calling Model
         $ProjectModel              = new ProjectModel();
         $CompanyModel              = new CompanyModel();

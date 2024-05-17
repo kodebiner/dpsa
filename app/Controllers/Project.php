@@ -494,6 +494,7 @@ class Project extends BaseController
             // $data['pager']          = $ProjectModel->pager;
             $data['pager']          = $pager->makeLinks($page, $perpage, $totalprolist, 'uikit_full');
             $data['input']          = $this->request->getGet('projectid');
+            $data['inputpage']      = $this->request->getVar();
 
             return view('project', $data);
         } else {

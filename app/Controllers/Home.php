@@ -116,14 +116,17 @@ class Home extends BaseController
                     $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
                 }
                 $this->builder->where('project.deleted_at ='.null);
-
+                
                 // Variable for pagination
                 if (isset($input['perpagereport'])) {
                     $perpagereport = $input['perpagereport'];
                 } else {
                     $perpagereport = 10;
                 }
-
+                
+                $pagereport = (@$_GET['page']) ? $_GET['page'] : 1;
+                $offsetreport = ($pagereport - 1) * $perpage;
+                
                 $this->builder->join('users', 'users.id = project.marketing');
                 $this->builder->join('company', 'company.id = project.clientid');
                 if (isset($input['searchreport']) && !empty($input['searchreport'])) {
@@ -133,17 +136,20 @@ class Home extends BaseController
                 }
                 $this->builder->orderBy('id',"DESC");
                 $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-                $queryproject = $this->builder->get($perpagereport, $offset)->getResultArray();
+
+                $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
 
                 if (isset($input['searchreport']) && !empty($input['searchreport'])) {
                     $totalpro = $proyek
+                        ->join('company', 'company.id = project.clientid')
                         ->like('project.name', $input['searchreport'])
+                        ->orLike('company.rsname', $input['searchreport'])
                         ->where('project.deleted_at ='.null)
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
-                        ->where('project.deleted_at ='.null)
-                        ->countAllResults();
+                    ->where('project.deleted_at ='.null)
+                    ->countAllResults();
                 }
 
                 // Query Data Project
@@ -249,10 +255,11 @@ class Home extends BaseController
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
                 $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
-                $data['pagerpro']       = $pager->makeLinks($page, $perpagereport, $totalpro, 'uikit_full');
+                $data['pagerpro']       = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;
+                $data['input']          = $input;
                 $data['total']          = count($queryproject);
                 $data['startdate']      = strtotime($startdate);
                 $data['enddate']        = strtotime($enddate);
@@ -447,6 +454,7 @@ class Home extends BaseController
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;
+                $data['input']          = $input;
                 $data['total']          = count($queryproject);
                 $data['startdate']      = strtotime($startdate);
                 $data['enddate']        = strtotime($enddate);
