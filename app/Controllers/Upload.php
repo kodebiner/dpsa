@@ -76,43 +76,6 @@ class Upload extends BaseController
         }
     }
 
-    // public function saverevisi($id)
-    // {
-    //     $DesignModel    = new DesignModel();
-    //     $LogModel       = new LogModel();
-    //     $ProjectModel   = new ProjectModel();
-
-    //     $input = $this->request->getPost();
-    //     // Design Data
-    //     if (isset($input['revisi'])) {
-    //         $project = $ProjectModel->find($id);
-    //         $design = $DesignModel->where('projectid', $id)->first();
-    //         if (!empty($design)) {
-    //             if(!empty($design['revision'])){
-    //                 unlink(FCPATH . '/img/revisi/' . $design['revision']);
-    //             }
-    //             $datadesign = [
-    //                 'id'            => $design['id'],
-    //                 'projectid'     => $id,
-    //                 'revision'      => $input['revisi'],
-    //                 'status'        => 1,
-    //             ];
-    //             $DesignModel->insert($datadesign);
-    //             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi'.$project['name']]);
-    //         } else {
-    //             $datadesign = [
-    //                 'projectid'     => $id,
-    //                 'revision'      => $input['revisi'],
-    //                 'status'        => 1,
-    //             ];
-    //             $DesignModel->save($datadesign);
-    //             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi'.$project['name']]);
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('message', 'Revisi terkirim');
-    // }
-
     public function removerevisi()
     {
         // Removing File
@@ -128,32 +91,13 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-
-        // Validation Rules
-        $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
-        ];
-
-        // Get Extention
-        $ext = $input->getClientExtension();
-
-        // Validating
-        if (!$this->validate($rules)) {
-            http_response_code(400);
-            die(json_encode(array('message' => $this->validator->getErrors())));
-        }
+        $file       = $input->getName();
 
         if ($input->isValid() && !$input->hasMoved()) {
-            // Saving uploaded file
-            $filename = $input->getRandomName();
-            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            $input->move(FCPATH . '/img/spk/', $truename . '.' . $ext);
-
-            // Getting True Filename
-            $returnFile = $truename . '.' . $ext;
+            $input->move(FCPATH . '/img/spk/', $file);
 
             // Returning Message
-            die(json_encode($returnFile));
+            die(json_encode($file));
         }
     }
 
@@ -240,7 +184,11 @@ class Upload extends BaseController
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK ' . $project['name']]);
             } else {
                 if (!empty($spk['spk'])) {
-                    unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                    if(file_exists(FCPATH . '/img/spkclient/' . $spk['spk']) === false){
+                        unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                    }else{
+                        unlink(FCPATH . '/img/spkclient/' . $spk['spk']);
+                    }
                 }
                 $dataspk = [
                     'id'            => $spk['id'],
@@ -295,6 +243,31 @@ class Upload extends BaseController
         // Removing File
         $input = $this->request->getPost('spk');
         unlink(FCPATH . 'img/spk/' . $input);
+
+        // Return Message
+        die(json_encode(array('errors', 'Data berhasil di hapus')));
+    }
+
+    public function spkclient()
+    {
+        $image      = \Config\Services::image();
+        $validation = \Config\Services::validation();
+        $input      = $this->request->getFile('uploads');
+        $file       = $input->getName();
+
+        if ($input->isValid() && !$input->hasMoved()) {
+            $input->move(FCPATH . '/img/spkclient/', $file);
+
+            // Returning Message
+            die(json_encode($file));
+        }
+    }
+
+    public function removespkclient()
+    {
+        // Removing File
+        $input = $this->request->getPost('spk');
+        unlink(FCPATH . 'img/spkclient/' . $input);
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));

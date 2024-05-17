@@ -39,6 +39,9 @@
                     </div>
                 </form>
             </div>
+            <div>
+                <?= view('Views/Auth/_message_block') ?>
+            </div>
             <script>
                 document.getElementById('filterbutton').addEventListener('click', toggleiconfilter);
 
@@ -57,6 +60,7 @@
             <h3 class="tm-h3 uk-margin-remove">Daftar Proyek</h3>
         <?php } ?>
         <hr class="uk-divider-icon uk-margin-remove-top">
+        <?= view('Views/Auth/_message_block') ?>
         <!-- end of Page Heading -->
 
         <!-- Content -->

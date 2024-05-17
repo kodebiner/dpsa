@@ -849,7 +849,11 @@ class Project extends BaseController
             if (!empty($input['spk'])) {
                 if ($input['spk'] != $pro['spk']) {
                     if (!empty($pro['spk'])) {
-                        unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                        if(file_exists(FCPATH . '/img/spk/' . $pro['spk']) === false){
+                            unlink(FCPATH . '/img/spkclient/' . $pro['spk']);
+                        }else{
+                            unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                        }
                     }
                     $spk        = $input['spk'];
                     $statusspk  = 1;

@@ -48,6 +48,9 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('spk', 'Upload::spk');
     $routes->post('savespk/(:num)', 'Upload::savespk/$1');
     $routes->post('removespk', 'Upload::removespk');
+    $routes->post('spkclient', 'Upload::spkclient');
+    $routes->post('savespkclient/(:num)', 'Upload::savespkclient/$1');
+    $routes->post('removespkclient', 'Upload::removespkclient');
     $routes->post('mdl/(:num)', 'Upload::mdl/$1');
     $routes->post('layout', 'Upload::layout');
     $routes->post('removelayout', 'Upload::removelayout');
