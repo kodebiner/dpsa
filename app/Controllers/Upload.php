@@ -21,7 +21,7 @@ class Upload extends BaseController
     {
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
-        $input      = $this->request->getFile('uploads');
+        $input      = $this->request->getFile();
         $file       = $input->getName();
         
         // Get Extention
