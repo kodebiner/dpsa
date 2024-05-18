@@ -22,20 +22,29 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-        $file       = $input->getName();
-        
-        // Get Extention
-        $ext = $input->getClientMimeType();
+
+        // Validation Rules
+        $rules = [
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/pdf]',
+        ];
+
+        // Validating
+        if (!$this->validate($rules)) {
+            http_response_code(400);
+            die(json_encode(array('message' => $this->validator->getErrors())));
+        }
 
         if ($input->isValid() && !$input->hasMoved()) {
-            // $input->move(FCPATH . '/img/design/', $file);
-            // $this->request->getFile('uploads')->store('/img/design/', $file);
+            $filename = $input->getRandomName();
+            $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+            $input->move(FCPATH . '/img/design/', $filename);
+
+            // Getting True Filename
+            $returnFile = $truename . '.pdf';
+
             // Returning Message
-            die(json_encode($file));
-        } //else if ($input->isValid()) {
-            //die(json_encode($this->fail($input->getErrorString())));
-        //}
-        // die(json_encode($ext));
+            die(json_encode($returnFile));
+        }
     }
 
     public function removedesigncreate()
