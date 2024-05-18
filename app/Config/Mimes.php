@@ -76,6 +76,7 @@ class Mimes
             'application/x-download',
             'application/unknown',
             'binary/octet-stream',
+            'text/html',
         ],
         'ai' => [
             'application/pdf',
