@@ -2391,7 +2391,7 @@
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label">NO SPK</label>
                                             <div class="uk-form-controls">:
-                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
+                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (isset($project['no_spk'])) {
                                                                                                                                     echo $project['no_spk'];
                                                                                                                                 } ?>" placeholder="NO SPK" />
                                             </div>
