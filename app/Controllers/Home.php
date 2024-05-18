@@ -254,8 +254,10 @@ class Home extends BaseController
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
-                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full');
+                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
                 $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                // $data['pager']          = $this->builder->get($perpagereport, $offsetreport)->pager;
+                // $data['pager']          = $clients->get($perpage, $offset);
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;
@@ -1743,7 +1745,7 @@ class Home extends BaseController
 
     public function information()
     {
-        echo "There's nothing to see here";
-        // phpinfo();
+        // echo "There's nothing to see here";
+        phpinfo();
     }
 }
