@@ -21,21 +21,21 @@ class Upload extends BaseController
     {
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
-        $input      = $this->request->getFile();
+        $input      = $this->request->getFile('uploads');
         $file       = $input->getName();
         
         // Get Extention
         $ext = $input->getClientMimeType();
 
-        // if ($input->isValid() && !$input->hasMoved()) {
+        if ($input->isValid() && !$input->hasMoved()) {
             // $input->move(FCPATH . '/img/design/', $file);
 
             // Returning Message
-            // die(json_encode($ext));
-        // } else {
-            // die(json_encode($ext));
-        // }
-        die(json_encode($ext));
+            die(json_encode($ext));
+        } else if ($input->isValid()) {
+            die(json_encode($this->fail($input->getErrorString())));
+        }
+        // die(json_encode($ext));
     }
 
     public function removedesigncreate()
