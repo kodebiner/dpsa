@@ -15,6 +15,7 @@ use App\Models\PurchaseModel;
 use App\Models\PurchaseDetailModel;
 use App\Models\LogModel;
 use App\Models\RabModel;
+use App\Models\ProductionModel;
 
 class Purchase extends BaseController
 {
@@ -213,18 +214,8 @@ class Purchase extends BaseController
         $authorize  = $auth = service('authorization');
         $quantity = $this->request->getPost('qty');
 
-        $rules = [
-            'clientid' => [
-                'label'  => 'Pemesanan',
-                'rules'  => 'required',
-                'errors' => [
-                    'required'      => '{field} hanya bisa dilakukan oleh Klien',
-                ],
-            ],
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->to('pesanan')->withInput()->with('errors', $this->validator->getErrors());
+        if (empty($this->data['account']->parentid)) {
+            return redirect()->to('pesanan')->withInput()->with('errors', array('Pesan Hanya Bisa Dilakukan Oleh Klien'));
         }
 
         // Check Current Client Id Order
@@ -419,6 +410,7 @@ class Purchase extends BaseController
             $PurchaseModel          = new PurchaseModel();
             $PurchaseDetailModel    = new PurchaseDetailModel();
             $RabModel               = new RabModel();
+            $ProductionModel        = new ProductionModel();
 
             // initialize
             $input      = $this->request->getPost();
@@ -559,6 +551,7 @@ class Purchase extends BaseController
             }
             
             // Replace Data From PO to RAB
+            $rab = [];
             foreach($purchasedetails as $podetail){
                 $datarab = [
                     'projectid' => $projectid,
@@ -568,8 +561,35 @@ class Purchase extends BaseController
                 ];
                 $RabModel->insert($datarab);
 
+                $rab[$podetail['mdlid']] = $podetail['qty'];
+
                 // Delete PO Data
                 $PurchaseDetailModel->delete($podetail['id']);
+            }
+
+            // Replace Data From PO to RAB
+            // $rab = [];
+            // foreach($purchasedetails as $podetail){
+            //     $datarab = [
+            //         'projectid' => $projectid,
+            //         'mdlid'     => $podetail['mdlid'],
+            //         'paketid'   => $podetail['paketid'],
+            //         'qty'       => $podetail['qty'],
+            //     ];
+            //     // $RabModel->insert($datarab);
+
+            //     $rab[$podetail['mdlid']] = $podetail['qty'];
+            // }
+
+            // Production Tracking
+            foreach($rab as $mdl => $qty){
+                for ($x = 0; $x < $qty; $x++){
+                    $dataproduction = [
+                        'projectid' => $projectid,
+                        'mdlid'     => $mdl,
+                    ];
+                    $ProductionModel->insert($dataproduction);
+                }
             }
 
             // Delete Purchase Data
