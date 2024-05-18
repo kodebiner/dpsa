@@ -2403,7 +2403,7 @@
                                                                                 echo $project['no_spk'];
                                                                             } ?> </a></div>
                                             <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
-                                                                                                                                    echo $project['no_spk'];
+                                                                                                                                    $project['no_spk'];
                                                                                                                                 } ?>" />
                                         </div>
                                     <?php } ?>
