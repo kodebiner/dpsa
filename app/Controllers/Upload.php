@@ -32,6 +32,8 @@ class Upload extends BaseController
 
             // Returning Message
             die(json_encode($ext));
+        } else {
+            die(json_encode($ext));
         }
     }
 
