@@ -89,7 +89,7 @@ class Project extends BaseController
                 $this->builder->orLike('company.rsname', $input['search']);
             }
             $this->builder->orderBy('id','DESC');
-            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, project.sph as sph, project.batas_produksi as batas_produksi, project.status_spk as status_spk, project.no_sph as no_sph, project.ded as ded, project.tahun as tahun, project.type_design as type_design, project.marketing as marketing, project.status as status, project.inv1 as inv1, project.inv2 as inv2, project.inv3 as inv3, project.inv4 as inv4, project.spk as spk, company.id as compid, company.rsname as rsname');
+            $this->builder->select('project.id as id, project.no_spk as no_spk, project.tanggal_spk as tanggal_spk, project.name as name, project.clientid as clientid, project.sph as sph, project.batas_produksi as batas_produksi, project.status_spk as status_spk, project.no_sph as no_sph, project.ded as ded, project.tahun as tahun, project.type_design as type_design, project.marketing as marketing, project.status as status, project.inv1 as inv1, project.inv2 as inv2, project.inv3 as inv3, project.inv4 as inv4, project.spk as spk, company.id as compid, company.rsname as rsname');
             $projects = $this->builder->get($perpage, $offset)->getResultArray();
             // array_multisort($projects,SORT_DESC);
 

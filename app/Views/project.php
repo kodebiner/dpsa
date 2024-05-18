@@ -2371,17 +2371,9 @@
                                             <div class="uk-inline">
                                                 <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                    <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) {
-                                                                                                        $tglspk = date_create($project['tanggal_spk']);
-                                                                                                        echo "value='" . date_format($tglspk, 'm/d/Y') . "'";
-                                                                                                    } ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                    <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) {$tglspk = date_create($project['tanggal_spk']); echo "value='" . date_format($tglspk, 'm/d/Y') . "'";} ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                 <?php } else { ?>
-                                                    <span class=""><?php if (!empty($project['tanggal_spk'])) {
-                                                                        $tglspk = date_create($project['tanggal_spk']);
-                                                                        echo date_format($tglspk, 'm/d/Y');
-                                                                    } else {
-                                                                        echo date('m/d/Y');
-                                                                    } ?></span>
+                                                    <span class=""><?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']);echo date_format($tglspk, 'm/d/Y');} else { echo date('m/d/Y'); } ?></span>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -2391,20 +2383,14 @@
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label">NO SPK</label>
                                             <div class="uk-form-controls">:
-                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($projectdata[$project['id']]['no_spk'])) {
-                                                                                                                                    echo 'testing '.$projectdata[$project['id']]['no_spk'];
-                                                                                                                                } ?>" placeholder="NO SPK" />
+                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo 'testing '.$project['no_spk'];} ?>" placeholder="NO SPK" />
                                             </div>
                                         </div>
                                     <?php } else { ?>
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
-                                            <div class="uk-form-controls">: <?php if (!empty($projectdata[$project['id']]['no_spk'])) {
-                                                                                echo $projectdata[$project['id']]['no_spk'];
-                                                                            } ?> </a></div>
-                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($projectdata[$project['id']]['no_spk'])) {
-                                                                                                                                    echo $projectdata[$project['id']]['no_spk'];
-                                                                                                                                } ?>" />
+                                            <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) {  echo $project['no_spk']; } ?> </a></div>
+                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) { echo $project['no_spk']; } ?>" />
                                         </div>
                                     <?php } ?>
 
