@@ -72,6 +72,7 @@ class Mimes
             'application/pdf',
             'application/force-download',
             'application/x-download',
+            'application/unknown',
         ],
         'ai' => [
             'application/pdf',

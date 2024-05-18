@@ -29,12 +29,12 @@ class Upload extends BaseController
 
         if ($input->isValid() && !$input->hasMoved()) {
             // $input->move(FCPATH . '/img/design/', $file);
-
+            // $this->request->getFile('uploads')->store('/img/design/', $file);
             // Returning Message
-            die(json_encode($ext));
-        } else if ($input->isValid()) {
-            die(json_encode($this->fail($input->getErrorString())));
-        }
+            die(json_encode($file));
+        } //else if ($input->isValid()) {
+            //die(json_encode($this->fail($input->getErrorString())));
+        //}
         // die(json_encode($ext));
     }
 
