@@ -213,6 +213,20 @@ class Purchase extends BaseController
         $authorize  = $auth = service('authorization');
         $quantity = $this->request->getPost('qty');
 
+        $rules = [
+            'clientid' => [
+                'label'  => 'Pemesanan',
+                'rules'  => 'required',
+                'errors' => [
+                    'required'      => '{field} hanya bisa dilakukan oleh Klien',
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to('pesanan')->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         // Check Current Client Id Order
         $currentOrderId = $PurchaseModel->where('clientid',$this->data['account']->parentid)->first();
         // $currentOrderId = $PurchaseModel->where('clientid',1)->first();
@@ -386,6 +400,7 @@ class Purchase extends BaseController
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
        $data['inputpage']      =    $this->request->getVar();
+
        // Return
        return view('purchaseorderlist', $data);
     }
