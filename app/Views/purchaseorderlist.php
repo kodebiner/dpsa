@@ -192,7 +192,7 @@
                             if (confirm(text) == true) {
                                 $.ajax({
                                     type: 'POST',
-                                    url: "pesananmasuk/delete",
+                                    url: "pesanmasuk/delete",
                                     data: {
                                         id: <?=$company['id']?>,
                                     },
@@ -201,6 +201,7 @@
                                         console.log('error', arguments);
                                     },
                                     success: function() {
+                                        console.log('success', arguments);
                                         $('#order<?=$company['id']?>').remove();
                                         alert("Pesanan berhasil dihapus");
                                     }
