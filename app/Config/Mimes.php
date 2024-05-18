@@ -70,9 +70,12 @@ class Mimes
         'oda' => 'application/oda',
         'pdf' => [
             'application/pdf',
+            'application/x-pdf',
+            'application/download',
             'application/force-download',
             'application/x-download',
             'application/unknown',
+            'binary/octet-stream',
         ],
         'ai' => [
             'application/pdf',
