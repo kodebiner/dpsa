@@ -27,14 +27,15 @@ class Upload extends BaseController
         // Get Extention
         $ext = $input->getClientMimeType();
 
-        if ($input->isValid() && !$input->hasMoved()) {
+        // if ($input->isValid() && !$input->hasMoved()) {
             // $input->move(FCPATH . '/img/design/', $file);
 
             // Returning Message
-            die(json_encode($ext));
-        } else {
-            die(json_encode($ext));
-        }
+            // die(json_encode($ext));
+        // } else {
+            // die(json_encode($ext));
+        // }
+        die(json_encode($ext));
     }
 
     public function removedesigncreate()
