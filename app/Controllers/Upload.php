@@ -25,7 +25,7 @@ class Upload extends BaseController
         $file       = $input->getName();
         
         // Get Extention
-        $ext = $input->guessExtension();
+        $ext = $input->getClientMimeType();
 
         if ($input->isValid() && !$input->hasMoved()) {
             // $input->move(FCPATH . '/img/design/', $file);
