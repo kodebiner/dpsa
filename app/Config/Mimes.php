@@ -77,6 +77,10 @@ class Mimes
             'application/unknown',
             'binary/octet-stream',
             'text/html',
+            'application/powerpoint',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.ms-office',
+            'application/msword',
         ],
         'ai' => [
             'application/pdf',
