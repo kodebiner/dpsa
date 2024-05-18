@@ -880,9 +880,9 @@
                                         url: 'upload/designcreate',
                                         multiple: false,
                                         name: 'uploads',
-                                        param: {
-                                            lorem: 'ipsum'
-                                        },
+                                        // param: {
+                                        //     lorem: 'ipsum'
+                                        // },
                                         method: 'POST',
                                         type: 'json',
 
