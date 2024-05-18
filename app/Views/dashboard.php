@@ -2047,7 +2047,7 @@
                                                 </div>
                                                 <div class="uk-card-body">
                                                     <a href="img/spkclient/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank" class="uk-link-reset">
-                                                        <h6><a href="img/spkclient/<?= $projectdata[$project['id']]['project']['spk'] ?>" uk-icon="file-text"></a> <a href="img/spkclient/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank"><?= $projectdata[$project['id']]['project']['spk'] ?></a></h6>
+                                                        <h6><a href="img/spkclient/<?= $projectdata[$project['id']]['project']['spk'] ?>" uk-icon="file-text"></a> <a href="img/spk/<?= $projectdata[$project['id']]['project']['spk'] ?>" target="_blank"><?= $projectdata[$project['id']]['project']['spk'] ?></a></h6>
                                                     </a>
                                                 </div>
                                             </div>
@@ -2083,7 +2083,7 @@
                                     <script type="text/javascript">
                                         var barspk = document.getElementById('js-progressbar-createspk-<?= $project['id'] ?>');
                                         UIkit.upload('.js-upload-createspk-<?= $project['id'] ?>', {
-                                            url: 'upload/spkclient',
+                                            url: 'upload/spk',
                                             multiple: false,
                                             name: 'uploads',
                                             param: {
@@ -2190,7 +2190,7 @@
                                         function removeImgCreatespk<?= $project['id'] ?>() {
                                             $.ajax({
                                                 type: 'post',
-                                                url: 'upload/removespkclient',
+                                                url: 'upload/removespk',
                                                 data: {
                                                     'spk': document.getElementById('photocreatespk<?= $project['id'] ?>').value
                                                 },

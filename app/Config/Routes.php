@@ -48,9 +48,9 @@ $routes->group('upload', ['filter' => 'login'], function($routes) {
     $routes->post('spk', 'Upload::spk');
     $routes->post('savespk/(:num)', 'Upload::savespk/$1');
     $routes->post('removespk', 'Upload::removespk');
-    $routes->post('spkclient', 'Upload::spkclient');
-    $routes->post('savespkclient/(:num)', 'Upload::savespkclient/$1');
-    $routes->post('removespkclient', 'Upload::removespkclient');
+    // $routes->post('spkclient', 'Upload::spkclient');
+    // $routes->post('savespkclient/(:num)', 'Upload::savespkclient/$1');
+    // $routes->post('removespkclient', 'Upload::removespkclient');
     $routes->post('mdl/(:num)', 'Upload::mdl/$1');
     $routes->post('layout', 'Upload::layout');
     $routes->post('removelayout', 'Upload::removelayout');
@@ -97,16 +97,19 @@ $routes->group('home', ['filter' => 'login'], function($routes) {
 // Users
 $routes->group('users',['filter' => 'login'], function ($routes){
     $routes->get('','User::index');
+
     // Users
     $routes->post('create','User::create');
     $routes->post('update/(:num)','User::update/$1');
     $routes->post('delete/(:num)','User::delete/$1');
     $routes->get('delete/(:num)','User::delete/$1');
+
     // Access Control
     $routes->get('access-control','User::accesscontrol');
     $routes->post('create/access-control','User::createaccess');
     $routes->post('update/access/(:num)','User::updateaccess/$1');
     $routes->get('delete/access-control/(:num)','User::deleteaccess/$1');
+    
     // Log
     $routes->get('log','User::log');
 

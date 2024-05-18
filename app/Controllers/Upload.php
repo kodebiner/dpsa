@@ -184,11 +184,12 @@ class Upload extends BaseController
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK ' . $project['name']]);
             } else {
                 if (!empty($spk['spk'])) {
-                    if(file_exists(FCPATH . '/img/spkclient/' . $spk['spk']) === false){
-                        unlink(FCPATH . '/img/spk/' . $spk['spk']);
-                    }else{
-                        unlink(FCPATH . '/img/spkclient/' . $spk['spk']);
-                    }
+                    // if(file_exists(FCPATH . '/img/spkclient/' . $spk['spk']) === false){
+                    //     unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                    // }else{
+                    //     unlink(FCPATH . '/img/spkclient/' . $spk['spk']);
+                    // }
+                    unlink(FCPATH . '/img/spk/' . $spk['spk']);
                 }
                 $dataspk = [
                     'id'            => $spk['id'],
@@ -248,30 +249,30 @@ class Upload extends BaseController
         die(json_encode(array('errors', 'Data berhasil di hapus')));
     }
 
-    public function spkclient()
-    {
-        $image      = \Config\Services::image();
-        $validation = \Config\Services::validation();
-        $input      = $this->request->getFile('uploads');
-        $file       = $input->getName();
+    // public function spkclient()
+    // {
+    //     $image      = \Config\Services::image();
+    //     $validation = \Config\Services::validation();
+    //     $input      = $this->request->getFile('uploads');
+    //     $file       = $input->getName();
 
-        if ($input->isValid() && !$input->hasMoved()) {
-            $input->move(FCPATH . '/img/spkclient/', $file);
+    //     if ($input->isValid() && !$input->hasMoved()) {
+    //         $input->move(FCPATH . '/img/spkclient/', $file);
 
-            // Returning Message
-            die(json_encode($file));
-        }
-    }
+    //         // Returning Message
+    //         die(json_encode($file));
+    //     }
+    // }
 
-    public function removespkclient()
-    {
-        // Removing File
-        $input = $this->request->getPost('spk');
-        unlink(FCPATH . 'img/spkclient/' . $input);
+    // public function removespkclient()
+    // {
+    //     // Removing File
+    //     $input = $this->request->getPost('spk');
+    //     unlink(FCPATH . 'img/spkclient/' . $input);
 
-        // Return Message
-        die(json_encode(array('errors', 'Data berhasil di hapus')));
-    }
+    //     // Return Message
+    //     die(json_encode(array('errors', 'Data berhasil di hapus')));
+    // }
 
     public function mdl($id)
     {
