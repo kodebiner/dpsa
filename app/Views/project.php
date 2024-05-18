@@ -883,6 +883,8 @@
                                         // param: {
                                         //     lorem: 'ipsum'
                                         // },
+                                        contentType: false,
+                                        processData: false,
                                         method: 'POST',
                                         type: 'json',
 
