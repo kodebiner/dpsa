@@ -2391,19 +2391,19 @@
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label">NO SPK</label>
                                             <div class="uk-form-controls">:
-                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
-                                                                                                                                    echo 'testing '.$project['no_spk'];
+                                                <input type="text" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($projectdata[$project['id']]['no_spk'])) {
+                                                                                                                                    echo 'testing '.$projectdata[$project['id']]['no_spk'];
                                                                                                                                 } ?>" placeholder="NO SPK" />
                                             </div>
                                         </div>
                                     <?php } else { ?>
                                         <div class="uk-margin-small">
                                             <label class="uk-form-label uk-margin-remove-top">NO. SPK</label>
-                                            <div class="uk-form-controls">: <?php if (!empty($project['no_spk'])) {
-                                                                                echo $project['no_spk'];
+                                            <div class="uk-form-controls">: <?php if (!empty($projectdata[$project['id']]['no_spk'])) {
+                                                                                echo $projectdata[$project['id']]['no_spk'];
                                                                             } ?> </a></div>
-                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($project['no_spk'])) {
-                                                                                                                                    echo $project['no_spk'];
+                                            <input type="hidden" class="uk-input uk-width-1-3" id="nospk" name="nospk" value="<?php if (!empty($projectdata[$project['id']]['no_spk'])) {
+                                                                                                                                    echo $projectdata[$project['id']]['no_spk'];
                                                                                                                                 } ?>" />
                                         </div>
                                     <?php } ?>
