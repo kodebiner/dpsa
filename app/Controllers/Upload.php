@@ -25,13 +25,13 @@ class Upload extends BaseController
         $file       = $input->getName();
         
         // Get Extention
-        $ext = $input->getClientExtension();
+        $ext = $input->guessExtension();
 
         if ($input->isValid() && !$input->hasMoved()) {
-            $input->move(FCPATH . '/img/design/', $file);
+            // $input->move(FCPATH . '/img/design/', $file);
 
             // Returning Message
-            die(json_encode($file));
+            die(json_encode($ext));
         }
     }
 
