@@ -621,7 +621,7 @@ class Purchase extends BaseController
         foreach($purchases as $purchase){
             $PurchaseModel->delete($purchase['id']);
         }
-
+        
         die(json_encode('Data Berhasil Dihapus'));
     }
 }
