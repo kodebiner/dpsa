@@ -309,14 +309,14 @@ class Home extends BaseController
                 }
                 $this->builder->where('project.deleted_at ='.null);
                 if(!empty($klienid)){
-                    $this->builder->whereIn('project.clientid',$klienid);
                     $this->builder->join('users', 'users.id = project.marketing');
                     $this->builder->join('company', 'company.id = project.clientid');
                     if (isset($input['searchreport']) && !empty($input['searchreport'])) {
                         $this->builder->like('project.name', $input['searchreport']);
-                        $this->builder->orLike('users.username', $input['searchreport']);
+                        // $this->builder->orLike('users.username', $input['searchreport']);
                         $this->builder->orLike('company.rsname', $input['searchreport']);
                     }
+                    $this->builder->whereIn('project.clientid',$klienid);
                     $this->builder->orderBy('id',"DESC");
                     $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
                     $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
@@ -339,16 +339,17 @@ class Home extends BaseController
                         ->join('users', 'users.id = project.marketing')
                         ->join('company', 'company.id = project.clientid')
                         ->like('project.name', $input['searchreport'])
-                        ->orLike('users.username', $input['searchreport'])
+                        // ->orLike('users.username', $input['searchreport'])
                         ->orLike('company.rsname', $input['searchreport'])
+                        ->whereIn('project.clientid',$klienid)
                         ->where('project.deleted_at ='.null)
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
                         ->where('project.deleted_at ='.null)
+                        ->whereIn('project.clientid',$klienid)
                         ->countAllResults();
                 }
-
                 // Query Data Project
                 $projectdata = [];
                 foreach ($queryproject as $project) {
@@ -767,7 +768,7 @@ class Home extends BaseController
                     $totalpro = $proyek
                     ->join('users', 'users.id = project.marketing')
                     ->join('company', 'company.id = project.clientid')
-                    ->orLike('users.username', $input['searchproyek'])
+                    // ->orLike('users.username', $input['searchproyek'])
                     ->orLike('company.rsname', $input['searchproyek'])
                     ->like('project.name', $input['searchproyek'])
                     ->where('project.clientid', $this->data['parentid'])
