@@ -208,8 +208,13 @@ class Purchase extends BaseController
         $MdlPaketModel          = new MdlPaketModel();
         $UserModel              = new UserModel();
         $NotificationModel      = new NotificationModel();
+        $LogModel               = new LogModel();
+        $UserModel              = new UserModel();
+        $CompanyModel           = new CompanyModel();
 
-
+        $user = $UserModel->find($this->data['uid']);
+        $company = $CompanyModel->find($this->data['account']->parentid);
+        
         // Get Data
         $authorize  = $auth = service('authorization');
         $quantity = $this->request->getPost('qty');
@@ -274,7 +279,7 @@ class Purchase extends BaseController
         // Notif Marketing
         $notifmarketing  = [
             'userid'        => $this->data['account']->id,
-            'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan item baru ',
+            'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan baru ',
             'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
             'status'        => 0,
         ];
@@ -292,6 +297,7 @@ class Purchase extends BaseController
 
             $NotificationModel->insert($notifadmin);
         }
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => $user->username.' dari '.$company['rsname'].' baru saja menambahkan pesanan Baru ']);
 
         return redirect()->to('pesanan')->with('message','Pesanan Telah Dikirimkan Mohon Tunggu Konfirmasi Dari DPSA');
     }
@@ -567,20 +573,6 @@ class Purchase extends BaseController
                 $PurchaseDetailModel->delete($podetail['id']);
             }
 
-            // Replace Data From PO to RAB
-            // $rab = [];
-            // foreach($purchasedetails as $podetail){
-            //     $datarab = [
-            //         'projectid' => $projectid,
-            //         'mdlid'     => $podetail['mdlid'],
-            //         'paketid'   => $podetail['paketid'],
-            //         'qty'       => $podetail['qty'],
-            //     ];
-            //     // $RabModel->insert($datarab);
-
-            //     $rab[$podetail['mdlid']] = $podetail['qty'];
-            // }
-
             // Production Tracking
             foreach($rab as $mdl => $qty){
                 for ($x = 0; $x < $qty; $x++){
@@ -628,9 +620,17 @@ class Purchase extends BaseController
     {
         $PurchaseModel          = new PurchaseModel();
         $PurchaseDetailModel    = new PurchaseDetailModel();
+        $LogModel               = new LogModel();
+        $UserModel              = new UserModel();
+        $CompanyModel           = new CompanyModel();
 
+        $user = $UserModel->find($this->data['uid']);
+        
         $input = $this->request->getPost('id');
-
+        
+        $company = $CompanyModel->find($input);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => $user->username. ' baru saja menghapus pesanan dari '.$company['rsname']]);
+        
         $purchases = $PurchaseModel->where('clientid',$input)->find();
         $Purchasedetails = $PurchaseDetailModel->where('clientid',$input)->find();
 
@@ -641,6 +641,7 @@ class Purchase extends BaseController
         foreach($purchases as $purchase){
             $PurchaseModel->delete($purchase['id']);
         }
+
         
         die(json_encode('Data Berhasil Dihapus'));
     }
