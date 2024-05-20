@@ -1451,13 +1451,22 @@
                                         </div>
 
                                         <div id="contentbuktipembayaran<?= $project['id'] ?>" hidden>
-                                            <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                            <!-- <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
+                                                </?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-card-body"><a href="/img/bukti/pembayaran/</?= $payproof['file'] ?>" data-caption="</?= $payproof['file'] ?>"><span uk-icon="file-pdf"></span></?= $payproof['file'] ?></a></div>
+                                                    </div>
+                                                </?php } ?>
+                                            </div> -->
+
+                                            <div class="uk-grid-column-small uk-grid-row-small uk-child-width-1-3@s uk-text-center" uk-grid>
                                                 <?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
                                                     <div>
-                                                        <div class="uk-card uk-card-default uk-card-body"><a href="/img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>"><span uk-icon="file-pdf"></span><?= $payproof['file'] ?></a></div>
+                                                        <div class="uk-card uk-card-default uk-card-body"><a target="_blank" href="/img/bukti/pembayaran/<?= $payproof['file'] ?>" data-caption="<?= $payproof['file'] ?>" download><span uk-icon="file-pdf"></span><?= $payproof['file'] ?></a></div>
                                                     </div>
                                                 <?php } ?>
                                             </div>
+
                                         </div>
                                         <!-- Bukti Pembayaran End -->
 
