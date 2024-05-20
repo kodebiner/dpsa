@@ -254,8 +254,8 @@ class Home extends BaseController
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
                 $data['mdls']           = $MdlModel->findAll();
-                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
                 $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
                 // $data['pager']          = $this->builder->get($perpagereport, $offsetreport)->pager;
                 // $data['pager']          = $clients->get($perpage, $offset);
                 $data['input']          = $this->request->getGet('projectid');
@@ -313,9 +313,9 @@ class Home extends BaseController
                     $this->builder->join('users', 'users.id = project.marketing');
                     $this->builder->join('company', 'company.id = project.clientid');
                     if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-                        $this->builder->like('project.name', $input['searchproyek']);
-                        $this->builder->orLike('users.username', $input['searchproyek']);
-                        $this->builder->orLike('company.rsname', $input['searchproyek']);
+                        $this->builder->like('project.name', $input['searchreport']);
+                        $this->builder->orLike('users.username', $input['searchreport']);
+                        $this->builder->orLike('company.rsname', $input['searchreport']);
                     }
                     $this->builder->orderBy('id',"DESC");
                     $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
@@ -323,21 +323,21 @@ class Home extends BaseController
                 }else{
                     $queryproject = $this->builder->where('project.clientid',$this->data['account']->parentid)->get()->getResultArray();
                 }
-
-                // $this->builder->whereIn('project.clientid',$klienid);
-                // $this->builder->join('users', 'users.id = project.marketing');
-                // $this->builder->join('company', 'company.id = project.clientid');
-                // if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
-                //     $this->builder->like('project.name', $input['searchproyek']);
-                //     $this->builder->orLike('users.username', $input['searchproyek']);
-                //     $this->builder->orLike('company.rsname', $input['searchproyek']);
-                // }
-                // $this->builder->orderBy('id',"DESC");
-                // $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-                // $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
+                
+                // Variable for pagination
+                if (isset($input['perpagereport'])) {
+                    $perpagereport = $input['perpagereport'];
+                } else {
+                    $perpagereport = 10;
+                }
+                
+                $pagereport = (@$_GET['pagereport']) ? $_GET['pagereport'] : 1;
+                $offsetreport = ($pagereport - 1) * $perpagereport;
 
                 if (isset($input['searchreport']) && !empty($input['searchreport'])) {
                     $totalpro = $proyek
+                        ->join('users', 'users.id = project.marketing')
+                        ->join('company', 'company.id = project.clientid')
                         ->like('project.name', $input['searchreport'])
                         ->orLike('users.username', $input['searchreport'])
                         ->orLike('company.rsname', $input['searchreport'])
@@ -345,7 +345,6 @@ class Home extends BaseController
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
-                        // ->where('company.rsname !=', '')
                         ->where('project.deleted_at ='.null)
                         ->countAllResults();
                 }
@@ -451,8 +450,10 @@ class Home extends BaseController
                 $data['rabs']           = $RabModel->findAll();
                 $data['pakets']         = $PaketModel->findAll();
                 $data['clients']        = array_slice($clients, $offset, $perpage);
-                $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
-                $data['pagerpro']       = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+                $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
+                // $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+                // $data['pagerpro']       = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;
@@ -484,6 +485,43 @@ class Home extends BaseController
                     $projects = $ProjectModel->where('clientid', $this->data['parentid'])->where('deleted_at', null)->paginate($perpage, 'projects');
                 }
                 $this->builder->where('project.deleted_at ='.null);
+
+                // Variable for pagination
+                if (isset($input['perpage'])) {
+                    $perpage = $input['perpage'];
+                } else {
+                    $perpage = 10;
+                }
+
+                $page = (@$_GET['page']) ? $_GET['page'] : 1;
+                $offset = ($page - 1) * $perpage;
+
+                // Daterange Filter
+                $inputdate = $this->request->getVar('daterange');
+                if (!empty($inputdate)) {
+                    $daterange = explode(' - ', $inputdate);
+                    $startdate = $daterange[0];
+                    $enddate = $daterange[1];
+                } else {
+                    $startdate = date('Y-m-1');
+                    $enddate = date('Y-m-t');
+                }
+
+                if (isset($input['search']) && !empty($input['search'])) {
+                    $totalclient = $ProjectModel
+                        ->where('clientid', $this->data['parentid'])
+                        ->join('company', 'company.id = project.clientid')
+                        ->where('company.status !=', '0')
+                        ->like('company.rsname', $input['search'])
+                        ->orLike('company.rsname', $input['search'])
+                        ->countAllResults();
+                } else {
+                    $totalclient = $ProjectModel
+                        ->where('clientid', $this->data['parentid'])
+                        ->join('company', 'company.id = project.clientid')
+                        ->where('company.status !=', '0')
+                        ->countAllResults();
+                }
 
                 $projectdata = [];
                 $projectdesign = [];
@@ -702,30 +740,42 @@ class Home extends BaseController
                     $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
                 }
                 $this->builder->where('project.deleted_at ='.null);
-                $this->builder->whereIn('project.clientid', $this->data['parentid']);
+                $this->builder->where('project.clientid', $this->data['parentid']);
                 $this->builder->join('users', 'users.id = project.marketing');
                 $this->builder->join('company', 'company.id = project.clientid');
-                if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-                    $this->builder->like('project.name', $input['searchreport']);
-                    // $this->builder->orLike('users.username', $input['searchreport']);
-                    // $this->builder->orLike('company.rsname', $input['searchreport']);
-                    $this->builder->whereIn('project.clientid', $this->data['parentid']);
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
+                    $this->builder->like('project.name', $input['searchproyek']);
+                    // $this->builder->orLike('users.username', $input['searchproyek']);
+                    $this->builder->orLike('company.rsname', $input['searchproyek']);
+                    $this->builder->where('project.clientid', $this->data['parentid']);
                 }
                 $this->builder->orderBy('id',"DESC");
                 $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
                 $queryproject = $this->builder->get($perpage, $offset)->getResultArray();
 
-                if (isset($input['searchreport']) && !empty($input['searchreport'])) {
+                // Variable for pagination
+                if (isset($input['perpagereport'])) {
+                $perpagereport = $input['perpagereport'];
+                } else {
+                    $perpagereport = 10;
+                }
+                
+                $pagereport = (@$_GET['pagereport']) ? $_GET['pagereport'] : 1;
+                $offsetreport = ($pagereport - 1) * $perpagereport;
+
+                if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
                     $totalpro = $proyek
-                        ->like('project.name', $input['searchreport'])
-                        ->whereIn('project.clientid', $this->data['parentid'])
+                    ->join('users', 'users.id = project.marketing')
+                    ->join('company', 'company.id = project.clientid')
+                    ->orLike('users.username', $input['searchproyek'])
+                    ->orLike('company.rsname', $input['searchproyek'])
+                    ->like('project.name', $input['searchproyek'])
+                    ->where('project.clientid', $this->data['parentid'])
                         ->where('project.deleted_at ='.null)
-                        // ->orLike('users.username', $input['searchreport'])
-                        // ->orLike('company.rsname', $input['searchreport'])
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
-                        // ->where('company.parentid !=', '0')
+                        ->where('clientid', $this->data['parentid'])
                         ->where('project.deleted_at ='.null)
                         ->countAllResults();
                 }
@@ -836,8 +886,10 @@ class Home extends BaseController
                 $data['rabs']               = $RabModel->findAll();
                 $data['pakets']             = $PaketModel->findAll();
                 $data['mdls']               = $MdlModel->findAll();
-                $data['pager']              = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
-                $data['pagerpro']           = $pager->links('projects', 'uikit_full');
+                $data['pager']              = $pager->makeLinks($page, $perpage, $totalclient, 'uikit_full');
+                $data['pagerpro']           = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
+                // $data['pager']              = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+                // $data['pagerpro']           = $pager->links('projects', 'uikit_full');
                 $data['projectdata']        = $projectdata;
                 $data['projectdesign']      = $projectdesign;
                 $data['input']              = $this->request->getGet('projectid');

@@ -1,5 +1,6 @@
 <?php
 
+use CodeIgniter\CodeIgniter;
 use CodeIgniter\Pager\PagerRenderer;
 
 /**
@@ -19,9 +20,13 @@ $pager->setSurroundCount(2);
             <?php } ?>
         <?php } ?>
 
+        <?php
+        $i = 1;
+        ?>
         <?php foreach ($pager->links() as $link) { ?>
             <li <?= $link['active'] ? 'class="uk-active"' : '' ?>>
                 <?php
+                $link['uri'] = 'https://dpsa.local/?pagereport='.$i++;
                 if ($link['active'] === true) {
                     echo '<span>'.$link['title'].'</span>';
                 } else {
