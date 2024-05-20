@@ -1450,7 +1450,7 @@
                                             <hr>
                                         </div>
 
-                                        <div id="contentbuktipembayaran<?= $project['id'] ?>" hidden>
+                                        <div id="contentbuktipembayaran<?= $project['id'] ?>" class="uk-width-1-1" hidden>
                                             <!-- <div class="uk-child-width-auto uk-grid-match uk-flex-middle" uk-grid uk-lightbox="animation: slide">
                                                 </?php foreach($projectdata[$project['id']]['buktipembayaran'] as $payproof) { ?>
                                                     <div>
