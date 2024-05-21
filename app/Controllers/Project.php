@@ -918,9 +918,9 @@ class Project extends BaseController
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
                     foreach ($mdls as $mdlid => $qty) {
+                        dd($input['checked' . $id]);
                         if (isset($input['checked' . $id][$mdlid])) {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            dd($rab);
                             if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid]) && $input['eqty' . $id][$paketid][$mdlid] != "0") {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
