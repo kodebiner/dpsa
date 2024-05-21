@@ -951,9 +951,9 @@ class Project extends BaseController
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $datarab = [
                                         'mdlid'     => $mdlid,
-                                        'projectid' => $id,
+                                        'projectid' => (int)$id,
                                         'paketid'   => $paketid,
-                                        'qty'       => $qty,
+                                        'qty'       => (int)$qty,
                                     ];
                                     dd($datarab);
                                     $RabModel->save($datarab);
