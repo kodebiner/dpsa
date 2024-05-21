@@ -955,7 +955,6 @@ class Project extends BaseController
                                         'paketid'   => $paketid,
                                         'qty'       => (int)$qty,
                                     ];
-                                    dd($datarab);
                                     $RabModel->save($datarab);
                                     for ($n = 1; $n <= (int)$qty; $n++) {
                                         $dataProduction = [
