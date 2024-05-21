@@ -947,7 +947,7 @@ class Project extends BaseController
                                     }
                                     $RabModel->delete($rab);
                                 }
-                            } elseif (empty($rab)) {
+                            } else {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $datarab = [
                                         'mdlid'     => $mdlid,
