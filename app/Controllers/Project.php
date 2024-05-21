@@ -948,7 +948,6 @@ class Project extends BaseController
                                     $RabModel->delete($rab);
                                 }
                             } elseif (empty($rab)) {
-                                dd($input['eqty' . $id][$paketid][$mdlid]);
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $datarab = [
                                         'mdlid'     => $mdlid,
@@ -956,6 +955,7 @@ class Project extends BaseController
                                         'paketid'   => $paketid,
                                         'qty'       => $qty,
                                     ];
+                                    dd($datarab);
                                     $RabModel->save($datarab);
                                     for ($n = 1; $n <= (int)$qty; $n++) {
                                         $dataProduction = [
