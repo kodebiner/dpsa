@@ -2925,19 +2925,20 @@
                                                 </div>
                                             <?php } ?>
                                         </div>
-
-                                        <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
-                                            <input id="photocreatebuktipengiriman<?= $project['id'] ?>" name="buktipengiriman" hidden />
-                                            <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
-                                                <span uk-icon="icon: cloud-upload"></span>
-                                                <span class="uk-text-middle">Tarik dan lepas bukti pengiriman disini atau</span>
-                                                <div uk-form-custom>
-                                                    <input type="file">
-                                                    <span class="uk-link uk-preserve-color">pilih satu</span>
+                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                            <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
+                                                <input id="photocreatebuktipengiriman<?= $project['id'] ?>" name="buktipengiriman" hidden />
+                                                <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
+                                                    <span uk-icon="icon: cloud-upload"></span>
+                                                    <span class="uk-text-middle">Tarik dan lepas bukti pengiriman disini atau</span>
+                                                    <div uk-form-custom>
+                                                        <input type="file">
+                                                        <span class="uk-link uk-preserve-color">pilih satu</span>
+                                                    </div>
                                                 </div>
+                                                <progress id="js-progressbar-createbuktipengiriman-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
                                             </div>
-                                            <progress id="js-progressbar-createbuktipengiriman-<?= $project['id'] ?>" class="uk-progress" value="0" max="100" hidden></progress>
-                                        </div>
+                                        <?php } ?>
                                     </div>
 
                                     <script type="text/javascript">

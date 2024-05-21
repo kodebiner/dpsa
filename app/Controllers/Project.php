@@ -1052,7 +1052,6 @@ class Project extends BaseController
                     }
                 }
             }
-
            
             // Shipping Data
             if (!empty($input['shippingcost'])) {
