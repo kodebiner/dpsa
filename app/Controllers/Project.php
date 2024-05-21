@@ -945,7 +945,7 @@ class Project extends BaseController
                                     foreach ($productions as $production) {
                                         $ProductionModel->delete($production['id']);
                                     }
-                                    $RabModel->delete($rab);
+                                    $RabModel->delete($rab['id']);
                                 }
                             } else {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
@@ -965,16 +965,14 @@ class Project extends BaseController
                                     }
                                 }
                             }
-                        } elseif (!isset($input['checked' . $id][$mdlid])) {
-                            $rabs = $RabModel->where('projectid', $id)->find();
+                        } else {
+                            $rabs = $RabModel->where('projectid', $id)->where('mdlid', $mdlid)->first();
                             if (!empty($rabs)) {
-                                $productions = $ProductionModel->where('projectid', $id)->find();
+                                $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
                                 foreach ($productions as $production) {
                                     $ProductionModel->delete($production['id']);
                                 }
-                                foreach($rabs as $rab){
-                                    $RabModel->delete($rab['id']);
-                                }
+                                $RabModel->delete($rabs['id']);
                             }
                         }
                     }
