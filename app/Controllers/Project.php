@@ -965,7 +965,7 @@ class Project extends BaseController
                                     }
                                 }
                             }
-                        } else {
+                        } elseif (!isset($input['checked' . $id][$mdlid])) {
                             $rabs = $RabModel->where('projectid', $id)->find();
                             if (!empty($rabs)) {
                                 $productions = $ProductionModel->where('projectid', $id)->find();
