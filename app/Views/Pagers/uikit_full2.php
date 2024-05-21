@@ -26,14 +26,7 @@ $pager->setSurroundCount(2);
         <?php foreach ($pager->links() as $link) { ?>
             <li <?= $link['active'] ? 'class="uk-active"' : '' ?>>
                 <?php
-                // $link['uri'] = 'https://dpsa.local/?pagereport='.$i++;
-                // $str = $link['uri'];
-                // $pattern[] = '/page='.$i++.'/i';
-                // var_dump(preg_replace($pattern, 'pagereport', $str));
-                // $link['uri'] = preg_replace($pattern, 'pagereport', $str)."=".$i++;
-                // var_dump($link['uri']);
-                
-                $link['uri'] = base_url().'?pagereport='.$i++;
+                $link['uri'] = base_url('?pagereport='.$i++);
                 if ($link['active'] === true) {
                     echo '<span>'.$link['title'].'</span>';
                 } else {
