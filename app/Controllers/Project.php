@@ -920,7 +920,6 @@ class Project extends BaseController
                     foreach ($mdls as $mdlid => $qty) {
                         if (isset($input['checked' . $id][$mdlid])) {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            dd($rab);
                             if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid]) && $input['eqty' . $id][$paketid][$mdlid] != "0") {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
@@ -949,6 +948,7 @@ class Project extends BaseController
                                     $RabModel->delete($rab);
                                 }
                             } elseif (empty($rab)) {
+                                dd($input['eqty' . $id][$paketid][$mdlid]);
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
                                     $datarab = [
                                         'mdlid'     => $mdlid,
