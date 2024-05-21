@@ -917,6 +917,7 @@ class Project extends BaseController
             // RAB Data
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
+                    dd($mdls);
                     foreach ($mdls as $mdlid => $qty) {
                         if (isset($input['checked' . $id][$mdlid])) {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
