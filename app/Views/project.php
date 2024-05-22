@@ -1079,12 +1079,12 @@
                                                                         <td>
                                                                             <?php
                                                                             if ($mdl['checked']) {
-                                                                                $checked = 'checked';
+                                                                                $checked = "checked='checked'";
                                                                             } else {
                                                                                 $checked = '';
                                                                             }
                                                                             ?>
-                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" disabled/>
+                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" disabled="disabled"/>
                                                                         </td>
                                                                         <td><?= $mdl['name'] ?></td>
                                                                         <td><?= $mdl['length'] ?></td>
