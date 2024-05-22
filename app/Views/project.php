@@ -1154,11 +1154,27 @@
                                                                         <td>
                                                                             <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" disabled/>
                                                                         </td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>" disabled/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>" disabled/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>" disabled/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>" disabled/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="uk-select" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
+                                                                                <option value="" selected disabled hidden>Pilih Satuan</option>
+                                                                                <option value="1" <?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                                                                                <option value="2" <?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                                                                                <option value="3" <?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                                                                                <option value="4" <?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
+                                                                            </select>
+                                                                        </td>
                                                                         <td></td>
                                                                         <td></td>
                                                                         <td>
@@ -1639,11 +1655,27 @@
                                                                         <td>
                                                                             <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
                                                                         </td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
+                                                                                <option value="" selected disabled hidden>Pilih Satuan</option>
+                                                                                <option value="1" <?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                                                                                <option value="2" <?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                                                                                <option value="3" <?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                                                                                <option value="4" <?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
+                                                                            </select>
+                                                                        </td>
                                                                         <td></td>
                                                                         <td></td>
                                                                         <td>
@@ -1803,10 +1835,31 @@
                                                 </div>
                                                 <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
                                                     <div id="createName<?= $project['id'] ?>0">
-                                                        <input type="text" class="uk-input" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
+                                                    </div>
+                                                    <div id="createLength<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customlength<?= $project['id'] ?>[0]" name="customlength<?= $project['id'] ?>[0]" placeholder="Panjang" />
+                                                    </div>
+                                                    <div id="createWidth<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customwidth<?= $project['id'] ?>[0]" name="customwidth<?= $project['id'] ?>[0]" placeholder="Lebar" />
+                                                    </div>
+                                                    <div id="createHeight<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customheight<?= $project['id'] ?>[0]" name="customheight<?= $project['id'] ?>[0]" placeholder="Tinggi" />
+                                                    </div>
+                                                    <div id="createVol<?= $project['id'] ?>0">
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customvol<?= $project['id'] ?>[0]" name="customvol<?= $project['id'] ?>[0]" placeholder="Volume" />
+                                                    </div>
+                                                    <div id="createDen<?= $project['id'] ?>0">
+                                                        <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="customden<?= $project['id'] ?>[0]" name="customden<?= $project['id'] ?>[0]">
+                                                            <option value="" selected disabled hidden>Pilih Satuan</option>
+                                                            <option value="1">Unit</option>
+                                                            <option value="2">Meter Lari</option>
+                                                            <option value="3">Meter Persegi</option>
+                                                            <option value="4">Set</option>
+                                                        </select>
                                                     </div>
                                                     <div id="createPrice<?= $project['id'] ?>0">
-                                                        <input type="text" class="uk-input" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
+                                                        <input type="text" class="uk-input uk-form-width-medium" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1830,17 +1883,89 @@
 
                                                     const createNameInput = document.createElement('input');
                                                     createNameInput.setAttribute('type', 'text');
-                                                    createNameInput.setAttribute('class', 'uk-input');
+                                                    createNameInput.setAttribute('class', 'uk-input uk-form-width-medium');
                                                     createNameInput.setAttribute('placeholder', 'Nama');
                                                     createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
                                                     createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
+
+                                                    const createLength = document.createElement('div');
+                                                    createLength.setAttribute('id', 'createLength' + x + '' + createCount);
+
+                                                    const createLengthInput = document.createElement('input');
+                                                    createLengthInput.setAttribute('type', 'text');
+                                                    createLengthInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                    createLengthInput.setAttribute('placeholder', 'Panjang');
+                                                    createLengthInput.setAttribute('id', 'customlength' + x + '[' + createCount + ']');
+                                                    createLengthInput.setAttribute('name', 'customlength' + x + '[' + createCount + ']');
+
+                                                    const createWidth = document.createElement('div');
+                                                    createWidth.setAttribute('id', 'createWidth' + x + '' + createCount);
+
+                                                    const createWidthInput = document.createElement('input');
+                                                    createWidthInput.setAttribute('type', 'text');
+                                                    createWidthInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                    createWidthInput.setAttribute('placeholder', 'Lebar');
+                                                    createWidthInput.setAttribute('id', 'customwidth' + x + '[' + createCount + ']');
+                                                    createWidthInput.setAttribute('name', 'customwidth' + x + '[' + createCount + ']');
+
+                                                    const createHeight = document.createElement('div');
+                                                    createHeight.setAttribute('id', 'createHeight' + x + '' + createCount);
+
+                                                    const createHeightInput = document.createElement('input');
+                                                    createHeightInput.setAttribute('type', 'text');
+                                                    createHeightInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                    createHeightInput.setAttribute('placeholder', 'Tinggi');
+                                                    createHeightInput.setAttribute('id', 'customheight' + x + '[' + createCount + ']');
+                                                    createHeightInput.setAttribute('name', 'customheight' + x + '[' + createCount + ']');
+
+                                                    const createVol = document.createElement('div');
+                                                    createVol.setAttribute('id', 'createVol' + x + '' + createCount);
+
+                                                    const createVolInput = document.createElement('input');
+                                                    createVolInput.setAttribute('type', 'text');
+                                                    createVolInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                    createVolInput.setAttribute('placeholder', 'Volume');
+                                                    createVolInput.setAttribute('id', 'customvol' + x + '[' + createCount + ']');
+                                                    createVolInput.setAttribute('name', 'customvol' + x + '[' + createCount + ']');
+
+                                                    const createDen = document.createElement('div');
+                                                    createDen.setAttribute('id', 'createDen' + x + '' + createCount);
+
+                                                    const createDenInput = document.createElement('select');
+                                                    createDenInput.setAttribute('class', 'uk-select uk-form-width-medium');
+                                                    createDenInput.setAttribute('placeholder', 'Satuan');
+                                                    createDenInput.setAttribute('id', 'customden' + x + '[' + createCount + ']');
+                                                    createDenInput.setAttribute('name', 'customden' + x + '[' + createCount + ']');
+
+                                                    const createOption1 = document.createElement('option');
+                                                    createOption1.setAttribute('hidden', '');
+                                                    createOption1.setAttribute('selected', '');
+                                                    createOption1.setAttribute('disabled', '');
+                                                    createOption1.setAttribute('value', '');
+                                                    createOption1.innerHTML = "Pilih Satuan"
+
+                                                    const createOption2 = document.createElement('option');
+                                                    createOption2.setAttribute('value', '1');
+                                                    createOption2.innerHTML = "Unit"
+
+                                                    const createOption3 = document.createElement('option');
+                                                    createOption3.setAttribute('value', '2');
+                                                    createOption3.innerHTML = "Meter Lari"
+
+                                                    const createOption4 = document.createElement('option');
+                                                    createOption4.setAttribute('value', '3');
+                                                    createOption4.innerHTML = "Meter Persegi"
+
+                                                    const createOption5 = document.createElement('option');
+                                                    createOption5.setAttribute('value', '4');
+                                                    createOption5.innerHTML = "Set"
 
                                                     const createPrice = document.createElement('div');
                                                     createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
 
                                                     const createPriceInput = document.createElement('input');
                                                     createPriceInput.setAttribute('type', 'text');
-                                                    createPriceInput.setAttribute('class', 'uk-input');
+                                                    createPriceInput.setAttribute('class', 'uk-input uk-form-width-medium');
                                                     createPriceInput.setAttribute('placeholder', 'Harga');
                                                     createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
                                                     createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
@@ -1857,6 +1982,21 @@
 
                                                     createName.appendChild(createNameInput);
                                                     newCreateCustomRab.appendChild(createName);
+                                                    createLength.appendChild(createLengthInput);
+                                                    newCreateCustomRab.appendChild(createLength);
+                                                    createWidth.appendChild(createWidthInput);
+                                                    newCreateCustomRab.appendChild(createWidth);
+                                                    createHeight.appendChild(createHeightInput);
+                                                    newCreateCustomRab.appendChild(createHeight);
+                                                    createVol.appendChild(createVolInput);
+                                                    newCreateCustomRab.appendChild(createVol);
+                                                    createDenInput.appendChild(createOption1);
+                                                    createDenInput.appendChild(createOption2);
+                                                    createDenInput.appendChild(createOption3);
+                                                    createDenInput.appendChild(createOption4);
+                                                    createDenInput.appendChild(createOption5);
+                                                    createDen.appendChild(createDenInput);
+                                                    newCreateCustomRab.appendChild(createDen);
                                                     createPrice.appendChild(createPriceInput);
                                                     newCreateCustomRab.appendChild(createPrice);
                                                     createRemove.appendChild(createRemoveButton);
@@ -2927,12 +3067,12 @@
                                         </div>
                                         <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                             <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
-                                                <input id="photocreatebuktipengiriman<?= $project['id'] ?>" name="buktipengiriman" hidden />
+                                                <!-- <input id="photocreatebuktipengiriman</?= $project['id'] ?>" name="buktipengiriman" hidden /> -->
                                                 <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
                                                     <span uk-icon="icon: cloud-upload"></span>
                                                     <span class="uk-text-middle">Tarik dan lepas bukti pengiriman disini atau</span>
                                                     <div uk-form-custom>
-                                                        <input type="file">
+                                                        <input type="file" multiple>
                                                         <span class="uk-link uk-preserve-color">pilih satu</span>
                                                     </div>
                                                 </div>
@@ -2940,14 +3080,16 @@
                                             </div>
                                         <?php } ?>
                                     </div>
+                                    <div id="list-foto-<?= $project['id'] ?>"></div>
 
                                     <script type="text/javascript">
                                         // Upload Bukti Pembayaran
                                         var bar = document.getElementById('js-progressbar-createbuktipengiriman-<?= $project['id'] ?>');
+                                        var createCount = 0;
 
                                         UIkit.upload('.js-upload-createbuktipengiriman-<?= $project['id'] ?>', {
                                             url: 'upload/buktipengiriman',
-                                            multiple: false,
+                                            multiple: true,
                                             name: 'uploads',
                                             param: {
                                                 lorem: 'ipsum'
@@ -2974,57 +3116,74 @@
                                                 console.log('complete', arguments);
 
                                                 var filename = arguments[0].response;
+                                                createCount++;
+                                                
+                                                for (i in filename) {
+                                                    // if (document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>')) {
+                                                    //     document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>').remove();
+                                                    // };
 
-                                                if (document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>')) {
-                                                    document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>').remove();
-                                                };
+                                                    // document.getElementById('photocreatebuktipengiriman</?= $project['id'] ?>').value = filename;
 
-                                                document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value = filename;
+                                                    var imgContainer = document.getElementById('list-foto-<?= $project['id'] ?>');
 
-                                                var imgContainer = document.getElementById('image-container-createbuktipengiriman-<?= $project['id'] ?>');
+                                                    // var gridcontainer = document.createElement('div');
+                                                    // gridcontainer.setAttribute('class', 'uk-child-width-1-2 uk-child-width-1-5@m');
+                                                    // gridcontainer.setAttribute('uk-grid', '');
 
-                                                var displayContainer = document.createElement('div');
-                                                displayContainer.setAttribute('id', 'display-container-createbuktipengiriman-<?= $project['id'] ?>');
-                                                displayContainer.setAttribute('class', 'uk-inline uk-width-1-2 uk-width-1-5@m uk-margin');
+                                                    var displayContainer = document.createElement('div');
+                                                    displayContainer.setAttribute('id', 'display-container-createbuktipengiriman-<?= $project['id'] ?>'+createCount);
+                                                    displayContainer.setAttribute('class', 'uk-inline uk-width-1-2 uk-width-1-5@m uk-padding-small');
 
-                                                var displayImg = document.createElement('div');
-                                                displayImg.setAttribute('uk-lightbox', 'animation: fade');
-                                                displayImg.setAttribute('class', 'uk-inline');
+                                                    var displayImg = document.createElement('div');
+                                                    displayImg.setAttribute('uk-lightbox', 'animation: fade');
+                                                    displayImg.setAttribute('class', 'uk-inline');
 
-                                                var link = document.createElement('a');
-                                                link.setAttribute('href', 'img/bukti/pengiriman/' + filename);
+                                                    var link = document.createElement('a');
+                                                    link.setAttribute('href', 'img/bukti/pengiriman/' + filename);
 
-                                                var image = document.createElement('img');
-                                                image.setAttribute('src', 'img/bukti/pengiriman/' + filename);
+                                                    var image = document.createElement('img');
+                                                    image.setAttribute('src', 'img/bukti/pengiriman/' + filename);
+                                                    image.setAttribute('width', '300');
+                                                    image.setAttribute('height', '300');
 
-                                                var createNote = document.createElement('div');
-                                                createNote.setAttribute('class', 'uk-margin');
+                                                    var inputhidden = document.createElement('input');
+                                                    inputhidden.setAttribute('hidden', '');
+                                                    inputhidden.setAttribute('id', 'buktipengiriman-<?= $project['id'] ?>-'+createCount);
+                                                    inputhidden.setAttribute('name', 'buktipengiriman-<?= $project['id'] ?>['+createCount+']');
+                                                    inputhidden.setAttribute('value', filename);
 
-                                                var createNoteInput = document.createElement('input');
-                                                createNoteInput.setAttribute('type', 'text');
-                                                createNoteInput.setAttribute('class', 'uk-input uk-form-width-large');
-                                                createNoteInput.setAttribute('placeholder', 'Keterangan (optional)');
-                                                createNoteInput.setAttribute('id', 'note');
-                                                createNoteInput.setAttribute('name', 'note');
+                                                    var createNote = document.createElement('div');
+                                                    createNote.setAttribute('class', 'uk-margin');
 
-                                                var closeContainer = document.createElement('div');
-                                                closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
+                                                    var createNoteInput = document.createElement('input');
+                                                    createNoteInput.setAttribute('type', 'text');
+                                                    createNoteInput.setAttribute('class', 'uk-input uk-form-width-large');
+                                                    createNoteInput.setAttribute('placeholder', 'Keterangan (optional)');
+                                                    createNoteInput.setAttribute('id', 'note-<?= $project['id'] ?>-'+createCount);
+                                                    createNoteInput.setAttribute('name', 'note-<?= $project['id'] ?>['+createCount+']');
 
-                                                var closeButton = document.createElement('a');
-                                                closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
-                                                closeButton.setAttribute('onClick', 'removeImgCreatebuktipengiriman<?= $project['id'] ?>()');
-                                                closeButton.setAttribute('uk-icon', 'close');
+                                                    var closeContainer = document.createElement('div');
+                                                    closeContainer.setAttribute('class', 'uk-position-small uk-position-right');
 
-                                                createNote.appendChild(createNoteInput);
-                                                displayContainer.appendChild(displayImg);
-                                                closeContainer.appendChild(closeButton);
-                                                displayContainer.appendChild(createNote);
-                                                displayContainer.appendChild(closeContainer);
-                                                link.appendChild(image);
-                                                displayImg.appendChild(link);
+                                                    var closeButton = document.createElement('a');
+                                                    closeButton.setAttribute('class', 'tm-img-remove uk-border-circle');
+                                                    closeButton.setAttribute('onClick', 'removeImgCreatebuktipengiriman<?= $project['id'] ?>('+createCount+')');
+                                                    closeButton.setAttribute('uk-icon', 'close');
+
+                                                    createNote.appendChild(createNoteInput);
+                                                    displayContainer.appendChild(displayImg);
+                                                    closeContainer.appendChild(closeButton);
+                                                    displayContainer.appendChild(inputhidden);
+                                                    displayContainer.appendChild(createNote);
+                                                    displayContainer.appendChild(closeContainer);
+                                                    link.appendChild(image);
+                                                    displayImg.appendChild(link);
+                                                    // gridcontainer.appendChild(displayContainer);
+                                                }
                                                 imgContainer.appendChild(displayContainer);
 
-                                                document.getElementById('js-upload-createbuktipengiriman-<?= $project['id'] ?>').setAttribute('hidden', '');
+                                                // document.getElementById('js-upload-createbuktipengiriman-</?= $project['id'] ?>').setAttribute('hidden', '');
                                             },
 
                                             loadStart: function(e) {
@@ -3060,12 +3219,12 @@
                                             }
                                         });
 
-                                        function removeImgCreatebuktipengiriman<?= $project['id'] ?>() {
+                                        function removeImgCreatebuktipengiriman<?= $project['id'] ?>(i) {
                                             $.ajax({
                                                 type: 'post',
                                                 url: 'upload/removebuktipengiriman',
                                                 data: {
-                                                    'buktipengiriman': document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value
+                                                    'buktipengiriman': document.getElementById('buktipengiriman-<?= $project['id'] ?>-'+i).value
                                                 },
                                                 dataType: 'json',
 
@@ -3078,12 +3237,12 @@
 
                                                     var pesan = arguments[0][1];
 
-                                                    document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>').remove();
-                                                    document.getElementById('photocreatebuktipengiriman<?= $project['id'] ?>').value = '';
+                                                    document.getElementById('display-container-createbuktipengiriman-<?= $project['id'] ?>'+i).remove();
+                                                    // document.getElementById('buktipengiriman'+i).value = '';
 
                                                     alert(pesan);
 
-                                                    document.getElementById('js-upload-createbuktipengiriman-<?= $project['id'] ?>').removeAttribute('hidden', '');
+                                                    // document.getElementById('js-upload-createbuktipengiriman-</?= $project['id'] ?>').removeAttribute('hidden', '');
                                                 }
                                             });
                                         };

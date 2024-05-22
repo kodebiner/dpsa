@@ -1005,6 +1005,36 @@ class Project extends BaseController
                             }
                         }
 
+                        foreach ($input['customlength' . $id] as $lengthKey => $cuslength) {
+                            if ($lengthKey === $priceKey) {
+                                $custrab['length']    = $cuslength;
+                            }
+                        }
+
+                        foreach ($input['customwidth' . $id] as $widthKey => $cuswidth) {
+                            if ($widthKey === $priceKey) {
+                                $custrab['width']    = $cuswidth;
+                            }
+                        }
+
+                        foreach ($input['customheight' . $id] as $heightKey => $cusheight) {
+                            if ($heightKey === $priceKey) {
+                                $custrab['height']    = $cusheight;
+                            }
+                        }
+
+                        foreach ($input['customvol' . $id] as $volumeKey => $cusvolume) {
+                            if ($volumeKey === $priceKey) {
+                                $custrab['volume']    = $cusvolume;
+                            }
+                        }
+
+                        foreach ($input['customden' . $id] as $denominationKey => $cusdenomination) {
+                            if ($denominationKey === $priceKey) {
+                                $custrab['denomination']    = $cusdenomination;
+                            }
+                        }
+
                         $CustomRabModel->insert($custrab);
                     }
                 }
@@ -1047,7 +1077,112 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updatecustrab);
                             } else {
-                                $CustomRabModel->delete($customrabdata);
+                                $CustomRabModel->delete($custrabdata);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Length
+            if (!empty($input['lengthcustrab' . $id])) {
+                foreach ($input['lengthcustrab' . $id] as $lengthcustrabid => $length) {
+                    $lengthcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($lengthcustrabid);
+
+                    if (!empty($lengthcustrab)) {
+                        if ($length != $lengthcustrab['length']) {
+                            if (!empty($length)) {
+                                $updatelengthcustab  = [
+                                    'id'        => $lengthcustrabid,
+                                    'length'    => $length,
+                                ];
+                                $CustomRabModel->save($updatelengthcustab);
+                            } else {
+                                $CustomRabModel->delete($lengthcustrab);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Width
+            if (!empty($input['widthcustrab' . $id])) {
+                foreach ($input['widthcustrab' . $id] as $widthcustrabid => $width) {
+                    $widthcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($widthcustrabid);
+
+                    if (!empty($widthcustrab)) {
+                        if ($width != $widthcustrab['width']) {
+                            if (!empty($width)) {
+                                $updatewidthcustab  = [
+                                    'id'    => $widthcustrabid,
+                                    'width' => $width,
+                                ];
+                                $CustomRabModel->save($updatewidthcustab);
+                            } else {
+                                $CustomRabModel->delete($widthcustrab);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Height
+            if (!empty($input['heightcustrab' . $id])) {
+                foreach ($input['heightcustrab' . $id] as $heightcustrabid => $height) {
+                    $heightcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($heightcustrabid);
+
+                    if (!empty($heightcustrab)) {
+                        if ($height != $heightcustrab['height']) {
+                            if (!empty($height)) {
+                                $updateheightcustab  = [
+                                    'id'        => $heightcustrabid,
+                                    'height'    => $height,
+                                ];
+                                $CustomRabModel->save($updateheightcustab);
+                            } else {
+                                $CustomRabModel->delete($heightcustrab);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Volume
+            if (!empty($input['volumecustrab' . $id])) {
+                foreach ($input['volumecustrab' . $id] as $volumecustrabid => $volume) {
+                    $volumecustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($volumecustrabid);
+
+                    if (!empty($volumecustrab)) {
+                        if ($volume != $volumecustrab['volume']) {
+                            if (!empty($volume)) {
+                                $updatevolumecustab  = [
+                                    'id'        => $volumecustrabid,
+                                    'volume'    => $volume,
+                                ];
+                                $CustomRabModel->save($updatevolumecustab);
+                            } else {
+                                $CustomRabModel->delete($volumecustrab);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Denomination
+            if (!empty($input['denominationcustrab' . $id])) {
+                foreach ($input['denominationcustrab' . $id] as $denominationcustrabid => $denomination) {
+                    $denominationcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($denominationcustrabid);
+
+                    if (!empty($denominationcustrab)) {
+                        if ($denomination != $denominationcustrab['denomination']) {
+                            if (!empty($denomination)) {
+                                $updatedenominationcustab  = [
+                                    'id'            => $denominationcustrabid,
+                                    'denomination'  => $denomination,
+                                ];
+                                $CustomRabModel->save($updatedenominationcustab);
+                            } else {
+                                $CustomRabModel->delete($denominationcustrab);
                             }
                         }
                     }
@@ -1501,17 +1636,29 @@ class Project extends BaseController
             }
 
             // Bukti Pengiriman Data
-            if (!empty($input['buktipengiriman'])) {
+            if (!empty($input['buktipengiriman-' . $id])) {
                 $senddate       = date_create();
                 $tanggalkirim   = date_format($senddate, 'Y-m-d H:i:s');
-                $databukti  = [
-                    'projectid'     => $id,
-                    'file'          => $input['buktipengiriman'],
-                    'note'          => $input['note'],
-                    'status'        => 1,
-                    'created_at'    => $tanggalkirim,
-                ];
-                $BuktiModel->insert($databukti);
+                // foreach ($input['note-' . $id] as $nid => $notes) {
+                    foreach ($input['buktipengiriman-' . $id] as $bid => $value) {
+                        $databukti = [
+                            'projectid'     => $id,
+                            'file'          => $value,
+                            'note'          => $input['note-' . $id][$bid],
+                            'status'        => 1,
+                            'created_at'    => $tanggalkirim,
+                        ];
+                        $BuktiModel->insert($databukti);
+                    }
+                // }
+                // $databukti  = [
+                //     'projectid'     => $id,
+                //     'file'          => $input['buktipengiriman'],
+                //     'note'          => $input['note'],
+                //     'status'        => 1,
+                //     'created_at'    => $tanggalkirim,
+                // ];
+                // $BuktiModel->insert($databukti);
 
                 // Notif Marketing
                 $notifmarketing  = [
