@@ -257,11 +257,12 @@ class Project extends BaseController
                     $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
 
                     // Production
-                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) && $authorize->inGroup('admins', $this->data['uid'])){
-                        $productions                                    = $ProductionModel->where('projectid', $project['id'])->where('userid',$this->data['uid'])->orderBy('mdlid', 'DESC')->find();
+                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) && $authorize->inGroup('production', $this->data['uid'])){
+                        $productions                                    = $ProductionModel->where('userid !=', NULL)->where('projectid', $project['id'])->where('userid',$this->data['uid'])->orderBy('mdlid', 'DESC')->find();
                     }else{
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
                     }
+
                     $projectdata[$project['id']]['productionproject'] = [];
                     if (!empty($productions)) {
                         foreach ($productions as $production) {
@@ -799,7 +800,7 @@ class Project extends BaseController
 
     public function update($id)
     {
-        if ($this->data['authorize']->hasPermission('ppic.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('ppic.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('admin.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('finance.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('marketing.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) || $this->data['authorize']->hasPermission('design.project.edit', $this->data['uid'])) {
             // Calling Model
             $ProjectModel       = new ProjectModel();
             $RabModel           = new RabModel();
@@ -1464,13 +1465,27 @@ class Project extends BaseController
             // FINANCE
 
             // FUNCTION INVOICE
-            $idinv1 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '1')->first();
-            $idinv2 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '2')->first();
-            $idinv3 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '3')->first();
-            $idinv4 = $InvoiceModel->withDeleted()->where('projectid', $id)->where('status', '4')->first();
+            $idinv1 = $InvoiceModel->where('projectid', $id)->where('status', '1')->first();
+            $idinv2 = $InvoiceModel->where('projectid', $id)->where('status', '2')->first();
+            $idinv3 = $InvoiceModel->where('projectid', $id)->where('status', '3')->first();
+            $idinv4 = $InvoiceModel->where('projectid', $id)->where('status', '4')->first();
+
+            // PPH Default Value
+            if(empty($input['pphinvoice1' . $id])){
+                $input['pphinvoice1' . $id] = "0";
+            }
+            if(empty($input['pphinvoice2' . $id])){
+                $input['pphinvoice2' . $id] = 0;
+            }
+            if(empty($input['pphinvoice3' . $id])){
+                $input['pphinvoice3' . $id] = 0;
+            }
+            if(empty($input['pphinvoice4' . $id])){
+                $input['pphinvoice4' . $id] = "0";
+            }
 
             // if (!empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty( $input['emailinvoice1' . $id]) && !empty($idinv1)){
-            if (isset($input['dateinvoice1' . $id], $input['noinv1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
+            if (isset($input['dateinvoice1' . $id], $input['noinv1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
                 $date1 = $input['dateinvoice1' . $id];
                 $newDate1 = date('Y-m-d H:i:s', strtotime($date1));
                 $invoice1 = [
@@ -1486,7 +1501,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv1' . $id],
                 ];
                 $InvoiceModel->save($invoice1);
-            } elseif (isset($input['referensiinvoice1' . $id], $input['noinv1' . $id], $input['picinvoice1' . $id]) && !empty($input['dateinvoice1' . $id]) && !empty($input['emailinvoice1' . $id]) && !empty($input['pphinvoice1' . $id])) {
+            } elseif (isset($input['referensiinvoice1' . $id], $input['noinv1' . $id], $input['picinvoice1' . $id]) && !empty($input['dateinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
 
                 $tahunini = date('Y-m-d H:i:s');
                 $invoice1 = [
@@ -1504,7 +1519,7 @@ class Project extends BaseController
             }
 
             // INVOICE 2 UPDATE
-            if (isset($input['dateinvoice2' . $id], $input['noinv2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty($input['emailinvoice2' . $id])) {
+            if (isset($input['dateinvoice2' . $id], $input['noinv2' . $id], $input['referensiinvoice2' . $id], $input['pphinvoice2' . $id], $input['emailinvoice2' . $id]) && !empty($idinv2) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id])) {
                 // if (!empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['pphinvoice2' . $id]) && !empty( $input['emailinvoice2' . $id]) && !empty($idinv2)){
                 $date2 = $input['dateinvoice2' . $id];
                 $newDate2 = date('Y-m-d H:i:s', strtotime($date2));
@@ -1523,7 +1538,7 @@ class Project extends BaseController
                 ];
 
                 $InvoiceModel->save($invoice2);
-            } elseif (isset($input['referensiinvoice2' . $id], $input['noinv2' . $id], $input['picinvoice2' . $id]) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id]) && !empty($input['pphinvoice2' . $id])) {
+            } elseif (isset($input['referensiinvoice2' . $id], $input['noinv2' . $id], $input['picinvoice2' . $id]) && !empty($input['dateinvoice2' . $id]) && !empty($input['referensiinvoice2' . $id]) && !empty($input['emailinvoice2' . $id])) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
@@ -1542,7 +1557,7 @@ class Project extends BaseController
             }
 
             // INVOICE 3 UPDATE
-            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty($input['emailinvoice3' . $id])) {
+            if (isset($input['dateinvoice3' . $id], $input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['pphinvoice3' . $id], $input['emailinvoice3' . $id]) && !empty($idinv3) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id])) {
                 // if (!empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['pphinvoice3' . $id]) && !empty( $input['emailinvoice3' . $id]) && !empty($idinv3)){
                 $date3 = $input['dateinvoice3' . $id];
                 $newDate3 = date('Y-m-d H:i:s', strtotime($date3));
@@ -1559,7 +1574,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv3' . $id],
                 ];
                 $InvoiceModel->save($invoice3);
-            } elseif (isset($input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) && !empty($input['pphinvoice3' . $id])) {
+            } elseif (isset($input['referensiinvoice3' . $id], $input['noinv3' . $id], $input['picinvoice3' . $id]) && !empty($input['dateinvoice3' . $id]) && !empty($input['referensiinvoice3' . $id]) && !empty($input['emailinvoice3' . $id]) ) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $roman . "/" . $Year;
@@ -1578,7 +1593,7 @@ class Project extends BaseController
             }
 
             // INVOICE 4 UPDATE
-            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty($input['emailinvoice4' . $id])) {
+            if (isset($input['dateinvoice4' . $id], $input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['pphinvoice4' . $id], $input['emailinvoice4' . $id]) && !empty($idinv4) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id])) {
                 // if (!empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['pphinvoice4' . $id]) && !empty( $input['emailinvoice4' . $id]) && !empty($idinv4)){
                 $date4 = $input['dateinvoice3' . $id];
                 $newDate4 = date('Y-m-d H:i:s', strtotime($date4));
@@ -1595,7 +1610,7 @@ class Project extends BaseController
                     'no_inv'        => $input['noinv4' . $id],
                 ];
                 $InvoiceModel->save($invoice4);
-            } elseif (isset($input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id]) && !empty($input['pphinvoice4' . $id])) {
+            } elseif (isset($input['referensiinvoice4' . $id], $input['noinv4' . $id], $input['picinvoice4' . $id]) && !empty($input['dateinvoice4' . $id]) && !empty($input['referensiinvoice4' . $id]) && !empty($input['emailinvoice4' . $id])) {
                 // } else {
                 $tahunini = date('Y-m-d H:i:s');
                 // $numinv = $invnum . "/DPSA/" . $client['rscode'] . "/" . $roman . "/" . $Year;
@@ -2176,15 +2191,21 @@ class Project extends BaseController
             foreach ($custrab as $cusrab) {
                 if (!empty($cusrab)) {
                     $customrab[] = [
-                        'name'  => $cusrab['name'],
-                        'price' => $cusrab['price'],
+                        'name'          => $cusrab['name'],
+                        'price'         => $cusrab['price'],
+                        'length'        => $cusrab['length'],
+                        'width'         => $cusrab['width'],
+                        'height'        => $cusrab['height'],
+                        'volume'        => $cusrab['volume'],
+                        'denomination'  => $cusrab['denomination'],
+                        'price'         => $cusrab['price'],
                     ];
                 }
             }
 
             $totalrab = "";
             if (!empty($mdldata)) {
-                $totalrab = array_sum(array_column($mdldata, 'mdlprice'));
+                $totalrab = array_sum(array_column($mdldata, 'price'));
             }
 
             $totalcustom = "";
@@ -2198,7 +2219,6 @@ class Project extends BaseController
                 $ppn = (int)$gconf['ppn'];
                 $direktur = $gconf['direktur'];
             }
-
             
 
             // END RAB DATA
@@ -2289,6 +2309,8 @@ class Project extends BaseController
             $data['custom']         = $customrab;
             $data['sphdata']        = $datasph;
             $data['sphrabs']        = $mdldata;
+
+            // dd($data['sphdata']);
 
             return view('sphview', $data);
         } else {
@@ -2985,7 +3007,7 @@ class Project extends BaseController
     public function invoiceexcel1($id)
     {
 
-        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid']) || $this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
             // NEW FUNCTION INVOICE
             // Calling models
             $ProjectModel   = new ProjectModel;
@@ -3224,7 +3246,7 @@ class Project extends BaseController
     public function invoiceexcel2($id)
     {
 
-        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid']) || $this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
 
             // Calling models
             $ProjectModel   = new ProjectModel;
@@ -3462,7 +3484,7 @@ class Project extends BaseController
     public function invoiceexcel3($id)
     {
 
-        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid']) || $this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
             // NEW FUNCTION INVOICE
             // Calling models
             $ProjectModel   = new ProjectModel;
@@ -3702,7 +3724,7 @@ class Project extends BaseController
     public function invoiceexcel4($id)
     {
 
-        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid']) || $this->data['authorize']->hasPermission('client.read', $this->data['uid'])) {
             // Calling models
             $ProjectModel   = new ProjectModel;
             $CompanyModel   = new CompanyModel();

@@ -960,9 +960,9 @@ class Home extends BaseController
             $client = $CompanyModel->find($id);
 
             if (isset($input['search']) && !empty($input['search'])) {
-                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->like('name', $input['search'])->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->orderBy('id','DESC')->like('name', $input['search'])->paginate($perpage, 'projects');
             } else {
-                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->paginate($perpage, 'projects');
+                $projects = $ProjectModel->where('clientid', $id)->where('deleted_at', null)->orderBy('id','DESC')->paginate($perpage, 'projects');
             }
 
             $projectdata        = [];

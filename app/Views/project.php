@@ -10,7 +10,7 @@
 
 <?php
 
-    if ($authorize->hasPermission('design.project.edit', $uid)){
+    if ($authorize->hasPermission('design.project.edit', $uid) ||$authorize->hasPermission('design.project.edit', $uid) ){
         $togledesign = "";
     }else{
         $togledesign = "hidden";
@@ -22,7 +22,7 @@
         $togleproduction = "hidden";
     }
 
-    if ($authorize->hasPermission('ppic.project.edit', $uid)){
+    if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)){
         $bastview = "";
     }else{
         $bastview = "hidden";
@@ -772,7 +772,6 @@
                                                     </div>
                                                 </div>
                                             <?php } ?>
-    
                                         </div>
                                         <?php } else {
                                         if ($projectdata[$project['id']]['design']['status'] === '0') { ?>
@@ -862,7 +861,7 @@
                                                         <div class="uk-form-controls">: <a href="/img/revisi/<?= $projectdata[$project['id']]['design']['revision'] ?>"><span uk-icon="file-pdf"></span><?= $projectdata[$project['id']]['design']['revision'] ?></a></div>
                                                     </div>
                                                 </div>
-                                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                                <?php if ($authorize->hasPermission('design.project.edit', $uid)) { ?>
                                                     <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
                                                         <div id="image-container-<?= $project['id'] ?>" class="uk-form-controls">
                                                             <input id="photocreate<?= $project['id'] ?>" name="submitted" hidden />
@@ -1240,7 +1239,6 @@
 
                                             <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                                 
-
                                                 <!-- Current MDL Proyek Removed -->
                                                 <?php if (!empty($projectdata[$project['id']]['allrabdatadeleted'])) { ?>
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
@@ -1985,11 +1983,13 @@
                                                     };
                                                 </script>
                                                 <div class="uk-margin-bottom">
-                                                    <label class="uk-form-label" for="paket">Nomor SPH</label>
+                                                    <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" for="paket">Nomor SPH</label>
                                                     <div class="uk-form-controls">
                                                         <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH">
                                                     </div>
                                                 </div>
+
+                                                <a id="downloadsph<?=$project['id']?>" class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
 
                                                 <!-- SPH -->
                                                 <div class="uk-margin" id="image-container-createsph-<?= $project['id'] ?>">
@@ -2179,7 +2179,6 @@
                                                 
                                                 <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
                                                 <!-- </?php if(!empty($project['sph'])){?> -->
-                                                <a id="downloadsph<?=$project['id']?>" class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
                                                 <!-- </?php } ?> -->
                                                 <hr>
                                                 <!-- end SPH -->
@@ -2567,6 +2566,7 @@
                                                     <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) {$tglspk = date_create($project['tanggal_spk']); echo "value='" . date_format($tglspk, 'm/d/Y') . "'";} ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                 <?php } else { ?>
                                                     <span class=""><?php if (!empty($project['tanggal_spk'])) { $tglspk = date_create($project['tanggal_spk']);echo date_format($tglspk, 'm/d/Y');} else { echo date('m/d/Y'); } ?></span>
+                                                    <input class="uk-input uk-form-width-medium" <?php if (!empty($project['tanggal_spk'])) {$tglspk = date_create($project['tanggal_spk']); echo "value='" . date_format($tglspk, 'm/d/Y') . "'";} ?> id="tanggalspk<?= $project['id'] ?>" name="tanggalspk<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" hidden/>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -2819,19 +2819,12 @@
                                                 <label class="uk-form-label">Tanggal Batas Produksi</label>
                                                 <div class="uk-form-controls">:
                                                     <div class="uk-inline">
-                                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?>
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) {
-                                                                                                                $batasproduksi = date_create($project['batas_produksi']);
-                                                                                                                echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'";
-                                                                                                            } ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'"; } ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                         <?php } else { ?>
-                                                            <span class=""><?php if (!empty($project['batas_produksi'])) {
-                                                                                $batasproduksi = date_create($project['batas_produksi']);
-                                                                                echo date_format($batasproduksi, 'm/d/Y');
-                                                                            } else {
-                                                                                echo date('m/d/Y');
-                                                                            } ?></span>
+                                                            <span class=""><?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo date_format($batasproduksi, 'm/d/Y'); } else {echo date('m/d/Y');} ?></span>
+                                                            <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) { $batasproduksi = date_create($project['batas_produksi']); echo "value='" . date_format($batasproduksi, 'm/d/Y') . "'"; } ?> id="batasproduksi<?= $project['id'] ?>" name="batasproduksi<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" / hidden>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -3024,7 +3017,7 @@
                                             <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate" style="text-transform: uppercase;"<?=$bastview?>>Bukti Pengiriman</label>
                                             <div class="uk-margin uk-child-width-1-3 uk-child-width-1-6@m uk-grid-match uk-flex-middle uk-grid-divider" uk-grid uk-lightbox="animation: slide">
                                                 <?php foreach ($projectdata[$project['id']]['buktipengiriman'] as $sendproof) { ?>
-                                                    <div>
+                                                    <div <?=$bastview?>>
                                                         <a class="uk-inline-clip uk-transition-toggle uk-link-toggle" href="img/bukti/pengiriman/<?= $sendproof['file'] ?>" data-caption="<?= $sendproof['file'] ?>">
                                                             <img src="img/bukti/pengiriman/<?= $sendproof['file'] ?>" alt="<?= $sendproof['file'] ?>" class="uk-transition-opaque">
                                                             <div class="uk-overlay-primary uk-transition-fade uk-position-cover"></div>
@@ -3116,7 +3109,7 @@
                                                     </div>
                                                 <?php } ?>
                                             </div>
-                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?>
                                                 <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
                                                     <!-- <input id="photocreatebuktipengiriman</?= $project['id'] ?>" name="buktipengiriman" hidden /> -->
                                                     <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
@@ -3131,7 +3124,7 @@
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                        <div id="list-foto-<?= $project['id'] ?>"></div>
+                                        <div id="list-foto-<?= $project['id'] ?>" ></div>
     
                                         <script type="text/javascript">
                                             // Upload Bukti Pembayaran
@@ -3310,7 +3303,7 @@
                                                         if (!empty($bast) && $bast['status'] === "0") { ?>
                                                             <div id="sertrim-file-<?= $bast['id']; ?>">
                                                                 <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                    <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                    <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
                                                                     <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
                                                                 </div>
                                                             </div>
@@ -3340,7 +3333,7 @@
                                                     }
                                                 } ?>
                                             </div>
-                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?>
                                                 <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
                                                     <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
                                                     <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
@@ -3365,7 +3358,7 @@
                                                     <label class="uk-form-label">Tanggal BAST</label>
                                                     <div class="uk-form-controls">:
                                                         <div class="uk-inline">
-                                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?>
                                                                 <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                                 <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) {
                                                                                                                     $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
@@ -3391,7 +3384,7 @@
                                                         $bastid = $bast['id']; ?>
                                                         <div id="bast-file-<?= $bast['id'] ?>">
                                                             <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
                                                                 <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
@@ -3421,7 +3414,7 @@
                                                 <?php }
                                                 } ?>
                                             </div>
-                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                                            <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->inGroup(['superuser', 'admin'], $uid)) { ?>
                                                 <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
                                                     <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
                                                     <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
@@ -5259,11 +5252,11 @@
                                 <?php if ($authorize->hasPermission('admin.project.delete', $uid)) { ?>
                                     <a class="uk-button uk-button-danger" href="project/delete/<?= $project['id'] ?>" onclick="return confirm('<?= 'Anda yakin ingin menghapus data ' . $project['name'] . '?' ?>')" type="button">Hapus</a>
                                 <?php } ?>
-                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid)|| $authorize->hasPermission('finance.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('marketing.project.edit', $uid)) { ?>
                                     <button class="uk-button uk-button-primary" type="submit">Simpan</button>
                                 <?php } ?>
                             </div>
-                        </form>
+                        </f orm>
                     </div>
                 </div>
             </div>

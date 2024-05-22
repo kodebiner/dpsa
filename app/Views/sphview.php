@@ -140,7 +140,7 @@ $tanggalsph = ucwords($dateFormatted);
                 <div>
                     <font style="font-weight: bold; text-decoration: underline;"><?= $sphdata['clientpic'] ?> Kepala Jangum</font> <br><br>Dengan hormat,
                 </div>
-                <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran harga furniture Lukisan untuk Rumah Sakit <?= $client['rsname'] ?> <br> dengan perincian sebagai berikut :</p>
+                <p>Bersama dengan ini, Kami dari PT, Dharma Putra Sejahtera Abadi, berkeinginan mengajukan penawaran produk untuk Rumah Sakit <?= $client['rsname'] ?> <br> dengan perincian sebagai berikut :</p>
             </div>
 
             <table style="width:100%; border: 1pt solid black;">
@@ -195,8 +195,8 @@ $tanggalsph = ucwords($dateFormatted);
                         <td style="border: 1pt solid black; text-align:center;"><?= $mdl['volume'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $mdl['denom'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $mdl['qty'] ?></td>
+                        <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['mdlprice'], 0, ',', '.')  ?></td>
                         <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['price'], 0, ',', '.')  ?></td>
-                        <td style="border: 1pt solid black;"><?= "Rp." . number_format($mdl['qty'] * $mdl['price'], 0, ',', '.')  ?></td>
                         <td style="border: 1pt solid black;"><?= $mdl['keterangan'] ?></td>
                         </tr>
                     <?php }
@@ -224,19 +224,23 @@ $tanggalsph = ucwords($dateFormatted);
                         <!-- <td style="border: 1pt solid black;"></td> -->
                         <td class="uk-text-left"><?= $cusrab['name'] ?></td>
                         <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black; text-align:right;">
-                            <?php if (!empty($cusrab['price'])) {
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['length'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['width'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['height'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['volume'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['denomination'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;">1</td>
+                        <td style="border: 1pt solid black;">
+                        <?php if (!empty($cusrab['price'])) {
                                 echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
                             } ?>
                         </td>
+                        <td style="border: 1pt solid black;">
+                        <?php if (!empty($cusrab['price'])) {
+                                echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
+                            } ?>
+                        </td>
+                        <td style="border: 1pt solid black; text-align:right;"></td>
                     </tr>
                 <?php } ?>
                 <tr style="border: 1pt solid black;">

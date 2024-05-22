@@ -924,18 +924,6 @@ class Upload extends BaseController
             // Saving uploaded file
             $filename = $input->getRandomName();
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
-            // function random_string($filename)
-            // {
-            //     $key = '';
-            //     $keys = array_merge(range(0, 9), range('a', 'z'));
-
-            //     for ($i = 0; $i < $filename; $i++) {
-            //         $key .= $keys[array_rand($keys)];
-            //     }
-
-            //     return $key;
-            // }
-            // $truename = random_string(20);
             $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename
@@ -1234,7 +1222,7 @@ class Upload extends BaseController
             //     return $key;
             // }
             // $truename = random_string(20);
-            // $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
+            $input->move(FCPATH . '/img/invoice/', $truename . '.' . $ext);
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
@@ -1253,7 +1241,9 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III' . $project['name']]);
                 } else {
                     if (!empty($invoice['file'])) {
-                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                        if(file_exists(FCPATH . '/img/invoice/' . $invoice['file'])){
+                            unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                        }
                     }
                     $datainvoice = [
                         'id'            => $invoice['id'],
