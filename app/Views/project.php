@@ -1084,7 +1084,7 @@
                                                                                 $checked = '';
                                                                             }
                                                                             ?>
-                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" hidden/>
+                                                                            <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" readonly/>
                                                                         </td>
                                                                         <td><?= $mdl['name'] ?></td>
                                                                         <td><?= $mdl['length'] ?></td>
