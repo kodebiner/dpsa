@@ -10,6 +10,8 @@ use App\Models\CompanyModel;
 use App\Models\ProjectModel;
 use App\Models\ProjectTempModel;
 use App\Models\LogModel;
+use App\Models\PurchaseDetailModel;
+use App\Models\PurchaseModel;
 
 class Client extends BaseController
 {
@@ -295,13 +297,25 @@ class Client extends BaseController
         if ($this->data['authorize']->hasPermission('admin.user.delete', $this->data['uid'])) {
 
             // Calling Model
-            $CompanyModel = new CompanyModel();
-            $ProjectModel = new ProjectModel();
-            $LogModel = new LogModel();
+            $CompanyModel           = new CompanyModel();
+            $ProjectModel           = new ProjectModel();
+            $PurchaseModel          = new PurchaseModel();
+            $UserModel              = new UserModel();
+            $PurchaseDetailModel    = new PurchaseDetailModel();
+            $LogModel               = new LogModel();
 
             // Getting Data 
-            $companys = $CompanyModel->where('parentid', $id)->find();
-            $Project = $ProjectModel->where('clientid', $id)->find();
+            $companys       = $CompanyModel->where('parentid', $id)->find();
+            $Project        = $ProjectModel->where('clientid', $id)->find();
+            $purchase       = $PurchaseModel->where('clientid',$id)->first();
+            $usersclient    = $UserModel->where('parentid',$id)->find();
+
+            // Remove users klien
+            if(!empty($usersclient)){
+                foreach($usersclient as $userklien){
+                    $UserModel->delete($userklien['id']);
+                }
+            }
 
             // Remove this client projects
             if (!empty($Project)) {
@@ -310,15 +324,36 @@ class Client extends BaseController
                 }
             }
 
+            // Remove Purchase Data
+            if(!empty($purchase)){
+                $PurchaseModel->delete($purchase['id']);
+            }
+
             // Child Company
             if (!empty($companys)) {
                 foreach ($companys as $company) {
-                    $comprojects = $ProjectModel->where('clientid', $company['id'])->find();
+                    $comprojects        = $ProjectModel->where('clientid', $company['id'])->find();
+                    $companyusers       = $UserModel->where('parentid',$company['id'])->find();
+                    $purchaseDetails    = $PurchaseModel->where('clientid',$company['id'])->find();
+
+                    // Remove Purchase Details
+                    if(!empty($purchaseDetails)){
+                        foreach($purchaseDetails as $purdet){
+                            $PurchaseDetailModel->delete($purdet['id']);
+                        }
+                    }
 
                     // Remove Child Projects
                     if (!empty($comprojects)) {
                         foreach ($comprojects as $comproject) {
                             $ProjectModel->delete($comproject['id']);
+                        }
+                    }
+
+                    // Remove Users Child Company
+                    if(!empty($companyusers)){
+                        foreach($companyusers as $usercomp){
+                            $UserModel->delete($usercomp['id']);
                         }
                     }
 
