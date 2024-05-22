@@ -920,9 +920,9 @@ class Project extends BaseController
                     foreach ($mdls as $mdlid => $qty) {
                         if (isset($input['checked' . $id][$mdlid])) {
                             $rab = $RabModel->where('mdlid', $mdlid)->where('paketid', $paketid)->where('projectid', $id)->first();
-                            if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid]) && $input['eqty' . $id][$paketid][$mdlid] != "0") {
+                            if ((!empty($rab)) && ($rab['qty'] != $input['eqty' . $id][$paketid][$mdlid])) {
                                 if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
-                                    $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
+                                    // $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
                                     if ($rab['qty'] < $input['eqty' . $id][$paketid][$mdlid]) {
                                         $countDiff = (int)$input['eqty' . $id][$paketid][$mdlid] - (int)$rab['qty'];
                                         for ($n = 1; $n <= (int)$countDiff; $n++) {
@@ -939,7 +939,9 @@ class Project extends BaseController
                                             $ProductionModel->delete($production['id']);
                                         }
                                     }
-                                    $RabModel->save(['id' => $rab['id'], 'qty' => $qty,'deleted_at' => null,],);
+                                    if ((int)$rab['qty'] !== (int)$input['eqty' . $id][$paketid][$mdlid]) {
+                                        $RabModel->save(['id' => $rab['id'], 'qty' => $qty]);
+                                    }
                                 } else {
                                     $productions = $ProductionModel->where('projectid', $id)->where('mdlid', $mdlid)->find();
                                     foreach ($productions as $production) {
@@ -947,22 +949,20 @@ class Project extends BaseController
                                     }
                                     $RabModel->delete($rab['id']);
                                 }
-                            } else {
-                                if ($input['eqty' . $id][$paketid][$mdlid] != "0") {
-                                    $datarab = [
+                            } elseif ((empty($rab)) && ($input['eqty' . $id][$paketid][$mdlid] != "0")) {
+                                $datarab = [
+                                    'mdlid'     => $mdlid,
+                                    'projectid' => (int)$id,
+                                    'paketid'   => $paketid,
+                                    'qty'       => (int)$qty,
+                                ];
+                                $RabModel->save($datarab);
+                                for ($n = 1; $n <= (int)$qty; $n++) {
+                                    $dataProduction = [
                                         'mdlid'     => $mdlid,
-                                        'projectid' => (int)$id,
-                                        'paketid'   => $paketid,
-                                        'qty'       => (int)$qty,
+                                        'projectid' => $id
                                     ];
-                                    $RabModel->save($datarab);
-                                    for ($n = 1; $n <= (int)$qty; $n++) {
-                                        $dataProduction = [
-                                            'mdlid'     => $mdlid,
-                                            'projectid' => $id
-                                        ];
-                                        $ProductionModel->save($dataProduction);
-                                    }
+                                    $ProductionModel->save($dataProduction);
                                 }
                             }
                         } else {
@@ -977,7 +977,7 @@ class Project extends BaseController
                         }
                     }
                 }
-            }elseif(!isset($input['checked' . $id])){
+            } else {
                 $rab = $RabModel->where('projectid', $id)->find();
                 if (!empty($rab)) {
                     $productions = $ProductionModel->where('projectid', $id)->find();
