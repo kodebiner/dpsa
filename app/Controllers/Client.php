@@ -2,16 +2,23 @@
 
 namespace App\Controllers;
 
+use App\Models\BastModel;
+use App\Models\BuktiModel;
 use App\Models\UserModel;
 use App\Models\GroupUserModel;
 use App\Models\PermissionModel;
 use Myth\Auth\Models\GroupModel;
 use App\Models\CompanyModel;
+use App\Models\CustomRabModel;
+use App\Models\DesignModel;
+use App\Models\InvoiceModel;
 use App\Models\ProjectModel;
 use App\Models\ProjectTempModel;
 use App\Models\LogModel;
+use App\Models\PembayaranModel;
 use App\Models\PurchaseDetailModel;
 use App\Models\PurchaseModel;
+use App\Models\RabModel;
 
 class Client extends BaseController
 {
@@ -299,10 +306,17 @@ class Client extends BaseController
             // Calling Model
             $CompanyModel           = new CompanyModel();
             $ProjectModel           = new ProjectModel();
-            $PurchaseModel          = new PurchaseModel();
             $UserModel              = new UserModel();
+            $PurchaseModel          = new PurchaseModel();
             $PurchaseDetailModel    = new PurchaseDetailModel();
             $LogModel               = new LogModel();
+            $BastModel              = new BastModel();
+            $BuktiModel             = new BuktiModel();
+            $RabModel               = new RabModel();
+            $CustomRabModel         = new CustomRabModel();
+            $DesignModel            = new DesignModel();
+            $InvoiceModel           = new InvoiceModel();
+            $PembayaranModel        = new PembayaranModel();
 
             // Getting Data 
             $companys       = $CompanyModel->where('parentid', $id)->find();
@@ -310,25 +324,72 @@ class Client extends BaseController
             $purchase       = $PurchaseModel->where('clientid',$id)->first();
             $usersclient    = $UserModel->where('parentid',$id)->find();
 
-            // Remove users klien
-            if(!empty($usersclient)){
-                foreach($usersclient as $userklien){
-                    $UserModel->delete($userklien['id']);
-                }
-            }
-
-            // Remove this client projects
+            // Remove Client Project
             if (!empty($Project)) {
                 foreach ($Project as $project) {
+
+                    // Get All Projects Data
+                    $bast           = $BastModel->where('projectid',$project['id'])->find();
+                    $bukti          = $BuktiModel->where('projectid',$project['id'])->find();
+                    $rabs           = $RabModel->where('projectid',$project['id'])->find();
+                    $CustomRab      = $CustomRabModel->where('projectid',$project['id'])->find();
+                    $Design         = $DesignModel->where('projectid',$project['id'])->find();
+                    $Invoice        = $InvoiceModel->where('projectid',$project['id'])->find();
+                    $Pembayaran     = $PembayaranModel->where('projectid',$project['id'])->find(); 
+
+                    // Remove Bast Project
+                    if(!empty($bast)){
+                        foreach($bast as $basts){
+                            $BastModel->delete($basts['id']);
+                        }
+                    }
+
+                    // Remove Bukti Project
+                    if(!empty($bukti)){
+                        foreach($bukti as $buktis){
+                            $BuktiModel->delete($buktis['id']);
+                        }
+                    }
+
+                    // Remove Rab Project
+                    if(!empty($rabs)){
+                        foreach($rabs as $rab){
+                            $RabModel->delete($rab['id']);
+                        }
+                    }
+
+                    // Remove Rab Custom
+                    if(!empty($CustomRab)){
+                        foreach($CustomRab as $custrab){
+                            $CustomRabModel->delete($custrab['id']);
+                        }
+                    }
+
+                    // Remove Design Project
+                    if(!empty($Design)){
+                        foreach($Design as $desain){
+                            $DesignModel->Delete($desain['id']);
+                        }
+                    }
+
+                    // Remove Invoice Project
+                    if(!empty($Invoice)){
+                        foreach($Invoice as $inv){
+                            $InvoiceModel->delete($inv['id']);
+                        }
+                    }
+
+                    // Remove Pembayaran
+                    if(!empty($Pembayaran)){
+                        foreach($Pembayaran as $payment){
+                            $PembayaranModel->delete($payment['id']);
+                        }
+                    }
+
                     $ProjectModel->delete($project['id']);
                 }
             }
-
-            // Remove Purchase Data
-            if(!empty($purchase)){
-                $PurchaseModel->delete($purchase['id']);
-            }
-
+           
             // Child Company
             if (!empty($companys)) {
                 foreach ($companys as $company) {
@@ -346,6 +407,66 @@ class Client extends BaseController
                     // Remove Child Projects
                     if (!empty($comprojects)) {
                         foreach ($comprojects as $comproject) {
+
+                            // Get All Projects Data
+                            $bastchildcom           = $BastModel->where('projectid',$comproject['id'])->find();
+                            $buktichildcom          = $BuktiModel->where('projectid',$comproject['id'])->find();
+                            $rabschildcom           = $RabModel->where('projectid',$comproject['id'])->find();
+                            $CustomRabchildcom      = $CustomRabModel->where('projectid',$comproject['id'])->find();
+                            $Designchildcom         = $DesignModel->where('projectid',$comproject['id'])->find();
+                            $Invoicechildcom        = $InvoiceModel->where('projectid',$comproject['id'])->find();
+                            $Pembayaranchildcom     = $PembayaranModel->where('projectid',$comproject['id'])->find();
+                            
+                            // Remove Bast Project Child Company
+                            if(!empty($bastchildcom)){
+                                foreach($bastchildcom as $bastschild){
+                                    $BastModel->delete($bastschild['id']);
+                                }
+                            }
+
+                            // Remove Bukti Project Child Company
+                            if(!empty($buktichildcom)){
+                                foreach($buktichildcom as $buktischild){
+                                    $BuktiModel->delete($buktischild['id']);
+                                }
+                            }
+
+                            // Remove Rab Project Child Company
+                            if(!empty($rabschildcom)){
+                                foreach($rabschildcom as $rabchild){
+                                    $RabModel->delete($rabchild['id']);
+                                }
+                            }
+
+                            // Remove Rab Custom
+                            if(!empty($CustomRabchildcom)){
+                                foreach($CustomRabchildcom as $custrabchild){
+                                    $CustomRabModel->delete($custrabchild['id']);
+                                }
+                            }
+
+                            // Remove Design Project Child Company
+                            if(!empty($Designchildcom)){
+                                foreach($Designchildcom as $desainchild){
+                                    $DesignModel->Delete($desainchild['id']);
+                                }
+                            }
+
+                            // Remove Invoice Project Child Company
+                            if(!empty($Invoicechildcom)){
+                                foreach($Invoicechildcom as $invchild){
+                                    $InvoiceModel->delete($invchild['id']);
+                                }
+                            }
+
+                            // Remove Pembayaran Project Child Company
+                            if(!empty($Pembayaranchildcom)){
+                                foreach($Pembayaranchildcom as $paymentchild){
+                                    $PembayaranModel->delete($paymentchild['id']);
+                                }
+                            }
+
+                            // Delete Project Child Company 
                             $ProjectModel->delete($comproject['id']);
                         }
                     }
@@ -360,6 +481,18 @@ class Client extends BaseController
                     // Remove Child
                     $CompanyModel->delete($company['id']);
                 }
+            }
+
+            // Remove users klien
+            if(!empty($usersclient)){
+                foreach($usersclient as $userklien){
+                    $UserModel->delete($userklien['id']);
+                }
+            }
+
+            // Remove Purchase Data
+            if(!empty($purchase)){
+                $PurchaseModel->delete($purchase['id']);
             }
 
             // Recording Logs
