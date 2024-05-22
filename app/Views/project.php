@@ -1369,9 +1369,9 @@
                                             
 
                                             <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
-                                            <?php if(!empty($project['sph'])){?>
+                                            <!-- </?php if(!empty($project['sph'])){?> -->
                                                 <a id="downloadsph<?=$project['id']?>" class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
-                                            <?php } ?>
+                                            <!-- </?php } ?> -->
                                             <hr>
 
                                             <!-- Current MDL Proyek Removed -->
@@ -2628,7 +2628,7 @@
                                             <label class="uk-form-label">Tanggal Batas Produksi</label>
                                             <div class="uk-form-controls">:
                                                 <div class="uk-inline">
-                                                    <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                    <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                                         <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                         <input class="uk-input uk-form-width-medium" <?php if (!empty($project['batas_produksi'])) {
                                                                                                             $batasproduksi = date_create($project['batas_produksi']);
@@ -2925,7 +2925,7 @@
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                             <div id="image-containerbuktipengiriman-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatebuktipengiriman<?= $project['id'] ?>" name="buktipengiriman" hidden />
                                                 <div id="js-upload-createbuktipengiriman-<?= $project['id'] ?>" class="js-upload-createbuktipengiriman-<?= $project['id'] ?> uk-placeholder uk-text-center">
@@ -3100,7 +3100,7 @@
                                                     if (!empty($bast) && $bast['status'] === "0") { ?>
                                                         <div id="sertrim-file-<?= $bast['id']; ?>">
                                                             <div id="sertrim-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                                <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                                <div class="uk-position-small uk-position-right"> <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="remove-sertrim-<?= $bast['id'] ?>" onclick="removeCardFile<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
                                                                 <a href="img/sertrim/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text"></span><?= $bast['file'] ?> </a>
                                                             </div>
                                                         </div>
@@ -3130,7 +3130,7 @@
                                                 }
                                             } ?>
                                         </div>
-                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                             <div id="image-containersertrim-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatesertrim<?= $project['id'] ?>" name="sertrim" hidden />
                                                 <div id="js-upload-createsertrim-<?= $project['id'] ?>" class="js-upload-createsertrim-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">
@@ -3155,7 +3155,7 @@
                                                 <label class="uk-form-label">Tanggal BAST</label>
                                                 <div class="uk-form-controls">:
                                                     <div class="uk-inline">
-                                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <input class="uk-input uk-form-width-medium" <?php if (!empty($projectdata[$project['id']]['bastfile'])) {
                                                                                                                 $tempo = date_create($projectdata[$project['id']]['bastfile']['tanggal_bast']);
@@ -3181,7 +3181,7 @@
                                                     $bastid = $bast['id']; ?>
                                                     <div id="bast-file-<?= $bast['id'] ?>">
                                                         <div id="bast-card<?= $bast['id'] ?>" class="uk-card uk-card-default uk-card-body uk-margin-bottom">
-                                                            <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
+                                                            <div class="uk-position-small uk-position-right"><?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?><a class="tm-img-remove2 uk-border-circle uk-icon" id="removeCardFilebast<?= $bast['id']; ?>" onclick="removeCardFilebast<?= $bast['id'] ?>()" uk-icon="close"></a><?php } ?></div>
                                                             <a href="img/bast/<?= $bast['file'] ?>" target="_blank"><span uk-icon="file-text" ;></span><?= $bast['file'] ?> </a>
                                                         </div>
                                                     </div>
@@ -3211,7 +3211,7 @@
                                             <?php }
                                             } ?>
                                         </div>
-                                        <?php if ($authorize->hasPermission('production.project.edit', $uid)) { ?>
+                                        <?php if ($authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                                             <div id="image-containerbast-<?= $project['id'] ?>" class="uk-form-controls">
                                                 <input id="photocreatebast<?= $project['id'] ?>" name="bast" hidden />
                                                 <div id="js-upload-createbast-<?= $project['id'] ?>" class="js-upload-createbast-<?= $project['id'] ?> uk-placeholder uk-text-center uk-margin-remove-top">

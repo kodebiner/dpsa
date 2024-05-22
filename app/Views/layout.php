@@ -77,18 +77,18 @@
                                     </div>
                                 </a>
                             </li>
-                        <?php } ?>
-
-                        <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
-                            <a class="tm-h4" href="users/access-control">
-                                <div class="uk-width-1-1 uk-margin-left">
-                                    <div class="uk-width-1-1 uk-flex uk-flex-center">
-                                        <img class="uk-width-1-6" src="img/layout/userrole.svg" uk-svg>
+                            
+                            <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'users') && ($uri->getSegment(2) === 'access-control')) ? 'uk-active' : '' ?>">
+                                <a class="tm-h4" href="users/access-control">
+                                    <div class="uk-width-1-1 uk-margin-left">
+                                        <div class="uk-width-1-1 uk-flex uk-flex-center">
+                                            <img class="uk-width-1-6" src="img/layout/userrole.svg" uk-svg>
+                                        </div>
+                                        <div class="uk-text-center">Hak Akses</div>
                                     </div>
-                                    <div class="uk-text-center">Hak Akses</div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        <?php } ?>
 
                         <?php if ($authorize->hasPermission('admin.project.read', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'project') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
@@ -142,7 +142,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="laporan">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -285,7 +285,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('ppic.project.edit', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'laporan')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="laporan">
                             <div class="uk-width-1-1 uk-margin-right">

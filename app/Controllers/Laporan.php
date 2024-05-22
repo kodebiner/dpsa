@@ -36,7 +36,7 @@ class Laporan extends BaseController
 
     public function index()
     {
-        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid']) || $this->data['authorize']->hasPermission('ppic.project.edit', $this->data['uid'])) {
             // Calling Services
             $pager = \Config\Services::pager();
 

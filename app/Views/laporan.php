@@ -18,7 +18,7 @@
 
 
 <!-- Page Heading -->
-<?php if ($authorize->hasPermission('admin.user.read', $uid)) { ?>
+<?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('ppic.project.edit', $uid)) { ?>
     <?php if ($ismobile === false) { ?>
         <div class="tm-card-header uk-light uk-margin-remove-left">
             <div uk-grid class="uk-flex-middle">
