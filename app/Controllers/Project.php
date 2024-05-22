@@ -257,7 +257,11 @@ class Project extends BaseController
                     $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
 
                     // Production
-                    $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])){
+                        $productions                                    = $ProductionModel->where('projectid', $project['id'])->where('userid',$this->data['uid'])->orderBy('mdlid', 'DESC')->find();
+                    }else{
+                        $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                    }
                     $projectdata[$project['id']]['productionproject'] = [];
                     if (!empty($productions)) {
                         foreach ($productions as $production) {
@@ -316,9 +320,6 @@ class Project extends BaseController
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
-
-
-                    // dd($projectdata[$project['id']]['productionproject']);
 
                     // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
