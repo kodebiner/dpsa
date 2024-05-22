@@ -257,7 +257,7 @@ class Project extends BaseController
                     $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
 
                     // Production
-                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid'])){
+                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) && $authorize->inGroup('admins', $this->data['uid'])){
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->where('userid',$this->data['uid'])->orderBy('mdlid', 'DESC')->find();
                     }else{
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
