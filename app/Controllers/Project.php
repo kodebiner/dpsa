@@ -915,7 +915,7 @@ class Project extends BaseController
             }
 
             // RAB Data
-            dd($input['checked' . $id][]);
+            dd($input['checked' . $id]);
             if (isset($input['checked' . $id])) {
                 foreach ($input['eqty' . $id] as $paketid => $mdls) {
                     foreach ($mdls as $mdlid => $qty) {
