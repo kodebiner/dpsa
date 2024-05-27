@@ -174,12 +174,12 @@ class Upload extends BaseController
                     // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPK baru telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -190,7 +190,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -202,7 +202,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -225,12 +225,12 @@ class Upload extends BaseController
                     // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPK baru telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -241,7 +241,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -253,7 +253,7 @@ class Upload extends BaseController
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -529,12 +529,12 @@ class Upload extends BaseController
                 'inv2'  => date("Y-m-d H:i:s"),
             ];
             $ProjectModel->save($inv2date);
-                    
+
             // Notif Marketing
             $notifmarketing  = [
                 'userid'        => $marketings->id,
                 'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                'url'           => 'project?projectid='.$project['id'],
+                'url'           => 'project?projectid=' . $project['id'],
                 'status'        => 0,
             ];
 
@@ -545,7 +545,7 @@ class Upload extends BaseController
                 $notifadmin  = [
                     'userid'        => $admin['id'],
                     'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -557,7 +557,7 @@ class Upload extends BaseController
                 $notifclient  = [
                     'userid'        => $client->id,
                     'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                    'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                    'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -647,38 +647,38 @@ class Upload extends BaseController
                     $BastModel->save($databast);
                     $bastId = $BastModel->getInsertID();
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast ' . $project['name']]);
-                    
+
                     // Notif Marketing
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Bast telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-        
+
                     $NotificationModel->insert($notifmarketing);
-        
+
                     // Notif Admin
                     foreach ($admins as $admin) {
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'project?projectid='.$project['id'],
+                            'url'           => 'project?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
-        
+
                         $NotificationModel->insert($notifadmin);
                     }
-        
+
                     // Notif Client
                     foreach ($clients as $client) {
                         $notifclient  = [
                             'userid'        => $client->id,
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                            'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
-        
+
                         $NotificationModel->insert($notifclient);
                     }
                 } else {
@@ -694,38 +694,38 @@ class Upload extends BaseController
                     $BastModel->save($databast);
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast ' . $project['name']]);
                     $bastId = $bast['id'];
-                    
+
                     // Notif Marketing
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Bast telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-        
+
                     $NotificationModel->insert($notifmarketing);
-        
+
                     // Notif Admin
                     foreach ($admins as $admin) {
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'project?projectid='.$project['id'],
+                            'url'           => 'project?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
-        
+
                         $NotificationModel->insert($notifadmin);
                     }
-        
+
                     // Notif Client
                     foreach ($clients as $client) {
                         $notifclient  = [
                             'userid'        => $client->id,
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                            'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
-        
+
                         $NotificationModel->insert($notifclient);
                     }
                 }
@@ -807,7 +807,7 @@ class Upload extends BaseController
 
             // Getting True Filename
             $returnFile = $truename . '.' . $ext;
-            
+
             $sphId = "";
             if (!empty($returnFile)) {
                 $sph = $ProjectModel->where('id', $id)->first();
@@ -831,38 +831,38 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah sph ' . $project['name']]);
                     $sphId = $sph['id'];
                 }
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPH telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
-    
+
                 $NotificationModel->insert($notifmarketing);
-    
+
                 // Notif Admin
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPH telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Client
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'SPH telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifclient);
                 }
             }
@@ -955,50 +955,50 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice I' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice I telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
-    
+
                 $NotificationModel->insert($notifmarketing);
-    
+
                 // Notif Admin
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Finance
                 foreach ($finances as $finance) {
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notiffinance);
                 }
-    
+
                 // Notif Client
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifclient);
                 }
             }
@@ -1104,50 +1104,50 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice II' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice II telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
-    
+
                 $NotificationModel->insert($notifmarketing);
-    
+
                 // Notif Admin
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Finance
                 foreach ($finances as $finance) {
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notiffinance);
                 }
-    
+
                 // Notif Client
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifclient);
                 }
             }
@@ -1241,7 +1241,7 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III' . $project['name']]);
                 } else {
                     if (!empty($invoice['file'])) {
-                        if(file_exists(FCPATH . '/img/invoice/' . $invoice['file'])){
+                        if (file_exists(FCPATH . '/img/invoice/' . $invoice['file'])) {
                             unlink(FCPATH . '/img/invoice/' . $invoice['file']);
                         }
                     }
@@ -1255,50 +1255,50 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice III' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice III telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
-    
+
                 $NotificationModel->insert($notifmarketing);
-    
+
                 // Notif Admin
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Finance
                 foreach ($finances as $finance) {
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notiffinance);
                 }
-    
+
                 // Notif Client
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifclient);
                 }
             }
@@ -1361,7 +1361,7 @@ class Upload extends BaseController
             $truename = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 
             // function random_string($filename)
-            // {
+            // 
             //     $key = '';
             //     $keys = array_merge(range(0, 9), range('a', 'z'));
 
@@ -1403,50 +1403,50 @@ class Upload extends BaseController
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice IV' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
-                    
+
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice IV telah diterbitkan',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
-    
+
                 $NotificationModel->insert($notifmarketing);
-    
+
                 // Notif Admin
                 foreach ($admins as $admin) {
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifadmin);
                 }
-    
+
                 // Notif Finance
                 foreach ($finances as $finance) {
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'project?projectid='.$project['id'],
+                        'url'           => 'project?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notiffinance);
                 }
-    
+
                 // Notif Client
                 foreach ($clients as $client) {
                     $notifclient  = [
                         'userid'        => $client->id,
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'dashboard/'.$project['clientid'].'?projectid='.$project['id'],
+                        'url'           => 'dashboard/' . $project['clientid'] . '?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
-    
+
                     $NotificationModel->insert($notifclient);
                 }
             }
@@ -1467,7 +1467,7 @@ class Upload extends BaseController
         $image      = \Config\Services::image();
         $validation = \Config\Services::validation();
         $input      = $this->request->getFile('uploads');
-        
+
 
         // Validation Rules
         $rules = [

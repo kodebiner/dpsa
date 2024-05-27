@@ -718,7 +718,6 @@ class Mdl extends BaseController
             }
         }
 
-        dd($mdlPaket);
     }
 
     public function orderingpaket()

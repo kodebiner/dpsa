@@ -906,7 +906,6 @@ class Project extends BaseController
                     // Shipping Cost
                     $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
 
-
                     // Setrim
                     $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
 
@@ -1164,6 +1163,35 @@ class Project extends BaseController
                     // Notifikasi
                     $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid', $this->data['uid'])->find();
 
+                    
+                    // New RAB data
+                    $projectdata[$project['id']]['newrab'] = [];
+                    $newrabs = $RabModel->where('projectid',$project['id'])->find();
+                    foreach($newrabs as $newrab){
+                        $newpakets = $PaketModel->where('id',$newrab['paketid'])->find();
+                        $newmdls   = $MdlModel->where('id',$newrab['mdlid'])->find();
+                        foreach($newpakets as $newpaket){
+                            foreach($newmdls as $newmdl){
+                                if($newpaket['id'] === $newrab['paketid'] && $newmdl['id'] === $newrab['mdlid']) {
+                                    $projectdata[$project['id']]['newrab'][] = [
+                                        'id'            => $newmdl['id'],
+                                        'name'          => $newmdl['name'],
+                                        'paketname'     => $newpaket['name'],
+                                        'length'        => $newmdl['length'],
+                                        'width'         => $newmdl['width'],
+                                        'height'        => $newmdl['height'],
+                                        'volume'        => $newmdl['volume'],
+                                        'photo'         => $newmdl['photo'],
+                                        'keterangan'    => $newmdl['keterangan'],
+                                        'denomination'  => $newmdl['denomination'],
+                                        'price'         => $newmdl['price'],
+                                        'qty'           => $newrab['qty'],
+                                    ];
+                                }
+                            }
+                        }
+                    }
+
                     // All Deleted Rab Data Or Mdl Data
                     $datarabnew = [];
                     $allrabdata = $RabModel->where('projectid',$project['id'])->where('paketid',null)->find();
@@ -1193,6 +1221,7 @@ class Project extends BaseController
             } else {
                 $rabs           = [];
             }
+
 
             // Parsing Data To View
             $data                   = $this->data;

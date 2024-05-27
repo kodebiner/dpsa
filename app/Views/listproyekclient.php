@@ -950,7 +950,160 @@
                                             <?php } ?>
 
                                             <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                                
+
+                                                <!-- New View RAB Data -->
+                                                <?php 
+                                                $rabhide = "hidden";
+                                                $formrabhide = "";
+
+                                                if (!empty($projectdata[$project['id']]['newrab'])) { 
+                                                    $rabhide = ""; 
+                                                    $formrabhide = "hidden";
+                                                    ?>
+                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                        <table class="uk-table uk-table-divider">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td colspan="8" class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Daftar Pesanan</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Ruang</th>
+                                                                    <th>Nama</th>
+                                                                    <th>Panjang</th>
+                                                                    <th>Lebar</th>
+                                                                    <th>Tinggi</th>
+                                                                    <th>Volume</th>
+                                                                    <th>Satuan</th>
+                                                                    <th class="uk-table-expand">Keterangan</th>
+                                                                    <th>Foto</th>
+                                                                    <th class="uk-text-nowrap">Jumlah Pesanan</th>
+                                                                    <th>Harga</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- ROW RAB DATA -->
+                                                                <?php foreach ($projectdata[$project['id']]['newrab'] as $rabexist) { ?>
+                                                                    <tr id="mdl<?=$rabexist['id']?>">
+                                                                        <td class="uk-text-nowrap">
+                                                                            <?= $rabexist['paketname'] ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $rabexist['name'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-center">
+                                                                            <?= $rabexist['length'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-center">
+                                                                            <?= $rabexist['width'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-center">
+                                                                            <?= $rabexist['height'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-center">
+                                                                            <?= $rabexist['volume'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-nowrap">
+                                                                            <?php
+                                                                                if ($rabexist['denomination'] === "1") {
+                                                                                    echo "Unit";
+                                                                                } elseif ($rabexist['denomination'] === "2") {
+                                                                                    echo "Meter Lari";
+                                                                                } elseif ($rabexist['denomination'] === "3") {
+                                                                                    echo "Meter Persegi";
+                                                                                } elseif ($rabexist['denomination'] === "4") {
+                                                                                    echo "Set";
+                                                                                }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $rabexist['keterangan'] ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div uk-lightbox="">
+                                                                                <a class="uk-inline" href="img/mdl/<?=$rabexist['photo']?>" role="button">
+                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$rabexist['photo']?>" width="40" height="40" alt="<?=$rabexist['photo']?>">
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="uk-text-center">
+                                                                            <?= $rabexist['qty'] ?>
+                                                                        </td>
+                                                                        <td class="uk-text-nowrap">
+                                                                            <?= "Rp. " . number_format( $rabexist['price']*$rabexist['qty'], 0, ',', '.'); " "; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php } ?>
+                                                                <!-- END ROW RAB DATA -->
+
+                                                                <!-- ROW RAB CUSTOM-->
+                                                                <?php if(!empty($projectdata[$project['id']]['customrab'])) {?>
+                                                                    <tr>
+                                                                        <td class="uk-text-bold uk-text-nowrap">TAMBAHAN PESANAN</td>
+                                                                        <td class="-text-bold"></td>
+                                                                        <td class="uk-text-center"></td>
+                                                                        <td class="uk-text-center"></td>
+                                                                        <td class="uk-text-center"></td>
+                                                                        <td class="uk-text-center"></td>
+                                                                        <td class="uk-text-bold"></td>
+                                                                        <td class="uk-text-bold"></td>
+                                                                    </tr>
+                                                                    <?php foreach ($projectdata[$project['id']]['customrab'] as $custrab) {?>
+                                                                        <tr>
+                                                                            <td class=""></td>
+                                                                            <td class="uk-text-nowrap"><?= strtoupper($custrab['name']) ?></td>
+                                                                            <td class="uk-text-center"><?=$custrab['length']?></td>
+                                                                            <td class="uk-text-center"><?=$custrab['width']?></td>
+                                                                            <td class="uk-text-center"><?=$custrab['height']?></td>
+                                                                            <td class="uk-text-center"><?=$custrab['volume']?></td>
+                                                                            <td class="uk-text-nowrap">
+                                                                                <?php
+                                                                                    if ($custrab['denomination'] === "1") {
+                                                                                        echo "Unit";
+                                                                                    } elseif ($custrab['denomination'] === "2") {
+                                                                                        echo "Meter Lari";
+                                                                                    } elseif ($custrab['denomination'] === "3") {
+                                                                                        echo "Meter Persegi";
+                                                                                    } elseif ($custrab['denomination'] === "4") {
+                                                                                        echo "Set";
+                                                                                    }
+                                                                                ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center"></td>
+                                                                            <td class="uk-text-center"></td>
+                                                                            <td class="uk-text-center">1</td>
+                                                                            <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                                        </tr>
+                                                                    <?php } ?>
+                                                                <?php } ?>
+                                                                <!-- END ROW RAB CUSTOM -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                <?php } ?>
+                                                <!-- End New View RAB Data -->
+
+                                                <!-- BUTTON KELOLA RAB -->
+                                                <a class="uk-button uk-button-default uk-margin" id="buttonrab<?=$project['id']?>" <?=$rabhide?>>KELOLA PESANAN</a>
+                                                <a class="uk-button uk-button-default uk-margin" id="closebuttonrab<?=$project['id']?>" hidden>TUTUP KELOLA PESANAN</a>
+                                                <script>
+                                                    $(document).ready(function(){
+                                                        // OPEN BUTTON FUNCTION
+                                                        $("#buttonrab<?=$project['id']?>").click(function(){
+                                                            $("#formeditrab<?=$project['id']?>").removeAttr("hidden");
+                                                            $("#closebuttonrab<?=$project['id']?>").removeAttr("hidden");
+                                                            $("#buttonrab<?=$project['id']?>").attr("hidden",true);
+                                                        });
+
+                                                        // CLOSE BUTTON FUNCTION
+                                                        $("#closebuttonrab<?=$project['id']?>").click(function(){
+                                                            $("#formeditrab<?=$project['id']?>").attr("hidden",true);
+                                                            $("#closebuttonrab<?=$project['id']?>").attr("hidden",true);
+                                                            $("#buttonrab<?=$project['id']?>").removeAttr("hidden");
+                                                        });
+                                                    });
+                                                </script>
+                                                <!-- END BUTTON KELOLA RAB -->
+
                                                 <!-- Current MDL Proyek Removed -->
                                                 <?php if (!empty($projectdata[$project['id']]['allrabdatadeleted'])) { ?>
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
@@ -1051,649 +1204,654 @@
                                                 <?php } ?>
                                                 <!-- End MDL Proyek Removed -->
 
-                                                <?php if (!empty($projectdata[$project['id']]['paket']) || !empty($projectdata[$project['id']]['customrab'])) { ?>
-                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                                        <table class="uk-table uk-table-middle uk-table-divider">
-                                                            <?php if (!empty($projectdata[$project['id']]['paket'])){ ?>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Status</th>
-                                                                        <th>Nama</th>
-                                                                        <th>Panjang</th>
-                                                                        <th>Lebar</th>
-                                                                        <th>Tinggi</th>
-                                                                        <th>Volume</th>
-                                                                        <th>Satuan</th>
-                                                                        <th>Keterangan</th>
-                                                                        <th>Foto</th>
-                                                                        <th>Jumlah Pesanan</th>
-                                                                        <th>Harga</th>
-                                                                    </tr>
-                                                                </thead>
-                                                            <?php } ?>
-                                                            <tbody>
-                                                                <?php if (!empty($projectdata[$project['id']]['paket'])){ 
-                                                                    foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
+                                                <!-- EDIT MDL / RAB DATA -->
+                                                <div id="formeditrab<?=$project['id']?>" <?= $formrabhide ?>>
+                                                    <?php if (!empty($projectdata[$project['id']]['paket']) || !empty($projectdata[$project['id']]['customrab'])) { ?>
+                                                        <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                            <table class="uk-table uk-table-middle uk-table-divider">
+                                                                <?php if (!empty($projectdata[$project['id']]['paket'])){ ?>
+                                                                    <thead>
                                                                         <tr>
-                                                                            <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                                                                            <th>Status</th>
+                                                                            <th>Nama</th>
+                                                                            <th>Panjang</th>
+                                                                            <th>Lebar</th>
+                                                                            <th>Tinggi</th>
+                                                                            <th>Volume</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Keterangan</th>
+                                                                            <th>Foto</th>
+                                                                            <th>Jumlah Pesanan</th>
+                                                                            <th>Harga</th>
                                                                         </tr>
-                                                                        <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                                    </thead>
+                                                                <?php } ?>
+                                                                <tbody>
+                                                                    <?php if (!empty($projectdata[$project['id']]['paket'])){ 
+                                                                        foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
                                                                             <tr>
-                                                                                <td>
-                                                                                    <?php
-                                                                                    if ($mdl['checked']) {
-                                                                                        $checked = 'checked';
-                                                                                    } else {
-                                                                                        $checked = '';
-                                                                                    }
-                                                                                    ?>
-                                                                                    <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
-                                                                                </td>
-                                                                                <td><?= $mdl['name'] ?></td>
-                                                                                <td><?= $mdl['length'] ?></td>
-                                                                                <td><?= $mdl['width'] ?></td>
-                                                                                <td><?= $mdl['height'] ?></td>
-                                                                                <td><?= $mdl['volume'] ?></td>
-                                                                                <td>
-                                                                                    <?php
-                                                                                    if ($mdl['denomination'] === "1") {
+                                                                                <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                                                                            </tr>
+                                                                            <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <?php
+                                                                                        if ($mdl['checked']) {
+                                                                                            $checked = 'checked';
+                                                                                        } else {
+                                                                                            $checked = '';
+                                                                                        }
+                                                                                        ?>
+                                                                                        <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" />
+                                                                                    </td>
+                                                                                    <td><?= $mdl['name'] ?></td>
+                                                                                    <td><?= $mdl['length'] ?></td>
+                                                                                    <td><?= $mdl['width'] ?></td>
+                                                                                    <td><?= $mdl['height'] ?></td>
+                                                                                    <td><?= $mdl['volume'] ?></td>
+                                                                                    <td>
+                                                                                        <?php
+                                                                                        if ($mdl['denomination'] === "1") {
+                                                                                            echo "Unit";
+                                                                                        } elseif ($mdl['denomination'] === "2") {
+                                                                                            echo "Meter Lari";
+                                                                                        } elseif ($mdl['denomination'] === "3") {
+                                                                                            echo "Meter Persegi";
+                                                                                        } elseif ($mdl['denomination'] === "4") {
+                                                                                            echo "Set";
+                                                                                        }
+                                                                                        ?>
+                                                                                    </td>
+                                                                                    <td><?= $mdl['keterangan'] ?></td>
+                                                                                    <td>
+                                                                                        <div uk-lightbox="">
+                                                                                            <a class="uk-inline" href="img/mdl/<?= $mdl['photo'] ?>" role="button">
+                                                                                                <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?= $mdl['photo'] ?>" width="40" height="40" alt="<?= $mdl['photo'] ?>">
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="uk-form-controls">
+                                                                                        <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
+                                                                                    </td>
+                                                                                    <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
+                                                                                    <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
+                                                                                </tr>
+                                                                        <?php }
+                                                                    } ?>
+                                                                        <script>
+                                                                            function eprice(n) {
+                                                                                var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
+                                                                                var ebaseqty = document.getElementById('eqty[' + n + ']').value;
+                                                                                var epricetd = document.getElementById('eshowprice[' + n + ']');
+                                                                                var echeckbox = document.getElementById('checked[' + n + ']');
+                                                                                var eprojprice = ebaseprice * ebaseqty;
+                                                                                epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
+
+                                                                                if (ebaseqty > 0) {
+                                                                                    echeckbox.checked = true;
+                                                                                } else {
+                                                                                    echeckbox.checked = false;
+                                                                                }
+                                                                            };
+                                                                        </script>
+                                                                    <?php } ?>
+
+                                                                    <!-- MDL Remove Form Center List -->
+                                                                    <!-- <tr>
+                                                                        <td colspan="9" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
+                                                                    </tr> -->
+
+                                                                    <!-- </?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?> -->
+                                                                        <!-- <tr class="uk-text-muted">
+                                                                            <td>
+                                                                                <input type="checkbox" class="uk-checkbox" checked disabled/>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['name'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['length'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['width'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['height'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['volume'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?php
+                                                                                    if ($allcurrentrabdata['denomination'] === "1") {
                                                                                         echo "Unit";
-                                                                                    } elseif ($mdl['denomination'] === "2") {
+                                                                                    } elseif ($allcurrentrabdata['denomination'] === "2") {
                                                                                         echo "Meter Lari";
-                                                                                    } elseif ($mdl['denomination'] === "3") {
+                                                                                    } elseif ($allcurrentrabdata['denomination'] === "3") {
                                                                                         echo "Meter Persegi";
-                                                                                    } elseif ($mdl['denomination'] === "4") {
+                                                                                    } elseif ($allcurrentrabdata['denomination'] === "4") {
                                                                                         echo "Set";
                                                                                     }
-                                                                                    ?>
-                                                                                </td>
-                                                                                <td><?= $mdl['keterangan'] ?></td>
+                                                                                ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                </?= $allcurrentrabdata['keterangan'] ?>
+                                                                            </td> -->
+                                                                            <!-- <td>
+                                                                                <div uk-lightbox="">
+                                                                                    <a class="uk-inline" href="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" role="button">
+                                                                                        <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td> -->
+                                                                            <!-- <td>
+                                                                                <input type="number" class="uk-input uk-form-width-small" placeholder="</?= $allcurrentrabdata['qty'] ?>" disabled/>
+                                                                            </td>
+                                                                            <td>
+                                                                            </?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
+                                                                            </td>
+                                                                        </tr> -->
+                                                                    <!-- </?php } ?> -->
+                                                                    <!-- End MDL Remove Form Center List -->
+
+                                                                    <tr>
+                                                                        <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
+                                                                        <td>
+                                                                            <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?>" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" />
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
+                                                                    </tr>
+                                                                    <?php if (!empty($projectdata[$project['id']]['customrab'])) {
+                                                                        foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
+                                                                            <tr>
+                                                                                <td></td>
                                                                                 <td>
-                                                                                    <div uk-lightbox="">
-                                                                                        <a class="uk-inline" href="img/mdl/<?= $mdl['photo'] ?>" role="button">
-                                                                                            <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?= $mdl['photo'] ?>" width="40" height="40" alt="<?= $mdl['photo'] ?>">
-                                                                                        </a>
-                                                                                    </div>
+                                                                                    <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
                                                                                 </td>
-                                                                                <td class="uk-form-controls">
-                                                                                    <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" />
+                                                                                <td>
+                                                                                    <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>"/>
                                                                                 </td>
-                                                                                <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                                <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
+                                                                                <td>
+                                                                                    <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>"/>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>"/>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>"/>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
+                                                                                        <option value="" selected disabled hidden>Pilih Satuan</option>
+                                                                                        <option value="1" <?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                                                                                        <option value="2" <?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                                                                                        <option value="3" <?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                                                                                        <option value="4" <?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    <input type="text" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="<?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" />
+                                                                                </td>
                                                                             </tr>
+                                                                            <script>
+                                                                                $("input[data-type='curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>']").on({
+                                                                                    keyup: function() {
+                                                                                        formatCurrency($(this));
+                                                                                    },
+                                                                                    blur: function() {
+                                                                                        formatCurrency($(this), "blur");
+                                                                                    }
+                                                                                });
+
+                                                                                function formatNumber(n) {
+                                                                                    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                                                }
+
+                                                                                function formatCurrency(input, blur) {
+
+                                                                                    var input_val = input.val();
+
+                                                                                    if (input_val === "") {
+                                                                                        return;
+                                                                                    }
+
+                                                                                    var original_len = input_val.length;
+
+                                                                                    var caret_pos = input.prop("selectionStart");
+
+                                                                                    if (input_val.indexOf(".") >= 0) {
+
+                                                                                        var decimal_pos = input_val.indexOf(".");
+
+                                                                                        var left_side = input_val.substring(0, decimal_pos);
+                                                                                        var right_side = input_val.substring(decimal_pos);
+
+                                                                                        left_side = formatNumber(left_side);
+
+                                                                                        right_side = formatNumber(right_side);
+
+                                                                                        if (blur === "blur") {
+                                                                                            right_side += "";
+                                                                                        }
+
+                                                                                        right_side = right_side.substring(0, 0);
+
+                                                                                        input_val = "Rp" + left_side + "." + right_side;
+
+                                                                                    } else {
+
+                                                                                        input_val = formatNumber(input_val);
+                                                                                        input_val = "Rp" + input_val;
+
+                                                                                        if (blur === "blur") {
+                                                                                            input_val += "";
+                                                                                        }
+                                                                                    }
+
+                                                                                    input.val(input_val);
+
+                                                                                    var updated_len = input_val.length;
+                                                                                    caret_pos = updated_len - original_len + caret_pos;
+                                                                                    input[0].setSelectionRange(caret_pos, caret_pos);
+                                                                                }
+                                                                            </script>
                                                                     <?php }
-                                                                } ?>
+                                                                    } ?>
+
                                                                     <script>
-                                                                        function eprice(n) {
-                                                                            var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
-                                                                            var ebaseqty = document.getElementById('eqty[' + n + ']').value;
-                                                                            var epricetd = document.getElementById('eshowprice[' + n + ']');
-                                                                            var echeckbox = document.getElementById('checked[' + n + ']');
-                                                                            var eprojprice = ebaseprice * ebaseqty;
-                                                                            epricetd.innerHTML = 'Rp. ' + Intl.NumberFormat('de-DE').format(eprojprice);
+                                                                        $("input[data-type='curencyupdate<?= $project['id'] ?>']").on({
+                                                                            keyup: function() {
+                                                                                formatCurrency($(this));
+                                                                            },
+                                                                            blur: function() {
+                                                                                formatCurrency($(this), "blur");
+                                                                            }
+                                                                        });
 
-                                                                            if (ebaseqty > 0) {
-                                                                                echeckbox.checked = true;
+                                                                        function formatNumber(n) {
+                                                                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                                        }
+
+                                                                        function formatCurrency(input, blur) {
+
+                                                                            var input_val = input.val();
+
+                                                                            if (input_val === "") {
+                                                                                return;
+                                                                            }
+
+                                                                            var original_len = input_val.length;
+
+                                                                            var caret_pos = input.prop("selectionStart");
+
+                                                                            if (input_val.indexOf(".") >= 0) {
+
+                                                                                var decimal_pos = input_val.indexOf(".");
+
+                                                                                var left_side = input_val.substring(0, decimal_pos);
+                                                                                var right_side = input_val.substring(decimal_pos);
+
+                                                                                left_side = formatNumber(left_side);
+
+                                                                                right_side = formatNumber(right_side);
+
+                                                                                if (blur === "blur") {
+                                                                                    right_side += "";
+                                                                                }
+
+                                                                                right_side = right_side.substring(0, 0);
+
+                                                                                input_val = "Rp" + left_side + "." + right_side;
+
                                                                             } else {
-                                                                                echeckbox.checked = false;
+
+                                                                                input_val = formatNumber(input_val);
+                                                                                input_val = "Rp" + input_val;
+
+                                                                                if (blur === "blur") {
+                                                                                    input_val += "";
+                                                                                }
                                                                             }
-                                                                        };
+
+                                                                            input.val(input_val);
+
+                                                                            var updated_len = input_val.length;
+                                                                            caret_pos = updated_len - original_len + caret_pos;
+                                                                            input[0].setSelectionRange(caret_pos, caret_pos);
+                                                                        }
                                                                     </script>
-                                                                <?php } ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="uk-h4">Tambah Pesanan</div>
+                                                    <?php } ?>
 
-                                                                <!-- MDL Remove Form Center List -->
-                                                                <!-- <tr>
-                                                                    <td colspan="9" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
-                                                                </tr> -->
+                                                    <div class="uk-margin-bottom">
+                                                        <label class="uk-form-label" for="paket">Cari Sub Kategori</label>
+                                                        <div class="uk-form-controls">
+                                                            <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Sub Kategori">
+                                                        </div>
+                                                    </div>
 
-                                                                <!-- </?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?> -->
-                                                                    <!-- <tr class="uk-text-muted">
-                                                                        <td>
-                                                                            <input type="checkbox" class="uk-checkbox" checked disabled/>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['name'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['length'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['width'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['height'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['volume'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?php
-                                                                                if ($allcurrentrabdata['denomination'] === "1") {
-                                                                                    echo "Unit";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "2") {
-                                                                                    echo "Meter Lari";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "3") {
-                                                                                    echo "Meter Persegi";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "4") {
-                                                                                    echo "Set";
-                                                                                }
-                                                                            ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['keterangan'] ?>
-                                                                        </td> -->
-                                                                        <!-- <td>
-                                                                            <div uk-lightbox="">
-                                                                                <a class="uk-inline" href="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" role="button">
-                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
-                                                                                </a>
-                                                                            </div>
-                                                                        </td> -->
-                                                                        <!-- <td>
-                                                                            <input type="number" class="uk-input uk-form-width-small" placeholder="</?= $allcurrentrabdata['qty'] ?>" disabled/>
-                                                                        </td>
-                                                                        <td>
-                                                                        </?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
-                                                                        </td>
-                                                                    </tr> -->
-                                                                <!-- </?php } ?> -->
-                                                                <!-- End MDL Remove Form Center List -->
+                                                    <div id="listmdl<?= $project['id'] ?>"></div>
 
-                                                                <tr>
-                                                                    <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
-                                                                    <td>
-                                                                        <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?>" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" />
-                                                                    </td>
-                                                                </tr>
+                                                    <div id="createCustomRab<?= $project['id'] ?>" class="uk-margin">
+                                                        <div class="uk-child-width-1-2" uk-grid>
+                                                            <div>
+                                                                <label class="uk-form-label" for="custompemesanan">Custom Pemesanan</label>
+                                                            </div>
+                                                            <div class="uk-text-right">
+                                                                <a onclick="createNewCustomRab(<?= $project['id'] ?>)">+ Tambah Custom Pemesanan</a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
+                                                            <div id="createName<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
+                                                            </div>
+                                                            <div id="createLength<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customlength<?= $project['id'] ?>[0]" name="customlength<?= $project['id'] ?>[0]" placeholder="Panjang" />
+                                                            </div>
+                                                            <div id="createWidth<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customwidth<?= $project['id'] ?>[0]" name="customwidth<?= $project['id'] ?>[0]" placeholder="Lebar" />
+                                                            </div>
+                                                            <div id="createHeight<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customheight<?= $project['id'] ?>[0]" name="customheight<?= $project['id'] ?>[0]" placeholder="Tinggi" />
+                                                            </div>
+                                                            <div id="createVol<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customvol<?= $project['id'] ?>[0]" name="customvol<?= $project['id'] ?>[0]" placeholder="Volume" />
+                                                            </div>
+                                                            <div id="createDen<?= $project['id'] ?>0">
+                                                                <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="customden<?= $project['id'] ?>[0]" name="customden<?= $project['id'] ?>[0]">
+                                                                    <option value="" selected disabled hidden>Pilih Satuan</option>
+                                                                    <option value="1">Unit</option>
+                                                                    <option value="2">Meter Lari</option>
+                                                                    <option value="3">Meter Persegi</option>
+                                                                    <option value="4">Set</option>
+                                                                </select>
+                                                            </div>
+                                                            <div id="createPrice<?= $project['id'] ?>0">
+                                                                <input type="text" class="uk-input uk-form-width-medium" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        var createCount = 0;
+                                                        var createx = 0;
+                                                        var elementExists = document.getElementById("customprice<?= $project['id'] ?>");
 
-                                                                <tr>
-                                                                    <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
-                                                                </tr>
-                                                                <?php if (!empty($projectdata[$project['id']]['customrab'])) {
-                                                                    foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
-                                                                                    <option value="" selected disabled hidden>Pilih Satuan</option>
-                                                                                    <option value="1" <?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
-                                                                                    <option value="2" <?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
-                                                                                    <option value="3" <?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
-                                                                                    <option value="4" <?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
-                                                                                </select>
-                                                                            </td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <input type="text" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="<?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <script>
-                                                                            $("input[data-type='curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>']").on({
-                                                                                keyup: function() {
-                                                                                    formatCurrency($(this));
-                                                                                },
-                                                                                blur: function() {
-                                                                                    formatCurrency($(this), "blur");
-                                                                                }
-                                                                            });
+                                                        function createNewCustomRab(x) {
+                                                            createCount++;
 
-                                                                            function formatNumber(n) {
-                                                                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                                                            }
+                                                            const createCustomRab = document.getElementById('createCustomRab' + x + '');
 
-                                                                            function formatCurrency(input, blur) {
+                                                            const newCreateCustomRab = document.createElement('div');
+                                                            newCreateCustomRab.setAttribute('id', 'create' + x + '' + createCount);
+                                                            newCreateCustomRab.setAttribute('class', 'uk-margin uk-child-width-auto');
+                                                            newCreateCustomRab.setAttribute('uk-grid', '');
 
-                                                                                var input_val = input.val();
+                                                            const createName = document.createElement('div');
+                                                            createName.setAttribute('id', 'createName' + x + '' + createCount);
 
-                                                                                if (input_val === "") {
-                                                                                    return;
-                                                                                }
+                                                            const createNameInput = document.createElement('input');
+                                                            createNameInput.setAttribute('type', 'text');
+                                                            createNameInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createNameInput.setAttribute('placeholder', 'Nama');
+                                                            createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
+                                                            createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
 
-                                                                                var original_len = input_val.length;
+                                                            const createLength = document.createElement('div');
+                                                            createLength.setAttribute('id', 'createLength' + x + '' + createCount);
 
-                                                                                var caret_pos = input.prop("selectionStart");
+                                                            const createLengthInput = document.createElement('input');
+                                                            createLengthInput.setAttribute('type', 'text');
+                                                            createLengthInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createLengthInput.setAttribute('placeholder', 'Panjang');
+                                                            createLengthInput.setAttribute('id', 'customlength' + x + '[' + createCount + ']');
+                                                            createLengthInput.setAttribute('name', 'customlength' + x + '[' + createCount + ']');
 
-                                                                                if (input_val.indexOf(".") >= 0) {
+                                                            const createWidth = document.createElement('div');
+                                                            createWidth.setAttribute('id', 'createWidth' + x + '' + createCount);
 
-                                                                                    var decimal_pos = input_val.indexOf(".");
+                                                            const createWidthInput = document.createElement('input');
+                                                            createWidthInput.setAttribute('type', 'text');
+                                                            createWidthInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createWidthInput.setAttribute('placeholder', 'Lebar');
+                                                            createWidthInput.setAttribute('id', 'customwidth' + x + '[' + createCount + ']');
+                                                            createWidthInput.setAttribute('name', 'customwidth' + x + '[' + createCount + ']');
 
-                                                                                    var left_side = input_val.substring(0, decimal_pos);
-                                                                                    var right_side = input_val.substring(decimal_pos);
+                                                            const createHeight = document.createElement('div');
+                                                            createHeight.setAttribute('id', 'createHeight' + x + '' + createCount);
 
-                                                                                    left_side = formatNumber(left_side);
+                                                            const createHeightInput = document.createElement('input');
+                                                            createHeightInput.setAttribute('type', 'text');
+                                                            createHeightInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createHeightInput.setAttribute('placeholder', 'Tinggi');
+                                                            createHeightInput.setAttribute('id', 'customheight' + x + '[' + createCount + ']');
+                                                            createHeightInput.setAttribute('name', 'customheight' + x + '[' + createCount + ']');
 
-                                                                                    right_side = formatNumber(right_side);
+                                                            const createVol = document.createElement('div');
+                                                            createVol.setAttribute('id', 'createVol' + x + '' + createCount);
 
-                                                                                    if (blur === "blur") {
-                                                                                        right_side += "";
-                                                                                    }
+                                                            const createVolInput = document.createElement('input');
+                                                            createVolInput.setAttribute('type', 'text');
+                                                            createVolInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createVolInput.setAttribute('placeholder', 'Volume');
+                                                            createVolInput.setAttribute('id', 'customvol' + x + '[' + createCount + ']');
+                                                            createVolInput.setAttribute('name', 'customvol' + x + '[' + createCount + ']');
 
-                                                                                    right_side = right_side.substring(0, 0);
+                                                            const createDen = document.createElement('div');
+                                                            createDen.setAttribute('id', 'createDen' + x + '' + createCount);
 
-                                                                                    input_val = "Rp" + left_side + "." + right_side;
+                                                            const createDenInput = document.createElement('select');
+                                                            createDenInput.setAttribute('class', 'uk-select uk-form-width-medium');
+                                                            createDenInput.setAttribute('placeholder', 'Satuan');
+                                                            createDenInput.setAttribute('id', 'customden' + x + '[' + createCount + ']');
+                                                            createDenInput.setAttribute('name', 'customden' + x + '[' + createCount + ']');
 
-                                                                                } else {
+                                                            const createOption1 = document.createElement('option');
+                                                            createOption1.setAttribute('hidden', '');
+                                                            createOption1.setAttribute('selected', '');
+                                                            createOption1.setAttribute('disabled', '');
+                                                            createOption1.setAttribute('value', '');
+                                                            createOption1.innerHTML = "Pilih Satuan"
 
-                                                                                    input_val = formatNumber(input_val);
-                                                                                    input_val = "Rp" + input_val;
+                                                            const createOption2 = document.createElement('option');
+                                                            createOption2.setAttribute('value', '1');
+                                                            createOption2.innerHTML = "Unit"
 
-                                                                                    if (blur === "blur") {
-                                                                                        input_val += "";
-                                                                                    }
-                                                                                }
+                                                            const createOption3 = document.createElement('option');
+                                                            createOption3.setAttribute('value', '2');
+                                                            createOption3.innerHTML = "Meter Lari"
 
-                                                                                input.val(input_val);
+                                                            const createOption4 = document.createElement('option');
+                                                            createOption4.setAttribute('value', '3');
+                                                            createOption4.innerHTML = "Meter Persegi"
 
-                                                                                var updated_len = input_val.length;
-                                                                                caret_pos = updated_len - original_len + caret_pos;
-                                                                                input[0].setSelectionRange(caret_pos, caret_pos);
-                                                                            }
-                                                                        </script>
-                                                                <?php }
-                                                                } ?>
+                                                            const createOption5 = document.createElement('option');
+                                                            createOption5.setAttribute('value', '4');
+                                                            createOption5.innerHTML = "Set"
 
-                                                                <script>
-                                                                    $("input[data-type='curencyupdate<?= $project['id'] ?>']").on({
-                                                                        keyup: function() {
-                                                                            formatCurrency($(this));
-                                                                        },
-                                                                        blur: function() {
-                                                                            formatCurrency($(this), "blur");
-                                                                        }
-                                                                    });
+                                                            const createPrice = document.createElement('div');
+                                                            createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
 
-                                                                    function formatNumber(n) {
-                                                                        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                            const createPriceInput = document.createElement('input');
+                                                            createPriceInput.setAttribute('type', 'text');
+                                                            createPriceInput.setAttribute('class', 'uk-input uk-form-width-medium');
+                                                            createPriceInput.setAttribute('placeholder', 'Harga');
+                                                            createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
+                                                            createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
+                                                            createPriceInput.setAttribute('data-type', 'customprice' + x + '[' + createCount + ']');
+
+                                                            const createRemove = document.createElement('div');
+                                                            createRemove.setAttribute('id', 'remove' + x + '' + createCount);
+                                                            createRemove.setAttribute('class', 'uk-text-center uk-text-bold uk-text-danger uk-flex uk-flex-middle');
+
+                                                            const createRemoveButton = document.createElement('a');
+                                                            createRemoveButton.setAttribute('onclick', 'createRemove' + x + '(' + createCount + ')');
+                                                            createRemoveButton.setAttribute('class', 'uk-link-reset');
+                                                            createRemoveButton.innerHTML = 'X';
+
+                                                            createName.appendChild(createNameInput);
+                                                            newCreateCustomRab.appendChild(createName);
+                                                            createLength.appendChild(createLengthInput);
+                                                            newCreateCustomRab.appendChild(createLength);
+                                                            createWidth.appendChild(createWidthInput);
+                                                            newCreateCustomRab.appendChild(createWidth);
+                                                            createHeight.appendChild(createHeightInput);
+                                                            newCreateCustomRab.appendChild(createHeight);
+                                                            createVol.appendChild(createVolInput);
+                                                            newCreateCustomRab.appendChild(createVol);
+                                                            createDenInput.appendChild(createOption1);
+                                                            createDenInput.appendChild(createOption2);
+                                                            createDenInput.appendChild(createOption3);
+                                                            createDenInput.appendChild(createOption4);
+                                                            createDenInput.appendChild(createOption5);
+                                                            createDen.appendChild(createDenInput);
+                                                            newCreateCustomRab.appendChild(createDen);
+                                                            createPrice.appendChild(createPriceInput);
+                                                            newCreateCustomRab.appendChild(createPrice);
+                                                            createRemove.appendChild(createRemoveButton);
+                                                            newCreateCustomRab.appendChild(createRemove);
+                                                            createCustomRab.appendChild(newCreateCustomRab);
+
+                                                            $("input[id='customprice"+ x +"["+createCount+"]']").on({
+                                                                keyup: function() {
+                                                                    formatNumber($(this));
+                                                                    formatCurrency($(this));
+                                                                },
+                                                                blur: function() {
+                                                                    formatCurrency($(this), "blur");
+                                                                }
+                                                            });
+
+                                                            function formatNumber(n) {
+                                                                return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                            };
+
+                                                            function formatCurrency(input, blur) {
+                                                                var input_val = input.val();
+
+                                                                if (input_val === "") {
+                                                                    return;
+                                                                }
+
+                                                                var original_len = input_val.length;
+
+                                                                var caret_pos = input.prop("selectionStart");
+
+                                                                if (input_val.indexOf(".") >= 0) {
+
+                                                                    var decimal_pos = input_val.indexOf(".");
+
+                                                                    var left_side = input_val.substring(0, decimal_pos);
+                                                                    var right_side = input_val.substring(decimal_pos);
+
+                                                                    left_side = formatNumber(left_side);
+
+                                                                    right_side = formatNumber(right_side);
+
+                                                                    if (blur === "blur") {
+                                                                        right_side += "";
                                                                     }
 
-                                                                    function formatCurrency(input, blur) {
+                                                                    right_side = right_side.substring(0, 0);
 
-                                                                        var input_val = input.val();
+                                                                    input_val = "Rp" + left_side + "." + right_side;
 
-                                                                        if (input_val === "") {
-                                                                            return;
-                                                                        }
+                                                                } else {
 
-                                                                        var original_len = input_val.length;
+                                                                    input_val = formatNumber(input_val);
+                                                                    input_val = "Rp" + input_val;
 
-                                                                        var caret_pos = input.prop("selectionStart");
-
-                                                                        if (input_val.indexOf(".") >= 0) {
-
-                                                                            var decimal_pos = input_val.indexOf(".");
-
-                                                                            var left_side = input_val.substring(0, decimal_pos);
-                                                                            var right_side = input_val.substring(decimal_pos);
-
-                                                                            left_side = formatNumber(left_side);
-
-                                                                            right_side = formatNumber(right_side);
-
-                                                                            if (blur === "blur") {
-                                                                                right_side += "";
-                                                                            }
-
-                                                                            right_side = right_side.substring(0, 0);
-
-                                                                            input_val = "Rp" + left_side + "." + right_side;
-
-                                                                        } else {
-
-                                                                            input_val = formatNumber(input_val);
-                                                                            input_val = "Rp" + input_val;
-
-                                                                            if (blur === "blur") {
-                                                                                input_val += "";
-                                                                            }
-                                                                        }
-
-                                                                        input.val(input_val);
-
-                                                                        var updated_len = input_val.length;
-                                                                        caret_pos = updated_len - original_len + caret_pos;
-                                                                        input[0].setSelectionRange(caret_pos, caret_pos);
+                                                                    if (blur === "blur") {
+                                                                        input_val += "";
                                                                     }
-                                                                </script>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="uk-h4">Tambah Pesanan</div>
-                                                <?php } ?>
+                                                                }
 
-                                                <div class="uk-margin-bottom">
-                                                    <label class="uk-form-label" for="paket">Cari Sub Kategori</label>
-                                                    <div class="uk-form-controls">
-                                                        <input type="text" class="uk-input" id="paketname<?= $project['id'] ?>" name="paketname<?= $project['id'] ?>" placeholder="Nama Sub Kategori">
-                                                    </div>
-                                                </div>
+                                                                input.val(input_val);
 
-                                                <div id="listmdl<?= $project['id'] ?>"></div>
-
-                                                <div id="createCustomRab<?= $project['id'] ?>" class="uk-margin">
-                                                    <div class="uk-child-width-1-2" uk-grid>
-                                                        <div>
-                                                            <label class="uk-form-label" for="custompemesanan">Custom Pemesanan</label>
-                                                        </div>
-                                                        <div class="uk-text-right">
-                                                            <a onclick="createNewCustomRab(<?= $project['id'] ?>)">+ Tambah Custom Pemesanan</a>
-                                                        </div>
-                                                    </div>
-                                                    <div id="create<?= $project['id'] ?>0" class="uk-margin uk-child-width-auto" uk-grid>
-                                                        <div id="createName<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
-                                                        </div>
-                                                        <div id="createLength<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customlength<?= $project['id'] ?>[0]" name="customlength<?= $project['id'] ?>[0]" placeholder="Panjang" />
-                                                        </div>
-                                                        <div id="createWidth<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customwidth<?= $project['id'] ?>[0]" name="customwidth<?= $project['id'] ?>[0]" placeholder="Lebar" />
-                                                        </div>
-                                                        <div id="createHeight<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customheight<?= $project['id'] ?>[0]" name="customheight<?= $project['id'] ?>[0]" placeholder="Tinggi" />
-                                                        </div>
-                                                        <div id="createVol<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customvol<?= $project['id'] ?>[0]" name="customvol<?= $project['id'] ?>[0]" placeholder="Volume" />
-                                                        </div>
-                                                        <div id="createDen<?= $project['id'] ?>0">
-                                                            <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="customden<?= $project['id'] ?>[0]" name="customden<?= $project['id'] ?>[0]">
-                                                                <option value="" selected disabled hidden>Pilih Satuan</option>
-                                                                <option value="1">Unit</option>
-                                                                <option value="2">Meter Lari</option>
-                                                                <option value="3">Meter Persegi</option>
-                                                                <option value="4">Set</option>
-                                                            </select>
-                                                        </div>
-                                                        <div id="createPrice<?= $project['id'] ?>0">
-                                                            <input type="text" class="uk-input uk-form-width-medium" id="customprice<?= $project['id'] ?>[0]" name="customprice<?= $project['id'] ?>[0]" placeholder="Harga" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script type="text/javascript">
-                                                    var createCount = 0;
-                                                    var createx = 0;
-                                                    var elementExists = document.getElementById("customprice<?= $project['id'] ?>");
-
-                                                    function createNewCustomRab(x) {
-                                                        createCount++;
-
-                                                        const createCustomRab = document.getElementById('createCustomRab' + x + '');
-
-                                                        const newCreateCustomRab = document.createElement('div');
-                                                        newCreateCustomRab.setAttribute('id', 'create' + x + '' + createCount);
-                                                        newCreateCustomRab.setAttribute('class', 'uk-margin uk-child-width-auto');
-                                                        newCreateCustomRab.setAttribute('uk-grid', '');
-
-                                                        const createName = document.createElement('div');
-                                                        createName.setAttribute('id', 'createName' + x + '' + createCount);
-
-                                                        const createNameInput = document.createElement('input');
-                                                        createNameInput.setAttribute('type', 'text');
-                                                        createNameInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createNameInput.setAttribute('placeholder', 'Nama');
-                                                        createNameInput.setAttribute('id', 'customname' + x + '[' + createCount + ']');
-                                                        createNameInput.setAttribute('name', 'customname' + x + '[' + createCount + ']');
-
-                                                        const createLength = document.createElement('div');
-                                                        createLength.setAttribute('id', 'createLength' + x + '' + createCount);
-
-                                                        const createLengthInput = document.createElement('input');
-                                                        createLengthInput.setAttribute('type', 'text');
-                                                        createLengthInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createLengthInput.setAttribute('placeholder', 'Panjang');
-                                                        createLengthInput.setAttribute('id', 'customlength' + x + '[' + createCount + ']');
-                                                        createLengthInput.setAttribute('name', 'customlength' + x + '[' + createCount + ']');
-
-                                                        const createWidth = document.createElement('div');
-                                                        createWidth.setAttribute('id', 'createWidth' + x + '' + createCount);
-
-                                                        const createWidthInput = document.createElement('input');
-                                                        createWidthInput.setAttribute('type', 'text');
-                                                        createWidthInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createWidthInput.setAttribute('placeholder', 'Lebar');
-                                                        createWidthInput.setAttribute('id', 'customwidth' + x + '[' + createCount + ']');
-                                                        createWidthInput.setAttribute('name', 'customwidth' + x + '[' + createCount + ']');
-
-                                                        const createHeight = document.createElement('div');
-                                                        createHeight.setAttribute('id', 'createHeight' + x + '' + createCount);
-
-                                                        const createHeightInput = document.createElement('input');
-                                                        createHeightInput.setAttribute('type', 'text');
-                                                        createHeightInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createHeightInput.setAttribute('placeholder', 'Tinggi');
-                                                        createHeightInput.setAttribute('id', 'customheight' + x + '[' + createCount + ']');
-                                                        createHeightInput.setAttribute('name', 'customheight' + x + '[' + createCount + ']');
-
-                                                        const createVol = document.createElement('div');
-                                                        createVol.setAttribute('id', 'createVol' + x + '' + createCount);
-
-                                                        const createVolInput = document.createElement('input');
-                                                        createVolInput.setAttribute('type', 'text');
-                                                        createVolInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createVolInput.setAttribute('placeholder', 'Volume');
-                                                        createVolInput.setAttribute('id', 'customvol' + x + '[' + createCount + ']');
-                                                        createVolInput.setAttribute('name', 'customvol' + x + '[' + createCount + ']');
-
-                                                        const createDen = document.createElement('div');
-                                                        createDen.setAttribute('id', 'createDen' + x + '' + createCount);
-
-                                                        const createDenInput = document.createElement('select');
-                                                        createDenInput.setAttribute('class', 'uk-select uk-form-width-medium');
-                                                        createDenInput.setAttribute('placeholder', 'Satuan');
-                                                        createDenInput.setAttribute('id', 'customden' + x + '[' + createCount + ']');
-                                                        createDenInput.setAttribute('name', 'customden' + x + '[' + createCount + ']');
-
-                                                        const createOption1 = document.createElement('option');
-                                                        createOption1.setAttribute('hidden', '');
-                                                        createOption1.setAttribute('selected', '');
-                                                        createOption1.setAttribute('disabled', '');
-                                                        createOption1.setAttribute('value', '');
-                                                        createOption1.innerHTML = "Pilih Satuan"
-
-                                                        const createOption2 = document.createElement('option');
-                                                        createOption2.setAttribute('value', '1');
-                                                        createOption2.innerHTML = "Unit"
-
-                                                        const createOption3 = document.createElement('option');
-                                                        createOption3.setAttribute('value', '2');
-                                                        createOption3.innerHTML = "Meter Lari"
-
-                                                        const createOption4 = document.createElement('option');
-                                                        createOption4.setAttribute('value', '3');
-                                                        createOption4.innerHTML = "Meter Persegi"
-
-                                                        const createOption5 = document.createElement('option');
-                                                        createOption5.setAttribute('value', '4');
-                                                        createOption5.innerHTML = "Set"
-
-                                                        const createPrice = document.createElement('div');
-                                                        createPrice.setAttribute('id', 'createPrice' + x + '' + createCount);
-
-                                                        const createPriceInput = document.createElement('input');
-                                                        createPriceInput.setAttribute('type', 'text');
-                                                        createPriceInput.setAttribute('class', 'uk-input uk-form-width-medium');
-                                                        createPriceInput.setAttribute('placeholder', 'Harga');
-                                                        createPriceInput.setAttribute('id', 'customprice' + x + '[' + createCount + ']');
-                                                        createPriceInput.setAttribute('name', 'customprice' + x + '[' + createCount + ']');
-                                                        createPriceInput.setAttribute('data-type', 'customprice' + x + '[' + createCount + ']');
-
-                                                        const createRemove = document.createElement('div');
-                                                        createRemove.setAttribute('id', 'remove' + x + '' + createCount);
-                                                        createRemove.setAttribute('class', 'uk-text-center uk-text-bold uk-text-danger uk-flex uk-flex-middle');
-
-                                                        const createRemoveButton = document.createElement('a');
-                                                        createRemoveButton.setAttribute('onclick', 'createRemove' + x + '(' + createCount + ')');
-                                                        createRemoveButton.setAttribute('class', 'uk-link-reset');
-                                                        createRemoveButton.innerHTML = 'X';
-
-                                                        createName.appendChild(createNameInput);
-                                                        newCreateCustomRab.appendChild(createName);
-                                                        createLength.appendChild(createLengthInput);
-                                                        newCreateCustomRab.appendChild(createLength);
-                                                        createWidth.appendChild(createWidthInput);
-                                                        newCreateCustomRab.appendChild(createWidth);
-                                                        createHeight.appendChild(createHeightInput);
-                                                        newCreateCustomRab.appendChild(createHeight);
-                                                        createVol.appendChild(createVolInput);
-                                                        newCreateCustomRab.appendChild(createVol);
-                                                        createDenInput.appendChild(createOption1);
-                                                        createDenInput.appendChild(createOption2);
-                                                        createDenInput.appendChild(createOption3);
-                                                        createDenInput.appendChild(createOption4);
-                                                        createDenInput.appendChild(createOption5);
-                                                        createDen.appendChild(createDenInput);
-                                                        newCreateCustomRab.appendChild(createDen);
-                                                        createPrice.appendChild(createPriceInput);
-                                                        newCreateCustomRab.appendChild(createPrice);
-                                                        createRemove.appendChild(createRemoveButton);
-                                                        newCreateCustomRab.appendChild(createRemove);
-                                                        createCustomRab.appendChild(newCreateCustomRab);
-
-                                                        $("input[id='customprice"+ x +"["+createCount+"]']").on({
-                                                            keyup: function() {
-                                                                formatNumber($(this));
-                                                                formatCurrency($(this));
-                                                            },
-                                                            blur: function() {
-                                                                formatCurrency($(this), "blur");
+                                                                var updated_len = input_val.length;
+                                                                caret_pos = updated_len - original_len + caret_pos;
+                                                                input[0].setSelectionRange(caret_pos, caret_pos);
                                                             }
-                                                        });
-
-                                                        function formatNumber(n) {
-                                                            return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                            
                                                         };
 
-                                                        function formatCurrency(input, blur) {
-                                                            var input_val = input.val();
+                                                        // Currency
+                                                        $("input[id='customprice"+ <?= $project['id'] ?> +"[0]']").on({
+                                                                keyup: function() {
+                                                                    formatCurrency($(this));
+                                                                },
+                                                                blur: function() {
+                                                                    formatCurrency($(this), "blur");
+                                                                }
+                                                            });
 
-                                                            if (input_val === "") {
-                                                                return;
+                                                            function formatNumber(n) {
+                                                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                                             }
 
-                                                            var original_len = input_val.length;
+                                                            function formatCurrency(input, blur) {
 
-                                                            var caret_pos = input.prop("selectionStart");
+                                                                var input_val = input.val();
 
-                                                            if (input_val.indexOf(".") >= 0) {
-
-                                                                var decimal_pos = input_val.indexOf(".");
-
-                                                                var left_side = input_val.substring(0, decimal_pos);
-                                                                var right_side = input_val.substring(decimal_pos);
-
-                                                                left_side = formatNumber(left_side);
-
-                                                                right_side = formatNumber(right_side);
-
-                                                                if (blur === "blur") {
-                                                                    right_side += "";
+                                                                if (input_val === "") {
+                                                                    return;
                                                                 }
 
-                                                                right_side = right_side.substring(0, 0);
+                                                                var original_len = input_val.length;
 
-                                                                input_val = "Rp" + left_side + "." + right_side;
+                                                                var caret_pos = input.prop("selectionStart");
 
-                                                            } else {
+                                                                if (input_val.indexOf(".") >= 0) {
 
-                                                                input_val = formatNumber(input_val);
-                                                                input_val = "Rp" + input_val;
+                                                                    var decimal_pos = input_val.indexOf(".");
 
-                                                                if (blur === "blur") {
-                                                                    input_val += "";
-                                                                }
-                                                            }
+                                                                    var left_side = input_val.substring(0, decimal_pos);
+                                                                    var right_side = input_val.substring(decimal_pos);
 
-                                                            input.val(input_val);
+                                                                    left_side = formatNumber(left_side);
 
-                                                            var updated_len = input_val.length;
-                                                            caret_pos = updated_len - original_len + caret_pos;
-                                                            input[0].setSelectionRange(caret_pos, caret_pos);
-                                                        }
-                                                        
-                                                    };
+                                                                    right_side = formatNumber(right_side);
 
-                                                    // Currency
-                                                    $("input[id='customprice"+ <?= $project['id'] ?> +"[0]']").on({
-                                                            keyup: function() {
-                                                                formatCurrency($(this));
-                                                            },
-                                                            blur: function() {
-                                                                formatCurrency($(this), "blur");
-                                                            }
-                                                        });
+                                                                    if (blur === "blur") {
+                                                                        right_side += "";
+                                                                    }
 
-                                                        function formatNumber(n) {
-                                                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                                        }
+                                                                    right_side = right_side.substring(0, 0);
 
-                                                        function formatCurrency(input, blur) {
+                                                                    input_val = "Rp" + left_side + "." + right_side;
 
-                                                            var input_val = input.val();
+                                                                } else {
 
-                                                            if (input_val === "") {
-                                                                return;
-                                                            }
+                                                                    input_val = formatNumber(input_val);
+                                                                    input_val = "Rp" + input_val;
 
-                                                            var original_len = input_val.length;
-
-                                                            var caret_pos = input.prop("selectionStart");
-
-                                                            if (input_val.indexOf(".") >= 0) {
-
-                                                                var decimal_pos = input_val.indexOf(".");
-
-                                                                var left_side = input_val.substring(0, decimal_pos);
-                                                                var right_side = input_val.substring(decimal_pos);
-
-                                                                left_side = formatNumber(left_side);
-
-                                                                right_side = formatNumber(right_side);
-
-                                                                if (blur === "blur") {
-                                                                    right_side += "";
+                                                                    if (blur === "blur") {
+                                                                        input_val += "";
+                                                                    }
                                                                 }
 
-                                                                right_side = right_side.substring(0, 0);
+                                                                input.val(input_val);
 
-                                                                input_val = "Rp" + left_side + "." + right_side;
-
-                                                            } else {
-
-                                                                input_val = formatNumber(input_val);
-                                                                input_val = "Rp" + input_val;
-
-                                                                if (blur === "blur") {
-                                                                    input_val += "";
-                                                                }
+                                                                var updated_len = input_val.length;
+                                                                caret_pos = updated_len - original_len + caret_pos;
+                                                                input[0].setSelectionRange(caret_pos, caret_pos);
                                                             }
 
-                                                            input.val(input_val);
+                                                        function createRemove<?= $project['id'] ?>(i) {
+                                                            const createRemoveElement = document.getElementById('create<?= $project['id'] ?>' + i);
+                                                            createRemoveElement.remove();
+                                                        };
+                                                    </script>
+                                                </div>
+                                                <!-- END EDIT MDL / RAB DATA -->
 
-                                                            var updated_len = input_val.length;
-                                                            caret_pos = updated_len - original_len + caret_pos;
-                                                            input[0].setSelectionRange(caret_pos, caret_pos);
-                                                        }
-
-                                                    function createRemove<?= $project['id'] ?>(i) {
-                                                        const createRemoveElement = document.getElementById('create<?= $project['id'] ?>' + i);
-                                                        createRemoveElement.remove();
-                                                    };
-                                                </script>
                                                 <div class="uk-margin-bottom">
                                                     <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" for="paket">Nomor SPH</label>
                                                     <div class="uk-form-controls">
