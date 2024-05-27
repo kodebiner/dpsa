@@ -883,6 +883,9 @@
                                             <table class="uk-table uk-table-responsive  uk-table-striped">
                                                 <thead>
                                                     <tr>
+                                                        <td colspan="8" class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Daftar Pesanan</td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="">Nama</th>
                                                         <th class="uk-text-center">Panjang</th>
                                                         <th class="uk-text-center">Lebar</th>
@@ -956,7 +959,7 @@
                                                     ?>
                                                     <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
                                                         <tr>
-                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
+                                                            <td class="tm-h3 uk-text-bold">TAMBAHAN PESANAN</td>
                                                             <td class="-text-bold"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
@@ -964,6 +967,16 @@
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-bold"></td>
                                                             <td class="uk-text-bold"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Nama</td>
+                                                            <td class="uk-text-center">Panjang</td>
+                                                            <td class="uk-text-center">Lebar</td>
+                                                            <td class="uk-text-center">Tinggi</td>
+                                                            <td class="uk-text-center">Volume</td>
+                                                            <td class="uk-text-center">Satuan</td>
+                                                            <td class="uk-text-center">Jumlah</td>
+                                                            <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
                                                             <tr>
@@ -985,7 +998,6 @@
                                                                         }
                                                                     ?>
                                                                 </td>
-                                                                <td class="uk-text-center"></td>
                                                                 <td class="uk-text-center">1</td>
                                                                 <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
                                                             </tr>

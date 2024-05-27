@@ -956,7 +956,7 @@
                                                 $rabhide = "hidden";
                                                 $formrabhide = "";
 
-                                                if (!empty($projectdata[$project['id']]['newrab'])) { 
+                                                if (!empty($projectdata[$project['id']]['newrab']) || !empty($projectdata[$project['id']]['customrab'])) { 
                                                     $rabhide = ""; 
                                                     $formrabhide = "hidden";
                                                     ?>
@@ -1038,7 +1038,7 @@
                                                                 <!-- ROW RAB CUSTOM-->
                                                                 <?php if(!empty($projectdata[$project['id']]['customrab'])) {?>
                                                                     <tr>
-                                                                        <td class="uk-text-bold uk-text-nowrap">TAMBAHAN PESANAN</td>
+                                                                    <td colspan="8" class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Tambahan Pesanan</td>
                                                                         <td class="-text-bold"></td>
                                                                         <td class="uk-text-center"></td>
                                                                         <td class="uk-text-center"></td>
@@ -1047,9 +1047,19 @@
                                                                         <td class="uk-text-bold"></td>
                                                                         <td class="uk-text-bold"></td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <td class="uk-text-nowrap">Nama</td>
+                                                                        <td class="">Panjang</td>
+                                                                        <td class="uk-text-center">Lebar</td>
+                                                                        <td class="uk-text-center">Tinggi</td>
+                                                                        <td class="uk-text-center">Volume</td>
+                                                                        <td class="uk-text-center">Satuan</td>
+                                                                        <td class="uk-text-center">Jumlah</td>
+                                                                        <td class="uk-text-nowrap">Harga</td>
+                                                                    </tr>
                                                                     <?php foreach ($projectdata[$project['id']]['customrab'] as $custrab) {?>
                                                                         <tr>
-                                                                            <td class=""></td>
+                                                                            <!-- <td class=""></td> -->
                                                                             <td class="uk-text-nowrap"><?= strtoupper($custrab['name']) ?></td>
                                                                             <td class="uk-text-center"><?=$custrab['length']?></td>
                                                                             <td class="uk-text-center"><?=$custrab['width']?></td>
@@ -1068,8 +1078,8 @@
                                                                                     }
                                                                                 ?>
                                                                             </td>
-                                                                            <td class="uk-text-center"></td>
-                                                                            <td class="uk-text-center"></td>
+                                                                            <!-- <td class="uk-text-center"></td> -->
+                                                                            <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center">1</td>
                                                                             <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
                                                                         </tr>
