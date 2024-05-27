@@ -2552,7 +2552,7 @@ class Project extends BaseController
 
 
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data Proyek ' . $name]);
-            return redirect()->to('project')->with('message', "Data berhasil di perbaharui.");
+            return redirect()->to('project/listprojectclient/'.$pro['clientid'])->with('message', "Data berhasil di perbaharui.");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
