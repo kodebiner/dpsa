@@ -2540,6 +2540,7 @@ class Project extends BaseController
             $ProductionModel    = new ProductionModel();
             $CustomRabModel     = new CustomRabModel();
             $LogModel           = new LogModel();
+            $ClientModel        = new CompanyModel();
 
             // Populating Data
             $rabs               = $RabModel->where('projectid', $id)->find();
@@ -2548,6 +2549,7 @@ class Project extends BaseController
             $basts              = $BastModel->where('projectid', $id)->find();
             $customrab          = $CustomRabModel->where('projectid', $id)->find();
             $project            = $ProjectModel->find($id);
+            $client             = $ClientModel->find($project['clientid']);
 
             // Deleting Rab
             if (!empty($rab)) {
@@ -2585,7 +2587,7 @@ class Project extends BaseController
             // Delete Project
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Menghapus data Proyek ' . $project['name']]);
             $ProjectModel->delete($id);
-            return redirect()->to('project')->with('error', "Data berhasil di hapus");
+            return redirect()->to('project/listprojectclient/'.$client['id'])->with('error', "Data berhasil di hapus");
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
