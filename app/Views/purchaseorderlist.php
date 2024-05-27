@@ -105,8 +105,8 @@
         <?php
         foreach($companys as $company){ ?>
             <?php  $empty ="";
-                if (!empty($items[$company['id']]['purdet'])){ ?>
-                    <?php var_dump($items[$company['id']]['purdet'])?>
+                foreach($purchases as $purchase){
+                if (isset($items[$company['id']]['purdet'])){ ?>
                     <div id="order<?=$company['id']?>" class="uk-grid-column-small uk-grid-row-large uk-child-width-1-1@s uk-margin" uk-grid>
                         <div>
                             <div class="uk-card uk-card-default uk-width-1-1@m">
@@ -214,7 +214,8 @@
                 if(empty($items)){
                     $empty = '<div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Pesanan Masuk</div>';
                 }
-              }?>
+              }
+            }?>
         <?php } ?>
         <!-- </?= $empty ?> -->
         <?= $pager ?>

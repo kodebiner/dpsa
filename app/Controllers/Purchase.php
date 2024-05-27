@@ -393,6 +393,7 @@ class Purchase extends BaseController
        $data['description']    =   "Daftar Pesanan Klien";
        $data['items']          =    $purchasedata;
        $data['companys']       =    $companys;
+       $data['purchases']      =    $purchases;
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
        $data['inputpage']      =    $this->request->getVar();
