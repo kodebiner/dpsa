@@ -387,6 +387,8 @@ class Purchase extends BaseController
             }
         }
 
+        dd($purchasedata);
+
        // Parsing Data to View
        $data                   =   $this->data;
        $data['title']          =   "Daftar Pesanan Klien";
