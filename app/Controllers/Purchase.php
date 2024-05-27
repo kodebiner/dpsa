@@ -76,15 +76,6 @@ class Purchase extends BaseController
 
             // Purchase Data
             $purchasedata = [];
-            // foreach ($purchases as $purchase){
-            //     if($this->data['parentid'] === null){
-            //         $purchasedetail = $PurchaseDetailModel->findAll();
-            //     }else{
-            //         $purchasedetail = $PurchaseDetailModel->where('clientid',$clientid)->find();
-            //     }
-
-            //     $purchasesdata[$purchase['id']['purchasedetail']] =  $purchasedetail;
-            // }
 
             // List Paket Auto Complete
             $autopakets     = $PaketModel->where('parentid !=', 0)->find();
@@ -215,8 +206,6 @@ class Purchase extends BaseController
         $user = $UserModel->find($this->data['uid']);
         $company = $CompanyModel->find($this->data['account']->parentid);
         
-        // Get Data
-        $authorize  = $auth = service('authorization');
         $quantity = $this->request->getPost('qty');
 
         if (empty($this->data['account']->parentid)) {
@@ -270,34 +259,44 @@ class Purchase extends BaseController
             }
         }
 
+        // Notification
+
+        // Get Data
+        $authorize  = $auth = service('authorization');
+
         // User Admin
         $admins     = $authorize->usersInGroup('admin');
 
         // User Marketing
-        $marketings = $UserModel->find($this->data['account']->id);
+        $marketings = $authorize->usersInGroup('marketing');
+
 
         // Notif Marketing
-        $notifmarketing  = [
-            'userid'        => $this->data['account']->id,
-            'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan baru ',
-            'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
-            'status'        => 0,
-        ];
+        foreach ($marketings as $marketing){
 
-        $NotificationModel->insert($notifmarketing);
+            $notifmarketing  = [
+                'userid'        => $marketing['id'],
+                'keterangan'    => $company['rsname']. ' baru saja menambahkan pesanan baru ',
+                'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
+                'status'        => 0,
+            ];
+            $NotificationModel->insert($notifmarketing);
+        }
 
         // Notif Admin
         foreach ($admins as $admin) {
             $notifadmin  = [
                 'userid'        => $admin['id'],
-                'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan pesanan Baru ',
+                'keterangan'    => $company['rsname']. ' baru saja menambahkan pesanan baru ',
                 'url'           => 'pesanmasuk?companyid=' . $this->data['account']->parentid,
                 'status'        => 0,
             ];
-
             $NotificationModel->insert($notifadmin);
         }
+
         $LogModel->save(['uid' => $this->data['uid'], 'record' => $user->username.' dari '.$company['rsname'].' baru saja menambahkan pesanan Baru ']);
+        
+        // End Notifications
 
         return redirect()->to('pesanan')->with('message','Pesanan Telah Dikirimkan Mohon Tunggu Konfirmasi Dari DPSA');
     }
@@ -479,7 +478,7 @@ class Purchase extends BaseController
                 $notifmarketing  = [
                     'userid'        => $this->data['account']->id,
                     'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                    'url'           => 'project?projectid=' . $projectid,
+                    'url'           => "project/listprojectclient/".$id."?projectid=" . $projectid,
                     'status'        => 0,
                 ];
 
@@ -490,7 +489,7 @@ class Purchase extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => "project/listprojectclient/".$id."?projectid=" . $projectid,
                         'status'        => 0,
                     ];
 
@@ -502,30 +501,18 @@ class Purchase extends BaseController
                     $notifdesigner  = [
                         'userid'        => $designer['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => "project/listprojectclient/".$id."?projectid=" . $projectid,
                         'status'        => 0,
                     ];
 
                     $NotificationModel->insert($notifdesigner);
-                }
-
-                // Notif Client
-                foreach ($clients as $client) {
-                    $notifclient  = [
-                        'userid'        => $client->id,
-                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                        'url'           => 'dashboard/' . $id . '?projectid=' . $projectid,
-                        'status'        => 0,
-                    ];
-
-                    $NotificationModel->insert($notifclient);
                 }
             } else {
                 // Notif Marketing
                 $notifmarketing  = [
                     'userid'        => $this->data['account']->id,
                     'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
-                    'url'           => 'project?projectid=' . $projectid,
+                    'url'           => "project/listprojectclient/".$id."?projectid=" . $projectid,
                     'status'        => 0,
                 ];
 
@@ -536,23 +523,11 @@ class Purchase extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => "project/listprojectclient/".$id."?projectid=" . $projectid,
                         'status'        => 0,
                     ];
 
                     $NotificationModel->insert($notifadmin);
-                }
-
-                // Notif Client
-                foreach ($clients as $client) {
-                    $notifclient  = [
-                        'userid'        => $client->id,
-                        'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
-                        'url'           => 'dashboard/' . $id . '?projectid=' . $projectid,
-                        'status'        => 0,
-                    ];
-
-                    $NotificationModel->insert($notifclient);
                 }
             }
             

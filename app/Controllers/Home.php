@@ -1358,7 +1358,7 @@ class Home extends BaseController
                 $datanotifikasi = [
                     'userid'        => $user->id,
                     'keterangan'    => 'Design '.$project['name'].' telah di disetujui client',
-                    'url'           => 'project?projectid='.$project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
                 $NotifikasiModel->insert($datanotifikasi);
@@ -1453,7 +1453,7 @@ class Home extends BaseController
             $datanotifikasi = [
                 'userid'        => $user->id,
                 'keterangan'    => 'Revisi design '.$project['name'].' telah di upload client',
-                'url'           => 'project?projectid='.$project['id'],
+                'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                 'status'        => 0,
             ];
             $NotifikasiModel->insert($datanotifikasi);
@@ -1519,6 +1519,7 @@ class Home extends BaseController
         $BuktiModel         = new BuktiModel();
         $ProjectModel       = new ProjectModel();
         $NotifikasiModel    = new NotificationModel();
+        $LogModel           = new LogModel();
 
         $input      = $this->request->getPost();
         $project    = $ProjectModel->find($id);
@@ -1554,20 +1555,23 @@ class Home extends BaseController
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->builder->where('users.id !=', $this->data['uid']);
-        $this->builder->where('auth_groups.name =', 'marketing');
         $this->builder->orWhere('auth_groups.name =', 'admin');
+        $this->builder->where('auth_groups.name =', 'marketing');
+        $this->builder->orWhere('auth_groups.name =', 'finance');
         $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
         $users = $this->builder->get()->getResult();
 
         foreach($users as $user){
             $datanotifikasi = [
                 'userid'        => $user->id,
-                'keterangan'    => 'Bukti pembayaran '.$project['name'].' telah di Kirim klient',
-                'url'           => 'project?projectid='.$project['id'],
+                'keterangan'    => 'Bukti pembayaran '.$project['name'].' telah di Kirim klien',
+                'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                 'status'        => 0,
             ];
             $NotifikasiModel->insert($datanotifikasi);
         }
+
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Upload Bukti Pembayarata ' . $project['name']]);
 
 
         return redirect()->to('/')->with('message', 'Bukti telah tekirim');

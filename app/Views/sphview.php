@@ -257,7 +257,7 @@ $tanggalsph = ucwords($dateFormatted);
                     <td style="border: 1pt solid black;"></td>
                     <td style="border: 1pt solid black; text-align:right;">
                         <?php if (!empty($sphdata)) {
-                            echo "Rp." .number_format($sphdata['total'], 0, ',', '.');
+                            echo "Rp." . number_format($sphdata['total'], 0, ',', '.');
                         } ?>
                     </td>
                 </tr>
@@ -295,6 +295,7 @@ $tanggalsph = ucwords($dateFormatted);
                     <td style="border: 1pt solid black; text-align:right" class="uk-text-center"><?= $sphdata['ppn'] ?> %</td>
                     <td style="border: 1pt solid black; text-align:right" class="uk-text-right"><?= "Rp." .number_format($sphdata['ppnval'], 0, ',', '.'); ?></td>
                 </tr>
+                
                 <tr style="border: 1pt solid black;">
                     <!-- <td style="border: 1pt solid black;"></td> -->
                     <td style="border: 1pt solid black;" class="uk-text-left" colspan="10">Grand Total</td>
@@ -305,7 +306,8 @@ $tanggalsph = ucwords($dateFormatted);
                     <td class="uk-text-left" colspan="11" style="display: table-cell; vertical-align: inherit; font-weight: bold;text-align:left;">Terbilang : <?= ucwords($sphdata['terbilang']) ?></td>
                 </tr>
             </table>
-            <!-- <dl>
+
+            <dl>
                 <dt>Catatan :</dt>
                 <dd>Harga diatas sudah termasuk Biaya transport</dd>
                 <dd>Harga diatas sudah termasuk Pajak PPN</dd>
@@ -321,26 +323,28 @@ $tanggalsph = ucwords($dateFormatted);
                 <p class="uk-text-left">Demikian kami sampaikan, atas perhatian dan kerjasama yang telah terjalin dengan baik selama ini, kami ucapkan banyak terima kasih</p>
             </div>
 
-            <table style="width:100%">
-                <tr>
-                    <th style="width:70%"></th>
-                    <th>Yogyakarta, 13 Januari 2024</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="text-align: center;">
-                        <font style="text-decoration: underline;"> <?= $sphdata['direktur'] ?> </font> <br> Direktur
-                    </td>
-                </tr>
-            </table> -->
+            <div>
+                <table style="width:100%; text-align:left;">
+                    <tr>
+                        <th style="width:70%"></th>
+                        <th>Yogyakarta, 13 Januari 2024</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <font style="text-decoration: underline;"> <?= $sphdata['direktur'] ?> </font> <br> Direktur
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
         </div>
     </div>

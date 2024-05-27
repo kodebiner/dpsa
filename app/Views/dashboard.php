@@ -956,24 +956,37 @@
                                                     ?>
                                                     <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
                                                         <tr>
-                                                            <td class="uk-text-bold"></td>
+                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
                                                             <td class="-text-bold"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
-                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
+                                                            <td class="uk-text-bold"></td>
                                                             <td class="uk-text-bold"></td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
                                                             <tr>
-                                                                <td class=""></td>
-                                                                <td class="uk-text-left"></td>
+                                                                <td class=""><?= strtoupper($custrab['name']) ?></td>
+                                                                <td class="uk-text-left"><?=$custrab['length']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['width']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['height']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['volume']?></td>
+                                                                <td class="uk-text-center">
+                                                                    <?php
+                                                                        if ($custrab['denomination'] === "1") {
+                                                                            echo "Unit";
+                                                                        } elseif ($custrab['denomination'] === "2") {
+                                                                            echo "Meter Lari";
+                                                                        } elseif ($custrab['denomination'] === "3") {
+                                                                            echo "Meter Persegi";
+                                                                        } elseif ($custrab['denomination'] === "4") {
+                                                                            echo "Set";
+                                                                        }
+                                                                    ?>
+                                                                </td>
                                                                 <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-left uk-width-1-6"><?= strtoupper($custrab['name']) ?></td>
+                                                                <td class="uk-text-center">1</td>
                                                                 <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
                                                             </tr>
                                                         <?php } ?>

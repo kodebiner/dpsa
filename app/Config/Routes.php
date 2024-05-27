@@ -140,10 +140,23 @@ $routes->group('pesanmasuk',['filter' => 'login'], function ($routes){
     $routes->post('delete','Purchase::deletepurchase');
 });
 
+// Client List For Project
+$routes->group('ClientProject',['filter' => 'login'], function ($routes) {
+    $routes->get('', 'ClientProject::index');
+    // $routes->post('mdl', 'ClientProject::mdl');
+    // $routes->post('create', 'ClientProject::create');
+});
+
 
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {
-    $routes->get('', 'Project::index');
+    
+    // Client Project 
+    $routes->get('', 'Project::clientlist');
+    $routes->get('listprojectclient/(:num)', 'Project::listprojectclient/$1');
+
+    // Project
+    // $routes->get('', 'Project::index');
     $routes->post('mdl', 'Project::mdl');
     $routes->post('create', 'Project::create');
     $routes->post('update/(:num)', 'Project::update/$1');
@@ -160,6 +173,7 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->post('removesertrim/(:num)', 'Project::removesertrim/$1');
     $routes->post('removesph/(:num)', 'Project::removesph/$1');
     $routes->post('removemdlpro/(:num)', 'Project::removemdlpro/$1');
+
 
     // $routes->post('inv4/(:num)', 'Project::inv4/$1');
 

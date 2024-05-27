@@ -504,6 +504,720 @@ class Project extends BaseController
         }
     }
 
+    public function clientlist()
+    {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // Calling Services
+            $pager = \Config\Services::pager();
+
+            // Calling Models
+            $UserModel          = new UserModel();
+            $ProjectModel       = new ProjectModel();
+            $CompanyModel       = new CompanyModel();
+            $RabModel           = new RabModel();
+            $PaketModel         = new PaketModel();
+            $MdlModel           = new MdlModel();
+            $DesignModel        = new DesignModel();
+            $BastModel          = new BastModel();
+            $CustomRabModel     = new CustomRabModel();
+            $PembayaranModel    = new PembayaranModel();
+
+            // Populating data
+            $input          = $this->request->getGet();
+            $company        = $CompanyModel->where('status !=', "0")->find();
+
+            // parsing data to view
+            $data           = $this->data;
+            // $data['input']  = $input;
+
+            // Variable for pagination
+            if (isset($input['perpage'])) {
+                $perpage = $input['perpage'];
+            } else {
+                $perpage = 10;
+            }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
+            // Daterange Filter
+            $inputdate = $this->request->getVar('daterange');
+            if (!empty($inputdate)) {
+                $daterange = explode(' - ', $inputdate);
+                $startdate = $daterange[0];
+                $enddate = $daterange[1];
+            } else {
+                $startdate = date('Y-m-1');
+                $enddate = date('Y-m-t');
+            }
+
+            // User Marketing
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'marketing');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $marketings = $this->builder->get()->getResult();
+
+            // New Client Data 
+            $clients = $this->db->table('company')->where('deleted_at', null);
+            $clients->select('company.id as id, company.rsname as rsname, company.ptname as ptname, company.address as address');
+            $clients->where('company.status !=', '0');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $clients->like('company.rsname', $input['search']);
+                $clients->orLike('company.rsname', $input['search']);
+            }
+            $query = $clients->get($perpage, $offset)->getResultArray();
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $total = $clients
+                    ->where('company.status !=', '0')
+                    ->like('company.rsname', $input['search'])
+                    ->orLike('company.rsname', $input['search'])
+                    ->countAllResults();
+            } else {
+                $total = $clients
+                    ->where('company.status !=', '0')
+                    ->countAllResults();
+            }
+
+            // Report Data Script
+            $this->db       = \Config\Database::connect();
+            $validation     = \Config\Services::validation();
+            $proyek         = $this->builder  = $this->db->table('project');
+
+            if ($startdate === $enddate) {
+                $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+            } else {
+                $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+            }
+            $this->builder->where('project.deleted_at ='.null);
+            
+            // Variable for pagination
+            if (isset($input['perpagereport'])) {
+                $perpagereport = $input['perpagereport'];
+            } else {
+                $perpagereport = 10;
+            }
+            
+            $pagereport = (@$_GET['pagereport']) ? $_GET['pagereport'] : 1;
+            $offsetreport = ($pagereport - 1) * $perpagereport;
+            
+            $this->builder->join('users', 'users.id = project.marketing');
+            $this->builder->join('company', 'company.id = project.clientid');
+            if (isset($input['searchreport']) && !empty($input['searchreport'])) {
+                $this->builder->like('project.name', $input['searchreport']);
+                $this->builder->orLike('users.username', $input['searchreport']);
+                $this->builder->orLike('company.rsname', $input['searchreport']);
+            }
+            $this->builder->orderBy('id',"DESC");
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+
+            $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
+
+            if (isset($input['searchreport']) && !empty($input['searchreport'])) {
+                $totalpro = $proyek
+                    ->join('company', 'company.id = project.clientid')
+                    ->like('project.name', $input['searchreport'])
+                    ->orLike('company.rsname', $input['searchreport'])
+                    ->where('project.deleted_at ='.null)
+                    ->countAllResults();
+            } else {
+                $totalpro = $proyek
+                ->where('project.deleted_at ='.null)
+                ->countAllResults();
+            }
+
+            // Query Data Project
+            $projectdata = [];
+            foreach ($queryproject as $project) {
+
+                // Klien
+                $projectdata[$project['id']]['klien'] = $CompanyModel->where('id', $project['clientid'])->first();
+
+                // Marketing
+                $projectdata[$project['id']]['marketing'] = $UserModel->where('id', $project['marketing'])->first();
+
+                // RAB
+                $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                if (!empty($rabs)) {
+                    foreach ($rabs as $rab) {
+                        $paketid[]  = $rab['paketid'];
+
+                        // MDL RAB
+                        $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                        foreach ($rabmdl as $mdlr) {
+                            $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                'id'            => $mdlr['id'],
+                                'proid'         => $project['id'],
+                                'name'          => $mdlr['name'],
+                                'length'        => $mdlr['length'],
+                                'width'         => $mdlr['width'],
+                                'height'        => $mdlr['height'],
+                                'volume'        => $mdlr['volume'],
+                                'denomination'  => $mdlr['denomination'],
+                                'keterangan'    => $mdlr['keterangan'],
+                                'qty'           => $rab['qty'],
+                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                'oriprice'      => (int)$mdlr['price'],
+                            ];
+                        }
+                    }
+                }
+
+                // Get RAB data
+                $price = [];
+                if (!empty($projectdata[$project['id']]['rab'])) {
+                    foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                        $price[] = [
+                            'id'        => $mdldata['id'],
+                            'proid'     => $mdldata['proid'],
+                            'price'     => $mdldata['oriprice'],
+                            'sumprice'  => $mdldata['price'],
+                            'qty'       => $mdldata['qty']
+                        ];
+                    }
+                }
+
+                // Setrim
+                $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                // BAST
+                $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                if (!empty($projectdata[$project['id']]['bastfile'])) {
+                    $day =  $projectdata[$project['id']]['bastfile']['tanggal_bast'];
+                    $date = date_create($day);
+                    $key = date_format($date, "Y-m-d");
+                    $hari = date_create($key);
+                    date_add($hari, date_interval_create_from_date_string('3 month'));
+                    $dateline = date_format($hari, 'Y-m-d');
+
+                    $now = strtotime("now");
+                    $nowtime = date("Y-m-d", $now);
+                    $projectdata[$project['id']]['dateline'] = $dateline;
+                    $projectdata[$project['id']]['now'] = $nowtime;
+                } else {
+                    $projectdata[$project['id']]['dateline'] = "";
+                    $projectdata[$project['id']]['now'] = "";
+                }
+
+                // Custom RAB
+                $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                // Shipping Cost
+                $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+                // All Custom RAB 
+                $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
+                $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                // Pembayaran Value
+                $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
+                $projectdata[$project['id']]['pembayaran'] = array_sum(array_column($pembayaran, 'qty'));
+
+                // Rab Sum Value
+                $projectdata[$project['id']]['rabvalue'] = 0;
+                if (!empty($price)) {
+                    $projectdata[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
+                }
+            }
+
+            $data['title']          = lang('Global.titleDashboard');
+            $data['description']    = lang('Global.dashboardDescription');
+            $data['clients']        = $query;
+            $data['rabs']           = $RabModel->findAll();
+            $data['pakets']         = $PaketModel->findAll();
+            $data['mdls']           = $MdlModel->findAll();
+            $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
+            $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
+            $data['input']          = $this->request->getGet('projectid');
+            $data['projectdata']    = $projectdata;
+            $data['projects']       = $queryproject;
+            $data['input']          = $input;
+            $data['total']          = count($queryproject);
+            $data['startdate']      = strtotime($startdate);
+            $data['enddate']        = strtotime($enddate);
+            $data['marketings']     = $marketings;
+            $data['company']        = $company;
+
+            return view('clientproject', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+    }
+
+    public function listprojectclient($id)
+    {
+        if ($this->data['authorize']->hasPermission('admin.project.read', $this->data['uid'])) {
+            // Calling Model
+            $ProjectModel           = new ProjectModel();
+            $BastModel              = new BastModel();
+            $CompanyModel           = new CompanyModel();
+            $MdlModel               = new MdlModel();
+            $MdlPaketModel          = new MdlPaketModel();
+            $PaketModel             = new PaketModel();
+            $RabModel               = new RabModel();
+            $DesignModel            = new DesignModel();
+            $ProductionModel        = new ProductionModel();
+            $InvoiceModel           = new InvoiceModel();
+            $ReferensiModel         = new ReferensiModel();
+            $CustomRabModel         = new CustomRabModel();
+            $BuktiModel             = new BuktiModel();
+            $UserModel              = new UserModel();
+            $NotificationModel      = new NotificationModel();
+            $PembayaranModel        = new PembayaranModel();
+            // $LogModel               = new LogModel();
+
+            // Calling Services
+            $pager = \Config\Services::pager();
+
+            // Initilize
+            $input = $this->request->getGet();
+
+            if (isset($input['perpage'])) {
+                $perpage = $input['perpage'];
+            } else {
+                $perpage = 10;
+            }
+
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
+            // Populating Data
+            $authorize  = $auth = service('authorization');
+            $pakets                 = $PaketModel->where('parentid !=', 0)->find();
+            $company                = $CompanyModel->where('status !=', "0")->find();
+
+            // New Searh Company Project System
+            $this->builder  = $this->db->table('project');
+            $this->builder->where('project.deleted_at', null);
+            $this->builder->where('project.clientid', $id);
+            $this->builder->join('company', 'company.id = project.clientid');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('project.name', $input['search']);
+                $this->builder->where('project.clientid', $id);
+                // $this->builder->orLike('company.rsname', $input['search']);
+            }
+            $this->builder->orderBy('id','DESC');
+            $this->builder->select('project.id as id, project.no_spk as no_spk, project.tanggal_spk as tanggal_spk, project.name as name, project.clientid as clientid, project.sph as sph, project.batas_produksi as batas_produksi, project.status_spk as status_spk, project.no_sph as no_sph, project.ded as ded, project.tahun as tahun, project.type_design as type_design, project.marketing as marketing, project.status as status, project.inv1 as inv1, project.inv2 as inv2, project.inv3 as inv3, project.inv4 as inv4, project.spk as spk, company.id as compid, company.rsname as rsname');
+            $projects = $this->builder->get($perpage, $offset)->getResultArray();
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $totalprolist       = $ProjectModel
+                    // ->join('company', 'company.id = project.clientid')
+                    // ->orLike('company.rsname', $input['search'])
+                    ->like('project.name', $input['search'])
+                    ->where('project.clientid',$id)
+                    ->countAllResults();
+            } else {
+                $totalprolist     = $ProjectModel
+                // ->join('company', 'company.id = project.clientid')
+                ->where('project.clientid',$id)
+                ->countAllResults();
+            }
+
+            // Company With Deleted
+            $companydel             = $CompanyModel->withDeleted()->where('status !=', "0")->find();
+
+            // Users
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('users.id !=', $this->data['uid']);
+            $this->builder->where('auth_groups.name !=', 'superuser');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $users = $this->builder->get()->getResult();
+
+            // User Marketing
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'marketing');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $marketings = $this->builder->get()->getResult();
+
+            // User Production
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'production');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $picPro = $this->builder->get()->getResult();
+
+            // User PIC Invoice
+            $this->builder = $this->db->table('users');
+            // $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'client cabang');
+            $this->builder->orWhere('auth_groups.name =', 'client pusat');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $picinv = $this->builder->get()->getResult();
+
+            // Finance
+            $this->builder = $this->db->table('users');
+            $this->builder->where('deleted_at', null);
+            $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+            $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+            $this->builder->where('auth_groups.name =', 'finance');
+            $this->builder->select('users.id as id, users.username as name, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
+            $finances = $this->builder->get()->getResult();
+
+            $projectdata    = [];
+            if (!empty($projects)) {
+                foreach ($projects as $project) {
+                    $paketid    = [];
+
+                    // RAB
+                    $rabs       = $RabModel->where('projectid', $project['id'])->find();
+                    foreach ($rabs as $rab) {
+                        $paketid[]  = $rab['paketid'];
+
+                        // MDL RAB
+                        $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                        foreach ($rabmdl as $mdlr) {
+                            $projectdata[$project['id']]['rab'][$rab['id']]  = [
+                                'id'            => $mdlr['id'],
+                                'proid'         => $project['id'],
+                                'name'          => $mdlr['name'],
+                                'length'        => $mdlr['length'],
+                                'width'         => $mdlr['width'],
+                                'height'        => $mdlr['height'],
+                                'volume'        => $mdlr['volume'],
+                                'denomination'  => $mdlr['denomination'],
+                                'photo'         => $mdlr['photo'],
+                                'keterangan'    => $mdlr['keterangan'],
+                                'qty'           => $rab['qty'],
+                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                'oriprice'      => (int)$mdlr['price'],
+                            ];
+                        }
+                    }
+
+                    // Custom RAB
+                    $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->notLike('name', 'biaya pengiriman')->find();
+
+                    // Shipping Cost
+                    $projectdata[$project['id']]['shippingcost']    = $CustomRabModel->where('projectid', $project['id'])->like('name', 'biaya pengiriman')->first();
+
+
+                    // Setrim
+                    $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
+
+                    // BAST
+                    $projectdata[$project['id']]['bast']        = $BastModel->where('projectid', $project['id'])->where('file !=', "")->find();
+                    $projectdata[$project['id']]['bastfile']    = $BastModel->where('projectid', $project['id'])->where('status', "1")->first();
+
+                    if (!empty($rabs)) {
+                        // Paket
+                        $paketdata      = [];
+                        $paketproject   = $PaketModel->find($paketid);
+                        foreach ($paketproject as $pack) {
+                            $paketdata[]    = $pack['id'];
+                            $projectdata[$project['id']]['paket'][$pack['id']]['id']    = $pack['id'];
+                            $projectdata[$project['id']]['paket'][$pack['id']]['name']  = $pack['name'];
+
+                            // MDL Paket
+                            $mdlpaket       = $MdlPaketModel->withDeleted()->where('paketid', $pack['id'])->find();
+
+                            // MDL
+                            foreach ($mdlpaket as $mdlpak) {
+                                $mdlpack        = $MdlModel->where('id', $mdlpak['mdlid'])->find();
+                                foreach ($mdlpack as $mdl) {
+                                    $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']] = [
+                                        'id'            => $mdl['id'],
+                                        'name'          => $mdl['name'],
+                                        'length'        => $mdl['length'],
+                                        'width'         => $mdl['width'],
+                                        'height'        => $mdl['height'],
+                                        'volume'        => $mdl['volume'],
+                                        'denomination'  => $mdl['denomination'],
+                                        'photo'         => $mdl['photo'],
+                                        'keterangan'    => $mdl['keterangan'],
+                                        'price'         => $mdl['price'],
+                                    ];
+
+                                    // Checklist RAB
+                                    $rabpack = $RabModel->where('mdlid', $mdl['id'])->where('projectid', $project['id'])->where('paketid', $pack['id'])->first();
+                                    if (!empty($rabpack)) {
+                                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = $rabpack['qty'];
+                                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = true;
+                                    } else {
+                                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['qty'] = 0;
+                                        $projectdata[$project['id']]['paket'][$pack['id']]['mdl'][$mdl['id']]['checked'] = false;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $paketdata      = [];
+                        $paketproject   = [];
+                    }
+
+                    // Autocomplete Paket
+                    if (!empty($paketdata)) {
+                        $projectdata[$project['id']]['autopaket']   = $PaketModel->whereNotIn('id', $paketdata)->where('parentid !=', 0)->find();
+                    } else {
+                        $projectdata[$project['id']]['autopaket']   = [];
+                    }
+
+                    // Design
+                    $projectdata[$project['id']]['design']          = $DesignModel->where('projectid', $project['id'])->first();
+
+                    // Production
+                    if($this->data['authorize']->hasPermission('production.project.edit', $this->data['uid']) && $authorize->inGroup('production', $this->data['uid'])){
+                        $productions                                    = $ProductionModel->where('userid !=', NULL)->where('projectid', $project['id'])->where('userid',$this->data['uid'])->orderBy('mdlid', 'DESC')->find();
+                    }else{
+                        $productions                                    = $ProductionModel->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                    }
+
+                    $projectdata[$project['id']]['productionproject'] = [];
+                    if (!empty($productions)) {
+                        foreach ($productions as $production) {
+
+                            // MDL Production
+                            $mdlprod        = $MdlModel->withDeleted()->where('id', $production['mdlid'])->find();
+                            $percentages    = [];
+                            foreach ($mdlprod as $mdlp) {
+                                // Percentage Production
+                                if ($production['gambar_kerja'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_awal'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['tukang'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['mesin_lanjutan'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['finishing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['packing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['pengiriman'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($production['setting'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+
+                                $projectdata[$project['id']]['production'][$production['id']]  = [
+                                    'id'                => $production['id'],
+                                    'userid'            => $production['userid'],
+                                    'mdlid'             => $mdlp['id'],
+                                    'name'              => $mdlp['name'],
+                                    'gambar_kerja'      => $production['gambar_kerja'],
+                                    'mesin_awal'        => $production['mesin_awal'],
+                                    'tukang'            => $production['tukang'],
+                                    'mesin_lanjutan'    => $production['mesin_lanjutan'],
+                                    'finishing'         => $production['finishing'],
+                                    'packing'           => $production['packing'],
+                                    'pengiriman'        => $production['pengiriman'],
+                                    'setting'           => $production['setting'],
+                                ];
+                            }
+
+                            $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
+                            $projectdata[$project['id']]['productionproject'] = $projectdata[$project['id']]['production'][$production['id']];
+
+                        }
+                    } else {
+                        $mdlprod    = [];
+                        $projectdata[$project['id']]['production']   = [];
+                    }
+
+                    // PRODUCTION VALUE
+                    if (!empty($projectdata[$project['id']]['rab'])) {
+                        $price = [];
+                        foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
+                            $price[] = [
+                                'id'        => $mdldata['id'],
+                                'proid'     => $mdldata['proid'],
+                                'price'     => $mdldata['oriprice'],
+                                'sumprice'  => $mdldata['price'],
+                                'qty'       => $mdldata['qty']
+                            ];
+                        }
+
+                        $total = array_sum(array_column($price, 'sumprice'));
+
+                        $progresdata = [];
+                        $datamdlid = [];
+                        foreach ($price as $progresval) {
+                            $progresdata[] = [
+                                'id'    => $progresval['id'], // mdlid
+                                'proid' => $progresval['proid'],
+                                'val'   => (($progresval['price'] / $total) * 65) / 8,
+                            ];
+                            $datamdlid[] = $progresval['id'];
+                        }
+
+                        $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
+
+                        $progress = [];
+                        foreach ($productval as $proses) {
+                            foreach ($progresdata as $value) {
+                                if ($proses['mdlid'] === $value['id']) {
+                                    if ($proses['gambar_kerja'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['mesin_awal'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['tukang'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['mesin_lanjutan'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['finishing'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['packing'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['pengiriman'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                    if ($proses['setting'] === "1") {
+                                        array_push($progress, $value['val']);
+                                    }
+                                }
+                            }
+                        }
+
+                        $projectdata[$project['id']]['progress']   = array_sum($progress);
+                    }
+
+                    if (!empty($projectdata[$project['id']]['bastfile'])) {
+                        $day =  $projectdata[$project['id']]['bastfile']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdata[$project['id']]['dateline'] = $dateline;
+                        $projectdata[$project['id']]['now'] = $nowtime;
+                    } else {
+                        $projectdata[$project['id']]['dateline'] = "";
+                        $projectdata[$project['id']]['now'] = "";
+                    }
+
+                    // INVOICE
+                    $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
+                    $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
+                    $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
+                    $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
+                    // $projectdata[$project['id']]['invoice1'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '1')->first();
+                    // $projectdata[$project['id']]['invoice2'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '2')->first();
+                    // $projectdata[$project['id']]['invoice3'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '3')->first();
+                    // $projectdata[$project['id']]['invoice4'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '4')->first();
+
+                    // Pembayaran
+                    $projectdata[$project['id']]['pembayaran']  = $PembayaranModel->where('projectid', $project['id'])->find();
+
+                    // REFERENSI
+                    $projectdata[$project['id']]['referensi']   = $ReferensiModel->findAll();
+
+                    // Marketing
+                    if (!empty($project['marketing'])) {
+                        $mark     = $UserModel->withDeleted()->find($project['marketing']);
+                    } else {
+                        $mark     = $UserModel->withDeleted()->where('parentid', $project['clientid'])->first();
+                    }
+
+                    // $marketing_code = "";
+                    // if(!empty($mark)){
+                    //     $marketing_code = $mark->kode_marketing;
+                    // }
+                    // $projectdata[$project['id']]['marketing']        = $marketing_code;
+
+                    $projectdata[$project['id']]['marketing']           = $mark->kode_marketing;
+
+                    // PIC
+                    // $projectdata[$project['id']]['pic']              = $users;
+                    $projectdata[$project['id']]['pic']                 = $picinv;
+
+                    // Finance
+                    $projectdata[$project['id']]['finnance']            = $finances;
+
+
+                    // Bukti Pembayaran
+                    $projectdata[$project['id']]['buktipembayaran']     = $BuktiModel->where('projectid', $project['id'])->where('status', "0")->find();
+
+                    // Bukti Pengiriman
+                    $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
+
+                    // Notifikasi
+                    $projectdata[$project['id']]['notifikasi']          = $NotificationModel->where('userid', $this->data['uid'])->find();
+
+                    // All Deleted Rab Data Or Mdl Data
+                    $datarabnew = [];
+                    $allrabdata = $RabModel->where('projectid',$project['id'])->where('paketid',null)->find();
+                    foreach($allrabdata as $rabedelete){
+                        $mdldatas    = $MdlModel->where('id',$rabedelete['mdlid'])->find();
+                        foreach ($mdldatas as $mdldel){
+                            if($mdldel['id'] === $rabedelete['mdlid']){
+                                $datarabnew [] = [
+                                    'id'            => $mdldel['id'],
+                                    'name'          => $mdldel['name'],
+                                    'length'        => $mdldel['length'],
+                                    'width'         => $mdldel['width'],
+                                    'height'        => $mdldel['height'],
+                                    'volume'        => $mdldel['volume'],
+                                    'photo'         => $mdldel['photo'],
+                                    'keterangan'    => $mdldel['keterangan'],
+                                    'denomination'  => $mdldel['denomination'],
+                                    'price'         => $mdldel['price'],
+                                    'qty'           => $rabedelete['qty'],
+                                ];
+                            }
+                        }
+                    }
+                    $projectdata[$project['id']]['allrabdatadeleted']   = $datarabnew;
+
+                }
+            } else {
+                $rabs           = [];
+            }
+
+            // Parsing Data To View
+            $data                   = $this->data;
+            $data['title']          = "Proyek";
+            $data['description']    = "Data Proyek";
+            $data['users']          = $users;
+            $data['projects']       = $projects;
+            $data['projectdata']    = $projectdata;
+            $data['company']        = $company;
+            $data['companydel']     = $companydel;
+            $data['pakets']         = $pakets;
+            $data['rabs']           = $rabs;
+            $data['marketings']     = $marketings;
+            $data['picpro']         = $picPro;
+            $data['pager']          = $pager->makeLinks($page, $perpage, $totalprolist, 'uikit_full');
+            $data['input']          = $this->request->getGet('projectid');
+            $data['inputpage']      = $this->request->getVar();
+            $data['compname']       = $CompanyModel->find($id);
+
+            return view('listproyekclient', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+    }
+
     public function removemdlpro($mdl)
     {
         $RabModel           = new RabModel();
@@ -694,7 +1408,7 @@ class Project extends BaseController
                 $notifmarketing  = [
                     'userid'        => $input['marketing'],
                     'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                    'url'           => 'project?projectid=' . $projectid,
+                    'url'           => 'project/listprojectclient/'.$input['company'].'?projectid='.$projectid,
                     'status'        => 0,
                 ];
 
@@ -705,7 +1419,7 @@ class Project extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => 'project/listprojectclient/'.$input['company'].'?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -717,7 +1431,7 @@ class Project extends BaseController
                     $notifdesigner  = [
                         'userid'        => $designer['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ') dengan desain ' . $input['design'],
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => 'project/listprojectclient/'.$input['company'].'?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -740,7 +1454,7 @@ class Project extends BaseController
                 $notifmarketing  = [
                     'userid'        => $input['marketing'],
                     'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
-                    'url'           => 'project?projectid=' . $projectid,
+                    'url'           => 'project/listprojectclient/'.$input['company'].'?projectid=' . $projectid,
                     'status'        => 0,
                 ];
 
@@ -751,7 +1465,7 @@ class Project extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => $marketings->firstname . ' ' . $marketings->lastname . ' baru saja menambahkan Proyek Baru (' . $input['name'] . ')',
-                        'url'           => 'project?projectid=' . $projectid,
+                        'url'           => 'project/listprojectclient/'.$input['company'].'?projectid=' . $projectid,
                         'status'        => 0,
                     ];
 
@@ -1238,7 +1952,7 @@ class Project extends BaseController
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Desain telah diterbitkan',
-                        'url'           => 'project?projectid=' . $pro['id'],
+                        'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
@@ -1249,7 +1963,7 @@ class Project extends BaseController
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid=' . $pro['id'],
+                            'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
 
@@ -1261,7 +1975,7 @@ class Project extends BaseController
                         $notifdesigner  = [
                             'userid'        => $designer['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid=' . $pro['id'],
+                            'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
 
@@ -1295,7 +2009,7 @@ class Project extends BaseController
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Desain telah diperbaharui',
-                        'url'           => 'project?projectid=' . $pro['id'],
+                        'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
@@ -1306,7 +2020,7 @@ class Project extends BaseController
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Desain telah diperbaharui',
-                            'url'           => 'project?projectid=' . $pro['id'],
+                            'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
 
@@ -1318,7 +2032,7 @@ class Project extends BaseController
                         $notifdesigner  = [
                             'userid'        => $designer['id'],
                             'keterangan'    => 'Desain telah diterbitkan',
-                            'url'           => 'project?projectid=' . $pro['id'],
+                            'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                             'status'        => 0,
                         ];
 
@@ -1447,7 +2161,7 @@ class Project extends BaseController
                     $notifproduksi  = [
                         'userid'        => $input['picpro'][$picprod['id']],
                         'keterangan'    => 'Ditugaskan sebagai PIC Produksi',
-                        'url'           => 'project?projectid=' . $pro['id'],
+                        'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
@@ -1679,7 +2393,7 @@ class Project extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                    'url'           => 'project?projectid=' . $pro['id'],
+                    'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                     'status'        => 0,
                 ];
 
@@ -1690,7 +2404,7 @@ class Project extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Bukti Pengiriman baru telah diterbitkan',
-                        'url'           => 'project?projectid=' . $pro['id'],
+                        'url'           => 'project/listprojectclient/'.$pro['clientid'].'?projectid=' . $pro['id'],
                         'status'        => 0,
                     ];
 
