@@ -209,7 +209,7 @@
                             }
                         });
                     </script>
-             <?php }elseif(empty($items[$company['id']]['purdet'])){ 
+             <?php }else{ 
                 if(empty($items)){
                     $empty = '<div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Pesanan Masuk</div>';
                 }
