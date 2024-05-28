@@ -1086,6 +1086,16 @@
                                                                     <?php } ?>
                                                                 <?php } ?>
                                                                 <!-- END ROW RAB CUSTOM -->
+
+                                                                <?php if (!empty($projectdata[$project['id']]['shippingcost'])) { ?>
+                                                                    <tr>
+                                                                        <td colspan="7" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
+                                                                        <td>
+                                                                            <?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp. ' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', '.'); ' ';} ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php } ?>
+
                                                             </tbody>
                                                         </table>
                                                     </div>
