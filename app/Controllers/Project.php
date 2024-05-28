@@ -1743,39 +1743,51 @@ class Project extends BaseController
                         $custrab['price']       = (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $cusprice));
                         $custrab['projectid']   = $id;
 
-                        foreach ($input['customname' . $id] as $nameKey => $cusname) {
-                            if ($nameKey === $priceKey) {
-                                $custrab['name']    = $cusname;
+                        if(!empty($input['customname' . $id])){
+                            foreach ($input['customname' . $id] as $nameKey => $cusname) {
+                                if ($nameKey === $priceKey) {
+                                    $custrab['name']    = $cusname;
+                                }
                             }
                         }
 
-                        foreach ($input['customlength' . $id] as $lengthKey => $cuslength) {
-                            if ($lengthKey === $priceKey) {
-                                $custrab['length']    = $cuslength;
+                        if(!empty($input['customlength' . $id])){
+                            foreach ($input['customlength' . $id] as $lengthKey => $cuslength) {
+                                if ($lengthKey === $priceKey) {
+                                    $custrab['length']    = $cuslength;
+                                }
                             }
                         }
 
-                        foreach ($input['customwidth' . $id] as $widthKey => $cuswidth) {
-                            if ($widthKey === $priceKey) {
-                                $custrab['width']    = $cuswidth;
+                        if(!empty($input['customwidth' . $id])){
+                            foreach ($input['customwidth' . $id] as $widthKey => $cuswidth) {
+                                if ($widthKey === $priceKey) {
+                                    $custrab['width']    = $cuswidth;
+                                }
                             }
                         }
 
-                        foreach ($input['customheight' . $id] as $heightKey => $cusheight) {
-                            if ($heightKey === $priceKey) {
-                                $custrab['height']    = $cusheight;
+                        if(!empty($input['customheight' . $id])){
+                            foreach ($input['customheight' . $id] as $heightKey => $cusheight) {
+                                if ($heightKey === $priceKey) {
+                                    $custrab['height']    = $cusheight;
+                                }
                             }
                         }
 
-                        foreach ($input['customvol' . $id] as $volumeKey => $cusvolume) {
-                            if ($volumeKey === $priceKey) {
-                                $custrab['volume']    = $cusvolume;
+                        if(!empty($input['customvol' . $id])){
+                            foreach ($input['customvol' . $id] as $volumeKey => $cusvolume) {
+                                if ($volumeKey === $priceKey) {
+                                    $custrab['volume']    = $cusvolume;
+                                }
                             }
                         }
 
-                        foreach ($input['customden' . $id] as $denominationKey => $cusdenomination) {
-                            if ($denominationKey === $priceKey) {
-                                $custrab['denomination']    = $cusdenomination;
+                        if(!empty($input['customden' . $id])){
+                            foreach ($input['customden' . $id] as $denominationKey => $cusdenomination) {
+                                if ($denominationKey === $priceKey) {
+                                    $custrab['denomination']    = $cusdenomination;
+                                }
                             }
                         }
 
