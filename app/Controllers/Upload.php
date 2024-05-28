@@ -179,7 +179,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPK baru telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -190,7 +190,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -230,7 +230,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPK baru telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -241,7 +241,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPK baru telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -534,7 +534,7 @@ class Upload extends BaseController
             $notifmarketing  = [
                 'userid'        => $marketings->id,
                 'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                'url'           => 'project?projectid=' . $project['id'],
+                'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                 'status'        => 0,
             ];
 
@@ -545,7 +545,7 @@ class Upload extends BaseController
                 $notifadmin  = [
                     'userid'        => $admin['id'],
                     'keterangan'    => 'Bukti Serah Terima telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -652,7 +652,7 @@ class Upload extends BaseController
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Bast telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -663,7 +663,7 @@ class Upload extends BaseController
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'project?projectid=' . $project['id'],
+                            'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
 
@@ -699,7 +699,7 @@ class Upload extends BaseController
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
                         'keterangan'    => 'Bast telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -710,7 +710,7 @@ class Upload extends BaseController
                         $notifadmin  = [
                             'userid'        => $admin['id'],
                             'keterangan'    => 'Bast telah diterbitkan',
-                            'url'           => 'project?projectid=' . $project['id'],
+                            'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                             'status'        => 0,
                         ];
 
@@ -836,7 +836,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'SPH telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -847,7 +847,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'SPH telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -908,7 +908,7 @@ class Upload extends BaseController
 
         // Validation Rules
         $rules = [
-            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/xls,application/vnd.ms-excel,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
+            'uploads'   => 'uploaded[uploads]|mime_in[uploads,application/vnd-xls,application/x-xls,application/vnd.ms-excel,application/xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf,application/octet-stream,image/png,image/jpeg,image/pjpeg]',
         ];
 
         // Get Extention
@@ -960,7 +960,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice I telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -971,7 +971,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -983,7 +983,7 @@ class Upload extends BaseController
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice I telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1109,7 +1109,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice II telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -1120,7 +1120,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1132,7 +1132,7 @@ class Upload extends BaseController
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice II telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1260,7 +1260,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice III telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -1271,7 +1271,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1283,7 +1283,7 @@ class Upload extends BaseController
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice III telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1408,7 +1408,7 @@ class Upload extends BaseController
                 $notifmarketing  = [
                     'userid'        => $marketings->id,
                     'keterangan'    => 'Invoice IV telah diterbitkan',
-                    'url'           => 'project?projectid=' . $project['id'],
+                    'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                     'status'        => 0,
                 ];
 
@@ -1419,7 +1419,7 @@ class Upload extends BaseController
                     $notifadmin  = [
                         'userid'        => $admin['id'],
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 
@@ -1431,7 +1431,7 @@ class Upload extends BaseController
                     $notiffinance  = [
                         'userid'        => $finance['id'],
                         'keterangan'    => 'Invoice IV telah diterbitkan',
-                        'url'           => 'project?projectid=' . $project['id'],
+                        'url'           => 'project/listprojectclient/'.$project['clientid'].'?projectid=' . $project['id'],
                         'status'        => 0,
                     ];
 

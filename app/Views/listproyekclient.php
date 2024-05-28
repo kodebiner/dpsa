@@ -960,7 +960,7 @@
                                                     $rabhide = ""; 
                                                     $formrabhide = "hidden";
                                                     ?>
-                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top" id="rabview<?=$project['id']?>">
                                                         <table class="uk-table uk-table-divider">
                                                             <thead>
                                                                 <tr>
@@ -1093,8 +1093,8 @@
                                                 <!-- End New View RAB Data -->
 
                                                 <!-- BUTTON KELOLA RAB -->
-                                                <a class="uk-button uk-button-default uk-margin" id="buttonrab<?=$project['id']?>" <?=$rabhide?>>KELOLA PESANAN</a>
-                                                <a class="uk-button uk-button-default uk-margin" id="closebuttonrab<?=$project['id']?>" hidden>TUTUP KELOLA PESANAN</a>
+                                                <a class="uk-button uk-button-default uk-margin" id="buttonrab<?=$project['id']?>" <?=$rabhide?>>EDIT PESANAN</a>
+                                                
                                                 <script>
                                                     $(document).ready(function(){
                                                         // OPEN BUTTON FUNCTION
@@ -1102,6 +1102,7 @@
                                                             $("#formeditrab<?=$project['id']?>").removeAttr("hidden");
                                                             $("#closebuttonrab<?=$project['id']?>").removeAttr("hidden");
                                                             $("#buttonrab<?=$project['id']?>").attr("hidden",true);
+                                                            $("#rabview<?=$project['id']?>").attr("hidden",true);
                                                         });
 
                                                         // CLOSE BUTTON FUNCTION
@@ -1109,6 +1110,7 @@
                                                             $("#formeditrab<?=$project['id']?>").attr("hidden",true);
                                                             $("#closebuttonrab<?=$project['id']?>").attr("hidden",true);
                                                             $("#buttonrab<?=$project['id']?>").removeAttr("hidden");
+                                                            $("#rabview<?=$project['id']?>").removeAttr("hidden");
                                                         });
                                                     });
                                                 </script>
@@ -1861,6 +1863,10 @@
                                                     </script>
                                                 </div>
                                                 <!-- END EDIT MDL / RAB DATA -->
+
+                                                <!-- BUTTON TUTUP EDIT PESANAN -->
+                                                <a class="uk-button uk-button-default uk-margin" id="closebuttonrab<?=$project['id']?>" hidden>TUTUP EDIT PESANAN</a>
+                                                <!-- BUTTON TUTUP EDIT PESANAN -->
 
                                                 <div class="uk-margin-bottom">
                                                     <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" for="paket">Nomor SPH</label>
