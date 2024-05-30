@@ -1206,9 +1206,9 @@ class Project extends BaseController
                         //         $projectdata[$project['id']]['settingproduk'] += 1;
                         //     }
                         // }
+                        $projectdata[$project['id']]['pengiriman'] = $result;
                     }
 
-                    $projectdata[$project['id']]['pengiriman'] = $result;
 
                     // All Deleted Rab Data Or Mdl Data
                     $datarabnew = [];
