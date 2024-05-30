@@ -141,11 +141,11 @@ $routes->group('pesanmasuk',['filter' => 'login'], function ($routes){
 });
 
 // Client List For Project
-$routes->group('ClientProject',['filter' => 'login'], function ($routes) {
-    $routes->get('', 'ClientProject::index');
+// $routes->group('ClientProject',['filter' => 'login'], function ($routes) {
+//     $routes->get('', 'ClientProject::index');
     // $routes->post('mdl', 'ClientProject::mdl');
     // $routes->post('create', 'ClientProject::create');
-});
+// });
 
 
 // Project

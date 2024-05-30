@@ -1643,11 +1643,11 @@
                         <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                             <div><?= lang('Global.display') ?></div>
                             <div>
-                                <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                    <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                    <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                    <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                    <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
+                                    <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                    <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                    <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                    <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
                                 </select>
                             </div>
                             <div><?= lang('Global.perPage') ?></div>
@@ -1766,10 +1766,10 @@
                                         <div>Tampilan</div>
                                         <div>
                                             <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
-                                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                                <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                                <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                                <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                                <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
                                             </select>
                                         </div>
                                         <div>Per Halaman</div>
@@ -1786,7 +1786,7 @@
             document.getElementById('perpagereport').addEventListener("change", submitformreport);
 
             function submitformreport() {
-                document.getElementById('searchreport').submit();
+                document.getElementById('searchform').submit();
             };
         </script>
 

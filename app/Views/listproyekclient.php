@@ -61,7 +61,27 @@
         <h3 class="tm-h1 uk-text-center uk-margin-remove">DAFTAR PROYEK <?= $compname['rsname'] ?></h3>
         <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
             <div class="uk-text-center uk-margin">
-                <!-- <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button> -->
+                <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
+            </div>
+
+            <div id="filter" class="uk-margin" hidden>
+                <form id="searchform" action="project/listprojectclient/<?=$compname['id']?>" method="GET">
+                    <div class="uk-margin-small uk-flex uk-flex-center">
+                        <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($inputpage['search']) ? 'value="' . $inputpage['search'] . '"' : '') ?> />
+                    </div>
+                    <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
+                        <div>Tampilan</div>
+                        <div>
+                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                                <option value="10" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                <option value="25" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                <option value="50" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                <option value="100" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                            </select>
+                        </div>
+                        <div>Per Halaman</div>
+                    </div>
+                </form>
             </div>
         <?php } ?>
     <?php } else { ?>
@@ -105,26 +125,6 @@
                 </div>
             </div>
         </form>
-    <?php } else { ?>
-        <div id="filter" class="uk-margin" hidden>
-            <form id="searchform" action="project/listprojectclient/<?=$compname['id']?>" method="GET">
-                <div class="uk-margin-small uk-flex uk-flex-center">
-                    <input class="uk-input uk-form-width-medium" id="search" name="search" placeholder="Cari" <?= (isset($inputpage['search']) ? 'value="' . $inputpage['search'] . '"' : '') ?> />
-                </div>
-                <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
-                    <div>Tampilan</div>
-                    <div>
-                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                            <option value="10" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                            <option value="25" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                            <option value="50" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                            <option value="100" <?= (isset($inputpage['perpage']) && ($inputpage['perpage'] === '100') ? 'selected' : '') ?>>100</option>
-                        </select>
-                    </div>
-                    <div>Per Halaman</div>
-                </div>
-            </form>
-        </div>
     <?php } ?>
     <!-- form input -->
 
@@ -212,16 +212,16 @@
                         <div class="uk-card-body">
                             <div class="uk-grid-divider uk-grid-small" uk-grid uk-height-match="target: > div > .match-height">
                                 <div class="uk-width-1-2">
-                                    <h4 class="uk-text-center match-height">Status</h3>
-                                        <div class="uk-text-center">
-                                            <?= $status ?>
-                                        </div>
+                                    <h4 class="uk-text-center match-height">Status</h4>
+                                    <div class="uk-text-center">
+                                        <?= $status ?>
+                                    </div>
                                 </div>
                                 <div class="uk-width-1-2">
                                     <h4 class="uk-text-center match-height">Progress Proyek</h3>
-                                        <div class="uk-text-center">
-                                            <?= $progress ?> %
-                                        </div>
+                                    <div class="uk-text-center">
+                                        <?= $progress ?> %
+                                    </div>
                                 </div>
                             </div>
                         </div>

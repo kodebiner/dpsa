@@ -201,9 +201,17 @@
                     <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
                 </div>
                 <div id="filter" class="uk-margin" hidden>
-                    <form id="searchform" action="home" method="GET">
+                    <div class="uk-margin-small uk-flex uk-flex-center">
+                        <form id="short" action="home" method="get">
+                            <div class="uk-inline">
+                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                <input class="uk-input uk-form-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
+                            </div>
+                        </form>
+                    </div>
+                    <form id="searchformreport" action="home" method="GET">
                         <div class="uk-margin-small uk-flex uk-flex-center">
-                            <input class="uk-input uk-form-width-medium" id="search" name="searchproyek" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                            <input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> />
                         </div>
                         <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                             <div><?= lang('Global.display') ?></div>
@@ -360,7 +368,7 @@
             document.getElementById('perpagereport').addEventListener("change", submitreport);
 
             function submitreport() {
-                document.getElementById('searchreport').submit();
+                document.getElementById('searchformreport').submit();
             };
 
         </script>

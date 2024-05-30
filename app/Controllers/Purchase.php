@@ -315,6 +315,9 @@ class Purchase extends BaseController
         $CompanyModel           = new CompanyModel();
         $companyclient          = $this->builder  = $this->db->table('company');
 
+        // All Company 
+        $allcompany = $CompanyModel->findAll();
+
         // Filter Input
         $input          = $this->request->getGet();
 
@@ -397,6 +400,8 @@ class Purchase extends BaseController
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
        $data['inputpage']      =    $this->request->getVar();
+       $data['allCompany']     =    $allcompany;
+
 
        // Return
        return view('purchaseorderlist', $data);

@@ -18,7 +18,10 @@
             <h3 class="tm-h1 uk-text-center uk-margin-remove">DAFTAR KLIEN</h3>
             <?php if ($authorize->hasPermission('admin.project.create', $uid)) { ?>
                 <div class="uk-text-center uk-margin">
-                    <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button>
+                    <button class="uk-button uk-button-primary uk-margin-small-right" href="#modaladd" aria-label="Project" uk-toggle>Tambah Proyek</button>
+                </div>
+                <div class="uk-text-center uk-margin">
+                    <button type="button" class="uk-button uk-button-secondary uk-preserve-color" uk-toggle="target: #filter">Filter <span uk-icon="chevron-down"></span></button>
                 </div>
 
                 <div id="filter" class="uk-margin" hidden>
@@ -84,7 +87,7 @@
                         </a>
                     <?php } ?>
                 <?php } else { ?>
-                    <div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Proyek</div>
+                    <div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Klien</div>
                 <?php } ?>
             <?php } else { ?>
                 <form class="uk-margin" id="searchform" action="project" method="GET">

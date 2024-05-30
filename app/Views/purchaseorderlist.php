@@ -103,7 +103,7 @@
         <?= view('Views/Auth/_message_block') ?>
         
         <?php
-        foreach($companys as $company){ ?>
+        foreach($allCompany as $company){ ?>
             <?php  $empty ="";
                 if (!empty($items[$company['id']]['purdet'])){ ?>
                     <div id="order<?=$company['id']?>" class="uk-grid-column-small uk-grid-row-large uk-child-width-1-1@s uk-margin" uk-grid>
