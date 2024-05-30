@@ -313,7 +313,7 @@ class Purchase extends BaseController
         $PurchaseModel          = new PurchaseModel();
         $PurchaseDetailModel    = new PurchaseDetailModel();
         $CompanyModel           = new CompanyModel();
-        $companyclient          = $this->builder  = $this->db->table('company');
+        // $companyclient          = $this->builder  = $this->db->table('company');
 
         // All Company 
         $allcompany = $CompanyModel->findAll();
@@ -321,6 +321,11 @@ class Purchase extends BaseController
         // Filter Input
         $input          = $this->request->getGet();
 
+        // Report Data Script
+        $this->db       = \Config\Database::connect();
+        $validation     = \Config\Services::validation();
+        $purchases      = $this->builder  = $this->db->table('purchaseorder');
+        
         if (isset($input['perpage'])) {
             $perpage    = $input['perpage'];
         } else {
@@ -330,32 +335,32 @@ class Purchase extends BaseController
         $page = (@$_GET['page']) ? $_GET['page'] : 1;
         $offset = ($page - 1) * $perpage;
 
+        $purchases->join('company', 'company.id = purchaseorder.clientid');
+        if (isset($input['search']) && !empty($input['search'])) {
+            $purchases->like('company.rsname', $input['search']);
+        }
+        $purchases->orderBy('id',"DESC");
+        $purchases->select('purchaseorder.id as id, purchaseorder.clientid as clientid, company.rsname as name');
+        $querypurchase = $purchases->get($perpage, $offset)->getResultArray();
+
         // Search Company Order
         if (isset($input['search']) && !empty($input['search'])) {
-            $companys       = $CompanyModel->like('rsname', $input['search'])->orderBy('id', 'ASC')->find();
-            $totalpro       = $companyclient
-                ->join('purchaseorder', 'purchaseorder.clientid = company.id')
+            $totalpro       = $purchases
+                ->join('company', 'company.id = purchaseorder.clientid')
                 ->like('company.rsname', $input['search'])
                 ->countAllResults();
         } else {
-            $companys     = $this->builder  = $this->db->table('company')->orderBy('id', 'ASC')->get($perpage, $offset)->getResultArray();
-            $totalpro     = $companyclient
-            ->join('purchaseorder', 'purchaseorder.clientid = company.id')
-            ->countAllResults();
-        }
-
-        // Purchase List
-        $purchases = [];
-        if($this->data['account']->parentid === null){
-            $purchases = $PurchaseModel->findAll();
+            $totalpro     = $purchases
+                ->join('company', 'company.id = purchaseorder.clientid')
+                ->countAllResults();
         }
 
         // Purchase Data
         $purchasedata       = [];
         $purchasedetails    = [];
-        $quantity                = [];
+        $quantity           = [];
        
-        foreach ($purchases as $purchase){
+        foreach ($querypurchase as $purchase){
             $purchasedetails[$purchase['clientid']]['mdls']  = $PurchaseDetailModel->where('clientid',$purchase['clientid'])->find();
             foreach($purchasedetails[$purchase['clientid']]['mdls'] as $purdet){
                 $mdls[] = $MdlModel->where('id',$purdet['mdlid'])->first();
@@ -390,18 +395,17 @@ class Purchase extends BaseController
             }
         }
 
+
        // Parsing Data to View
        $data                   =   $this->data;
        $data['title']          =   "Daftar Pesanan Klien";
        $data['description']    =   "Daftar Pesanan Klien";
        $data['items']          =    $purchasedata;
-       $data['companys']       =    $companys;
-       $data['purchases']      =    $purchases;
+       $data['purchases']      =    $querypurchase;
        $data['pager']          =    $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
        $data['input']          =    $this->request->getGet('companyid');
        $data['inputpage']      =    $this->request->getVar();
        $data['allCompany']     =    $allcompany;
-
 
        // Return
        return view('purchaseorderlist', $data);
