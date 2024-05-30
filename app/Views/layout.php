@@ -43,7 +43,7 @@
             <div class="uk-offcanvas-bar" role="dialog" aria-modal="true">
                 <nav>
                     <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
-                        <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('client.read', $uid) && !$authorize->inGroup('finance',$uid)) { ?>
                             <li class="tm-main-navbar <?= ($uri->getSegment(1) === '') ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="<?= base_url('') ?>">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -116,7 +116,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('client.read', $uid) && !$authorize->inGroup('finance',$uid) ) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanan') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="pesanan">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -142,7 +142,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                        <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
                             <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'mdl') && ($uri->getSegment(2) === '')) ? 'uk-active' : '' ?>">
                                 <a class="tm-h4" href="laporan">
                                     <div class="uk-width-1-1 uk-margin-left">
@@ -191,7 +191,7 @@
     <?php if ($ismobile === false) { ?>
         <nav class="tm-sidebar-left" style="background-color: #007ec8;">
             <ul class="uk-nav uk-nav-default tm-nav" uk-nav>
-                <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('client.read', $uid) && !$authorize->inGroup('finance',$uid)) { ?>
                     <li class="tm-main-navbar <?= ($uri->getSegment(1) === '') ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="<?= base_url('') ?>">
                             <div class="uk-width-1-1 uk-margin-right">
@@ -261,7 +261,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($authorize->hasPermission('client.read', $uid)) { ?>
+                <?php if ($authorize->hasPermission('client.read', $uid) && !$authorize->inGroup('finance',$uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'pesanan')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="pesanan">
                             <div class="uk-width-1-1 uk-margin-right">
@@ -285,7 +285,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('ppic.project.edit', $uid)) { ?>
+                <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
                     <li class="tm-main-navbar <?= (($uri->getSegment(1) === 'laporan')) ? 'uk-active' : '' ?>">
                         <a class="tm-h4" href="laporan">
                             <div class="uk-width-1-1 uk-margin-right">

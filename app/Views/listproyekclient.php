@@ -10,7 +10,7 @@
 
 <?php
 
-    if ($authorize->hasPermission('design.project.edit', $uid) ||$authorize->hasPermission('design.project.edit', $uid) ){
+    if ($authorize->hasPermission('design.project.edit', $uid) || $authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) ){
         $togledesign = "";
     }else{
         $togledesign = "hidden";
@@ -2726,6 +2726,18 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-h5 uk-text-bold uk-text-emphasis uk-text-center uk-margin" uk-grid>
+                                            <div>
+                                                <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-card-small uk-light">Dalam Proses Produksi : </?=$projectdata[$project['id']]['progressproduk']?></div>
+                                            </div>
+                                            <div>
+                                                <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-card-small uk-light">Pengiriman :  </?=$projectdata[$project['id']]['pengirimanproduk']?></div>
+                                            </div>
+                                            <div>
+                                                <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-card-small uk-light">Setting : </?=$projectdata[$project['id']]['settingproduk']?></div>
+                                            </div>
+                                        </div> -->
     
                                         <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                             <table class="uk-table uk-table-middle uk-table-divider">
@@ -2740,14 +2752,21 @@
                                                         <th class="uk-text-center">Packing</th>
                                                         <th class="uk-text-center">Pengiriman</th>
                                                         <th class="uk-text-center">Setting</th>
-                                                        <!-- </?php if (( $authorize->hasPermission('ppic.project.edit', $uid) ||$authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?> -->
-                                                        <!-- </?php if ( $authorize->hasPermission('ppic.project.edit', $uid)) { ?> -->
                                                         <th class="uk-text-center">PIC Produksi</th>
-                                                        <!-- </?php } ?> -->
                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <!-- </?php foreach($projectdata[$project['id']]['pengiriman'] as $pengiriman){ ?>
+                                                            <tr>
+                                                                <td class="uk-text-center uk-text-nowrap">
+                                                                    Pengiriman </?=$pengiriman['name']?>
+                                                                </td>
+                                                                <td class="uk-text-center">
+                                                                   </?=$pengiriman['pengiriman']?>
+                                                                </td>
+                                                            </tr>
+                                                    </?php } ?> -->
                                                     <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
                                                         <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                             <?php 
@@ -2808,14 +2827,14 @@
                                                                     <?php if (strtoupper($production['pengiriman']) == '1') { ?>
                                                                         <div uk-icon="check"></div>
                                                                     <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
+                                                                        <input class="uk-checkbox" type="checkbox" name="pengiriman<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermitppic?>>
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td class="uk-text-center">
                                                                     <?php if (strtoupper($production['setting']) == '1') { ?>
                                                                         <div uk-icon="check"></div>
                                                                     <?php } else { ?>
-                                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermission?>>
+                                                                        <input class="uk-checkbox" type="checkbox" name="setting<?= $project['id']; ?>[<?= $production['id'] ?>]" value="1" <?=$dispermitppic?>>
                                                                     <?php } ?>
                                                                 </td>
                                                                 <!-- end production edit permission -->
@@ -2907,6 +2926,19 @@
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        <?php if(!empty($projectdata[$project['id']]['pengiriman'])){?>
+                                            <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Jumlah Produk Terkirim</label>
+                                            <div class="uk-child-width-1-3@s uk-margin" uk-grid>
+                                                <?php foreach($projectdata[$project['id']]['pengiriman'] as $pengiriman){ ?>
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                                                            <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;"><?=$pengiriman['name']?> : <?=$pengiriman['pengiriman']?></label>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        <?php }?>
     
                                         <!-- Bukti Pengiriman -->
                                         <div class="uk-margin" id="image-container-createbuktipengiriman-<?= $project['id'] ?> <?=$bastview?>">

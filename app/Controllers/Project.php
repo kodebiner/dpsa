@@ -1028,7 +1028,6 @@ class Project extends BaseController
 
                             $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                             $projectdata[$project['id']]['productionproject'] = $projectdata[$project['id']]['production'][$production['id']];
-
                         }
                     } else {
                         $mdlprod    = [];
@@ -1120,10 +1119,6 @@ class Project extends BaseController
                     $projectdata[$project['id']]['invoice2'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '2')->first();
                     $projectdata[$project['id']]['invoice3'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '3')->first();
                     $projectdata[$project['id']]['invoice4'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '4')->first();
-                    // $projectdata[$project['id']]['invoice1'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '1')->first();
-                    // $projectdata[$project['id']]['invoice2'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '2')->first();
-                    // $projectdata[$project['id']]['invoice3'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '3')->first();
-                    // $projectdata[$project['id']]['invoice4'] = $InvoiceModel->withDeleted()->where('projectid', $project['id'])->where('status', '4')->first();
 
                     // Pembayaran
                     $projectdata[$project['id']]['pembayaran']  = $PembayaranModel->where('projectid', $project['id'])->find();
@@ -1137,12 +1132,6 @@ class Project extends BaseController
                     } else {
                         $mark     = $UserModel->withDeleted()->where('parentid', $project['clientid'])->first();
                     }
-
-                    // $marketing_code = "";
-                    // if(!empty($mark)){
-                    //     $marketing_code = $mark->kode_marketing;
-                    // }
-                    // $projectdata[$project['id']]['marketing']        = $marketing_code;
 
                     $projectdata[$project['id']]['marketing']           = $mark->kode_marketing;
 
@@ -1192,6 +1181,35 @@ class Project extends BaseController
                         }
                     }
 
+                    // Project Production Status
+                    // $projectdata[$project['id']]['progressproduk'] = 0 ;
+                    // $projectdata[$project['id']]['pengirimanproduk'] = 0 ;
+                    // $projectdata[$project['id']]['settingproduk'] = 0 ;
+
+                    if(!empty($projectdata[$project['id']]['production'])){
+
+                        $result = array_reduce($projectdata[$project['id']]['production'], function($carry, $item){ 
+                            if(!isset($carry[$item['mdlid']])){ 
+                                $carry[$item['mdlid']] = ['mdlid'=>$item['mdlid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
+                            } else { 
+                                $carry[$item['mdlid']]['pengiriman'] += $item['pengiriman']; 
+                            } 
+                            return $carry; 
+                        });
+                        
+                        // foreach($projectdata[$project['id']]['production'] as $progresdataproduction){
+                        //     if($progresdataproduction['pengiriman'] === "0" && $progresdataproduction['setting'] === "0" ){
+                        //         $projectdata[$project['id']]['progressproduk'] += 1;
+                        //     }elseif($progresdataproduction['pengiriman'] === "1" && $progresdataproduction['setting'] === "0"){
+                        //         $projectdata[$project['id']]['pengirimanproduk'] += 1;
+                        //     }elseif($progresdataproduction['pengiriman'] === "1" && $progresdataproduction['setting'] === "1"){
+                        //         $projectdata[$project['id']]['settingproduk'] += 1;
+                        //     }
+                        // }
+                    }
+
+                    $projectdata[$project['id']]['pengiriman'] = $result;
+
                     // All Deleted Rab Data Or Mdl Data
                     $datarabnew = [];
                     $allrabdata = $RabModel->where('projectid',$project['id'])->where('paketid',null)->find();
@@ -1221,7 +1239,6 @@ class Project extends BaseController
             } else {
                 $rabs           = [];
             }
-
 
             // Parsing Data To View
             $data                   = $this->data;
@@ -3102,7 +3119,7 @@ class Project extends BaseController
             $alamat = $gconf['alamat'];
         }
         if (!empty($rabcustom)) {
-            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
+            $rabcustom  = $CustomRabModel->where('projectid',$projects['id'])->notLike('name', 'biaya pengiriman')->find();
         } else {
             $rabcustom  = [];
         }
@@ -3788,11 +3805,9 @@ class Project extends BaseController
             if (!empty($gconf)) {
                 $alamat = $gconf['alamat'];
             }
-            if (!empty($rabcustom)) {
-                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
-            } else {
-                $rabcustom  = [];
-            }
+
+            // $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
+            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
 
             // INVOICE 
             $rabdata    = [];
@@ -3867,16 +3882,17 @@ class Project extends BaseController
                 $biayakirim = $biaya['price'];
             }
 
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal;
+
             // PPN
             $ppn = "";
             $ppnval = "";
             if (!empty($gconf)) {
                 $ppn        = (int)$gconf['ppn'];
-                $ppnval     = ($ppn / 100) * (int)$total;
+                $ppnval     = ($ppn / 100) * (int)$totalvalue ;
             }
 
-            // total value
-            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
 
             // Invoice Data Array
             $termin     = "";
@@ -3895,17 +3911,16 @@ class Project extends BaseController
             $npwpdpsa   = "";
 
             if (!empty($projects)) {
-                // INVOICE I
-                // if ($projects['status_spk'] === "1" && !empty($invoice1) && !empty($projects['inv1'])) {
+                // INVOICE 
                 if ($projects['status_spk'] === "1" && !empty($invoice1)) {
                     $termin     = "30";
                     $progress   = "30";
-                    $nilaispk   = ((int)$total - ((70 / 100) * (int)$total)) + (int)$rabcustotal;
+                    $nilaispk   = (int)$totalvalue;
                     $dateinv    = $projects['inv1'];
                     $dateline   = $invoice1['jatuhtempo'];
                     $pph        = (int)$invoice1['pph23'];
                     $pphvalue   = ($pph / 100) * $nilaispk;
-                    $ppnvalue   = ($pph / 100) * $nilaispk;
+                    $ppnvalue   = ($ppn / 100) * $nilaispk;
                     $referensi  = $invoice1['referensi'];
                     $email      = $invoice1['email'];
                     $status     = $invoice1['status'];
@@ -3937,7 +3952,7 @@ class Project extends BaseController
 
                 $terminval = "";
                 if (!empty($termin)) {
-                    $terminval = $total * ($termin / 100);
+                    $terminval = $totalvalue * ($termin / 100);
                 }
 
                 // PPN VALUE RUPIAH
@@ -3958,7 +3973,7 @@ class Project extends BaseController
                     'nilai_spk' => $nilaispk,
                     'dateinv'   => $dateinv,
                     'dateline'  => $dateline,
-                    'total'     => (int)$total,
+                    'total'     => (int)$totalvalue,
                     'ppn'       => $ppn,
                     'pph'       => $pph,
                     'pphval'    => (int)$pphvalue,
@@ -4027,11 +4042,8 @@ class Project extends BaseController
             if (!empty($gconf)) {
                 $alamat = $gconf['alamat'];
             }
-            if (!empty($rabcustom)) {
-                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
-            } else {
-                $rabcustom  = [];
-            }
+
+            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
 
             // INVOICE 
             $rabdata    = [];
@@ -4106,16 +4118,16 @@ class Project extends BaseController
                 $biayakirim = $biaya['price'];
             }
 
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal;
+
             // PPN
             $ppn = "";
             $ppnval = "";
             if (!empty($gconf)) {
                 $ppn        = (int)$gconf['ppn'];
-                $ppnval     = ($ppn / 100) * (int)$total;
+                $ppnval     = ($ppn / 100) * (int)$totalvalue ;
             }
-
-            // total value
-            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
 
             // Invoice Data Array
             $termin     = "";
@@ -4139,7 +4151,8 @@ class Project extends BaseController
                 if (!empty($sertrim) && !empty($projects['inv2']) && !empty($invoice3)) {
                     $termin     = "30";
                     $progress   = "60";
-                    $nilaispk   = (int)$total - ((70 / 100) * (int)$total) + (int)$rabcustotal;
+                    // $nilaispk   = (int)$total - ((70 / 100) * (int)$total) + (int)$rabcustotal;
+                    $nilaispk   = $totalvalue;
                     $dateinv    = $projects['inv2'];
                     $dateline   = $invoice2['jatuhtempo'];
                     $pph        = (int)$invoice2['pph23'];
@@ -4175,7 +4188,7 @@ class Project extends BaseController
 
                 $terminval = "";
                 if (!empty($termin)) {
-                    $terminval = $total * ($termin / 100);
+                    $terminval = $totalvalue * ($termin / 100);
                 }
 
                 // PPN VALUE RUPIAH
@@ -4196,7 +4209,7 @@ class Project extends BaseController
                     'nilai_spk' => $nilaispk,
                     'dateinv'   => $dateinv,
                     'dateline'  => $dateline,
-                    'total'     => (int)$total,
+                    'total'     => (int)$totalvalue,
                     'ppn'       => $ppn,
                     'pph'       => $pph,
                     'pphval'    => (int)$pphvalue,
@@ -4265,11 +4278,8 @@ class Project extends BaseController
             if (!empty($gconf)) {
                 $alamat = $gconf['alamat'];
             }
-            if (!empty($rabcustom)) {
-                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
-            } else {
-                $rabcustom  = [];
-            }
+
+            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
 
             // INVOICE 
             $rabdata    = [];
@@ -4344,16 +4354,16 @@ class Project extends BaseController
                 $biayakirim = $biaya['price'];
             }
 
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal;
+
             // PPN
             $ppn = "";
             $ppnval = "";
             if (!empty($gconf)) {
                 $ppn        = (int)$gconf['ppn'];
-                $ppnval     = ($ppn / 100) * (int)$total;
+                $ppnval     = ($ppn / 100) * (int)$totalvalue ;
             }
-
-            // total value
-            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
 
             // Invoice Data Array
             $termin     = "";
@@ -4377,7 +4387,8 @@ class Project extends BaseController
                 if (!empty($bast) && !empty($projects['inv3']) && !empty($invoice3)) {
                     $termin     = "35";
                     $progress   = "95";
-                    $nilaispk   = (int)$total - ((int)(65 / 100) * (int)$total) + (int)$rabcustotal;
+                    // $nilaispk   = (int)$total - ((int)(65 / 100) * (int)$total) + (int)$rabcustotal;
+                    $nilaispk   = $totalvalue;
                     $dateinv    = $projects['inv3'];
                     $dateline   = $invoice3['jatuhtempo'];
                     // $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
@@ -4414,7 +4425,7 @@ class Project extends BaseController
 
                 $terminval = "";
                 if (!empty($termin)) {
-                    $terminval = $total * ($termin / 100);
+                    $terminval = $totalvalue * ($termin / 100);
                 }
 
                 // PPN VALUE RUPIAH
@@ -4435,7 +4446,7 @@ class Project extends BaseController
                     'nilai_spk' => $nilaispk,
                     'dateinv'   => $dateinv,
                     'dateline'  => $dateline,
-                    'total'     => (int)$total,
+                    'total'     => (int)$totalvalue,
                     'ppn'       => $ppn,
                     'pph'       => $pph,
                     'pphval'    => (int)$pphvalue,
@@ -4504,11 +4515,8 @@ class Project extends BaseController
             if (!empty($gconf)) {
                 $alamat = $gconf['alamat'];
             }
-            if (!empty($rabcustom)) {
-                $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->notLike('name', 'biaya pengiriman')->find();
-            } else {
-                $rabcustom  = [];
-            }
+
+            $rabcustom  = $CustomRabModel->where('projectid', $projects['id'])->find();
 
             // INVOICE 
             $rabdata    = [];
@@ -4582,17 +4590,17 @@ class Project extends BaseController
             if (!empty($biaya)) {
                 $biayakirim = $biaya['price'];
             }
+            
+            // total value
+            $totalvalue = (int)$total + (int)$rabcustotal;
 
             // PPN
             $ppn = "";
             $ppnval = "";
             if (!empty($gconf)) {
                 $ppn        = (int)$gconf['ppn'];
-                $ppnval     = ($ppn / 100) * (int)$total;
+                $ppnval     = ($ppn / 100) * (int)$totalvalue ;
             }
-
-            // total value
-            $totalvalue = (int)$total + (int)$rabcustotal + (int)$ppnval;
 
             // Invoice Data Array
             $termin     = "";
@@ -4635,7 +4643,8 @@ class Project extends BaseController
                 if (!empty($bast) && !empty($projects['inv4']) && !empty($invoice4) && $nowtime > $datelinebast) {
                     $termin     = "5";
                     $progress   = "100";
-                    $nilaispk   = (int)$total - ((95 / 100) * (int)$total) + (int)$rabcustotal;
+                    // $nilaispk   = (int)$total - ((95 / 100) * (int)$total) + (int)$rabcustotal;
+                    $nilaispk   = $totalvalue;
                     $dateinv    = $projects['inv4'];
                     $dateline   = $invoice4['jatuhtempo'];
                     $priceppn   = ($gconf['ppn'] / 100) * $nilaispk;
@@ -4672,7 +4681,7 @@ class Project extends BaseController
 
                 $terminval = "";
                 if (!empty($termin)) {
-                    $terminval = $total * ($termin / 100);
+                    $terminval = $totalvalue * ($termin / 100);
                 }
 
                 // PPN VALUE RUPIAH
@@ -4693,7 +4702,7 @@ class Project extends BaseController
                     'nilai_spk' => $nilaispk,
                     'dateinv'   => $dateinv,
                     'dateline'  => $dateline,
-                    'total'     => (int)$total,
+                    'total'     => (int)$totalvalue,
                     'ppn'       => $ppn,
                     'pph'       => $pph,
                     'pphval'    => (int)$pphvalue,
@@ -4715,7 +4724,6 @@ class Project extends BaseController
             } else {
                 $invoicedata  = [];
             }
-
             //--- END NEW FUCTION ---//
 
             // Parsing Data to View

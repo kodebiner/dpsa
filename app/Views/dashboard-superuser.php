@@ -144,7 +144,8 @@
             foreach ($projects as $project) {
                 $datachart[] = [
                     'tanggal'   => $project['created_at'],
-                    'nilaispk'  => $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'],
+                    'nilaispk'  => $projectdata[$project['id']]['rabvalueppn'],
+                    // 'nilaispk'  => $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'],
                 ];
             }
         ?>
@@ -268,7 +269,8 @@
                     <?php
                     $spkvalue = [];
                     foreach ($projects as $project) {
-                        $spkvalue[] = $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'];
+                        // $spkvalue[] = $projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'];
+                        $spkvalue[] = $projectdata[$project['id']]['rabvalueppn'];
                     }
                     echo "Rp." . number_format(array_sum($spkvalue), 0, ',', '.');
                     ?>
@@ -399,9 +401,11 @@
                             <td class=""><?= $project['name'] ?></td>
                             <td class=""><?= $projectdata[$project['id']]['klien']['rsname'] ?></td>
                             <td class=""><?= $projectdata[$project['id']]['marketing']->username ?></td>
-                            <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td>
+                            <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['rabvalueppn'], 0, ',', '.')  ?></td>
+                            <!-- <td class=""></?= "Rp." . number_format($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td> -->
                             <td class=""><?= "Rp." . number_format($projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
-                            <td class=""><?= "Rp." . number_format(($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'])-$projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
+                            <td class=""><?= "Rp." . number_format(($projectdata[$project['id']]['rabvalueppn'])-$projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
+                            <!-- <td class=""></?= "Rp." . number_format(($projectdata[$project['id']]['rabvalue'] + $projectdata[$project['id']]['allcustomrab'])-$projectdata[$project['id']]['pembayaran'], 0, ',', '.')  ?></td> -->
                             <td class="uk-text-center">
                                 <?php if ($projectdata[$project['id']]['dateline'] < $projectdata[$project['id']]['now']) {
                                     echo 'Selesai';

@@ -14,6 +14,8 @@ use App\Models\LogModel;
 use App\Models\MdlModel;
 use App\Models\RabModel;
 use App\Models\BastModel;
+use App\Models\GconfigModel;
+use App\Models\InvoiceModel;
 use App\Models\PembayaranModel;
 
 class Laporan extends BaseController
@@ -36,7 +38,7 @@ class Laporan extends BaseController
 
     public function index()
     {
-        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid']) || $this->data['authorize']->hasPermission('ppic.project.edit', $this->data['uid'])) {
+        if ($this->data['authorize']->hasPermission('admin.user.read', $this->data['uid']) || $this->data['authorize']->hasPermission('finance.project.edit', $this->data['uid'])) {
             // Calling Services
             $pager = \Config\Services::pager();
 
@@ -49,6 +51,8 @@ class Laporan extends BaseController
             $CustomRabModel            = new CustomRabModel();
             $BastModel                 = new BastModel();
             $PembayaranModel           = new PembayaranModel();
+            $GconfigModel              = new GconfigModel();
+            $InvoiceModel              = new InvoiceModel();
 
             // Populating data
             $input = $this->request->getVar('daterange');
@@ -63,6 +67,7 @@ class Laporan extends BaseController
 
             // Initialize
             $input = $this->request->getGet();
+            $gconf = $GconfigModel->first();
 
             if (isset($input['perpage'])) {
                 $perpage = $input['perpage'];
@@ -152,6 +157,7 @@ class Laporan extends BaseController
                     }
                 }
 
+
                 // Setrim
                 $projectdata[$project['id']]['sertrim']     = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
                 // BAST
@@ -194,6 +200,43 @@ class Laporan extends BaseController
                 if (!empty($price)) {
                     $projectdata[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
                 }
+
+                // New Value ALL RAB & CUSTOM RAB + PPN + PPH
+                $projectdata[$project['id']]['rabvalueppn'] = 0;
+                if(!empty($price) || !empty($allCustomRab)){
+                    $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+
+                    // Value I & II
+                    $valuerab = $allrab - ($allrab * (70/100));
+                    $ppnrabval = ((int)$valuerab * ((int)$gconf['ppn']/100));
+                    $valrab1  = $valuerab + $ppnrabval;
+                    $valrab12 = (int)$valrab1 * 2;
+
+                    // Value III
+                    $valuerab3 = $allrab - ($allrab * (65/100));
+                    $ppnrabval3 = (((int)$gconf['ppn']/100) * (int)$valuerab3) + $valuerab3;
+
+                    // Value IV
+                    $valuerab4 = $allrab - ($allrab * (5/100));
+                    $valrabres4 = $allrab - $valuerab4;
+                    $ppnrabval4 = (((int)$gconf['ppn']/100) * (int)$valrabres4) + $valrabres4;
+
+                    // PPH Value Configuration
+                    $pphinvoice1 = $InvoiceModel->where('projectid',$project['id'])->where('status', 1)->first();
+                    $pphinvoice2 = $InvoiceModel->where('projectid',$project['id'])->where('status', 2)->first();
+                    $pphinvoice3 = $InvoiceModel->where('projectid',$project['id'])->where('status', 3)->first();
+                    $pphinvoice4 = $InvoiceModel->where('projectid',$project['id'])->where('status', 4)->first();
+
+                    $pph1 = (int)$valuerab * ((int)$pphinvoice1['pph23'] / 100); 
+                    $pph2 = (int)$valuerab * ((int)$pphinvoice2['pph23'] / 100); 
+                    $pph3 = (int)$valuerab3 * ((int)$pphinvoice3['pph23'] / 100); 
+                    $pph4 = (int)$valuerab4 * ((int)$pphinvoice4['pph23'] / 100); 
+
+                    $projectdata[$project['id']]['rabvalueppn'] = (int)$ppnrabval4 + (int)$ppnrabval3 + (int)$valrab12 + (int)$pph1 +  (int)$pph2 +  (int)$pph3 +  (int)$pph4;
+
+                }
+                // End New Value ALL RAB & CUSTOM RAB + PPN
+
             }
 
 
@@ -227,6 +270,9 @@ class Laporan extends BaseController
         $CustomRabModel            = new CustomRabModel();
         $BastModel                 = new BastModel();
         $PembayaranModel           = new PembayaranModel();
+        $GconfigModel              = new GconfigModel();
+        $InvoiceModel              = new InvoiceModel();
+        
 
         // Populating data
         $inputDate = $this->request->getGet('daterange');
@@ -241,6 +287,7 @@ class Laporan extends BaseController
         
         // Initialize
         $input = $this->request->getGet();
+        $gconf = $GconfigModel->first();
 
         // if (isset($input['perpage'])) {
         //     $perpage = $input['perpage'];
@@ -404,6 +451,43 @@ class Laporan extends BaseController
             if (!empty($price)) {
                 $projectdata[$project['id']]['rabvalue']    = array_sum(array_column($price, 'sumprice'));
             }
+
+            // New Value ALL RAB & CUSTOM RAB + PPN
+            $projectdata[$project['id']]['rabvalueppn'] = 0;
+            if(!empty($price) || !empty($allCustomRab)){
+                $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+
+                // PPN Value Configuration
+
+                // Value I & II
+                $valuerab = $allrab - ($allrab * (70/100));
+                $ppnrabval = ((int)$valuerab * ((int)$gconf['ppn']/100));
+                $valrab1  = $valuerab + $ppnrabval;
+                $valrab12 = (int)$valrab1 * 2;
+
+                // Value III
+                $valuerab3 = $allrab - ($allrab * (65/100));
+                $ppnrabval3 = (((int)$gconf['ppn']/100) * (int)$valuerab3) + $valuerab3;
+
+                // Value IV
+                $valuerab4 = $allrab - ($allrab * (5/100));
+                $valrabres4 = $allrab - $valuerab4;
+                $ppnrabval4 = (((int)$gconf['ppn']/100) * (int)$valrabres4) + $valrabres4;
+
+                // PPH Value Configuration
+                $pphinvoice1 = $InvoiceModel->where('projectid',$project['id'])->where('status', 1)->first();
+                $pphinvoice2 = $InvoiceModel->where('projectid',$project['id'])->where('status', 2)->first();
+                $pphinvoice3 = $InvoiceModel->where('projectid',$project['id'])->where('status', 3)->first();
+                $pphinvoice4 = $InvoiceModel->where('projectid',$project['id'])->where('status', 4)->first();
+
+                $pph1 = (int)$valuerab * ((int)$pphinvoice1['pph23'] / 100); 
+                $pph2 = (int)$valuerab * ((int)$pphinvoice2['pph23'] / 100); 
+                $pph3 = (int)$valuerab3 * ((int)$pphinvoice3['pph23'] / 100); 
+                $pph4 = (int)$valuerab4 * ((int)$pphinvoice4['pph23'] / 100); 
+
+                $projectdata[$project['id']]['rabvalueppn'] = (int)$ppnrabval4 + (int)$ppnrabval3 + (int)$valrab12 + (int)$pph1 +  (int)$pph2 +  (int)$pph3 +  (int)$pph4;
+            }
+            // End New Value ALL RAB & CUSTOM RAB + PPN
         }
 
         // Parsing data to view

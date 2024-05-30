@@ -324,20 +324,20 @@ if(!empty($invoice)){
         </div>
     </div>
 
-    <?php
+    <!-- </?php
         if(!empty($rabcustom)){
             foreach ($rabcustom as $cusrab) { ?>
                     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
                         <tr>
                             <th style="border: 1pt solid black; border-right-style:none;  width:55%;"></th>
-                            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"><?php if(!empty($cusrab)){ echo $cusrab['name'];}  ?><span>&nbsp;</span></th>
+                            <th style="border: 1pt solid black; border-right-style:none; border-left-style:none;  width:22.2%;"></?php if(!empty($cusrab)){ echo $cusrab['name'];}  ?><span>&nbsp;</span></th>
                             <td style="border: 1pt solid black; border-right-style:none;"></td>
-                            <td style="border: 1pt solid black; border-left-style:none; text-align:right"><?php if(!empty($cusrab)){ echo number_format($cusrab['price'], 0, ',', '.');" ";}  ?></td>
+                            <td style="border: 1pt solid black; border-left-style:none; text-align:right"></?php if(!empty($cusrab)){ echo number_format($cusrab['price'], 0, ',', '.');" ";}  ?></td>
                         </tr>
                     </table>
-            <?php }
+            </?php }
         } 
-    ?>
+    ?> -->
 
     <table style="border: 1pt solid black; background-color: #dddddd; margin-top:5px;">
         <tr>
@@ -375,7 +375,7 @@ if(!empty($invoice)){
             <td style="border: 1pt solid black; border-left-style: none; border-right-style:none;"></td>
             <th style="border: 1pt solid black; border-right-style:none; font-weight:bold; border-left-style:none; text-align:right;">TOTAL / JUMLAH HARGA DI BAYAR<span>&nbsp;</span></th>
             <td style="border: 1pt solid black; border-right-style:none;"></td>
-            <td style="border: 1pt solid black; border-left-style:none; text-align:right;"><?php if(!empty($invoice)){ echo "Rp. ".number_format($invoice['totalterm'] + $invoice['pphtermin'] + array_sum(array_column($rabcustom,'price')) + (((int)$invoice['termin'] / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
+            <td style="border: 1pt solid black; border-left-style:none; text-align:right;"><?php if(!empty($invoice)){ echo "Rp. ".number_format($invoice['totalterm'] + $invoice['pphtermin'] + (((int)$invoice['termin'] / 100) * $invoice['total']), 0, ',', '.');" ";}  ?></td>
         </tr>
     </table>
 

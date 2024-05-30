@@ -1579,7 +1579,8 @@
             foreach ($projectsreport as $project) {
                 $datachart[] = [
                     'tanggal'   => $project['created_at'],
-                    'nilaispk'  => $projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'],
+                    'nilaispk'  => $projectdatareport[$project['id']]['rabvalueppn'],
+                    // 'nilaispk'  => $projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'],
                 ];
             }
         ?>
@@ -1635,9 +1636,9 @@
                     <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
                 </div>
                 <div id="filter" class="uk-margin" hidden>
-                    <form id="searchform" action="home" method="GET">
+                    <form id="searchform" action="<?= $uri ?>" method="GET">
                         <div class="uk-margin-small uk-flex uk-flex-center">
-                            <input class="uk-input uk-form-width-medium" id="search" name="searchproyek" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                            <input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> />
                         </div>
                         <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                             <div><?= lang('Global.display') ?></div>
@@ -1703,7 +1704,8 @@
                     <?php
                     $spkvalue = [];
                     foreach ($projectsreport as $project) {
-                        $spkvalue[] = $projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'];
+                        $spkvalue[] = $projectdatareport[$project['id']]['rabvalueppn'];
+                        // $spkvalue[] = $projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'];
                     }
                     echo "Rp." . number_format(array_sum($spkvalue), 0, ',', '.');
                     ?>
@@ -1736,7 +1738,7 @@
             <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
                 <div class="uk-width-1-3">
                     <div class="">
-                        <form id="short" action="home" method="get">
+                        <form id="short" action="<?= $uri ?>" method="get">
                             <div class="uk-inline">
                                 <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                 <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
@@ -1746,12 +1748,12 @@
                 </div>
                 <div class="uk-width-auto">
                     <div>
-                        <form class="uk-margin" id="searchform" action="home" method="GET">
+                        <form class="uk-margin" id="searchreport" action="<?= $uri ?>" method="GET">
                             <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                                 <div>
                                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                         <div>Cari:</div>
-                                        <div><input class="uk-input uk-form-width-medium" id="search" placeholder="Masukkan Nama Proyek..." name="searchproyek" <?= (isset($input['searchproyek']) ? 'value="' . $input['searchproyek'] . '"' : '') ?> /></div>
+                                        <div><input class="uk-input uk-form-width-medium" id="searchreport" placeholder="Masukkan Nama Proyek..." name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
                                     </div>
                                 </div>
                                 <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
@@ -1763,7 +1765,7 @@
                                     <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
                                         <div>Tampilan</div>
                                         <div>
-                                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                                            <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
                                                 <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
                                                 <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
                                                 <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
@@ -1780,11 +1782,11 @@
             </div>
         <?php } ?>
         <script>
-            document.getElementById('search').addEventListener("change", submitform);
-            document.getElementById('perpage').addEventListener("change", submitform);
+            document.getElementById('searchreport').addEventListener("change", submitformreport);
+            document.getElementById('perpagereport').addEventListener("change", submitformreport);
 
-            function submitform() {
-                document.getElementById('searchform').submit();
+            function submitformreport() {
+                document.getElementById('searchreport').submit();
             };
         </script>
 
@@ -1824,9 +1826,10 @@
                             <td class=""><?= $project['name'] ?></td>
                             <td class=""><?= $projectdatareport[$project['id']]['klien']['rsname'] ?></td>
                             <td class=""><?= $projectdatareport[$project['id']]['marketing']->username ?></td>
-                            <td class=""><?= "Rp." . number_format($projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td>
+                            <td class=""><?= "Rp." . number_format($projectdatareport[$project['id']]['rabvalueppn'], 0, ',', '.')  ?></td>
+                            <!-- <td class=""></?= "Rp." . number_format($projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'], 0, ',', '.')  ?></td> -->
                             <td class=""><?= "Rp." . number_format($projectdatareport[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
-                            <td class=""><?= "Rp." . number_format(($projectdatareport[$project['id']]['rabvalue'] + $projectdatareport[$project['id']]['allcustomrab'])-$projectdatareport[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
+                            <td class=""><?= "Rp." . number_format(($projectdatareport[$project['id']]['rabvalueppn'])-$projectdatareport[$project['id']]['pembayaran'], 0, ',', '.')  ?></td>
                             <td class="uk-text-center">
                                 <?php if ($projectdatareport[$project['id']]['dateline'] < $projectdatareport[$project['id']]['now']) {
                                     echo 'Selesai';
