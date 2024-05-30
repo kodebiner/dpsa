@@ -103,9 +103,9 @@
         <?= view('Views/Auth/_message_block') ?>
         
         <?php
-        foreach($purchases as $purchase){ ?>
-            <?php  $empty ="";
-                if(!empty($items)){
+            if(!empty($items)){
+                $empty ="";
+                foreach($purchases as $purchase){ 
                     if (!empty($items[$purchase['clientid']]['purdet'])){ ?>
                         <div id="order<?=$purchase['clientid']?>" class="uk-grid-column-small uk-grid-row-large uk-child-width-1-1@s uk-margin" uk-grid>
                             <div>
@@ -211,10 +211,10 @@
                             });
                         </script>
                     <?php } ?>
-                <?php } elseif(empty($items)) {
-                    $empty = '<div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Pesanan Masuk</div>';
-                } ?>
-        <?php } ?>
+                <?php } ?>
+        <?php }else{
+            $empty = '<div class="uk-width-1-1 uk-text-center uk-text-italic">Belum Ada Pesanan Masuk</div>';
+        } ?>
         <?= $empty ?>
         <?= $pager ?>
     <?php } ?>
