@@ -494,6 +494,12 @@ class Mdl extends BaseController
             $pakets             = $PaketModel->find($mdlpakets['paketid']);
             $parents            = $PaketModel->find($pakets['parentid']);
 
+            if(empty($input['photo'])){
+                $photomdl = $mdls['photo'];
+            }else{
+                $photomdl = $input['photo'];
+            }
+
             $mdlup = [
                 'id'            => $id,
                 'name'          => $input['name'],
@@ -503,9 +509,12 @@ class Mdl extends BaseController
                 'height'        => $input['height'],
                 'volume'        => $input['length'],
                 'keterangan'    => $input['keterangan'],
-                'photo'         => $input['photo'],
+                'photo'         => $photomdl,
                 'price'         => strupdate($str),
             ];
+
+            dd($mdlup);
+
             // Save Data MDL
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah MDL ' . $input['name']]);
             $MdlModel->save($mdlup);
