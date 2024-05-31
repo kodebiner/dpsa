@@ -513,8 +513,6 @@ class Mdl extends BaseController
                 'price'         => strupdate($str),
             ];
 
-            dd($mdlup);
-
             // Save Data MDL
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah MDL ' . $input['name']]);
             $MdlModel->save($mdlup);
