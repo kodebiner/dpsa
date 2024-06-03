@@ -11,6 +11,7 @@ use App\Models\LogModel;
 use App\Models\InvoiceModel;
 use App\Models\UserModel;
 use App\Models\NotificationModel;
+use App\Models\VersionModel;
 
 class Upload extends BaseController
 {
@@ -51,7 +52,7 @@ class Upload extends BaseController
     {
         // Removing File
         $input = $this->request->getPost('submitted');
-        unlink(FCPATH . 'img/design/' . $input);
+        // unlink(FCPATH . 'img/design/' . $input);
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
@@ -134,6 +135,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getPost();
         $project            = $ProjectModel->find($id);
 
@@ -164,7 +166,7 @@ class Upload extends BaseController
             return redirect()->to('/')->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Design Data
+        // SPK Data
         if (isset($input['spk'])) {
             $spk = $ProjectModel->find($id);
             if (empty($spk)) {
@@ -174,6 +176,17 @@ class Upload extends BaseController
                     // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
+
+                $projectid = $ProjectModel->getInsertID();
+
+                // Insert SPK Version (Arsip)
+                $spkversion = [
+                    'projectid'     => $projectid,
+                    'file'          => $input['spk'],
+                    'type'          => 4,
+                ];
+                $VersionModel->insert($spkversion);
+                // End Insert SPK Version
 
                 // Notif Marketing
                 $notifmarketing  = [
@@ -210,14 +223,9 @@ class Upload extends BaseController
                 }
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload SPK ' . $project['name']]);
             } else {
-                if (!empty($spk['spk'])) {
-                    // if(file_exists(FCPATH . '/img/spkclient/' . $spk['spk']) === false){
-                    //     unlink(FCPATH . '/img/spk/' . $spk['spk']);
-                    // }else{
-                    //     unlink(FCPATH . '/img/spkclient/' . $spk['spk']);
-                    // }
-                    unlink(FCPATH . '/img/spk/' . $spk['spk']);
-                }
+                // if (!empty($spk['spk'])) {
+                //     unlink(FCPATH . '/img/spk/' . $spk['spk']);
+                // }
                 $dataspk = [
                     'id'            => $spk['id'],
                     'spk'           => $input['spk'],
@@ -225,6 +233,15 @@ class Upload extends BaseController
                     // 'inv1'          => date("Y-m-d H:i:s"),
                 ];
                 $ProjectModel->save($dataspk);
+
+                // Insert SPK Version (Arsip)
+                $spkversion = [
+                    'projectid'     => $spk['id'],
+                    'file'          => $input['spk'],
+                    'type'          => 4,
+                ];
+                $VersionModel->insert($spkversion);
+                // End Insert SPK Version
 
                 // Notif Marketing
                 $notifmarketing  = [
@@ -461,6 +478,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -521,8 +539,19 @@ class Upload extends BaseController
                 'status'    => 0,
             ];
             $BastModel->save($sertrim);
-            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Sertrim ' . $project['name']]);
             $idBast = $BastModel->getInsertID();
+
+            // Insert Sertim Version (Arsip)
+            $sertrimversion = [
+                'projectid'     => $id,
+                'file'          => $returnFile,
+                'type'          => 5,
+            ];
+            $VersionModel->insert($sertrimversion);
+            // End Insert Sertim Version
+
+            // Insert Log Notification
+            $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Sertrim ' . $project['name']]);
 
             $inv2date = [
                 'id'    => $id,
@@ -584,6 +613,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -646,6 +676,17 @@ class Upload extends BaseController
                     ];
                     $BastModel->save($databast);
                     $bastId = $BastModel->getInsertID();
+
+                    // Insert BAST Version (Arsip)
+                    $sertrimversion = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 6,
+                    ];
+                    $VersionModel->insert($sertrimversion);
+                    // End Insert BAST Version
+
+                    // Insert Log Notification
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload Bast ' . $project['name']]);
 
                     // Notif Marketing
@@ -682,9 +723,9 @@ class Upload extends BaseController
                         $NotificationModel->insert($notifclient);
                     }
                 } else {
-                    if (!empty($bast['file'])) {
-                        unlink(FCPATH . '/img/bast/' . $bast['file']);
-                    }
+                    // if (!empty($bast['file'])) {
+                    //     unlink(FCPATH . '/img/bast/' . $bast['file']);
+                    // }
                     $databast = [
                         'id'            => $bast['id'],
                         'projectid'     => $id,
@@ -692,8 +733,18 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $BastModel->save($databast);
-                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast ' . $project['name']]);
+
+                    // Insert BAST Version (Arsip)
+                    $sertrimversion = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 6,
+                    ];
+                    $VersionModel->insert($sertrimversion);
+                    // End Insert BAST Version
+
                     $bastId = $bast['id'];
+                    $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah Bast ' . $project['name']]);
 
                     // Notif Marketing
                     $notifmarketing  = [
@@ -756,6 +807,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -818,16 +870,36 @@ class Upload extends BaseController
                     ];
                     $ProjectModel->save($datasph);
                     $sphId = $ProjectModel->getInsertID();
+
+                    // Insert SPH Version (Arsip)
+                    $sphversion = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 3,
+                    ];
+                    $VersionModel->insert($sphversion);
+                    // End Insert SPH Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload sph ' . $project['name']]);
                 } else {
-                    if (!empty($sph['sph'])) {
-                        unlink(FCPATH . '/img/sph/' . $sph['sph']);
-                    }
+                    // if (!empty($sph['sph'])) {
+                    //     unlink(FCPATH . '/img/sph/' . $sph['sph']);
+                    // }
                     $datasph = [
                         'id'            => $sph['id'],
                         'sph'           => $returnFile,
                     ];
                     $ProjectModel->save($datasph);
+
+                    // Insert SPH Version (Arsip)
+                    $sphversion = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 3,
+                    ];
+                    $VersionModel->insert($sphversion);
+                    // End Insert SPH Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah sph ' . $project['name']]);
                     $sphId = $sph['id'];
                 }
@@ -888,6 +960,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -940,11 +1013,21 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
+
+                    // Insert INVOICE I Version (Arsip)
+                    $sertrimversion = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 7,
+                    ];
+                    $VersionModel->insert($sertrimversion);
+                    // End Insert INVOICE I Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice I' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) {
-                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
-                    }
+                    // if (!empty($invoice['file'])) {
+                    //     unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    // }
                     $datainvoice = [
                         'id'            => $invoice['id'],
                         'projectid'     => $id,
@@ -952,6 +1035,16 @@ class Upload extends BaseController
                         'status'        => 1,
                     ];
                     $InvoiceModel->save($datainvoice);
+
+                    // Insert INVOICE I Version (Arsip)
+                    $invoice1version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 7,
+                    ];
+                    $VersionModel->insert($invoice1version);
+                    // End Insert INVOICE I Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice I' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
@@ -1024,6 +1117,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -1089,11 +1183,21 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
+
+                    // Insert INVOICE II Version (Arsip)
+                        $invoice2version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 8,
+                    ];
+                    $VersionModel->insert($invoice2version);
+                    // End Insert INVOICE II Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice II' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) {
-                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
-                    }
+                    // if (!empty($invoice['file'])) {
+                    //     unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    // }
                     $datainvoice = [
                         'id'            => $invoice['id'],
                         'projectid'     => $id,
@@ -1101,6 +1205,16 @@ class Upload extends BaseController
                         'status'        => 2,
                     ];
                     $InvoiceModel->save($datainvoice);
+
+                    // Insert INVOICE II Version (Arsip)
+                    $invoice2version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 8,
+                    ];
+                    $VersionModel->insert($invoice2version);
+                    // End Insert INVOICE II Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice II' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
@@ -1173,6 +1287,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
 
@@ -1238,13 +1353,23 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
+
+                    // Insert INVOICE III Version (Arsip)
+                    $invoice3version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 9,
+                    ];
+                    $VersionModel->insert($invoice3version);
+                    // End Insert INVOICE III Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice III' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) {
-                        if (file_exists(FCPATH . '/img/invoice/' . $invoice['file'])) {
-                            unlink(FCPATH . '/img/invoice/' . $invoice['file']);
-                        }
-                    }
+                    // if (!empty($invoice['file'])) {
+                    //     if (file_exists(FCPATH . '/img/invoice/' . $invoice['file'])) {
+                    //         unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    //     }
+                    // }
                     $datainvoice = [
                         'id'            => $invoice['id'],
                         'projectid'     => $id,
@@ -1252,6 +1377,16 @@ class Upload extends BaseController
                         'status'        => 3,
                     ];
                     $InvoiceModel->save($datainvoice);
+
+                    // Insert INVOICE III Version (Arsip)
+                    $invoice3version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 9,
+                    ];
+                    $VersionModel->insert($invoice3version);
+                    // End Insert INVOICE III Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice III' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }
@@ -1324,6 +1459,7 @@ class Upload extends BaseController
         $LogModel           = new LogModel();
         $UserModel          = new UserModel();
         $NotificationModel  = new NotificationModel();
+        $VersionModel       = new VersionModel();
         $input              = $this->request->getFile('uploads');
         $project            = $ProjectModel->find($id);
         $authorize  = $auth = service('authorization');
@@ -1388,11 +1524,21 @@ class Upload extends BaseController
                     ];
                     $InvoiceModel->save($datainvoice);
                     $invoiceId = $InvoiceModel->getInsertID();
+
+                    // Insert INVOICE IV Version (Arsip)
+                    $invoice4version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 10,
+                    ];
+                    $VersionModel->insert($invoice4version);
+                    // End Insert INVOICE IV Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload invoice IV' . $project['name']]);
                 } else {
-                    if (!empty($invoice['file'])) {
-                        unlink(FCPATH . '/img/invoice/' . $invoice['file']);
-                    }
+                    // if (!empty($invoice['file'])) {
+                    //     unlink(FCPATH . '/img/invoice/' . $invoice['file']);
+                    // }
                     $datainvoice = [
                         'id'            => $invoice['id'],
                         'projectid'     => $id,
@@ -1400,6 +1546,16 @@ class Upload extends BaseController
                         'status'        => 4,
                     ];
                     $InvoiceModel->save($datainvoice);
+
+                    // Insert INVOICE IV Version (Arsip)
+                    $invoice4version = [
+                        'projectid'     => $id,
+                        'file'          => $returnFile,
+                        'type'          => 10,
+                    ];
+                    $VersionModel->insert($invoice4version);
+                    // End Insert INVOICE IV Version
+
                     $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah invoice IV' . $project['name']]);
                     $invoiceId = $invoice['id'];
                 }

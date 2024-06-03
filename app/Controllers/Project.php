@@ -20,6 +20,7 @@ use App\Models\BuktiModel;
 use App\Models\NotificationModel;
 use App\Models\PembayaranModel;
 use App\Models\LogModel;
+use App\Models\VersionModel;
 
 class Project extends BaseController
 {
@@ -60,8 +61,8 @@ class Project extends BaseController
             $PembayaranModel        = new PembayaranModel();
             $LogModel               = new LogModel();
 
-             // Calling Services
-             $pager = \Config\Services::pager();
+            // Calling Services
+            $pager = \Config\Services::pager();
 
             // Initilize
             $input = $this->request->getGet();
@@ -769,6 +770,7 @@ class Project extends BaseController
             $UserModel              = new UserModel();
             $NotificationModel      = new NotificationModel();
             $PembayaranModel        = new PembayaranModel();
+            $VersionModel           = new VersionModel();
             // $LogModel               = new LogModel();
 
             // Calling Services
@@ -1196,6 +1198,7 @@ class Project extends BaseController
                             } 
                             return $carry; 
                         });
+                        $projectdata[$project['id']]['pengiriman'] = $result;
                         
                         // foreach($projectdata[$project['id']]['production'] as $progresdataproduction){
                         //     if($progresdataproduction['pengiriman'] === "0" && $progresdataproduction['setting'] === "0" ){
@@ -1206,9 +1209,21 @@ class Project extends BaseController
                         //         $projectdata[$project['id']]['settingproduk'] += 1;
                         //     }
                         // }
-                        $projectdata[$project['id']]['pengiriman'] = $result;
                     }
 
+                    // Data Version (Arsip)
+                        $projectdata[$project['id']]['verdesign']      = count($VersionModel->where('projectid',$project['id'])->where('type', 1)->find());
+                        $projectdata[$project['id']]['verrevisi']      = count($VersionModel->where('projectid',$project['id'])->where('type', 2)->find());
+                        $projectdata[$project['id']]['versph']         = count($VersionModel->where('projectid',$project['id'])->where('type', 3)->find());
+                        $projectdata[$project['id']]['verspk']         = count($VersionModel->where('projectid',$project['id'])->where('type', 4)->find());
+                        $projectdata[$project['id']]['versertrim']     = count($VersionModel->where('projectid',$project['id'])->where('type', 5)->find());
+                        $projectdata[$project['id']]['verbast']        = count($VersionModel->where('projectid',$project['id'])->where('type', 6)->find());
+                        $projectdata[$project['id']]['verinvoice1']    = count($VersionModel->where('projectid',$project['id'])->where('type', 7)->find());
+                        $projectdata[$project['id']]['verinvoice2']    = count($VersionModel->where('projectid',$project['id'])->where('type', 8)->find());
+                        $projectdata[$project['id']]['verinvoice3']    = count($VersionModel->where('projectid',$project['id'])->where('type', 9)->find());
+                        $projectdata[$project['id']]['verinvoice4']    = count($VersionModel->where('projectid',$project['id'])->where('type', 10)->find());
+                        $projectdata[$project['id']]['verded']         = count($VersionModel->where('projectid',$project['id'])->where('type', 11)->find());
+                    // End Of Data Version
 
                     // All Deleted Rab Data Or Mdl Data
                     $datarabnew = [];
@@ -1257,6 +1272,9 @@ class Project extends BaseController
             $data['input']          = $this->request->getGet('projectid');
             $data['inputpage']      = $this->request->getVar();
             $data['compname']       = $CompanyModel->find($id);
+            // dd($data['input']);
+
+            // dd($projectdata);
 
             return view('listproyekclient', $data);
         } else {
@@ -1333,6 +1351,7 @@ class Project extends BaseController
             $LogModel           = new LogModel();
             $NotificationModel  = new NotificationModel();
             $UserModel          = new UserModel();
+            $VersionModel       = new VersionModel();
 
             // initialize
             $input      = $this->request->getPost();
@@ -1447,6 +1466,17 @@ class Project extends BaseController
             $ProjectModel->insert($project);
 
             $projectid = $ProjectModel->getInsertID();
+
+            // Insert DED/LAYOUT Version (Arsip)
+            if (isset($input['designtype'])) {
+                $designrevision = [
+                    'projectid'     => $projectid,
+                    'file'          => $input['design'],
+                    'type'          => 11,
+                ];
+                $VersionModel->insert($designrevision);
+            }
+            // End Insert DED/LAYOUT Version
 
             // Data Notification
             if (isset($input['designtype'])) {
@@ -1574,10 +1604,12 @@ class Project extends BaseController
             $NotificationModel  = new NotificationModel();
             $PembayaranModel    = new PembayaranModel();
             $CompanyModel       = new CompanyModel();
+            $VersionModel       = new VersionModel();
             $LogModel           = new LogModel();
             
             // initialize
             $input      = $this->request->getPost();
+
             $pro        = $ProjectModel->find($id);
 
             $authorize  = $auth = service('authorization');
@@ -1609,24 +1641,55 @@ class Project extends BaseController
 
             $tglinv1 = "";
             if (!empty($input['spk'])) {
+
                 if ($input['spk'] != $pro['spk']) {
-                    if (!empty($pro['spk'])) {
-                        if(file_exists(FCPATH . '/img/spk/' . $pro['spk']) === false){
-                            unlink(FCPATH . '/img/spkclient/' . $pro['spk']);
-                        }else{
-                            unlink(FCPATH . '/img/spk/' . $pro['spk']);
-                        }
-                    }
+                    // if (!empty($pro['spk'])) {
+                    //     if(file_exists(FCPATH . '/img/spk/' . $pro['spk']) === false){
+                    //         unlink(FCPATH . '/img/spkclient/' . $pro['spk']);
+                    //     }else{
+                    //         unlink(FCPATH . '/img/spk/' . $pro['spk']);
+                    //     }
+                    // }
                     $spk        = $input['spk'];
                     $statusspk  = 1;
                     $status     = 4;
                     $tglinv1    = date("Y-m-d H:i:s");
+                    
+                    // Insert SPK Version (Arsip)
+                    $spkversion = [
+                        'projectid'     => $pro['id'],
+                        'file'          => $input['spk'],
+                        'type'          => 4,
+                    ];
+                    $VersionModel->insert($spkversion);
+                    // End Insert SPK Version
+
                 } else {
                     $spk        = $pro['spk'];
                     $statusspk  = $pro['status_spk'];
                     $tglinv1    = date("Y-m-d H:i:s");
+                    
+                    // Insert SPK Version (Arsip)
+                    // $spkversion = [
+                    //     'projectid'     => $pro['id'],
+                    //     'file'          => $input['spk'],
+                    //     'type'          => 4,
+                    // ];
+                    // $VersionModel->insert($spkversion);
+                    // End Insert SPK Version
+
                 }
             } else {
+
+                // Insert SPK Version (Arsip)
+                // $spkversion = [
+                //     'projectid'     => $pro['id'],
+                //     'file'          => $pro['spk'],
+                //     'type'          => 4,
+                // ];
+                // $VersionModel->insert($spkversion);
+                // End Insert SPK Version
+
                 $spk        = $pro['spk'];
                 $statusspk  = $pro['status_spk'];
                 $tglinv1    = $pro['inv1'];
@@ -2006,6 +2069,15 @@ class Project extends BaseController
                     ];
                     $DesignModel->insert($datadesign);
 
+                    // Insert Design Version (Arsip)
+                    $designrevision = [
+                        'projectid'     => $id,
+                        'file'          => $input['submitted'],
+                        'type'          => 1,
+                    ];
+                    $VersionModel->insert($designrevision);
+                    // End Insert Design Version
+
                     // Notif Marketing
                     $notifmarketing  = [
                         'userid'        => $marketings->id,
@@ -2052,9 +2124,9 @@ class Project extends BaseController
                         $NotificationModel->insert($notifclient);
                     }
                 } else {
-                    if (!empty($design['submitted'])) {
-                        unlink(FCPATH . '/img/design/' . $design['submitted']);
-                    }
+                    // if (!empty($design['submitted'])) {
+                    //     unlink(FCPATH . '/img/design/' . $design['submitted']);
+                    // }
                     $datadesign = [
                         'id'            => $design['id'],
                         'projectid'     => $id,
@@ -2062,6 +2134,15 @@ class Project extends BaseController
                         'status'        => 0,
                     ];
                     $DesignModel->save($datadesign);
+
+                    // Insert Design Version (Arsip)
+                     $designrevision = [
+                        'projectid'     => $id,
+                        'file'          => $input['submitted'],
+                        'type'          => 1,
+                    ];
+                    $VersionModel->insert($designrevision);
+                    // End Insert Design Version
 
                     // Notif Marketing
                     $notifmarketing  = [

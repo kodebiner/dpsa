@@ -618,12 +618,12 @@
     
                                                     <div class="uk-margin-small">
                                                         <label class="uk-form-label uk-margin-remove-top">File Design</label>
-                                                        <div class="uk-form-controls">: <a href="/img/design/<?= $projectdata[$project['id']]['design']['submitted'] ?>"><span uk-icon="file-pdf"></span><?= $projectdata[$project['id']]['design']['submitted'] ?></a></div>
+                                                        <div class="uk-form-controls">: <a href="/img/design/<?= $projectdata[$project['id']]['design']['submitted'] ?>"><span uk-icon="file-pdf"></span><?= $projectdata[$project['id']]['design']['submitted'] ?></a>&nbsp;&nbsp;<?php if ($projectdata[$project['id']]['verdesign'] > 1) { echo "<a href=".base_url("version?project=".$project['id']."&type=1").">+".($projectdata[$project['id']]['verdesign']-1)."&nbsp;ver</a>"; } ?></div>
                                                     </div>
     
                                                     <div class="uk-margin-small">
                                                         <label class="uk-form-label uk-margin-remove-top">File Revisi</label>
-                                                        <div class="uk-form-controls">: <a href="/img/revisi/<?= $projectdata[$project['id']]['design']['revision'] ?>"><span uk-icon="file-pdf"></span><?= $projectdata[$project['id']]['design']['revision'] ?></a></div>
+                                                        <div class="uk-form-controls">: <a href="/img/revisi/<?= $projectdata[$project['id']]['design']['revision'] ?>"><span uk-icon="file-pdf"></span><?= $projectdata[$project['id']]['design']['revision'] ?></a>&nbsp;&nbsp;<?php if ($projectdata[$project['id']]['verrevisi'] > 1) { echo "<a href=".base_url("version?project=".$project['id']."&type=2").">+".($projectdata[$project['id']]['verrevisi']-1)."&nbsp;ver</a>"; } ?></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -956,7 +956,6 @@
                                             <?php } ?>
 
                                             <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-
                                                 <!-- New View RAB Data -->
                                                 <?php 
                                                 $rabhide = "hidden";
@@ -1105,11 +1104,11 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <!-- End New View RAB Data -->
+                                                    
+                                                    <!-- BUTTON KELOLA RAB -->
+                                                    <a class="uk-button uk-button-default uk-margin" id="buttonrab<?=$project['id']?>" <?=$rabhide?>>EDIT PESANAN</a>
                                                 <?php } ?>
-                                                <!-- End New View RAB Data -->
-
-                                                <!-- BUTTON KELOLA RAB -->
-                                                <a class="uk-button uk-button-default uk-margin" id="buttonrab<?=$project['id']?>" <?=$rabhide?>>EDIT PESANAN</a>
                                                 
                                                 <script>
                                                     $(document).ready(function(){
@@ -1131,6 +1130,7 @@
                                                     });
                                                 </script>
                                                 <!-- END BUTTON KELOLA RAB -->
+                                            <?php } ?>
 
                                                 <!-- Current MDL Proyek Removed -->
                                                 <?php if (!empty($projectdata[$project['id']]['allrabdatadeleted'])) { ?>
@@ -1884,10 +1884,15 @@
                                                 <a class="uk-button uk-button-default uk-margin" id="closebuttonrab<?=$project['id']?>" hidden>TUTUP EDIT PESANAN</a>
                                                 <!-- BUTTON TUTUP EDIT PESANAN -->
 
+                                                
                                                 <div class="uk-margin-bottom">
                                                     <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" for="paket">Nomor SPH</label>
                                                     <div class="uk-form-controls">
-                                                        <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH">
+                                                        <?php if($authorize->hasPermission('marketing.project.edit', $uid)){ $upload = "UPLOAD" ?>
+                                                                <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH">
+                                                            <?php }else{ $upload = "FILE"?>
+                                                                <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH" readonly>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
 
@@ -1895,7 +1900,7 @@
 
                                                 <!-- SPH -->
                                                 <div class="uk-margin" id="image-container-createsph-<?= $project['id'] ?>">
-                                                    <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">UPLOAD SPH</label>
+                                                    <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate"><?=$upload?> SPH</label>&nbsp;&nbsp;<?php if ($projectdata[$project['id']]['versph'] > 1) { echo "<a href=".base_url("version?project=".$project['id']."&type=3").">+".($projectdata[$project['id']]['versph']-1)."&nbsp;ver</a>"; } ?>
                                                     <div class="uk-child-width-auto uk-text-center uk-margin-top" id="containersph-<?= $project['id'] ?>" uk-grid>
                                                         <div id="sph-file-<?= $project['id'] ?>">
                                                             <?php if (!empty($project['sph'])) { ?>
@@ -2084,7 +2089,7 @@
                                                 <!-- </?php } ?> -->
                                                 <hr>
                                                 <!-- end SPH -->
-                                            <?php } ?>
+                                            <!-- </?php } ?> -->
                                         </div>
                                         <!-- </?php } ?> -->
                                         <!-- </?php } else { ?> -->
@@ -2491,7 +2496,7 @@
 
                                     <div class="uk-margin-small">
                                         <label class="uk-form-label uk-margin-remove-top">File SPK</label>
-                                        <div class="uk-form-controls">: <?php if (!empty($project['spk'])) { ?><a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a> <?php } ?></div>
+                                        <div class="uk-form-controls">: <?php if (!empty($project['spk'])) { ?><a href="/img/spk/<?= $project['spk'] ?>"><span uk-icon="file-pdf"></span><?= $project['spk'] ?></a> <?php } ?>&nbsp;&nbsp;<?php if ($projectdata[$project['id']]['verspk'] > 1) { echo "<a href=".base_url("version?project=".$project['id']."&type=4").">+".($projectdata[$project['id']]['verspk']-1)."&nbsp;ver</a>"; } ?></div>
                                     </div>
                                 </div>
 
@@ -2701,7 +2706,6 @@
                                     }
                                 });
                             </script>
-                            <!-- </?php } ?> -->
                             <!-- SPK Section End -->
 
                             <!-- Production Section -->
@@ -3229,7 +3233,7 @@
     
                                         <!-- Serah Terima -->
                                         <div class="uk-margin" id="image-container-createspk-<?= $project['id'] ?>" <?=$bastview?>>
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA</label>
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">SERAH TERIMA </label><?php if ($projectdata[$project['id']]['versertrim'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=5").">+".($projectdata[$project['id']]['versertrim']-1)."&nbsp;ver</a>"; } ?>
                                             <div class="uk-child-width-auto uk-text-center uk-margin-top" id="containersertrim-<?= $project['id'] ?>" uk-grid>
                                                 <?php
                                                 if (!empty($projectdata[$project['id']]['bast'])) {
@@ -3286,7 +3290,7 @@
     
                                         <!-- BAST -->
                                         <div class="uk-margin" id="image-container-createbast-<?= $project['id'] ?>" <?=$bastview?>>
-                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST</label>
+                                            <label class="uk-h5 uk-margin-remove uk-text-bold uk-text-emphasis uk-text-left" for="photocreate">BAST </label> <?php if ($projectdata[$project['id']]['verbast'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=6").">+".($projectdata[$project['id']]['verbast']-1)."&nbsp;ver</a>"; } ?>
                                             <div class="uk-form-horizontal">
                                                 <div class="uk-margin-small">
                                                     <label class="uk-form-label">Tanggal BAST</label>
@@ -3650,7 +3654,7 @@
                                 <?php if (empty($projectdata[$project['id']]['finnance'])) { ?>
                                     <p>* Mohon tambahkan pegawai keuangan terlebih dahulu untuk dapat melakukan upload invoice</p>
                                 <?php } ?>
-                                <div class="uk-margin-small uk-child-width-1-2" uk-grid>
+                                <div class="uk-margin-small uk-child-width-1-2@m" uk-grid>
                                     <!-- Invoice I -->
                                     <div>
                                         <div class="uk-margin-small uk-child-width-1-2" uk-grid>
@@ -3823,11 +3827,11 @@
                                                 </div>
 
                                                 <div class="uk-margin-small">
-                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <label class="uk-form-label">File Invoice <?php if ($projectdata[$project['id']]['verinvoice1'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=7").">+".($projectdata[$project['id']]['verinvoice1']-1)."&nbsp;ver</a>"; } ?></label>
                                                     <?php if (!empty($projectdata[$project['id']]['invoice1'])) { ?>
                                                         <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice1']['id'] ?>">:
                                                             <?php if (!empty($projectdata[$project['id']]['invoice1']['file'])) { ?>
-                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice1']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice1']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice1']['file'] ?></a>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice1']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice1']['id'] ?>" target="_blank" download><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice1']['file'] ?></a>
                                                             <?php } ?>
                                                         </div>
                                                     <?php } ?>
@@ -3898,7 +3902,7 @@
                                                                 var setcontinv = document.getElementById('continv<?= $projectdata[$project['id']]['invoice1']['id'] ?>');
 
                                                                 var container = document.createElement('a');
-                                                                container.setAttribute('id', 'inv' + proid);
+                                                                container.setAttribute('id', 'inv' + id);
 
                                                                 var icon = document.createElement('span');
                                                                 icon.setAttribute('uk-icon', 'file-text');
@@ -4112,11 +4116,11 @@
                                                 </div>
 
                                                 <div class="uk-margin-small">
-                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <label class="uk-form-label">File Invoice <?php if ($projectdata[$project['id']]['verinvoice2'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=8").">+".($projectdata[$project['id']]['verinvoice2']-1)."&nbsp;ver</a>"; } ?></label>
                                                     <?php if (!empty($projectdata[$project['id']]['invoice2'])) { ?>
                                                         <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice2']['id'] ?>">:
                                                             <?php if (!empty($projectdata[$project['id']]['invoice2']['file'])) { ?>
-                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice2']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice2']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice2']['file'] ?></a>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice2']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice2']['id'] ?>" target="_blank" download><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice2']['file'] ?></a>
                                                             <?php } ?>
                                                         </div>
                                                     <?php } ?>
@@ -4401,11 +4405,11 @@
                                                 </div>
 
                                                 <div class="uk-margin-small">
-                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <label class="uk-form-label">File Invoice <?php if ($projectdata[$project['id']]['verinvoice3'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=9").">+".($projectdata[$project['id']]['verinvoice3']-1)."&nbsp;ver</a>"; } ?></label>
                                                     <?php if (!empty($projectdata[$project['id']]['invoice3'])) { ?>
                                                         <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice3']['id'] ?>">:
                                                             <?php if (!empty($projectdata[$project['id']]['invoice3']['file'])) { ?>
-                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice3']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice3']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice3']['file'] ?></a>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice3']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice3']['id'] ?>" target="_blank" download><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice3']['file'] ?></a>
                                                             <?php } ?>
                                                         </div>
                                                     <?php } ?>
@@ -4690,11 +4694,11 @@
                                                 </div>
 
                                                 <div class="uk-margin-small">
-                                                    <label class="uk-form-label">File Invoice</label>
+                                                    <label class="uk-form-label">File Invoice <?php if ($projectdata[$project['id']]['verinvoice4'] > 1) { echo "&nbsp<a class='uk-margin-default-left' href=".base_url("version?project=".$project['id']."&type=10").">+".($projectdata[$project['id']]['verinvoice4']-1)."&nbsp;ver</a>"; } ?></label>
                                                     <?php if (!empty($projectdata[$project['id']]['invoice4'])) { ?>
                                                         <div class="uk-form-controls" id="continv<?= $projectdata[$project['id']]['invoice4']['id'] ?>">:
                                                             <?php if (!empty($projectdata[$project['id']]['invoice4']['file'])) { ?>
-                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice4']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice4']['id'] ?>"><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice4']['file'] ?></a>
+                                                                <a href="img/invoice/<?= $projectdata[$project['id']]['invoice4']['file'] ?>" id="inv<?= $projectdata[$project['id']]['invoice4']['id'] ?>" target="_blank" download><span uk-icon="file-text" ;></span><?= $projectdata[$project['id']]['invoice4']['file'] ?></a>
                                                             <?php } ?>
                                                         </div>
                                                     <?php } ?>

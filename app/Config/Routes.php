@@ -140,13 +140,9 @@ $routes->group('pesanmasuk',['filter' => 'login'], function ($routes){
     $routes->post('delete','Purchase::deletepurchase');
 });
 
-// Client List For Project
-// $routes->group('ClientProject',['filter' => 'login'], function ($routes) {
-//     $routes->get('', 'ClientProject::index');
-    // $routes->post('mdl', 'ClientProject::mdl');
-    // $routes->post('create', 'ClientProject::create');
-// });
-
+$routes->group('version',['filter' => 'login'], function ($routes){
+    $routes->get('','Version::index');
+});
 
 // Project
 $routes->group('project',['filter' => 'login'], function ($routes) {

@@ -19,6 +19,7 @@ use App\Models\GconfigModel;
 use App\Models\NotificationModel;
 use App\Models\InvoiceModel;
 use App\Models\PembayaranModel;
+use App\Models\VersionModel;
 
 class Home extends BaseController
 {
@@ -961,7 +962,7 @@ class Home extends BaseController
                     }
 
                     // New Value ALL RAB & CUSTOM RAB + PPN
-                    $projectdata[$project['id']]['rabvalueppn'] = 0;
+                    $projectdatareport[$project['id']]['rabvalueppn'] = 0;
                     if(!empty($price) || !empty($allCustomRab)){
                         $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
 
@@ -995,6 +996,7 @@ class Home extends BaseController
                     }
                     // End New Value ALL RAB & CUSTOM RAB + PPN
                 }
+
                 
 
                 // Parsing Data to View
@@ -1483,6 +1485,8 @@ class Home extends BaseController
             $data['startdate']          = strtotime($startdate);
             $data['enddate']            = strtotime($enddate);
 
+            // dd($projectdesign);
+
             return view('dashboard', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -1593,6 +1597,7 @@ class Home extends BaseController
         $DesignModel        = new DesignModel();
         $LogModel           = new LogModel();
         $NotifikasiModel    = new NotificationModel();
+        $VersionModel       = new VersionModel();
 
         $input = $this->request->getPost();
         $project = $ProjectModel->find($id);
@@ -1637,9 +1642,9 @@ class Home extends BaseController
             $project = $ProjectModel->find($id);
             $design = $DesignModel->where('projectid', $id)->first();
             if (!empty($design)) {
-                if (!empty($design['revision'])) {
-                    unlink(FCPATH . '/img/revisi/' . $design['revision']);
-                }
+                // if (!empty($design['revision'])) {
+                //     unlink(FCPATH . '/img/revisi/' . $design['revision']);
+                // }
                 $datadesign = [
                     'id'            => $design['id'],
                     'projectid'     => $id,
@@ -1647,6 +1652,17 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
+
+                
+                // Insert revisi Version (Arsip)
+                $revisionversion = [
+                    'projectid'     => $id,
+                    'file'          => $input['revisi'],
+                    'type'          => 2,
+                ];
+                $VersionModel->insert($revisionversion);
+                // End Insert revisi Version
+
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan upload revisi ' . $project['name']]);
             } else {
                 $datadesign = [
@@ -1655,6 +1671,16 @@ class Home extends BaseController
                     'status'        => 1,
                 ];
                 $DesignModel->save($datadesign);
+
+                // Insert revisi Version (Arsip)
+                $revisionversion = [
+                    'projectid'     => $id,
+                    'file'          => $input['revisi'],
+                    'type'          => 2,
+                ];
+                $VersionModel->insert($revisionversion);
+                // End Insert revisi Version
+
                 $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah revisi ' . $project['name']]);
             }
         }

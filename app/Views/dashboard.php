@@ -1858,7 +1858,11 @@
                             </div>
                             <div class="uk-modal-body">
                                 <form class="uk-form-stacked" action="home/saverevisi/<?= $project['id'] ?>" method="post">
-                                    <?php if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
+                                    <?php if (!empty($projectdesign[$project['id']]['design']['submitted'])) {
+                                            $revisi     = $projectdesign[$project['id']]['design']['revision'];
+                                        } else {
+                                            $revisi     = "";
+                                        } if (!empty($projectdesign[$project['id']]['design']['revision'])) { ?>
                                         <a href="img/revisi/<?= $revisi ?>" target="_blank" class="uk-link-reset">
                                             <div class="uk-card uk-card-default uk-card-hover uk-width-1-1@m">
                                                 <div class="uk-card-header">
@@ -1877,7 +1881,7 @@
                                             </div>
                                         </a>
                                     <?php } ?>
-
+                                   
                                     <div class="uk-margin" id="image-container-create-<?= $project['id'] ?>">
                                         <label class="uk-form-label" for="photocreate">Unggah Catatan Revisi</label>
                                         <div class="uk-placeholder" id="placerev<?= $project['id'] ?>" hidden>
