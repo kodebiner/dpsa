@@ -31,7 +31,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
-    <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid) ) { ?>
+    <?php if ($authorize->hasPermission('marketing.project.edit', $uid) || $authorize->hasPermission('finance.project.edit', $uid) || $authorize->hasPermission('admin.project.read', $uid) ) { ?>
         <!-- Page Heading -->
         <?php if ($ismobile === false) { ?>
             <div class="tm-card-header uk-light uk-margin-remove-left">

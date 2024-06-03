@@ -1756,7 +1756,7 @@ class Home extends BaseController
             $NotifikasiModel->insert($datanotifikasi);
         }
 
-        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Upload Bukti Pembayarata ' . $project['name']]);
+        $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Melakukan Upload Bukti Pembayaran ' . $project['name']]);
 
 
         return redirect()->to('/')->with('message', 'Bukti telah tekirim');
