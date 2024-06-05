@@ -138,7 +138,7 @@
                     $folder = "spk";
                 }elseif($version['type'] === "5"){
                     $type   = "Sertrim";
-                    $folder = "bast";
+                    $folder = "sertrim";
                 }elseif($version['type'] === "6"){
                     $type   = "Bast";
                     $folder = "bast";

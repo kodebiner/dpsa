@@ -19,6 +19,8 @@
 
 <!-- Page Heading -->
 <?php if ($authorize->hasPermission('admin.user.read', $uid) || $authorize->hasPermission('finance.project.edit', $uid)) { ?>
+
+    <!-- Form Input Mobile View-->
     <?php if ($ismobile === false) { ?>
         <div class="tm-card-header uk-light uk-margin-remove-left">
             <div uk-grid class="uk-flex-middle">
@@ -37,7 +39,11 @@
         <div id="filter" class="uk-margin" hidden>
             <form id="searchform" action="laporan" method="GET">
                 <div class="uk-margin-small uk-flex uk-flex-center">
-                    <input class="uk-input uk-form-width-large" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                    <input class="uk-input uk-form-width-small" id="search" name="search" placeholder="Cari" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> />
+                </div>
+                <div class="uk-margin-small uk-flex uk-flex-center">
+                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                    <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
                 </div>
                 <div class="uk-margin uk-child-width-auto uk-grid-small uk-flex-middle uk-flex-center" uk-grid>
                     <div>Tampilan</div>
@@ -54,6 +60,7 @@
             </form>
         </div>
     <?php } ?>
+    <!-- End Form Input Mobile View -->
 
     <?php
     $datachart = [];
@@ -165,67 +172,99 @@
         </div>
     </div>
 
+    <!-- Form Input Desktop View -->
+    <?php if ($ismobile === false) { ?>
+        <div class="uk-margin-large">
+            <form id="searchform" action="laporan" method="get">
+                <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
+                    <div class="uk-width-1-3">
+                        <div class="">
+                            <div class="uk-inline">
+                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-auto">
+                        <div>
+                            <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
+                                <div>
+                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                        <div>Cari:</div>
+                                        <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
+                                    </div>
+                                </div>
+                                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                    <div>
+                                        <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                        <div>Tampilan</div>
+                                        <div>
+                                            <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
+                                                <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
+                                                <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
+                                                <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
+                                                <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
+                                            </select>
+                                        </div>
+                                        <div>Per Halaman</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <?php } ?>
+    <!-- End Form Input Desktop View -->
+
     <!-- End Of Page Heading -->
     <?= view('Views/Auth/_message_block') ?>
 
-    <!-- form input -->
-    <?php if ($ismobile === false) { ?>
-        <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
-            <div class="uk-width-1-3">
-                <div class="">
-                    <form id="short" action="laporan" method="get">
-                        <div class="uk-inline">
-                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                            <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="uk-width-auto">
-                <div>
-                    <form class="uk-margin" id="searchform" action="laporan" method="GET">
-                        <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
-                            <div>
-                                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                    <div>Cari:</div>
-                                    <div><input class="uk-input uk-form-width-medium" id="search" name="search" <?= (isset($input['search']) ? 'value="' . $input['search'] . '"' : '') ?> /></div>
-                                </div>
-                            </div>
-                            <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                <div>
-                                    <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                    <div>Tampilan</div>
-                                    <div>
-                                        <select class="uk-select uk-form-width-xsmall" id="perpage" name="perpage">
-                                            <option value="10" <?= (isset($input['perpage']) && ($input['perpage'] === '10') ? 'selected' : '') ?>>10</option>
-                                            <option value="25" <?= (isset($input['perpage']) && ($input['perpage'] === '25') ? 'selected' : '') ?>>25</option>
-                                            <option value="50" <?= (isset($input['perpage']) && ($input['perpage'] === '50') ? 'selected' : '') ?>>50</option>
-                                            <option value="100" <?= (isset($input['perpage']) && ($input['perpage'] === '100') ? 'selected' : '') ?>>100</option>
-                                        </select>
-                                    </div>
-                                    <div>Per Halaman</div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
     <script>
         document.getElementById('search').addEventListener("change", submitform);
         document.getElementById('perpage').addEventListener("change", submitform);
 
         function submitform() {
+            const x =  document.getElementById('daterange').value.replace(/[^A-Za-z 0-9~%.:_\\&-]/gi, '-');
+            
+            // Start date
+            let sMonth  = x.slice(0,2);
+            let sDate   = x.slice(3,5);
+            let sYear   = x.slice(6,10);
+
+            // End date
+            let eMonth  = x.slice(13,15);
+            let eDate   = x.slice(16,18);
+            let eYear   = x.slice(19,23);
+
+            let startdate = sYear + "-" + sMonth + "-" + sDate;
+            let enddate   = eYear + "-" + eMonth + "-" + eDate;
+            
+            let result  = startdate + ' - ' + enddate;
+            document.getElementById('daterange').value = result;
+            
+            // console.log(result);
+            // const today = new Date();
+            // const yyyy = today.getFullYear();
+            // let mm = today.getMonth() + 1; // Months start at 0!
+            // let dd = today.getDate();
+
+            // if (dd < 10) dd = '0' + dd;
+            // if (mm < 10) mm = '0' + mm;
+
+            // const formattedToday = yyyy + '-' + mm + '-' + dd;
+            // console.log(formattedToday);
+
+            console.log(document.getElementById('daterange').value);
+            document.getElementById('daterange').value = result;
             document.getElementById('searchform').submit();
         };
-    </script>
 
-    <script>
         $(document).ready(function() {
             $(function() {
                 $('input[name="daterange"]').daterangepicker({
@@ -234,7 +273,8 @@
                 }, function(start, end, label) {
                     document.getElementById('daterange').value = start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD');
                     console.log(document.getElementById('daterange').value);
-                    document.getElementById('short').submit();
+                    // document.getElementById('short').submit();
+                    document.getElementById('searchform').submit();
                 });
             });
         });

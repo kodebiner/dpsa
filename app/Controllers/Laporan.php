@@ -56,6 +56,7 @@ class Laporan extends BaseController
 
             // Populating data
             $input = $this->request->getVar('daterange');
+           
             if (!empty($input)) {
                 $daterange = explode(' - ', $input);
                 $startdate = $daterange[0];
@@ -68,7 +69,7 @@ class Laporan extends BaseController
             // Initialize
             $input = $this->request->getGet();
             $gconf = $GconfigModel->first();
-
+            
             if (isset($input['perpage'])) {
                 $perpage = $input['perpage'];
             } else {
@@ -95,16 +96,18 @@ class Laporan extends BaseController
             $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
             $query = $this->builder->get($perpage, $offset)->getResultArray();
             $total = count($query);
-
+            
             if (isset($input['search']) && !empty($input['search'])) {
                 $totalLaporan = $ProjectModel
-                    ->like('project.name', $input['search'])
-                    ->countAllResults();
-            } else {
-                $totalLaporan = $ProjectModel
-                    ->countAllResults();
+                ->like('project.name', $input['search'])
+                ->where('project.deleted_at ='.null)
+                ->countAllResults();
+            } else { $totalLaporan = $ProjectModel
+                ->where('project.deleted_at ='.null)
+                ->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate)
+                ->countAllResults();
             }
-
+            
             $projects = $query;
 
             $projectdata = [];
