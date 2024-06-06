@@ -82,7 +82,7 @@ class Laporan extends BaseController
             if ($startdate === $enddate) {
                 $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
             } else {
-                $this->builder->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate);
+                $this->builder->where('project.created_at >=', $startdate. ' 00:00:00')->where('project.created_at <=', $enddate. ' 23:59:59');
             }
             $this->builder->where('project.deleted_at ='.null);
             $this->builder->join('users', 'users.id = project.marketing');
@@ -101,6 +101,8 @@ class Laporan extends BaseController
                 $totalLaporan = $ProjectModel
                 ->like('project.name', $input['search'])
                 ->where('project.deleted_at ='.null)
+                ->where('project.created_at >=', $startdate. ' 00:00:00')
+                ->where('project.created_at <=', $enddate. ' 23:59:59')
                 ->countAllResults();
             } else { $totalLaporan = $ProjectModel
                 ->where('project.deleted_at ='.null)
@@ -241,7 +243,6 @@ class Laporan extends BaseController
                 // End New Value ALL RAB & CUSTOM RAB + PPN
 
             }
-
 
             // Parsing data to view
             $data                   = $this->data;

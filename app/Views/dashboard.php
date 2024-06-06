@@ -1635,10 +1635,16 @@
             <?php if ($ismobile === true) { ?>
                 <h1 class="tm-h1 uk-text-center uk-margin-remove">Daftar & Laporan Proyek</h1>
                 <div class="uk-margin uk-text-center">
-                    <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
+                    <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filterreport">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
                 </div>
-                <div id="filter" class="uk-margin" hidden>
-                    <form id="searchform" action="<?= $uri ?>" method="GET">
+                <div id="filterreport" class="uk-margin" hidden>
+                    <form id="searchformreport" action="<?= $uri ?>" method="GET">
+                        <div class="uk-margin-small uk-flex uk-flex-center">
+                            <div class="uk-inline">
+                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                <input class="uk-input uk-form-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
+                            </div>
+                        </div>
                         <div class="uk-margin-small uk-flex uk-flex-center">
                             <input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> />
                         </div>
@@ -1737,62 +1743,116 @@
 
         <!-- form input -->
         <?php if ($ismobile === false) { ?>
-            <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
-                <div class="uk-width-1-3">
-                    <div class="">
-                        <form id="short" action="<?= $uri ?>" method="get">
-                            <div class="uk-inline">
-                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="uk-width-auto">
-                    <div>
-                        <form class="uk-margin" id="searchreport" action="<?= $uri ?>" method="GET">
-                            <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
-                                <div>
-                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                        <div>Cari:</div>
-                                        <div><input class="uk-input uk-form-width-medium" id="searchreport" placeholder="Masukkan Nama Proyek..." name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
-                                    </div>
+            <div class="uk-margin">
+                <form class="uk-margin" id="searchformreport" action="<?= $uri ?>" method="GET">
+                    <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
+                        <div class="uk-width-1-3">
+                            <div class="">
+                                <div class="uk-inline">
+                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                    <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
                                 </div>
-                                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                            </div>
+                        </div>
+                        <div class="uk-width-auto">
+                            <div>
+                                <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                                     <div>
-                                        <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                        <div>Tampilan</div>
-                                        <div>
-                                            <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
-                                                <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
-                                                <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
-                                                <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
-                                                <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
-                                            </select>
+                                        <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                            <div>Cari:</div>
+                                            <div><input class="uk-input uk-form-width-medium" id="searchreport" placeholder="Masukkan Nama Proyek..." name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
                                         </div>
-                                        <div>Per Halaman</div>
+                                    </div>
+                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                        <div>
+                                            <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                            <div>Tampilan</div>
+                                            <div>
+                                                <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
+                                                    <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                                    <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                                    <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                                    <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
+                                                </select>
+                                            </div>
+                                            <div>Per Halaman</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         <?php } ?>
-        <script>
+        <!-- <script>
             document.getElementById('searchreport').addEventListener("change", submitformreport);
             document.getElementById('perpagereport').addEventListener("change", submitformreport);
 
             function submitformreport() {
                 document.getElementById('searchform').submit();
             };
-        </script>
+        </script> -->
 
         <script>
+
+            // Client Filter
+            document.getElementById('search').addEventListener("change", submitform);
+            document.getElementById('perpage').addEventListener("change", submitform);
+
+            function submitform() {
+                document.getElementById('searchform').submit();
+            };
+
+            // Report Filter
+            document.getElementById('searchreport').addEventListener("change", submitreport);
+            document.getElementById('perpagereport').addEventListener("change", submitreport);
+
+            function submitreport() {
+                const x =  document.getElementById('daterange').value.replace(/[^A-Za-z 0-9~%.:_\\&-]/gi, '-');
+                
+                // Start date
+                let sMonth  = x.slice(0,2);
+                let sDate   = x.slice(3,5);
+                let sYear   = x.slice(6,10);
+
+                // End date
+                let eMonth  = x.slice(13,15);
+                let eDate   = x.slice(16,18);
+                let eYear   = x.slice(19,23);
+
+                let startdate = sYear + "-" + sMonth + "-" + sDate;
+                let enddate   = eYear + "-" + eMonth + "-" + eDate;
+                
+                let result  = startdate + ' - ' + enddate;
+                console.log(result);
+                document.getElementById('daterange').value = result;
+
+                console.log(document.getElementById('daterange').value);
+                document.getElementById('daterange').value = result;
+                document.getElementById('searchformreport').submit();
+            };
+
+            $(document).ready(function() {
+                $(function() {
+                    $('input[name="daterange"]').daterangepicker({
+                        maxDate: new Date(),
+                        opens: 'right'
+                    }, function(start, end, label) {
+                        document.getElementById('daterange').value = start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD');
+                        console.log(document.getElementById('daterange').value);
+                        // document.getElementById('short').submit();
+                        document.getElementById('searchformreport').submit();
+                    });
+                });
+            });
+        </script>
+
+        <!-- <script>
             $(document).ready(function() {
                 $(function() {
                     $('input[name="daterange"]').daterangepicker({
@@ -1805,7 +1865,7 @@
                     });
                 });
             });
-        </script>
+        </script> -->
 
         <!-- Table Of Content -->
         <div class="uk-overflow-auto uk-margin-large-top uk-margin-large-bottom">
@@ -1839,7 +1899,7 @@
                                     echo 'Dalam Proses';
                                 } ?>
                             </td>
-                            <td class="uk-text-center"><?= $project['created_at'] ?></td>
+                            <td class="uk-text-center uk-text-nowrap"><?= $project['created_at'] ?></td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -2459,39 +2519,39 @@
         </script>
     </div>
 <?php } ?>
-<?php if (!empty($input)) {
+<?php if (!empty($input['projectid'])) {
     if ($ismobile == false) { ?>
         <script>
             $(document).ready(function() {
-                var unhidecontent = document.getElementById('content<?=$input?>');
+                var unhidecontent = document.getElementById('content<?=$input['projectid']?>');
                 unhidecontent.removeAttribute('hidden');
 
-                var opendropdown = document.getElementById('containerbtnup<?=$input?>');
+                var opendropdown = document.getElementById('containerbtnup<?=$input['projectid']?>');
                 opendropdown.removeAttribute('hidden');
 
-                var closedropdown = document.getElementById('containerbtn<?=$input?>');
+                var closedropdown = document.getElementById('containerbtn<?=$input['projectid']?>');
                 closedropdown.setAttribute('hidden', '');
             });
                 
             window.addEventListener('load', () => setTimeout(() => {
-                document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                document.querySelector('#card-project<?= $input['projectid'] ?>').scrollIntoView()
             }))
         </script>
     <?php } else { ?>
         <script>
             $(document).ready(function() {
-                var unhidebody = document.getElementById('body<?=$input?>');
+                var unhidebody = document.getElementById('body<?=$input['projectid']?>');
                 unhidebody.removeAttribute('hidden');
 
-                var openmobile = document.getElementById('open<?=$input?>');
+                var openmobile = document.getElementById('open<?=$input['projectid']?>');
                 openmobile.removeAttribute('hidden');
 
-                var closemobile = document.getElementById('close<?=$input?>');
+                var closemobile = document.getElementById('close<?=$input['projectid']?>');
                 closemobile.setAttribute('hidden', '');
             });
             
             window.addEventListener('load', () => setTimeout(() => {
-                document.querySelector('#card-project<?= $input ?>').scrollIntoView()
+                document.querySelector('#card-project<?= $input['projectid'] ?>').scrollIntoView()
             }))
         </script>
     <?php }

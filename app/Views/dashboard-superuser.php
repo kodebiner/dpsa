@@ -198,18 +198,16 @@
             <?php if ($ismobile === true) { ?>
                 <h1 class="tm-h1 uk-text-center uk-margin-remove">Daftar & Laporan Proyek</h1>
                 <div class="uk-margin uk-text-center">
-                    <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filter">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
+                    <button id="filterbutton" class="uk-button uk-button-secondary" uk-toggle="target: #filterreport">Filter <span id="filteropen" uk-icon="chevron-down"></span><span id="filterclose" uk-icon="chevron-up" hidden></span></button>
                 </div>
-                <div id="filter" class="uk-margin" hidden>
-                    <div class="uk-margin-small uk-flex uk-flex-center">
-                        <form id="short" action="home" method="get">
+                <div id="filterreport" class="uk-margin" hidden>
+                    <form id="searchformreport" action="home" method="GET">
+                        <div class="uk-margin-small uk-flex uk-flex-center">
                             <div class="uk-inline">
                                 <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                 <input class="uk-input uk-form-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
                             </div>
-                        </form>
-                    </div>
-                    <form id="searchformreport" action="home" method="GET">
+                        </div>
                         <div class="uk-margin-small uk-flex uk-flex-center">
                             <input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" placeholder="<?= lang('Global.search') ?>" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> />
                         </div>
@@ -460,7 +458,7 @@
                                     echo 'Dalam Proses';
                                 } ?>
                             </td>
-                            <td class="uk-text-center"><?= $project['created_at'] ?></td>
+                            <td class="uk-text-center uk-text-nowrap"><?= $project['created_at'] ?></td>
                         </tr>
                     <?php } ?>
                 </tbody>
