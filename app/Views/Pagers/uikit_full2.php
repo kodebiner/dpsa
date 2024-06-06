@@ -23,7 +23,8 @@ $pager->setSurroundCount(2);
         <?php
             $i = 1;
             $uri = current_url(true);
-            $full_url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $full_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            // $full_url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             // $full_url = base_url("home?".$_SERVER["QUERY_STRING"]);
         ?>
 
