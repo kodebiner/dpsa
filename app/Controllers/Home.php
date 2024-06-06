@@ -144,22 +144,25 @@ class Home extends BaseController
 
                 $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
 
+                // $totalpro = $ProjectModel->where('project.deleted_at ='.null)->where('project.created_at >=', $startdate)->where('project.created_at <=', $enddate)->find();
+                // dd($totalpro);
                 if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-                    $totalpro = $proyek
+                    $totalpro = $ProjectModel
                         ->where('project.deleted_at ='.null)
                         ->join('company', 'company.id = project.clientid')
                         ->like('project.name', $input['searchreport'])
                         ->orLike('company.rsname', $input['searchreport'])
-                        ->where('created_at >=', $startdate)
-                        ->where('created_at <=', $enddate)
+                        // ->where('created_at >=', $startdate)
+                        // ->where('created_at <=', $enddate)
                         ->countAllResults();
                 } else {
-                    $totalpro = $proyek
+                    $totalpro = $ProjectModel
                     ->where('project.deleted_at ='.null)
-                    ->where('created_at >=', $startdate)
-                    ->where('created_at <=', $enddate)
+                    ->where('project.created_at >=', $startdate)
+                    ->where('project.created_at <=', $enddate)
                     ->countAllResults();
                 }
+                // dd($totalpro);
 
                 // Query Data Project
                 $projectdata = [];
@@ -385,14 +388,14 @@ class Home extends BaseController
                         ->orLike('company.rsname', $input['searchreport'])
                         ->whereIn('project.clientid',$klienid)
                         ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate)
-                        ->where('created_at <=', $enddate)
+                        // ->where('created_at >=', $startdate)
+                        // ->where('created_at <=', $enddate)
                         ->countAllResults();
                 } else {
                     $totalpro = $proyek
                         ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate)
-                        ->where('created_at <=', $enddate)
+                        // ->where('created_at >=', $startdate)
+                        // ->where('created_at <=', $enddate)
                         ->whereIn('project.clientid',$klienid)
                         ->countAllResults();
                 }
@@ -534,8 +537,6 @@ class Home extends BaseController
                 $data['clients']        = array_slice($clients, $offset, $perpage);
                 $data['pagerpro']       = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
                 $data['pagerreport']    = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
-                // $data['pager']          = $pager->makeLinks($page, $perpage, $total, 'uikit_full');
-                // $data['pagerpro']       = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
                 $data['input']          = $this->request->getGet('projectid');
                 $data['projectdata']    = $projectdata;
                 $data['projects']       = $queryproject;

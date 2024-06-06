@@ -149,7 +149,9 @@
                 if (!empty($projectdata[$project['id']]['progress'])) {
                     $produksi = round((int)$projectdata[$project['id']]['progress']);
                     $progress = round($projectdata[$project['id']]['progress'] + $progress);
-                    $status   = "Retensi";
+                    if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
+                        $status   = "Retensi";
+                    }
                 }
 
                 if (!empty($projectdata[$project['id']]['dateline']) && !empty($projectdata[$project['id']]['now'])) {

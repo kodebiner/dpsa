@@ -21,17 +21,30 @@ $pager->setSurroundCount(2);
         <?php } ?>
 
         <?php
-        $i = 1;
+            $i = 1;
+            $uri = current_url(true);
+            $full_url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            // $full_url = base_url("home?".$_SERVER["QUERY_STRING"]);
         ?>
+
         <?php foreach ($pager->links() as $link) { ?>
             <li <?= $link['active'] ? 'class="uk-active"' : '' ?>>
                 <?php
-                $link['uri'] = base_url('?pagereport='.$i++);
-                if ($link['active'] === true) {
-                    echo '<span>'.$link['title'].'</span>';
-                } else {
-                    echo '<a href="'.$link['uri'].'">'.$link['title'].'</a>';
-                }
+            
+                    $link['uri'] = $full_url.'&pagereport='.$i++;
+                    if ($link['active'] === true) {
+                        echo '<span>'.$link['title'].'</span>';
+                    } else {
+                        echo '<a href="'.$link['uri'].'">'.$link['title'].'</a>';
+                    }
+
+                    // $link['uri'] = base_url('?pagereport='.$i++);
+                    // if ($link['active'] === true) {
+                    //     echo '<span>'.$link['title'].'</span>';
+                    // } else {
+                    //     echo '<a href="'.$link['uri'].'">'.$link['title'].'</a>';
+                    // }
+
                 ?>
             </li>
         <?php } ?>

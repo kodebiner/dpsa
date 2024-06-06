@@ -247,7 +247,6 @@
             <!-- end of Page Heading Report -->
 
             <div id="chart_div" class="uk-margin" style="width: 100%; height: 500px;"></div>
-
         </div>
         
         <div class="uk-child-width-1-3@s uk-text-left uk-margin" uk-grid>
@@ -308,53 +307,54 @@
 
         <!-- form input -->
         <?php if ($ismobile === false) { ?>
-            <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
-                <div class="uk-width-1-3">
-                    <div class="">
-                        <form id="short" action="home" method="get">
-                            <div class="uk-inline">
-                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
-                                <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="uk-width-auto">
-                    <div>
-                        <form class="uk-margin" id="searchreport" action="home" method="GET">
-                            <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
-                                <div>
-                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                        <div>Cari:</div>
-                                        <div><input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
-                                    </div>
+            <div class="uk-margin">
+                <form id="searchformreport" action="home" method="get">
+                    <div class="uk-child-width-1-2@s uk-text-left" uk-grid>
+                        <div class="uk-width-1-3">
+                            <div class="">
+                                <div class="uk-inline">
+                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
+                                    <input class="uk-input uk-width-medium" type="text" id="daterange" name="daterange" value="<?= date('m/d/Y', $startdate) ?> - <?= date('m/d/Y', $enddate) ?>" />
                                 </div>
-                                <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                            </div>
+                        </div>
+                        <div class="uk-width-auto">
+                            <div>
+                                <div class="uk-child-width-auto uk-flex-between uk-flex-middle" uk-grid>
                                     <div>
-                                        <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
-                                        <div>Tampilan</div>
-                                        <div>
-                                            <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
-                                                <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
-                                                <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
-                                                <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
-                                                <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
-                                            </select>
+                                        <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                            <div>Cari:</div>
+                                            <div><input class="uk-input uk-form-width-medium" id="searchreport" name="searchreport" <?= (isset($input['searchreport']) ? 'value="' . $input['searchreport'] . '"' : '') ?> /></div>
                                         </div>
-                                        <div>Per Halaman</div>
+                                    </div>
+                                    <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                        <div>
+                                            <a class="uk-button uk-button-primary uk-button-default uk-width-1-1" href="laporan/excel?daterange=<?=date('Y-m-d', $startdate)?>+-+<?=date('Y-m-d', $enddate)?>" target="_blank"><span uk-icon="download"></span>Laporan</a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="uk-child-width-auto uk-grid-small uk-flex-middle" uk-grid>
+                                            <div>Tampilan</div>
+                                            <div>
+                                                <select class="uk-select uk-form-width-xsmall" id="perpagereport" name="perpagereport">
+                                                    <option value="10" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '10') ? 'selected' : '') ?>>10</option>
+                                                    <option value="25" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '25') ? 'selected' : '') ?>>25</option>
+                                                    <option value="50" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '50') ? 'selected' : '') ?>>50</option>
+                                                    <option value="100" <?= (isset($input['perpagereport']) && ($input['perpagereport'] === '100') ? 'selected' : '') ?>>100</option>
+                                                </select>
+                                            </div>
+                                            <div>Per Halaman</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         <?php } ?>
-        <script>
+
+        <!-- <script>
             // Searching Proyek
             document.getElementById('search').addEventListener("change", submitform);
             document.getElementById('perpage').addEventListener("change", submitform);
@@ -368,12 +368,50 @@
             document.getElementById('perpagereport').addEventListener("change", submitreport);
 
             function submitreport() {
+                document.getElementById('searchreport').submit();
+            };
+
+        </script> -->
+
+        <script>
+
+            // Client Filter
+            document.getElementById('search').addEventListener("change", submitform);
+            document.getElementById('perpage').addEventListener("change", submitform);
+
+            function submitform() {
+                document.getElementById('searchform').submit();
+            };
+
+            // Report Filter
+            document.getElementById('searchreport').addEventListener("change", submitreport);
+            document.getElementById('perpagereport').addEventListener("change", submitreport);
+
+            function submitreport() {
+                const x =  document.getElementById('daterange').value.replace(/[^A-Za-z 0-9~%.:_\\&-]/gi, '-');
+                
+                // Start date
+                let sMonth  = x.slice(0,2);
+                let sDate   = x.slice(3,5);
+                let sYear   = x.slice(6,10);
+
+                // End date
+                let eMonth  = x.slice(13,15);
+                let eDate   = x.slice(16,18);
+                let eYear   = x.slice(19,23);
+
+                let startdate = sYear + "-" + sMonth + "-" + sDate;
+                let enddate   = eYear + "-" + eMonth + "-" + eDate;
+                
+                let result  = startdate + ' - ' + enddate;
+                console.log(result);
+                document.getElementById('daterange').value = result;
+
+                console.log(document.getElementById('daterange').value);
+                document.getElementById('daterange').value = result;
                 document.getElementById('searchformreport').submit();
             };
 
-        </script>
-
-        <script>
             $(document).ready(function() {
                 $(function() {
                     $('input[name="daterange"]').daterangepicker({
@@ -382,7 +420,8 @@
                     }, function(start, end, label) {
                         document.getElementById('daterange').value = start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD');
                         console.log(document.getElementById('daterange').value);
-                        document.getElementById('short').submit();
+                        // document.getElementById('short').submit();
+                        document.getElementById('searchformreport').submit();
                     });
                 });
             });
