@@ -160,7 +160,7 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('sphprint/(:num)', 'Project::sphprint/$1');
     $routes->get('sphview/(:num)', 'Project::sphview/$1');
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
-    $routes->get('invoiceexcel/(:num)', 'Project::invoiceexcel/$1');
+    // $routes->get('invoiceexcel/(:num)', 'Project::invoiceexcel/$1');
     $routes->get('invoiceexcel1/(:num)', 'Project::invoiceexcel1/$1');
     $routes->get('invoiceexcel2/(:num)', 'Project::invoiceexcel2/$1');
     $routes->get('invoiceexcel3/(:num)', 'Project::invoiceexcel3/$1');

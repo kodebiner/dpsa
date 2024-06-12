@@ -229,7 +229,7 @@ $tanggalsph = ucwords($dateFormatted);
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['height'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['volume'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['denomination'] ?></td>
-                        <td style="border: 1pt solid black; text-align:center;">1</td>
+                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['qty'] ?></td>
                         <td style="border: 1pt solid black;">
                         <?php if (!empty($cusrab['price'])) {
                                 echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
@@ -237,7 +237,7 @@ $tanggalsph = ucwords($dateFormatted);
                         </td>
                         <td style="border: 1pt solid black;">
                         <?php if (!empty($cusrab['price'])) {
-                                echo "Rp." . number_format($cusrab['price'], 0, ',', '.');
+                                echo "Rp." . number_format($cusrab['price'] * $cusrab['qty'], 0, ',', '.');
                             } ?>
                         </td>
                         <td style="border: 1pt solid black; text-align:right;"></td>

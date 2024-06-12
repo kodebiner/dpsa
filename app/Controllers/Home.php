@@ -246,7 +246,13 @@ class Home extends BaseController
 
                     // All Custom RAB 
                     $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-                    $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // New Cust Rab Price
+                    $allnewrabcust = [];
+                    foreach($allCustomRab as $rabcust){
+                        $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                    }
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
                     // Pembayaran Value
                     $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -260,8 +266,8 @@ class Home extends BaseController
 
                     // New Value ALL RAB & CUSTOM RAB + PPN
                     $projectdata[$project['id']]['rabvalueppn'] = 0;
-                    if(!empty($price) || !empty($allCustomRab)){
-                        $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+                    if(!empty($price) || !empty($allnewrabcust)){
+                        $allrab     =   array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                         // Value I & II
                         $valuerab = $allrab - ($allrab * (70/100));
@@ -398,6 +404,7 @@ class Home extends BaseController
                         ->whereIn('project.clientid',$klienid)
                         ->countAllResults();
                 }
+
                 // Query Data Project
                 $projectdata = [];
                 foreach ($queryproject as $project) {
@@ -481,7 +488,13 @@ class Home extends BaseController
 
                     // All Custom RAB 
                     $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-                    $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // New Cust Rab Price
+                    $allnewrabcust = [];
+                    foreach($allCustomRab as $rabcust){
+                        $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                    }
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
                     // Pembayaran Value
                     $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -495,8 +508,8 @@ class Home extends BaseController
 
                     // New Value ALL RAB & CUSTOM RAB + PPN
                     $projectdata[$project['id']]['rabvalueppn'] = 0;
-                    if(!empty($price) || !empty($allCustomRab)){
-                        $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+                    if(!empty($price) || !empty($allnewrabcust)){
+                        $allrab     =   array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                         // Value I & II
                         $valuerab = $allrab - ($allrab * (70/100));
@@ -641,6 +654,7 @@ class Home extends BaseController
     
                         // Custom RAB MODEL
                         $projectdata[$project['id']]['custrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
+                        $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->find();
     
                         // bast
                         $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
@@ -650,7 +664,7 @@ class Home extends BaseController
                         $productions                                    = $ProductionModel->where('projectid', $project['id'])->find();
                         if (!empty($productions)) {
                             foreach ($productions as $production) {
-    
+
                                 // MDL Production
                                 $mdlprod        = $MdlModel->where('id', $production['mdlid'])->find();
                                 $percentages    = [];
@@ -680,7 +694,7 @@ class Home extends BaseController
                                     if ($production['setting'] == 1) {
                                         $percentages[]    = 1;
                                     }
-    
+
                                     // Data Prodcution
                                     $projectdata[$project['id']]['production'][$production['id']]  = [
                                         'id'                => $production['id'],
@@ -694,17 +708,16 @@ class Home extends BaseController
                                         'packing'           => $production['packing'],
                                         'pengiriman'        => $production['pengiriman'],
                                         'setting'           => $production['setting'],
+                                        'percentages'       => array_sum($percentages) / 8 * 100,
                                     ];
                                 }
-    
-                                $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                             }
                         } else {
                             $mdlprod    = [];
                             $projectdata[$project['id']]['production']   = [];
                         }
-    
-                        // Production Proggres
+
+                        // PRODUCTION VALUE
                         if (!empty($projectdata[$project['id']]['rab'])) {
                             $price = [];
                             foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
@@ -713,72 +726,260 @@ class Home extends BaseController
                                     'proid'     => $mdldata['proid'],
                                     'price'     => $mdldata['oriprice'],
                                     'sumprice'  => $mdldata['price'],
-                                    'qty'       => $mdldata['qty'],
+                                    'qty'       => $mdldata['qty']
                                 ];
                             }
-    
-                            $total = array_sum(array_column($price, 'sumprice'));
-    
-                            $progresdata = [];
-                            $datamdlid = [];
+
+                            // $progresdata = [];
                             foreach ($price as $progresval) {
-                                $progresdata[] = [
-                                    'id'    => $progresval['id'], // mdlid
-                                    'proid' => $progresval['proid'],
-                                    'val'   => (($progresval['price'] / $total) * 65) / 8,
-                                ];
                                 $datamdlid[] = $progresval['id'];
                             }
-    
-                            $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
-    
-                            $progress = [];
-                            foreach ($productval as $proses) {
-                                foreach ($progresdata as $value) {
-                                    if ($proses['mdlid'] === $value['id']) {
-                                        if ($proses['gambar_kerja'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['mesin_awal'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['tukang'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['mesin_lanjutan'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['finishing'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['packing'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['pengiriman'] === "1") {
-                                            array_push($progress, $value['val']);
-                                        }
-                                        if ($proses['setting'] === "1") {
-                                            array_push($progress, $value['val']);
+                        }
+
+                        // CUSTOM RAB PRODUCTION
+                        if($this->data['authorize']->hasPermission('client.read', $this->data['uid'])){
+                            $productionCustRabs = $ProductionModel->where('custrabid!=', NULL)->where('mdlid', 0)->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                        }
+
+                        $projectdata[$project['id']]['productioncustrab']   = [];
+                        if (!empty($productionCustRabs)) {
+                            foreach ($productionCustRabs as $productionCustRab) {
+
+                                // MDL Production
+                                $cusrabproducts        = $CustomRabModel->where('id', $productionCustRab['custrabid'])->find();
+                                $percentages    = [];
+                                foreach ($cusrabproducts as $cusrabproduct) {
+                                    
+                                    // Percentage Production
+                                    if ($productionCustRab['gambar_kerja'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['mesin_awal'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['tukang'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['mesin_lanjutan'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['finishing'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['packing'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['pengiriman'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+                                    if ($productionCustRab['setting'] == 1) {
+                                        $percentages[]    = 1;
+                                    }
+
+                                    $projectdata[$project['id']]['productioncustrab'][$productionCustRab['id']]  = [
+                                        'id'                => $productionCustRab['id'],
+                                        'userid'            => $productionCustRab['userid'],
+                                        'custrabid'         => $productionCustRab['custrabid'],
+                                        'name'              => $cusrabproduct['name'],
+                                        'gambar_kerja'      => $productionCustRab['gambar_kerja'],
+                                        'mesin_awal'        => $productionCustRab['mesin_awal'],
+                                        'tukang'            => $productionCustRab['tukang'],
+                                        'mesin_lanjutan'    => $productionCustRab['mesin_lanjutan'],
+                                        'finishing'         => $productionCustRab['finishing'],
+                                        'packing'           => $productionCustRab['packing'],
+                                        'pengiriman'        => $productionCustRab['pengiriman'],
+                                        'setting'           => $productionCustRab['setting'],
+                                        'percentages'       => array_sum($percentages) / 8 * 100,
+                                    ];
+                                }
+
+                                // $projectdata[$project['id']]['productioncustrab'][$productionCustRab['id']]['percentages']  = array_sum($percentages) / 8 * 100;
+                            }
+                        } else {
+                            $cusrabproducts    = [];
+                            $projectdata[$project['id']]['productioncustrab']   = [];
+                        }
+                        // END PRODUCTION CUSTOM RAB
+
+                        // CUSTOM RAB PRODUCTION VALUE
+                        $custrabid = [];
+                        if (!empty($projectdata[$project['id']]['customrab'])) {
+                            $custrabprice = [];
+                            foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
+                                $custrabprice[] = [
+                                    'id'            => $custrabdata['id'],
+                                    'proid'         => $custrabdata['projectid'],
+                                    'price'         => $custrabdata['price'],
+                                    'totalprice'    => $custrabdata['price'] * $custrabdata['qty'],
+                                    'qty'           => $custrabdata['qty']
+                                ];
+                            }
+                                    
+                            foreach ($custrabprice as $custrabprogresval) {
+                                $custrabid[] = $custrabprogresval['id'];
+                            }
+                        }
+
+                        // ARRAY DATA PRICE & PRECENTAGES
+                        $pricetotalgroup   = [];
+
+                        // MDL DATA
+                        if(!empty($datamdlid)){
+                            $dataMdlItems = $MdlModel->whereIn('id',$datamdlid)->find();
+                            $mdlItemQty   = $RabModel->where('projectid',$project['id'])->whereIn('mdlid',$datamdlid)->find();
+        
+                            foreach ($dataMdlItems as $dataMdlItem) {
+                                foreach ( $mdlItemQty as $qtyItem ) {
+                                    if($qtyItem['mdlid'] === $dataMdlItem['id']){
+        
+                                        $dataCalculatePresentage[$project['id']]['mdl'][$dataMdlItem['id']] = [
+                                            'id'                => $project['id'],
+                                            'mdlid'             => $dataMdlItem['id'],
+                                            'mdlprice'          => $dataMdlItem['price'],
+                                            'mdltotalprice'     => $dataMdlItem['price'] * $qtyItem['qty'],
+                                            'mdlqty'            => $qtyItem['qty'],
+                                        ];
+                                        $pricetotalgroup[] = $dataMdlItem['price'] * $qtyItem['qty'];
+        
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // CUSTOM RAB DATA
+                        $dataCustRabItems = [];
+                        if (!empty($custrabid)) {
+                            $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
+                            foreach($dataCustRabItems as $dataCustRabItem){
+
+                                $dataCalculatePresentage[$project['id']]['custrab'][$dataCustRabItem['id']] = [
+                                    'id'                        =>  $project['id'],
+                                    'custrabid'                 =>  $dataCustRabItem['id'],
+                                    'custrabprice'              =>  $dataCustRabItem['price'],
+                                    'custrabtotalprice'         =>  $dataCustRabItem['price'] * $dataCustRabItem['qty'],
+                                    'custrabqty'                =>  $dataCustRabItem['qty'],
+                                ];
+                                $pricetotalgroup[] = $dataCustRabItem['price'] * $dataCustRabItem['qty'];
+                                    
+                            }
+                        }
+
+                        // ALL TOTAL PRICE
+                        if(!empty($pricetotalgroup)){
+                            $sumTotalpricevalue = array_sum($pricetotalgroup);
+                        }
+
+                        // MDL VALUE PER ITEMS
+                        if(!empty($dataCalculatePresentage[$project['id']])){
+                            if(!empty($datamdlid)){
+                                foreach($dataMdlItems as $mdlitem){
+                                    if(!empty($sumTotalpricevalue)) {
+                                        if(!empty($dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']])){
+                                            $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val'] = (((int)$dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['mdlprice'] / (int)$sumTotalpricevalue) * 65 ) / 8;
                                         }
                                     }
                                 }
                             }
-                            $projectdata[$project['id']]['progress']    = array_sum($progress);
-    
-                            if (!empty($projectdata[$project['id']]['bast'])) {
-                                $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
-                                $date = date_create($day);
-                                $key = date_format($date, "Y-m-d");
-                                $hari = date_create($key);
-                                date_add($hari, date_interval_create_from_date_string('3 month'));
-                                $dateline = date_format($hari, 'Y-m-d');
-    
-                                $now = strtotime("now");
-                                $nowtime = date("Y-m-d", $now);
-                                $projectdata[$project['id']]['dateline'] = $dateline;
-                                $projectdata[$project['id']]['now'] = $nowtime;
+                        }
+                            
+                        // CUSTRAB VALUE PER ITEMS
+                        if(!empty($custrabid)) {
+                            foreach($dataCustRabItems as $custrabprice){
+                                if(!empty($sumTotalpricevalue)) {
+                                    $dataCalculatePresentage[$project['id']]['custrab'][$custrabprice['id']]['val'] = (((int)$dataCalculatePresentage[$project['id']]['custrab'][$custrabprice['id']]['custrabprice'] / $sumTotalpricevalue) * 65 ) / 8;
+                                }
                             }
-                        } else {
+                        }
+
+                        // PRODUCTION DATA
+                        $newProduction = $ProductionModel->where('projectid',$project['id'])->find();
+
+                        // CALCULATING VALUE DATA PERCENTAGE
+                        $newAllProgress = [];
+                        foreach($newProduction as $production) {
+
+                            // CALCULATING DATA PERCENTAGE BY MDL
+                            if(!empty($datamdlid)) {
+                                foreach($dataMdlItems as $mdlitem) {
+                                    if($mdlitem['id'] === $production['mdlid']){
+                                        if ($production['gambar_kerja'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['mesin_awal'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['tukang'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['mesin_lanjutan'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['finishing'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['packing'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['pengiriman'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                        if ($production['setting'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // CALCULATING DATA PERCENTAGE BY CUSTOM RAB
+                            if(!empty($custrabid)) {
+                                foreach($dataCustRabItems as $cusrabItem) {
+                                    if($cusrabItem['id'] === $production['custrabid']){
+                                        if ($production['gambar_kerja'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['mesin_awal'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['tukang'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['mesin_lanjutan'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['finishing'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['packing'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['pengiriman'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                        if ($production['setting'] === "1") {
+                                            array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+
+                        $projectdata[$project['id']]['progress']   = array_sum($newAllProgress);
+                        // END NEW PRODUCTION CALCULATE PRESENTAGE
+
+                        if (!empty($projectdata[$project['id']]['bast'])) {
+                            $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
+                            $date = date_create($day);
+                            $key = date_format($date, "Y-m-d");
+                            $hari = date_create($key);
+                            date_add($hari, date_interval_create_from_date_string('3 month'));
+                            $dateline = date_format($hari, 'Y-m-d');
+
+                            $now = strtotime("now");
+                            $nowtime = date("Y-m-d", $now);
+                            $projectdata[$project['id']]['dateline'] = $dateline;
+                            $projectdata[$project['id']]['now'] = $nowtime;
+                        }else{
                             $projectdata[$project['id']]['dateline'] = '';
                             $projectdata[$project['id']]['now'] = '';
                         }
@@ -945,7 +1146,13 @@ class Home extends BaseController
 
                     // All Custom RAB 
                     $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    // New Cust Rab Price
+                    $allnewrabcust = [];
+                    foreach($allCustomRab as $rabcust){
+                        $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                    }
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
                     // Pembayaran Value
                     $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -959,8 +1166,8 @@ class Home extends BaseController
 
                     // New Value ALL RAB & CUSTOM RAB + PPN
                     $projectdatareport[$project['id']]['rabvalueppn'] = 0;
-                    if(!empty($price) || !empty($allCustomRab)){
-                        $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+                    if(!empty($price) || !empty($allnewrabcust)){
+                        $allrab     =   array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                         // Value I & II
                         $valuerab = $allrab - ($allrab * (70/100));
@@ -993,7 +1200,6 @@ class Home extends BaseController
                     // End New Value ALL RAB & CUSTOM RAB + PPN
                 }
 
-                
 
                 // Parsing Data to View
                 $data['title']              = lang('Global.titleDashboard');
@@ -1006,8 +1212,6 @@ class Home extends BaseController
                 $data['mdls']               = $MdlModel->findAll();
                 $data['pager']              = $pager->links('projects', 'uikit_full');
                 $data['pagerpro']           = $pager->makeLinks($pagereport, $perpagereport, $totalpro, 'uikit_full2');
-                // $data['pager']              = $pager->makeLinks($page, $perpage, $totalclient, 'uikit_full');
-                // $data['pager']              = $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
                 $data['projectdata']        = $projectdata;
                 $data['projectdesign']      = $projectdesign;
                 $data['input']              = $this->request->getGet('projectid');
@@ -1078,6 +1282,35 @@ class Home extends BaseController
             $pagereport = (@$_GET['pagereport']) ? $_GET['pagereport'] : 1;
             $offsetreport = ($pagereport - 1) * $perpagereport;
 
+            // Report Script
+            $this->db       = \Config\Database::connect();
+            $validation     = \Config\Services::validation();
+            $this->builder  = $this->db->table('project');
+            $this->config   = config('Auth');
+            $this->auth     = service('authentication');
+
+            // Initialize
+            $input = $this->request->getGet();
+            $gconf = $GconfigModel->first();
+            
+            if ($startdate === $enddate) {
+                $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
+            } else {
+                $this->builder->where('project.created_at >=', $startdate. ' 00:00:00')->where('project.created_at <=', $enddate. ' 23:59:59');
+            }
+            $this->builder->where('project.deleted_at ='.null);
+            $this->builder->where('project.clientid', $id);
+            $this->builder->join('users', 'users.id = project.marketing');
+            $this->builder->join('company', 'company.id = project.clientid');
+            if (isset($input['searchreport']) && !empty($input['searchreport'])) {
+                $this->builder->like('project.name', $input['searchreport']);
+                $this->builder->where('project.clientid', $id);
+            }
+            $this->builder->orderBy('project.id',"DESC");
+            $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
+            // $queryproject = $this->builder->get($offsetreport, $perpagereport)->getResultArray();
+            $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
+
             $totalpro = 0;
             if (isset($input['searchreport']) && !empty($input['searchreport'])) {
                 $totalpro = $ProjectModel
@@ -1096,20 +1329,6 @@ class Home extends BaseController
                     ->countAllResults();
             }
 
-            // $total = 0;
-            // if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-            //     $total = $ProjectModel
-            //         ->like('project.name', $input['searchreport'])
-            //         ->where('project.deleted_at ='.null)
-            //         ->where('project.clientid', $id)
-            //         ->countAllResults();
-            // } else {
-            //     $total = $ProjectModel
-            //         ->where('project.deleted_at ='.null)
-            //         ->where('project.clientid', $id)
-            //         ->countAllResults();
-            // }
-
             $client = $CompanyModel->find($id);
 
             if (isset($input['search']) && !empty($input['search'])) {
@@ -1120,6 +1339,8 @@ class Home extends BaseController
 
             $projectdata        = [];
             $projectdesign      = [];
+            $dataCalculatePresentage = [];
+
             if (!empty($projects)) {
                 foreach ($projects as $project) {
                     $projectdata[$project['id']]['project']     = $ProjectModel->where('id', $project['id'])->first();
@@ -1152,6 +1373,7 @@ class Home extends BaseController
 
                     // Custom RAB MODEL
                     $projectdata[$project['id']]['custrab']         = $CustomRabModel->where('projectid', $project['id'])->find();
+                    $projectdata[$project['id']]['customrab']       = $CustomRabModel->where('projectid', $project['id'])->find();
 
                     // bast
                     $projectdata[$project['id']]['sertrim']         = $BastModel->where('projectid', $project['id'])->where('status', "0")->first();
@@ -1205,17 +1427,16 @@ class Home extends BaseController
                                     'packing'           => $production['packing'],
                                     'pengiriman'        => $production['pengiriman'],
                                     'setting'           => $production['setting'],
+                                    'percentages'       => array_sum($percentages) / 8 * 100,
                                 ];
                             }
-
-                            $projectdata[$project['id']]['production'][$production['id']]['percentages']  = array_sum($percentages) / 8 * 100;
                         }
                     } else {
                         $mdlprod    = [];
                         $projectdata[$project['id']]['production']   = [];
                     }
 
-                    // Production Proggres
+                    // PRODUCTION VALUE
                     if (!empty($projectdata[$project['id']]['rab'])) {
                         $price = [];
                         foreach ($projectdata[$project['id']]['rab'] as $mdldata) {
@@ -1224,75 +1445,264 @@ class Home extends BaseController
                                 'proid'     => $mdldata['proid'],
                                 'price'     => $mdldata['oriprice'],
                                 'sumprice'  => $mdldata['price'],
-                                'qty'       => $mdldata['qty'],
+                                'qty'       => $mdldata['qty']
                             ];
                         }
 
-                        $total = array_sum(array_column($price, 'sumprice'));
-
-                        $progresdata = [];
-                        $datamdlid = [];
+                        // $progresdata = [];
                         foreach ($price as $progresval) {
-                            $progresdata[] = [
-                                'id'    => $progresval['id'], // mdlid
-                                'proid' => $progresval['proid'],
-                                'val'   => (($progresval['price'] / $total) * 65) / 8,
-                            ];
                             $datamdlid[] = $progresval['id'];
                         }
+                    }
 
-                        $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find();
+                    // CUSTOM RAB PRODUCTION
+                    if($this->data['authorize']->hasPermission('client.read', $this->data['uid'])){
+                        $productionCustRabs = $ProductionModel->where('custrabid!=', NULL)->where('mdlid', 0)->where('projectid', $project['id'])->orderBy('mdlid', 'DESC')->find();
+                    }
 
-                        $progress = [];
-                        foreach ($productval as $proses) {
-                            foreach ($progresdata as $value) {
-                                if ($proses['mdlid'] === $value['id']) {
-                                    if ($proses['gambar_kerja'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['mesin_awal'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['tukang'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['mesin_lanjutan'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['finishing'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['packing'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['pengiriman'] === "1") {
-                                        array_push($progress, $value['val']);
-                                    }
-                                    if ($proses['setting'] === "1") {
-                                        array_push($progress, $value['val']);
+                    $projectdata[$project['id']]['productioncustrab']   = [];
+                    if (!empty($productionCustRabs)) {
+                        foreach ($productionCustRabs as $productionCustRab) {
+
+                            // MDL Production
+                            $cusrabproducts        = $CustomRabModel->where('id', $productionCustRab['custrabid'])->find();
+                            $percentages    = [];
+                            foreach ($cusrabproducts as $cusrabproduct) {
+                                
+                                // Percentage Production
+                                if ($productionCustRab['gambar_kerja'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['mesin_awal'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['tukang'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['mesin_lanjutan'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['finishing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['packing'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['pengiriman'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+                                if ($productionCustRab['setting'] == 1) {
+                                    $percentages[]    = 1;
+                                }
+
+                                $projectdata[$project['id']]['productioncustrab'][$productionCustRab['id']]  = [
+                                    'id'                => $productionCustRab['id'],
+                                    'userid'            => $productionCustRab['userid'],
+                                    'custrabid'         => $productionCustRab['custrabid'],
+                                    'name'              => $cusrabproduct['name'],
+                                    'gambar_kerja'      => $productionCustRab['gambar_kerja'],
+                                    'mesin_awal'        => $productionCustRab['mesin_awal'],
+                                    'tukang'            => $productionCustRab['tukang'],
+                                    'mesin_lanjutan'    => $productionCustRab['mesin_lanjutan'],
+                                    'finishing'         => $productionCustRab['finishing'],
+                                    'packing'           => $productionCustRab['packing'],
+                                    'pengiriman'        => $productionCustRab['pengiriman'],
+                                    'setting'           => $productionCustRab['setting'],
+                                    'percentages'       => array_sum($percentages) / 8 * 100,
+                                ];
+                            }
+
+                        }
+                    } else {
+                        $cusrabproducts    = [];
+                        $projectdata[$project['id']]['productioncustrab']   = [];
+                    }
+                    // END PRODUCTION CUSTOM RAB
+
+                    // CUSTOM RAB PRODUCTION VALUE
+                    $custrabid = [];
+                    if (!empty($projectdata[$project['id']]['customrab'])) {
+                        $custrabprice = [];
+                        foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
+                            $custrabprice[] = [
+                                'id'            => $custrabdata['id'],
+                                'proid'         => $custrabdata['projectid'],
+                                'price'         => $custrabdata['price'],
+                                'totalprice'    => $custrabdata['price'] * $custrabdata['qty'],
+                                'qty'           => $custrabdata['qty']
+                            ];
+                        }
+                                
+                        foreach ($custrabprice as $custrabprogresval) {
+                            $custrabid[] = $custrabprogresval['id'];
+                        }
+                    }
+
+                    // ARRAY DATA PRICE & PRECENTAGES
+                    $pricetotalgroup   = [];
+
+                    // MDL DATA
+                    if(!empty($datamdlid)){
+                        $dataMdlItems = $MdlModel->whereIn('id',$datamdlid)->find();
+                        $mdlItemQty   = $RabModel->where('projectid',$project['id'])->whereIn('mdlid',$datamdlid)->find();
+    
+                        foreach ($dataMdlItems as $dataMdlItem) {
+                            foreach ( $mdlItemQty as $qtyItem ) {
+                                if($qtyItem['mdlid'] === $dataMdlItem['id']){
+    
+                                    $dataCalculatePresentage[$project['id']]['mdl'][$dataMdlItem['id']] = [
+                                        'id'                => $project['id'],
+                                        'mdlid'             => $dataMdlItem['id'],
+                                        'mdlprice'          => $dataMdlItem['price'],
+                                        'mdltotalprice'     => $dataMdlItem['price'] * $qtyItem['qty'],
+                                        'mdlqty'            => $qtyItem['qty'],
+                                    ];
+                                    $pricetotalgroup[] = $dataMdlItem['price'] * $qtyItem['qty'];
+    
+                                }
+                            }
+                        }
+                    }
+                    
+                    // CUSTOM RAB DATA
+                    $dataCustRabItems = [];
+                    if (!empty($custrabid)) {
+                        $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
+                        foreach($dataCustRabItems as $dataCustRabItem){
+
+                            $dataCalculatePresentage[$project['id']]['custrab'][$dataCustRabItem['id']] = [
+                                'id'                        =>  $project['id'],
+                                'custrabid'                 =>  $dataCustRabItem['id'],
+                                'custrabprice'              =>  $dataCustRabItem['price'],
+                                'custrabtotalprice'         =>  $dataCustRabItem['price'] * $dataCustRabItem['qty'],
+                                'custrabqty'                =>  $dataCustRabItem['qty'],
+                            ];
+                            $pricetotalgroup[] = $dataCustRabItem['price'] * $dataCustRabItem['qty'];
+                                
+                        }
+                    }
+
+                    // ALL TOTAL PRICE
+                    if(!empty($pricetotalgroup)){
+                        $sumTotalpricevalue = array_sum($pricetotalgroup);
+                    }
+
+                    // MDL VALUE PER ITEMS
+                    if(!empty($dataCalculatePresentage[$project['id']])){
+                        if(!empty($datamdlid)){
+                            foreach($dataMdlItems as $mdlitem){
+                                if(!empty($sumTotalpricevalue)) {
+                                    if(!empty($dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']])){
+                                        $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val'] = (((int)$dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['mdlprice'] / (int)$sumTotalpricevalue) * 65 ) / 8;
                                     }
                                 }
                             }
                         }
-                        $projectdata[$project['id']]['progress']    = array_sum($progress);
-
-                        if (!empty($projectdata[$project['id']]['bast'])) {
-                            $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
-                            $date = date_create($day);
-                            $key = date_format($date, "Y-m-d");
-                            $hari = date_create($key);
-                            date_add($hari, date_interval_create_from_date_string('3 month'));
-                            $dateline = date_format($hari, 'Y-m-d');
-
-                            $now = strtotime("now");
-                            $nowtime = date("Y-m-d", $now);
-                            $projectdata[$project['id']]['dateline'] = $dateline;
-                            $projectdata[$project['id']]['now'] = $nowtime;
+                    }
+                        
+                    // CUSTRAB VALUE PER ITEMS
+                    if(!empty($custrabid)) {
+                        foreach($dataCustRabItems as $custrabprice){
+                            if(!empty($sumTotalpricevalue)) {
+                                $dataCalculatePresentage[$project['id']]['custrab'][$custrabprice['id']]['val'] = (((int)$dataCalculatePresentage[$project['id']]['custrab'][$custrabprice['id']]['custrabprice'] / $sumTotalpricevalue) * 65 ) / 8;
+                            }
                         }
-                    } else {
+                    }
+
+                    // PRODUCTION DATA
+                    $newProduction = $ProductionModel->where('projectid',$project['id'])->find();
+
+                    // CALCULATING VALUE DATA PERCENTAGE
+                    $newAllProgress = [];
+                    foreach($newProduction as $production) {
+
+                        // CALCULATING DATA PERCENTAGE BY MDL
+                        if(!empty($datamdlid)) {
+                            foreach($dataMdlItems as $mdlitem) {
+                                if($mdlitem['id'] === $production['mdlid']){
+                                    if ($production['gambar_kerja'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['mesin_awal'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['tukang'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['mesin_lanjutan'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['finishing'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['packing'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['pengiriman'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                    if ($production['setting'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['mdl'][$mdlitem['id']]['val']);
+                                    }
+                                }
+                            }
+                        }
+
+                        // CALCULATING DATA PERCENTAGE BY CUSTOM RAB
+                        if(!empty($custrabid)) {
+                            foreach($dataCustRabItems as $cusrabItem) {
+                                if($cusrabItem['id'] === $production['custrabid']){
+                                    if ($production['gambar_kerja'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['mesin_awal'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['tukang'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['mesin_lanjutan'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['finishing'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['packing'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['pengiriman'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                    if ($production['setting'] === "1") {
+                                        array_push($newAllProgress, $dataCalculatePresentage[$project['id']]['custrab'][$cusrabItem['id']]['val']);
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+
+                    $projectdata[$project['id']]['progress']   = array_sum($newAllProgress);
+                    // END NEW PRODUCTION CALCULATE PRESENTAGE
+
+                    // BAST DATE
+                    if (!empty($projectdata[$project['id']]['bast'])) {
+                        $day =  $projectdata[$project['id']]['bast']['tanggal_bast'];
+                        $date = date_create($day);
+                        $key = date_format($date, "Y-m-d");
+                        $hari = date_create($key);
+                        date_add($hari, date_interval_create_from_date_string('3 month'));
+                        $dateline = date_format($hari, 'Y-m-d');
+
+                        $now = strtotime("now");
+                        $nowtime = date("Y-m-d", $now);
+                        $projectdata[$project['id']]['dateline'] = $dateline;
+                        $projectdata[$project['id']]['now'] = $nowtime;
+                    }else{
                         $projectdata[$project['id']]['dateline'] = '';
                         $projectdata[$project['id']]['now'] = '';
                     }
+                    // END BAST DATE
 
                     // INVOICE
                     $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
@@ -1307,36 +1717,6 @@ class Home extends BaseController
                     $projectdata[$project['id']]['buktipengiriman']     = $BuktiModel->where('projectid', $project['id'])->where('status', "1")->find();
                     
                 }
-
-                // Report Script
-                $this->db       = \Config\Database::connect();
-                $validation     = \Config\Services::validation();
-                $this->builder  = $this->db->table('project');
-                $this->config   = config('Auth');
-                $this->auth     = service('authentication');
-
-                // Initialize
-                $input = $this->request->getGet();
-                $gconf = $GconfigModel->first();
-                
-                if ($startdate === $enddate) {
-                    $this->builder->where('project.created_at >=', $startdate . ' 00:00:00')->where('project.created_at <=', $enddate . ' 23:59:59');
-                } else {
-                    $this->builder->where('project.created_at >=', $startdate. ' 00:00:00')->where('project.created_at <=', $enddate. ' 23:59:59');
-                }
-                $this->builder->where('project.deleted_at ='.null);
-                $this->builder->where('project.clientid', $id);
-                $this->builder->join('users', 'users.id = project.marketing');
-                $this->builder->join('company', 'company.id = project.clientid');
-                if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-                    $this->builder->like('project.name', $input['searchreport']);
-                    $this->builder->where('project.clientid', $id);
-                }
-                $this->builder->orderBy('project.id',"DESC");
-                $this->builder->select('project.id as id, project.name as name, project.clientid as clientid, company.rsname as rsname, project.marketing as marketing, project.created_at as created_at, users.username as username');
-                // $queryproject = $this->builder->get($offsetreport, $perpagereport)->getResultArray();
-                $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
-                // dd($queryproject);
 
                 // Query Data Project
                 $projectdatareport = [];
@@ -1421,7 +1801,14 @@ class Home extends BaseController
 
                     // All Custom RAB 
                     $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+                    $allnewrabcust = [];
+                    // New Cust Rab Price
+                    foreach($allCustomRab as $rabcust){
+                        $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                    }
+
+                    $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allCustomRab);
 
                     // Pembayaran Value
                     $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -1435,8 +1822,8 @@ class Home extends BaseController
 
                     // New Value ALL RAB & CUSTOM RAB + PPN
                     $projectdatareport[$project['id']]['rabvalueppn'] = 0;
-                    if(!empty($price) || !empty($allCustomRab)){
-                        $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+                    if(!empty($price) || !empty($allnewrabcust)){
+                        $allrab     =   array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                         // Value I & II
                         $valuerab = $allrab - ($allrab * (70/100));
@@ -1470,11 +1857,6 @@ class Home extends BaseController
                 }
             }
 
-            // Empty Project Condition
-            // if(!isset($totalpro)){
-            //     $totalpro = 0 ;
-            // }
-            
             if(!isset($projectdatareport)){
                 $projectdatareport = [];
             }
@@ -1483,6 +1865,7 @@ class Home extends BaseController
                 $queryproject = [];
             }
             // End Empty Project Condition
+
 
             // Parsing Data to View
             $data                       = $this->data;

@@ -253,6 +253,9 @@
                                             <table class="uk-table uk-table-divider">
                                             <thead>
                                                     <tr>
+                                                        <td colspan="8" class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Daftar Pesanan</td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="">Nama</th>
                                                         <th class="uk-text-center">Panjang</th>
                                                         <th class="uk-text-center">Lebar</th>
@@ -326,29 +329,50 @@
                                                     ?>
                                                     <?php if(!empty($projectdata[$project['id']]['custrab'])) {?>
                                                         <tr>
-                                                            <td class="uk-text-bold"></td>
+                                                            <td class="tm-h3 uk-text-bold uk-text-nowrap">TAMBAHAN PESANAN</td>
                                                             <td class="-text-bold"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
                                                             <td class="uk-text-center"></td>
-                                                            <td class="uk-text-bold">TAMBAHAN PESANAN</td>
                                                             <td class="uk-text-bold"></td>
+                                                            <td class="uk-text-bold"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Nama</td>
+                                                            <td class="uk-text-center">Panjang</td>
+                                                            <td class="uk-text-center">Lebar</td>
+                                                            <td class="uk-text-center">Tinggi</td>
+                                                            <td class="uk-text-center">Volume</td>
+                                                            <td class="uk-text-center">Satuan</td>
+                                                            <td class="uk-text-center">Jumlah</td>
+                                                            <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
                                                             <tr>
-                                                                <td class=""></td>
-                                                                <td class="uk-text-left"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-center"></td>
-                                                                <td class="uk-text-left"><?= strtoupper($custrab['name']) ?></td>
-                                                                <td class="uk-text-left"><?= number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                                <td class=""><?= strtoupper($custrab['name']) ?></td>
+                                                                <td class="uk-text-center"><?=$custrab['length']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['width']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['height']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['volume']?></td>
+                                                                <td class="uk-text-center">
+                                                                    <?php
+                                                                        if ($custrab['denomination'] === "1") {
+                                                                            echo "Unit";
+                                                                        } elseif ($custrab['denomination'] === "2") {
+                                                                            echo "Meter Lari";
+                                                                        } elseif ($custrab['denomination'] === "3") {
+                                                                            echo "Meter Persegi";
+                                                                        } elseif ($custrab['denomination'] === "4") {
+                                                                            echo "Set";
+                                                                        }
+                                                                    ?>
+                                                                </td>
+                                                                <td class="uk-text-center"><?=$custrab['qty']?></td>
+                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'] * $custrab['qty'], 0, ',', '.');" "; ?></td>
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } ?>
-
                                                 </tbody>
                                             </table>
                                             
@@ -480,6 +504,7 @@
                                 
                                 <div id="contentproduksi<?= $project['id'] ?>" class="uk-section uk-padding-remove-top" hidden>
                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                        <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left uk-margin uk-margin-large-top" style="text-transform: uppercase;">Progress Produksi Produk</label>
                                         <table class="uk-table uk-table-middle uk-table-divider">
                                             <thead>
                                                 <tr>
@@ -564,6 +589,114 @@
                                         </table>
                                     </div>
 
+                                    <!-- CUSTOM RAB PRODUCTION -->
+                                    <?php if(!empty($projectdata[$project['id']]['productioncustrab'])){ ?>
+                                        <hr class="uk-divider-icon">
+                                        <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                            <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left uk-margin uk-margin-large-top" style="text-transform: uppercase;">Progress Produksi Produk Kustom</label>
+                                            <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                <table class="uk-table uk-table-middle uk-table-divider">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nama</th>
+                                                            <th class="uk-text-center">Gambar Kerja</th>
+                                                            <th class="uk-text-center">Mesin Awal</th>
+                                                            <th class="uk-text-center">Tukang</th>
+                                                            <th class="uk-text-center">Mesin Lanjutan</th>
+                                                            <th class="uk-text-center">Finishing</th>
+                                                            <th class="uk-text-center">Packing</th>
+                                                            <th class="uk-text-center">Pengiriman</th>
+                                                            <th class="uk-text-center">Setting</th>
+                                                            <!-- <th class="uk-text-center">PIC Produksi</th> -->
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach ($projectdata[$project['id']]['productioncustrab'] as $productioncustrab) { ?>
+                                                                <tr>
+                                                                    <td><?= $productioncustrab['name'] ?></td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['gambar_kerja']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['mesin_awal']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['tukang']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['mesin_lanjutan']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['finishing']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['packing']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['pengiriman']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php if (strtoupper($productioncustrab['setting']) == '1') { ?>
+                                                                            <div uk-icon="check"></div>
+                                                                        <?php }else{ ?>
+                                                                            <input class="uk-checkbox" type="checkbox" disabled>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <!-- <td class="uk-text-center">
+                                                                        <div class="uk-margin">
+                                                                            <select class="uk-select" name="picpro[</?= $productioncustrab['id'] ?>]" disabled>
+                                                                                <option value="">Pilih PIC</option>
+                                                                                </?php if (!empty($picpro)) {
+                                                                                    foreach ($picpro as $propic) { ?>
+                                                                                        <option value="</?= $propic->id ?>" </?php if ($productioncustrab['userid'] === $propic->id) { echo 'selected'; } ?>></?= $propic->name ?></option>
+                                                                                    </?php }
+                                                                                } else { ?>
+                                                                                    <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                                </?php } ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </td> -->
+                                                                    <td class="uk-text-center">
+                                                                        <div><?= $productioncustrab['percentages'] ?> %</div>
+                                                                    </td>
+                                                                </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    <?php } ?> 
+                                    <!-- END OF CUSTOM RAB PRODUCTION -->
+
                                     <!-- Bukti Pengiriman -->
                                     <div class="uk-margin">Bukti Pengiriman</div>
                                     <div class="uk-child-width-1-3 uk-grid-match uk-flex-middle uk-grid-divider" uk-grid uk-lightbox="animation: slide">
@@ -624,8 +757,6 @@
                                     </div>
                                     <!-- Bukti Pengiriman End -->
                                 </div>
-
-                                <hr class="uk-margin-remove-top">
 
                                 <div class="uk-text-center" uk-grid>
                                     <div class="uk-width-expand">
@@ -983,7 +1114,7 @@
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
                                                             <tr>
                                                                 <td class=""><?= strtoupper($custrab['name']) ?></td>
-                                                                <td class="uk-text-left"><?=$custrab['length']?></td>
+                                                                <td class="uk-text-center"><?=$custrab['length']?></td>
                                                                 <td class="uk-text-center"><?=$custrab['width']?></td>
                                                                 <td class="uk-text-center"><?=$custrab['height']?></td>
                                                                 <td class="uk-text-center"><?=$custrab['volume']?></td>
@@ -1000,8 +1131,8 @@
                                                                         }
                                                                     ?>
                                                                 </td>
-                                                                <td class="uk-text-center">1</td>
-                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                                <td class="uk-text-center"><?=$custrab['qty']?></td>
+                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'] * $custrab['qty'], 0, ',', '.');" "; ?></td>
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } ?>
@@ -1166,11 +1297,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr>
                                         </div>
                                 
                                         <div id="contentproduksi<?= $project['id'] ?>" class="uk-width-1-1 uk-margin-remove" hidden>
                                             <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                <?php if(!empty($projectdata[$project['id']]['production'])){ ?>
+                                                <hr class="uk-divider-icon">
+                                                <!-- <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left uk-margin uk-margin-large-top" style="text-transform: uppercase;">Progress Produksi Produk</label> -->
+                                                <label class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Progress Produksi Produk</label>
                                                 <table class="uk-table uk-table-middle uk-table-divider">
                                                     <thead>
                                                         <tr>
@@ -1187,7 +1321,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php foreach ($projectdata[$project['id']]['production'] as $production) { ?>
+                                                        <?php foreach ($projectdata[$project['id']]['production'] as $production) {?>
                                                             <tr>
                                                                 <td><?= $production['name'] ?></td>
                                                                 <td class="uk-text-center">
@@ -1253,7 +1387,114 @@
                                                         <?php } ?>
                                                     </tbody>
                                                 </table>
-                                                <hr>
+                                                <?php } ?>
+
+                                                <!-- CUSTOM RAB PRODUCTION -->
+                                                <?php if(!empty($projectdata[$project['id']]['productioncustrab'])){ ?>
+                                                    <hr class="uk-divider-icon">
+                                                    <!-- <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left uk-margin uk-margin-large-top" style="text-transform: uppercase;">Progress Produksi Produk Kustom</label> -->
+                                                    <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                        <label class="tm-h3 uk-text-bold uk-margin-large-bottom" style="text-transform: uppercase;">Progress Produksi Produk Kustom</label>
+                                                        <table class="uk-table uk-table-middle uk-table-divider">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nama</th>
+                                                                    <th class="uk-text-center">Gambar Kerja</th>
+                                                                    <th class="uk-text-center">Mesin Awal</th>
+                                                                    <th class="uk-text-center">Tukang</th>
+                                                                    <th class="uk-text-center">Mesin Lanjutan</th>
+                                                                    <th class="uk-text-center">Finishing</th>
+                                                                    <th class="uk-text-center">Packing</th>
+                                                                    <th class="uk-text-center">Pengiriman</th>
+                                                                    <th class="uk-text-center">Setting</th>
+                                                                    <!-- <th class="uk-text-center">PIC Produksi</th> -->
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php foreach ($projectdata[$project['id']]['productioncustrab'] as $productioncustrab) { ?>
+                                                                        <tr>
+                                                                            <td><?= $productioncustrab['name'] ?></td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['gambar_kerja']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['mesin_awal']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['tukang']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['mesin_lanjutan']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['finishing']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['packing']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['pengiriman']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?php if (strtoupper($productioncustrab['setting']) == '1') { ?>
+                                                                                    <div uk-icon="check"></div>
+                                                                               <?php }else{ ?>
+                                                                                    <input class="uk-checkbox" type="checkbox" disabled>
+                                                                                <?php } ?>
+                                                                            </td>
+                                                                            <!-- <td class="uk-text-center">
+                                                                                <div class="uk-margin">
+                                                                                    <select class="uk-select" name="picpro[</?= $productioncustrab['id'] ?>]" disabled>
+                                                                                        <option value="">Pilih PIC</option>
+                                                                                        </?php if (!empty($picpro)) {
+                                                                                            foreach ($picpro as $propic) { ?>
+                                                                                                <option value="</?= $propic->id ?>" </?php if ($productioncustrab['userid'] === $propic->id) { echo 'selected'; } ?>></?= $propic->name ?></option>
+                                                                                            </?php }
+                                                                                        } else { ?>
+                                                                                            <option value="" disabled> Tambahkan pegawai produksi terlebih dahulu </option>
+                                                                                        </?php } ?>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td> -->
+                                                                            <td class="uk-text-center">
+                                                                                <div><?= $productioncustrab['percentages'] ?> %</div>
+                                                                            </td>
+                                                                        </tr>
+                                                                <?php } ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                <?php } ?> 
+                                                <!-- END OF CUSTOM RAB PRODUCTION -->
                                             </div>
 
                                             <!-- Bukti Pengiriman -->
@@ -1521,12 +1762,14 @@
                                                     $("div[id='containerbtnproduksi<?= $project['id'] ?>']").attr("hidden", false);
                                                     $("div[id='contentproduksi<?= $project['id'] ?>']").attr("hidden", true);
                                                     $("div[id='containerbtnupproduksi<?= $project['id'] ?>']").attr("hidden", true);
+                                                    $("div[id='dividerproduksi<?= $project['id'] ?>']").attr("hidden", false);
                                                 });
 
                                                 $("span[id='btndownbuktipembayaran<?= $project['id'] ?>']").click(function() {
                                                     $("div[id='containerbtnupbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
                                                     $("div[id='containerbtnbuktipembayaran<?= $project['id'] ?>']").attr("hidden", true);
                                                     $("div[id='contentbuktipembayaran<?= $project['id'] ?>']").attr("hidden", false);
+                                                    $("div[id='dividerproduksi<?= $project['id'] ?>']").attr("hidden", true);
                                                 });
 
                                                 $("span[id='btnupbuktipembayaran<?= $project['id'] ?>']").click(function() {

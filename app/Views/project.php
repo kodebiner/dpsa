@@ -1089,16 +1089,90 @@
                                         </div>
 
                                         <div class="uk-padding uk-padding-remove-vertical togglesph<?= $project['id'] ?>" hidden>
-                                            <?php if (!$authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                            <div class="uk-margin-bottom">
-                                                <label class="uk-form-label" for="paket">Nomor SPH</label>
-                                                <div class="uk-form-controls">
-                                                    <input type="text" class="uk-input" id="nosph<?= $project['id'] ?>" name="nosph<?= $project['id'] ?>" <?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH" disabled>
-                                                </div>
-                                            </div>
+
+                                            <!-- New View RAB Data -->
                                             <?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
-                                                    <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
-                                                    <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/<?= $project['id'] ?>" target="_blank">Download SPH</a>
+                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
+                                                    <table class="uk-table uk-table-divider uk-text-muted">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="8" class="tm-h3 uk-text-light" style="text-transform: uppercase;">Daftar Pesanan</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Kelola</th>
+                                                                <th>Nama</th>
+                                                                <th>Panjang</th>
+                                                                <th>Lebar</th>
+                                                                <th>Tinggi</th>
+                                                                <th>Volume</th>
+                                                                <th>Satuan</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Foto</th>
+                                                                <th>Jumlah Pesanan</th>
+                                                                <th>Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($projectdata[$project['id']]['paket'] as $rabexist) { ?>
+                                                                <tr class="uk-text-light" id="mdl<?=$rabexist['id']?>">
+                                                                    <td class="uk-text-center">
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $rabexist['name'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $rabexist['length'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $rabexist['width'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $rabexist['height'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?= $rabexist['volume'] ?>
+                                                                    </td>
+                                                                    <td class="uk-text-center">
+                                                                        <?php
+                                                                            if ($rabexist['denomination'] === "1") {
+                                                                                echo "Unit";
+                                                                            } elseif ($rabexist['denomination'] === "2") {
+                                                                                echo "Meter Lari";
+                                                                            } elseif ($rabexist['denomination'] === "3") {
+                                                                                echo "Meter Persegi";
+                                                                            } elseif ($rabexist['denomination'] === "4") {
+                                                                                echo "Set";
+                                                                            }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $rabexist['keterangan'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $rabexist['qty'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= "Rp. " . number_format( $rabexist['price']  * $rabexist['qty'], 0, ',', '.'); " "; ?>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <?php } ?>
+                                            <!-- End New View RAB Data -->
+
+                                            <!-- View Not Authorize Marketing -->
+                                            <!-- </?php if (!$authorize->hasPermission('marketing.project.edit', $uid)) { ?>
+                                                <div class="uk-margin-bottom">
+                                                    <label class="uk-form-label" for="paket">Nomor SPH</label>
+                                                    <div class="uk-form-controls"> -->
+                                                        <!-- <input type="text" class="uk-input" id="nosph</?= $project['id'] ?>" name="nosph</?= $project['id'] ?>" </?php if (!empty($project['no_sph'])) {$nosph = $project['no_sph'];echo "value='$nosph'";} ?> placeholder="Nomor SPH" disabled> -->
+                                                    <!-- </div>
+                                                </div>
+
+                                                </?php if (!empty($projectdata[$project['id']]['paket'])) { ?>
+                                                    <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/</?= $project['id'] ?>" target="_blank">Download SPH</a>
                                                     <hr>
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                         <table class="uk-table uk-table-middle uk-table-divider">
@@ -1118,29 +1192,29 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
+                                                                </?php foreach ($projectdata[$project['id']]['paket'] as $paket) { ?>
                                                                     <tr>
-                                                                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"><?= $paket['name'] ?></td>
+                                                                        <td colspan="8" class="tm-h3" style="text-transform: uppercase;"></?= $paket['name'] ?></td>
                                                                     </tr>
-                                                                    <?php foreach ($paket['mdl'] as $mdl) { ?>
+                                                                    </?php foreach ($paket['mdl'] as $mdl) { ?>
                                                                         <tr>
                                                                             <td>
-                                                                                <?php
+                                                                                </?php
                                                                                 if ($mdl['checked']) {
                                                                                     $checked = 'checked';
                                                                                 } else {
                                                                                     $checked = '';
                                                                                 }
                                                                                 ?>
-                                                                                <input type="checkbox" class="uk-checkbox" <?= $checked ?> id="checked[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="checked<?= $project['id'] ?>[<?= $mdl['id'] ?>]" hidden/>
+                                                                                <input type="checkbox" class="uk-checkbox" </?= $checked ?> id="checked[</?= $project['id'] ?></?= $paket['id'] ?></?= $mdl['id'] ?>]" name="checked</?= $project['id'] ?>[</?= $mdl['id'] ?>]" hidden/>
                                                                             </td>
-                                                                            <td><?= $mdl['name'] ?></td>
-                                                                            <td><?= $mdl['length'] ?></td>
-                                                                            <td><?= $mdl['width'] ?></td>
-                                                                            <td><?= $mdl['height'] ?></td>
-                                                                            <td><?= $mdl['volume'] ?></td>
+                                                                            <td></?= $mdl['name'] ?></td>
+                                                                            <td></?= $mdl['length'] ?></td>
+                                                                            <td></?= $mdl['width'] ?></td>
+                                                                            <td></?= $mdl['height'] ?></td>
+                                                                            <td></?= $mdl['volume'] ?></td>
                                                                             <td>
-                                                                                <?php
+                                                                                </?php
                                                                                 if ($mdl['denomination'] === "1") {
                                                                                     echo "Unit";
                                                                                 } elseif ($mdl['denomination'] === "2") {
@@ -1152,21 +1226,21 @@
                                                                                 }
                                                                                 ?>
                                                                             </td>
-                                                                            <td><?= $mdl['keterangan'] ?></td>
+                                                                            <td></?= $mdl['keterangan'] ?></td>
                                                                             <td>
                                                                                 <div uk-lightbox="">
-                                                                                    <a class="uk-inline" href="img/mdl/<?= $mdl['photo'] ?>" role="button">
-                                                                                        <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?= $mdl['photo'] ?>" width="40" height="40" alt="<?= $mdl['photo'] ?>">
+                                                                                    <a class="uk-inline" href="img/mdl/</?= $mdl['photo'] ?>" role="button">
+                                                                                        <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/</?= $mdl['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
                                                                                     </a>
                                                                                 </div>
                                                                             </td>
                                                                             <td class="uk-form-controls">
-                                                                                <input type="number" id="eqty[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" name="eqty<?= $project['id'] ?>[<?= $paket['id'] ?>][<?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $mdl['qty'] ?>" onchange="eprice(<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>)" readonly/>
+                                                                                <input type="number" id="eqty[</?= $project['id'] ?></?= $paket['id'] ?></?= $mdl['id'] ?>]" name="eqty</?= $project['id'] ?>[</?= $paket['id'] ?>][</?= $mdl['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $mdl['qty'] ?>" onchange="eprice(</?= $project['id'] ?></?= $paket['id'] ?></?= $mdl['id'] ?>)" readonly/>
                                                                             </td>
-                                                                            <div id="eprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]" hidden><?= $mdl['price'] ?></div>
-                                                                            <td id="eshowprice[<?= $project['id'] ?><?= $paket['id'] ?><?= $mdl['id'] ?>]"><?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
+                                                                            <div id="eprice[</?= $project['id'] ?></?= $paket['id'] ?></?= $mdl['id'] ?>]" hidden></?= $mdl['price'] ?></div>
+                                                                            <td id="eshowprice[</?= $project['id'] ?></?= $paket['id'] ?></?= $mdl['id'] ?>]"></?= "Rp. " . number_format((int)$mdl['qty'] * (int)$mdl['price'], 0, ',', '.'); " "; ?></td>
                                                                         </tr>
-                                                                    <?php } ?>
+                                                                    </?php } ?>
                                                                     <script>
                                                                         function eprice(n) {
                                                                             var ebaseprice = document.getElementById('eprice[' + n + ']').innerHTML;
@@ -1183,67 +1257,66 @@
                                                                             }
                                                                         };
                                                                     </script>
-                                                                <?php } ?>
+                                                                </?php } ?>
 
                                                                 <tr>
                                                                     <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
                                                                     <td>
-                                                                        <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?>" value="<?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" disabled/>
+                                                                        <input type="text" class="uk-input uk-form-width-small" id="shippingcost" name="shippingcost" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate</?= $project['id'] ?>" value="</?php if (!empty($projectdata[$project['id']]['shippingcost'])) {echo 'Rp' . number_format((int)$projectdata[$project['id']]['shippingcost']['price'], 0, ',', ','); ' ';} ?>" disabled/>
                                                                     </td>
                                                                 </tr>
 
                                                                 <tr>
                                                                     <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
                                                                 </tr>
-                                                                <?php if (!empty($projectdata[$project['id']]['customrab'])) {
+                                                                </?php if (!empty($projectdata[$project['id']]['customrab'])) {
                                                                     foreach ($projectdata[$project['id']]['customrab'] as $customrab) { ?>
                                                                         <tr>
                                                                             <td></td>
                                                                             <td>
-                                                                                <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" disabled/>
+                                                                                <input type="text" id="namecustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="namecustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $customrab['name'] ?>" disabled/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>" disabled/>
+                                                                                <input type="text" id="lengthcustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="lengthcustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $customrab['length'] ?>" disabled/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>" disabled/>
+                                                                                <input type="text" id="widthcustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="widthcustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $customrab['width'] ?>" disabled/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>" disabled/>
+                                                                                <input type="text" id="heightcustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="heightcustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $customrab['height'] ?>" disabled/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>" disabled/>
+                                                                                <input type="text" id="volumecustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="volumecustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="</?= $customrab['volume'] ?>" disabled/>
                                                                             </td>
                                                                             <td>
-                                                                                <select class="uk-select" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
+                                                                                <select class="uk-select" aria-label="Satuan" id="denominationcustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="denominationcustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]">
                                                                                     <option value="" selected disabled hidden>Pilih Satuan</option>
-                                                                                    <option value="1" <?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
-                                                                                    <option value="2" <?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
-                                                                                    <option value="3" <?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
-                                                                                    <option value="4" <?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
+                                                                                    <option value="1" </?php if ($customrab['denomination'] === "1") { echo 'selected'; } ?>>Unit</option>
+                                                                                    <option value="2" </?php if ($customrab['denomination'] === "2") { echo 'selected'; } ?>>Meter Lari</option>
+                                                                                    <option value="3" </?php if ($customrab['denomination'] === "3") { echo 'selected'; } ?>>Meter Persegi</option>
+                                                                                    <option value="4" </?php if ($customrab['denomination'] === "4") { echo 'selected'; } ?>>Set</option>
                                                                                 </select>
                                                                             </td>
                                                                             <td></td>
                                                                             <td></td>
                                                                             <td>
-                                                                                <input type="text" id="pricecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="pricecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="<?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" disabled />
+                                                                                <input type="text" id="pricecustrab[</?= $project['id'] ?></?= $customrab['id'] ?>]" name="pricecustrab</?= $project['id'] ?>[</?= $customrab['id'] ?>]" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" data-type="curencyupdate</?= $project['id'] ?></?= $customrab['id'] ?>" class="uk-input uk-form-width-small" value="</?= "Rp" . number_format((int)$customrab['price'], 0, ',', ',');' '; ?>" disabled />
                                                                             </td>
                                                                         </tr>
-                                                                <?php }
+                                                                </?php }
                                                                 } ?>
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                <?php } ?>
-                                            <?php } ?>
+                                                </?php } ?>
+                                            </?php } ?> -->
 
                                             <?php if ($authorize->hasPermission('marketing.project.edit', $uid)) { ?>
-                                                
+
                                                 <!-- Current MDL Proyek Removed -->
                                                 <?php if (!empty($projectdata[$project['id']]['allrabdatadeleted'])) { ?>
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
                                                         <table class="uk-table uk-table-divider uk-text-muted">
-                                                            <!-- <caption class="uk-text-muted tm-h3">MDL Dalam Proyek Yang Telah Terhapus Dari Data MDL</caption> -->
                                                             
                                                             <thead>
                                                                 <tr>
@@ -1428,64 +1501,6 @@
                                                                         };
                                                                     </script>
                                                                 <?php } ?>
-
-                                                                <!-- MDL Remove Form Center List -->
-                                                                <!-- <tr>
-                                                                    <td colspan="9" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
-                                                                </tr> -->
-
-                                                                <!-- </?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?> -->
-                                                                    <!-- <tr class="uk-text-muted">
-                                                                        <td>
-                                                                            <input type="checkbox" class="uk-checkbox" checked disabled/>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['name'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['length'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['width'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['height'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['volume'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?php
-                                                                                if ($allcurrentrabdata['denomination'] === "1") {
-                                                                                    echo "Unit";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "2") {
-                                                                                    echo "Meter Lari";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "3") {
-                                                                                    echo "Meter Persegi";
-                                                                                } elseif ($allcurrentrabdata['denomination'] === "4") {
-                                                                                    echo "Set";
-                                                                                }
-                                                                            ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            </?= $allcurrentrabdata['keterangan'] ?>
-                                                                        </td> -->
-                                                                        <!-- <td>
-                                                                            <div uk-lightbox="">
-                                                                                <a class="uk-inline" href="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" role="button">
-                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
-                                                                                </a>
-                                                                            </div>
-                                                                        </td> -->
-                                                                        <!-- <td>
-                                                                            <input type="number" class="uk-input uk-form-width-small" placeholder="</?= $allcurrentrabdata['qty'] ?>" disabled/>
-                                                                        </td>
-                                                                        <td>
-                                                                        </?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
-                                                                        </td>
-                                                                    </tr> -->
-                                                                <!-- </?php } ?> -->
-                                                                <!-- End MDL Remove Form Center List -->
 
                                                                 <tr>
                                                                     <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
@@ -1982,6 +1997,7 @@
                                                         createRemoveElement.remove();
                                                     };
                                                 </script>
+
                                                 <div class="uk-margin-bottom">
                                                     <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" for="paket">Nomor SPH</label>
                                                     <div class="uk-form-controls">
@@ -2175,85 +2191,11 @@
                                                         }
                                                     }
                                                 </script>
-                                                
-                                                
-                                                <!-- <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphprint/</?= $project['id'] ?>" target="_blank">Download SPH</a> -->
-                                                <!-- </?php if(!empty($project['sph'])){?> -->
-                                                <!-- </?php } ?> -->
                                                 <hr>
                                                 <!-- end SPH -->
                                             <?php } ?>
                                         </div>
-                                        <!-- </?php } ?> -->
-                                        <!-- </?php } else { ?> -->
-                                        <!-- <div class="uk-padding uk-padding-remove-vertical togglesph</?= $project['id'] ?>" hidden>
-                                                <a class="uk-button uk-button-primary uk-margin-small-right" href="project/sphview/</?= $project['id'] ?>">Download SPH</a>
-                                                <div class="uk-overflow-auto uk-margin uk-margin-remove-top">
-                                                    <table class="uk-table uk-table-middle uk-table-divider">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nama</th>
-                                                                <th>Panjang</th>
-                                                                <th>Lebar</th>
-                                                                <th>Tinggi</th>
-                                                                <th>Volume</th>
-                                                                <th>Satuan</th>
-                                                                <th>Keterangan</th>
-                                                                <th>Jumlah Pesanan</th>
-                                                                <th>Harga</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            </?php if (!empty($projectdata[$project['id']]['rab'])) {
-                                                                foreach ($projectdata[$project['id']]['rab'] as $mdlrab) { ?>
-                                                                    <tr>
-                                                                        <td></?= $mdlrab['name'] ?></td>
-                                                                        <td></?= $mdlrab['length'] ?></td>
-                                                                        <td></?= $mdlrab['width'] ?></td>
-                                                                        <td></?= $mdlrab['height'] ?></td>
-                                                                        <td></?= $mdlrab['volume'] ?></td>
-                                                                        <td>
-                                                                            </?php
-                                                                            if ($mdlrab['denomination'] === "1") {
-                                                                                echo "Unit";
-                                                                            } elseif ($mdlrab['denomination'] === "2") {
-                                                                                echo "Meter Lari";
-                                                                            } elseif ($mdlrab['denomination'] === "3") {
-                                                                                echo "Meter Persegi";
-                                                                            } elseif ($mdlrab['denomination'] === "4") {
-                                                                                echo "Set";
-                                                                            }
-                                                                            ?>
-                                                                        </td>
-                                                                        <td></?= $mdlrab['keterangan'] ?></td>
-                                                                        <td class="uk-text-center"></?= $mdlrab['qty'] ?></td>
-                                                                        <td></?= "Rp. " . number_format($mdlrab['price'], 0, ',', '.');" "; ?></td>
-                                                                    </tr>
-                                                                </?php }
-                                                            } ?>
-                                                            <tr>
-                                                                <td colspan="8" class="tm-h3" style="text-transform: uppercase;">Custom Pemesanan</td>
-                                                            </tr>
-                                                            </?php if (!empty($projectdata[$project['id']]['customrab'])) {
-                                                                foreach ($projectdata[$project['id']]['customrab'] as $customsph) { ?>
-                                                                    <tr>
-                                                                        <td></?= $customsph['name'] ?></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></?= "Rp. " . number_format($customsph['price'], 0, ',', '.');" "; ?></td>
-                                                                    </tr>
-                                                                </?php }
-                                                            } ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </?php } ?> -->
+                                        
                                         <script>
                                             // Dropdown SPH
                                             document.getElementById('toggle<?= $project['id'] ?>').addEventListener('click', function() {
@@ -2533,8 +2475,6 @@
                             <!-- Detail Pemesanan Section End -->
 
                             <!-- SPK Section -->
-                            <!-- </?php if ($project['spk'] != null) {
-                                if ($project['status_spk'] === '0') { ?> -->
                             <div class="uk-margin uk-child-width-1-2" <?=$tooglespk?> uk-grid>
                                 <div>
                                     <div class="uk-child-width-auto uk-flex-middle" uk-grid>

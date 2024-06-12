@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class CustomRabModel extends Model
 {
     protected $allowedFields = [
-        'projectid', 'name', 'length', 'width', 'height', 'volume', 'denomination', 'price',
+        'projectid', 'name', 'length', 'width', 'height', 'volume', 'denomination', 'price', 'qty',
     ];
     protected $table            = 'customrab';
     protected $primaryKey       = 'id';

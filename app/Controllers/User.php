@@ -71,11 +71,31 @@ class User extends BaseController
             $this->builder->select('users.id as id, users.username as username, users.kode_marketing as kodemarketing, users.active as status, users.firstname as firstname, users.lastname as lastname, users.email as email, users.parentid as parent, auth_groups.id as group_id, auth_groups.name as role');
             $query =   $this->builder->get($perpage, $offset)->getResult();
 
-            $total = $this->builder
-                ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-                ->where('users.id !=', $this->data['uid'])
-                ->countAllResults();
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $total = $this->builder
+                    ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                    ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                    ->like('users.username', $input['search'])
+                    ->orLike('users.firstname', $input['search'])
+                    ->orLike('users.lastname', $input['search'])
+                    ->orLike('users.email', $input['search'])
+                    ->where('users.id !=', $this->data['uid'])
+                    ->countAllResults();
+            }elseif (isset($input['rolesearch']) && !empty($input['rolesearch']) && ($input['rolesearch'] != '0')) {
+                $total = $this->builder
+                    ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                    ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                    ->where('auth_groups.id', $input['rolesearch'])
+                    ->where('users.id !=', $this->data['uid'])
+                    ->countAllResults();
+            }else{
+                $total = $this->builder
+                    ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+                    ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                    ->where('users.id !=', $this->data['uid'])
+                    ->countAllResults();
+            }
 
             $parentid = [];
             foreach ($users as $user) {

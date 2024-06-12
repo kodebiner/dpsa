@@ -194,7 +194,14 @@ class Laporan extends BaseController
 
                 // All Custom RAB 
                 $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-                $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+                $allnewrabcust = [];
+
+                // New Cust Rab Price
+                foreach($allCustomRab as $rabcust){
+                    $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                }
+
+                $projectdata[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
                 // Pembayaran Value
                 $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -208,8 +215,8 @@ class Laporan extends BaseController
 
                 // New Value ALL RAB & CUSTOM RAB + PPN + PPH
                 $projectdata[$project['id']]['rabvalueppn'] = 0;
-                if(!empty($price) || !empty($allCustomRab)){
-                    $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+                if(!empty($price) || !empty($allnewrabcust)){
+                    $allrab     =   array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                     // Value I & II
                     $valuerab = $allrab - ($allrab * (70/100));
@@ -444,7 +451,13 @@ class Laporan extends BaseController
 
             // All Custom RAB 
             $allCustomRab = $CustomRabModel->where('projectid', $project['id'])->find();
-            $projectdata[$project['id']]['allcustomrab']    = array_sum(array_column($allCustomRab, 'price'));
+
+            // New Cust Rab Price
+            $allnewrabcust = [];
+            foreach($allCustomRab as $rabcust){
+                $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+            }
+            $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
             // Pembayaran Value
             $pembayaran = $PembayaranModel->where('projectid',$project['id'])->find();
@@ -458,8 +471,8 @@ class Laporan extends BaseController
 
             // New Value ALL RAB & CUSTOM RAB + PPN
             $projectdata[$project['id']]['rabvalueppn'] = 0;
-            if(!empty($price) || !empty($allCustomRab)){
-                $allrab     =   array_sum(array_column($allCustomRab, 'price')) +  array_sum(array_column($price, 'sumprice')) ;
+            if(!empty($price) || !empty($allnewrabcust)){
+                $allrab     =  array_sum($allnewrabcust) +  array_sum(array_column($price, 'sumprice')) ;
 
                 // PPN Value Configuration
 
