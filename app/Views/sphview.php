@@ -218,17 +218,42 @@ $tanggalsph = ucwords($dateFormatted);
                     <td style="border: 1pt solid black;"></td>
                 </tr>
 
+                <tr class="uk-text-center">
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black; font-weight: bold;">KUSTOM PESANAN</td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                    <td style="border: 1pt solid black;"></td>
+                </tr>
+
                 <?php
                  foreach ($custom as $cusrab) { ?>
                     <tr style="border: 1pt solid black;">
                         <!-- <td style="border: 1pt solid black;"></td> -->
-                        <td class="uk-text-left"><?= $cusrab['name'] ?></td>
-                        <td style="border: 1pt solid black;"></td>
+                        <td class="uk-text-left"></td>
+                        <td style="border: 1pt solid black;"><?= $cusrab['name'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['length'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['width'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['height'] ?></td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['volume'] ?></td>
-                        <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['denomination'] ?></td>
+                        <td style="border: 1pt solid black; text-align:center;">
+                            <?php if ($cusrab['denomination']=== "1") {
+                                echo "Unit";
+                            } elseif ($cusrab['denomination']=== "2") {
+                                echo "M";
+                            } elseif ($cusrab['denomination']=== "3") {
+                                $price  =   $mdl['price'] * $luas;
+                                echo "M2";
+                            } elseif ($cusrab['denomination']=== "4") {
+                                echo "Set";
+                            }?>
+                        </td>
                         <td style="border: 1pt solid black; text-align:center;"><?= $cusrab['qty'] ?></td>
                         <td style="border: 1pt solid black;">
                         <?php if (!empty($cusrab['price'])) {
