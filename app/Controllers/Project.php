@@ -1523,6 +1523,22 @@ class Project extends BaseController
                     }
                     // QUANTITY PRODUCT CUSTOM DELIVER
 
+                    // PRODUCTION EMPLOYE EXIST
+                    $employeproductions  = $ProductionModel->where('projectid', $project['id'])->find();
+                    $employePro = [];
+                    if(!empty($employeproductions)){
+                        foreach($employeproductions as $employeProd){
+                            if($employeProd['userid'] != null){
+                                $employePro[] = $employeProd['userid'];
+                            }
+                        }
+                    }
+                    $projectdata[$project['id']]['employeProduction'] = 'notexist';
+                    if(!empty($employePro)){
+                        $projectdata[$project['id']]['employeProduction'] = 'exist';
+                    }
+                    // END PRODUCTION EMPLOYE EXIST
+
                     // Data Version (Arsip)
                         $projectdata[$project['id']]['verdesign']      = count($VersionModel->where('projectid',$project['id'])->where('type', 1)->find());
                         $projectdata[$project['id']]['verrevisi']      = count($VersionModel->where('projectid',$project['id'])->where('type', 2)->find());
@@ -3516,10 +3532,11 @@ class Project extends BaseController
                                                     $denom  = "Set";
                                                 }
                                                 // $total[] = $rab['qty'] * $mdl['price'];
+
                                                 $datamdlid[] = $mdl['id'];
                                                 $mdldata[] = [
                                                     'id'            => $paket['id'],
-                                                    'kategori'      => $kategori['name'],
+                                                    'kategori'      => $paket['name'],
                                                     'name'          => $mdl['name'],
                                                     'length'        => $mdl['length'],
                                                     'width'         => $mdl['width'],

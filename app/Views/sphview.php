@@ -221,7 +221,8 @@ $tanggalsph = ucwords($dateFormatted);
                 <?php if (!empty($custom)) { ?>
                     <tr class="uk-text-center">
                         <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black; font-weight: bold;">KUSTOM PESANAN</td>
+                        <td style="border: 1pt solid black; font-weight: bold;" colspan="9">KUSTOM PESANAN</td>
+                        <!-- <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
@@ -229,8 +230,7 @@ $tanggalsph = ucwords($dateFormatted);
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
                         <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
-                        <td style="border: 1pt solid black;"></td>
+                        <td style="border: 1pt solid black;"></td> -->
                     </tr>
                     <?php foreach ($custom as $cusrab) { ?>
                         <tr style="border: 1pt solid black;">

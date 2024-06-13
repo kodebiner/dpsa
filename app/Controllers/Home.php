@@ -983,6 +983,22 @@ class Home extends BaseController
                             $projectdata[$project['id']]['dateline'] = '';
                             $projectdata[$project['id']]['now'] = '';
                         }
+
+                        // PRODUCTION EMPLOYE EXIST
+                        $employeproductions  = $ProductionModel->where('projectid', $project['id'])->find();
+                        $employePro = [];
+                        if(!empty($employeproductions)){
+                            foreach($employeproductions as $employeProd){
+                                if($employeProd['userid'] != null){
+                                    $employePro[] = $employeProd['userid'];
+                                }
+                            }
+                        }
+                        $projectdata[$project['id']]['employeProduction'] = 'notexist';
+                        if(!empty($employePro)){
+                            $projectdata[$project['id']]['employeProduction'] = 'exist';
+                        }
+                        // END PRODUCTION EMPLOYE EXIST
     
                         // INVOICE
                         $projectdata[$project['id']]['invoice1'] = $InvoiceModel->where('projectid', $project['id'])->where('status', '1')->first();
@@ -1684,6 +1700,22 @@ class Home extends BaseController
 
                     $projectdata[$project['id']]['progress']   = array_sum($newAllProgress);
                     // END NEW PRODUCTION CALCULATE PRESENTAGE
+
+                    // PRODUCTION EMPLOYE EXIST
+                    $employeproductions  = $ProductionModel->where('projectid', $project['id'])->find();
+                    $employePro = [];
+                    if(!empty($employeproductions)){
+                        foreach($employeproductions as $employeProd){
+                            if($employeProd['userid'] != null){
+                                $employePro[] = $employeProd['userid'];
+                            }
+                        }
+                    }
+                    $projectdata[$project['id']]['employeProduction'] = 'notexist';
+                    if(!empty($employePro)){
+                        $projectdata[$project['id']]['employeProduction'] = 'exist';
+                    }
+                    // END PRODUCTION EMPLOYE EXIST
 
                     // BAST DATE
                     if (!empty($projectdata[$project['id']]['bast'])) {

@@ -174,10 +174,17 @@
                 $status = "SPK DiSetujui";
             }
 
+            if($projectdata[$project['id']]['employeProduction'] === "exist" && $progress >= 30){
+                $status = "Dalam Proses Produksi";
+            }
+
             if (!empty($projectdata[$project['id']]['progress'])) {
                 $produksi = round((int)$projectdata[$project['id']]['progress']);
                 $progress = round($projectdata[$project['id']]['progress'] + $progress);
-                if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
+                if ($progress < 95) {
+                    $status   = "Dalam Proses Produksi";
+                }
+                if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95 || is_float($progress) >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
                     $status   = "Retensi";
                 }
             }

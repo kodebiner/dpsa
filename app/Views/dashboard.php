@@ -137,19 +137,28 @@
                         $status = "Menunggu Desain Dari DPSA";
                     }
                 } else {
-                    $progress = "30";
+                    (int)$progress = "30";
                     $status = "Menunggu SPH";
                 }
 
                 if ($project['status_spk'] === "1") {
                     $progress = "30";
-                    $status = "SPK DiSetujui";
+                    $status = "SPK Disetujui";
+                }
+
+                if($projectdata[$project['id']]['employeProduction'] === "exist" && $progress >= 30){
+                    $status = "Dalam Proses Produksi";
                 }
 
                 if (!empty($projectdata[$project['id']]['progress'])) {
                     $produksi = round((int)$projectdata[$project['id']]['progress']);
                     $progress = round($projectdata[$project['id']]['progress'] + $progress);
-                    if (!empty($projectdata[$project['id']]['bastfile']['status']) && ($progress >= "95" || $progress >= 95)  && $projectdata[$project['id']]['bastfile']['status'] === "1" && !empty($projectdata[$project['id']]['bastfile']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
+
+                    if ($progress > 30 && $progress < 95 ) {
+                        $status   = "Dalam Proses Produksi";
+                    }
+
+                    if (!empty($projectdata[$project['id']]['bast']['status']) && ($progress >= 95)  && $projectdata[$project['id']]['bast']['status'] === "1" && !empty($projectdata[$project['id']]['bast']['file']) && !empty($projectdata[$project['id']]['sertrim']['status'] === "0")) {
                         $status   = "Retensi";
                     }
                 }
@@ -159,7 +168,8 @@
                         $progress = "100";
                         $status   = "Proyek Selesai";
                     }
-                }?>
+                }
+                ?>
 
                 <!-- // Data project initialize -->
                 <?php if (!empty($projectdata[$project['id']])) {
