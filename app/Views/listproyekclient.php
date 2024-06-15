@@ -892,7 +892,7 @@
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
                                                                         <td class="uk-text-nowrap">
-                                                                            <?= "Rp. " . number_format( $rabexist['price']*$rabexist['qty'], 0, ',', '.'); " "; ?>
+                                                                            <?= "Rp. " . number_format(($rabexist['price'] * $rabexist['volume']) * $rabexist['qty'], 0, ',', '.'); " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -943,8 +943,15 @@
                                                                             </td>
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <!-- <td class="uk-text-center"></td> -->
-                                                                            <td class="uk-text-center">1</td>
-                                                                            <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($custrab['price'], 0, ',', '.');" "; ?></td>
+                                                                            <td class="uk-text-center"><?=$custrab['qty']?></td>
+                                                                            <?php 
+                                                                            if($custrab['denomination'] === "2"){
+                                                                                $hargacustrab = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
+                                                                            }else{
+                                                                                $hargacustrab = $custrab['price']  * $custrab['qty'];
+                                                                            }
+                                                                            ?>
+                                                                            <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($hargacustrab , 0, ',', '.');" "; ?></td>
                                                                         </tr>
                                                                     <?php } ?>
                                                                 <?php } ?>
@@ -1044,8 +1051,14 @@
                                                                         <td class="uk-text-center">
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
+                                                                        <?php if($rabexist['denomination'] === "2"){
+                                                                            $hargarab = ($rabexist['price'] * $rabexist['volume']) * $rabexist['qty'];
+                                                                        }else{
+                                                                            $hargarab = $rabexist['price'] * $rabexist['qty'];
+                                                                        }
+                                                                        ?>
                                                                         <td class="uk-text-nowrap">
-                                                                            <?= "Rp. " . number_format( $rabexist['price']*$rabexist['qty'], 0, ',', '.'); " "; ?>
+                                                                            <?= "Rp. " . number_format($hargarab, 0, ',', '.'); " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -1097,7 +1110,13 @@
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                            <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($custrab['price'] * $custrab['qty'], 0, ',', '.');" "; ?></td>
+                                                                            <?php if($custrab['denomination'] === "2"){
+                                                                                $hargarabcust = ((int)$custrab['price'] * $custrab['volume']) * (int)$custrab['qty'];
+                                                                            }else{
+                                                                                $hargarabcust = (int)$custrab['price'] * (int)$custrab['qty'];
+                                                                            }
+                                                                            ?>
+                                                                            <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($hargarabcust, 0, ',', '.');" "; ?></td>
                                                                         </tr>
                                                                     <?php } ?>
                                                                 <?php } ?>
@@ -1207,8 +1226,15 @@
                                                                         <td>
                                                                             <input type="number" class="uk-input uk-form-width-small" placeholder="<?= $allcurrentrabdata['qty'] ?>" disabled/>
                                                                         </td>
+                                                                        <?php 
+                                                                            if($allcurrentrabdata['denomination'] === "2"){
+                                                                                $hargamdldeleted = ((int)$allcurrentrabdata['price'] * $allcurrentrabdata['volume'])  * (int)$allcurrentrabdata['qty'];
+                                                                            }else{
+                                                                                $hargamdldeleted = (int)$allcurrentrabdata['price']  * (int)$allcurrentrabdata['qty'];
+                                                                            }
+                                                                        ?>
                                                                         <td>
-                                                                        <?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
+                                                                        <?= "Rp. " . number_format( $hargamdldeleted, 0, ',', '.'); " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                     <script>

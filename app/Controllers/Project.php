@@ -884,6 +884,11 @@ class Project extends BaseController
                         // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
+                            if($mdlr['denomination'] === "2"){
+                                $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $mdlr['volume']);
+                            }else{
+                                $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
+                            }
                             $projectdata[$project['id']]['rab'][$rab['id']]  = [
                                 'id'            => $mdlr['id'],
                                 'proid'         => $project['id'],
@@ -896,7 +901,7 @@ class Project extends BaseController
                                 'photo'         => $mdlr['photo'],
                                 'keterangan'    => $mdlr['keterangan'],
                                 'qty'           => $rab['qty'],
-                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                'price'         => $hargamdl,
                                 'oriprice'      => (int)$mdlr['price'],
                             ];
                         }
@@ -1052,53 +1057,10 @@ class Project extends BaseController
                             ];
                         }
 
-                        // $total = array_sum(array_column($price, 'sumprice'));
-
                         // $progresdata = [];
                         foreach ($price as $progresval) {
                             $datamdlid[] = $progresval['id'];
-                            // $progresdata[] = [
-                            //     'id'    => $progresval['id'], // mdlid
-                            //     'proid' => $progresval['proid'],
-                            //     'val'   => (($progresval['price'] / $total) * 65) / 8,
-                            // ];
                         }
-
-                        // $productval = $ProductionModel->where('projectid', $project['id'])->whereIn('mdlid', $datamdlid)->find(); // cek projectid
-
-                        // $progress = [];
-                        // foreach ($productval as $proses) {
-                        //     foreach ($progresdata as $value) {
-                        //         if ($proses['mdlid'] === $value['id']) {
-                        //             if ($proses['gambar_kerja'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['mesin_awal'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['tukang'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['mesin_lanjutan'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['finishing'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['packing'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['pengiriman'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //             if ($proses['setting'] === "1") {
-                        //                 array_push($progress, $value['val']);
-                        //             }
-                        //         }
-                        //     }
-                        // }
-
-                        // $projectdata[$project['id']]['progress']   = array_sum($progress);
                     }
 
                     // CUSTOM RAB PRODUCTION
@@ -1172,78 +1134,25 @@ class Project extends BaseController
                     if (!empty($projectdata[$project['id']]['customrab'])) {
                         $custrabprice = [];
                         foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
+                            if($custrabdata['denomination'] === "2"){
+                                $hargacustrab = ((int)$custrabdata['price'] * (int)$custrabdata['volume']) * (int)$custrabdata['qty'];
+                            }elseif($custrabdata['qty'] != 0 && $custrabdata['denomination'] != "2"){
+                                $hargacustrab = (int)$custrabdata['price'] * (int)$custrabdata['qty'];
+                            }else{
+                                $hargacustrab = (int)$custrabdata['price'];
+                            }
                             $custrabprice[] = [
                                 'id'            => $custrabdata['id'],
                                 'proid'         => $custrabdata['projectid'],
                                 'price'         => $custrabdata['price'],
-                                'totalprice'    => $custrabdata['price'] * $custrabdata['qty'],
+                                'totalprice'    => $hargacustrab,
                                 'qty'           => $custrabdata['qty']
                             ];
                         }
-                        // $custrabtotal = array_sum(array_column($custrabprice, 'totalprice'));
-                                
-                        // $progresdatacustrab = [];
                         foreach ($custrabprice as $custrabprogresval) {
                             $custrabid[] = $custrabprogresval['id'];
-                            // $progresdatacustrab[] = [
-                            //     'id'    => $custrabprogresval['id'], // custrabid
-                            //     'proid' => $custrabprogresval['proid'],
-                            //     'val'   => (($custrabprogresval['price'] / $custrabtotal) * 65) / 8,
-                            // ];
                         }
-
-                        // $custrabproductval = $ProductionModel->where('projectid', $project['id'])->whereIn('custrabid', $custrabid)->find(); // cek projectid
-
-                        // $progresscustrab = [];
-                        // foreach ($custrabproductval as $prosescustrab) {
-                        //     foreach ($progresdatacustrab as $valuecustrab) {
-                        //         if ($prosescustrab['custrabid'] === $valuecustrab['id']) {
-                        //             if ($prosescustrab['gambar_kerja'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['mesin_awal'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['tukang'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['mesin_lanjutan'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['finishing'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['packing'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['pengiriman'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //             if ($prosescustrab['setting'] === "1") {
-                        //                 array_push($progresscustrab, $valuecustrab['val']);
-                        //             }
-                        //         }
-                        //     }
-                        // }
-
-                        // $projectdata[$project['id']]['progresscustrab']   = array_sum($progresscustrab);
                     }
-
-
-                    // NEW PRODUCTION CALCULATE PRESENTAGE
-                    // $produksiItems  = $ProductionModel->where('projectid', $project['id'])->find();
-                    // $custrabItemId  = [];
-                    // $MdlItemId      = [];
-
-                    // foreach ($produksiItems as $produksiItem){
-                    //     if(!empty($produksiItem['custrabid']) ) {
-                    //         $custrabItemId[]  = (int)$produksiItem['custrabid'];
-                    //     }
-
-                    //     if(!empty($produksiItem['mdlid'])){
-                    //         $MdlItemId[]      = (int)$produksiItem['mdlid'];
-                    //     }
-                    // }
 
                     // ARRAY DATA PRICE & PRECENTAGES
                     $dataCalculatePresentage = [];
@@ -1257,15 +1166,19 @@ class Project extends BaseController
                         foreach ($dataMdlItems as $dataMdlItem) {
                             foreach ( $mdlItemQty as $qtyItem ) {
                                 if($qtyItem['mdlid'] === $dataMdlItem['id']){
-    
+                                    if($dataMdlItem['denomination'] === "2"){
+                                        $hargamdl = ((int)$dataMdlItem['price'] * (int)$dataMdlItem['volume']) * (int)$qtyItem['qty'];
+                                    }else{
+                                        $hargamdl = (int)$dataMdlItem['price'] * (int)$qtyItem['qty'];
+                                    }
                                     $dataCalculatePresentage[$project['id']]['mdl'][$dataMdlItem['id']] = [
                                         'id'                => $project['id'],
                                         'mdlid'             => $dataMdlItem['id'],
                                         'mdlprice'          => $dataMdlItem['price'],
-                                        'mdltotalprice'     => $dataMdlItem['price'] * $qtyItem['qty'],
+                                        'mdltotalprice'     => $hargamdl,
                                         'mdlqty'            => $qtyItem['qty'],
                                     ];
-                                    $pricetotalgroup[] = $dataMdlItem['price'] * $qtyItem['qty'];
+                                    $pricetotalgroup[] = $hargamdl;
     
                                 }
                             }
@@ -1277,15 +1190,19 @@ class Project extends BaseController
                     if (!empty($custrabid)) {
                         $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
                         foreach($dataCustRabItems as $dataCustRabItem){
-
+                            if($dataCustRabItem['denomination'] === "2"){
+                                $hargacustrab = ((int)$dataCustRabItem['price'] * (int)$dataCustRabItem['volume']) * (int)$dataCustRabItem['qty'];
+                            }elseif($dataCustRabItem['denomination'] != "2" && $dataCustRabItem['qty'] != 0){
+                                $hargacustrab = (int)$dataCustRabItem['price'] * (int)$dataCustRabItem['qty'];
+                            }
                             $dataCalculatePresentage[$project['id']]['custrab'][$dataCustRabItem['id']] = [
                                 'id'                        =>  $project['id'],
                                 'custrabid'                 =>  $dataCustRabItem['id'],
                                 'custrabprice'              =>  $dataCustRabItem['price'],
-                                'custrabtotalprice'         =>  $dataCustRabItem['price'] * $dataCustRabItem['qty'],
+                                'custrabtotalprice'         =>  $hargacustrab,
                                 'custrabqty'                =>  $dataCustRabItem['qty'],
                             ];
-                            $pricetotalgroup[] = $dataCustRabItem['price'] * $dataCustRabItem['qty'];
+                            $pricetotalgroup[] = $hargacustrab;
                                 
                         }
                     }
@@ -1480,11 +1397,6 @@ class Project extends BaseController
                         }
                     }
 
-                    // Project Production Status
-                    // $projectdata[$project['id']]['progressproduk'] = 0 ;
-                    // $projectdata[$project['id']]['pengirimanproduk'] = 0 ;
-                    // $projectdata[$project['id']]['settingproduk'] = 0 ;
-
                     // QUANTITY PRODUCT DELIVER
                     if(!empty($projectdata[$project['id']]['production'])){
                         $result = array_reduce($projectdata[$project['id']]['production'], function($carry, $item){ 
@@ -1496,16 +1408,6 @@ class Project extends BaseController
                             return $carry; 
                         });
                         $projectdata[$project['id']]['pengiriman'] = $result;
-                        
-                        // foreach($projectdata[$project['id']]['production'] as $progresdataproduction){
-                        //     if($progresdataproduction['pengiriman'] === "0" && $progresdataproduction['setting'] === "0" ){
-                        //         $projectdata[$project['id']]['progressproduk'] += 1;
-                        //     }elseif($progresdataproduction['pengiriman'] === "1" && $progresdataproduction['setting'] === "0"){
-                        //         $projectdata[$project['id']]['pengirimanproduk'] += 1;
-                        //     }elseif($progresdataproduction['pengiriman'] === "1" && $progresdataproduction['setting'] === "1"){
-                        //         $projectdata[$project['id']]['settingproduk'] += 1;
-                        //     }
-                        // }
                     }
                     // END QUANTITY PRODUCT KUSTOM DELIVER
 
@@ -3521,7 +3423,7 @@ class Project extends BaseController
                                                     // $price  = $rab['qty'] * $mdl['price'];
                                                     $denom  = "Unit";
                                                 } elseif ($mdl['denomination'] === "2") {
-                                                    // $price  = $rab['qty'] * $mdl['price'];
+                                                    $price  = $rab['qty'] * $mdl['price'];
                                                     $denom  = "M";
                                                 } elseif ($mdl['denomination'] === "3") {
                                                     $luas   =   $mdl['height'] * $mdl['length'];
@@ -3532,6 +3434,12 @@ class Project extends BaseController
                                                     $denom  = "Set";
                                                 }
                                                 // $total[] = $rab['qty'] * $mdl['price'];
+
+                                                if($mdl['denomination'] === "2"){
+                                                    $mdlprice = ($mdl['price'] * $mdl['volume']) * $rab['qty'];
+                                                }else{
+                                                    $mdlprice = $mdl['price'] * $rab['qty'];
+                                                }
 
                                                 $datamdlid[] = $mdl['id'];
                                                 $mdldata[] = [
@@ -3545,7 +3453,7 @@ class Project extends BaseController
                                                     'denom'         => $denom,
                                                     'qty'           => $rab['qty'],
                                                     'mdlprice'      => $mdl['price'],
-                                                    'price'         => $mdl['price'] * $rab['qty'],
+                                                    'price'         => $mdlprice,
                                                     'keterangan'    => $mdl['keterangan'],
                                                 ];
                                             }
@@ -3564,6 +3472,13 @@ class Project extends BaseController
             $customrab = [];
             foreach ($custrab as $cusrab) {
                 if (!empty($cusrab)) {
+                    if($cusrab['denomination'] === "2"){
+                        $custrabharga = (int)$cusrab['qty'] * ((int)$cusrab['price'] * $cusrab['volume']);
+                    }elseif($cusrab['denomination'] != "2" && $cusrab['qty'] != null){
+                        $custrabharga = (int)$cusrab['qty'] *(int) $cusrab['price'];
+                    }else{
+                        $custrabharga = (int)$cusrab['price'];
+                    }
                     $customrab[] = [
                         'name'          => $cusrab['name'],
                         'price'         => $cusrab['price'],
@@ -3574,7 +3489,7 @@ class Project extends BaseController
                         'denomination'  => $cusrab['denomination'],
                         'price'         => $cusrab['price'],
                         'qty'           => $cusrab['qty'],
-                        'totalprice'    => $cusrab['qty'] * $cusrab['price'],
+                        'totalprice'    => $custrabharga,
                     ];
                 }
             }
@@ -3595,7 +3510,6 @@ class Project extends BaseController
                 $ppn = (int)$gconf['ppn'];
                 $direktur = $gconf['direktur'];
             }
-            
 
             // END RAB DATA
             $ppnval   = ((int)$ppn / 100) * ((int)$totalcustom + (int)$totalrab);
@@ -3673,7 +3587,7 @@ class Project extends BaseController
                 'terbilang' => terbilang($angka) . " rupiah",
                 'marketing' => strtoupper($markname),
                 'direktur'  => $direktur,
-                'totcustom' => $totalcustom,
+                'totcustom' => (int)$totalcustom,
             ];
 
             // Parsing Data to View
@@ -3685,8 +3599,6 @@ class Project extends BaseController
             $data['custom']         = $customrab;
             $data['sphdata']        = $datasph;
             $data['sphrabs']        = $mdldata;
-
-            // dd($data['sphdata']);
 
             return view('sphview', $data);
         } else {
@@ -4434,6 +4346,11 @@ class Project extends BaseController
                     // MDL RAB
                     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                     foreach ($rabmdl as $mdlr) {
+                        if($mdlr['denomination'] === "2"){
+                            $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] * $mdlr['volume']);
+                        }else{
+                            $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price']);
+                        }
                         $rabdata[]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $projects['id'],
@@ -4445,7 +4362,7 @@ class Project extends BaseController
                             'denomination'  => $mdlr['denomination'],
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'price'         => $mdlprice,
                             'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
@@ -4480,7 +4397,12 @@ class Project extends BaseController
             if (!empty($rabcustom)) {
                 $rabcustomprice = [];
                 foreach($rabcustom as $rabcustitem){
-                    $rabcustomprice[] = $rabcustitem['price'] * $rabcustitem['qty'];
+                    if($rabcustitem['denomination'] === "2"){
+                        $rabcustprice = $rabcustitem['price'] * $rabcustitem['volume']* $rabcustitem['qty'];
+                    }else{
+                        $rabcustprice = $rabcustitem['price'] * $rabcustitem['qty'];
+                    }
+                    $rabcustomprice[] = $rabcustprice;
                 }
                 $rabcustotal = array_sum($rabcustomprice);
                 // $rabcustotal = array_sum(array_column($rabcustom, 'price'));
@@ -4675,6 +4597,11 @@ class Project extends BaseController
                     // MDL RAB
                     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                     foreach ($rabmdl as $mdlr) {
+                        if($mdlr['denomination'] === "2"){
+                            $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+                        }else{
+                            $mdlprice = (int)$rab['qty'] * (int)$mdlr['price'];
+                        }
                         $rabdata[]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $projects['id'],
@@ -4686,7 +4613,7 @@ class Project extends BaseController
                             'denomination'  => $mdlr['denomination'],
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'price'         => $mdlprice,
                             'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
@@ -4721,7 +4648,12 @@ class Project extends BaseController
             if (!empty($rabcustom)) {
                 $rabcustomprice = [];
                 foreach($rabcustom as $rabcustitem){
-                    $rabcustomprice[] = $rabcustitem['price'] * $rabcustitem['qty'];
+                    if($rabcustitem['denomination'] === "2"){
+                        $customrabprice = ($rabcustitem['price'] * $rabcustitem['volume']) * $rabcustitem['qty'];
+                    }else{
+                        $customrabprice = $rabcustitem['price'] * $rabcustitem['qty'];
+                    }
+                    $rabcustomprice[] = $customrabprice;
                 }
                 $rabcustotal = array_sum($rabcustomprice);
             }
@@ -4915,6 +4847,11 @@ class Project extends BaseController
                     // MDL RAB
                     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                     foreach ($rabmdl as $mdlr) {
+                        if ($mdlr['denomination'] === "2"){
+                            $hargamdl = ((int)$rab['qty'] * (int)($mdlr['volume']) * (int)$mdlr['price']);
+                        }else{
+                            $hargamdl = ((int)$rab['qty'] *  (int)$mdlr['price']);
+                        }
                         $rabdata[]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $projects['id'],
@@ -4926,7 +4863,7 @@ class Project extends BaseController
                             'denomination'  => $mdlr['denomination'],
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'price'         => (int)$hargamdl,
                             'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
@@ -4961,7 +4898,12 @@ class Project extends BaseController
             if (!empty($rabcustom)) {
                 $rabcustomprice = [];
                 foreach($rabcustom as $rabcustitem){
-                    $rabcustomprice[] = $rabcustitem['price'] * $rabcustitem['qty'];
+                    if($rabcustitem['denomination'] === "2"){
+                        $rabcustprice = ($rabcustitem['volume'] * $rabcustitem['price']) * $rabcustitem['qty'];
+                    }else{
+                        $rabcustprice =  $rabcustitem['price'] * $rabcustitem['qty'];
+                    }
+                    $rabcustomprice[] = $rabcustprice;
                 }
                 $rabcustotal = array_sum($rabcustomprice);
             }
@@ -5156,6 +5098,11 @@ class Project extends BaseController
                     // MDL RAB
                     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                     foreach ($rabmdl as $mdlr) {
+                        if($mdlr['denomination'] === "2"){
+                            $mdlrprice =  (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+                        }else{
+                            $mdlrprice =  (int)$rab['qty'] * (int)$mdlr['price'];
+                        }
                         $rabdata[]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $projects['id'],
@@ -5167,7 +5114,7 @@ class Project extends BaseController
                             'denomination'  => $mdlr['denomination'],
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'price'         => $mdlrprice,
                             'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
@@ -5202,7 +5149,12 @@ class Project extends BaseController
             if (!empty($rabcustom)) {
                 $rabcustomprice = [];
                 foreach($rabcustom as $rabcustitem){
-                    $rabcustomprice[] = $rabcustitem['price'] * $rabcustitem['qty'];
+                    if($rabcustitem['denomination'] === "2"){
+                        $rabcustitemprice = ($rabcustitem['price'] * $rabcustitem['volume']) * $rabcustitem['qty'];
+                    }else{
+                        $rabcustitemprice = $rabcustitem['price'] * $rabcustitem['qty'];
+                    }
+                    $rabcustomprice[] = $rabcustitemprice;
                 }
                 $rabcustotal = array_sum($rabcustomprice);
             }

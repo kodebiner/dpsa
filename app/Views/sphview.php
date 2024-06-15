@@ -247,7 +247,7 @@ $tanggalsph = ucwords($dateFormatted);
                                 } elseif ($cusrab['denomination']=== "2") {
                                     echo "M";
                                 } elseif ($cusrab['denomination']=== "3") {
-                                    $price  =   $mdl['price'] * $luas;
+                                    // $price  =   $mdl['price'] * $luas;
                                     echo "M2";
                                 } elseif ($cusrab['denomination']=== "4") {
                                     echo "Set";
@@ -261,7 +261,14 @@ $tanggalsph = ucwords($dateFormatted);
                             </td>
                             <td style="border: 1pt solid black;">
                             <?php if (!empty($cusrab['price'])) {
-                                    echo "Rp." . number_format($cusrab['price'] * $cusrab['qty'], 0, ',', '.');
+                                    if($cusrab['denomination'] === "2"){
+                                        $hargacustrab =  ($cusrab['price'] * $cusrab['volume']) * $cusrab['qty'];
+                                    }elseif($cusrab['denomination'] != "2" && $cusrab['qty'] != 0){
+                                        $hargacustrab =  $cusrab['price'] * $cusrab['qty'];
+                                    }else{
+                                        $hargacustrab =  $cusrab['price'];
+                                    }
+                                    echo "Rp." . number_format($hargacustrab, 0, ',', '.');
                                 } ?>
                             </td>
                             <td style="border: 1pt solid black; text-align:right;"></td>

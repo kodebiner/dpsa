@@ -318,12 +318,14 @@
                                                                                     if ($mdl['denomination'] === "1") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "2") {
-                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                        $price  = $rab['qty'] * ($mdl['price'] * $mdl['volume']);
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         $luas   =   $mdl['height'] * $mdl['length'];
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
+                                                                                    }else{
+                                                                                        $price  = $mdl['price'];
                                                                                     }
                                                                                     ?>
                                                                                     <td class="uk-text-left"><?= number_format($price, 0, ',', '.');" "; ?></td>
@@ -359,6 +361,14 @@
                                                             <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                            <?php if($custrab['denomination'] === "2"){
+                                                                $harga = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
+                                                            }elseif($custrab['denomination'] != "2" && !empty($custrab['qty'])){
+                                                                $harga = $custrab['price'] * $custrab['qty'];
+                                                            }else{
+                                                                $harga = $custrab['price'];
+                                                            }
+                                                            ?>
                                                             <tr>
                                                                 <td class=""><?= strtoupper($custrab['name']) ?></td>
                                                                 <td class="uk-text-center"><?=$custrab['length']?></td>
@@ -379,7 +389,7 @@
                                                                     ?>
                                                                 </td>
                                                                 <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'] * $custrab['qty'], 0, ',', '.');" "; ?></td>
+                                                                <td class="uk-text-left"><?= "Rp. " . number_format($harga, 0, ',', '.');" "; ?></td>
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } ?>
@@ -1081,7 +1091,7 @@
                                                                                     if ($mdl['denomination'] === "1") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "2") {
-                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * $mdl['volume'] );
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         $luas   =   $mdl['height'] * $mdl['length'];
                                                                                         $price  = $rab['qty'] * $mdl['price'];
@@ -1122,6 +1132,14 @@
                                                             <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                            <?php if($custrab['denomination'] === "2"){
+                                                                $harga = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
+                                                            }elseif(!empty($custrab['qty']) && $custrab['denomination'] !="2"){
+                                                                $harga = $custrab['price'] * $custrab['qty'];
+                                                            }else{
+                                                                $harga = $custrab['price'];
+                                                            }
+                                                            ?>
                                                             <tr>
                                                                 <td class=""><?= strtoupper($custrab['name']) ?></td>
                                                                 <td class="uk-text-center"><?=$custrab['length']?></td>
@@ -1142,7 +1160,7 @@
                                                                     ?>
                                                                 </td>
                                                                 <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                <td class="uk-text-left"><?= "Rp. " . number_format($custrab['price'] * $custrab['qty'], 0, ',', '.');" "; ?></td>
+                                                                <td class="uk-text-left"><?= "Rp. " . number_format($harga, 0, ',', '.');" "; ?></td>
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } ?>

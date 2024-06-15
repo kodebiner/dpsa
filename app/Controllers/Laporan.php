@@ -130,6 +130,11 @@ class Laporan extends BaseController
                         // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
+                            if($mdlr['denomination'] === "2"){
+                                $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] *$mdlr['volume']);
+                            }else{
+                                $mdlprice = (int)$rab['qty'] * (int)$mdlr['price'];
+                            }
                             $projectdata[$project['id']]['rab'][$rab['id']]  = [
                                 'id'            => $mdlr['id'],
                                 'proid'         => $project['id'],
@@ -141,7 +146,7 @@ class Laporan extends BaseController
                                 'denomination'  => $mdlr['denomination'],
                                 'keterangan'    => $mdlr['keterangan'],
                                 'qty'           => $rab['qty'],
-                                'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                                'price'         => $mdlprice,
                                 'oriprice'      => (int)$mdlr['price'],
                             ];
                         }
@@ -198,7 +203,14 @@ class Laporan extends BaseController
 
                 // New Cust Rab Price
                 foreach($allCustomRab as $rabcust){
-                    $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                    if($rabcust['denomination'] === "2"){
+                        $rabprice = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+                    }elseif($rabcust['denomination'] != "2" && !empty($rabcust['qty'])){
+                        $rabprice = $rabcust['price'] * $rabcust['qty'];
+                    }else{
+                        $rabprice = $rabcust['price'];
+                    }
+                    $allnewrabcust[] = $rabprice;
                 }
 
                 $projectdata[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
@@ -387,6 +399,11 @@ class Laporan extends BaseController
                     // MDL RAB
                     $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                     foreach ($rabmdl as $mdlr) {
+                        if($mdlr['denomination'] === "2"){
+                            $mdlprice =  (int)$rab['qty'] * ((int)$mdlr['price'] * $mdlr['volume']);
+                        }else{
+                            $mdlprice =  (int)$rab['qty'] * (int)$mdlr['price'];
+                        }
                         $projectdata[$project['id']]['rab'][$rab['id']]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $project['id'],
@@ -398,7 +415,7 @@ class Laporan extends BaseController
                             'denomination'  => $mdlr['denomination'],
                             'keterangan'    => $mdlr['keterangan'],
                             'qty'           => $rab['qty'],
-                            'price'         => (int)$rab['qty'] * (int)$mdlr['price'],
+                            'price'         => $mdlprice,
                             'oriprice'      => (int)$mdlr['price'],
                         ];
                     }
@@ -455,7 +472,14 @@ class Laporan extends BaseController
             // New Cust Rab Price
             $allnewrabcust = [];
             foreach($allCustomRab as $rabcust){
-                $allnewrabcust[] = $rabcust['price'] * $rabcust['qty'];
+                if($rabcust['denomination'] === "2"){
+                    $rabprice = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+                }elseif($rabcust['denomination'] != "2" && !empty($rabcust['qty'])){
+                    $rabprice = $rabcust['price'] * $rabcust['qty'];
+                }else{
+                    $rabprice = $rabcust['price'];
+                }
+                $allnewrabcust[] = $rabprice;
             }
             $projectdatareport[$project['id']]['allcustomrab']    = array_sum($allnewrabcust);
 
