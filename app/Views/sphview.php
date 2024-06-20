@@ -76,8 +76,8 @@ $tanggalsph = ucwords($dateFormatted);
 <body>
     <?php
     $nosph = $projects['no_sph'];
-	header("Content-type: application/vnd-ms-excel");
-	header("Content-Disposition: attachment; filename=SPH_$nosph.xls");
+	// header("Content-type: application/vnd-ms-excel");
+	// header("Content-Disposition: attachment; filename=SPH_$nosph.xls");
 	?>
     <!-- <table style="width:100%">
         <tr>
@@ -261,9 +261,9 @@ $tanggalsph = ucwords($dateFormatted);
                             </td>
                             <td style="border: 1pt solid black;">
                             <?php if (!empty($cusrab['price'])) {
-                                    if($cusrab['denomination'] === "2"){
+                                    if($cusrab['denomination'] === "2" || $cusrab['denomination'] === "3"){
                                         $hargacustrab =  ($cusrab['price'] * $cusrab['volume']) * $cusrab['qty'];
-                                    }elseif($cusrab['denomination'] != "2" && $cusrab['qty'] != 0){
+                                    }elseif(($cusrab['denomination'] != "2"|| $cusrab['denomination'] != "3") && $cusrab['qty'] != 0){
                                         $hargacustrab =  $cusrab['price'] * $cusrab['qty'];
                                     }else{
                                         $hargacustrab =  $cusrab['price'];

@@ -321,7 +321,7 @@
                                                                                         $price  = $rab['qty'] * ($mdl['price'] * $mdl['volume']);
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         $luas   =   $mdl['height'] * $mdl['length'];
-                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                        $price  = $rab['qty'] * ($mdl['price'] * $mdl['volume']);
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }else{
@@ -1093,8 +1093,8 @@
                                                                                     } elseif ($mdl['denomination'] === "2") {
                                                                                         $price  = $rab['qty'] * ( $mdl['price'] * $mdl['volume'] );
                                                                                     } elseif ($mdl['denomination'] === "3") {
-                                                                                        $luas   =   $mdl['height'] * $mdl['length'];
-                                                                                        $price  = $rab['qty'] * $mdl['price'];
+                                                                                        // $luas   =   $mdl['height'] * $mdl['length'];
+                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * $mdl['volume'] );
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }
@@ -1132,9 +1132,9 @@
                                                             <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
-                                                            <?php if($custrab['denomination'] === "2"){
+                                                            <?php if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
                                                                 $harga = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
-                                                            }elseif(!empty($custrab['qty']) && $custrab['denomination'] !="2"){
+                                                            }elseif(!empty($custrab['qty']) && ($custrab['denomination'] !="2" || $custrab['denomination'] !="3")){
                                                                 $harga = $custrab['price'] * $custrab['qty'];
                                                             }else{
                                                                 $harga = $custrab['price'];

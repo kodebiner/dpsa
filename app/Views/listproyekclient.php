@@ -891,8 +891,15 @@
                                                                         <td class="uk-text-center">
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
+                                                                        <?php 
+                                                                            if($rabexist['denomination'] === "2" || $rabexist['denomination'] === "3"){
+                                                                                $hargatrab = ((int)$rabexist['price'] * (int)$rabexist['volume']) * (int)$rabexist['qty'];
+                                                                            }else{
+                                                                                $hargarab = (int)$rabexist['price']  * (int)$rabexist['qty'];
+                                                                            }
+                                                                        ?>
                                                                         <td class="uk-text-nowrap">
-                                                                            <?= "Rp. " . number_format(($rabexist['price'] * $rabexist['volume']) * $rabexist['qty'], 0, ',', '.'); " "; ?>
+                                                                            <?= "Rp. " . number_format($hargarab, 0, ',', '.'); " "; ?>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -945,10 +952,10 @@
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
                                                                             <?php 
-                                                                            if($custrab['denomination'] === "2"){
-                                                                                $hargacustrab = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
+                                                                            if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
+                                                                                $hargacustrab = ((int)$custrab['price'] * (int)$custrab['volume']) * (int)$custrab['qty'];
                                                                             }else{
-                                                                                $hargacustrab = $custrab['price']  * $custrab['qty'];
+                                                                                $hargacustrab = (int)$custrab['price']  * (int)$custrab['qty'];
                                                                             }
                                                                             ?>
                                                                             <td class="uk-text-left uk-text-nowrap"><?= "Rp. " . number_format($hargacustrab , 0, ',', '.');" "; ?></td>
@@ -1051,10 +1058,10 @@
                                                                         <td class="uk-text-center">
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
-                                                                        <?php if($rabexist['denomination'] === "2"){
-                                                                            $hargarab = ($rabexist['price'] * $rabexist['volume']) * $rabexist['qty'];
+                                                                        <?php if($rabexist['denomination'] === "2" || $rabexist['denomination'] === "3"){
+                                                                            $hargarab = ((int)$rabexist['price'] * (int)$rabexist['volume']) * (int)$rabexist['qty'];
                                                                         }else{
-                                                                            $hargarab = $rabexist['price'] * $rabexist['qty'];
+                                                                            $hargarab = (int)$rabexist['price'] * (int)$rabexist['qty'];
                                                                         }
                                                                         ?>
                                                                         <td class="uk-text-nowrap">
@@ -1110,7 +1117,7 @@
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                            <?php if($custrab['denomination'] === "2"){
+                                                                            <?php if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
                                                                                 $hargarabcust = ((int)$custrab['price'] * $custrab['volume']) * (int)$custrab['qty'];
                                                                             }else{
                                                                                 $hargarabcust = (int)$custrab['price'] * (int)$custrab['qty'];
@@ -3018,7 +3025,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php foreach ($projectdata[$project['id']]['productioncustrab'] as $productioncustrab) { ?>
+                                                    <?php foreach ($projectdata[$project['id']]['productioncustrab'] as $productioncustrab) {  ?>
                                                         <?php if ($authorize->hasPermission('ppic.project.edit', $uid) || $authorize->hasPermission('production.project.edit', $uid) || ($authorize->inGroup('admin', $uid)) || ($authorize->inGroup('owner', $uid)) || ($authorize->inGroup('superuser', $uid))) { ?>
                                                             <?php 
                                                                 if($authorize->hasPermission('ppic.project.edit', $uid)){
@@ -3181,18 +3188,18 @@
                                     <!-- END OF CUSTOM RAB PRODUCTION -->
 
                                     <!-- QUANTITY CUSTOM PRODUCT DELIVER -->
-                                    <?php if(!empty($projectdata[$project['id']]['pengirimanprodukcustom'])){?>
+                                    <!-- </?php if(!empty($projectdata[$project['id']]['pengirimanprodukcustom'])){?>
                                         <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Jumlah Produk Kustom Terkirim</label>
                                         <div class="uk-child-width-1-3@s uk-margin uk-margin-large-bottom" uk-grid>
-                                            <?php foreach($projectdata[$project['id']]['pengirimanprodukcustom'] as $pengirimancustrab){ ?>
+                                            </?php foreach($projectdata[$project['id']]['pengirimanprodukcustom'] as $pengirimancustrab){ ?>
                                                 <div>
                                                     <div class="uk-card uk-card-default uk-card-small uk-card-body">
-                                                        <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;"><?=$pengirimancustrab['name']?> : <?=$pengirimancustrab['pengiriman']?></label>
+                                                        <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;"></?=$pengirimancustrab['name']?> : </?=$pengirimancustrab['pengiriman']?></label>
                                                     </div>
                                                 </div>
-                                            <?php } ?>
+                                            </?php } ?>
                                         </div>
-                                    <?php }?>
+                                    </?php }?> -->
                                     <!-- END QUANTITY CUSTOM PRODUCT DELIVER -->
 
                                     <!-- Bukti Pengiriman -->

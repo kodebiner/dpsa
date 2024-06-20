@@ -109,8 +109,8 @@ class Client extends BaseController
 
             // Parsing data to view
             $data                   = $this->data;
-            $data['title']          = lang('Global.clientList');
-            $data['description']    = lang('Global.clientListDesc');
+            $data['title']          = "Data Klien";
+            $data['description']    = "Data Klien";
             $data['roles']          = $CompanyModel->where('deleted_at',null)->find();
             $data['company']        = $query;
             $data['parent']         = $parentid;

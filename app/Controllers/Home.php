@@ -255,7 +255,7 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2"){
+                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
                             $hargacustrab = $rabcust['qty'] * ($rabcust['price'] * $rabcust['volume']);
                         }elseif($rabcust['denomination'] != "2" && !empty($rabcust['qty'])){
                             $hargacustrab = $rabcust['qty'] * $rabcust['price'];
@@ -436,7 +436,7 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2"){
+                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
                                     $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] *$mdlr['volume']);
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -509,9 +509,9 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2"){
+                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "2"){
                             $hargacustrab = $rabcust['qty'] * ($rabcust['price'] * $rabcust['volume']);
-                        }elseif($rabcust['denomination'] != "2" && !empty($rabcust['qty'])){
+                        }elseif(($rabcust['denomination'] != "2" || $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                             $hargacustrab = $rabcust['qty'] * $rabcust['price'];
                         }else{
                             $hargacustrab = $rabcust['price'];
@@ -659,7 +659,7 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2"){
+                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
                                     $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -835,7 +835,7 @@ class Home extends BaseController
                         if (!empty($projectdata[$project['id']]['customrab'])) {
                             $custrabprice = [];
                             foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
-                                if($custrabdata['denomination'] === "2"){
+                                if($custrabdata['denomination'] === "2" || $custrabdata['denomination'] === "3"){
                                     $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] *$custrabdata['volume']);
                                 }else{
                                     $hargacustrab = (int)$custrabdata['qty'] * (int)$custrabdata['price'];
@@ -890,9 +890,9 @@ class Home extends BaseController
                         if (!empty($custrabid)) {
                             $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
                             foreach($dataCustRabItems as $dataCustRabItem){
-                                if($dataCustRabItem['denomination'] === "2"){
+                                if($dataCustRabItem['denomination'] === "2" || $dataCustRabItem['denomination'] === "3"){
                                     $hargacustrab = ($dataCustRabItem['price'] * $dataCustRabItem['volume']) * $dataCustRabItem['qty'];
-                                }elseif($dataCustRabItem['denomination'] != "2" && !empty($dataCustRabItem['qty'])){
+                                }elseif(($dataCustRabItem['denomination'] != "2" || $dataCustRabItem['denomination'] != "2") && !empty($dataCustRabItem['qty'])){
                                     $hargacustrab = $dataCustRabItem['price'] * $dataCustRabItem['qty'];
                                 }else{
                                     $hargacustrab = $dataCustRabItem['price'];
@@ -1144,7 +1144,7 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2"){
+                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
                                     $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -1217,9 +1217,9 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2"){
+                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
                             $hargacustrab = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
-                        }elseif($rabcust['denomination'] != "2" && !empty($rabcust['qty'])){
+                        }elseif(($rabcust['denomination'] != "2"|| $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                             $hargacustrab = $rabcust['price'] * $rabcust['qty'];
                         }else{
                             $hargacustrab = $rabcust['price'];
@@ -1428,7 +1428,7 @@ class Home extends BaseController
                         // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
-                            if($mdlr['denomination'] === "2"){
+                            if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
                                 $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
                             }else{
                                 $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -1603,7 +1603,7 @@ class Home extends BaseController
                     if (!empty($projectdata[$project['id']]['customrab'])) {
                         $custrabprice = [];
                         foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
-                            if($custrabdata['denomination'] === "2"){
+                            if($custrabdata['denomination'] === "2" || $custrabdata['denomination'] === "3"){
                                 $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * (int)$custrabdata['volume']);
                             }elseif(!empty($custrabdata['qty']) && $custrabdata['qty']){
                                 $hargacustrab = (int)$custrabdata['qty'] * (int)$custrabdata['price'];
@@ -1635,7 +1635,7 @@ class Home extends BaseController
                         foreach ($dataMdlItems as $dataMdlItem) {
                             foreach ( $mdlItemQty as $qtyItem ) {
                                 if($qtyItem['mdlid'] === $dataMdlItem['id']){
-                                    if($dataMdlItem['denomination'] === "2"){
+                                    if($dataMdlItem['denomination'] === "2" || $dataMdlItem['denomination'] === "3"){
                                         $hargamdl = (int)$qtyItem['qty'] * ((int)$dataMdlItem['price'] * (int)$dataMdlItem['volume']);
                                     }else{
                                         $hargamdl = (int)$qtyItem['qty'] * (int)$dataMdlItem['price'];
@@ -1851,7 +1851,7 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2"){
+                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
                                     $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -1924,9 +1924,9 @@ class Home extends BaseController
                     $allnewrabcust = [];
                     // New Cust Rab Price
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2"){
+                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
                             $harga = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
-                        }elseif(!empty($rabcust['qty']) && $rabcust['denomination'] !="2"){
+                        }elseif(!empty($rabcust['qty']) && ($rabcust['denomination'] !="2" || $rabcust['denomination'] !="3")){
                             $harga = $rabcust['price'] * $rabcust['qty'];
                         }else{
                             $harga = $rabcust['price'];
@@ -2014,8 +2014,6 @@ class Home extends BaseController
             $data['total']              = count($queryproject);
             $data['startdate']          = strtotime($startdate);
             $data['enddate']            = strtotime($enddate);
-
-
             return view('dashboard', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
