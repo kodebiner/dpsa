@@ -76,8 +76,8 @@ $tanggalsph = ucwords($dateFormatted);
 <body>
     <?php
     $nosph = $projects['no_sph'];
-	// header("Content-type: application/vnd-ms-excel");
-	// header("Content-Disposition: attachment; filename=SPH_$nosph.xls");
+	header("Content-type: application/vnd-ms-excel");
+	header("Content-Disposition: attachment; filename=SPH_$nosph.xls");
 	?>
     <!-- <table style="width:100%">
         <tr>
