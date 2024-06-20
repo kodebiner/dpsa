@@ -1414,11 +1414,13 @@ class Project extends BaseController
                     // QUANTITY PRODUCT CUSTOM DELIVER
                     if(!empty($projectdata[$project['id']]['productioncustrab'])){
                         $resultcustrabitem = array_reduce($projectdata[$project['id']]['productioncustrab'], function($custrabitem, $item){ 
-                            if(!isset($custrabitem[$item['custrabid']])){ 
-                                $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
-                            } else { 
-                                $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
-                            } 
+                            if(!empty($item)){
+                                if(!isset($custrabitem[$item['custrabid']])){ 
+                                    $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
+                                } else { 
+                                    $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
+                                } 
+                            }
                             return $custrabitem; 
                         });
                         $projectdata[$project['id']]['pengirimanprodukcustom'] = $resultcustrabitem;
