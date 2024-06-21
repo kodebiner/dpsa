@@ -1118,7 +1118,7 @@
                                                                             <?php if($custrab['denomination'] === "2"){
                                                                                 $hargarabcust = ((int)$custrab['price'] * (int)$custrab['volume']) * (int)$custrab['qty'];
                                                                             }elseif($custrab['denomination'] === "3"){
-                                                                                $hargarabcust = ((int)$custrab['price'] * ((int)$custrab['length'] * (int)$custrab['height'])) * (int)$custrab['qty'];
+                                                                                $hargarabcust = ((int)$custrab['price'] * ($custrab['length'] * $custrab['height'])) * (int)$custrab['qty'];
                                                                             }else{
                                                                                 $hargarabcust = (int)$custrab['price'] * (int)$custrab['qty'];
                                                                             }
