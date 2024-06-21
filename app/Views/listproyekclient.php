@@ -1114,11 +1114,11 @@
                                                                                     }
                                                                                 ?>
                                                                             </td>
-                                                                            <!-- <td class="uk-text-center"></td> -->
-                                                                            <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                            <?php if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
-                                                                                $hargarabcust = ((int)$custrab['price'] * $custrab['volume']) * (int)$custrab['qty'];
+                                                                            <?php if($custrab['denomination'] === "2"){
+                                                                                $hargarabcust = ((int)$custrab['price'] * (int)$custrab['volume']) * (int)$custrab['qty'];
+                                                                            }elseif($custrab['denomination'] === "3"){
+                                                                                $hargarabcust = ((int)$custrab['price'] * ((int)$custrab['length'] * (int)$custrab['height'])) * (int)$custrab['qty'];
                                                                             }else{
                                                                                 $hargarabcust = (int)$custrab['price'] * (int)$custrab['qty'];
                                                                             }

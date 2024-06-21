@@ -1479,6 +1479,8 @@ class Project extends BaseController
                     }
                     $projectdata[$project['id']]['allrabdatadeleted']   = $datarabnew;
 
+                    // dd((int)$projectdata[$project['id']]['customrab'][0]['volume']);
+
                 }
             } else {
                 $rabs           = [];
