@@ -892,8 +892,28 @@
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
                                                                         <?php 
-                                                                            if($rabexist['denomination'] === "2" || $rabexist['denomination'] === "3"){
-                                                                                $hargatrab = ((int)$rabexist['price'] * (int)$rabexist['volume']) * (int)$rabexist['qty'];
+
+                                                                            // Value Condition
+                                                                            $lengthrab = 0;
+                                                                            $heigthrab = 0;
+                                                                            $volumerab = 0;
+
+                                                                            if(!empty($rabexist['length'])){
+                                                                                $lengthrab = $rabexist['length'];
+                                                                            }
+
+                                                                            if(!empty($rabexist['height'])){
+                                                                                $heigthrab = $rabexist['height'];
+                                                                            }
+
+                                                                            if(!empty($rabexist['volume'])){
+                                                                                $volumerab = $rabexist['volume'];
+                                                                            }
+
+                                                                            if($rabexist['denomination'] === "2"){
+                                                                                $hargatrab = ((int)$rabexist['price'] * $volumerab) * (int)$rabexist['qty'];
+                                                                            }elseif($rabexist['denomination'] === "3"){
+                                                                                $hargatrab = ((int)$rabexist['price'] * ($heigthrab * $lengthrab)) * (int)$rabexist['qty'];
                                                                             }else{
                                                                                 $hargarab = (int)$rabexist['price']  * (int)$rabexist['qty'];
                                                                             }
@@ -952,8 +972,28 @@
                                                                             <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
                                                                             <?php 
-                                                                            if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
-                                                                                $hargacustrab = ((int)$custrab['price'] * (int)$custrab['volume']) * (int)$custrab['qty'];
+
+                                                                            // Value Condition
+                                                                            $lengthcustrab = 0;
+                                                                            $heigthcustrab = 0;
+                                                                            $volumecustrab = 0;
+
+                                                                            if(!empty($custrab['length'])){
+                                                                                $lengthcustrab = $custrab['length'];
+                                                                            }
+
+                                                                            if(!empty($custrab['height'])){
+                                                                                $heigthcustrab = $custrab['height'];
+                                                                            }
+
+                                                                            if(!empty($custrab['volume'])){
+                                                                                $volumecustrab = $custrab['volume'];
+                                                                            }
+
+                                                                            if($custrab['denomination'] === "2"){
+                                                                                $hargacustrab = ((int)$custrab['price'] * $volumecustrab) * (int)$custrab['qty'];
+                                                                            }elseif($custrab['denomination'] === "3"){
+                                                                                $hargacustrab = ((int)$custrab['price'] * ($heigthcustrab * $lengthcustrab)) * (int)$custrab['qty'];
                                                                             }else{
                                                                                 $hargacustrab = (int)$custrab['price']  * (int)$custrab['qty'];
                                                                             }
@@ -1058,8 +1098,29 @@
                                                                         <td class="uk-text-center">
                                                                             <?= $rabexist['qty'] ?>
                                                                         </td>
-                                                                        <?php if($rabexist['denomination'] === "2" || $rabexist['denomination'] === "3"){
-                                                                            $hargarab = ((int)$rabexist['price'] * (int)$rabexist['volume']) * (int)$rabexist['qty'];
+                                                                        <?php
+
+                                                                        // Value Condition
+                                                                        $lengthrabexist = 0;
+                                                                        $heigthrabexist = 0;
+                                                                        $volumerabexist = 0;
+
+                                                                        if(!empty($rabexist['length'])){
+                                                                            $lengthrabexist = $rabexist['length'];
+                                                                        }
+
+                                                                        if(!empty($rabexist['height'])){
+                                                                            $heigthrabexist = $rabexist['height'];
+                                                                        }
+
+                                                                        if(!empty($rabexist['volume'])){
+                                                                            $volumerabexist = $rabexist['volume'];
+                                                                        }
+
+                                                                        if($rabexist['denomination'] === "2"){
+                                                                            $hargarab = ((int)$rabexist['price'] * $volumerabexist) * (int)$rabexist['qty'];
+                                                                        }elseif($rabexist['denomination'] === "3"){
+                                                                            $hargarab = ((int)$rabexist['price'] * ($heigthrabexist *  $lengthrabexist)) * (int)$rabexist['qty'];
                                                                         }else{
                                                                             $hargarab = (int)$rabexist['price'] * (int)$rabexist['qty'];
                                                                         }
@@ -1115,10 +1176,29 @@
                                                                                 ?>
                                                                             </td>
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
-                                                                            <?php if($custrab['denomination'] === "2"){
-                                                                                $hargarabcust = ((int)$custrab['price'] * (int)$custrab['volume']) * (int)$custrab['qty'];
+                                                                            <?php
+
+                                                                            // Value Condition
+                                                                            $lengthcustrab = 0;
+                                                                            $heigthcustrab = 0;
+                                                                            $volumecustrab = 0;
+
+                                                                            if(!empty($custrab['length'])){
+                                                                                $lengthcustrab = $custrab['length'];
+                                                                            }
+
+                                                                            if(!empty($custrab['height'])){
+                                                                                $heigthcustrab = $custrab['height'];
+                                                                            }
+
+                                                                            if(!empty($custrab['volume'])){
+                                                                                $volumecustrab = $custrab['volume'];
+                                                                            }
+
+                                                                            if($custrab['denomination'] === "2"){
+                                                                                $hargarabcust = ((int)$custrab['price'] * $volumecustrab) * (int)$custrab['qty'];
                                                                             }elseif($custrab['denomination'] === "3"){
-                                                                                $hargarabcust = ((int)$custrab['price'] * ($custrab['length'] * $custrab['height'])) * (int)$custrab['qty'];
+                                                                                $hargarabcust = ((int)$custrab['price'] * ($lengthcustrab * $heigthcustrab)) * (int)$custrab['qty'];
                                                                             }else{
                                                                                 $hargarabcust = (int)$custrab['price'] * (int)$custrab['qty'];
                                                                             }
@@ -1234,8 +1314,28 @@
                                                                             <input type="number" class="uk-input uk-form-width-small" placeholder="<?= $allcurrentrabdata['qty'] ?>" disabled/>
                                                                         </td>
                                                                         <?php 
+
+                                                                            // Value Condition
+                                                                            $lengthcurrentcustrab = 0;
+                                                                            $heigthcurrentcustrab = 0;
+                                                                            $volumecurrentcustrab = 0;
+
+                                                                            if(!empty($allcurrentrabdata['length'])){
+                                                                                $lengthcurrentcustrab = $allcurrentrabdata['length'];
+                                                                            }
+
+                                                                            if(!empty($allcurrentrabdata['height'])){
+                                                                                $heigthcurrentcustrab = $allcurrentrabdata['height'];
+                                                                            }
+
+                                                                            if(!empty($allcurrentrabdata['volume'])){
+                                                                                $volumecurrentcustrab = $allcurrentrabdata['volume'];
+                                                                            }
+
                                                                             if($allcurrentrabdata['denomination'] === "2"){
-                                                                                $hargamdldeleted = ((int)$allcurrentrabdata['price'] * $allcurrentrabdata['volume'])  * (int)$allcurrentrabdata['qty'];
+                                                                                $hargamdldeleted = ((int)$allcurrentrabdata['price'] * $volumecurrentcustrab)  * (int)$allcurrentrabdata['qty'];
+                                                                            }elseif($allcurrentrabdata['denomination'] === "3"){
+                                                                                $hargamdldeleted = ((int)$allcurrentrabdata['price'] * ($lengthcurrentcustrab * $heigthcurrentcustrab))  * (int)$allcurrentrabdata['qty'];
                                                                             }else{
                                                                                 $hargamdldeleted = (int)$allcurrentrabdata['price']  * (int)$allcurrentrabdata['qty'];
                                                                             }

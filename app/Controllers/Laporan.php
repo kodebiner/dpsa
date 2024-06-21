@@ -130,8 +130,28 @@ class Laporan extends BaseController
                         // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
-                            if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
-                                $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] *$mdlr['volume']);
+
+                            // Value Condition
+                            $lengthmdlr = 0;
+                            $heigthmdlr = 0;
+                            $volumemdlr = 0;
+
+                            if(!empty($mdlr['length'])){
+                                $lengthmdlr = $mdlr['length'];
+                            }
+
+                            if(!empty($mdlr['height'])){
+                                $heigthmdlr = $mdlr['height'];
+                            }
+
+                            if(!empty($mdlr['volume'])){
+                                $volumemdlr = $mdlr['volume'];
+                            }
+                            
+                            if($mdlr['denomination'] === "2"){
+                                $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] * $volumemdlr);
+                            }elseif($mdlr['denomination'] === "3"){
+                                $mdlprice = (int)$rab['qty'] * ((int)$mdlr['price'] * ($heigthmdlr * $lengthmdlr));
                             }else{
                                 $mdlprice = (int)$rab['qty'] * (int)$mdlr['price'];
                             }
@@ -203,8 +223,28 @@ class Laporan extends BaseController
 
                 // New Cust Rab Price
                 foreach($allCustomRab as $rabcust){
-                    if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
-                        $rabprice = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+
+                    // Value Condition
+                    $lengthrabcust = 0;
+                    $heigthrabcust = 0;
+                    $volumerabcust = 0;
+
+                    if(!empty($rabcust['length'])){
+                        $lengthrabcust = $rabcust['length'];
+                    }
+
+                    if(!empty($rabcust['height'])){
+                        $heigthrabcust = $rabcust['height'];
+                    }
+
+                    if(!empty($rabcust['volume'])){
+                        $volumerabcust = $rabcust['volume'];
+                    }
+                      
+                    if($rabcust['denomination'] === "2"){
+                        $rabprice = ($rabcust['price'] * $volumerabcust) * $rabcust['qty'];
+                    }elseif($rabcust['denomination'] === "3"){
+                        $rabprice = ($rabcust['price'] * ($heigthrabcust * $lengthrabcust)) * $rabcust['qty'];
                     }elseif(($rabcust['denomination'] != "2" || $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                         $rabprice = $rabcust['price'] * $rabcust['qty'];
                     }else{
@@ -396,14 +436,35 @@ class Laporan extends BaseController
                 foreach ($rabs as $rab) {
                     $paketid[]  = $rab['paketid'];
 
-                    // MDL RAB
-                    $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
-                    foreach ($rabmdl as $mdlr) {
-                        if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
-                            $mdlprice =  (int)$rab['qty'] * ((int)$mdlr['price'] * $mdlr['volume']);
+                        // MDL RAB
+                        $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+                        foreach ($rabmdl as $mdlr) {
+
+                        // Value Condition
+                        $lengthmdlr = 0;
+                        $heigthmdlr = 0;
+                        $volumemdlr = 0;
+
+                        if(!empty($mdlr['length'])){
+                            $lengthmdlr = $mdlr['length'];
+                        }
+
+                        if(!empty($mdlr['height'])){
+                            $heigthmdlr = $mdlr['height'];
+                        }
+
+                        if(!empty($mdlr['volume'])){
+                            $volumemdlr = $mdlr['volume'];
+                        }
+
+                        if($mdlr['denomination'] === "2"){
+                            $mdlprice =  (int)$rab['qty'] * ((int)$mdlr['price'] * $volumemdlr);
+                        }elseif($mdlr['denomination'] === "3"){
+                            $mdlprice =  (int)$rab['qty'] * ((int)$mdlr['price'] * ($lengthmdlr * $heigthmdlr));
                         }else{
                             $mdlprice =  (int)$rab['qty'] * (int)$mdlr['price'];
                         }
+
                         $projectdata[$project['id']]['rab'][$rab['id']]  = [
                             'id'            => $mdlr['id'],
                             'proid'         => $project['id'],
@@ -472,8 +533,28 @@ class Laporan extends BaseController
             // New Cust Rab Price
             $allnewrabcust = [];
             foreach($allCustomRab as $rabcust){
-                if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
-                    $rabprice = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+
+                // Value Condition
+                $lengthrabcust = 0;
+                $heigthrabcust = 0;
+                $volumerabcust = 0;
+
+                if(!empty($rabcust['length'])){
+                    $lengthrabcust = $rabcust['length'];
+                }
+
+                if(!empty($rabcust['height'])){
+                    $heigthrabcust = $rabcust['height'];
+                }
+
+                if(!empty($rabcust['volume'])){
+                    $volumerabcust = $rabcust['volume'];
+                }
+
+                if($rabcust['denomination'] === "2"){
+                    $rabprice = ($rabcust['price'] * $volumerabcust) * $rabcust['qty'];
+                }elseif($rabcust['denomination'] === "3"){
+                    $rabprice = ($rabcust['price'] * ($heigthrabcust * $lengthrabcust)) * $rabcust['qty'];
                 }elseif(($rabcust['denomination'] != "2"|| $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                     $rabprice = $rabcust['price'] * $rabcust['qty'];
                 }else{

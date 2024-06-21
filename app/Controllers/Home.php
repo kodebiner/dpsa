@@ -179,11 +179,30 @@ class Home extends BaseController
 
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
+
                             foreach ($rabmdl as $mdlr) {
+
+                                // Value Condition
+                                $length = 0;
+                                $heigth = 0;
+                                $volume = 0;
+
+                                if(!empty($mdlr['length'])){
+                                    $length = $mdlr['length'];
+                                }
+
+                                if(!empty($mdlr['height'])){
+                                    $heigth = $mdlr['height'];
+                                }
+
+                                if(!empty($mdlr['volume'])){
+                                    $volume = $mdlr['volume'];
+                                }
+
                                 if($mdlr['denomination'] === "2"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $mdlr['volume']);
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
                                 }elseif($mdlr['denomination'] === "3"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ((int)$mdlr['length'] * (int)$mdlr['height']));
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($length * $heigth));
                                 }
                                 else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
@@ -256,12 +275,30 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
+
+                        // Value Condition
+                        $lengthcust = 0;
+                        $heigthcust = 0;
+                        $volumecust = 0;
+
+                        if(!empty($rabcust['length'])){
+                            $lengthcust = $rabcust['length'];
+                        }
+
+                        if(!empty($rabcust['height'])){
+                            $heigthcust = $rabcust['height'];
+                        }
+
+                        if(!empty($rabcust['volume'])){
+                            $volumecust = $rabcust['volume'];
+                        }
+
                         if($rabcust['denomination'] === "2"){
-                            $hargacustrab = (int)$rabcust['qty'] * (int)($rabcust['price'] * (int)$rabcust['volume']);
+                            $hargacustrab = (int)$rabcust['qty'] * (int)($rabcust['price'] * $volumecust);
                         }elseif(($rabcust['denomination'] != "2" || $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                             $hargacustrab = (int)$rabcust['qty'] * (int)$rabcust['price'];
                         }elseif($rabcust['denomination'] === "3"){
-                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * (int)($rabcust['length'] * (int)$rabcust['height']));
+                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * ($lengthcust * $heigthcust));
                         }else{
                             $hargacustrab = (int)$rabcust['price'];
                         }
@@ -437,10 +474,28 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
+
+                                // Value Condition
+                                $length = 0;
+                                $heigth = 0;
+                                $volume = 0;
+
+                                if(!empty($mdlr['length'])){
+                                    $length = $mdlr['length'];
+                                }
+
+                                if(!empty($mdlr['height'])){
+                                    $heigth = $mdlr['height'];
+                                }
+
+                                if(!empty($mdlr['volume'])){
+                                    $volume = $mdlr['volume'];
+                                }
+
                                 if($mdlr['denomination'] === "2" ){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] *$mdlr['volume']);
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
                                 }elseif($mdlr['denomination'] === "3"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ((int)$mdlr['height'] *$mdlr['length']));
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($heigth * $length));
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
                                 }
@@ -512,10 +567,28 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
+
+                        // Value Condition
+                        $lengthcust = 0;
+                        $heigthcust = 0;
+                        $volumecust = 0;
+
+                        if(!empty($rabcust['length'])){
+                            $lengthcust = $rabcust['length'];
+                        }
+
+                        if(!empty($rabcust['height'])){
+                            $heigthcust = $rabcust['height'];
+                        }
+
+                        if(!empty($rabcust['volume'])){
+                            $volumecust = $rabcust['volume'];
+                        }
+
                         if($rabcust['denomination'] === "2"){
-                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * (int)$rabcust['volume']);
+                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * $volumecust);
                         }elseif($rabcust['denomination'] === "3"){
-                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * ((int)$rabcust['length'] * (int)$rabcust['height']));
+                            $hargacustrab = (int)$rabcust['qty'] * ((int)$rabcust['price'] * ($lengthcust * $heigthcust));
                         }elseif(($rabcust['denomination'] != "2" || $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                             $hargacustrab = (int)$rabcust['qty'] * (int)$rabcust['price'];
                         }else{
@@ -664,10 +737,28 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
+
+                                // Value Condition
+                                $length = 0;
+                                $heigth = 0;
+                                $volume = 0;
+
+                                if(!empty($mdlr['length'])){
+                                    $length = $mdlr['length'];
+                                }
+
+                                if(!empty($mdlr['height'])){
+                                    $heigth = $mdlr['height'];
+                                }
+
+                                if(!empty($mdlr['volume'])){
+                                    $volume = $mdlr['volume'];
+                                }
+
                                 if($mdlr['denomination'] === "2"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
                                 }elseif($mdlr['denomination'] === "3"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ((int)$mdlr['length'] * (int)$mdlr['height']));
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($length * $heigth));
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
                                 }
@@ -842,10 +933,28 @@ class Home extends BaseController
                         if (!empty($projectdata[$project['id']]['customrab'])) {
                             $custrabprice = [];
                             foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
+
+                                // Value Condition
+                                $lengthcust = 0;
+                                $heigthcust = 0;
+                                $volumecust = 0;
+
+                                if(!empty($custrabdata['length'])){
+                                    $lengthcust = $custrabdata['length'];
+                                }
+
+                                if(!empty($custrabdata['height'])){
+                                    $heigthcust = $custrabdata['height'];
+                                }
+
+                                if(!empty($custrabdata['volume'])){
+                                    $volumecust = $custrabdata['volume'];
+                                }
+
                                 if($custrabdata['denomination'] === "2"){
-                                    $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * $custrabdata['volume']);
+                                    $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * $volumecust);
                                 }elseif($custrabdata['denomination'] === "3"){
-                                    $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * ((int)$custrabdata['length'] * (int)$custrabdata['height']));
+                                    $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * ($lengthcust * $volumecust));
                                 }else{
                                     $hargacustrab = (int)$custrabdata['qty'] * (int)$custrabdata['price'];
                                 }
@@ -874,11 +983,28 @@ class Home extends BaseController
                             foreach ($dataMdlItems as $dataMdlItem) {
                                 foreach ( $mdlItemQty as $qtyItem ) {
                                     if($qtyItem['mdlid'] === $dataMdlItem['id']){
+
+                                        // Value Condition
+                                        $lengthmdl = 0;
+                                        $heigthmdl = 0;
+                                        $volumemdl = 0;
+
+                                        if(!empty($dataMdlItem['length'])){
+                                            $lengthmdl = $dataMdlItem['length'];
+                                        }
+
+                                        if(!empty($dataMdlItem['height'])){
+                                            $heigthmdl = $dataMdlItem['height'];
+                                        }
+
+                                        if(!empty($dataMdlItem['volume'])){
+                                            $volumemdl = $dataMdlItem['volume'];
+                                        }
         
                                         if($dataMdlItem['denomination'] === "2"){
-                                            $mdlprice = ((int)$dataMdlItem['price'] * (int)$dataMdlItem['volume']) * (int)$qtyItem['qty'];
+                                            $mdlprice = ((int)$dataMdlItem['price'] * $volumemdl) * (int)$qtyItem['qty'];
                                         }elseif($dataMdlItem['denomination'] === "3"){
-                                            $mdlprice = ((int)$dataMdlItem['price'] * ((int)$dataMdlItem['length'] * (int)$dataMdlItem['height'])) * (int)$qtyItem['qty'];
+                                            $mdlprice = ((int)$dataMdlItem['price'] * ($lengthmdl * $heigthmdl)) * (int)$qtyItem['qty'];
                                         }else{
                                             $mdlprice = (int)$dataMdlItem['price'] * (int)$qtyItem['qty'];
                                         }
@@ -901,10 +1027,28 @@ class Home extends BaseController
                         if (!empty($custrabid)) {
                             $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
                             foreach($dataCustRabItems as $dataCustRabItem){
+
+                                // Value Condition
+                                $lengthcustrab = 0;
+                                $heigthcustrab = 0;
+                                $volumecustrab = 0;
+
+                                if(!empty($datacustrabItem['length'])){
+                                    $lengthcustrab = $datacustrabItem['length'];
+                                }
+
+                                if(!empty($datacustrabItem['height'])){
+                                    $heigthcustrab = $datacustrabItem['height'];
+                                }
+
+                                if(!empty($datacustrabItem['volume'])){
+                                    $volumecustrab = $datacustrabItem['volume'];
+                                }
+
                                 if($dataCustRabItem['denomination'] === "2"){
-                                    $hargacustrab = ((int)$dataCustRabItem['price'] * (int)$dataCustRabItem['volume']) * (int)$dataCustRabItem['qty'];
+                                    $hargacustrab = ((int)$dataCustRabItem['price'] * $volumecustrab) * (int)$dataCustRabItem['qty'];
                                 }elseif($dataCustRabItem['denomination'] === "3"){
-                                    $hargacustrab = ((int)$dataCustRabItem['price'] * ((int)$dataCustRabItem['length'] * (int)$dataCustRabItem['height'] )) * (int)$dataCustRabItem['qty'];
+                                    $hargacustrab = ((int)$dataCustRabItem['price'] * ($lengthcustrab * $heigthcustrab )) * (int)$dataCustRabItem['qty'];
                                 }elseif(($dataCustRabItem['denomination'] != "2" || $dataCustRabItem['denomination'] != "3") && !empty($dataCustRabItem['qty'])){
                                     $hargacustrab = (int)$dataCustRabItem['price'] * (int)$dataCustRabItem['qty'];
                                 }else{
@@ -1157,8 +1301,28 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+
+                                // Value Condition
+                                $length = 0;
+                                $heigth = 0;
+                                $volume = 0;
+
+                                if(!empty($mdlr['length'])){
+                                    $length = $mdlr['length'];
+                                }
+
+                                if(!empty($mdlr['height'])){
+                                    $heigth = $mdlr['height'];
+                                }
+
+                                if(!empty($mdlr['volume'])){
+                                    $volume = $mdlr['volume'];
+                                }
+
+                                if($mdlr['denomination'] === "2"){
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
+                                }elseif($mdlr['denomination'] === "3"){
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($length * $heigth));
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
                                 }
@@ -1230,8 +1394,28 @@ class Home extends BaseController
                     // New Cust Rab Price
                     $allnewrabcust = [];
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
-                            $hargacustrab = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+
+                        // Value Condition
+                        $lengthcustrab = 0;
+                        $heigthcustrab = 0;
+                        $volumecustrab = 0;
+
+                        if(!empty($rabcust['length'])){
+                            $lengthcustrab = $rabcust['length'];
+                        }
+
+                        if(!empty($rabcust['height'])){
+                            $heigthcustrab = $rabcust['height'];
+                        }
+
+                        if(!empty($rabcust['volume'])){
+                            $volumecustrab = $rabcust['volume'];
+                        }
+
+                        if($rabcust['denomination'] === "2"){
+                            $hargacustrab = ($rabcust['price'] * $volumecustrab) * $rabcust['qty'];
+                        }elseif($rabcust['denomination'] === "3"){
+                            $hargacustrab = ($rabcust['price'] * ($lengthcustrab * $heigthcustrab)) * $rabcust['qty'];
                         }elseif(($rabcust['denomination'] != "2"|| $rabcust['denomination'] != "3") && !empty($rabcust['qty'])){
                             $hargacustrab = $rabcust['price'] * $rabcust['qty'];
                         }else{
@@ -1441,8 +1625,28 @@ class Home extends BaseController
                         // MDL RAB
                         $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                         foreach ($rabmdl as $mdlr) {
-                            if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
-                                $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+
+                            // Value Condition
+                            $length = 0;
+                            $heigth = 0;
+                            $volume = 0;
+
+                            if(!empty($mdlr['length'])){
+                                $length = $mdlr['length'];
+                            }
+
+                            if(!empty($mdlr['height'])){
+                                $heigth = $mdlr['height'];
+                            }
+
+                            if(!empty($mdlr['volume'])){
+                                $volume = $mdlr['volume'];
+                            }
+
+                            if($mdlr['denomination'] === "2"){
+                                $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
+                            }elseif($mdlr['denomination'] === "3"){
+                                $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($length * $heigth));
                             }else{
                                 $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
                             }
@@ -1616,9 +1820,29 @@ class Home extends BaseController
                     if (!empty($projectdata[$project['id']]['customrab'])) {
                         $custrabprice = [];
                         foreach ($projectdata[$project['id']]['customrab'] as $custrabdata) {
-                            if($custrabdata['denomination'] === "2" || $custrabdata['denomination'] === "3"){
-                                $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * (int)$custrabdata['volume']);
-                            }elseif(!empty($custrabdata['qty']) && $custrabdata['qty']){
+
+                            // Value Condition
+                            $lengthcustrab = 0;
+                            $heigthcustrab = 0;
+                            $volumecustrab = 0;
+
+                            if(!empty($mdlr['length'])){
+                                $lengthcustrab = $mdlr['length'];
+                            }
+
+                            if(!empty($mdlr['height'])){
+                                $heigthcustrab = $mdlr['height'];
+                            }
+
+                            if(!empty($mdlr['volume'])){
+                                $volumecustrab = $mdlr['volume'];
+                            }
+
+                            if($custrabdata['denomination'] === "2"){
+                                $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * $volumecustrab);
+                            }elseif($custrabdata['denomination'] === "3"){
+                                $hargacustrab = (int)$custrabdata['qty'] * ((int)$custrabdata['price'] * ($lengthcustrab * $heigthcustrab));
+                            }elseif(!empty($custrabdata['qty']) && ($custrabdata['denomination'] != "2" || $custrabdata['denomination'] != "3")){
                                 $hargacustrab = (int)$custrabdata['qty'] * (int)$custrabdata['price'];
                             }else{
                                 $hargacustrab = (int)$custrabdata['price'];
@@ -1648,8 +1872,28 @@ class Home extends BaseController
                         foreach ($dataMdlItems as $dataMdlItem) {
                             foreach ( $mdlItemQty as $qtyItem ) {
                                 if($qtyItem['mdlid'] === $dataMdlItem['id']){
-                                    if($dataMdlItem['denomination'] === "2" || $dataMdlItem['denomination'] === "3"){
-                                        $hargamdl = (int)$qtyItem['qty'] * ((int)$dataMdlItem['price'] * (int)$dataMdlItem['volume']);
+
+                                    // Value Condition
+                                    $lengthmdl = 0;
+                                    $heigthmdl = 0;
+                                    $volumemdl = 0;
+
+                                    if(!empty($dataMdlItem['length'])){
+                                        $lengthmdl = $dataMdlItem['length'];
+                                    }
+
+                                    if(!empty($dataMdlItem['height'])){
+                                        $heigthmdl = $dataMdlItem['height'];
+                                    }
+
+                                    if(!empty($dataMdlItem['volume'])){
+                                        $volumemdl = $dataMdlItem['volume'];
+                                    }
+
+                                    if($dataMdlItem['denomination'] === "2"){
+                                        $hargamdl = (int)$qtyItem['qty'] * ((int)$dataMdlItem['price'] * $volumemdl);
+                                    }elseif($dataMdlItem['denomination'] === "3"){
+                                        $hargamdl = (int)$qtyItem['qty'] * ((int)$dataMdlItem['price'] * ($lengthmdl * $heigthmdl));
                                     }else{
                                         $hargamdl = (int)$qtyItem['qty'] * (int)$dataMdlItem['price'];
                                     }
@@ -1673,9 +1917,28 @@ class Home extends BaseController
                         $dataCustRabItems = $CustomRabModel->where('projectid', $project['id'])->whereIn('id',$custrabid)->find();
                         foreach($dataCustRabItems as $dataCustRabItem){
 
+                            // Value Condition
+                            $lengthcustrab = 0;
+                            $heigthcustrab = 0;
+                            $volumecustrab = 0;
+
+                            if(!empty($datacustrabItem['length'])){
+                                $lengthcustrab = $datacustrabItem['length'];
+                            }
+
+                            if(!empty($datacustrabItem['height'])){
+                                $heigthcustrab = $datacustrabItem['height'];
+                            }
+
+                            if(!empty($datacustrabItem['volume'])){
+                                $volumecustrab = $datacustrabItem['volume'];
+                            }
+
                             if($dataCustRabItem['denomination'] === "2"){
-                                $hargacustrab = (int)$dataCustRabItem['qty'] * ((int)$dataCustRabItem['price'] * (int)$dataCustRabItem['volume']);
-                            }elseif(!empty($dataCustRabItem['qty']) && $dataCustRabItem['denomination'] != "2"){
+                                $hargacustrab = (int)$dataCustRabItem['qty'] * ((int)$dataCustRabItem['price'] * $volumecustrab);
+                            }elseif($dataCustRabItem['denomination'] === "3"){
+                                $hargacustrab = (int)$dataCustRabItem['qty'] * ((int)$dataCustRabItem['price'] * ($heigthcustrab * $lengthcustrab));
+                            }elseif(!empty($dataCustRabItem['qty']) && ($dataCustRabItem['denomination'] != "2" || $dataCustRabItem['denomination'] != "3" )){
                                 $hargacustrab = (int)$dataCustRabItem['qty'] * (int)$dataCustRabItem['price'];
                             }else{
                                 $hargacustrab = (int)$dataCustRabItem['price'];
@@ -1864,8 +2127,28 @@ class Home extends BaseController
                             // MDL RAB
                             $rabmdl     = $MdlModel->where('id', $rab['mdlid'])->find();
                             foreach ($rabmdl as $mdlr) {
-                                if($mdlr['denomination'] === "2" || $mdlr['denomination'] === "3"){
-                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * (int)$mdlr['volume']);
+
+                                // Value Condition
+                                $length = 0;
+                                $heigth = 0;
+                                $volume = 0;
+
+                                if(!empty($mdlr['length'])){
+                                    $length = $mdlr['length'];
+                                }
+
+                                if(!empty($mdlr['height'])){
+                                    $heigth = $mdlr['height'];
+                                }
+
+                                if(!empty($mdlr['volume'])){
+                                    $volume = $mdlr['volume'];
+                                }
+
+                                if($mdlr['denomination'] === "2"){
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * $volume);
+                                }elseif($mdlr['denomination'] === "3"){
+                                    $hargamdl = (int)$rab['qty'] * ((int)$mdlr['price'] * ($length * $heigth));
                                 }else{
                                     $hargamdl = (int)$rab['qty'] * (int)$mdlr['price'];
                                 }
@@ -1937,8 +2220,28 @@ class Home extends BaseController
                     $allnewrabcust = [];
                     // New Cust Rab Price
                     foreach($allCustomRab as $rabcust){
-                        if($rabcust['denomination'] === "2" || $rabcust['denomination'] === "3"){
-                            $harga = ($rabcust['price'] * $rabcust['volume']) * $rabcust['qty'];
+
+                        // Value Condition
+                        $lengthrabcust = 0;
+                        $heigthrabcust = 0;
+                        $volumerabcust = 0;
+
+                        if(!empty($rabcust['length'])){
+                            $lengthrabcust = $rabcust['length'];
+                        }
+
+                        if(!empty($rabcust['height'])){
+                            $heigthrabcust = $rabcust['height'];
+                        }
+
+                        if(!empty($rabcust['volume'])){
+                            $volumerabcust = $rabcust['volume'];
+                        }
+
+                        if($rabcust['denomination'] === "2"){
+                            $harga = ($rabcust['price'] * $volumerabcust) * $rabcust['qty'];
+                        }elseif($rabcust['denomination'] === "3"){
+                            $harga = ($rabcust['price'] * ($lengthrabcust * $heigthrabcust)) * $rabcust['qty'];
                         }elseif(!empty($rabcust['qty']) && ($rabcust['denomination'] !="2" || $rabcust['denomination'] !="3")){
                             $harga = $rabcust['price'] * $rabcust['qty'];
                         }else{

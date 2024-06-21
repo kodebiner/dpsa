@@ -315,13 +315,31 @@
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                     <?php
                                                                                     $price = "";
+
+                                                                                    // Value Condition
+                                                                                    $lengthmdl = 0;
+                                                                                    $heigthmdl = 0;
+                                                                                    $volumemdl = 0;
+
+                                                                                    if(!empty($mdl['length'])){
+                                                                                        $lengthmdl = $mdl['length'];
+                                                                                    }
+
+                                                                                    if(!empty($mdl['height'])){
+                                                                                        $heigthmdl = $mdl['height'];
+                                                                                    }
+
+                                                                                    if(!empty($mdl['volume'])){
+                                                                                        $volumemdl = $mdl['volume'];
+                                                                                    }
+
                                                                                     if ($mdl['denomination'] === "1") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "2") {
-                                                                                        $price  = $rab['qty'] * ($mdl['price'] * $mdl['volume']);
+                                                                                        $price  = $rab['qty'] * ($mdl['price'] * $volumemdl);
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         $luas   =   $mdl['height'] * $mdl['length'];
-                                                                                        $price  = $rab['qty'] * ($mdl['price'] * $mdl['volume']);
+                                                                                        $price  = $rab['qty'] * ($mdl['price'] * ($heigthmdl * $lengthmdl));
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }else{
@@ -360,10 +378,32 @@
                                                             <td class="uk-text-center">Jumlah</td>
                                                             <td class="">Harga</td>
                                                         </tr>
-                                                        <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
+                                                        <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {
+
+                                                            // Value Condition
+                                                            $lengthcustrab = 0;
+                                                            $heigthcustrab = 0;
+                                                            $volumecustrab = 0;
+
+                                                            if(!empty($custrab['length'])){
+                                                                $lengthcustrab = $custrab['length'];
+                                                            }
+
+                                                            if(!empty($custrab['height'])){
+                                                                $heigthcustrab = $custrab['height'];
+                                                            }
+
+                                                            if(!empty($custrab['volume'])){
+                                                                $volumecustrab = $custrab['volume'];
+                                                            }
+
+                                                            ?>
+                                                            
                                                             <?php if($custrab['denomination'] === "2"){
-                                                                $harga = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
-                                                            }elseif($custrab['denomination'] != "2" && !empty($custrab['qty'])){
+                                                                $harga = ($custrab['price'] * $volumecustrab) * $custrab['qty'];
+                                                            }elseif($custrab['denomination'] === "3"){
+                                                                $harga = ($custrab['price'] * ($lengthcustrab * $heigthcustrab)) * $custrab['qty'];
+                                                            }elseif(($custrab['denomination'] != "2" || $custrab['denomination'] != "3" ) && !empty($custrab['qty'])){
                                                                 $harga = $custrab['price'] * $custrab['qty'];
                                                             }else{
                                                                 $harga = $custrab['price'];
@@ -1088,13 +1128,31 @@
                                                                                     <td class="uk-text-center"><?= $rab['qty'] ?></td>
                                                                                     <?php
                                                                                     $price = "";
+
+                                                                                    // Value Condition
+                                                                                    $lengthmdl = 0;
+                                                                                    $heigthmdl = 0;
+                                                                                    $volumemdl = 0;
+
+                                                                                    if(!empty($mdl['length'])){
+                                                                                        $lengthmdl = $mdl['length'];
+                                                                                    }
+
+                                                                                    if(!empty($mdl['height'])){
+                                                                                        $heigthmdl = $mdl['height'];
+                                                                                    }
+
+                                                                                    if(!empty($mdl['volume'])){
+                                                                                        $volumemdl = $mdl['volume'];
+                                                                                    }
+
                                                                                     if ($mdl['denomination'] === "1") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     } elseif ($mdl['denomination'] === "2") {
-                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * $mdl['volume'] );
+                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * $volumemdl );
                                                                                     } elseif ($mdl['denomination'] === "3") {
                                                                                         // $luas   =   $mdl['height'] * $mdl['length'];
-                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * $mdl['volume'] );
+                                                                                        $price  = $rab['qty'] * ( $mdl['price'] * ($heigthmdl * $lengthmdl));
                                                                                     } elseif ($mdl['denomination'] === "4") {
                                                                                         $price  = $rab['qty'] * $mdl['price'];
                                                                                     }
@@ -1132,8 +1190,29 @@
                                                             <td class="">Harga</td>
                                                         </tr>
                                                         <?php foreach ($projectdata[$project['id']]['custrab'] as $custrab) {?>
-                                                            <?php if($custrab['denomination'] === "2" || $custrab['denomination'] === "3"){
-                                                                $harga = ($custrab['price'] * $custrab['volume']) * $custrab['qty'];
+                                                            <?php
+                                                            
+                                                            // Value Condition
+                                                            $lengthcustrab = 0;
+                                                            $heigthcustrab = 0;
+                                                            $volumecustrab = 0;
+
+                                                            if(!empty($custrab['length'])){
+                                                                $lengthcustrab = $custrab['length'];
+                                                            }
+
+                                                            if(!empty($custrab['height'])){
+                                                                $heigthcustrab = $custrab['height'];
+                                                            }
+
+                                                            if(!empty($custrab['volume'])){
+                                                                $volumecustrab = $custrab['volume'];
+                                                            }
+
+                                                            if($custrab['denomination'] === "2"){
+                                                                $harga = ($custrab['price'] * $volumecustrab) * $custrab['qty'];
+                                                            }elseif($custrab['denomination'] === "3"){
+                                                                $harga = ($custrab['price'] * ($lengthcustrab * $heigthcustrab )) * $custrab['qty'];
                                                             }elseif(!empty($custrab['qty']) && ($custrab['denomination'] !="2" || $custrab['denomination'] !="3")){
                                                                 $harga = $custrab['price'] * $custrab['qty'];
                                                             }else{
@@ -1145,7 +1224,7 @@
                                                                 <td class="uk-text-center"><?=$custrab['length']?></td>
                                                                 <td class="uk-text-center"><?=$custrab['width']?></td>
                                                                 <td class="uk-text-center"><?=$custrab['height']?></td>
-                                                                <td class="uk-text-center"><?=$custrab['volume']?></td>
+                                                                <td class="uk-text-center"><?=$volumecustrab?></td>
                                                                 <td class="uk-text-center">
                                                                     <?php
                                                                         if ($custrab['denomination'] === "1") {

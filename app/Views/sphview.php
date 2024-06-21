@@ -261,15 +261,34 @@ $tanggalsph = ucwords($dateFormatted);
                             </td>
                             <td style="border: 1pt solid black;">
                             <?php if (!empty($cusrab['price'])) {
-                                    if($cusrab['denomination'] === "2" || $cusrab['denomination'] === "3"){
-                                        $hargacustrab =  ($cusrab['price'] * $cusrab['volume']) * $cusrab['qty'];
+                                    // Value Condition
+                                    $lengthcusrab = 0;
+                                    $heigthcusrab = 0;
+                                    $volumecusrab = 0;
+
+                                    if(!empty($cusrab['length'])){
+                                        $lengthcusrab = $cusrab['length'];
+                                    }
+
+                                    if(!empty($cusrab['height'])){
+                                        $heigthcusrab = $cusrab['height'];
+                                    }
+
+                                    if(!empty($cusrab['volume'])){
+                                        $volumecusrab = $cusrab['volume'];
+                                    }
+
+                                    if($cusrab['denomination'] === "2"){
+                                        $hargacustrab =  ($cusrab['price'] * $volumecusrab) * $cusrab['qty'];
+                                    }elseif($cusrab['denomination'] === "3"){
+                                        $hargacustrab =  ($cusrab['price'] * ($heigthcusrab * $lengthcusrab)) * $cusrab['qty'];
                                     }elseif(($cusrab['denomination'] != "2"|| $cusrab['denomination'] != "3") && $cusrab['qty'] != 0){
                                         $hargacustrab =  $cusrab['price'] * $cusrab['qty'];
                                     }else{
                                         $hargacustrab =  $cusrab['price'];
                                     }
                                     echo "Rp." . number_format($hargacustrab, 0, ',', '.');
-                                } ?>
+                            } ?>
                             </td>
                             <td style="border: 1pt solid black; text-align:right;"></td>
                         </tr>
