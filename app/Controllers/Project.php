@@ -1523,13 +1523,11 @@ class Project extends BaseController
                     if(!empty($projectdata[$project['id']]['productioncustrab'])){
                         $resultcustrabitem = array_reduce($projectdata[$project['id']]['productioncustrab'], function($custrabitem, $item){
                             if(!empty($item)){
-                                if(!empty($custrabitem)){
-                                    if(!isset($custrabitem[$item['custrabid']])){ 
-                                        $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
-                                    } else { 
-                                        $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
-                                    } 
-                                }
+                                if(!isset($custrabitem[$item['custrabid']])){ 
+                                    $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
+                                } else { 
+                                    $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
+                                } 
                             }
                             return $custrabitem; 
                         });
@@ -2237,37 +2235,6 @@ class Project extends BaseController
                 }
             }
 
-            // Update Custom RAB Price
-            if (!empty($input['pricecustrab' . $id])) {
-                foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
-                    $customrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($custrabid);
-                    $custPrice = preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab));
-                    if ($custPrice != $customrabdata['price']) {
-                        if (!empty($custPrice)) {
-                            if ($custPrice != 0) {
-                                $datacustomrab  = [
-                                    'id'    => $custrabid,
-                                    'price' => $custPrice,
-                                ];
-                                $CustomRabModel->save($datacustomrab);
-                            } else {
-                                $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
-                                foreach($productionsdata as $dataproduction['id']){
-                                    $ProductionModel->delete($dataproduction['id']);
-                                }
-                                $CustomRabModel->delete($customrabdata);
-                            }
-                        } else {
-                            $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
-                            foreach($productionsdata as $dataproduction['id']){
-                                $ProductionModel->delete($dataproduction['id']);
-                            }
-                            $CustomRabModel->delete($customrabdata);
-                        }
-                    }
-                }
-            }
-
             // Update Custom RAB Qty
             if (!empty($input['qtycustrab' . $id])) {
                 foreach ($input['qtycustrab' . $id] as $custrabid => $qtycustrab) {
@@ -2308,8 +2275,10 @@ class Project extends BaseController
                                             $ProductionModel->delete($procustrab['id']);
                                         }
                                     }
+                                    $customrabdata = $CustomRabModel->where('custrabid',$custrabid)->first();
+                                    $CustomRabModel->delete($customrabdata['id']);
                                 }
-                                $CustomRabModel->delete($customrabdata);
+                                // $CustomRabModel->delete($customrabdata);
                             }
                         } else {
                             if(!empty($customrabdata)){
@@ -2319,8 +2288,42 @@ class Project extends BaseController
                                         $ProductionModel->delete($procustrab['id']);
                                     }
                                 }
+                                $CustomRabModel->delete($customrabdata['id']);
                             }
-                            $CustomRabModel->delete($customrabdata);
+                            // $CustomRabModel->delete($customrabdata);
+                        }
+                    }
+                }
+            }
+
+            // Update Custom RAB Price
+            if (!empty($input['pricecustrab' . $id])) {
+                foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
+                    $customrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($custrabid);
+                    $custPrice = preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab));
+                    if(!empty($customrabdata)){
+                        if ($custPrice != $customrabdata['price']) {
+                            if (!empty($custPrice)) {
+                                if ($custPrice != 0 || $custPrice != "0") {
+                                    $datacustomrab  = [
+                                        'id'    => $custrabid,
+                                        'price' => $custPrice,
+                                    ];
+                                    $CustomRabModel->save($datacustomrab);
+                                } else {
+                                    $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
+                                    foreach($productionsdata as $dataproduction['id']){
+                                        $ProductionModel->delete($dataproduction['id']);
+                                    }
+                                    $CustomRabModel->delete($customrabdata['id']);
+                                }
+                            } else {
+                                $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
+                                foreach($productionsdata as $dataproduction['id']){
+                                    $ProductionModel->delete($dataproduction['id']);
+                                }
+                                $CustomRabModel->delete($customrabdata['id']);
+                            }
                         }
                     }
                 }
@@ -2461,6 +2464,8 @@ class Project extends BaseController
                     }
                 }
             }
+
+            
            
             // Shipping Data
             if (!empty($input['shippingcost'])) {

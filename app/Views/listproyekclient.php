@@ -3289,18 +3289,18 @@
                                     <!-- END OF CUSTOM RAB PRODUCTION -->
 
                                     <!-- QUANTITY CUSTOM PRODUCT DELIVER -->
-                                    <!-- </?php if(!empty($projectdata[$project['id']]['pengirimanprodukcustom'])){?>
+                                    <?php if(!empty($projectdata[$project['id']]['pengirimanprodukcustom'])){?>
                                         <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;">Jumlah Produk Kustom Terkirim</label>
                                         <div class="uk-child-width-1-3@s uk-margin uk-margin-large-bottom" uk-grid>
-                                            </?php foreach($projectdata[$project['id']]['pengirimanprodukcustom'] as $pengirimancustrab){ ?>
+                                            <?php foreach($projectdata[$project['id']]['pengirimanprodukcustom'] as $pengirimancustrab){ ?>
                                                 <div>
                                                     <div class="uk-card uk-card-default uk-card-small uk-card-body">
-                                                        <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;"></?=$pengirimancustrab['name']?> : </?=$pengirimancustrab['pengiriman']?></label>
+                                                        <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left" style="text-transform: uppercase;"><?=$pengirimancustrab['name']?> : <?=$pengirimancustrab['pengiriman']?></label>
                                                     </div>
                                                 </div>
-                                            </?php } ?>
+                                            <?php } ?>
                                         </div>
-                                    </?php }?> -->
+                                    <?php }?>
                                     <!-- END QUANTITY CUSTOM PRODUCT DELIVER -->
 
                                     <!-- Bukti Pengiriman -->
