@@ -2241,20 +2241,28 @@ class Project extends BaseController
             if (!empty($input['pricecustrab' . $id])) {
                 foreach ($input['pricecustrab' . $id] as $custrabid => $pricecustrab) {
                     $customrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($custrabid);
-                    $newPrice = preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab));
-                    if ($newPrice != $customrabdata['price']) {
-                        if (!empty($newPrice)) {
-                            if ($newPrice != 0) {
+                    $custPrice = preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $pricecustrab));
+                    if ($custPrice != $customrabdata['price']) {
+                        if (!empty($custPrice)) {
+                            if ($custPrice != 0) {
                                 $datacustomrab  = [
                                     'id'    => $custrabid,
-                                    'price' => $newPrice,
+                                    'price' => $custPrice,
                                 ];
                                 $CustomRabModel->save($datacustomrab);
                             } else {
                                 $CustomRabModel->delete($customrabdata);
+                                $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
+                                foreach($productionsdata as $dataproduction['id']){
+                                    $ProductionModel->delete($dataproduction['id']);
+                                }
                             }
                         } else {
                             $CustomRabModel->delete($customrabdata);
+                            $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
+                            foreach($productionsdata as $dataproduction['id']){
+                                $ProductionModel->delete($dataproduction['id']);
+                            }
                         }
                     }
                 }
