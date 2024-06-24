@@ -3104,6 +3104,7 @@
                                     <!-- END QUANTITY PRODUCT DELIVER -->
 
                                     <!-- CUSTOM RAB PRODUCTION -->
+                                   
                                     <?php if(!empty($projectdata[$project['id']]['productioncustrab'])){ ?>
                                         <hr class="uk-divider-icon">
                                         <label class="uk-h5 uk-text-bold uk-text-emphasis uk-text-left uk-margin uk-margin-large-top" style="text-transform: uppercase;">Progress Produksi Produk Kustom</label>

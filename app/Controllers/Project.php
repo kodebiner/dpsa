@@ -1523,11 +1523,13 @@ class Project extends BaseController
                     if(!empty($projectdata[$project['id']]['productioncustrab'])){
                         $resultcustrabitem = array_reduce($projectdata[$project['id']]['productioncustrab'], function($custrabitem, $item){
                             if(!empty($item)){
-                                if(!isset($custrabitem[$item['custrabid']])){ 
-                                    $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
-                                } else { 
-                                    $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
-                                } 
+                                if(!empty($custrabitem)){
+                                    if(!isset($custrabitem[$item['custrabid']])){ 
+                                        $custrabitem[$item['custrabid']] = ['custrabid'=>$item['custrabid'],'pengiriman'=>$item['pengiriman'],'name'=>$item['name']]; 
+                                    } else { 
+                                        $custrabitem[$item['custrabid']]['pengiriman'] += $item['pengiriman']; 
+                                    } 
+                                }
                             }
                             return $custrabitem; 
                         });
@@ -1589,8 +1591,6 @@ class Project extends BaseController
                         }
                     }
                     $projectdata[$project['id']]['allrabdatadeleted']   = $datarabnew;
-
-                    // dd((int)$projectdata[$project['id']]['customrab'][0]['volume']);
 
                 }
             } else {
@@ -2251,18 +2251,18 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($datacustomrab);
                             } else {
-                                $CustomRabModel->delete($customrabdata);
                                 $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
                                 foreach($productionsdata as $dataproduction['id']){
                                     $ProductionModel->delete($dataproduction['id']);
                                 }
+                                $CustomRabModel->delete($customrabdata);
                             }
                         } else {
-                            $CustomRabModel->delete($customrabdata);
                             $productionsdata = $ProductionModel->where('custrabid',$custrabid)->find();
                             foreach($productionsdata as $dataproduction['id']){
                                 $ProductionModel->delete($dataproduction['id']);
                             }
+                            $CustomRabModel->delete($customrabdata);
                         }
                     }
                 }
@@ -2365,9 +2365,10 @@ class Project extends BaseController
                                     'length'    => $length,
                                 ];
                                 $CustomRabModel->save($updatelengthcustab);
-                            } else {
-                                $CustomRabModel->delete($lengthcustrab);
-                            }
+                            } 
+                            // else {
+                            //     $CustomRabModel->delete($lengthcustrab);
+                            // }
                         }
                     }
                 }
@@ -2386,9 +2387,10 @@ class Project extends BaseController
                                     'width' => $width,
                                 ];
                                 $CustomRabModel->save($updatewidthcustab);
-                            } else {
-                                $CustomRabModel->delete($widthcustrab);
-                            }
+                            } 
+                            // else {
+                            //     $CustomRabModel->delete($widthcustrab);
+                            // }
                         }
                     }
                 }
@@ -2407,9 +2409,10 @@ class Project extends BaseController
                                     'height'    => $height,
                                 ];
                                 $CustomRabModel->save($updateheightcustab);
-                            } else {
-                                $CustomRabModel->delete($heightcustrab);
-                            }
+                            } 
+                            // else {
+                            //     $CustomRabModel->delete($heightcustrab);
+                            // }
                         }
                     }
                 }
@@ -2428,9 +2431,10 @@ class Project extends BaseController
                                     'volume'    => $volume,
                                 ];
                                 $CustomRabModel->save($updatevolumecustab);
-                            } else {
-                                $CustomRabModel->delete($volumecustrab);
-                            }
+                            } 
+                            // else {
+                            //     $CustomRabModel->delete($volumecustrab);
+                            // }
                         }
                     }
                 }
@@ -2449,9 +2453,10 @@ class Project extends BaseController
                                     'denomination'  => $denomination,
                                 ];
                                 $CustomRabModel->save($updatedenominationcustab);
-                            } else {
-                                $CustomRabModel->delete($denominationcustrab);
-                            }
+                            } 
+                            // else {
+                            //     $CustomRabModel->delete($denominationcustrab);
+                            // }
                         }
                     }
                 }
