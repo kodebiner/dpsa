@@ -825,6 +825,7 @@
                                                     ?>
                                                     <div class="uk-overflow-auto uk-margin uk-margin-remove-top" id="rabview<?=$project['id']?>">
                                                         <table class="uk-table uk-table-divider">
+                                                            <?php if(!empty($projectdata[$project['id']]['newrab'])){ ?>
                                                             <thead>
                                                                 <tr>
                                                                     <td colspan="8" class="tm-h3 uk-text-bold" style="text-transform: uppercase;">Daftar Pesanan</td>
@@ -845,83 +846,85 @@
                                                             </thead>
                                                             <tbody>
                                                                 <!-- ROW RAB DATA -->
-                                                                <?php foreach ($projectdata[$project['id']]['newrab'] as $rabexist) { ?>
-                                                                    <tr id="mdl<?=$rabexist['id']?>">
-                                                                        <td class="uk-text-nowrap">
-                                                                            <?= $rabexist['paketname'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            <?= $rabexist['name'] ?>
-                                                                        </td>
-                                                                        <td class="uk-text-center">
-                                                                            <?= $rabexist['length'] ?>
-                                                                        </td>
-                                                                        <td class="uk-text-center">
-                                                                            <?= $rabexist['width'] ?>
-                                                                        </td>
-                                                                        <td class="uk-text-center">
-                                                                            <?= $rabexist['height'] ?>
-                                                                        </td>
-                                                                        <td class="uk-text-center">
-                                                                            <?= $rabexist['volume'] ?>
-                                                                        </td>
-                                                                        <td class="uk-text-nowrap">
-                                                                            <?php
-                                                                                if ($rabexist['denomination'] === "1") {
-                                                                                    echo "Unit";
-                                                                                } elseif ($rabexist['denomination'] === "2") {
-                                                                                    echo "Meter Lari";
-                                                                                } elseif ($rabexist['denomination'] === "3") {
-                                                                                    echo "Meter Persegi";
-                                                                                } elseif ($rabexist['denomination'] === "4") {
-                                                                                    echo "Set";
+                                                                    <?php foreach ($projectdata[$project['id']]['newrab'] as $rabexist) {?>
+                                                                        <tr id="mdl<?=$rabexist['id']?>">
+                                                                            <td class="uk-text-nowrap">
+                                                                                <?= $rabexist['paketname'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                <?= $rabexist['name'] ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?= $rabexist['length'] ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?= $rabexist['width'] ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?= $rabexist['height'] ?>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?= $rabexist['volume'] ?>
+                                                                            </td>
+                                                                            <td class="uk-text-nowrap">
+                                                                                <?php
+                                                                                    if ($rabexist['denomination'] === "1") {
+                                                                                        echo "Unit";
+                                                                                    } elseif ($rabexist['denomination'] === "2") {
+                                                                                        echo "Meter Lari";
+                                                                                    } elseif ($rabexist['denomination'] === "3") {
+                                                                                        echo "Meter Persegi";
+                                                                                    } elseif ($rabexist['denomination'] === "4") {
+                                                                                        echo "Set";
+                                                                                    }
+                                                                                ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                <?= $rabexist['keterangan'] ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div uk-lightbox="">
+                                                                                    <a class="uk-inline" href="img/mdl/<?=$rabexist['photo']?>" role="button">
+                                                                                        <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$rabexist['photo']?>" width="40" height="40" alt="<?=$rabexist['photo']?>">
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="uk-text-center">
+                                                                                <?= $rabexist['qty'] ?>
+                                                                            </td>
+                                                                            <?php 
+
+                                                                                // Value Condition
+                                                                                $lengthrab  = 0;
+                                                                                $heigthrab  = 0;
+                                                                                $volumerab  = 0;
+                                                                                $hargarab   = 0;
+
+                                                                                if(!empty($rabexist['length'])){
+                                                                                    $lengthrab = $rabexist['length'];
+                                                                                }
+
+                                                                                if(!empty($rabexist['height'])){
+                                                                                    $heigthrab = $rabexist['height'];
+                                                                                }
+
+                                                                                if(!empty($rabexist['volume'])){
+                                                                                    $volumerab = $rabexist['volume'];
+                                                                                }
+
+                                                                                if($rabexist['denomination'] === "2"){
+                                                                                    $hargatrab = ((int)$rabexist['price'] * $volumerab) * (int)$rabexist['qty'];
+                                                                                }elseif($rabexist['denomination'] === "3"){
+                                                                                    $hargatrab = ((int)$rabexist['price'] * ($heigthrab * $lengthrab)) * (int)$rabexist['qty'];
+                                                                                }else{
+                                                                                    $hargarab = (int)$rabexist['price']  * (int)$rabexist['qty'];
                                                                                 }
                                                                             ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            <?= $rabexist['keterangan'] ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div uk-lightbox="">
-                                                                                <a class="uk-inline" href="img/mdl/<?=$rabexist['photo']?>" role="button">
-                                                                                    <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/<?=$rabexist['photo']?>" width="40" height="40" alt="<?=$rabexist['photo']?>">
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="uk-text-center">
-                                                                            <?= $rabexist['qty'] ?>
-                                                                        </td>
-                                                                        <?php 
-
-                                                                            // Value Condition
-                                                                            $lengthrab = 0;
-                                                                            $heigthrab = 0;
-                                                                            $volumerab = 0;
-
-                                                                            if(!empty($rabexist['length'])){
-                                                                                $lengthrab = $rabexist['length'];
-                                                                            }
-
-                                                                            if(!empty($rabexist['height'])){
-                                                                                $heigthrab = $rabexist['height'];
-                                                                            }
-
-                                                                            if(!empty($rabexist['volume'])){
-                                                                                $volumerab = $rabexist['volume'];
-                                                                            }
-
-                                                                            if($rabexist['denomination'] === "2"){
-                                                                                $hargatrab = ((int)$rabexist['price'] * $volumerab) * (int)$rabexist['qty'];
-                                                                            }elseif($rabexist['denomination'] === "3"){
-                                                                                $hargatrab = ((int)$rabexist['price'] * ($heigthrab * $lengthrab)) * (int)$rabexist['qty'];
-                                                                            }else{
-                                                                                $hargarab = (int)$rabexist['price']  * (int)$rabexist['qty'];
-                                                                            }
-                                                                        ?>
-                                                                        <td class="uk-text-nowrap">
-                                                                            <?= "Rp. " . number_format($hargarab, 0, ',', '.'); " "; ?>
-                                                                        </td>
-                                                                    </tr>
+                                                                            <td class="uk-text-nowrap">
+                                                                                <?= "Rp. " . number_format($hargarab, 0, ',', '.'); " "; ?>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php } ?>
                                                                 <?php } ?>
                                                                 <!-- END ROW RAB DATA -->
 
