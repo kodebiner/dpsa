@@ -1946,7 +1946,7 @@ class Project extends BaseController
             
             // initialize
             $input      = $this->request->getPost();
-            dd($input);
+            dd($input['nosph' . $id]);
 
             $pro        = $ProjectModel->find($id);
 
