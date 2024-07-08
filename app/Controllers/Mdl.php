@@ -43,21 +43,50 @@ class Mdl extends BaseController
             $input          = $this->request->getGet();
 
             if (isset($input['perpage'])) {
-                $perpage    = $input['perpage'];
+                $perpage = $input['perpage'];
             } else {
-                $perpage    = 10;
+                $perpage = 10;
             }
 
-            // Populating Data
-            // List Parent
-            // $parents        = $PaketModel->where('parentid', 0)->paginate($perpage, 'parent');
+            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $perpage;
+
+            $this->db       = \Config\Database::connect();
+            $validation     = \Config\Services::validation();
+            $this->builder  = $this->db->table('paket');
+            $this->config   = config('Auth');
+            $this->auth     = service('authentication');
+
+            // $this->builder->join('mdl_paket', 'paket.id = mdl_paket.paketid');
+            // $this->builder->join('mdl', 'mdl.id = mdl_paket.mdlid');
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('paket.name', $input['search'])->where('ordering >=', 1)->orderBy('ordering', 'ASC');
+                // $this->builder->orLike('mdl.name', $input['search']);
+            } else {
+                $this->builder->where('parentid', 0)->where('ordering >=', 1)->orderBy('ordering', 'ASC');
+            }
+            // $this->builder->orderBy('ordering',"ASC");
+            // $this->builder->select('paket.id as paket_id, paket.name as paket_name, paket.ordering as paket_order, paket.parentid as paket_parentid, mdl_paket.mdlid as mdlpaket_mdlid, mdl_paket.paketid as mdlpaket_paketid,');
+            $this->builder->select('paket.id as id, paket.name as name, paket.ordering as ordering, paket.parentid as parentid,');
+            $parents = $this->builder->get($perpage, $offset)->getResultArray();
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $totalParent = $PaketModel
+                ->like('paket.name', $input['search'])
+                ->where('parentid', 0)
+                ->countAllResults();
+            } else { 
+                $totalParent = $PaketModel
+                ->where('parentid', 0)
+                ->countAllResults();
+            }
 
             // Search Engine
-            if (isset($input['search']) && !empty($input['search'])) {
-                $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
-            } else {
-                $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
-            }
+            // if (isset($input['search']) && !empty($input['search'])) {
+            //     $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
+            // } else {
+            //     $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
+            // }
 
             // List Paket Auto Complete
             $autopakets     = $PaketModel->where('parentid !=', 0)->find();
@@ -87,15 +116,11 @@ class Mdl extends BaseController
                                     $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]['ordering']       = $mdlp['ordering'];
                                     $mdlid[]                                                                                = $mdlp['mdlid'];
 
-                                    // List MDL Uncategories
-                                    // $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
                                 }
                             } else {
                                 $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                                       = [];
                                 $mdlid[]                                                                                    = '';
 
-                                // List MDL Uncategories
-                                // $mdldata['mdluncate']                                                       = $MdlModel->findAll();
                             }
                         }
                     } else {
@@ -103,8 +128,6 @@ class Mdl extends BaseController
                         $mdldata[$parent['id']]['paket']    = [];
                         $mdlid[]                            = '';
 
-                        // List MDL Uncategories
-                        // $mdldata['mdluncate']               = $MdlModel->findAll();
                     }
 
                     // List Parent Auto Complete
@@ -129,7 +152,8 @@ class Mdl extends BaseController
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;
-            $data['pager']          =   $PaketModel->pager;
+            $data['pager']          =   $pager->makeLinks($page, $perpage, $totalParent, 'uikit_full');
+            // $data['pager']          =   $PaketModel->pager;
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
             $data['idparent']       =   $this->request->getGet('parentid');
@@ -140,6 +164,152 @@ class Mdl extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
+
+    public function requestdatapaket()
+    {
+
+        // Calling Models
+        $MdlModel       = new MdlModel();
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Get Data 
+        $input = $this->request->getPost();
+
+        // Parent Data
+        $parents     = $PaketModel->orderBy('ordering', 'ASC')->find($input);
+
+        // List Paket
+        $mdldata        = [];
+        $mdlid          = [];
+        if (!empty($parents)) {
+            foreach ($parents as $parent) {
+                $mdldata[$parent['id']]['name']     = $parent['name'];
+                $paketdata                          = $PaketModel->where('parentid', $parent['id'])->orderBy('ordering', 'ASC')->find();
+                $mdldata[$parent['id']]['paket']    = [];
+
+                if (!empty($paketdata)) {
+                    foreach ($paketdata as $paket) {
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['id']        = $paket['id'];
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['parentid']  = $paket['parentid'];
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['name']      = $paket['name'];
+                        $mdldata[$parent['id']]['paket'][$paket['id']]['ordering']  = $paket['ordering'];
+
+                        // List MDL Paket
+                        $mdlpaket   = $MdlPaketModel->where('paketid', $paket['id'])->orderBy('ordering', 'ASC')->find();
+
+                        // List MDL
+                        if (!empty($mdlpaket)) {
+                            foreach ($mdlpaket as $mdlp) {
+                                $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]                   = $MdlModel->find($mdlp['mdlid']);
+                                $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]['ordering']       = $mdlp['ordering'];
+                                $mdlid[]                                                                                = $mdlp['mdlid'];
+
+                            }
+                        } else {
+                            $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                                       = [];
+                            $mdlid[]                                                                                    = '';
+
+                        }
+                    }
+                } else {
+                    $mdlpaket                           = [];
+                    $mdldata[$parent['id']]['paket']    = [];
+                    $mdlid[]                            = '';
+
+                }
+
+                // List Parent Auto Complete
+                $autoparents    = $PaketModel->where('parentid', 0)->where('id !=', $parent['id'])->find();
+
+                // Ordering Paket ASC
+                if(!empty($mdldata[$parent['id']]['paket'])){
+                    array_multisort(array_column($mdldata[$parent['id']]['paket'],'ordering'), SORT_DESC,$mdldata[$parent['id']]['paket']);
+                }
+            }
+
+            // List MDL Uncategories
+            // $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
+        } else {
+            // $paketdata              = [];
+            // $autoparents            = [];
+            // $mdldata['mdluncate']   = [];
+        }
+
+        $alldataparent                      =   [];
+        $alldataparent['mdldata']           =   $mdldata;
+        $alldataparent['parents']           =   $parents;
+        // $alldataparent['countparents']      =   count($parents);
+        // $alldataparent['autoparents']       =   $autoparents;
+
+        die(json_encode($alldataparent));
+    }
+
+    public function requestdatamdluncate()
+    {
+        $MdlModel       = new MdlModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        $MdlPakets = $MdlPaketModel->findAll();
+        $mdlid = [];
+        foreach ($MdlPakets as $mdlpaket){
+            $mdlid[] = $mdlpaket['mdlid'];
+        } 
+        
+        $mdluncatedata = $MdlModel->whereNotIn('id',$mdlid)->find();
+        die(json_encode($mdluncatedata));
+
+    }
+
+    public function requestmdldata()
+    {
+        // Calling Models
+        $MdlModel       = new MdlModel();
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Get Data 
+        $input = $this->request->getPost();
+        
+        // PAKET MDL DATA 
+        $paketMdlData = $MdlPaketModel->where('paketid',$input)->orderBy('ordering', 'ASC')->find();
+
+        $mdlid = [];
+        foreach($paketMdlData as $mdls){
+            $mdlid[] = $mdls['mdlid'];
+        }
+
+        // MDL DATA
+        $mdlData = $MdlModel->whereIn('id', $mdlid)->find();
+
+        $mdlAllData = [];
+        foreach($mdlData as $dataMdl){
+            foreach($paketMdlData as $paketmdl){
+                if($dataMdl['id'] === $paketmdl['mdlid']){
+                    $mdlAllData[] = [
+                        'id'            => $dataMdl['id'],
+                        'name'          => $dataMdl['name'],
+                        'width'         => $dataMdl['width'],
+                        'height'        => $dataMdl['height'],
+                        'length'        => $dataMdl['length'],
+                        'volume'        => $dataMdl['volume'],
+                        'photo'         => $dataMdl['photo'],
+                        'denomination'  => $dataMdl['denomination'],
+                        'price'         => $dataMdl['price'],
+                        'keterangan'    => $dataMdl['keterangan'],
+                        'ordering'      => $paketmdl['ordering'], 
+                    ];
+                }
+            }
+        }
+
+        if(!empty($mdlAllData)){
+            array_multisort(array_column($mdlAllData,'ordering'), SORT_DESC,$mdlAllData);
+        }
+        die(json_encode($mdlAllData));
+
+    }
+
 
     public function datapaket()
     {
@@ -312,9 +482,6 @@ class Mdl extends BaseController
 
             // Delete MDL
             $MdlPaketModel->where('paketid', $id)->delete();
-            // foreach ($mdls as $mdl) {
-            //     $MdlPaketModel->delete($mdl['id']);
-            // }
 
             // Delete Data
             $PaketModel->delete($id);
@@ -817,6 +984,45 @@ class Mdl extends BaseController
         die(json_encode($currentSubmit));
     }
 
+    public function newreorderingparent()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+        $MdlPaketModel  = new MdlPaketModel();
+
+        // Populating Data
+        $input          = $this->request->getPOST();
+        $parent         = $PaketModel->find($input['id']);
+
+        //Processing Data
+        if ($parent['ordering'] < $input['order']) {
+            $upperParent = $PaketModel->where('parentid', '0')->where('ordering <=', $input['order'])->where('ordering >', $parent['ordering'])->find();
+            foreach ($upperParent as $upper) {
+                $upperSubmit = [
+                    'id'        => $upper['id'],
+                    'ordering'  => $upper['ordering'] - 1
+                ];
+                $PaketModel->save($upperSubmit);
+            }
+        } else {
+            $lowerParent = $PaketModel->where('parentid', '0')->where('ordering >=', $input['order'])->where('ordering <', $parent['ordering'])->find();
+            foreach ($lowerParent as $lower) {
+                $lowerSubmit = [
+                    'id'        => $lower['id'],
+                    'ordering'  => $lower['ordering'] + 1
+                ];
+                $PaketModel->save($lowerSubmit);
+            }
+        }
+        $currentSubmit = [
+            'id'        => $input['id'],
+            'ordering'  => $input['order']
+        ];
+        $PaketModel->save($currentSubmit);
+
+        die(json_encode($currentSubmit));
+    }
+
     public function reorderingpaket()
     {
         // Calling Models
@@ -828,6 +1034,46 @@ class Mdl extends BaseController
 
         $paket          = $PaketModel->find($input['id']);
         // $mdl            = $MdlPaketModel->where('id', $input['id'])->where('mdlid', $input['mdlid'])->first();
+
+        //Processing Data
+        if ($paket['ordering'] < $input['order']) {
+            $upperPaket = $PaketModel->where('parentid', $input['parent'])->where('ordering <=', $input['order'])->where('ordering >', $paket['ordering'])->find();
+            foreach ($upperPaket as $upper) {
+                $upperSubmit = [
+                    'id'        => $upper['id'],
+                    'ordering'  => $upper['ordering'] - 1
+                ];
+                $PaketModel->save($upperSubmit);
+            }
+        } else {
+            $lowerPaket = $PaketModel->where('parentid', $input['parent'])->where('ordering >=', $input['order'])->where('ordering <', $paket['ordering'])->find();
+            foreach ($lowerPaket as $lower) {
+                $lowerSubmit = [
+                    'id'        => $lower['id'],
+                    'ordering'  => $lower['ordering'] + 1
+                ];
+                $PaketModel->save($lowerSubmit);
+            }
+        }
+        $currentSubmit = [
+            'id'        => $input['id'],
+            'parentid'  => $input['parent'],
+            'ordering'  => $input['order']
+        ];
+        $PaketModel->save($currentSubmit);
+
+        die(json_encode($currentSubmit));
+    }
+
+    public function newreorderingpaket()
+    {
+        // Calling Models
+        $PaketModel     = new PaketModel();
+
+        // Populating Data
+        $input          = $this->request->getPOST();
+
+        $paket          = $PaketModel->find($input['id']);
 
         //Processing Data
         if ($paket['ordering'] < $input['order']) {

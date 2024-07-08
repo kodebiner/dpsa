@@ -152,7 +152,6 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('listprojectclient/(:num)', 'Project::listprojectclient/$1');
 
     // Project
-    // $routes->get('', 'Project::index');
     $routes->post('mdl', 'Project::mdl');
     $routes->post('create', 'Project::create');
     $routes->post('update/(:num)', 'Project::update/$1');
@@ -160,7 +159,6 @@ $routes->group('project',['filter' => 'login'], function ($routes) {
     $routes->get('sphprint/(:num)', 'Project::sphprint/$1');
     $routes->get('sphview/(:num)', 'Project::sphview/$1');
     $routes->get('invoice/(:num)', 'Project::invoice/$1');
-    // $routes->get('invoiceexcel/(:num)', 'Project::invoiceexcel/$1');
     $routes->get('invoiceexcel1/(:num)', 'Project::invoiceexcel1/$1');
     $routes->get('invoiceexcel2/(:num)', 'Project::invoiceexcel2/$1');
     $routes->get('invoiceexcel3/(:num)', 'Project::invoiceexcel3/$1');
@@ -205,7 +203,8 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->post('create/(:num)', 'Mdl::createmdl/$1');
     $routes->post('update/(:num)', 'Mdl::updatemdl/$1');
     $routes->post('delete/(:num)', 'Mdl::deletemdl/$1');
-    $routes->get('deleteuncate/(:num)', 'Mdl::deletemdluncategories/$1');
+    // $routes->get('deleteuncate/(:num)', 'Mdl::deletemdluncategories/$1');
+    $routes->post('deleteuncate/(:num)', 'Mdl::deletemdluncategories/$1');
     $routes->get('datapaket', 'Mdl::datapaket');
     $routes->post('submitcat', 'Mdl::submitcat');
     // $routes->get('orderingpaket', 'Mdl::orderingpaket');
@@ -213,6 +212,15 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->post('reorderingpaket', 'Mdl::reorderingpaket');
     $routes->post('reorderingmdl', 'Mdl::reorderingmdl');
     $routes->get('checkordering', 'Mdl::fixorder');
+
+    $routes->get('requestdatamdluncate', 'Mdl::requestdatamdluncate');
+    // $routes->post('newreorderingparent', 'Mdl::newreorderingparent');
+    // $routes->post('newreorderingpaket', 'Mdl::newreorderingpaket');
+    // $routes->post('newreorderingmdl', 'Mdl::newreorderingmdl');
+
+    // New Function For Loading Data
+    $routes->post('requestdatapaket', "Mdl::requestdatapaket");
+    $routes->post('requestmdldata', 'Mdl::requestmdldata');
 });
 
 // Account

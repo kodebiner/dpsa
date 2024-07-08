@@ -463,7 +463,10 @@ class Upload extends BaseController
     {
         // Removing File
         $input = $this->request->getPost('photo');
-        unlink(FCPATH . 'img/mdl/' . $input);
+
+        if(file_exists(FCPATH . 'img/mdl/' . $input)){
+            unlink(FCPATH . 'img/mdl/' . $input);
+        }
 
         // Return Message
         die(json_encode(array('errors', 'Data berhasil di hapus')));
