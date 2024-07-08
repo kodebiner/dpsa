@@ -1946,6 +1946,7 @@ class Project extends BaseController
             
             // initialize
             $input      = $this->request->getPost();
+            dd($input['nosph' . $id]);
 
             $pro        = $ProjectModel->find($id);
 
@@ -2354,6 +2355,27 @@ class Project extends BaseController
                     }
                 }
             }
+            // else{
+            //     foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
+            //         $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
+            //         $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
+
+            //         if (!empty($custrabdata)) {
+            //             if ($namecustrab != $custrabdata['name']) {
+            //                 if (empty($namecustrab)) {
+            //                     // Deleting RAB
+            //                     $CustomRabModel->delete($custrabdata['id']);
+
+            //                     // Deleting Production
+            //                     foreach($productiondata as $prodata){
+            //                         $ProductionModel->delete($prodata['id']);
+            //                     }
+
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
 
             // Update Custom RAB Length
             if (!empty($input['lengthcustrab' . $id])) {
@@ -2464,9 +2486,7 @@ class Project extends BaseController
                     }
                 }
             }
-
             
-           
             // Shipping Data
             if (!empty($input['shippingcost'])) {
                 $shipping       = $CustomRabModel->where('projectid', $id)->like('name', 'biaya pengiriman')->first();
@@ -3214,7 +3234,6 @@ class Project extends BaseController
                 'inv1'              => $tglinv1,
             ];
             $ProjectModel->save($project);
-
 
             $LogModel->save(['uid' => $this->data['uid'], 'record' => 'Mengubah data Proyek ' . $name]);
             return redirect()->to('project/listprojectclient/'.$pro['clientid'])->with('message', "Data berhasil di perbaharui.");
