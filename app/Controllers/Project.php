@@ -1946,6 +1946,7 @@ class Project extends BaseController
             
             // initialize
             $input      = $this->request->getPost();
+            dd($input);
 
             $pro        = $ProjectModel->find($id);
 
@@ -2358,7 +2359,6 @@ class Project extends BaseController
             //     foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
             //         $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
             //         $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
-
             //         if (!empty($custrabdata)) {
             //             if ($namecustrab != $custrabdata['name']) {
             //                 if (empty($namecustrab)) {
