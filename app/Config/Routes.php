@@ -214,7 +214,7 @@ $routes->group('mdl',['filter' => 'login'], function ($routes) {
     $routes->get('checkordering', 'Mdl::fixorder');
 
     $routes->get('requestdatamdluncate', 'Mdl::requestdatamdluncate');
-    // $routes->post('newreorderingparent', 'Mdl::newreorderingparent');
+    $routes->post('newreorderingparent', 'Mdl::newreorderingparent');
     // $routes->post('newreorderingpaket', 'Mdl::newreorderingpaket');
     // $routes->post('newreorderingmdl', 'Mdl::newreorderingmdl');
 
