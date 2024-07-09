@@ -1122,11 +1122,11 @@
                                     
                                     if (ribuan) {
                                         separator = sisa ? '.' : '';
-                                        rupiah += separator + ribuan.join('.');
+                                        rupiah += separator + ribuan.join(',');
                                     }
 
                                     // Denomination Condition
-                                    $("#price" + itemmdluncate.id).val("Rp " + rupiah);
+                                    $("#price" + itemmdluncate.id).val("Rp " + rupiah + '.00');
                                     var mdldenomUncate = "";
                                     
                                     for ($y = 1; $y <= 4; $y++) {

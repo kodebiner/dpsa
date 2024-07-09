@@ -606,10 +606,14 @@ class Mdl extends BaseController
             $mdls   = $MdlModel->find($id);
             $str    = $input['price'];
 
+            // dd($input);
+
             function strupdate($str)
             {
                 return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
             }
+
+            // dd(strupdate($str));
 
             // Validation
             // if ($input['name'] === $mdls['name']) {
@@ -676,7 +680,7 @@ class Mdl extends BaseController
                 'length'        => $input['length'],
                 'width'         => $input['width'],
                 'height'        => $input['height'],
-                'volume'        => $input['length'],
+                'volume'        => $input['volume'],
                 'keterangan'    => $input['keterangan'],
                 'photo'         => $photomdl,
                 'price'         => strupdate($str),
@@ -690,7 +694,7 @@ class Mdl extends BaseController
             if(!empty($mdlpakets)){
                 return redirect()->to('mdl?parentid=' . $parents['id'] . '&paketid=' . $pakets['id'] . '&mdlid=' . $id)->with('message', 'Data Berhasil Diperbaharui');
             }else{
-                return redirect()->back()->with('error', 'Data Berhasil Diperbaharui');
+                return redirect()->back()->with('message', 'Data Berhasil Diperbaharui');
             }
 
         } else {
