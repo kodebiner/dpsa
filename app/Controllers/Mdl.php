@@ -61,7 +61,6 @@ class Mdl extends BaseController
             // $this->builder->join('mdl', 'mdl.id = mdl_paket.mdlid');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('paket.name', $input['search'])->where('ordering >=', 1)->orderBy('ordering', 'ASC');
-                // $this->builder->orLike('mdl.name', $input['search']);
             } else {
                 $this->builder->where('parentid', 0)->where('ordering >=', 1)->orderBy('ordering', 'ASC');
             }
@@ -148,7 +147,8 @@ class Mdl extends BaseController
             $data['description']    =   "Daftar MDL yang tersedia";
             $data['mdldata']        =   $mdldata;
             $data['parents']        =   $parents;
-            $data['countparents']   =   count($parents);
+            // $data['countparents']   =   count($parents);
+            $data['countparents']   =   $totalParent;
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;

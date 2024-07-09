@@ -363,16 +363,15 @@
                                                         console.log('error', arguments);
                                                     },
                                                     success: function(paketOrder) {
-                                                        console.log(paketOrder);
-                                                        location.reload();
 
-                                                        console.log("pketid",<?= $parent['id'] ?>);
+                                                        location.reload();
+                                                        // console.log("orderPaket",paketOrder);
 
                                                         // $.ajax({
                                                         //     type: 'post',
                                                         //     url: "mdl/requestdatapaket",
                                                         //     data: {
-                                                        //         id: </?= $parent['id'] ?>,
+                                                        //         id: <?= $parent['id'] ?>,
                                                         //     },
                                                         //     dataType: "json",
                                                         //     error: function() {
@@ -380,17 +379,18 @@
                                                         //     },
                                                         //     success: function() {
                                                         //         console.log('success', arguments);
-                                                        //         var Paket       = arguments[0]['mdldata'][</?= $parent['id'] ?>]['paket'];
+                                                        //         var Paket       = arguments[0]['mdldata'][<?= $parent['id'] ?>]['paket'];
+                                                        //         console.log(Paket);
                                                         //         var countPaket  = Object.keys(Paket).length;
-                                                        //         var idparent    = '</?= $idparent ?>';
-                                                        //         var idPaket     = '</?= $idpaket ?>';
+                                                        //         // var idparent    = '</?= $idparent ?>';
+                                                        //         // var idPaket     = '</?= $idpaket ?>';
                                                         //         var parenthide  = '';
                                                         //         var pakethide   = '';
-                                                        //         console.log(i);
                                                                 
                                                         //         $.each(Paket, function(i, item) {
-
+                                                                    
                                                         //             $('#paketid'+Paket[i].id).hide('slow', function(){ $('#paketid'+Paket[i].id).remove(); });
+                                                        //             console.log(Paket);
                                                                     
                                                         //         });
 
