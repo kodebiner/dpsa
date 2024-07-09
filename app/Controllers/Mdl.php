@@ -655,11 +655,13 @@ class Mdl extends BaseController
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
-
-
+            
             $mdlpakets          = $MdlPaketModel->where('mdlid', $id)->where('paketid', $input['paketid'.$id])->first();
-            $pakets             = $PaketModel->find($mdlpakets['paketid']);
-            $parents            = $PaketModel->find($pakets['parentid']);
+
+            if(!empty($mdlpakets)){
+                $pakets             = $PaketModel->find($mdlpakets['paketid']);
+                $parents            = $PaketModel->find($pakets['parentid']);
+            }
 
             if(empty($input['photo'])){
                 $photomdl = $mdls['photo'];
@@ -685,7 +687,12 @@ class Mdl extends BaseController
             $MdlModel->save($mdlup);
 
             // Return
-            return redirect()->to('mdl?parentid=' . $parents['id'] . '&paketid=' . $pakets['id'] . '&mdlid=' . $id)->with('message', 'Data Behasil Diperbaharui');
+            if(!empty($mdlpakets)){
+                return redirect()->to('mdl?parentid=' . $parents['id'] . '&paketid=' . $pakets['id'] . '&mdlid=' . $id)->with('message', 'Data Berhasil Diperbaharui');
+            }else{
+                return redirect()->back()->with('error', 'Data Berhasil Diperbaharui');
+            }
+
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

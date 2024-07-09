@@ -371,7 +371,7 @@
                                                         //     type: 'post',
                                                         //     url: "mdl/requestdatapaket",
                                                         //     data: {
-                                                        //         id: <?= $parent['id'] ?>,
+                                                        //         id: </?= $parent['id'] ?>,
                                                         //     },
                                                         //     dataType: "json",
                                                         //     error: function() {
@@ -379,7 +379,7 @@
                                                         //     },
                                                         //     success: function() {
                                                         //         console.log('success', arguments);
-                                                        //         var Paket       = arguments[0]['mdldata'][<?= $parent['id'] ?>]['paket'];
+                                                        //         var Paket       = arguments[0]['mdldata'][</?= $parent['id'] ?>]['paket'];
                                                         //         console.log(Paket);
                                                         //         var countPaket  = Object.keys(Paket).length;
                                                         //         // var idparent    = '</?= $idparent ?>';
