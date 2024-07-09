@@ -799,13 +799,13 @@
                                         sisa 	= number_string.length % 3,
                                         rupiah 	= number_string.substr(0, sisa),
                                         ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                        
+
                                         if (ribuan) {
-                                            separator = sisa ? '.' : '';
-                                            rupiah += separator + ribuan.join('.');
+                                        separator = sisa ? '.' : '';
+                                        rupiah += separator + ribuan.join(',');
                                         }
 
-                                        $("#price" + itemMdl.id).val("Rp " + rupiah);
+                                        $("#price" + itemMdl.id).val("Rp" + rupiah + ".00");
 
                                         // Denomination Condition
                                         var mdldenom = "";
@@ -1126,7 +1126,7 @@
                                     }
 
                                     // Denomination Condition
-                                    $("#price" + itemmdluncate.id).val("Rp " + rupiah + '.00');
+                                    $("#price" + itemmdluncate.id).val("Rp " + rupiah + ".00");
                                     var mdldenomUncate = "";
                                     
                                     for ($y = 1; $y <= 4; $y++) {

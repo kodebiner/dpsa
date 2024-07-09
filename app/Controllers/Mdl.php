@@ -613,8 +613,6 @@ class Mdl extends BaseController
                 return (int)preg_replace("/\..+$/i", "", preg_replace("/[^0-9\.]/i", "", $str));
             }
 
-            // dd(strupdate($str));
-
             // Validation
             // if ($input['name'] === $mdls['name']) {
             //     $is_unique =  '';
