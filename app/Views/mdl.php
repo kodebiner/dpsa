@@ -530,7 +530,6 @@
 
                         // Function Showing Mdl
                         function togglemdl(x){
-
                             $.ajax({
                                 type: 'post',
                                 url: "mdl/requestmdldata",
@@ -551,6 +550,8 @@
                                     var mdldata     = arguments[0];
                                     var paketId     = x;
                                     var countMdl    = Object.keys(mdldata).length;
+
+                                    console.log('qtymdl',countMdl);
 
                                     // ROW IMPORT MDL
                                     var trImportMdl = document.createElement('tr');
@@ -594,310 +595,301 @@
                                     buttonImportDelete.appendChild(mdlImportTextDelete);
                                     $("#importMdl"+ paketId).insertAfter( $("#paketid"+ paketId));
 
-                                    $.each(mdldata, function(x, itemMdl) {
+                                    if (jQuery.isEmptyObject(mdldata)){
+                                        alert('Data MDL Belum Tersedia');
+                                    } else{
+                                        $.each(mdldata, function(x, itemMdl) {
+                                            // ROW MDL
+                                                var trMdl = document.createElement('tr');
+                                                trMdl.setAttribute('id','mdlDataItem' + itemMdl.id);                                            
+                                                
+                                                var tdOrderingMdl = document.createElement('td');
+                                                var selectOrderMdl = document.createElement('select');
 
-                                        // ROW MDL
-                                            var trMdl = document.createElement('tr');
-                                            trMdl.setAttribute('id','mdlDataItem' + itemMdl.id);                                            
-                                            
-                                            var tdOrderingMdl = document.createElement('td');
-                                            var selectOrderMdl = document.createElement('select');
+                                                selectOrderMdl.setAttribute('id','mdlList'+ paketId + itemMdl.id );
+                                                selectOrderMdl.setAttribute('class','uk-select uk-form-width-xsmall uk-margin-large-left');
+                                                selectOrderMdl.setAttribute('Aria-label', 'Mdl');
 
-                                            selectOrderMdl.setAttribute('id','mdlList'+ paketId + itemMdl.id );
-                                            selectOrderMdl.setAttribute('class','uk-select uk-form-width-xsmall uk-margin-large-left');
-                                            selectOrderMdl.setAttribute('Aria-label', 'Mdl');
-
-                                            for ($y = 1; $y <= countMdl; $y++) {
-                                                var optionMdl = document.createElement("option");
-                                                if ($y == itemMdl.ordering) {
-                                                    optionMdl.selected = true;
-                                                } else {
-                                                    optionMdl.selected = false;
+                                                for ($y = 1; $y <= countMdl; $y++) {
+                                                    var optionMdl = document.createElement("option");
+                                                    if ($y == itemMdl.ordering) {
+                                                        optionMdl.selected = true;
+                                                    } else {
+                                                        optionMdl.selected = false;
+                                                    }
+                                                    optionMdl.value    = $y;
+                                                    optionMdl.text     = $y;
+                                                    selectOrderMdl.appendChild(optionMdl);
                                                 }
-                                                optionMdl.value    = $y;
-                                                optionMdl.text     = $y;
-                                                selectOrderMdl.appendChild(optionMdl);
+
+                                                var tdIconMdl = document.createElement('td');
+
+                                                var tdNameMdl = document.createElement('td');
+                                                tdNameMdl.setAttribute('style','text-transform: uppercase; font-weight: 400;');
+                                                tdNameMdl.setAttribute('class','tm-h4');
+                                                MdlName = document.createTextNode(itemMdl.name);
+
+                                                var tdWidthMdl = document.createElement('td');
+                                                widthMdl = document.createTextNode(itemMdl.width);
+
+                                                var tdLengthMdl = document.createElement('td');
+                                                lengthMdl = document.createTextNode(itemMdl.length);
+
+                                                var tdHeightMdl = document.createElement('td');
+                                                heightMdl = document.createTextNode(itemMdl.height);
+
+                                                var tdVolumeMdl = document.createElement('td');
+                                                volumeMdl = document.createTextNode(itemMdl.volume);
+
+                                                var denom = "";
+                                                if (itemMdl.denomination == "1") {
+                                                    denom = "Unit";
+                                                } else if (itemMdl.denomination == "2") {
+                                                    denom = "Meter Lari";
+                                                } else if (itemMdl.denomination == "3") {
+                                                    denom = "Meter Persegi";
+                                                } else if (itemMdl.denomination == "4") {
+                                                    denom = "Set";
+                                                }
+                                                var tdDenominationMdl = document.createElement('td');
+                                                denominationMdl = document.createTextNode(denom);
+
+                                                var tdPriceMdl = document.createElement('td');
+
+                                                var	number_string = itemMdl.price.toString(),
+                                                    sisa 	= number_string.length % 3,
+                                                    rupiah 	= number_string.substr(0, sisa),
+                                                    ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                                                        
+                                                if (ribuan) {
+                                                    separator = sisa ? ',' : '';
+                                                    rupiah += separator + ribuan.join(',');
+                                                }
+                                                priceMdl = document.createTextNode('Rp.' + rupiah);
+
+                                                var tdKeteranganMdl = document.createElement('td');
+                                                keteranganMdl = document.createTextNode(itemMdl.keterangan);
+
+                                                var tdPhotoMdl = document.createElement('td');
+
+                                                divLightboxMdl = document.createElement('div');
+                                                divLightboxMdl.toggleAttribute('uk-lightbox');
+
+                                                linkPhotoMdl = document.createElement('a');
+                                                linkPhotoMdl.setAttribute('class','uk-inline');
+                                                linkPhotoMdl.setAttribute('href','img/mdl/'+ itemMdl.photo);
+                                                linkPhotoMdl.setAttribute('role','button');
+
+                                                imgMdl = document.createElement("img");
+                                                imgMdl.setAttribute('id', 'img'+ itemMdl.id);
+                                                imgMdl.setAttribute('class','uk-preserve-width uk-border-circle');
+                                                imgMdl.setAttribute('src','img/mdl/'+ itemMdl.photo);
+                                                imgMdl.setAttribute('width','40');
+                                                imgMdl.setAttribute('height','40');
+                                                imgMdl.setAttribute('alt', itemMdl.photo);
+
+                                                var tdButtonMdl = document.createElement('td');
+                                                tdButtonMdl.setAttribute('class','uk-text-center');
+
+                                                divButtonMdl = document.createElement('div');
+                                                divButtonMdl.setAttribute('class','uk-grid-small uk-flex-center uk-flex-middle');
+                                                divButtonMdl.toggleAttribute('uk-grid');
+
+                                                divUpdateMdl = document.createElement('div');
+                                                linkUpdateMdl = document.createElement('a');
+                                                linkUpdateMdl.setAttribute('class','uk-icon-button');
+                                                linkUpdateMdl.setAttribute('href','#modalupdatemdl'+ paketId + itemMdl.id);
+                                                linkUpdateMdl.setAttribute('uk-icon','pencil');
+                                                linkUpdateMdl.toggleAttribute('uk-toggle');
+
+
+                                                divDeleteMdlitem = document.createElement('div');
+                                                FormDeleteMdl = document.createElement('form');
+                                                FormDeleteMdl.setAttribute('class','uk-form-stacked');
+                                                FormDeleteMdl.setAttribute('role','form');
+                                                FormDeleteMdl.setAttribute('action','mdl/delete/' + itemMdl.id);
+                                                FormDeleteMdl.setAttribute('method','post');
+
+                                                inputDeleteMdl = document.createElement('input');
+                                                inputDeleteMdl.setAttribute('type','hidden');
+                                                inputDeleteMdl.setAttribute('name','paketid');
+                                                inputDeleteMdl.setAttribute('value', paketId);
+
+                                                buttonMdlDelete = document.createElement('button');
+                                                buttonMdlDelete.setAttribute('type','submit');
+                                                buttonMdlDelete.setAttribute('uk-icon','trash');
+                                                buttonMdlDelete.setAttribute('class','uk-icon-button-delete');
+                                                buttonMdlDelete.setAttribute('onclick','return confirm("Anda yakin ingin menghapus data ini?")');
+
+                                            // END ROW MDL
+
+                                            itemorder.appendChild(trMdl);
+                                            trMdl.appendChild(tdOrderingMdl);
+                                            tdOrderingMdl.appendChild(selectOrderMdl);
+                                            trMdl.appendChild(tdIconMdl);
+                                            trMdl.appendChild(tdNameMdl);
+                                            tdNameMdl.appendChild(MdlName);
+                                            trMdl.appendChild(tdLengthMdl);
+                                            tdLengthMdl.appendChild(lengthMdl);
+                                            trMdl.appendChild(tdWidthMdl);
+                                            tdWidthMdl.appendChild(widthMdl);
+                                            trMdl.appendChild(tdHeightMdl);
+                                            tdHeightMdl.appendChild(heightMdl);
+                                            trMdl.appendChild(tdVolumeMdl);
+                                            tdVolumeMdl.appendChild(volumeMdl);
+                                            trMdl.appendChild(tdDenominationMdl);
+                                            tdDenominationMdl.appendChild(denominationMdl);
+                                            trMdl.appendChild(tdKeteranganMdl);
+                                            tdKeteranganMdl.appendChild(keteranganMdl);
+                                            trMdl.appendChild(tdPriceMdl);
+                                            tdPriceMdl.appendChild(priceMdl);
+                                            trMdl.appendChild(tdPhotoMdl);
+                                            tdPhotoMdl.appendChild(divLightboxMdl);
+                                            divLightboxMdl.appendChild(linkPhotoMdl);
+                                            linkPhotoMdl.appendChild(imgMdl);
+                                            trMdl.appendChild(tdButtonMdl);
+                                            tdButtonMdl.appendChild(divButtonMdl);
+                                            divButtonMdl.appendChild(divUpdateMdl);
+                                            divUpdateMdl.appendChild(linkUpdateMdl);
+                                            divButtonMdl.appendChild(divDeleteMdlitem);
+                                            divDeleteMdlitem.appendChild(FormDeleteMdl);
+                                            FormDeleteMdl.appendChild(inputDeleteMdl);
+                                            FormDeleteMdl.appendChild(buttonMdlDelete);
+                                            $("#mdlDataItem" + itemMdl.id).insertAfter( $("#importMdl"+ paketId));
+
+                                            // Modal Import Mdl Paket
+                                            $('<div class="uk-modal-container" id="modalimport' + paketId +'" uk-modal><div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto><button class="uk-modal-close-default" type="button" uk-close></button><div class="uk-modal-header"><h2 class="uk-modal-title">Upload File MDL</h2></div><div class="uk-modal-body"><form id="formInputPaket' + paketId +'" class="uk-form-stacked" action="upload/importmdl/' + paketId +'" method="post" enctype="multipart/form-data"><div class="uk-margin" id="image-container-importmdl-' + paketId +'"><div class="uk-form-controls"><input id="fileimportmdl' + paketId +'" name="mdl" hidden /><div id="js-upload-importmdl-' + paketId +'" class="js-upload-importmdl-' + paketId +' uk-placeholder uk-text-center"><span uk-icon="icon: cloud-upload"></span><span class="uk-text-middle">Tarik dan lepas file MDL disini atau</span><div uk-form-custom><input type="file"><span class="uk-link uk-preserve-color">pilih satu</span></div></div><progress id="js-progressbar-importmdl-' + paketId +'" class="uk-progress" value="0" max="100" hidden></progress></div></div></form></div></div></div>').appendTo(document.getElementById("modalContainerImport"));
+
+                                            // Script Import MDL
+                                            $("<script>var bar = document.getElementById('js-progressbar-importmdl-" + paketId +"');UIkit.upload('.js-upload-importmdl-" + paketId +"', {url: 'upload/mdl/" + paketId + "',multiple: false,name: 'uploads',param: {lorem: 'ipsum'},method: 'POST', type: 'json', beforeSend: function() {console.log('beforeSend', arguments);},beforeAll: function() {console.log('beforeAll', arguments);}, load: function() {console.log('load', arguments);},error: function() {console.log('error', arguments);var error = arguments[0].xhr.response.message.uploads;alert(error);},complete: function() {console.log('complete', arguments);},loadStart: function(e) {console.log('loadStart', arguments);bar.removeAttribute('hidden');bar.max = e.total;bar.value = e.loaded;},progress: function(e) {console.log('progress', arguments);bar.max = e.total;bar.value = e.loaded;}, loadEnd: function(e) {console.log('loadEnd', arguments);bar.max = e.total; bar.value = e.loaded;},completeAll: function() {console.log('completeAll', arguments);setTimeout(function() { bar.setAttribute('hidden', 'hidden');}, 1000);location.reload();}});</" + "script>").appendTo(document.getElementById("formInputPaket" + paketId ));
+
+                                            // Modal Update Mdl
+                                            $('#modalcontainer').append("<div class='uk-modal-container' id='modalupdatemdl" + paketId + + itemMdl.id +"' uk-modal><div class='uk-modal-dialog uk-margin-auto-vertical' uk-overflow-auto><div class='uk-modal-header'> <h2 class='uk-modal-title'>Ubah MDL '"+ itemMdl.name +"'</h2> <button class='uk-modal-close-default' type='button' uk-close></button></div><div id='modalbodymdl"+itemMdl.id+"' class='uk-modal-body'></div></div></div>");
+
+                                            // Modal Body Update MDL
+                                            $('#modalbodymdl'+itemMdl.id).append("<form class='uk-form-stacked' id='formMdl" + paketId + + itemMdl.id +"' role='form' action='mdl/update/"+ itemMdl.id +"' method='post'><input type='text' class='uk-input' id='paketid"+itemMdl.id+"' ' name='paketid"+itemMdl.id+"' value='"+ paketId+ "' hidden/><div class='uk-margin-bottom'><label class='uk-form-label' for='name'>Nama</label><div class='uk-form-controls'><input type='text' class='uk-input' id='name' name='name' value='"+ itemMdl.name +"' /></div></div><div class='uk-margin'><label class='uk-form-label' for='denomination'> Satuan</label><select class='uk-select' aria-label='Satuan' id='denominations"+ itemMdl.id +"' name='denomination' required></select></div><div id='contupmdl"+ itemMdl.id +"'><div class='uk-margin-bottom'><label class='uk-form-label' for='length'>Panjang</label><div class='uk-form-controls'><input type='text' class='uk-input' id='length' name='length' value='"+ itemMdl.length +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='width'>Lebar</label><div class='uk-form-controls'><input type='text' class='uk-input' id='width' name='width' value='"+ itemMdl.width +"' required /></div></div><div class='uk-margin-bottom'> <label class='uk-form-label' for='height'>Tinggi</label><div class='uk-form-controls'><input type='text' class='uk-input' id='height' name='height' value='"+ itemMdl.height +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='volume'>Volume</label><div class='uk-form-controls'><input type='text' class='uk-input' id='volume' name='volume' value='"+ itemMdl.volume +"' required /></div></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Harga</label><div class='uk-form-controls'><input type='text' class='uk-input' id='price"+itemMdl.id+"' name='price' placeholder='Rp."+rupiah+".00' value='Rp"+rupiah+".00' data-type='curencyupdate' novalidate/></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Keterangan</label><div class='uk-margin'> <textarea class='uk-textarea' type='text' name='keterangan' rows='5' placeholder='"+ itemMdl.keterangan +"' value='"+ itemMdl.keterangan +"' aria-label='Textarea'>"+ itemMdl.keterangan +"</textarea></div></div><div class='uk-margin' id='image-container-createmdl-"+ paketId + + itemMdl.id +"'> <div id='image-containermdl-"+ paketId + + itemMdl.id +"' class='uk-form-controls'><label class='uk-form-label' for='photo'>Foto MDL</label><input id='photocreatemdl"+ paketId + + itemMdl.id +"' name='photo' hidden /><div id='js-upload-createmdl-"+ paketId + + itemMdl.id +"' class='js-upload-createmdl-"+ paketId + + itemMdl.id +" uk-placeholder uk-text-center'><span uk-icon='icon: cloud-upload'></span><span class='uk-text-middle'>Tarik dan lepas foto disini atau</span><div uk-form-custom><input type='file'><span class='uk-link uk-preserve-color'>pilih satu</span> </div></div><progress id='js-progressbar-createmdl-"+ paketId + + itemMdl.id +"' class='uk-progress' value='0' max='100' hidden></progress></div></div> <div class='uk-modal-footer'><div class='uk-text-right'><button class='uk-button uk-button-primary' type='submit'>Simpan</button></div> </div></form>");
+
+                                            // Script Upload
+                                            $("<script>var bar = document.getElementById('js-progressbar-createmdl-" + paketId + + itemMdl.id +"');UIkit.upload('.js-upload-createmdl-"+ paketId + + itemMdl.id +"', {url: 'upload/photomdl',multiple: false,name: 'uploads',param: { lorem: 'ipsum'},method: 'POST',type: 'json',beforeSend: function() { console.log('beforeSend', arguments);},beforeAll: function() {console.log('beforeAll', arguments);},load: function() {console.log('load', arguments);},error: function() {console.log('error', arguments);var error = arguments[0].xhr.response.message.uploads;alert(error);},complete: function() {console.log('complete', arguments);var filename = arguments[0].response;console.log(filename);if (document.getElementById('display-container-createmdl-"+ paketId + + itemMdl.id+"')) {document.getElementById('display-container-createmdl-"+ paketId + + itemMdl.id+"').remove();};document.getElementById('photocreatemdl"+ paketId + + itemMdl.id+"').value = filename;var imgContainer = document.getElementById('image-container-createmdl-"+ paketId + + itemMdl.id+"');var displayContainer = document.createElement('div');displayContainer.setAttribute('id', 'display-container-createmdl-"+ paketId + + itemMdl.id+"');displayContainer.setAttribute('class', 'uk-inline');var displayImg = document.createElement('div');displayImg.setAttribute('uk-lightbox', 'animation: fade');displayImg.setAttribute('class', 'uk-inline');var link = document.createElement('a');link.setAttribute('href', 'img/mdl/'+filename );var image = document.createElement('img');image.setAttribute('src', 'img/mdl/'+filename);var closeContainer = document.createElement('div');closeContainer.setAttribute('class', 'uk-position-small uk-position-right');var closeButton = document.createElement('a');closeButton.setAttribute('id', 'removeImgCreatemdl"+ paketId + + itemMdl.id +"');closeButton.setAttribute('class', 'tm-img-remove uk-border-circle'); closeButton.setAttribute('onClick', 'removeImgCreatemdl("+ paketId + + itemMdl.id +")');closeButton.setAttribute('uk-icon', 'close');closeContainer.appendChild(closeButton);displayContainer.appendChild(displayImg);displayContainer.appendChild(closeContainer);link.appendChild(image);displayImg.appendChild(link);imgContainer.appendChild(displayContainer);document.getElementById('js-upload-createmdl-"+ paketId + + itemMdl.id +"').setAttribute('hidden', '');},loadStart: function(e) {console.log('loadStart', arguments);bar.removeAttribute('hidden');bar.max = e.total;bar.value = e.loaded;},progress: function(e) {console.log('progress', arguments);bar.max = e.total;bar.value = e.loaded;},loadEnd: function(e) {console.log('loadEnd', arguments);bar.max = e.total;bar.value = e.loaded;},completeAll: function() {console.log('completeAll', arguments);setTimeout(function() {bar.setAttribute('hidden', 'hidden');}, 1000);alert('Data Berhasil Terunggah');}});</" + "script>").appendTo(document.getElementById("formMdl"+ paketId + + itemMdl.id));
+
+                                            // Sript Remove Image
+                                            $('<script>function removeImgCreatemdl(x) { console.log(x); $.ajax({ type: "post",url: "upload/removephotomdl", data: {"photo": document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value}, dataType: "json", error: function() { console.log("error", arguments);},success: function() {console.log("success", arguments); var pesan = arguments[0][1]; document.getElementById("display-container-createmdl-'+ paketId + + itemMdl.id +'").remove();document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value = "";alert(pesan); document.getElementById("js-upload-createmdl-' + paketId + + itemMdl.id +'").removeAttribute("hidden", "");}}); }</' + 'script>').appendTo(document.getElementById("formMdl"+ paketId + + itemMdl.id));
+                                                        
+
+                                            // Reposiition MDL List
+                                            $('#mdlList'+ paketId + + itemMdl.id ).change(function() {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: "mdl/reorderingmdl",
+                                                    data: {
+                                                        id: itemMdl.id,
+                                                        paket: paketId,
+                                                        order: $("#mdlList"+ paketId + + itemMdl.id).val()
+                                                    },
+                                                    dataType: "json",
+                                                    error: function(mdlOrder) {
+                                                        console.log('error', arguments);
+                                                    },
+                                                    success: function(mdlOrder) {
+                                                        console.log(mdlOrder);
+                                                        location.reload();
+                                                    }
+                                                });
+                                            });
+
+                                            // Denomination Condition
+                                            var mdldenom = "";
+
+                                            for ($y = 1; $y <= 4; $y++) {
+                                                var selectMdlItem = document.getElementById("denominations"+ itemMdl.id);
+                                                var optionMdlItem = document.createElement("option");
+
+                                                if ($y == itemMdl.denomination) {
+                                                    optionMdlItem.selected = true;
+                                                } else {
+                                                    optionMdlItem.selected = false;
+                                                }
+
+                                                if ($y == "1"){
+                                                    mdldenom = "Unit";
+                                                }else if($y == "2"){
+                                                    mdldenom = "Meter Lari";
+                                                }else if($y == "3"){
+                                                    mdldenom = "Meter Persegi";
+                                                }else if($y == "4"){
+                                                    mdldenom = "Set";
+                                                }
+                                                optionMdlItem.value    = $y;
+                                                optionMdlItem.text     = mdldenom;
+                                                selectMdlItem.appendChild(optionMdlItem);
                                             }
 
-                                            var tdIconMdl = document.createElement('td');
-
-                                            var tdNameMdl = document.createElement('td');
-                                            tdNameMdl.setAttribute('style','text-transform: uppercase; font-weight: 400;');
-                                            tdNameMdl.setAttribute('class','tm-h4');
-                                            MdlName = document.createTextNode(itemMdl.name);
-
-                                            var tdWidthMdl = document.createElement('td');
-                                            widthMdl = document.createTextNode(itemMdl.width);
-
-                                            var tdLengthMdl = document.createElement('td');
-                                            lengthMdl = document.createTextNode(itemMdl.length);
-
-                                            var tdHeightMdl = document.createElement('td');
-                                            heightMdl = document.createTextNode(itemMdl.height);
-
-                                            var tdVolumeMdl = document.createElement('td');
-                                            volumeMdl = document.createTextNode(itemMdl.volume);
-
-                                            var denom = "";
-                                            if (itemMdl.denomination == "1") {
-                                                denom = "Unit";
-                                            } else if (itemMdl.denomination == "2") {
-                                                denom = "Meter Lari";
-                                            } else if (itemMdl.denomination == "3") {
-                                                denom = "Meter Persegi";
-                                            } else if (itemMdl.denomination == "4") {
-                                                denom = "Set";
-                                            }
-                                            var tdDenominationMdl = document.createElement('td');
-                                            denominationMdl = document.createTextNode(denom);
-
-                                            var tdPriceMdl = document.createElement('td');
-
-                                            var	number_string = itemMdl.price.toString(),
-                                                sisa 	= number_string.length % 3,
-                                                rupiah 	= number_string.substr(0, sisa),
-                                                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                                    
-                                            if (ribuan) {
-                                                separator = sisa ? ',' : '';
-                                                rupiah += separator + ribuan.join(',');
-                                            }
-                                            priceMdl = document.createTextNode('Rp.' + rupiah);
-
-                                            var tdKeteranganMdl = document.createElement('td');
-                                            keteranganMdl = document.createTextNode(itemMdl.keterangan);
-
-                                            var tdPhotoMdl = document.createElement('td');
-
-                                            divLightboxMdl = document.createElement('div');
-                                            divLightboxMdl.toggleAttribute('uk-lightbox');
-
-                                            linkPhotoMdl = document.createElement('a');
-                                            linkPhotoMdl.setAttribute('class','uk-inline');
-                                            linkPhotoMdl.setAttribute('href','img/mdl/'+ itemMdl.photo);
-                                            linkPhotoMdl.setAttribute('role','button');
-
-                                            imgMdl = document.createElement("img");
-                                            imgMdl.setAttribute('id', 'img'+ itemMdl.id);
-                                            imgMdl.setAttribute('class','uk-preserve-width uk-border-circle');
-                                            imgMdl.setAttribute('src','img/mdl/'+ itemMdl.photo);
-                                            imgMdl.setAttribute('width','40');
-                                            imgMdl.setAttribute('height','40');
-                                            imgMdl.setAttribute('alt', itemMdl.photo);
-
-                                            var tdButtonMdl = document.createElement('td');
-                                            tdButtonMdl.setAttribute('class','uk-text-center');
-
-                                            divButtonMdl = document.createElement('div');
-                                            divButtonMdl.setAttribute('class','uk-grid-small uk-flex-center uk-flex-middle');
-                                            divButtonMdl.toggleAttribute('uk-grid');
-
-                                            divUpdateMdl = document.createElement('div');
-                                            linkUpdateMdl = document.createElement('a');
-                                            linkUpdateMdl.setAttribute('class','uk-icon-button');
-                                            linkUpdateMdl.setAttribute('href','#modalupdatemdl'+ paketId + itemMdl.id);
-                                            linkUpdateMdl.setAttribute('uk-icon','pencil');
-                                            linkUpdateMdl.toggleAttribute('uk-toggle');
-
-
-                                            divDeleteMdlitem = document.createElement('div');
-                                            FormDeleteMdl = document.createElement('form');
-                                            FormDeleteMdl.setAttribute('class','uk-form-stacked');
-                                            FormDeleteMdl.setAttribute('role','form');
-                                            FormDeleteMdl.setAttribute('action','mdl/delete/' + itemMdl.id);
-                                            FormDeleteMdl.setAttribute('method','post');
-
-                                            inputDeleteMdl = document.createElement('input');
-                                            inputDeleteMdl.setAttribute('type','hidden');
-                                            inputDeleteMdl.setAttribute('name','paketid');
-                                            inputDeleteMdl.setAttribute('value', paketId);
-
-                                            buttonMdlDelete = document.createElement('button');
-                                            buttonMdlDelete.setAttribute('type','submit');
-                                            buttonMdlDelete.setAttribute('uk-icon','trash');
-                                            buttonMdlDelete.setAttribute('class','uk-icon-button-delete');
-                                            buttonMdlDelete.setAttribute('onclick','return confirm("Anda yakin ingin menghapus data ini?")');
-
-                                        // END ROW MDL
-
-                                        itemorder.appendChild(trMdl);
-                                        trMdl.appendChild(tdOrderingMdl);
-                                        tdOrderingMdl.appendChild(selectOrderMdl);
-                                        trMdl.appendChild(tdIconMdl);
-                                        trMdl.appendChild(tdNameMdl);
-                                        tdNameMdl.appendChild(MdlName);
-                                        trMdl.appendChild(tdLengthMdl);
-                                        tdLengthMdl.appendChild(lengthMdl);
-                                        trMdl.appendChild(tdWidthMdl);
-                                        tdWidthMdl.appendChild(widthMdl);
-                                        trMdl.appendChild(tdHeightMdl);
-                                        tdHeightMdl.appendChild(heightMdl);
-                                        trMdl.appendChild(tdVolumeMdl);
-                                        tdVolumeMdl.appendChild(volumeMdl);
-                                        trMdl.appendChild(tdDenominationMdl);
-                                        tdDenominationMdl.appendChild(denominationMdl);
-                                        trMdl.appendChild(tdKeteranganMdl);
-                                        tdKeteranganMdl.appendChild(keteranganMdl);
-                                        trMdl.appendChild(tdPriceMdl);
-                                        tdPriceMdl.appendChild(priceMdl);
-                                        trMdl.appendChild(tdPhotoMdl);
-                                        tdPhotoMdl.appendChild(divLightboxMdl);
-                                        divLightboxMdl.appendChild(linkPhotoMdl);
-                                        linkPhotoMdl.appendChild(imgMdl);
-                                        trMdl.appendChild(tdButtonMdl);
-                                        tdButtonMdl.appendChild(divButtonMdl);
-                                        divButtonMdl.appendChild(divUpdateMdl);
-                                        divUpdateMdl.appendChild(linkUpdateMdl);
-                                        divButtonMdl.appendChild(divDeleteMdlitem);
-                                        divDeleteMdlitem.appendChild(FormDeleteMdl);
-                                        FormDeleteMdl.appendChild(inputDeleteMdl);
-                                        FormDeleteMdl.appendChild(buttonMdlDelete);
-                                        $("#mdlDataItem" + itemMdl.id).insertAfter( $("#importMdl"+ paketId));
-
-                                        // Modal Import Mdl Paket
-                                        $('<div class="uk-modal-container" id="modalimport' + paketId +'" uk-modal><div class="uk-modal-dialog uk-margin-auto-vertical" uk-overflow-auto><button class="uk-modal-close-default" type="button" uk-close></button><div class="uk-modal-header"><h2 class="uk-modal-title">Upload File MDL</h2></div><div class="uk-modal-body"><form id="formInputPaket' + paketId +'" class="uk-form-stacked" action="upload/importmdl/' + paketId +'" method="post" enctype="multipart/form-data"><div class="uk-margin" id="image-container-importmdl-' + paketId +'"><div class="uk-form-controls"><input id="fileimportmdl' + paketId +'" name="mdl" hidden /><div id="js-upload-importmdl-' + paketId +'" class="js-upload-importmdl-' + paketId +' uk-placeholder uk-text-center"><span uk-icon="icon: cloud-upload"></span><span class="uk-text-middle">Tarik dan lepas file MDL disini atau</span><div uk-form-custom><input type="file"><span class="uk-link uk-preserve-color">pilih satu</span></div></div><progress id="js-progressbar-importmdl-' + paketId +'" class="uk-progress" value="0" max="100" hidden></progress></div></div></form></div></div></div>').appendTo(document.getElementById("modalContainerImport"));
-                                       
-                                        // Script Import MDL
-                                        $("<script>var bar = document.getElementById('js-progressbar-importmdl-" + paketId +"');UIkit.upload('.js-upload-importmdl-" + paketId +"', {url: 'upload/mdl/" + paketId + "',multiple: false,name: 'uploads',param: {lorem: 'ipsum'},method: 'POST', type: 'json', beforeSend: function() {console.log('beforeSend', arguments);},beforeAll: function() {console.log('beforeAll', arguments);}, load: function() {console.log('load', arguments);},error: function() {console.log('error', arguments);var error = arguments[0].xhr.response.message.uploads;alert(error);},complete: function() {console.log('complete', arguments);},loadStart: function(e) {console.log('loadStart', arguments);bar.removeAttribute('hidden');bar.max = e.total;bar.value = e.loaded;},progress: function(e) {console.log('progress', arguments);bar.max = e.total;bar.value = e.loaded;}, loadEnd: function(e) {console.log('loadEnd', arguments);bar.max = e.total; bar.value = e.loaded;},completeAll: function() {console.log('completeAll', arguments);setTimeout(function() { bar.setAttribute('hidden', 'hidden');}, 1000);location.reload();}});</" + "script>").appendTo(document.getElementById("formInputPaket" + paketId ));
-
-                                        // Modal Update Mdl
-                                        $('#modalcontainer').append("<div class='uk-modal-container' id='modalupdatemdl" + paketId + + itemMdl.id +"' uk-modal><div class='uk-modal-dialog uk-margin-auto-vertical' uk-overflow-auto><div class='uk-modal-header'> <h2 class='uk-modal-title'>Ubah MDL '"+ itemMdl.name +"'</h2> <button class='uk-modal-close-default' type='button' uk-close></button></div><div id='modalbodymdl"+itemMdl.id+"' class='uk-modal-body'></div></div></div>");
-                                        
-                                        // Modal Body Update MDL
-                                        $('#modalbodymdl'+itemMdl.id).append("<form class='uk-form-stacked' id='formMdl" + paketId + + itemMdl.id +"' role='form' action='mdl/update/"+ itemMdl.id +"' method='post'><input type='text' class='uk-input' id='paketid"+itemMdl.id+"' ' name='paketid"+itemMdl.id+"' value='"+ paketId+ "' hidden/><div class='uk-margin-bottom'><label class='uk-form-label' for='name'>Nama</label><div class='uk-form-controls'><input type='text' class='uk-input' id='name' name='name' value='"+ itemMdl.name +"' /></div></div><div class='uk-margin'><label class='uk-form-label' for='denomination'> Satuan</label><select class='uk-select' aria-label='Satuan' id='denominations"+ itemMdl.id +"' name='denomination' required></select></div><div id='contupmdl"+ itemMdl.id +"'><div class='uk-margin-bottom'><label class='uk-form-label' for='length'>Panjang</label><div class='uk-form-controls'><input type='text' class='uk-input' id='length' name='length' value='"+ itemMdl.length +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='width'>Lebar</label><div class='uk-form-controls'><input type='text' class='uk-input' id='width' name='width' value='"+ itemMdl.width +"' required /></div></div><div class='uk-margin-bottom'> <label class='uk-form-label' for='height'>Tinggi</label><div class='uk-form-controls'><input type='text' class='uk-input' id='height' name='height' value='"+ itemMdl.height +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='volume'>Volume</label><div class='uk-form-controls'><input type='text' class='uk-input' id='volume' name='volume' value='"+ itemMdl.volume +"' required /></div></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Harga</label><div class='uk-form-controls'><input type='text' class='uk-input' id='price"+itemMdl.id+"' name='price' placeholder='Rp."+rupiah+".00' value='Rp"+rupiah+".00' data-type='curencyupdate' novalidate/></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Keterangan</label><div class='uk-margin'> <textarea class='uk-textarea' type='text' name='keterangan' rows='5' placeholder='"+ itemMdl.keterangan +"' value='"+ itemMdl.keterangan +"' aria-label='Textarea'>"+ itemMdl.keterangan +"</textarea></div></div><div class='uk-margin' id='image-container-createmdl-"+ paketId + + itemMdl.id +"'> <div id='image-containermdl-"+ paketId + + itemMdl.id +"' class='uk-form-controls'><label class='uk-form-label' for='photo'>Foto MDL</label><input id='photocreatemdl"+ paketId + + itemMdl.id +"' name='photo' hidden /><div id='js-upload-createmdl-"+ paketId + + itemMdl.id +"' class='js-upload-createmdl-"+ paketId + + itemMdl.id +" uk-placeholder uk-text-center'><span uk-icon='icon: cloud-upload'></span><span class='uk-text-middle'>Tarik dan lepas foto disini atau</span><div uk-form-custom><input type='file'><span class='uk-link uk-preserve-color'>pilih satu</span> </div></div><progress id='js-progressbar-createmdl-"+ paketId + + itemMdl.id +"' class='uk-progress' value='0' max='100' hidden></progress></div></div> <div class='uk-modal-footer'><div class='uk-text-right'><button class='uk-button uk-button-primary' type='submit'>Simpan</button></div> </div></form>");
-                                        
-                                        // Script Upload
-                                        $("<script>var bar = document.getElementById('js-progressbar-createmdl-" + paketId + + itemMdl.id +"');UIkit.upload('.js-upload-createmdl-"+ paketId + + itemMdl.id +"', {url: 'upload/photomdl',multiple: false,name: 'uploads',param: { lorem: 'ipsum'},method: 'POST',type: 'json',beforeSend: function() { console.log('beforeSend', arguments);},beforeAll: function() {console.log('beforeAll', arguments);},load: function() {console.log('load', arguments);},error: function() {console.log('error', arguments);var error = arguments[0].xhr.response.message.uploads;alert(error);},complete: function() {console.log('complete', arguments);var filename = arguments[0].response;console.log(filename);if (document.getElementById('display-container-createmdl-"+ paketId + + itemMdl.id+"')) {document.getElementById('display-container-createmdl-"+ paketId + + itemMdl.id+"').remove();};document.getElementById('photocreatemdl"+ paketId + + itemMdl.id+"').value = filename;var imgContainer = document.getElementById('image-container-createmdl-"+ paketId + + itemMdl.id+"');var displayContainer = document.createElement('div');displayContainer.setAttribute('id', 'display-container-createmdl-"+ paketId + + itemMdl.id+"');displayContainer.setAttribute('class', 'uk-inline');var displayImg = document.createElement('div');displayImg.setAttribute('uk-lightbox', 'animation: fade');displayImg.setAttribute('class', 'uk-inline');var link = document.createElement('a');link.setAttribute('href', 'img/mdl/'+filename );var image = document.createElement('img');image.setAttribute('src', 'img/mdl/'+filename);var closeContainer = document.createElement('div');closeContainer.setAttribute('class', 'uk-position-small uk-position-right');var closeButton = document.createElement('a');closeButton.setAttribute('id', 'removeImgCreatemdl"+ paketId + + itemMdl.id +"');closeButton.setAttribute('class', 'tm-img-remove uk-border-circle'); closeButton.setAttribute('onClick', 'removeImgCreatemdl("+ paketId + + itemMdl.id +")');closeButton.setAttribute('uk-icon', 'close');closeContainer.appendChild(closeButton);displayContainer.appendChild(displayImg);displayContainer.appendChild(closeContainer);link.appendChild(image);displayImg.appendChild(link);imgContainer.appendChild(displayContainer);document.getElementById('js-upload-createmdl-"+ paketId + + itemMdl.id +"').setAttribute('hidden', '');},loadStart: function(e) {console.log('loadStart', arguments);bar.removeAttribute('hidden');bar.max = e.total;bar.value = e.loaded;},progress: function(e) {console.log('progress', arguments);bar.max = e.total;bar.value = e.loaded;},loadEnd: function(e) {console.log('loadEnd', arguments);bar.max = e.total;bar.value = e.loaded;},completeAll: function() {console.log('completeAll', arguments);setTimeout(function() {bar.setAttribute('hidden', 'hidden');}, 1000);alert('Data Berhasil Terunggah');}});</" + "script>").appendTo(document.getElementById("formMdl"+ paketId + + itemMdl.id));
-                                        
-                                        // Sript Remove Image
-                                        $('<script>function removeImgCreatemdl(x) { console.log(x); $.ajax({ type: "post",url: "upload/removephotomdl", data: {"photo": document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value}, dataType: "json", error: function() { console.log("error", arguments);},success: function() {console.log("success", arguments); var pesan = arguments[0][1]; document.getElementById("display-container-createmdl-'+ paketId + + itemMdl.id +'").remove();document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value = "";alert(pesan); document.getElementById("js-upload-createmdl-' + paketId + + itemMdl.id +'").removeAttribute("hidden", "");}}); }</' + 'script>').appendTo(document.getElementById("formMdl"+ paketId + + itemMdl.id));
-                                                    
-                                        
-                                        // Reposiition MDL List
-                                        $('#mdlList'+ paketId + + itemMdl.id ).change(function() {
-                                            $.ajax({
-                                                type: 'POST',
-                                                url: "mdl/reorderingmdl",
-                                                data: {
-                                                    id: itemMdl.id,
-                                                    paket: paketId,
-                                                    order: $("#mdlList"+ paketId + + itemMdl.id).val()
+                                            // Currency
+                                            $("input[data-type='curencyupdate']").on({
+                                                keyup: function() {
+                                                    formatCurrency($(this));
                                                 },
-                                                dataType: "json",
-                                                error: function(mdlOrder) {
-                                                    console.log('error', arguments);
-                                                },
-                                                success: function(mdlOrder) {
-                                                    console.log(mdlOrder);
-                                                    location.reload();
+                                                blur: function() {
+                                                    formatCurrency($(this), "blur");
                                                 }
                                             });
-                                        });
-                                        
-                                        // Converting Price
-                                        // var	number_string = itemMdl.price.toString(),
-                                        // sisa 	= number_string.length % 3,
-                                        // rupiah 	= number_string.substr(0, sisa),
-                                        // ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
 
-                                        // if (ribuan) {
-                                        // separator = sisa ? '.' : '';
-                                        // rupiah += separator + ribuan.join('.');
-                                        // }
 
-                                        // $("#price" + itemMdl.id).val(rupiah);
-
-                                        // Denomination Condition
-                                        var mdldenom = "";
-                                        
-                                        for ($y = 1; $y <= 4; $y++) {
-                                            var selectMdlItem = document.getElementById("denominations"+ itemMdl.id);
-                                            var optionMdlItem = document.createElement("option");
-
-                                            if ($y == itemMdl.denomination) {
-                                                optionMdlItem.selected = true;
-                                            } else {
-                                                optionMdlItem.selected = false;
+                                            function formatNumber(n) {
+                                                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                             }
 
-                                            if ($y == "1"){
-                                                mdldenom = "Unit";
-                                            }else if($y == "2"){
-                                                mdldenom = "Meter Lari";
-                                            }else if($y == "3"){
-                                                mdldenom = "Meter Persegi";
-                                            }else if($y == "4"){
-                                                mdldenom = "Set";
-                                            }
-                                            optionMdlItem.value    = $y;
-                                            optionMdlItem.text     = mdldenom;
-                                            selectMdlItem.appendChild(optionMdlItem);
-                                        }
+                                            function formatCurrency(input, blur) {
 
-                                        // Currency
-                                        $("input[data-type='curencyupdate']").on({
-                                            keyup: function() {
-                                                formatCurrency($(this));
-                                            },
-                                            blur: function() {
-                                                formatCurrency($(this), "blur");
-                                            }
-                                        });
+                                                var input_val = input.val();
 
-
-                                        function formatNumber(n) {
-                                            return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                        }
-
-                                        function formatCurrency(input, blur) {
-
-                                            var input_val = input.val();
-
-                                            if (input_val === "") {
-                                                return;
-                                            }
-
-                                            var original_len = input_val.length;
-
-                                            var caret_pos = input.prop("selectionStart");
-
-                                            if (input_val.indexOf(".") >= 0) {
-
-                                                var decimal_pos = input_val.indexOf(".");
-
-                                                var left_side = input_val.substring(0, decimal_pos);
-                                                var right_side = input_val.substring(decimal_pos);
-
-                                                left_side = formatNumber(left_side);
-
-                                                right_side = formatNumber(right_side);
-
-                                                if (blur === "blur") {
-                                                    right_side += "00";
+                                                if (input_val === "") {
+                                                    return;
                                                 }
 
-                                                right_side = right_side.substring(0, 2);
+                                                var original_len = input_val.length;
 
-                                                input_val = "Rp" + left_side + "." + right_side;
+                                                var caret_pos = input.prop("selectionStart");
 
-                                            } else {
+                                                if (input_val.indexOf(".") >= 0) {
 
-                                                input_val = formatNumber(input_val);
-                                                input_val = "Rp" + input_val;
+                                                    var decimal_pos = input_val.indexOf(".");
 
-                                                if (blur === "blur") {
-                                                    input_val += ".00";
+                                                    var left_side = input_val.substring(0, decimal_pos);
+                                                    var right_side = input_val.substring(decimal_pos);
+
+                                                    left_side = formatNumber(left_side);
+
+                                                    right_side = formatNumber(right_side);
+
+                                                    if (blur === "blur") {
+                                                        right_side += "00";
+                                                    }
+
+                                                    right_side = right_side.substring(0, 2);
+
+                                                    input_val = "Rp" + left_side + "." + right_side;
+
+                                                } else {
+
+                                                    input_val = formatNumber(input_val);
+                                                    input_val = "Rp" + input_val;
+
+                                                    if (blur === "blur") {
+                                                        input_val += ".00";
+                                                    }
                                                 }
+
+                                                input.val(input_val);
+
+                                                var updated_len = input_val.length;
+                                                caret_pos = updated_len - original_len + caret_pos;
+                                                input[0].setSelectionRange(caret_pos, caret_pos);
                                             }
 
-                                            input.val(input_val);
+                                            }); 
+                                    }
 
-                                            var updated_len = input_val.length;
-                                            caret_pos = updated_len - original_len + caret_pos;
-                                            input[0].setSelectionRange(caret_pos, caret_pos);
-                                        }
-
-                                    }); 
                                 }
                             });
                         }
@@ -961,8 +953,7 @@
                             },
                             success : function (data){
                                 console.log("success", arguments);
-
-                               var mlduncate = arguments[0];
+                                var mlduncate = arguments[0];
 
                                 $.each(mlduncate, function(x, itemmdluncate){
 
@@ -1112,18 +1103,7 @@
                                     $('#modalcontainer').append("<div class='uk-modal-container' id='modalupdatemdl"+ itemmdluncate.id +"' uk-modal><div class='uk-modal-dialog uk-margin-auto-vertical' uk-overflow-auto><div class='uk-modal-header'> <h2 class='uk-modal-title'>Ubah MDL '"+ itemmdluncate.name +"'</h2> <button class='uk-modal-close-default' type='button' uk-close></button></div><div id='modalbodymdl"+itemmdluncate.id+"' class='uk-modal-body'></div></div></div>");
                                     
                                     // Modal Body Update MDL
-                                    $('#modalbodymdl'+itemmdluncate.id).append("<form class='uk-form-stacked' id='formMdl"+ itemmdluncate.id +"' role='form' action='mdl/update/"+ itemmdluncate.id +"' method='post'><input type='text' class='uk-input' id='paketid"+itemmdluncate.id+"' ' name='paketid"+itemmdluncate.id+"' value='"+itemmdluncate.id+ "' hidden/><div class='uk-margin-bottom'><label class='uk-form-label' for='name'>Nama</label><div class='uk-form-controls'><input type='text' class='uk-input' id='name' name='name' value='"+ itemmdluncate.name +"' /></div></div><div class='uk-margin'><label class='uk-form-label' for='denomination'> Satuan</label><select class='uk-select' aria-label='Satuan' id='denominationsUncate"+ itemmdluncate.id +"' name='denomination' required></select></div><div id='contupmdl"+ itemmdluncate.id +"'><div class='uk-margin-bottom'><label class='uk-form-label' for='length'>Panjang</label><div class='uk-form-controls'><input type='text' class='uk-input' id='length' name='length' value='"+ itemmdluncate.length +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='width'>Lebar</label><div class='uk-form-controls'><input type='text' class='uk-input' id='width' name='width' value='"+ itemmdluncate.width +"' required /></div></div><div class='uk-margin-bottom'> <label class='uk-form-label' for='height'>Tinggi</label><div class='uk-form-controls'><input type='text' class='uk-input' id='height' name='height' value='"+ itemmdluncate.height +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='volume'>Volume</label><div class='uk-form-controls'><input type='text' class='uk-input' id='volume' name='volume' value='"+ itemmdluncate.volume +"' required /></div></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Harga</label><div class='uk-form-controls'><input type='text' class='uk-input' id='price"+itemmdluncate.id+"' name='price' placeholder='Rp"+rupiah+".00'  value='Rp"+rupiah+".00' data-type='curencyupdate' /></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Keterangan</label><div class='uk-margin'> <textarea class='uk-textarea' type='text' name='keterangan' rows='5' placeholder='"+ itemmdluncate.keterangan +"' value='"+ itemmdluncate.keterangan +"' aria-label='Textarea'>"+ itemmdluncate.keterangan +"</textarea></div></div><div class='uk-modal-footer'><div class='uk-text-right'><button class='uk-button uk-button-primary' type='submit'>Simpan</button></div> </div></form>");
-                                                                       
-                                    // Converting Price
-                                    // var	number_string = itemmdluncate.price.toString(),
-                                    // sisa 	= number_string.length % 3,
-                                    // rupiah 	= number_string.substr(0, sisa),
-                                    // ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                    
-                                    // if (ribuan) {
-                                    //     separator = sisa ? '.' : '';
-                                    //     rupiah += separator + ribuan.join('.');
-                                    // }
+                                    $('#modalbodymdl'+itemmdluncate.id).append("<form class='uk-form-stacked' id='formMdl"+ itemmdluncate.id +"' role='form' action='mdl/update/"+ itemmdluncate.id +"' method='post'><input type='text' class='uk-input' id='paketid"+itemmdluncate.id+"' ' name='paketid"+itemmdluncate.id+"' value='"+itemmdluncate.id+ "' hidden/><div class='uk-margin-bottom'><label class='uk-form-label' for='name'>Nama</label><div class='uk-form-controls'><input type='text' class='uk-input' id='name' name='name' value='"+ itemmdluncate.name +"' /></div></div><div class='uk-margin'><label class='uk-form-label' for='denomination'> Satuan</label><select class='uk-select' aria-label='Satuan' id='denominationsUncate"+ itemmdluncate.id +"' name='denomination' required></select></div><div id='contupmdl"+ itemmdluncate.id +"'><div class='uk-margin-bottom'><label class='uk-form-label' for='length'>Panjang</label><div class='uk-form-controls'><input type='text' class='uk-input' id='length' name='length' value='"+ itemmdluncate.length +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='width'>Lebar</label><div class='uk-form-controls'><input type='text' class='uk-input' id='width' name='width' value='"+ itemmdluncate.width +"' required /></div></div><div class='uk-margin-bottom'> <label class='uk-form-label' for='height'>Tinggi</label><div class='uk-form-controls'><input type='text' class='uk-input' id='height' name='height' value='"+ itemmdluncate.height +"' required /></div></div><div class='uk-margin-bottom'><label class='uk-form-label' for='volume'>Volume</label><div class='uk-form-controls'><input type='text' class='uk-input' id='volume' name='volume' value='"+ itemmdluncate.volume +"' required /></div></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Harga</label><div class='uk-form-controls'><input type='text' class='uk-input' id='price"+itemmdluncate.id+"' name='price' placeholder='Rp"+rupiah+".00'  value='Rp"+rupiah+".00' data-type='curencyupdate' /></div></div><div class='uk-margin'><label class='uk-form-label' for='price'>Keterangan</label><div class='uk-margin'> <textarea class='uk-textarea' type='text' name='keterangan' rows='5' placeholder='"+ itemmdluncate.keterangan +"' value='"+ itemmdluncate.keterangan +"' aria-label='Textarea'>"+ itemmdluncate.keterangan +"</textarea></div></div><div class='uk-modal-footer'><div class='uk-text-right'><button class='uk-button uk-button-primary' type='submit'>Simpan</button></div> </div></form>");                                            
 
                                     // $("#price" + itemmdluncate.id).val(itemmdluncate.price);
 
@@ -1163,7 +1143,6 @@
                                             formatCurrency($(this), "blur");
                                         }
                                     });
-
 
                                     function formatNumber(n) {
                                         return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")

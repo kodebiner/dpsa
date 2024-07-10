@@ -274,39 +274,43 @@ class Mdl extends BaseController
         // PAKET MDL DATA 
         $paketMdlData = $MdlPaketModel->where('paketid',$input)->orderBy('ordering', 'ASC')->find();
 
-        $mdlid = [];
-        foreach($paketMdlData as $mdls){
-            $mdlid[] = $mdls['mdlid'];
-        }
+        if(!empty($paketMdlData)){
+            $mdlid = [];
+            foreach($paketMdlData as $mdls){
+                $mdlid[] = $mdls['mdlid'];
+            }
 
-        // MDL DATA
-        $mdlData = $MdlModel->whereIn('id', $mdlid)->find();
+            // MDL DATA
+            $mdlData = $MdlModel->whereIn('id', $mdlid)->find();
 
-        $mdlAllData = [];
-        foreach($mdlData as $dataMdl){
-            foreach($paketMdlData as $paketmdl){
-                if($dataMdl['id'] === $paketmdl['mdlid']){
-                    $mdlAllData[] = [
-                        'id'            => $dataMdl['id'],
-                        'name'          => $dataMdl['name'],
-                        'width'         => $dataMdl['width'],
-                        'height'        => $dataMdl['height'],
-                        'length'        => $dataMdl['length'],
-                        'volume'        => $dataMdl['volume'],
-                        'photo'         => $dataMdl['photo'],
-                        'denomination'  => $dataMdl['denomination'],
-                        'price'         => $dataMdl['price'],
-                        'keterangan'    => $dataMdl['keterangan'],
-                        'ordering'      => $paketmdl['ordering'], 
-                    ];
+            $mdlAllData = [];
+            foreach($mdlData as $dataMdl){
+                foreach($paketMdlData as $paketmdl){
+                    if($dataMdl['id'] === $paketmdl['mdlid']){
+                        $mdlAllData[] = [
+                            'id'            => $dataMdl['id'],
+                            'name'          => $dataMdl['name'],
+                            'width'         => $dataMdl['width'],
+                            'height'        => $dataMdl['height'],
+                            'length'        => $dataMdl['length'],
+                            'volume'        => $dataMdl['volume'],
+                            'photo'         => $dataMdl['photo'],
+                            'denomination'  => $dataMdl['denomination'],
+                            'price'         => $dataMdl['price'],
+                            'keterangan'    => $dataMdl['keterangan'],
+                            'ordering'      => $paketmdl['ordering'], 
+                        ];
+                    }
                 }
             }
-        }
 
-        if(!empty($mdlAllData)){
-            array_multisort(array_column($mdlAllData,'ordering'), SORT_DESC,$mdlAllData);
+            if(!empty($mdlAllData)){
+                array_multisort(array_column($mdlAllData,'ordering'), SORT_DESC,$mdlAllData);
+            }
+            die(json_encode($mdlAllData));
+        }else{
+            die(json_encode($paketMdlData));
         }
-        die(json_encode($mdlAllData));
 
     }
 
