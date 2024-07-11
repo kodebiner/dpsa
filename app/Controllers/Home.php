@@ -2241,7 +2241,7 @@ class Home extends BaseController
                         if($rabcust['denomination'] === "2"){
                             $harga = ($rabcust['price'] * $volumerabcust) * $rabcust['qty'];
                         }elseif($rabcust['denomination'] === "3"){
-                            $harga = ($rabcust['price'] * ($lengthrabcust * $heigthrabcust)) * $rabcust['qty'];
+                            $harga = ($rabcust['price'] * ((str_replace(',', '.', $heigthcustrab) * (str_replace(',', '.',$lengthcustrab))))) * $rabcust['qty'];
                         }elseif(!empty($rabcust['qty']) && ($rabcust['denomination'] !="2" || $rabcust['denomination'] !="3")){
                             $harga = $rabcust['price'] * $rabcust['qty'];
                         }else{

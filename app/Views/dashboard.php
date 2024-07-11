@@ -1212,7 +1212,7 @@
                                                             if($custrab['denomination'] === "2"){
                                                                 $harga = ($custrab['price'] * $volumecustrab) * $custrab['qty'];
                                                             }elseif($custrab['denomination'] === "3"){
-                                                                $harga = ($custrab['price'] * ($lengthcustrab * $heigthcustrab )) * $custrab['qty'];
+                                                                $harga = ($custrab['price'] * ((str_replace(',', '.', $heigthcustrab) * (str_replace(',', '.',$lengthcustrab))))) * $custrab['qty'];
                                                             }elseif(!empty($custrab['qty']) && ($custrab['denomination'] !="2" || $custrab['denomination'] !="3")){
                                                                 $harga = $custrab['price'] * $custrab['qty'];
                                                             }else{

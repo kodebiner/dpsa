@@ -1206,7 +1206,7 @@ class Project extends BaseController
                             if($custrabdata['denomination'] === "2"){
                                 $hargacustrab = ((int)$custrabdata['price'] * $volumecustrab) * (int)$custrabdata['qty'];
                             }elseif($custrabdata['denomination'] === "3"){
-                                $hargacustrab = ((int)$custrabdata['price'] * ($heigthcustrab * $lengthcustrab)) * (int)$custrabdata['qty'];
+                                $hargacustrab = ((int)$custrabdata['price'] * (str_replace(',', '.', $heigthcustrab) * (str_replace(',', '.',$lengthcustrab)))) * (int)$custrabdata['qty'];
                             }elseif($custrabdata['qty'] != 0 && ($custrabdata['denomination'] != "2" || $custrabdata['denomination'] != "3")){
                                 $hargacustrab = (int)$custrabdata['price'] * (int)$custrabdata['qty'];
                             }else{
@@ -1302,7 +1302,7 @@ class Project extends BaseController
                             if($dataCustRabItem['denomination'] === "2"){
                                 $hargacustrab = ((int)$dataCustRabItem['price'] * $volumecustrabdata) * (int)$dataCustRabItem['qty'];
                             }elseif($dataCustRabItem['denomination'] === "3"){
-                                $hargacustrab = ((int)$dataCustRabItem['price'] * ( $heigthcustrabdata * $lengthcustrabdata)) * (int)$dataCustRabItem['qty'];
+                                $hargacustrab = ((int)$dataCustRabItem['price'] * ( (str_replace(',', '.', $heigthcustrab) * (str_replace(',', '.',$lengthcustrab))))) * (int)$dataCustRabItem['qty'];
                             }elseif(($dataCustRabItem['denomination'] != "2" || $dataCustRabItem['denomination'] != "3") && $dataCustRabItem['qty'] != 0){
                                 $hargacustrab = (int)$dataCustRabItem['price'] * (int)$dataCustRabItem['qty'];
                             }
