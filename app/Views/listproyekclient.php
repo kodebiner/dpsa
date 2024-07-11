@@ -971,8 +971,6 @@
                                                                                     }
                                                                                 ?>
                                                                             </td>
-                                                                            <!-- <td class="uk-text-center"></td> -->
-                                                                            <!-- <td class="uk-text-center"></td> -->
                                                                             <td class="uk-text-center"><?=$custrab['qty']?></td>
                                                                             <?php 
 
@@ -1471,64 +1469,6 @@
                                                                         </script>
                                                                     <?php } ?>
 
-                                                                    <!-- MDL Remove Form Center List -->
-                                                                    <!-- <tr>
-                                                                        <td colspan="9" class="tm-h3 uk-text-muted" style="text-transform: uppercase;">MDL Dalam Proyek Yang Telah Terhapus Dari Daftar MDL</td>
-                                                                    </tr> -->
-
-                                                                    <!-- </?php foreach ($projectdata[$project['id']]['allrabdatadeleted'] as $allcurrentrabdata) { ?> -->
-                                                                        <!-- <tr class="uk-text-muted">
-                                                                            <td>
-                                                                                <input type="checkbox" class="uk-checkbox" checked disabled/>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['name'] ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['length'] ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['width'] ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['height'] ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['volume'] ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?php
-                                                                                    if ($allcurrentrabdata['denomination'] === "1") {
-                                                                                        echo "Unit";
-                                                                                    } elseif ($allcurrentrabdata['denomination'] === "2") {
-                                                                                        echo "Meter Lari";
-                                                                                    } elseif ($allcurrentrabdata['denomination'] === "3") {
-                                                                                        echo "Meter Persegi";
-                                                                                    } elseif ($allcurrentrabdata['denomination'] === "4") {
-                                                                                        echo "Set";
-                                                                                    }
-                                                                                ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                </?= $allcurrentrabdata['keterangan'] ?>
-                                                                            </td> -->
-                                                                            <!-- <td>
-                                                                                <div uk-lightbox="">
-                                                                                    <a class="uk-inline" href="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" role="button">
-                                                                                        <img class="uk-preserve-width uk-border-circle" id="img18" src="img/mdl/ </?= $allcurrentrabdata['photo'] ?>" width="40" height="40" alt="</?= $mdl['photo'] ?>">
-                                                                                    </a>
-                                                                                </div>
-                                                                            </td> -->
-                                                                            <!-- <td>
-                                                                                <input type="number" class="uk-input uk-form-width-small" placeholder="</?= $allcurrentrabdata['qty'] ?>" disabled/>
-                                                                            </td>
-                                                                            <td>
-                                                                            </?= "Rp. " . number_format( $allcurrentrabdata['price']  * $allcurrentrabdata['qty'], 0, ',', '.'); " "; ?>
-                                                                            </td>
-                                                                        </tr> -->
-                                                                    <!-- </?php } ?> -->
-                                                                    <!-- End MDL Remove Form Center List -->
-
                                                                     <tr>
                                                                         <td colspan="9" class="tm-h3" style="text-transform: uppercase;">Biaya Pengiriman</td>
                                                                         <td>
@@ -1547,16 +1487,16 @@
                                                                                     <input type="text" id="namecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="namecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['name'] ?>" />
                                                                                 </td>
                                                                                 <td>
-                                                                                    <input type="text" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>"/>
+                                                                                    <input type="text" onkeypress="return isNumberKey(event,this.id)" id="lengthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="lengthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['length'] ?>"/>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <input type="text" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>"/>
+                                                                                    <input type="text" onkeypress="return isNumberKey(event,this.id)" id="widthcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="widthcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['width'] ?>"/>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <input type="text" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>"/>
+                                                                                    <input type="text" onkeypress="return isNumberKey(event,this.id)" id="heightcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="heightcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['height'] ?>"/>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <input type="text" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>"/>
+                                                                                    <input type="text" onkeypress="return isNumberKey(event,this.id)" id="volumecustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="volumecustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]" class="uk-input uk-form-width-small" value="<?= $customrab['volume'] ?>"/>
                                                                                 </td>
                                                                                 <td>
                                                                                     <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="denominationcustrab[<?= $project['id'] ?><?= $customrab['id'] ?>]" name="denominationcustrab<?= $project['id'] ?>[<?= $customrab['id'] ?>]">
@@ -1577,6 +1517,7 @@
                                                                                 </td>
                                                                             </tr>
                                                                             <script>
+
                                                                                 $("input[data-type='curencyupdate<?= $project['id'] ?><?= $customrab['id'] ?>']").on({
                                                                                     keyup: function() {
                                                                                         formatCurrency($(this));
@@ -1732,16 +1673,16 @@
                                                                 <input type="text" class="uk-input uk-form-width-medium" id="customname<?= $project['id'] ?>[0]" name="customname<?= $project['id'] ?>[0]" placeholder="Nama" />
                                                             </div>
                                                             <div id="createLength<?= $project['id'] ?>0">
-                                                                <input type="text" class="uk-input uk-form-width-medium" id="customlength<?= $project['id'] ?>[0]" name="customlength<?= $project['id'] ?>[0]" placeholder="Panjang" />
+                                                                <input type="text" onkeypress="return isNumberKey(event,this.id)" class="uk-input uk-form-width-medium" id="customlength<?= $project['id'] ?>[0]" name="customlength<?= $project['id'] ?>[0]" placeholder="Panjang" />
                                                             </div>
                                                             <div id="createWidth<?= $project['id'] ?>0">
-                                                                <input type="text" class="uk-input uk-form-width-medium" id="customwidth<?= $project['id'] ?>[0]" name="customwidth<?= $project['id'] ?>[0]" placeholder="Lebar" />
+                                                                <input type="text" onkeypress="return isNumberKey(event,this.id)" class="uk-input uk-form-width-medium" id="customwidth<?= $project['id'] ?>[0]" name="customwidth<?= $project['id'] ?>[0]" placeholder="Lebar" />
                                                             </div>
                                                             <div id="createHeight<?= $project['id'] ?>0">
-                                                                <input type="text" class="uk-input uk-form-width-medium" id="customheight<?= $project['id'] ?>[0]" name="customheight<?= $project['id'] ?>[0]" placeholder="Tinggi" />
+                                                                <input type="text" onkeypress="return isNumberKey(event,this.id)" class="uk-input uk-form-width-medium" id="customheight<?= $project['id'] ?>[0]" name="customheight<?= $project['id'] ?>[0]" placeholder="Tinggi" />
                                                             </div>
                                                             <div id="createVol<?= $project['id'] ?>0">
-                                                                <input type="text" class="uk-input uk-form-width-medium" id="customvol<?= $project['id'] ?>[0]" name="customvol<?= $project['id'] ?>[0]" placeholder="Volume" />
+                                                                <input type="text" onkeypress="return isNumberKey(event,this.id)" class="uk-input uk-form-width-medium" id="customvol<?= $project['id'] ?>[0]" name="customvol<?= $project['id'] ?>[0]" placeholder="Volume" />
                                                             </div>
                                                             <div id="createDen<?= $project['id'] ?>0">
                                                                 <select class="uk-select uk-form-width-medium" aria-label="Satuan" id="customden<?= $project['id'] ?>[0]" name="customden<?= $project['id'] ?>[0]">
@@ -4105,13 +4046,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice1<?= $project['id'] ?>">
+                                                            <input id="pphinvoice1<?= $project['id'] ?>" class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'"; } ?> name="pphinvoice1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'";
-                                                                                                                                            } ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input id="pphinvoice1<?= $project['id'] ?>" class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice1'])) { echo "value='" . $projectdata[$project['id']]['invoice1']['pph23'] . "'";} ?> name="pphinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4120,13 +4057,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice1<?= $project['id'] ?>">
+                                                            <input id="emailinvoice1<?= $project['id'] ?>" class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'"; } ?> name="emailinvoice1<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {
-                                                                                                                                                echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'";
-                                                                                                                                            } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
+                                                            <input id="emailinvoice1<?= $project['id'] ?>" class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice1'])) {echo "value='" . $projectdata[$project['id']]['invoice1']['email'] . "'"; } ?> name="emailinvoice1<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4135,7 +4068,7 @@
                                                     <label class="uk-form-label">PIC</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice1<?= $project['id'] ?>" name="picinvoice1<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice1']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -4157,7 +4090,7 @@
                                                                 ?>
                                                             </select>
                                                         <?php } else { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice1<?= $project['id'] ?>" disabled>
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice1<?= $project['id'] ?>" name="picinvoice1<?= $project['id'] ?>" disabled>
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice1']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -4330,9 +4263,9 @@
                                                     <label class="uk-form-label">No Invoice II</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";} ?> name="noinv2<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";} ?> id="noinv2<?= $project['id'] ?>" name="noinv2<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";} ?> name="noinv2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice II" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['no_inv'] . "'";} ?> id="noinv2<?= $project['id'] ?>" name="noinv2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4355,7 +4288,7 @@
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="referensiinvoice2<?= $project['id'] ?>" name="referensiinvoice2<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice2']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -4376,7 +4309,7 @@
                                                                 } ?>
                                                             </select>
                                                         <?php } else { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="referensiinvoice2<?= $project['id'] ?>" disabled>
+                                                            <select class="uk-select uk-form-width-medium" id="referensiinvoice2<?= $project['id'] ?>" name="referensiinvoice2<?= $project['id'] ?>" disabled>
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice2']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -4404,9 +4337,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'"; } ?> name="pphinvoice2<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) {echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'"; } ?> id="pphinvoice2<?= $project['id'] ?>" name="pphinvoice2<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'"; } ?> name="pphinvoice2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['pph23'] . "'"; } ?> id="pphinvoice2<?= $project['id'] ?>" name="pphinvoice2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4415,9 +4348,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> name="emailinvoice2<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> id="emailinvoice2<?= $project['id'] ?>" name="emailinvoice2<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> name="emailinvoice2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice2'])) { echo "value='" . $projectdata[$project['id']]['invoice2']['email'] . "'";} ?> id="emailinvoice2<?= $project['id'] ?>" name="emailinvoice2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4426,7 +4359,7 @@
                                                     <label class="uk-form-label">PIC</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice2<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice2<?= $project['id'] ?>" name="picinvoice2<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice2']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -4619,9 +4552,9 @@
                                                     <label class="uk-form-label">No Invoice III</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'";} ?> name="noinv3<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'";} ?> id="noinv3<?= $project['id'] ?>" name="noinv3<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'"; } ?> name="noinv3<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice III" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['no_inv'] . "'"; } ?> id="noinv3<?= $project['id'] ?>" name="noinv3<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4693,9 +4626,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> name="pphinvoice3<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> id="pphinvoice3<?= $project['id'] ?>" id="pphinvoice3<?= $project['id'] ?>" name="pphinvoice3<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {    echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> name="pphinvoice3<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice3'])) {    echo "value='" . $projectdata[$project['id']]['invoice3']['pph23'] . "'";} ?> id="pphinvoice3<?= $project['id'] ?>" id="pphinvoice3<?= $project['id'] ?>" name="pphinvoice3<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4704,9 +4637,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'"; } ?> name="emailinvoice3<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'"; } ?> id="emailinvoice3<?= $project['id'] ?>" name="emailinvoice3<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'"; } ?> name="emailinvoice3<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice3'])) { echo "value='" . $projectdata[$project['id']]['invoice3']['email'] . "'"; } ?> id="emailinvoice3<?= $project['id'] ?>" name="emailinvoice3<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4715,7 +4648,7 @@
                                                     <label class="uk-form-label">PIC</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice3<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice3<?= $project['id'] ?>" name="picinvoice3<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice3'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -4736,7 +4669,7 @@
                                                                 } ?>
                                                             </select>
                                                         <?php } else { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice3<?= $project['id'] ?>" disabled>
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice3<?= $project['id'] ?>" name="picinvoice3<?= $project['id'] ?>" disabled>
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice3'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -4908,9 +4841,9 @@
                                                     <label class="uk-form-label">No Invoice IV</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> name="noinv4<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> id="noinv4<?= $project['id'] ?>" name="noinv4<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> name="noinv2<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="No Invoice IV" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['no_inv'] . "'"; } ?> id="noinv4<?= $project['id'] ?>" name="noinv2<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4921,9 +4854,9 @@
                                                         <div class="uk-inline">
                                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="calendar"></span>
                                                             <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" />
                                                             <?php } else { ?>
-                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
+                                                                <input class="uk-input uk-form-width-medium" id="dateinvoice4<?= $project['id'] ?>" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { $tempo = date_create($projectdata[$project['id']]['invoice4']['jatuhtempo']); echo "value='" . date_format($tempo, 'm/d/Y') . "'"; } ?> id="dateinvoice4<?= $project['id'] ?>" name="dateinvoice4<?= $project['id'] ?>" placeholder="<?= date('m/d/Y') ?>" disabled />
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -4933,7 +4866,7 @@
                                                     <label class="uk-form-label">Referensi</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="referensiinvoice4<?= $project['id'] ?>" name="referensiinvoice4<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice4']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -4954,7 +4887,7 @@
                                                                 } ?>
                                                             </select>
                                                         <?php } else { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="referensiinvoice4<?= $project['id'] ?>" disabled>
+                                                            <select class="uk-select uk-form-width-medium" id="referensiinvoice4<?= $project['id'] ?>" name="referensiinvoice4<?= $project['id'] ?>" disabled>
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice4']['referensi'])) {
                                                                     foreach ($projectdata[$project['id']]['referensi'] as $referensi) {
@@ -4982,9 +4915,9 @@
                                                     <label class="uk-form-label">PPH 23</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";} ?> name="pphinvoice4<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) {echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";} ?> id="pphinvoice4<?= $project['id'] ?>" name="pphinvoice4<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";} ?> name="pphinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="PPH 23" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['pph23'] . "'";} ?> id="pphinvoice4<?= $project['id'] ?>" name="pphinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -4993,9 +4926,9 @@
                                                     <label class="uk-form-label">Email</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";} ?> name="emailinvoice4<?= $project['id'] ?>">
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";} ?> id="emailinvoice4<?= $project['id'] ?>" name="emailinvoice4<?= $project['id'] ?>">
                                                         <?php } else { ?>
-                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";} ?> name="emailinvoice4<?= $project['id'] ?>" disabled>
+                                                            <input class="uk-input uk-form-width-medium" type="email" placeholder="Email" <?php if (!empty($projectdata[$project['id']]['invoice4'])) { echo "value='" . $projectdata[$project['id']]['invoice4']['email'] . "'";} ?> id="emailinvoice4<?= $project['id'] ?>" name="emailinvoice4<?= $project['id'] ?>" disabled>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -5004,7 +4937,7 @@
                                                     <label class="uk-form-label">PIC</label>
                                                     <div class="uk-form-controls">:
                                                         <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>">
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice4<?= $project['id'] ?>" name="picinvoice4<?= $project['id'] ?>">
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice4']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -5025,7 +4958,7 @@
                                                                 } ?>
                                                             </select>
                                                         <?php } else { ?>
-                                                            <select class="uk-select uk-form-width-medium" name="picinvoice4<?= $project['id'] ?>" disabled>
+                                                            <select class="uk-select uk-form-width-medium" id="picinvoice4<?= $project['id'] ?>" name="picinvoice4<?= $project['id'] ?>" disabled>
                                                                 <?php
                                                                 if (!empty($projectdata[$project['id']]['invoice4']['pic'])) {
                                                                     foreach ($projectdata[$project['id']]['pic'] as $pic) {
@@ -5178,6 +5111,44 @@
                                         </div>
                                     </div>
                                     <!-- Invoice IV End -->
+
+                                    <script>
+                                        // INVOICE I REQUIRED
+                                        $("#inputinv1<?=$project['id']?>").change(function(){
+                                            $("#dateinvoice1<?= $project['id'] ?>").prop('required',true);
+                                            $("#referensiinvoice1<?= $project['id'] ?>").prop('required',true);
+                                            $("#pphinvoice1<?= $project['id'] ?>").prop('required',true);
+                                            $("#emailinvoice1<?= $project['id'] ?>").prop('required',true);
+                                            $("#picinvoice1<?= $project['id'] ?>").prop('required',true);
+                                        });
+
+                                        // INVOICE II REQUIRED
+                                        $("#noinv2<?= $project['id'] ?>").change(function(){
+                                            $("#dateinvoice2<?= $project['id'] ?>").prop('required',true);
+                                            $("#referensiinvoice2<?= $project['id'] ?>").prop('required',true);
+                                            $("#pphinvoice2<?= $project['id'] ?>").prop('required',true);
+                                            $("#emailinvoice2<?= $project['id'] ?>").prop('required',true);
+                                            $("#picinvoice2<?= $project['id'] ?>").prop('required',true);
+                                        });
+
+                                        // INVOICE III REQUIRED
+                                        $("#noinv3<?= $project['id'] ?>").change(function(){
+                                            $("#dateinvoice3<?= $project['id'] ?>").prop('required',true);
+                                            $("#referensiinvoice3<?= $project['id'] ?>").prop('required',true);
+                                            $("#pphinvoice3<?= $project['id'] ?>").prop('required',true);
+                                            $("#emailinvoice3<?= $project['id'] ?>").prop('required',true);
+                                            $("#picinvoice3<?= $project['id'] ?>>").prop('required',true);
+                                        });
+
+                                        // INVOICE IV REQUIRED
+                                        $("#noinv4<?= $project['id'] ?>").change(function(){
+                                            $("#dateinvoice4<?= $project['id'] ?>").prop('required',true);
+                                            $("#referensiinvoice4<?= $project['id'] ?>").prop('required',true);
+                                            $("#pphinvoice4<?= $project['id'] ?>").prop('required',true);
+                                            $("#emailinvoice4<?= $project['id'] ?>").prop('required',true);
+                                            $("#picinvoice4<?= $project['id'] ?>").prop('required',true);
+                                        });
+                                    </script>
 
                                     <!-- Invoice Generate Button -->
                                     <?php if ($authorize->hasPermission('finance.project.edit', $uid)) { ?>
@@ -5559,6 +5530,30 @@
     <?php } ?>
     <!-- Modal Update Proyek End -->
 <?php } ?>
+
+<script>
+    // Custom Pesanan Input Format
+    function isNumberKey(evt,id)
+    {
+        try{
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+    
+            if(charCode==46){
+                var txt=document.getElementById(id).value;
+                if(!(txt.indexOf(".") > -1)){
+        
+                    return true;
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57) )
+                return false;
+
+            return true;
+        }catch(w){
+            alert(w);
+        }
+    }
+</script>
 <?php if (!empty($input)) { ?>
     <script>
         $(document).ready(function() {

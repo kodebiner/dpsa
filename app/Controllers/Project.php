@@ -2912,7 +2912,6 @@ class Project extends BaseController
                 $input['pphinvoice4' . $id] = "0";
             }
 
-            // if (!empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['pphinvoice1' . $id]) && !empty( $input['emailinvoice1' . $id]) && !empty($idinv1)){
             if (isset($input['dateinvoice1' . $id], $input['noinv1' . $id], $input['referensiinvoice1' . $id], $input['pphinvoice1' . $id], $input['emailinvoice1' . $id]) && !empty($idinv1) && !empty($input['dateinvoice1' . $id]) && !empty($input['referensiinvoice1' . $id]) && !empty($input['emailinvoice1' . $id])) {
                 $date1 = $input['dateinvoice1' . $id];
                 $newDate1 = date('Y-m-d H:i:s', strtotime($date1));
