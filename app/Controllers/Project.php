@@ -2332,7 +2332,7 @@ class Project extends BaseController
             }
 
             // Update Custom RAB Name
-            if (!empty($input['namecustrab' . $id])) {
+            if (!empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id])) {
                 foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
                     $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
                     $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
@@ -2355,30 +2355,29 @@ class Project extends BaseController
                         }
                     }
                 }
+            } else{
+                foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
+                    $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
+                    $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
+                    if (!empty($custrabdata)) {
+                        if ($namecustrab != $custrabdata['name']) {
+                            if (empty($namecustrab)) {
+                                if(!empty($productiondata)){
+                                    foreach($productiondata as $prodata){
+                                        $ProductionModel->delete($prodata['id']);
+                                    }
+                                }
+                                if(!empty($custrabdata)){
+                                    $CustomRabModel->delete($custrabdata['id']);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            // else{
-            //     foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
-            //         $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
-            //         $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
-            //         if (!empty($custrabdata)) {
-            //             if ($namecustrab != $custrabdata['name']) {
-            //                 if (empty($namecustrab)) {
-            //                     // Deleting RAB
-            //                     $CustomRabModel->delete($custrabdata['id']);
-
-            //                     // Deleting Production
-            //                     foreach($productiondata as $prodata){
-            //                         $ProductionModel->delete($prodata['id']);
-            //                     }
-
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
 
             // Update Custom RAB Length
-            if (!empty($input['lengthcustrab' . $id])) {
+            if (!empty($input['lengthcustrab' . $id]) && !empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id]) ) {
                 foreach ($input['lengthcustrab' . $id] as $lengthcustrabid => $length) {
                     $lengthcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($lengthcustrabid);
 
@@ -2391,16 +2390,13 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updatelengthcustab);
                             } 
-                            // else {
-                            //     $CustomRabModel->delete($lengthcustrab);
-                            // }
                         }
                     }
                 }
             }
 
             // Update Custom RAB Width
-            if (!empty($input['widthcustrab' . $id])) {
+            if (!empty($input['widthcustrab' . $id]) && !empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id])) {
                 foreach ($input['widthcustrab' . $id] as $widthcustrabid => $width) {
                     $widthcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($widthcustrabid);
 
@@ -2413,16 +2409,13 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updatewidthcustab);
                             } 
-                            // else {
-                            //     $CustomRabModel->delete($widthcustrab);
-                            // }
                         }
                     }
                 }
             }
 
             // Update Custom RAB Height
-            if (!empty($input['heightcustrab' . $id])) {
+            if (!empty($input['heightcustrab' . $id]) && !empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id])) {
                 foreach ($input['heightcustrab' . $id] as $heightcustrabid => $height) {
                     $heightcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($heightcustrabid);
 
@@ -2435,16 +2428,13 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updateheightcustab);
                             } 
-                            // else {
-                            //     $CustomRabModel->delete($heightcustrab);
-                            // }
                         }
                     }
                 }
             }
 
             // Update Custom RAB Volume
-            if (!empty($input['volumecustrab' . $id])) {
+            if (!empty($input['volumecustrab' . $id]) && !empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id])) {
                 foreach ($input['volumecustrab' . $id] as $volumecustrabid => $volume) {
                     $volumecustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($volumecustrabid);
 
@@ -2457,16 +2447,13 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updatevolumecustab);
                             } 
-                            // else {
-                            //     $CustomRabModel->delete($volumecustrab);
-                            // }
                         }
                     }
                 }
             }
 
             // Update Custom RAB Denomination
-            if (!empty($input['denominationcustrab' . $id])) {
+            if (!empty($input['denominationcustrab' . $id]) && !empty($input['qtycustrab' . $id]) && !empty($input['namecustrab' . $id])) {
                 foreach ($input['denominationcustrab' . $id] as $denominationcustrabid => $denomination) {
                     $denominationcustrab  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($denominationcustrabid);
 
@@ -2479,9 +2466,6 @@ class Project extends BaseController
                                 ];
                                 $CustomRabModel->save($updatedenominationcustab);
                             } 
-                            // else {
-                            //     $CustomRabModel->delete($denominationcustrab);
-                            // }
                         }
                     }
                 }
