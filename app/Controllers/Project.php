@@ -4198,7 +4198,7 @@ class Project extends BaseController
                         }elseif($mdlr['denomination'] === "3"){
                             $hargatmdlr =  ($mdlr['price'] * ($heigthmdlr * $lengthmdlr)) * $rab['qty'];
                         }elseif(($mdlr['denomination'] != "2" || $mdlr['denomination'] != "3") && $rab['qty'] != 0){
-                            $hargatmdlr =  $mdlr['price'] * $mdlr['qty'];
+                            $hargatmdlr =  $mdlr['price'] * $rab['qty'];
                         }else{
                             $hargatmdlr =  $mdlr['price'];
                         }
@@ -4566,7 +4566,7 @@ class Project extends BaseController
                         }elseif($mdlr['denomination'] === "3"){
                             $hargatmdlr =  ($mdlr['price'] * ($heigthmdlr * $lengthmdlr)) * $rab['qty'];
                         }elseif(($mdlr['denomination'] != "2" || $mdlr['denomination'] != "3") && $rab['qty'] != 0){
-                            $hargatmdlr =  $mdlr['price'] * $mdlr['qty'];
+                            $hargatmdlr =  $mdlr['price'] * $rab['qty'];
                         }else{
                             $hargatmdlr =  $mdlr['price'];
                         }
