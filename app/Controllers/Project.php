@@ -2355,7 +2355,7 @@ class Project extends BaseController
                         }
                     }
                 }
-            } else{
+            } elseif(empty($input['qtycustrab' . $id]) && empty($input['namecustrab' . $id]) && isset($input['qtycustrab' . $id]) && isset($input['namecustrab' . $id]) ){
                 foreach ($input['namecustrab' . $id] as $idcustrab => $namecustrab) {
                     $custrabdata  = $CustomRabModel->notLike('name', 'biaya pengiriman')->find($idcustrab);
                     $productiondata = $ProductionModel->where('custrabid',$idcustrab)->find();
