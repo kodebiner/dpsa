@@ -1736,6 +1736,8 @@
                                                             createLengthInput.setAttribute('placeholder', 'Panjang');
                                                             createLengthInput.setAttribute('id', 'customlength' + x + '[' + createCount + ']');
                                                             createLengthInput.setAttribute('name', 'customlength' + x + '[' + createCount + ']');
+                                                            createLengthInput.setAttribute('onkeypress', 'return isNumberKey(event,this.id)');
+
 
                                                             const createWidth = document.createElement('div');
                                                             createWidth.setAttribute('id', 'createWidth' + x + '' + createCount);
@@ -1746,6 +1748,7 @@
                                                             createWidthInput.setAttribute('placeholder', 'Lebar');
                                                             createWidthInput.setAttribute('id', 'customwidth' + x + '[' + createCount + ']');
                                                             createWidthInput.setAttribute('name', 'customwidth' + x + '[' + createCount + ']');
+                                                            createWidthInput.setAttribute('onkeypress', 'return isNumberKey(event,this.id)');
 
                                                             const createHeight = document.createElement('div');
                                                             createHeight.setAttribute('id', 'createHeight' + x + '' + createCount);
@@ -1756,6 +1759,7 @@
                                                             createHeightInput.setAttribute('placeholder', 'Tinggi');
                                                             createHeightInput.setAttribute('id', 'customheight' + x + '[' + createCount + ']');
                                                             createHeightInput.setAttribute('name', 'customheight' + x + '[' + createCount + ']');
+                                                            createHeightInput.setAttribute('onkeypress', 'return isNumberKey(event,this.id)');
 
                                                             const createVol = document.createElement('div');
                                                             createVol.setAttribute('id', 'createVol' + x + '' + createCount);
@@ -1766,6 +1770,7 @@
                                                             createVolInput.setAttribute('placeholder', 'Volume');
                                                             createVolInput.setAttribute('id', 'customvol' + x + '[' + createCount + ']');
                                                             createVolInput.setAttribute('name', 'customvol' + x + '[' + createCount + ']');
+                                                            createVolInput.setAttribute('onkeypress', 'return isNumberKey(event,this.id)');
 
                                                             const createDen = document.createElement('div');
                                                             createDen.setAttribute('id', 'createDen' + x + '' + createCount);
@@ -1814,7 +1819,7 @@
                                                             createQty.setAttribute('id', 'createQty' + x + '' + createCount);
 
                                                             const createQtyInput = document.createElement('input');
-                                                            createQtyInput.setAttribute('type', 'text');
+                                                            createQtyInput.setAttribute('type', 'number');
                                                             createQtyInput.setAttribute('class', 'uk-input uk-form-width-medium');
                                                             createQtyInput.setAttribute('placeholder', 'Jumlah');
                                                             createQtyInput.setAttribute('id', 'customqty' + x + '[' + createCount + ']');
