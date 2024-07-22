@@ -444,7 +444,7 @@
             <!-- Header Section end -->
 
             <div class="<?= $mainContainer ?>">
-                <div class="<?= $mainCard ?>uk-panel uk-panel-scrollable" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
+                <div id="main" class="<?= $mainCard ?>uk-panel uk-panel-scrollable" uk-height-viewport="offset-top: .uk-navbar-container; offset-bottom: .tm-footer;">
                     <?= $this->renderSection('main') ?>
                 </div>
             </div>

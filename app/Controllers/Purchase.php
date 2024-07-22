@@ -49,7 +49,6 @@ class Purchase extends BaseController
             // Filter Input
             $input          = $this->request->getGet();
 
-            // Variable for pagination
             if (isset($input['perpage'])) {
                 $perpage = $input['perpage'];
             } else {
@@ -59,19 +58,29 @@ class Purchase extends BaseController
             $page = (@$_GET['page']) ? $_GET['page'] : 1;
             $offset = ($page - 1) * $perpage;
 
-            // Search Engine
-            if (isset($input['search']) && !empty($input['search'])) {
-                $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
-            } else {
-                $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
-            }
+            $this->db       = \Config\Database::connect();
+            $validation     = \Config\Services::validation();
+            $this->builder  = $this->db->table('paket');
+            $this->config   = config('Auth');
+            $this->auth     = service('authentication');
 
-            // Purchase List
-            $clientid = $this->data['account']->parentid;
-            if($this->data['parentid'] === null){
-                $purchases = $PurchaseModel->findAll();
-            }else{
-                $purchases = $PurchaseModel->where('clientid', $clientid)->find();
+            if (isset($input['search']) && !empty($input['search'])) {
+                $this->builder->like('paket.name', $input['search'])->where('ordering >=', 1)->orderBy('ordering', 'ASC');
+            } else {
+                $this->builder->where('parentid', 0)->where('ordering >=', 1)->orderBy('ordering', 'ASC');
+            }
+            $this->builder->select('paket.id as id, paket.name as name, paket.ordering as ordering, paket.parentid as parentid,');
+            $parents = $this->builder->get($perpage, $offset)->getResultArray();
+
+            if (isset($input['search']) && !empty($input['search'])) {
+                $totalParent = $PaketModel
+                ->like('paket.name', $input['search'])
+                ->where('parentid', 0)
+                ->countAllResults();
+            } else { 
+                $totalParent = $PaketModel
+                ->where('parentid', 0)
+                ->countAllResults();
             }
 
             // Purchase Data
@@ -104,25 +113,16 @@ class Purchase extends BaseController
                                     $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]                   = $MdlModel->find($mdlp['mdlid']);
                                     $mdldata[$parent['id']]['paket'][$paket['id']]['mdl'][$mdlp['mdlid']]['ordering']       = $mdlp['ordering'];
                                     $mdlid[]                                                                                = $mdlp['mdlid'];
-
-                                    // List MDL Uncategories
-                                    // $mdldata['mdluncate']                                                   = $MdlModel->where('id !=', $mdlp['mdlid'])->find();
                                 }
                             } else {
                                 $mdldata[$parent['id']]['paket'][$paket['id']]['mdl']                                       = [];
                                 $mdlid[]                                                                                    = '';
-
-                                // List MDL Uncategories
-                                // $mdldata['mdluncate']                                                       = $MdlModel->findAll();
                             }
                         }
                     } else {
                         $mdlpaket                           = [];
                         $mdldata[$parent['id']]['paket']    = [];
                         $mdlid[]                            = '';
-
-                        // List MDL Uncategories
-                        // $mdldata['mdluncate']               = $MdlModel->findAll();
                     }
 
                     // List Parent Auto Complete
@@ -148,7 +148,7 @@ class Purchase extends BaseController
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['inputpage']      =   $input;
-            // $data['pagerpro']       =   $pager->makeLinks($page, $perpage, $totalpro, 'uikit_full');
+            $data['pager']          =   $pager->makeLinks($page, $perpage, $totalParent, 'uikit_full');
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
             $data['idparent']       =   $this->request->getGet('parentid');
@@ -157,7 +157,8 @@ class Purchase extends BaseController
             $data['input']          =   $this->request->getGet('companyid');
 
             // Return
-            return view('purchase', $data);
+            // return view('purchase', $data);
+            return view('newPurchase', $data);
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -166,8 +167,6 @@ class Purchase extends BaseController
     public function createpurchase()
     {
         // Calling Models
-        $PurchaseModel          = new PurchaseModel();
-        $PurchaseDetailModel    = new PurchaseDetailModel();
         $MdlModel               = new MdlModel();
 
         // Get Data
@@ -176,7 +175,7 @@ class Purchase extends BaseController
 
         $data = [
             'mdl'           => $input['id'],
-            'paket'         => $input['paket'],
+            // 'paket'         => $input['paket'],
             'name'          => $mdl['name'],
             'width'         => $mdl['width'],
             'heigth'        => $mdl['height'],
@@ -186,10 +185,71 @@ class Purchase extends BaseController
             'price'         => $mdl['price'],
             'keterangan'    => $mdl['keterangan'],
             'photo'         => $mdl['photo'],
+            'qty'           => '',
         ];
+
+        if(empty($data['qty'])){
+            $data['qty'] = 1;
+        }
+
+        if (!isset($_SESSION['item_purchase'])) {
+            $_SESSION['item_purchase'] = array();
+        }
+        array_push($_SESSION['item_purchase'],$data);
+
 
         die(json_encode(array($data)));
         
+    }
+
+    public function createQtySession()
+    {
+        $input = $this->request->getPost();
+        
+        $newQtyItem = array();
+        // unset($_SESSION['item_purchase']);
+        foreach($_SESSION['item_purchase'] as $item){
+            if($item['mdl'] === $input['id']){
+                if(!empty($input['qtyVal'])){
+                    $item['qty'] = $input['qtyVal'];
+                }
+                array_push($newQtyItem,$item);
+            }else{
+                array_push($newQtyItem,$item);
+            }
+        }
+        unset($_SESSION['item_purchase']);
+        
+        $_SESSION['item_purchase'] = $newQtyItem;
+
+        die(json_encode($_SESSION['item_purchase']));
+    }
+
+    public function unsetSessionItem()
+    {
+        $input = $this->request->getPost();
+
+        $newItem = array();
+
+        foreach($_SESSION['item_purchase'] as $item){
+            if($item['mdl'] === $input['id']){
+                unset($_SESSION['item_purchase'][$item['mdl']]);
+            }else{
+                array_push($newItem,$item);
+            }
+        }
+
+        unset($_SESSION['item_purchase']);
+        
+        $_SESSION['item_purchase'] = $newItem;
+
+        die(json_encode($_SESSION['item_purchase']));
+    }
+
+    public function unsetSession()
+    {
+        unset($_SESSION['item_purchase']);
+        die(json_encode("Item Berhasil Dihapus"));
     }
 
     public function insertpurchase()
@@ -209,6 +269,7 @@ class Purchase extends BaseController
         $quantity = $this->request->getPost('qty');
 
         if (empty($this->data['account']->parentid)) {
+            unset($_SESSION['item_purchase']);
             return redirect()->to('pesanan')->withInput()->with('errors', array('Pesan Hanya Bisa Dilakukan Oleh Klien'));
         }
 
@@ -297,6 +358,9 @@ class Purchase extends BaseController
         $LogModel->save(['uid' => $this->data['uid'], 'record' => $user->username.' dari '.$company['rsname'].' baru saja menambahkan pesanan Baru ']);
         
         // End Notifications
+        
+        // Unset Item Order
+        unset($_SESSION['item_purchase']);
 
         return redirect()->to('pesanan')->with('message','Pesanan Telah Dikirimkan Mohon Tunggu Konfirmasi Dari DPSA');
     }

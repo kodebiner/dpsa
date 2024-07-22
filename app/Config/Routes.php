@@ -131,6 +131,10 @@ $routes->group('pesanan',['filter' => 'login'], function ($routes){
     $routes->get('','Purchase::index');
     $routes->post('createpurchase','Purchase::createpurchase');
     $routes->post('insertpurchase', 'Purchase::insertpurchase');
+
+    $routes->post('createQtySession', 'Purchase::createQtySession');
+    $routes->post('unsetSession', 'Purchase::unsetSession');
+    $routes->post('unsetSessionItem', 'Purchase::unsetSessionItem');
 });
 
 // Order Recieved

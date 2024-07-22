@@ -775,7 +775,6 @@
                                             // Sript Remove Image
                                             $('<script>function removeImgCreatemdl(x) { console.log(x); $.ajax({ type: "post",url: "upload/removephotomdl", data: {"photo": document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value}, dataType: "json", error: function() { console.log("error", arguments);},success: function() {console.log("success", arguments); var pesan = arguments[0][1]; document.getElementById("display-container-createmdl-'+ paketId + + itemMdl.id +'").remove();document.getElementById("photocreatemdl' + paketId + + itemMdl.id +'").value = "";alert(pesan); document.getElementById("js-upload-createmdl-' + paketId + + itemMdl.id +'").removeAttribute("hidden", "");}}); }</' + 'script>').appendTo(document.getElementById("formMdl"+ paketId + + itemMdl.id));
                                                         
-
                                             // Reposiition MDL List
                                             $('#mdlList'+ paketId + + itemMdl.id ).change(function() {
                                                 $.ajax({

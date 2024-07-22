@@ -57,15 +57,11 @@ class Mdl extends BaseController
             $this->config   = config('Auth');
             $this->auth     = service('authentication');
 
-            // $this->builder->join('mdl_paket', 'paket.id = mdl_paket.paketid');
-            // $this->builder->join('mdl', 'mdl.id = mdl_paket.mdlid');
             if (isset($input['search']) && !empty($input['search'])) {
                 $this->builder->like('paket.name', $input['search'])->where('ordering >=', 1)->orderBy('ordering', 'ASC');
             } else {
                 $this->builder->where('parentid', 0)->where('ordering >=', 1)->orderBy('ordering', 'ASC');
             }
-            // $this->builder->orderBy('ordering',"ASC");
-            // $this->builder->select('paket.id as paket_id, paket.name as paket_name, paket.ordering as paket_order, paket.parentid as paket_parentid, mdl_paket.mdlid as mdlpaket_mdlid, mdl_paket.paketid as mdlpaket_paketid,');
             $this->builder->select('paket.id as id, paket.name as name, paket.ordering as ordering, paket.parentid as parentid,');
             $parents = $this->builder->get($perpage, $offset)->getResultArray();
 
@@ -79,13 +75,6 @@ class Mdl extends BaseController
                 ->where('parentid', 0)
                 ->countAllResults();
             }
-
-            // Search Engine
-            // if (isset($input['search']) && !empty($input['search'])) {
-            //     $parents     = $PaketModel->like('name', $input['search'])->orderBy('ordering', 'ASC')->find();
-            // } else {
-            //     $parents     = $PaketModel->where('parentid', 0)->orderBy('ordering', 'ASC')->paginate($perpage, 'parent');
-            // }
 
             // List Paket Auto Complete
             $autopakets     = $PaketModel->where('parentid !=', 0)->find();
@@ -147,13 +136,11 @@ class Mdl extends BaseController
             $data['description']    =   "Daftar MDL yang tersedia";
             $data['mdldata']        =   $mdldata;
             $data['parents']        =   $parents;
-            // $data['countparents']   =   count($parents);
             $data['countparents']   =   $totalParent;
             $data['autoparents']    =   $autoparents;
             $data['autopakets']     =   $autopakets;
             $data['input']          =   $input;
             $data['pager']          =   $pager->makeLinks($page, $perpage, $totalParent, 'uikit_full');
-            // $data['pager']          =   $PaketModel->pager;
             $data['idmdl']          =   $this->request->getGet('mdlid');
             $data['idpaket']        =   $this->request->getGet('paketid');
             $data['idparent']       =   $this->request->getGet('parentid');
@@ -228,19 +215,11 @@ class Mdl extends BaseController
                 }
             }
 
-            // List MDL Uncategories
-            // $mdldata['mdluncate']                                                   = $MdlModel->whereNotIn('id', $mdlid)->find();
-        } else {
-            // $paketdata              = [];
-            // $autoparents            = [];
-            // $mdldata['mdluncate']   = [];
-        }
+        } 
 
         $alldataparent                      =   [];
         $alldataparent['mdldata']           =   $mdldata;
         $alldataparent['parents']           =   $parents;
-        // $alldataparent['countparents']      =   count($parents);
-        // $alldataparent['autoparents']       =   $autoparents;
 
         die(json_encode($alldataparent));
     }
@@ -430,21 +409,6 @@ class Mdl extends BaseController
 
             // Get Data
             $input = $this->request->getPost();
-
-            // Validation
-            // $rules = [
-            //     'name'      => [
-            //         'label'     => 'Nama Paket/Kategori',
-            //         'rules'     => 'required|is_unique[paket.name,paket.id,' . $id . ']',
-            //         'errors'    => [
-            //             'required'      => '{field} wajib diisi.',
-            //             'is_unique'     => '{field} <b>{value}</b> sudah digunakan. Silahkan gunakan {field} yang lainnya.',
-            //         ],
-            //     ],
-            // ];
-            // if (!$this->validate($rules)) {
-            //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            // }
 
             // Recording Log
             $Paket = $PaketModel->find($id);
