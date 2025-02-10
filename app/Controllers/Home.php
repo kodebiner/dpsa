@@ -436,23 +436,31 @@ class Home extends BaseController
                 $offsetreport = ($pagereport - 1) * $perpagereport;
 
                 if (isset($input['searchreport']) && !empty($input['searchreport'])) {
-                    $totalpro = $proyek
-                        ->join('users', 'users.id = project.marketing')
-                        ->join('company', 'company.id = project.clientid')
-                        ->like('project.name', $input['searchreport'])
-                        ->orLike('company.rsname', $input['searchreport'])
-                        ->whereIn('project.clientid',$klienid)
-                        ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate)
-                        ->where('created_at <=', $enddate)
-                        ->countAllResults();
+                    if (!empty($proyek)) {
+                        $totalpro = $proyek
+                            ->join('users', 'users.id = project.marketing')
+                            ->join('company', 'company.id = project.clientid')
+                            ->like('project.name', $input['searchreport'])
+                            ->orLike('company.rsname', $input['searchreport'])
+                            // ->whereIn('project.clientid',$klienid)
+                            ->where('project.deleted_at ='.null)
+                            ->where('created_at >=', $startdate)
+                            ->where('created_at <=', $enddate)
+                            ->countAllResults();
+                    } else {
+                        $totalpro = 0;
+                    }
                 } else {
-                    $totalpro = $proyek
-                        ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate)
-                        ->where('created_at <=', $enddate)
-                        ->whereIn('project.clientid',$klienid)
-                        ->countAllResults();
+                    if (!empty($proyek)) {
+                        $totalpro = $proyek
+                            ->where('project.deleted_at ='.null)
+                            ->where('created_at >=', $startdate)
+                            ->where('created_at <=', $enddate)
+                            // ->whereIn('project.clientid',$klienid)
+                            ->countAllResults();
+                    } else {
+                        $totalpro = 0;
+                    }
                 }
 
                 // Query Data Project
@@ -1266,20 +1274,28 @@ class Home extends BaseController
                 $queryproject = $this->builder->get($perpagereport, $offsetreport)->getResultArray();
                 
                 if (isset($input['searchproyek']) && !empty($input['searchproyek'])) {
-                    $totalpro = $proyek
-                        ->like('project.name', $input['searchproyek'])
-                        ->where('project.clientid', $this->data['parentid'])
-                        ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate . ' 00:00:00')
-                        ->where('created_at <=', $enddate . ' 23:59:59')
-                        ->countAllResults();
+                    if (!empty($proyek)) {
+                        $totalpro = $proyek
+                            ->like('project.name', $input['searchproyek'])
+                            ->where('project.clientid', $this->data['parentid'])
+                            ->where('project.deleted_at ='.null)
+                            ->where('created_at >=', $startdate . ' 00:00:00')
+                            ->where('created_at <=', $enddate . ' 23:59:59')
+                            ->countAllResults();
+                    } else {
+                        $totalpro = 0;
+                    }
                 } else {
-                    $totalpro = $proyek
-                        ->where('clientid', $this->data['parentid'])
-                        ->where('project.deleted_at ='.null)
-                        ->where('created_at >=', $startdate . ' 00:00:00')
-                        ->where('created_at <=', $enddate . '  23:59:59')
-                        ->countAllResults();
+                    if (!empty($proyek)) {
+                        $totalpro = $proyek
+                            ->where('clientid', $this->data['parentid'])
+                            ->where('project.deleted_at ='.null)
+                            ->where('created_at >=', $startdate . ' 00:00:00')
+                            ->where('created_at <=', $enddate . '  23:59:59')
+                            ->countAllResults();
+                    } else {
+                        $totalpro = 0;
+                    }
                 }
 
                 // Query Data Project
